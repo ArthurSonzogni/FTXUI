@@ -3,8 +3,12 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 namespace ftxui {
+namespace dom {
+  class Node;
+}
 
 class Screen {
  public:
@@ -16,6 +20,7 @@ class Screen {
   size_t dimy() { return dimy_;}
 
   static Screen WholeTerminal();
+  static Screen TerminalOutput(std::unique_ptr<dom::Node>& element);
 
  private:
   size_t dimx_;

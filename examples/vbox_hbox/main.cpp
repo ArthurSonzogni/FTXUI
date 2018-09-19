@@ -5,7 +5,7 @@
 int main(int argc, const char *argv[])
 {
   using namespace ftxui::dom;
-  auto root =
+  auto document =
     vbox(
       hbox(
         text(L"north-west"),
@@ -28,7 +28,7 @@ int main(int argc, const char *argv[])
       )
     );
   auto screen = ftxui::Screen::WholeTerminal();
-  Render(screen, root.get());
+  Render(screen, document.get());
 
   std::cout << screen.ToString();
 

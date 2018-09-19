@@ -1,6 +1,7 @@
 #include "ftxui/core/screen.hpp"
 #include "ftxui/core/terminal.hpp"
 #include "ftxui/util/string.hpp"
+#include "ftxui/core/dom/node.hpp"
 
 #include <sstream>
 
@@ -26,6 +27,12 @@ wchar_t& Screen::at(size_t x, size_t y) {
 Screen Screen::WholeTerminal() {
   Terminal::Dimensions size = Terminal::Size();
   return Screen(size.dimx, size.dimy);
+}
+
+Screen Screen::TerminalOutput(std::unique_ptr<dom::Node>& element) {
+  element->ComputeRequirement();
+  Terminal::Dimensions size = Terminal::Size();
+  return Screen(size.dimx, element->requirement().min.y);
 }
 
 };  // namespace ftxui

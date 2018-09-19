@@ -35,7 +35,7 @@ class VBox : public Node {
     int remaining_flex = flex_sum;
     int remaining_extra_space = extra_space;
 
-    int y = box.left;
+    int y = box.top;
     for (auto& child : children) {
       if (y > box.right)
         break;
