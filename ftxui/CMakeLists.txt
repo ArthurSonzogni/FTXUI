@@ -3,14 +3,16 @@ project(ftxui)
 
 add_library(ftxui
   src/ftxui/core/component.cpp
+  src/ftxui/core/dom/frame.cpp
+  src/ftxui/core/dom/centered.cpp
   src/ftxui/core/dom/flex.cpp
+  src/ftxui/core/dom/frame.cpp
+  src/ftxui/core/dom/gauge.cpp
   src/ftxui/core/dom/hbox.cpp
   src/ftxui/core/dom/node.cpp
   src/ftxui/core/dom/separator.cpp
   src/ftxui/core/dom/text.cpp
-  src/ftxui/core/dom/centered.cpp
   src/ftxui/core/dom/vbox.cpp
-  src/ftxui/core/dom/gauge.cpp
   src/ftxui/core/screen.cpp
   src/ftxui/core/terminal.cpp
   src/ftxui/util/string.cpp

@@ -4,10 +4,12 @@
 namespace ftxui {
 namespace dom {
 
+static wchar_t charset[] = L"  ▏▎▍▌▋▊▉█";
+
 class Gauge : public Node {
  public:
   Gauge(float progress) : progress_(progress) {}
-  ~Gauge() {}
+  ~Gauge() override {}
 
   void ComputeRequirement() override {
     requirement_.flex.x = 1;
@@ -16,9 +18,14 @@ class Gauge : public Node {
 
   void Render(Screen& screen) override {
     float y = box_.top;
-    int limit = box_.left + progress_ * (box_.right - box_.left);
-    for(int i = box_.left; i<=limit; ++i)
-      screen.at(i, y) = 'X';
+    float limit = box_.left + progress_ * (box_.right - box_.left + 1);
+    int limit_int = limit;
+    int x = box_.left;
+    while (x < limit_int)
+      screen.at(x++, y) = charset[9];
+    screen.at(x++, y) = charset[int(9*(limit-limit_int))];
+    while (x <= box_.right)
+      screen.at(x++, y) = charset[0];
   }
  private:
   float progress_;

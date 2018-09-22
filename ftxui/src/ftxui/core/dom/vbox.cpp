@@ -37,7 +37,7 @@ class VBox : public Node {
 
     int y = box.top;
     for (auto& child : children) {
-      if (y > box.right)
+      if (y > box.bottom)
         break;
 
       Box child_box = box;

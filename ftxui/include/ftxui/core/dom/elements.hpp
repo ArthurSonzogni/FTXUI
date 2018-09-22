@@ -8,24 +8,27 @@ namespace ftxui {
 namespace dom {
 
 using Element = std::unique_ptr<Node>;
+using Child = std::unique_ptr<Node>;
 using Children = std::vector<std::unique_ptr<Node>>;
 
 
 // --- Layout ----
-std::unique_ptr<Node> vbox(Children);
-std::unique_ptr<Node> hbox(Children);
-std::unique_ptr<Node> flex();
-std::unique_ptr<Node> flex(Element);
+Element vbox(Children);
+Element hbox(Children);
+Element flex();
 
 // --- Widget --
-std::unique_ptr<Node> text(std::wstring text);
-std::unique_ptr<Node> separator();
-std::unique_ptr<Node> gauge(float ratio);
+Element text(std::wstring text);
+Element separator();
+Element gauge(float ratio);
+Element frame(Child);
+Element frame(std::wstring title, Child);
 
 // --- Decorator ---
-std::unique_ptr<Node> hcenter(Element);
-std::unique_ptr<Node> vcenter(Element);
-std::unique_ptr<Node> center(Element);
+Element hcenter(Element);
+Element vcenter(Element);
+Element center(Element);
+Element flex(Element);
 
 template <class... Args>
 std::vector<Element> unpack(Args... args) {
