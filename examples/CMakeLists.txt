@@ -1,4 +1,8 @@
 add_subdirectory(frame)
 add_subdirectory(gauge)
+add_subdirectory(menu)
+add_subdirectory(menu2)
+add_subdirectory(print_key_press)
 add_subdirectory(separator)
 add_subdirectory(vbox_hbox)
+add_subdirectory(toggle)

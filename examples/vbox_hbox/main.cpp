@@ -1,5 +1,5 @@
-#include "ftxui/core/screen.hpp"
-#include "ftxui/core/dom/elements.hpp"
+#include "ftxui/screen.hpp"
+#include "ftxui/dom/elements.hpp"
 #include <iostream>
 
 int main(int argc, const char *argv[])
@@ -27,7 +27,7 @@ int main(int argc, const char *argv[])
         text(L"south-east")
       )
     );
-  auto screen = ftxui::Screen::WholeTerminal();
+  auto screen = ftxui::Screen::TerminalFullscreen();
   Render(screen, document.get());
 
   std::cout << screen.ToString();

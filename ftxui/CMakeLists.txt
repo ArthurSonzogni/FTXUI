@@ -2,22 +2,31 @@ cmake_minimum_required(VERSION 3.0)
 project(ftxui)
 
 add_library(ftxui
-  src/ftxui/core/component.cpp
-  src/ftxui/core/dom/frame.cpp
-  src/ftxui/core/dom/centered.cpp
-  src/ftxui/core/dom/flex.cpp
-  src/ftxui/core/dom/frame.cpp
-  src/ftxui/core/dom/gauge.cpp
-  src/ftxui/core/dom/hbox.cpp
-  src/ftxui/core/dom/node.cpp
-  src/ftxui/core/dom/separator.cpp
-  src/ftxui/core/dom/text.cpp
-  src/ftxui/core/dom/vbox.cpp
-  src/ftxui/core/screen.cpp
-  src/ftxui/core/terminal.cpp
+  src/ftxui/component/component.cpp
+  src/ftxui/component/component_direction.cpp
+  src/ftxui/component/component_horizontal.cpp
+  src/ftxui/component/component_vertical.cpp
+  src/ftxui/component/toggle.cpp
+  src/ftxui/component/menu.cpp
+  src/ftxui/dom/bold.cpp
+  src/ftxui/dom/dim.cpp
+  src/ftxui/dom/underlined.cpp
+  src/ftxui/dom/inverted.cpp
+  src/ftxui/dom/composite_decorator.cpp
+  src/ftxui/dom/flex.cpp
+  src/ftxui/dom/frame.cpp
+  src/ftxui/dom/frame.cpp
+  src/ftxui/dom/gauge.cpp
+  src/ftxui/dom/hbox.cpp
+  src/ftxui/dom/node.cpp
+  src/ftxui/dom/separator.cpp
+  src/ftxui/dom/text.cpp
+  src/ftxui/dom/vbox.cpp
+  src/ftxui/screen.cpp
+  src/ftxui/screen_interactive.cpp
+  src/ftxui/terminal.cpp
   src/ftxui/util/string.cpp
 )
-
 
 target_include_directories(ftxui
   PUBLIC include
@@ -50,8 +59,9 @@ if (GTEST_FOUND AND THREADS_FOUND)
   endfunction(add_new_test)
 
   add_new_test(dom_tests
-    src/ftxui/core/dom/text_test.cpp
-    src/ftxui/core/dom/hbox_test.cpp
-    src/ftxui/core/dom/vbox_test.cpp
+    src/ftxui/dom/gauge_test.cpp
+    src/ftxui/dom/hbox_test.cpp
+    src/ftxui/dom/text_test.cpp
+    src/ftxui/dom/vbox_test.cpp
   )
 endif()
