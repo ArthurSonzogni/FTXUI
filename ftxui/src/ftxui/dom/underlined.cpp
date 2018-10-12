@@ -1,29 +1,19 @@
-#include "ftxui/dom/node.hpp"
+#include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
 
 namespace ftxui {
 namespace dom {
 
-class Underlined : public Node {
+class Underlined : public NodeDecorator {
  public:
-  Underlined(Children children) : Node(std::move(children)) {}
+  Underlined(Children children) : NodeDecorator(std::move(children)) {}
   ~Underlined() override {}
-
-  void ComputeRequirement() override {
-    Node::ComputeRequirement();
-    requirement_ = children[0]->requirement();
-  }
-
-  void SetBox(Box box) override {
-    Node::SetBox(box);
-    children[0]->SetBox(box);
-  }
 
   void Render(Screen& screen) override {
     Node::Render(screen);
     for (int y = box_.top; y <= box_.bottom; ++y) {
       for (int x = box_.left; x <= box_.right; ++x) {
-        screen.PixelAt(x,y).underlined = true; 
+        screen.PixelAt(x, y).underlined = true;
       }
     }
   }

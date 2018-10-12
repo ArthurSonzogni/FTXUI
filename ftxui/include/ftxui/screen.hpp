@@ -5,6 +5,8 @@
 #include <vector>
 #include <memory>
 
+#include <ftxui/color.hpp>
+
 namespace ftxui {
 namespace dom {
   class Node;
@@ -16,6 +18,8 @@ struct Pixel {
   bool inverted = false;
   bool underlined = false;
   bool dim = false;
+  Color background_color = Color::Default;
+  Color foreground_color = Color::Default;
 };
 
 class Screen {

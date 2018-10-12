@@ -1,6 +1,7 @@
 #ifndef FTXUI_DOM_ELEMENTS_HPP
 #define FTXUI_DOM_ELEMENTS_HPP
 
+#include "ftxui/color.hpp"
 #include "ftxui/dom/node.hpp"
 
 namespace ftxui {
@@ -27,6 +28,8 @@ Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
+Element color(Color, Element);
+Element bgcolor(Color, Element);
 
 // --- Decorator ---
 Element hcenter(Element);

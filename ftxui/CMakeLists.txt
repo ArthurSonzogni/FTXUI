@@ -6,21 +6,23 @@ add_library(ftxui
   src/ftxui/component/component_direction.cpp
   src/ftxui/component/component_horizontal.cpp
   src/ftxui/component/component_vertical.cpp
-  src/ftxui/component/toggle.cpp
   src/ftxui/component/menu.cpp
+  src/ftxui/component/toggle.cpp
   src/ftxui/dom/bold.cpp
-  src/ftxui/dom/dim.cpp
-  src/ftxui/dom/underlined.cpp
-  src/ftxui/dom/inverted.cpp
+  src/ftxui/dom/color.cpp
   src/ftxui/dom/composite_decorator.cpp
+  src/ftxui/dom/dim.cpp
   src/ftxui/dom/flex.cpp
   src/ftxui/dom/frame.cpp
   src/ftxui/dom/frame.cpp
   src/ftxui/dom/gauge.cpp
   src/ftxui/dom/hbox.cpp
+  src/ftxui/dom/inverted.cpp
   src/ftxui/dom/node.cpp
+  src/ftxui/dom/node_decorator.cpp
   src/ftxui/dom/separator.cpp
   src/ftxui/dom/text.cpp
+  src/ftxui/dom/underlined.cpp
   src/ftxui/dom/vbox.cpp
   src/ftxui/screen.cpp
   src/ftxui/screen_interactive.cpp

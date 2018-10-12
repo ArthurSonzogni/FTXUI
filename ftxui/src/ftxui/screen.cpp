@@ -12,7 +12,7 @@ Screen::Screen(size_t dimx, size_t dimy)
 
 std::string Screen::ToString() {
   std::wstringstream ss;
-  
+
   Pixel previous_pixel;
 
   for (size_t y = 0; y < dimy_; ++y) {
@@ -44,6 +44,16 @@ std::string Screen::ToString() {
         } else {
           ss << L"\e[22m";
         }
+      }
+      if (pixels_[y][x].foreground_color != previous_pixel.foreground_color) {
+        ss << L"\e[" + to_wstring(std::to_string(
+                           (uint8_t)pixels_[y][x].foreground_color)) +
+                  L"m";
+      }
+      if (pixels_[y][x].background_color != previous_pixel.background_color) {
+        ss << L"\e[" + to_wstring(std::to_string(
+                           10 + (uint8_t)pixels_[y][x].background_color)) +
+                  L"m";
       }
       ss << pixels_[y][x].character;
       previous_pixel = pixels_[y][x];
@@ -77,7 +87,7 @@ Screen Screen::TerminalOutput(std::unique_ptr<dom::Node>& element) {
 
 std::string Screen::ResetPosition() {
   std::stringstream ss;
-  for(size_t y = 1; y<dimy_; ++y) {
+  for (size_t y = 1; y < dimy_; ++y) {
     ss << "\e[2K\r\e[1A";
   }
   return ss.str();

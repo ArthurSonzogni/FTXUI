@@ -1,23 +1,13 @@
-#include "ftxui/dom/node.hpp"
+#include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
 
 namespace ftxui {
 namespace dom {
 
-class Bold : public Node {
+class Bold : public NodeDecorator {
  public:
-  Bold(Children children) : Node(std::move(children)) {}
+  Bold(Children children) : NodeDecorator(std::move(children)) {}
   ~Bold() override {}
-
-  void ComputeRequirement() override {
-    Node::ComputeRequirement();
-    requirement_ = children[0]->requirement();
-  }
-
-  void SetBox(Box box) override {
-    Node::SetBox(box);
-    children[0]->SetBox(box);
-  }
 
   void Render(Screen& screen) override {
     Node::Render(screen);

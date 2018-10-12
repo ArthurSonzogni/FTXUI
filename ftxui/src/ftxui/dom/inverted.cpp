@@ -1,23 +1,13 @@
-#include "ftxui/dom/node.hpp"
+#include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
 
 namespace ftxui {
 namespace dom {
 
-class Inverted : public Node {
+class Inverted : public NodeDecorator {
  public:
-  Inverted(Children children) : Node(std::move(children)) {}
+  Inverted(Children children) : NodeDecorator(std::move(children)) {}
   ~Inverted() override {}
-
-  void ComputeRequirement() override {
-    Node::ComputeRequirement();
-    requirement_ = children[0]->requirement();
-  }
-
-  void SetBox(Box box) override {
-    Node::SetBox(box);
-    children[0]->SetBox(box);
-  }
 
   void Render(Screen& screen) override {
     Node::Render(screen);
