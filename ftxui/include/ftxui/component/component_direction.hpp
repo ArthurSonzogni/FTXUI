@@ -10,12 +10,12 @@ namespace component {
 class ComponentDirection : public Component {
  public:
   ComponentDirection(Delegate* delegate);
-  bool Event(int key) override;
+  bool OnEvent(Event) override;
   Component* GetActiveChild() override;
 
  protected:
   void Focus(Component* child);
-  virtual bool HandleDirection(int key) = 0;
+  virtual bool HandleDirection(Event) = 0;
   Component* active_child_;
 };
 

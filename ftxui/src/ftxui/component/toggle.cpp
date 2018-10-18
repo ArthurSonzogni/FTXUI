@@ -24,16 +24,15 @@ dom::Element Toggle::Render() {
   return hbox(std::move(children));
 }
 
-bool Toggle::Event(int key) {
-
+bool Toggle::OnEvent(Event event) {
   if (activated) {
-    if (key == 67 || key == 'l') {
+    if (event == Event::ArrowRight || event == Event::Character('l')) {
       activated = false;
       on_change();
       return true;
     }
   } else {
-    if (key == 68 || key == 'h') {
+    if (event == Event::ArrowLeft || event == Event::Character('h')) {
       activated = true;
       on_change();
       return true;

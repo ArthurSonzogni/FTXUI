@@ -10,8 +10,8 @@ namespace component {
 // It assumes its children are put in the horizontal direction.
 class ComponentHorizontal : public ComponentDirection {
  public:
-  ComponentHorizontal(Delegate* delegate);
-  bool HandleDirection(int key) override;
+  ComponentHorizontal(Delegate*);
+  bool HandleDirection(Event) override;
 };
 
 } // namespace component

@@ -8,6 +8,7 @@
 #include "ftxui/component/component_vertical.hpp"
 #include "ftxui/util/string.hpp"
 
+using namespace ftxui;
 using namespace ftxui::component;
 using namespace ftxui::dom;
 
@@ -48,11 +49,11 @@ class MyComponent : ComponentVertical {
       );
   }
 
-  bool Event(int key) override {
-    if (ComponentVertical::Event(key))
+  bool OnEvent(Event event) override {
+    if (ComponentVertical::OnEvent(event))
       return true;
 
-    if (key == 10) {
+    if (event == Event::Return) {
       on_enter();
       return true;
     }

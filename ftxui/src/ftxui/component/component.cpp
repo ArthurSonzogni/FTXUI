@@ -17,7 +17,7 @@ dom::Element Component::Render() {
   return text(L"Not implemented component");
 }
 
-bool Component::Event(int key) {
+bool Component::OnEvent(Event event) {
   return false;
 }
 

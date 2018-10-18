@@ -10,8 +10,8 @@ namespace component {
 // It assumes its children are put in the vertical direction.
 class ComponentVertical : public ComponentDirection {
  public:
-  ComponentVertical(Delegate* delegate);
-  bool HandleDirection(int key) override;
+  ComponentVertical(Delegate*);
+  bool HandleDirection(Event) override;
 };
 
 } // namespace component

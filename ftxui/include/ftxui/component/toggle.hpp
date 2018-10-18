@@ -22,7 +22,7 @@ class Toggle : public Component {
 
   // Component implementation.
   dom::Element Render() override;
-	bool Event(int key) override;
+  bool OnEvent(Event) override;
 };
 
 }  // namespace component

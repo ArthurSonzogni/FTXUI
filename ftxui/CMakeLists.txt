@@ -6,6 +6,7 @@ add_library(ftxui
   src/ftxui/component/component_direction.cpp
   src/ftxui/component/component_horizontal.cpp
   src/ftxui/component/component_vertical.cpp
+  src/ftxui/component/input.cpp
   src/ftxui/component/menu.cpp
   src/ftxui/component/toggle.cpp
   src/ftxui/dom/bold.cpp
@@ -13,7 +14,6 @@ add_library(ftxui
   src/ftxui/dom/composite_decorator.cpp
   src/ftxui/dom/dim.cpp
   src/ftxui/dom/flex.cpp
-  src/ftxui/dom/frame.cpp
   src/ftxui/dom/frame.cpp
   src/ftxui/dom/gauge.cpp
   src/ftxui/dom/hbox.cpp
@@ -24,6 +24,7 @@ add_library(ftxui
   src/ftxui/dom/text.cpp
   src/ftxui/dom/underlined.cpp
   src/ftxui/dom/vbox.cpp
+  src/ftxui/event.cpp
   src/ftxui/screen.cpp
   src/ftxui/screen_interactive.cpp
   src/ftxui/terminal.cpp

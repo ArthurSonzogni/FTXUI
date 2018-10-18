@@ -1,5 +1,5 @@
-#ifndef FTXUI_COMPONENT_MENU
-#define FTXUI_COMPONENT_MENU
+#ifndef FTXUI_COMPONENT_INPUT_H_
+#define FTXUI_COMPONENT_INPUT_H_
 
 #include "ftxui/component/component.hpp"
 #include <functional>
@@ -7,14 +7,15 @@
 namespace ftxui {
 namespace component {
 
-class Menu : public Component {
+class Input : public Component {
  public:
   // Constructor.
-  Menu(Delegate*);
+  Input(Delegate*);
+  ~Input() override;
 
   // State.
-  std::vector<std::wstring> entries = {};
-  int selected = 0;
+  std::wstring content = L"input";
+  std::wstring placeholder = L"placeholder";
 
   // State update callback.
   std::function<void()> on_change = [](){};
@@ -23,9 +24,12 @@ class Menu : public Component {
   // Component implementation.
   dom::Element Render() override;
 	bool OnEvent(Event) override;
+
+ private:
+  int cursor_position = 0;
 };
 
 }  // namespace component
 }  // namespace ftxui
 
-#endif /* end of include guard: FTXUI_COMPONENT_MENU */
+#endif /* end of include guard: FTXUI_COMPONENT_INPUT_H_ */

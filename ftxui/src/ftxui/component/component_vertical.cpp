@@ -6,9 +6,9 @@ namespace component {
 ComponentVertical::ComponentVertical(Delegate* delegate)
     : ComponentDirection(delegate) {}
 
-bool ComponentVertical::HandleDirection(int key) {
+bool ComponentVertical::HandleDirection(Event event) {
   // Up pressed ?
-  if (key == 65 || key == 'k') {
+  if (event == Event::ArrowUp || event == Event::Character('k')) {
     Component* previous_sibling = active_child_->PreviousSibling();
     if (previous_sibling) {
       active_child_ = previous_sibling;
@@ -17,7 +17,7 @@ bool ComponentVertical::HandleDirection(int key) {
   }
 
   // Down pressed ?
-  if (key == 66 || key == 'j') {
+  if (event == Event::ArrowDown || event == Event::Character('j')) {
     Component* next_sibling = active_child_->NextSibling();
     if (next_sibling) {
       active_child_ = next_sibling;

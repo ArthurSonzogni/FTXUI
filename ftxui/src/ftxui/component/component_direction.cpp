@@ -6,17 +6,17 @@ namespace component {
 ComponentDirection::ComponentDirection(Delegate* delegate)
     : Component(delegate), active_child_(nullptr) {}
 
-bool ComponentDirection::Event(int key) {
+bool ComponentDirection::OnEvent(Event event) {
   if (!Focused())
     return false;
 
   if (!active_child_)
     return false;
 
-  if (active_child_->Event(key))
+  if (active_child_->OnEvent(event))
     return true;
 
-  return HandleDirection(key);
+  return HandleDirection(event);
 }
 
 Component* ComponentDirection::GetActiveChild() {

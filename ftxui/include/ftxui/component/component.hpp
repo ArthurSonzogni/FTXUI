@@ -1,8 +1,9 @@
 #ifndef FTXUI_COMPONENT_COMPONENT_HPP
 #define FTXUI_COMPONENT_COMPONENT_HPP
 
-#include "ftxui/dom/elements.hpp"
 #include "ftxui/component/delegate.hpp"
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/event.hpp"
 
 namespace ftxui {
 namespace component {
@@ -20,7 +21,7 @@ class Component {
   virtual dom::Element Render();
 
   // Handle an event. By default, it calls this function on each children.
-  virtual bool Event(int key);
+  virtual bool OnEvent(Event even);
 
   // If this component contains children, this indicates which one is active. It
   // can be none of them.

@@ -1,5 +1,6 @@
 #include "ftxui/component/menu.hpp"
 #include <algorithm>
+#include <iostream>
 
 namespace ftxui {
 namespace component {
@@ -24,14 +25,14 @@ dom::Element Menu::Render() {
   return vbox(std::move(elements));
 }
 
-bool Menu::Event(int key) {
+bool Menu::OnEvent(Event event) {
   if (!Focused())
     return false;
 
   int new_selected = selected;
-  if (key == 65 || key == 'k')
+  if (event == Event::ArrowUp || event == Event::Character('k'))
     new_selected--;
-  if (key == 66 || key == 'j')
+  if (event == Event::ArrowDown || event == Event::Character('j'))
     new_selected++;
   new_selected = std::max(0, std::min(int(entries.size())-1, new_selected));
 
@@ -41,7 +42,7 @@ bool Menu::Event(int key) {
     return true;
   }
 
-  if (key == 10) {
+  if (event == Event::Return) {
     on_enter();
     return true;
   }

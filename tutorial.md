@@ -23,6 +23,8 @@ Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
+Element color(Color,Element);
+Element bgcolor(Element);
 
 // --- Decorator ---
 Element hcenter(Element);
@@ -139,3 +141,5 @@ Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
+Element color(Element);
+Element bgcolor(Element);

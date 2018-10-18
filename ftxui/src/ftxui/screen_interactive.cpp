@@ -8,6 +8,20 @@
 
 namespace ftxui {
 
+namespace {
+  constexpr char ESC = char(27);
+
+  Event GetEvent() {
+    char v1 = char(getchar());
+    if (v1 != ESC)
+      return Event{v1};
+
+    char v2 = char(getchar());
+    char v3 = char(getchar());
+    return Event{v1,v2,v3};
+  };
+};
+
 class ScreenInteractive::Delegate : public component::Delegate {
  public:
   Delegate() : root_(this) {}
@@ -29,7 +43,7 @@ class ScreenInteractive::Delegate : public component::Delegate {
     return child;
   }
 
-  void Event(int key) { component_->Event(key); }
+  void OnEvent(Event event) { component_->OnEvent(event); }
 
 
   std::vector<component::Delegate*> children() override {
@@ -77,8 +91,7 @@ void ScreenInteractive::Loop() {
 
   Draw();
   while (!quit_) {
-    int key = getchar();
-    delegate_->Event(key);
+    delegate_->OnEvent(GetEvent());
 
     Clear();
     Draw();
