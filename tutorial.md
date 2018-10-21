@@ -1,11 +1,11 @@
 All the dom element are declared in one header:
-"""c++
+~~~cpp
 #include <ftxui/dom/elements.hpp>
-"""
+~~~
 
 It declares the following set of elements:
 
-"""C++
+~~~cpp
 // --- Layout ----
 Element vbox(Children);
 Element hbox(Children);
@@ -31,7 +31,7 @@ Element hcenter(Element);
 Element vcenter(Element);
 Element center(Element);
 Element flex(Element);
-"""
+~~~
 
 # Layout elements.
 
@@ -43,62 +43,62 @@ space dispatched to all the flexible elements.
 flex() is used to make an element flexible.
 
 ## Examples
-"""C++
+~~~cpp
   hbox(
     frame(text(L"left")),
     flex(frame(text(L"middle"))),
     frame(text(L"right"))
   );
-"""
-"""bash
+~~~
+~~~bash
 ┌────┐┌─────────────────────────────────────────────────────────────────┐┌─────┐
 │left││middle                                                           ││right│
 └────┘└─────────────────────────────────────────────────────────────────┘└─────┘
-"""
+~~~
 
-"""C++
+~~~cpp
   hbox(
     frame(text(L"left")),
     flex(frame(text(L"middle"))),
     flex(frame(text(L"right")))
   );
-"""
-"""bash
+~~~
+~~~bash
 ┌────┐┌───────────────────────────────────┐┌───────────────────────────────────┐
 │left││middle                             ││right                              │
 └────┘└───────────────────────────────────┘└───────────────────────────────────┘
-"""
+~~~
 
 # Widget elements.
 
 ## text
 
 The more simple widget. It display a text.
-"""C++
+~~~cpp
   text(L"I am a piece of text");
-"""
-"""bash
+~~~
+~~~bash
 I am a piece of text.
-"""
+~~~
 
 ## frame
 Add a border arround an element
-"""c+
+~~~c+
 frame(text(L"The element"))
-"""
+~~~
 
-"""bash
+~~~bash
 ┌───────────┐
 │The element│
 └───────────┘
-"""
+~~~
 
 ## separator
 
 Display a vertical or horizontal line to visually split the content of a
 container in two.
 
-"""c++
+~~~cpp
 frame(hbox(
 	vbox(
 		text(L"left top"),
@@ -110,28 +110,28 @@ frame(hbox(
 		text(L"right bottom")
 	)
 ));
-"""
+~~~
 
-"""bash
+~~~bash
 ┌───────────┬────────────┐
 │left top   │right top   │
 │left bottom│right bottom│
 └───────────┴────────────┘
-"""
+~~~
 
 ## gauge
 
 
 A gauge. It can be used to represent a progress bar.
-"""c+
+~~~c+
 frame(gauge(0.5))
-"""
+~~~
 
-"""bash
+~~~bash
 ┌────────────────────────────────────────────────────────────────────────────┐
 │██████████████████████████████████████                                      │
 └────────────────────────────────────────────────────────────────────────────┘
-"""
+~~~
 
 # Decorator (style)
 A terminal console can usually display colored text and colored background.
