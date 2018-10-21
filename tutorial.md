@@ -1,3 +1,18 @@
+Table of content.
+- [DOM](#dom)
+  * [Style](#style)
+  * [Layout](#layout)
+  * [Widget.](#widget)
+    + [text](#text)
+    + [frame](#frame)
+    + [separator](#separator)
+    + [gauge](#gauge)
+- [Components.](#components)
+  * [Input](#input)
+  * [Menu](#menu)
+  * [Toggle.](#toggle)
+
+## DOM
 All the dom element are declared in one header:
 ~~~cpp
 #include <ftxui/dom/elements.hpp>
@@ -33,7 +48,21 @@ Element center(Element);
 Element flex(Element);
 ~~~
 
-# Layout elements.
+### Style
+A terminal console can usually display colored text and colored background.
+The text can also have different effects: bold, dim, underlined, inverted.
+
+~~~cpp
+Element bold(Element);
+Element dim(Element);
+Element inverted(Element);
+Element underlined(Element);
+Element blink(Element);
+Element color(Color, Element);
+Element bgcolor(Color, Element);
+~~~
+
+### Layout
 
 vbox (Vertical-box) and hbox (Horizontal-box) are containers. They are used to
 compose all the elements together. They will display their children one by one in one direction.
@@ -42,7 +71,7 @@ space dispatched to all the flexible elements.
 
 flex() is used to make an element flexible.
 
-## Examples
+#### Examples
 ~~~cpp
   hbox(
     frame(text(L"left")),
@@ -69,11 +98,11 @@ flex() is used to make an element flexible.
 └────┘└───────────────────────────────────┘└───────────────────────────────────┘
 ~~~
 
-# Widget elements.
+### Widget.
 
-## text
+#### text
 
-The more simple widget. It display a text.
+The most simple widget. It display a text.
 ~~~cpp
   text(L"I am a piece of text");
 ~~~
@@ -81,7 +110,7 @@ The more simple widget. It display a text.
 I am a piece of text.
 ~~~
 
-## frame
+#### frame
 Add a border arround an element
 ~~~c+
 frame(text(L"The element"))
@@ -93,22 +122,22 @@ frame(text(L"The element"))
 └───────────┘
 ~~~
 
-## separator
+#### separator
 
 Display a vertical or horizontal line to visually split the content of a
 container in two.
 
 ~~~cpp
 frame(hbox(
-	vbox(
-		text(L"left top"),
-		text(L"left bottom")
-	),
-	separator(),
-	vbox(
-		text(L"right top"),
-		text(L"right bottom")
-	)
+  vbox(
+    text(L"left top"),
+    text(L"left bottom")
+  ),
+  separator(),
+  vbox(
+    text(L"right top"),
+    text(L"right bottom")
+  )
 ));
 ~~~
 
@@ -119,8 +148,7 @@ frame(hbox(
 └───────────┴────────────┘
 ~~~
 
-## gauge
-
+#### gauge
 
 A gauge. It can be used to represent a progress bar.
 ~~~c+
@@ -133,13 +161,8 @@ frame(gauge(0.5))
 └────────────────────────────────────────────────────────────────────────────┘
 ~~~
 
-# Decorator (style)
-A terminal console can usually display colored text and colored background.
-The text can also have different effects: bold, dim, underlined, inverted.
+## Components.
 
-Element bold(Element);
-Element dim(Element);
-Element inverted(Element);
-Element underlined(Element);
-Element color(Element);
-Element bgcolor(Element);
+### Input
+### Menu
+### Toggle.
