@@ -9,7 +9,7 @@ namespace ftxui {
 struct Event{
  public:
   // --- Character ---
-  static Event Character(char);
+  static Event Character(int);
 
   // --- Arrow ---
   static Event ArrowLeft;
@@ -27,7 +27,7 @@ struct Event{
   bool operator==(const Event& other) { return values == other.values; }
 
   // Internal representation.
-  std::array<char, 5> values = {0, 0, 0, 0, 0};
+  std::array<int, 5> values = {0, 0, 0, 0, 0};
 };
 
 

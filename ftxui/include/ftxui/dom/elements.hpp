@@ -28,6 +28,7 @@ Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
+Element blink(Element);
 Element color(Color, Element);
 Element bgcolor(Color, Element);
 
@@ -36,6 +37,9 @@ Element hcenter(Element);
 Element vcenter(Element);
 Element center(Element);
 Element flex(Element);
+
+// --- Util ---
+Element nothing(Element element);
 
 template <class... Args>
 Children unpack(Args... args) {

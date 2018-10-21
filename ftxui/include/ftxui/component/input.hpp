@@ -14,8 +14,8 @@ class Input : public Component {
   ~Input() override;
 
   // State.
-  std::wstring content = L"input";
-  std::wstring placeholder = L"placeholder";
+  std::wstring content;
+  std::wstring placeholder;
 
   // State update callback.
   std::function<void()> on_change = [](){};

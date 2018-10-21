@@ -9,16 +9,30 @@
 namespace ftxui {
 
 namespace {
-  constexpr char ESC = char(27);
+  constexpr int ESC = 27;
+  constexpr int WAT = 195;
+  constexpr int WATWAIT = 91;
 
   Event GetEvent() {
-    char v1 = char(getchar());
-    if (v1 != ESC)
-      return Event{v1};
+    int v1 = getchar();
+    if (v1 == ESC) {
+      int v2 = getchar();
+      int v3 = getchar();
 
-    char v2 = char(getchar());
-    char v3 = char(getchar());
-    return Event{v1,v2,v3};
+      //if (v2 == WATWAIT) {
+        //int v4 = getchar();
+        //int v5 = getchar();
+        //return Event{v1, v2, v3, v4, v5};
+      //}
+      return Event{v1, v2, v3};
+    }
+
+    if (v1 == WAT) {
+      int v2 = getchar();
+      return Event{v1, v2};
+    }
+
+    return Event{v1};
   };
 };
 

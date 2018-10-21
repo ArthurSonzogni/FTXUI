@@ -17,6 +17,10 @@ class MyComponent : ComponentVertical {
         input_1(delegate->NewChild()),
         input_2(delegate->NewChild()),
         input_3(delegate->NewChild()) {
+
+    input_1.placeholder = L"input1";
+    input_2.placeholder = L"input2";
+    input_3.placeholder = L"input3";
     Focus(&input_1);
   }
 

@@ -9,6 +9,7 @@ add_library(ftxui
   src/ftxui/component/input.cpp
   src/ftxui/component/menu.cpp
   src/ftxui/component/toggle.cpp
+  src/ftxui/dom/blink.cpp
   src/ftxui/dom/bold.cpp
   src/ftxui/dom/color.cpp
   src/ftxui/dom/composite_decorator.cpp
@@ -23,6 +24,7 @@ add_library(ftxui
   src/ftxui/dom/separator.cpp
   src/ftxui/dom/text.cpp
   src/ftxui/dom/underlined.cpp
+  src/ftxui/dom/util.cpp
   src/ftxui/dom/vbox.cpp
   src/ftxui/event.cpp
   src/ftxui/screen.cpp

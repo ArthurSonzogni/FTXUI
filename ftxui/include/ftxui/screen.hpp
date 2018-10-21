@@ -14,10 +14,11 @@ namespace dom {
 
 struct Pixel {
   wchar_t character = U' ';
+  bool blink = false;
   bool bold = false;
+  bool dim = false;
   bool inverted = false;
   bool underlined = false;
-  bool dim = false;
   Color background_color = Color::Default;
   Color foreground_color = Color::Default;
 };

@@ -28,4 +28,4 @@
     * mouse
     * terminal event
 
-  You can make implement your own.
+  Implement your own!

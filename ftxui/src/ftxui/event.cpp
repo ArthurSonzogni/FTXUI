@@ -2,10 +2,10 @@
 
 namespace ftxui {
 
-constexpr char ESC = char(27);
+constexpr int ESC = int(27);
 
 // --- Character ---
-Event Event::Character(char c) {
+Event Event::Character(int c) {
   return Event{c};
 }
 
@@ -16,10 +16,10 @@ Event Event::ArrowUp{ESC, '[', 'A'};
 Event Event::ArrowDown{ESC, '[', 'B'};
 
 // --- Other ---
-Event Event::Backspace{char(127)};
+Event Event::Backspace{127};
 Event Event::Delete{ESC, '[', '3', '~'};
 Event Event::Escape{ESC};
-Event Event::Return{char(10)};
+Event Event::Return{10};
 
 Event Event::F1{ESC, '[', 'O', 'P'};
 Event Event::F2{ESC, '[', 'O', 'Q'};

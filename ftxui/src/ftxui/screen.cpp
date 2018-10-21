@@ -45,6 +45,13 @@ std::string Screen::ToString() {
           ss << L"\e[22m";
         }
       }
+      if (pixels_[y][x].blink != previous_pixel.blink) {
+        if (pixels_[y][x].blink) {
+          ss << L"\e[5m";
+        } else {
+          ss << L"\e[25m";
+        }
+      }
       if (pixels_[y][x].foreground_color != previous_pixel.foreground_color) {
         ss << L"\e[" + to_wstring(std::to_string(
                            (uint8_t)pixels_[y][x].foreground_color)) +
