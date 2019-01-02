@@ -47,5 +47,17 @@ std::unique_ptr<Node> bgcolor(Color c, Child child) {
   return std::make_unique<BgColor>(unpack(std::move(child)), c);
 }
 
+Decorator color(Color c) {
+  return [c](Child child) {
+    return color(c, std::move(child));
+  };
+}
+
+Decorator bgcolor(Color c) {
+  return [c](Child child) {
+    return bgcolor(c, std::move(child));
+  };
+}
+
 };  // namespace dom
 };  // namespace ftxui

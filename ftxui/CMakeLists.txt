@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.0)
-project(ftxui)
 
 add_library(ftxui
   src/ftxui/component/component.cpp
@@ -13,6 +12,7 @@ add_library(ftxui
   src/ftxui/dom/bold.cpp
   src/ftxui/dom/color.cpp
   src/ftxui/dom/composite_decorator.cpp
+  src/ftxui/dom/dbox.cpp
   src/ftxui/dom/dim.cpp
   src/ftxui/dom/flex.cpp
   src/ftxui/dom/frame.cpp

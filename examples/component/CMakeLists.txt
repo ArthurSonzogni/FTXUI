@@ -1,6 +1,5 @@
-example(color)
-example(gauge)
 example(input)
 example(menu)
 example(menu2)
+example(menu_style)
 example(toggle)

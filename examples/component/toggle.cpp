@@ -18,15 +18,12 @@ class MyComponent : ComponentVertical {
       : ComponentVertical(delegate),
         toggle_1(delegate->NewChild()),
         toggle_2(delegate->NewChild()),
-        toggle_3(delegate->NewChild()) {
-    toggle_1.on = L"On";
-    toggle_1.off = L"Off";
-
-    toggle_2.on = L"Enabled";
-    toggle_2.off = L"Disabled";
-
-    toggle_3.on = L"10€";
-    toggle_3.off = L"0€";
+        toggle_3(delegate->NewChild()),
+        toggle_4(delegate->NewChild()) {
+    toggle_1.options = {L"On", L"Off"};
+    toggle_2.options = {L"Enabled", L"Disabled"};
+    toggle_3.options = {L"10€", L"0€"};
+    toggle_4.options = {L"Nothing", L"One element", L"Several elements"};
 
     Focus(&toggle_1);
   }
@@ -37,6 +34,7 @@ class MyComponent : ComponentVertical {
   Toggle toggle_1;
   Toggle toggle_2;
   Toggle toggle_3;
+  Toggle toggle_4;
 
   Element Render() override {
     return
@@ -45,7 +43,8 @@ class MyComponent : ComponentVertical {
         text(L""),
         hbox(text(L" * Poweroff on startup      : "), toggle_1.Render()),
         hbox(text(L" * Out of process           : "), toggle_2.Render()),
-        hbox(text(L" * Price of the information : "), toggle_3.Render())
+        hbox(text(L" * Price of the information : "), toggle_3.Render()),
+        hbox(text(L" * Number of elements       : "), toggle_4.Render())
       );
   }
 
@@ -63,7 +62,7 @@ class MyComponent : ComponentVertical {
 };
 
 int main(int argc, const char* argv[]) {
-  ftxui::ScreenInteractive screen(50,5);
+  ftxui::ScreenInteractive screen(70,7);
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

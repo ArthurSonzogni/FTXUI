@@ -11,32 +11,33 @@ dom::Element Toggle::Render() {
 
   Children children;
   children.push_back(text(L"["));
-  if (activated) {
-    children.push_back(highlight(text(on)));
-    children.push_back(text(L"|"));
-    children.push_back(dim(text(off)));
-  } else {
-    children.push_back(dim(text(on)));
-    children.push_back(text(L"|"));
-    children.push_back(highlight(text(off)));
+
+  for(size_t i = 0; i<options.size(); ++i) {
+    // Separator.
+    if (i != 0)
+      children.push_back(text(L"|"));
+
+    // Entry.
+    auto style = i == activated ? highlight : dim;
+    children.push_back(style(text(options[i])));
   }
   children.push_back(text(L"]"));
   return hbox(std::move(children));
 }
 
 bool Toggle::OnEvent(Event event) {
-  if (activated) {
-    if (event == Event::ArrowRight || event == Event::Character('l')) {
-      activated = false;
-      on_change();
-      return true;
-    }
-  } else {
-    if (event == Event::ArrowLeft || event == Event::Character('h')) {
-      activated = true;
-      on_change();
-      return true;
-    }
+  if (activated > 0 &&
+      (event == Event::ArrowLeft || event == Event::Character('h'))) {
+    activated--;
+    on_change();
+    return true;
+  }
+
+  if (activated < options.size() - 1 &&
+      (event == Event::ArrowRight || event == Event::Character('l'))) {
+    activated++;
+    on_change();
+    return true;
   }
 
   return false;

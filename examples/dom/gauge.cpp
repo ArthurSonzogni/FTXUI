@@ -7,9 +7,9 @@
 
 int main(int argc, const char *argv[])
 {
-  for(float percentage = 0; percentage <= 1.0; percentage+=0.001) {
+  for(float percentage = 0; percentage <= 1.0; percentage+=0.002) {
     std::wstring data_downloaded =
-        std::to_wstring(int(percentage * 44100)) + L"/44100";
+        std::to_wstring(int(percentage * 5000)) + L"/5000";
     using namespace ftxui::dom;
     auto document =
         hbox(

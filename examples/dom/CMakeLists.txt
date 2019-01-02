@@ -1,3 +1,6 @@
+example(color)
+example(dbox)
 example(frame)
+example(gauge)
 example(separator)
 example(vbox_hbox)

@@ -3,6 +3,7 @@
 
 #include "ftxui/component/component.hpp"
 #include <functional>
+#include <string>
 
 namespace ftxui {
 namespace component {
@@ -13,9 +14,8 @@ class Toggle : public Component {
   Toggle(Delegate*);
 
   // State.
-  bool activated = true;
-  std::wstring on = L"On";
-  std::wstring off = L"Off";
+  size_t activated = 0;
+  std::vector<std::wstring> options = {L"On", L"Off"};
 
   // Callback.
   std::function<void()> on_change = [](){};

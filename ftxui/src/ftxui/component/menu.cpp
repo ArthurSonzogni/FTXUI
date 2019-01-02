@@ -14,12 +14,12 @@ dom::Element Menu::Render() {
   for (size_t i = 0; i < entries.size(); ++i) {
     if (size_t(selected) == i) {
       if (focused)
-        elements.push_back(inverted(text(L"> " + entries[i])));
+        elements.push_back(active_style(text(L"> " + entries[i])));
       else
-        elements.push_back(bold(text(L"> " + entries[i])));
+        elements.push_back(selected_style(text(L"> " + entries[i])));
     }
     else {
-      elements.push_back(text(L"  " + entries[i]));
+      elements.push_back(normal_style(text(L"  " + entries[i])));
     }
   }
   return vbox(std::move(elements));

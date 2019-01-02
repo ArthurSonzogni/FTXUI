@@ -70,7 +70,7 @@ class MyComponent : ComponentHorizontal {
 
 int main(int argc, const char *argv[])
 {
-  ftxui::ScreenInteractive screen(60,17);
+  ftxui::ScreenInteractive screen(60,18);
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();
