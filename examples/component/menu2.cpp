@@ -43,6 +43,7 @@ class MyComponent : ComponentHorizontal {
              flex(
                vbox(
                  hcenter(bold(text(L"Percentage by 10%"))),
+                 separator(),
                  left_menu.Render()
                )
              ),
@@ -50,6 +51,7 @@ class MyComponent : ComponentHorizontal {
              flex(
                vbox(
                  hcenter(bold(text(L"Percentage by 1%"))),
+                 separator(),
                  right_menu.Render()
                )
              ),

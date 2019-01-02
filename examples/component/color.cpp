@@ -54,7 +54,5 @@ int main(int argc, const char *argv[])
 
   std::cout << screen.ToString();
 
-  getchar();
-
   return 0;
 }

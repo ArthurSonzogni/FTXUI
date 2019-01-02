@@ -1,5 +1,5 @@
-#include "ftxui/dom/node.hpp"
 #include "ftxui/screen.hpp"
+#include "ftxui/dom/node.hpp"
 #include "ftxui/terminal.hpp"
 #include "ftxui/util/string.hpp"
 
@@ -10,6 +10,35 @@ namespace ftxui {
 Screen::Screen(size_t dimx, size_t dimy)
     : dimx_(dimx), dimy_(dimy), pixels_(dimy, std::vector<Pixel>(dimx)) {}
 
+void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
+  if (next.bold != previous.bold)
+    ss << (next.bold ? L"\e[1m" : L"\e[0m");
+
+  if (next.inverted != previous.inverted)
+    ss << (next.inverted ? L"\e[7m" : L"\e[27m");
+
+  if (next.underlined != previous.underlined)
+    ss << (next.underlined ? L"\e[4m" : L"\e[24m");
+
+  if (next.dim != previous.dim)
+    ss << (next.dim ? L"\e[2m" : L"\e[22m");
+
+  if (next.blink != previous.blink)
+    ss << (next.blink ? L"\e[5m" : L"\e[25m");
+
+  if (next.foreground_color != previous.foreground_color) {
+    ss << L"\e[" + to_wstring(std::to_string((uint8_t)next.foreground_color)) +
+              L"m";
+  }
+  if (next.background_color != previous.background_color) {
+    ss << L"\e[" +
+              to_wstring(std::to_string(10 + (uint8_t)next.background_color)) +
+              L"m";
+  }
+
+  previous = next;
+}
+
 std::string Screen::ToString() {
   std::wstringstream ss;
 
@@ -17,57 +46,13 @@ std::string Screen::ToString() {
 
   for (size_t y = 0; y < dimy_; ++y) {
     for (size_t x = 0; x < dimx_; ++x) {
-      if (pixels_[y][x].bold != previous_pixel.bold) {
-        if (pixels_[y][x].bold) {
-          ss << L"\e[1m";
-        } else {
-          ss << L"\e[0m";
-        }
-      }
-      if (pixels_[y][x].inverted != previous_pixel.inverted) {
-        if (pixels_[y][x].inverted) {
-          ss << L"\e[7m";
-        } else {
-          ss << L"\e[27m";
-        }
-      }
-      if (pixels_[y][x].underlined != previous_pixel.underlined) {
-        if (pixels_[y][x].underlined) {
-          ss << L"\e[4m";
-        } else {
-          ss << L"\e[24m";
-        }
-      }
-      if (pixels_[y][x].dim != previous_pixel.dim) {
-        if (pixels_[y][x].dim) {
-          ss << L"\e[2m";
-        } else {
-          ss << L"\e[22m";
-        }
-      }
-      if (pixels_[y][x].blink != previous_pixel.blink) {
-        if (pixels_[y][x].blink) {
-          ss << L"\e[5m";
-        } else {
-          ss << L"\e[25m";
-        }
-      }
-      if (pixels_[y][x].foreground_color != previous_pixel.foreground_color) {
-        ss << L"\e[" + to_wstring(std::to_string(
-                           (uint8_t)pixels_[y][x].foreground_color)) +
-                  L"m";
-      }
-      if (pixels_[y][x].background_color != previous_pixel.background_color) {
-        ss << L"\e[" + to_wstring(std::to_string(
-                           10 + (uint8_t)pixels_[y][x].background_color)) +
-                  L"m";
-      }
+      UpdatePixelStyle(ss, previous_pixel, pixels_[y][x]);
       ss << pixels_[y][x].character;
-      previous_pixel = pixels_[y][x];
     }
     if (y + 1 < dimy_)
       ss << '\n';
   }
+
   return to_string(ss.str());
 }
 

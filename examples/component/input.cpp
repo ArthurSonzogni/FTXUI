@@ -9,6 +9,7 @@
 
 using namespace ftxui::component;
 using namespace ftxui::dom;
+using namespace ftxui;
 
 class MyComponent : ComponentVertical {
  public:
@@ -44,7 +45,7 @@ class MyComponent : ComponentVertical {
 };
 
 int main(int argc, const char* argv[]) {
-  ftxui::ScreenInteractive screen(60, 17);
+  ftxui::ScreenInteractive screen(60, 5);
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

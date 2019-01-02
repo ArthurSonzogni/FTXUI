@@ -19,7 +19,6 @@ int main(int argc, const char *argv[])
   Render(screen, document.get());
 
   std::cout << screen.ToString();
-
   getchar();
 
   return 0;

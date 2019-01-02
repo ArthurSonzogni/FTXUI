@@ -7,6 +7,7 @@ namespace ftxui {
 namespace component {
 
 // A component where focus and events are automatically handled for you.
+// Please use ComponentVertical or ComponentHorizontal.
 class ComponentDirection : public Component {
  public:
   ComponentDirection(Delegate* delegate);

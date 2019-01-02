@@ -17,14 +17,14 @@ class Node {
   Node(std::vector<std::unique_ptr<Node>> children);
   virtual ~Node();
 
-  // Step 1: Direction parent <= children.
-  //         Compute layout requirement. Tell parent what dimensions this
+  // Step 1: Compute layout requirement. Tell parent what dimensions this
   //         element wants to be.
+  //         Propagated from Children to Parents.
   virtual void ComputeRequirement();
   Requirement requirement() { return requirement_; }
 
-  // Step 2: Direction parent => children.
-  //         Assign this element its final dimensions.
+  // Step 2: Assign this element its final dimensions.
+  //         Propagated from Parents to Children.
   virtual void SetBox(Box box);
 
   // Step 3: Draw this element.

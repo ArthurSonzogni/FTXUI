@@ -15,6 +15,7 @@ using Children = std::vector<Child>;
 Element vbox(Children);
 Element hbox(Children);
 Element flex();
+Element flex(Element);
 
 // --- Widget --
 Element text(std::wstring text);
@@ -23,7 +24,7 @@ Element gauge(float ratio);
 Element frame(Child);
 Element frame(Child title, Child content);
 
-// -- Decorator (Style) ---
+// -- Style ---
 Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
@@ -32,11 +33,10 @@ Element blink(Element);
 Element color(Color, Element);
 Element bgcolor(Color, Element);
 
-// --- Decorator ---
+// --- Util ---
 Element hcenter(Element);
 Element vcenter(Element);
 Element center(Element);
-Element flex(Element);
 
 // --- Util ---
 Element nothing(Element element);

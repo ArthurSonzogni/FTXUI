@@ -24,6 +24,9 @@ dom::Element Input::Render() {
   if (!is_focused)
     return flex(text(content));
 
+  std::wstring sub_content = content;
+  size_t sub_cursor_position = cursor_position;
+
   std::wstring part_before_cursor = content.substr(0,cursor_position);
   std::wstring part_at_cursor = cursor_position < (int)content.size()
                                     ? content.substr(cursor_position, 1)

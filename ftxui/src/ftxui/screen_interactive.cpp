@@ -11,6 +11,7 @@ namespace ftxui {
 namespace {
   constexpr int ESC = 27;
   constexpr int WAT = 195;
+  constexpr int WAT2 = 194;
   constexpr int WATWAIT = 91;
 
   Event GetEvent() {
@@ -28,6 +29,11 @@ namespace {
     }
 
     if (v1 == WAT) {
+      int v2 = getchar();
+      return Event{v1, v2};
+    }
+
+    if (v1 == WAT2) {
       int v2 = getchar();
       return Event{v1, v2};
     }
