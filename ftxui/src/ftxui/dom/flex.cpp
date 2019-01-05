@@ -27,7 +27,7 @@ class Flex : public Node {
   }
 };
 
-std::unique_ptr<Node> flex() {
+std::unique_ptr<Node> filler() {
   return std::make_unique<Flex>();
 }
 

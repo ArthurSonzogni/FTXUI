@@ -18,17 +18,17 @@ using Children = std::vector<Child>;
 Element vbox(Children);
 Element hbox(Children);
 Element dbox(Children);
-Element flex();
+Element filler();
 Element flex(Element);
 
 // --- Widget --
 Element text(std::wstring text);
 Element separator();
 Element gauge(float ratio);
-Element frame(Child);
-Element frame(Child title, Child content);
+Element frame(Element);
+Element window(Child title, Child content);
 
-// -- Style ---
+// -- Decorator ---
 Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
@@ -46,8 +46,13 @@ Element center(Element);
 
 // --- Util ---
 Element nothing(Element element);
-Decorator compose(Decorator, Decorator);
 
+// Pipe elements into decorator togethers.
+// Examples: text("ftxui") | bold | underlined;
+Element operator|(Element, Decorator);
+Decorator operator|(Decorator, Decorator);
+
+// Make container able to take several children.
 template <class... Args>
 Children unpack(Args... args) {
   Children vec;
@@ -55,20 +60,15 @@ Children unpack(Args... args) {
   return vec;
 }
 
-template <class... Args>
-Element vbox(Args... children) {
-  return vbox(unpack(std::forward<Args>(children)...));
-}
+#define TAKE_ANY_ARGS(container) \
+  template <class... Args> \
+  Element container(Args... children) { \
+    return container(unpack(std::forward<Args>(children)...)); \
+  } \
 
-template <class... Args>
-Element hbox(Args... children) {
-  return hbox(unpack(std::forward<Args>(children)...));
-}
-
-template <class... Args>
-Element dbox(Args... children) {
-  return dbox(unpack(std::forward<Args>(children)...));
-}
+TAKE_ANY_ARGS(vbox)
+TAKE_ANY_ARGS(hbox)
+TAKE_ANY_ARGS(dbox)
 
 };  // namespace dom
 };  // namespace ftxui

@@ -7,7 +7,7 @@
 
 int main(int argc, const char *argv[])
 {
-  ftxui::ScreenInteractive screen(30,3);
+  auto screen = ftxui::ScreenInteractive::FixedSize(30, 3);
   ftxui::component::Menu menu(screen.delegate());
   menu.entries = {
     L"entry 1",

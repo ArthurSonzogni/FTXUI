@@ -45,7 +45,7 @@ class MyComponent : ComponentVertical {
 };
 
 int main(int argc, const char* argv[]) {
-  ftxui::ScreenInteractive screen(60, 5);
+  auto screen = ftxui::ScreenInteractive::TerminalOutput();
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

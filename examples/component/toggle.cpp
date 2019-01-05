@@ -62,7 +62,7 @@ class MyComponent : ComponentVertical {
 };
 
 int main(int argc, const char* argv[]) {
-  ftxui::ScreenInteractive screen(70,7);
+  auto screen = ftxui::ScreenInteractive::TerminalOutput();
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

@@ -10,12 +10,12 @@ class Bold : public NodeDecorator {
   ~Bold() override {}
 
   void Render(Screen& screen) override {
-    Node::Render(screen);
     for (int y = box_.top; y <= box_.bottom; ++y) {
       for (int x = box_.left; x <= box_.right; ++x) {
         screen.PixelAt(x,y).bold = true; 
       }
     }
+    Node::Render(screen);
   }
 };
 

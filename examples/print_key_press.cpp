@@ -42,7 +42,7 @@ class DrawKey : public ftxui::component::Component {
 };
 
 int main(int argc, const char* argv[]) {
-  ftxui::ScreenInteractive screen(80,10);
+  auto screen = ftxui::ScreenInteractive::FixedSize(80,10);
   DrawKey draw_key(screen.delegate());
   screen.Loop();
 }

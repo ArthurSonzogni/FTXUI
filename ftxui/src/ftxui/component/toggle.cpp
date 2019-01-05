@@ -10,18 +10,16 @@ dom::Element Toggle::Render() {
   auto highlight = Focused() ? inverted : bold;
 
   Children children;
-  children.push_back(text(L"["));
 
   for(size_t i = 0; i<options.size(); ++i) {
     // Separator.
     if (i != 0)
-      children.push_back(text(L"|"));
+      children.push_back(separator());
 
     // Entry.
     auto style = i == activated ? highlight : dim;
     children.push_back(style(text(options[i])));
   }
-  children.push_back(text(L"]"));
   return hbox(std::move(children));
 }
 

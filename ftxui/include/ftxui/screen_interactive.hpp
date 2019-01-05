@@ -14,7 +14,10 @@ namespace component {
 
 class ScreenInteractive : public Screen {
   public:
-    ScreenInteractive(size_t dimx, size_t dimy);
+    static ScreenInteractive FixedSize(size_t dimx, size_t dimy);
+    static ScreenInteractive Fullscreen();
+    static ScreenInteractive TerminalOutput();
+
     ~ScreenInteractive();
     component::Delegate* delegate();
     void Loop();
@@ -27,6 +30,15 @@ class ScreenInteractive : public Screen {
 	 void Clear();
 	 void Draw();
 	 bool quit_ = false;
+
+   enum class Dimension {
+     Fixed,
+     TerminalOutput,
+     Fullscreen,
+   };
+   Dimension dimension_ = Dimension::Fixed;
+
+   ScreenInteractive(size_t dimx, size_t dimy, Dimension dimension);
 };
 
 }  // namespace ftxui

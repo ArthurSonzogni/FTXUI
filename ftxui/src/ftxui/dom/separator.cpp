@@ -19,7 +19,7 @@ class Separator : public Node {
     wchar_t c = U'+';
     if (is_line && !is_column)
       c = U'─';
-    else if (!is_line && is_column)
+    else
       c = U'│';
 
     for (int y = box_.top; y <= box_.bottom; ++y) {

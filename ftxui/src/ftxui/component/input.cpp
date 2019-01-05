@@ -15,14 +15,14 @@ dom::Element Input::Render() {
   // Placeholder.
   if (content.size() == 0) {
     if (is_focused)
-      return flex(inverted(dim(text(placeholder))));
+      return text(placeholder) | dim | inverted | flex;
     else
-      return flex(dim(text(placeholder)));
+      return text(placeholder) | dim | flex;
   }
 
   // Not focused.
   if (!is_focused)
-    return flex(text(content));
+    return text(content) | flex;
 
   std::wstring part_before_cursor = content.substr(0,cursor_position);
   std::wstring part_at_cursor = cursor_position < (int)content.size()
@@ -31,11 +31,12 @@ dom::Element Input::Render() {
   std::wstring part_after_cursor = cursor_position < (int)content.size() - 1
                                        ? content.substr(cursor_position + 1)
                                        : L"";
-  return flex(inverted(hbox(             //
-      text(part_before_cursor),          //
-      underlined(text(part_at_cursor)),  //
-      text(part_after_cursor)            //
-      )));                               //
+  return
+    hbox(
+      text(part_before_cursor),
+      text(part_at_cursor) | underlined,
+      text(part_after_cursor)
+    ) | flex | inverted;
 }
 bool Input::OnEvent(Event event) {
   std::wstring c;

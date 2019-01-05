@@ -62,7 +62,7 @@ TEST(HBoxTest, ScreenBigger2) {
 TEST(HBoxTest, ScreenSmaller1Flex) {
   auto root = hbox(
     text(L"text_1"),
-    flex(),
+    filler(),
     text(L"text_2")
   );
   Screen screen(11,1);
@@ -74,7 +74,7 @@ TEST(HBoxTest, ScreenSmaller1Flex) {
 TEST(HBoxTest, ScreenSmaller2Flex) {
   auto root = hbox(
     text(L"text_1"),
-    flex(),
+    filler(),
     text(L"text_2")
   );
   Screen screen(10,1);
@@ -86,7 +86,7 @@ TEST(HBoxTest, ScreenSmaller2Flex) {
 TEST(HBoxTest, ScreenFitFlex) {
   auto root = hbox(
     text(L"text_1"),
-    flex(),
+    filler(),
     text(L"text_2")
   );
   Screen screen(12,1);
@@ -98,7 +98,7 @@ TEST(HBoxTest, ScreenFitFlex) {
 TEST(HBoxTest, ScreenBigger1Flex) {
   auto root = hbox(
     text(L"text_1"),
-    flex(),
+    filler(),
     text(L"text_2")
   );
   Screen screen(13,1);
@@ -110,7 +110,7 @@ TEST(HBoxTest, ScreenBigger1Flex) {
 TEST(HBoxTest, ScreenBigger2Flex) {
   auto root = hbox(
     text(L"text_1"),
-    flex(),
+    filler(),
     text(L"text_2")
   );
   Screen screen(14,1);

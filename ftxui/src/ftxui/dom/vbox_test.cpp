@@ -37,7 +37,7 @@ TEST(VBoxTest, ScreenBigger2) {
 }
 
 TEST(VBoxTest, ScreenSmaller1Flex) {
-  auto root = vbox(text(L"text_1"), flex(), text(L"text_2"));
+  auto root = vbox(text(L"text_1"), filler(), text(L"text_2"));
   Screen screen(6, 1);
   Render(screen, root.get());
 
@@ -45,7 +45,7 @@ TEST(VBoxTest, ScreenSmaller1Flex) {
 }
 
 TEST(VBoxTest, ScreenFitFlex) {
-  auto root = vbox(text(L"text_1"), flex(), text(L"text_2"));
+  auto root = vbox(text(L"text_1"), filler(), text(L"text_2"));
   Screen screen(6, 2);
   Render(screen, root.get());
 
@@ -53,14 +53,14 @@ TEST(VBoxTest, ScreenFitFlex) {
 }
 
 TEST(VBoxTest, ScreenBigger1Flex) {
-  auto root = vbox(text(L"text_1"), flex(), text(L"text_2"));
+  auto root = vbox(text(L"text_1"), filler(), text(L"text_2"));
   Screen screen(6, 3);
   Render(screen, root.get());
 
   EXPECT_EQ("text_1\n      \ntext_2", screen.ToString());
 }
 TEST(VBoxTest, ScreenBigger2Flex) {
-  auto root = vbox(text(L"text_1"), flex(), text(L"text_2"));
+  auto root = vbox(text(L"text_1"), filler(), text(L"text_2"));
   Screen screen(6, 4);
   Render(screen, root.get());
 

@@ -14,7 +14,7 @@ int main(int argc, const char *argv[])
     auto document =
         hbox(
           text(L"downloading:"),
-          flex(gauge(percentage)),
+          gauge(percentage) | flex,
           text(L" " + data_downloaded)
         );
     auto screen = ftxui::Screen(100, 1);

@@ -10,7 +10,7 @@ int main(int argc, const char *argv[])
       text(L"left-column"),
       separator(),
       flex(vbox(
-        flex(center(text(L"right-column"))),
+        center(text(L"right-column")) | flex,
         separator(),
         center(text(L"bottom-column"))
       ))

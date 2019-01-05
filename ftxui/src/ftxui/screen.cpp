@@ -12,28 +12,19 @@ Screen::Screen(size_t dimx, size_t dimy)
 
 void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
   if (next.bold != previous.bold)
-    ss << (next.bold ? L"\e[1m" : L"\e[0m");
-
-  if (next.inverted != previous.inverted)
-    ss << (next.inverted ? L"\e[7m" : L"\e[27m");
-
-  if (next.underlined != previous.underlined)
-    ss << (next.underlined ? L"\e[4m" : L"\e[24m");
-
+    ss << (next.bold ? L"\e[1m" : L"\e[22m"); // Can't use 21 here.
   if (next.dim != previous.dim)
     ss << (next.dim ? L"\e[2m" : L"\e[22m");
-
+  if (next.underlined != previous.underlined)
+    ss << (next.underlined ? L"\e[4m" : L"\e[24m");
   if (next.blink != previous.blink)
     ss << (next.blink ? L"\e[5m" : L"\e[25m");
-
-  if (next.foreground_color != previous.foreground_color) {
-    ss << L"\e[" + to_wstring(std::to_string((uint8_t)next.foreground_color)) +
-              L"m";
-  }
-  if (next.background_color != previous.background_color) {
-    ss << L"\e[" +
-              to_wstring(std::to_string(10 + (uint8_t)next.background_color)) +
-              L"m";
+  if (next.inverted != previous.inverted)
+    ss << (next.inverted ? L"\e[7m" : L"\e[27m");
+  if (next.foreground_color != previous.foreground_color ||
+      next.background_color != previous.background_color) {
+    ss << L"\e[" + to_wstring(std::to_string((uint8_t)next.foreground_color)) + L"m";
+    ss << L"\e[" + to_wstring(std::to_string(10 + (uint8_t)next.background_color)) + L"m";
   }
 
   previous = next;
@@ -49,8 +40,11 @@ std::string Screen::ToString() {
       UpdatePixelStyle(ss, previous_pixel, pixels_[y][x]);
       ss << pixels_[y][x].character;
     }
+
     if (y + 1 < dimy_)
       ss << '\n';
+    Pixel final_pixel;
+    UpdatePixelStyle(ss, previous_pixel, final_pixel);
   }
 
   return to_string(ss.str());

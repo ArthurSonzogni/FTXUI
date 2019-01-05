@@ -49,7 +49,7 @@ class Screen {
   // Fill with space.
   void Clear();
 
- private:
+ protected:
   size_t dimx_;
   size_t dimy_;
   std::vector<std::vector<Pixel>> pixels_;

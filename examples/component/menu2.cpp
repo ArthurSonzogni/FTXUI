@@ -40,29 +40,25 @@ class MyComponent : ComponentHorizontal {
            // -------- Top panel --------------
            hbox(
              // -------- Left Menu --------------
-             flex(
-               vbox(
-                 hcenter(bold(text(L"Percentage by 10%"))),
-                 separator(),
-                 left_menu.Render()
-               )
-             ),
+             vbox(
+               hcenter(bold(text(L"Percentage by 10%"))),
+               separator(),
+               left_menu.Render()
+             ) | flex,
              // -------- Right Menu --------------
-             flex(
-               vbox(
-                 hcenter(bold(text(L"Percentage by 1%"))),
-                 separator(),
-                 right_menu.Render()
-               )
-             ),
-             flex()
+             vbox(
+               hcenter(bold(text(L"Percentage by 1%"))),
+               separator(),
+               right_menu.Render()
+             ) | flex,
+             filler()
            ),
            separator(),
            // -------- Bottom panel --------------
-           flex(vbox(
+           vbox(
              hbox(text(L" gauge : "), gauge(sum/100.0)),
              hbox(text(L"  text : "), text(to_wstring(std::to_string(sum) + " %")))
-           ))
+           ) | flex
          )
        );
    }
@@ -70,7 +66,7 @@ class MyComponent : ComponentHorizontal {
 
 int main(int argc, const char *argv[])
 {
-  ftxui::ScreenInteractive screen(60,18);
+  auto screen = ftxui::ScreenInteractive::TerminalOutput();
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

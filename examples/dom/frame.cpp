@@ -10,7 +10,7 @@ int main(int argc, const char *argv[])
   using namespace ftxui::dom;
 	auto document =
 		hbox(
-			frame(hcenter(text(L" main frame ")),
+			window(hcenter(text(L" main frame ")),
 				vbox(
 					text(L"Line 1"),
 					text(L"Line 2"),
@@ -23,14 +23,14 @@ int main(int argc, const char *argv[])
 						)
 					),
 					hbox(
-						frame(text(L"frame 2"),
+						window(text(L"frame 2"),
 							vbox(
 								text(L"Line 4"),
 								text(L"Line 5"),
 								text(L"Line 6")
 							)
 						),
-						frame(text(L"frame 3"),
+						window(text(L"frame 3"),
 							vbox(
 								text(L"Line 7"),
 								text(L"Line 8"),
@@ -41,7 +41,7 @@ int main(int argc, const char *argv[])
 					text(L"footer footer footer footer footer")
 				)
 			),
-			flex()
+			filler()
 		);
   auto screen = ftxui::Screen::TerminalOutput(document);
   Render(screen, document.get());

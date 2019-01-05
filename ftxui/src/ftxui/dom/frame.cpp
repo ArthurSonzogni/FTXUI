@@ -84,8 +84,14 @@ std::unique_ptr<Node> frame(Child child) {
   return std::make_unique<Frame>(unpack(std::move(child)));
 }
 
-std::unique_ptr<Node> frame(Child title, Child content) {
+std::unique_ptr<Node> window(Child title, Child content) {
   return std::make_unique<Frame>(unpack(std::move(content), std::move(title)));
+}
+
+Decorator boxed() {
+  return [](Child child) {
+    return frame(std::move(child));
+  };
 }
 
 };  // namespace dom

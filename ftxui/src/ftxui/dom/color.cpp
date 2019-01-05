@@ -10,12 +10,12 @@ class BgColor : public NodeDecorator {
       : NodeDecorator(std::move(children)), color_(color) {}
 
   void Render(Screen& screen) override {
-    NodeDecorator::Render(screen);
     for (int y = box_.top; y <= box_.bottom; ++y) {
       for (int x = box_.left; x <= box_.right; ++x) {
         screen.PixelAt(x, y).background_color = color_;
       }
     }
+    NodeDecorator::Render(screen);
   }
 
   Color color_;
@@ -28,12 +28,12 @@ class FgColor : public NodeDecorator {
   ~FgColor() override {}
 
   void Render(Screen& screen) override {
-    NodeDecorator::Render(screen);
     for (int y = box_.top; y <= box_.bottom; ++y) {
       for (int x = box_.left; x <= box_.right; ++x) {
         screen.PixelAt(x, y).foreground_color = color_;
       }
     }
+    NodeDecorator::Render(screen);
   }
 
   Color color_;

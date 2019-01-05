@@ -46,7 +46,7 @@ int main(int argc, const char *argv[])
         bgcolor(Color::Yellow, text(L"Yellow")),
         bgcolor(Color::YellowLight, text(L"YellowLight"))
       ),
-      flex()
+      filler()
     );
 
   auto screen = ftxui::Screen::TerminalOutput(document);

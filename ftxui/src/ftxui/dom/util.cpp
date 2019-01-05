@@ -12,9 +12,17 @@ Decorator compose(Decorator a, Decorator b) {
     a = std::move(a),
     b = std::move(b)
   ](Element element) {
-    return a(b(std::move(element)));
+    return b(a(std::move(element)));
   };
 }
 
-};  // namespace dom
-};  // namespace ftxui
+Decorator operator|(Decorator a, Decorator b) {
+  return compose(a, b);
+}
+
+Element operator|(Element e, Decorator d) {
+  return d(std::move(e));
+}
+
+}  // namespace dom
+}  // namespace ftxui

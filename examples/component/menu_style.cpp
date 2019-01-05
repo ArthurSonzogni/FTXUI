@@ -33,7 +33,7 @@ class MyComponent : ComponentHorizontal {
      }
 
      menu_2.selected_style = color(Color::Blue);
-     menu_2.active_style = compose(bold, color(Color::Blue));
+     menu_2.active_style = bold | color(Color::Blue);
 
      menu_3.selected_style = color(Color::Blue);
      menu_3.active_style = bgcolor(Color::Blue);
@@ -45,9 +45,9 @@ class MyComponent : ComponentHorizontal {
      menu_5.selected_style = bgcolor(Color::Yellow);
      menu_5.active_style = bgcolor(Color::Red);
 
-     menu_6.normal_style = compose(dim, color(Color::Blue));
-     menu_6.selected_style = compose(nothing, color(Color::Blue));
-     menu_6.active_style = compose(bold, color(Color::Blue));
+     menu_6.normal_style = dim | color(Color::Blue);
+     menu_6.selected_style = color(Color::Blue);
+     menu_6.active_style = bold | color(Color::Blue);
 
      Focus(&menu_1);
    }
@@ -63,24 +63,21 @@ class MyComponent : ComponentHorizontal {
 
    Element Render() override {
      return
-      vbox(
         hbox(
-          flex(frame(center(text(L" menu_1 ")), menu_1.Render())),
-          flex(frame(center(text(L" menu_2 ")), menu_2.Render())),
-          flex(frame(center(text(L" menu_3 ")), menu_3.Render()))
-        ),
-        hbox(
-          flex(frame(center(text(L" menu_4 ")), menu_4.Render())),
-          flex(frame(center(text(L" menu_5 ")), menu_5.Render())),
-          flex(frame(center(text(L" menu_6 ")), menu_6.Render()))
-        )
-      );
+          menu_1.Render() | flex, separator(),
+          menu_2.Render() | flex, separator(),
+          menu_3.Render() | flex, separator(),
+          menu_4.Render() | flex, separator(),
+          menu_5.Render() | flex, separator(),
+          menu_6.Render() | flex
+        ) | frame;
    }
 };
 
 int main(int argc, const char *argv[])
 {
-  ftxui::ScreenInteractive screen(90,14);
+  //auto screen = ftxui::ScreenInteractive::TerminalOutput();
+  auto screen = ftxui::ScreenInteractive::Fullscreen();
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

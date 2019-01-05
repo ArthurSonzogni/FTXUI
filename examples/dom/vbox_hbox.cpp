@@ -9,21 +9,21 @@ int main(int argc, const char *argv[])
     vbox(
       hbox(
         text(L"north-west"),
-        flex(),
+        filler(),
         text(L"north-east")
       ),
-      flex(),
+      filler(),
       hbox(
         hbox(
-          flex(),
+          filler(),
           text(L"center"),
-          flex()
+          filler()
         )
       ),
-      flex(),
+      filler(),
       hbox(
         text(L"south-west"),
-        flex(),
+        filler(),
         text(L"south-east")
       )
     );

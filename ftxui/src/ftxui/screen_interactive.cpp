@@ -1,6 +1,8 @@
 #include "ftxui/screen_interactive.hpp"
+
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/delegate.hpp"
+#include "ftxui/terminal.hpp"
 #include <iostream>
 #include <stdio.h>
 #include <termios.h>
@@ -86,9 +88,26 @@ class ScreenInteractive::Delegate : public component::Delegate {
   component::Component* component() override { return component_; }
 };
 
-ScreenInteractive::ScreenInteractive(size_t dimx, size_t dimy)
-    : Screen(dimx, dimy), delegate_(new Delegate) {}
+ScreenInteractive::ScreenInteractive(size_t dimx,
+                                     size_t dimy,
+                                     Dimension dimension)
+    : Screen(dimx, dimy), delegate_(new Delegate), dimension_(dimension) {}
 ScreenInteractive::~ScreenInteractive() {}
+
+// static
+ScreenInteractive ScreenInteractive::FixedSize(size_t dimx, size_t dimy) {
+  return ScreenInteractive(dimx, dimy, Dimension::Fixed);
+}
+
+// static
+ScreenInteractive ScreenInteractive::Fullscreen() {
+  return ScreenInteractive(0, 0, Dimension::Fullscreen);
+}
+
+// static
+ScreenInteractive ScreenInteractive::TerminalOutput() {
+  return ScreenInteractive(0, 0, Dimension::TerminalOutput);
+}
 
 void ScreenInteractive::Loop() {
   std::cout << "\033[?9h";    /* Send Mouse Row & Column on Button Press */
@@ -110,14 +129,12 @@ void ScreenInteractive::Loop() {
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
 
   Draw();
-  while (!quit_) {
+  while(!quit_) {
     delegate_->OnEvent(GetEvent());
-
     Clear();
     Draw();
-  }
-  std::cout << std::endl;
-  //Clear();
+  } while(!quit_);
+  //std::cout << std::endl;
 
   // Restore the old terminal configuration.
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_old);
@@ -125,6 +142,29 @@ void ScreenInteractive::Loop() {
 
 void ScreenInteractive::Draw() {
   auto document = delegate_->component()->Render();
+  size_t dimx;
+  size_t dimy;
+  switch(dimension_) {
+    case Dimension::Fixed:
+      break;
+    case Dimension::TerminalOutput:
+      document->ComputeRequirement();
+      dimx = Terminal::Size().dimx;
+      dimy = document->requirement().min.y;
+      break;
+    case Dimension::Fullscreen:
+      document->ComputeRequirement();
+      dimx = Terminal::Size().dimx;
+      dimy = Terminal::Size().dimy;
+      break;
+  }
+
+  if (dimx != dimx_ || dimy != dimy_) {
+    dimx_ = dimx;
+    dimy_ = dimy;
+    pixels_ = std::vector<std::vector<Pixel>>(dimy, std::vector<Pixel>(dimx));
+  }
+
   Render(*this, document.get());
   std::cout << ToString() << std::flush;
 }

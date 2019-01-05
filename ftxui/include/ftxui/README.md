@@ -22,7 +22,7 @@
 ## Level 3: ftxui::component::Component
   A hierarchical set of component. A component render itself by producing
   ftxui::dom::Node in Component::Render().
-  
+
   Some component can handle events:
     * keyboard
     * mouse

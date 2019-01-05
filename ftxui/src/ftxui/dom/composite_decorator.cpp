@@ -5,11 +5,11 @@ namespace ftxui {
 namespace dom {
 
 std::unique_ptr<Node> hcenter(Element child) {
-  return hbox(flex(), std::move(child), flex());
+  return hbox(filler(), std::move(child), filler());
 }
 
 std::unique_ptr<Node> vcenter(Element child) {
-  return vbox(flex(), std::move(child), flex());
+  return vbox(filler(), std::move(child), filler());
 }
 
 std::unique_ptr<Node> center(Element child) {
