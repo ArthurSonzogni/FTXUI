@@ -25,8 +25,7 @@ class ScreenInteractive : public ftxui::screen::Screen {
    class Delegate;
    std::unique_ptr<Delegate> delegate_;
 
-   void Clear();
-   void Draw();
+   void PrepareDraw();
    bool quit_ = false;
 
    enum class Dimension {

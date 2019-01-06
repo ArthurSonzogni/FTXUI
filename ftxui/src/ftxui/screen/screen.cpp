@@ -56,16 +56,17 @@ std::string Screen::ToString() {
   Pixel previous_pixel;
 
   for (size_t y = 0; y < dimy_; ++y) {
+    if (y != 0)
+      ss << '\n';
     for (size_t x = 0; x < dimx_; ++x) {
       UpdatePixelStyle(ss, previous_pixel, pixels_[y][x]);
       ss << pixels_[y][x].character;
     }
 
-    if (y + 1 < dimy_)
-      ss << '\n';
-    Pixel final_pixel;
-    UpdatePixelStyle(ss, previous_pixel, final_pixel);
   }
+
+  Pixel final_pixel;
+  UpdatePixelStyle(ss, previous_pixel, final_pixel);
 
   return to_string(ss.str());
 }
@@ -93,10 +94,10 @@ Screen Screen::TerminalOutput(std::unique_ptr<dom::Node>& element) {
 
 std::string Screen::ResetPosition() {
   std::stringstream ss;
+  //ss << '\r';
   for (size_t y = 1; y < dimy_; ++y) {
     ss << "\e[2K\r\e[1A";
   }
-  ss << '\r';
   return ss.str();
 }
 

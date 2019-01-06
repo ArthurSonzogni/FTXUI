@@ -127,21 +127,20 @@ void ScreenInteractive::Loop() {
   terminal_configuration_new.c_lflag &= ~ECHO;
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
 
-  Draw();
+  std::string reset_position;
   while (!quit_) {
-    delegate_->OnEvent(GetEvent());
+    PrepareDraw();
+    std::cout << reset_position << ToString() << std::flush;
+    reset_position = ResetPosition();
     Clear();
-    Draw();
+    delegate_->OnEvent(GetEvent());
   }
-  while (!quit_)
-    ;
-  // std::cout << std::endl;
 
   // Restore the old terminal configuration.
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_old);
 }
 
-void ScreenInteractive::Draw() {
+void ScreenInteractive::PrepareDraw() {
   auto document = delegate_->component()->Render();
   size_t dimx;
   size_t dimy;
@@ -168,12 +167,6 @@ void ScreenInteractive::Draw() {
   }
 
   Render(*this, document.get());
-  std::cout << ToString() << std::flush;
-}
-
-void ScreenInteractive::Clear() {
-  std::cout << ResetPosition();
-  Screen::Clear();
 }
 
 component::Delegate* ScreenInteractive::delegate() {

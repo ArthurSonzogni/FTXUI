@@ -51,7 +51,7 @@ class VBox : public Node {
         remaining_flex -= child->requirement().flex.y;
         child_box.bottom += added_space;
       }
-      child_box.bottom = std::min(child_box.bottom, box.bottom-1);
+      child_box.bottom = std::min(child_box.bottom, box.bottom);
 
       child->SetBox(child_box);
       y = child_box.bottom + 1;
