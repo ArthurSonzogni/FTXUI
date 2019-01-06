@@ -27,7 +27,7 @@ class Menu : public Component {
 
   // Component implementation.
   dom::Element Render() override;
-	bool OnEvent(Event) override;
+  bool OnEvent(Event) override;
 };
 
 }  // namespace component

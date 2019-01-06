@@ -52,20 +52,8 @@ Element nothing(Element element);
 Element operator|(Element, Decorator);
 Decorator operator|(Decorator, Decorator);
 
-// Make container able to take several children.
-template <class... Args>
-Children unpack(Args... args) {
-  Children vec;
-  (vec.push_back(std::forward<Args>(args)), ...);
-  return vec;
-}
-
-#define TAKE_ANY_ARGS(container) \
-  template <class... Args> \
-  Element container(Args... children) { \
-    return container(unpack(std::forward<Args>(children)...)); \
-  } \
-
+// Make container able to take any number of children as input.
+#include "take_any_args.hpp"
 TAKE_ANY_ARGS(vbox)
 TAKE_ANY_ARGS(hbox)
 TAKE_ANY_ARGS(dbox)

@@ -44,7 +44,7 @@ int main(int argc, const char *argv[])
   int nb_done = 0;
 
   auto to_text = [](int number) {
-    std::wstring t = to_wstring(std::to_string(number));
+    std::wstring t = to_wstring(number);
     while(t.size() < 3)
       t = L" " + t;
     return text(t);

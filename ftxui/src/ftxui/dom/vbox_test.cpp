@@ -10,7 +10,7 @@ TEST(VBoxTest, ScreenSmaller1) {
   Screen screen(6, 1);
   Render(screen, root.get());
 
-  EXPECT_EQ("text_1", screen.ToString());
+  EXPECT_EQ("text_2", screen.ToString());
 }
 
 TEST(VBoxTest, ScreenFit) {

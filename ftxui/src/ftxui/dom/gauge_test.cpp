@@ -18,8 +18,8 @@ TEST(GaugeTest, half) {
   Screen screen(11,1);
   Render(screen, root.get());
 
-  EXPECT_EQ("█████▏▋    ", screen.ToString());
-//"  ▏▎▍▌▊▉█";
+  EXPECT_EQ("█████▍     ", screen.ToString());
+  //"  ▏▎▍▌▊▉█";
 }
 
 TEST(GaugeTest, one) {

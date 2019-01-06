@@ -23,7 +23,7 @@ class Input : public Component {
 
   // Component implementation.
   dom::Element Render() override;
-	bool OnEvent(Event) override;
+  bool OnEvent(Event) override;
 
  private:
   int cursor_position = 0;

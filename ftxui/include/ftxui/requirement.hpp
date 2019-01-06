@@ -4,23 +4,11 @@
 namespace ftxui {
 
 struct Requirement {
-  // Minimal dimensions.
-  struct {
-    int x = 0;
-    int y = 0;
-  } min;
+  // The required size to fully draw the element.
+  struct { int x = 0; int y = 0; } min;
 
-  // Maximal dimensions.
-  struct {
-    int x = -1;
-    int y = -1;
-  } max;
-
-  // Flex.
-  struct {
-    int x = 0;
-    int y = 0;
-  } flex;
+  // How much flexibility is given to the component.
+  struct { int x = 0; int y = 0; } flex;
 };
 
 };  // namespace ftxui
