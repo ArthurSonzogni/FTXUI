@@ -1,7 +1,8 @@
 #include "ftxui/dom/node.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
+
+using ftxui::screen::Screen;
 
 Node::Node() {}
 Node::Node(std::vector<std::unique_ptr<Node>> children)
@@ -39,5 +40,4 @@ void Render(Screen& screen, Node* node) {
   node->Render(screen);
 }
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom

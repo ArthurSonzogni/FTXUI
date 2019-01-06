@@ -1,8 +1,7 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
 
 class DBox : public Node {
  public:
@@ -33,5 +32,4 @@ std::unique_ptr<Node> dbox(Children children) {
   return std::make_unique<DBox>(std::move(children));
 }
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom

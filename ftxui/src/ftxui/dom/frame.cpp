@@ -1,8 +1,9 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
+
+using namespace ftxui::screen;
 
 static wchar_t charset[] = L"┌┐└┘─│┬┴┤├";
 
@@ -94,5 +95,4 @@ Decorator boxed() {
   };
 }
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom

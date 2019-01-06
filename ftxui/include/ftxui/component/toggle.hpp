@@ -5,8 +5,7 @@
 #include <functional>
 #include <string>
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 class Toggle : public Component {
  public:
@@ -25,7 +24,6 @@ class Toggle : public Component {
   bool OnEvent(Event) override;
 };
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::Component
 
 #endif /* end of include guard: FTXUI_COMPONENT_TOGGLE_H_ */

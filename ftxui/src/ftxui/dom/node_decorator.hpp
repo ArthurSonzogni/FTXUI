@@ -4,8 +4,7 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
 
 // Helper class.
 class NodeDecorator : public Node {
@@ -16,7 +15,6 @@ class NodeDecorator : public Node {
   void SetBox(Box box) override;
 };
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom
 
 #endif /* end of include guard: FTXUI_DOM_NODE_DECORATOR_H_ */

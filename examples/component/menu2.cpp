@@ -2,10 +2,10 @@
 #include <iostream>
 #include <thread>
 
-#include "ftxui/screen_interactive.hpp"
-#include "ftxui/component/menu.hpp"
 #include "ftxui/component/component_horizontal.hpp"
 #include "ftxui/component/component_vertical.hpp"
+#include "ftxui/component/menu.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/util/string.hpp"
 
 using namespace ftxui::component;
@@ -13,7 +13,7 @@ using namespace ftxui::dom;
 
 class MyComponent : ComponentHorizontal {
   public:
-   MyComponent(ftxui::component::Delegate* delegate)
+   MyComponent(Delegate* delegate)
        : ComponentHorizontal(delegate),
          left_menu(delegate->NewChild()),
          right_menu(delegate->NewChild()) {
@@ -66,7 +66,7 @@ class MyComponent : ComponentHorizontal {
 
 int main(int argc, const char *argv[])
 {
-  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+  auto screen = ScreenInteractive::TerminalOutput();
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

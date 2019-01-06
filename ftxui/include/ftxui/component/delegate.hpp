@@ -3,8 +3,7 @@
 
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 class Component;
 
@@ -28,7 +27,6 @@ class Delegate {
   virtual Delegate* Root() = 0;
 };
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::component
 
 #endif /* end of include guard: FTXUI_COMPONENT_DELEGATE_HPP */

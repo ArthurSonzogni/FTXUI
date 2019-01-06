@@ -2,11 +2,10 @@
 #define FTXUI_COMPONENT_COMPONENT_HPP
 
 #include "ftxui/component/delegate.hpp"
+#include "ftxui/component/event.hpp"
 #include "ftxui/dom/elements.hpp"
-#include "ftxui/event.hpp"
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 class Delegate;
 class Focus;
@@ -39,7 +38,6 @@ class Component {
   Delegate* delegate_;
 };
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::component
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_HPP */

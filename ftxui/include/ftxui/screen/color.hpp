@@ -1,9 +1,9 @@
-#ifndef FTXUI_COLOR_H_
-#define FTXUI_COLOR_H_
+#ifndef FTXUI_SCREEN_COLOR
+#define FTXUI_SCREEN_COLOR
 
 #include <cstdint>
 
-namespace ftxui {
+namespace ftxui::screen {
 
 enum class Color : uint8_t {
   // --- Transparent -----
@@ -35,6 +35,6 @@ enum class Color : uint8_t {
   YellowLight = 93,
 };
 
-};  // namespace ftxui
+}; // namespace ftxui::screen
 
 #endif /* end of include guard: FTXUI_COLOR_H_ */

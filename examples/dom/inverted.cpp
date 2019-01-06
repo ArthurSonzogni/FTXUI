@@ -1,10 +1,10 @@
-#include "ftxui/screen.hpp"
+#include "ftxui/screen/screen.hpp"
 #include "ftxui/dom/elements.hpp"
 #include <iostream>
 
 int main(int argc, const char *argv[])
 {
-  using namespace ftxui;
+  using namespace ftxui::screen;
   using namespace ftxui::dom;
   auto document =
     hbox(
@@ -12,7 +12,7 @@ int main(int argc, const char *argv[])
       text(L"inverted") | inverted,
       text(L". Do you like it?")
     );
-  auto screen = ftxui::Screen::TerminalOutput(document);
+  auto screen = Screen::TerminalOutput(document);
   Render(screen, document.get());
 
   std::cout << screen.ToString();

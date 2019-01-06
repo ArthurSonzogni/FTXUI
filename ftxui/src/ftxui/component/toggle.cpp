@@ -1,7 +1,6 @@
 #include "ftxui/component/toggle.hpp"
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 Toggle::Toggle(Delegate* delegate) : Component(delegate) {}
 
@@ -41,5 +40,4 @@ bool Toggle::OnEvent(Event event) {
   return false;
 }
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::component

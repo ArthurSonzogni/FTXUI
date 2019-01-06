@@ -1,9 +1,9 @@
 #include "ftxui/dom/elements.hpp"
-#include "ftxui/screen.hpp"
+#include "ftxui/screen/screen.hpp"
 #include "gtest/gtest.h"
 
-namespace ftxui {
-namespace dom {
+using namespace ftxui::screen;
+using namespace ftxui::dom;
 
 TEST(VBoxTest, ScreenSmaller1) {
   auto root = vbox(text(L"text_1"), text(L"text_2"));
@@ -66,6 +66,3 @@ TEST(VBoxTest, ScreenBigger2Flex) {
 
   EXPECT_EQ("text_1\n      \n      \ntext_2", screen.ToString());
 }
-
-};  // namespace dom
-};  // namespace ftxui

@@ -1,16 +1,17 @@
-#ifndef FTXUI_SCREEN
-#define FTXUI_SCREEN
+#ifndef FTXUI_SCREEN_SCREEN
+#define FTXUI_SCREEN_SCREEN
 
 #include <string>
 #include <vector>
 #include <memory>
 
-#include <ftxui/color.hpp>
+#include "ftxui/screen/color.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
   class Node;
 }
+
+namespace ftxui::screen {
 
 struct Pixel {
   wchar_t character = U' ';
@@ -55,6 +56,6 @@ class Screen {
   std::vector<std::vector<Pixel>> pixels_;
 };
 
-};  // namespace ftxui
+};  // namespace ftxui::screen
 
-#endif /* end of include guard: FTXUI_SCREEN */
+#endif /* end of include guard: FTXUI_SCREEN_SCREEN */

@@ -1,15 +1,14 @@
-#ifndef DOM_NODE_HPP
-#define DOM_NODE_HPP
+#ifndef FTXUI_DOM_NODE_HPP
+#define FTXUI_DOM_NODE_HPP
 
 #include <memory>
 #include <vector>
 
-#include "ftxui/requirement.hpp"
-#include "ftxui/screen.hpp"
-#include "ftxui/box.hpp"
+#include "ftxui/dom/box.hpp"
+#include "ftxui/dom/requirement.hpp"
+#include "ftxui/screen/screen.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
 
 class Node {
  public:
@@ -28,7 +27,7 @@ class Node {
   virtual void SetBox(Box box);
 
   // Step 3: Draw this element.
-  virtual void Render(Screen& screen);
+  virtual void Render(screen::Screen& screen);
 
   std::vector<std::unique_ptr<Node>> children;
  protected:
@@ -36,9 +35,8 @@ class Node {
   Box box_;
 };
 
-void Render(Screen& screen, Node* node);
+void Render(screen::Screen& screen, Node* node);
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom
 
-#endif /* end of include guard: DOM_NODE_HPP */
+#endif /* end of include guard: FTXUI_DOM_NODE_HPP */

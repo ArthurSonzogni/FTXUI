@@ -2,17 +2,17 @@
 #include <iostream>
 #include <thread>
 
-#include "ftxui/screen.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/screen.hpp"
 #include "ftxui/util/string.hpp"
 #include <list>
 #include <vector>
 
-using namespace ftxui;
-using namespace ftxui::dom;
-
 int main(int argc, const char *argv[])
 {
+  using namespace ftxui::screen;
+  using namespace ftxui::dom;
+
   struct Task {
     std::wstring name;
     int number_of_threads;
@@ -119,7 +119,7 @@ int main(int argc, const char *argv[])
 
     // Draw.
     auto document = render();
-    auto screen = ftxui::Screen::TerminalOutput(document);
+    auto screen = Screen::TerminalOutput(document);
     Render(screen, document.get());
     std::cout << reset_position << screen.ToString() << std::flush;
     reset_position = screen.ResetPosition();

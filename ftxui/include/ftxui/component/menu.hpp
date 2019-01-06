@@ -5,8 +5,7 @@
 #include "ftxui/dom/elements.hpp"
 #include <functional>
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 class Menu : public Component {
  public:
@@ -30,7 +29,6 @@ class Menu : public Component {
   bool OnEvent(Event) override;
 };
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::Component
 
 #endif /* end of include guard: FTXUI_COMPONENT_MENU */

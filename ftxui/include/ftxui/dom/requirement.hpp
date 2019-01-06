@@ -1,7 +1,7 @@
-#ifndef FTXUI_REQUIREMENT_HPP
-#define FTXUI_REQUIREMENT_HPP
+#ifndef FTXUI_DOM_REQUIREMENT_HPP
+#define FTXUI_DOM_REQUIREMENT_HPP
 
-namespace ftxui {
+namespace ftxui::dom {
 
 struct Requirement {
   // The required size to fully draw the element.
@@ -11,6 +11,6 @@ struct Requirement {
   struct { int x = 0; int y = 0; } flex;
 };
 
-};  // namespace ftxui
+}; // namespace ftxui::dom
 
 #endif /* end of include guard: FTXUI_REQUIREMENT_HPP */

@@ -1,9 +1,9 @@
 #include "ftxui/dom/elements.hpp"
-#include "ftxui/screen.hpp"
+#include "ftxui/screen/screen.hpp"
 #include "gtest/gtest.h"
 
-namespace ftxui {
-namespace dom {
+using namespace ftxui::screen;
+using namespace ftxui::dom;
 
 TEST(GaugeTest, zero) {
   auto root = gauge(0);
@@ -29,6 +29,3 @@ TEST(GaugeTest, one) {
 
   EXPECT_EQ("███████████", screen.ToString());
 }
-
-} // namespace dom
-} // namespace ftxui

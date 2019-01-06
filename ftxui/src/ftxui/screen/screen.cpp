@@ -1,26 +1,46 @@
-#include "ftxui/screen.hpp"
+#include "ftxui/screen/screen.hpp"
 #include "ftxui/dom/node.hpp"
 #include "ftxui/terminal.hpp"
 #include "ftxui/util/string.hpp"
 
 #include <sstream>
 
-namespace ftxui {
+namespace ftxui::screen {
+
+static const wchar_t* BOLD_SET = L"\e[1m";
+static const wchar_t* BOLD_RESET = L"\e[22m"; // Can't use 21 here.
+
+static const wchar_t* DIM_SET = L"\e[2m";
+static const wchar_t* DIM_RESET = L"\e[22m";
+
+static const wchar_t* UNDERLINED_SET = L"\e[4m";
+static const wchar_t* UNDERLINED_RESET = L"\e[24m";
+
+static const wchar_t* BLINK_SET = L"\e[5m";
+static const wchar_t* BLINK_RESET = L"\e[25m";
+
+static const wchar_t* INVERTED_SET = L"\e[7m";
+static const wchar_t* INVERTED_RESET = L"\e[27m";
 
 Screen::Screen(size_t dimx, size_t dimy)
     : dimx_(dimx), dimy_(dimy), pixels_(dimy, std::vector<Pixel>(dimx)) {}
 
 void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
   if (next.bold != previous.bold)
-    ss << (next.bold ? L"\e[1m" : L"\e[22m"); // Can't use 21 here.
+    ss << (next.bold ? BOLD_SET : BOLD_RESET);
+
   if (next.dim != previous.dim)
-    ss << (next.dim ? L"\e[2m" : L"\e[22m");
+    ss << (next.dim ? DIM_SET : DIM_RESET);
+
   if (next.underlined != previous.underlined)
-    ss << (next.underlined ? L"\e[4m" : L"\e[24m");
+    ss << (next.underlined ? UNDERLINED_SET : UNDERLINED_RESET);
+
   if (next.blink != previous.blink)
-    ss << (next.blink ? L"\e[5m" : L"\e[25m");
+    ss << (next.blink ? BLINK_SET : BLINK_RESET);
+
   if (next.inverted != previous.inverted)
-    ss << (next.inverted ? L"\e[7m" : L"\e[27m");
+    ss << (next.inverted ? INVERTED_SET : INVERTED_RESET);
+
   if (next.foreground_color != previous.foreground_color ||
       next.background_color != previous.background_color) {
     ss << L"\e[" + to_wstring(std::to_string((uint8_t)next.foreground_color)) + L"m";
@@ -84,4 +104,4 @@ void Screen::Clear() {
                                             std::vector<Pixel>(dimx_, Pixel()));
 }
 
-};  // namespace ftxui
+};  // namespace ftxui::screen

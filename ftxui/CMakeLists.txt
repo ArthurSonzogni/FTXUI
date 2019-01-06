@@ -5,8 +5,10 @@ add_library(ftxui
   src/ftxui/component/component_direction.cpp
   src/ftxui/component/component_horizontal.cpp
   src/ftxui/component/component_vertical.cpp
+  src/ftxui/component/event.cpp
   src/ftxui/component/input.cpp
   src/ftxui/component/menu.cpp
+  src/ftxui/component/screen_interactive.cpp
   src/ftxui/component/toggle.cpp
   src/ftxui/dom/blink.cpp
   src/ftxui/dom/bold.cpp
@@ -26,9 +28,7 @@ add_library(ftxui
   src/ftxui/dom/underlined.cpp
   src/ftxui/dom/util.cpp
   src/ftxui/dom/vbox.cpp
-  src/ftxui/event.cpp
-  src/ftxui/screen.cpp
-  src/ftxui/screen_interactive.cpp
+  src/ftxui/screen/screen.cpp
   src/ftxui/terminal.cpp
   src/ftxui/util/string.cpp
 )

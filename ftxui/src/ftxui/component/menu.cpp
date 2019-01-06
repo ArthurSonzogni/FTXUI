@@ -2,8 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 Menu::Menu(Delegate* delegate) : Component(delegate) {}
 
@@ -50,5 +49,4 @@ bool Menu::OnEvent(Event event) {
   return false;
 }
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::component

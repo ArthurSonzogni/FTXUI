@@ -2,12 +2,13 @@
 #include <iostream>
 #include <thread>
 
-#include "ftxui/screen.hpp"
+#include "ftxui/screen/screen.hpp"
 #include "ftxui/dom/elements.hpp"
 
 int main(int argc, const char *argv[])
 {
   using namespace ftxui::dom;
+  using namespace ftxui::screen;
   auto document =
     hbox(
       window(text(L" main frame ") | hcenter,
@@ -43,7 +44,7 @@ int main(int argc, const char *argv[])
       ),
       filler()
     );
-  auto screen = ftxui::Screen::TerminalOutput(document);
+  auto screen = Screen::TerminalOutput(document);
   Render(screen, document.get());
   std::cout << screen.ToString() << std::endl;
 }

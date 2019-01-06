@@ -1,8 +1,7 @@
 #include "ftxui/component/input.hpp"
 #include "ftxui/util/string.hpp"
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 Input::Input(Delegate* delegate): Component(delegate) {}
 Input::~Input() {}
@@ -76,5 +75,4 @@ bool Input::OnEvent(Event event) {
   return false;
 }
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::component

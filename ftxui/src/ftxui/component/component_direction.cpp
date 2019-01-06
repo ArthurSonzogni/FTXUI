@@ -1,7 +1,6 @@
 #include "ftxui/component/component_direction.hpp"
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 ComponentDirection::ComponentDirection(Delegate* delegate)
     : Component(delegate), active_child_(nullptr) {}
@@ -27,5 +26,4 @@ void ComponentDirection::Focus(Component* child) {
   active_child_ = child;
 }
 
-} // namespace component
-} // namespace ftxui
+} // namespace ftxui::Component

@@ -3,16 +3,16 @@
 
 #include <functional>
 
-#include "ftxui/color.hpp"
 #include "ftxui/dom/node.hpp"
+#include "ftxui/screen/color.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
 
 using Element = std::unique_ptr<Node>;
 using Decorator = std::function<Element(Element)>;
 using Child = std::unique_ptr<Node>;
 using Children = std::vector<Child>;
+using Color = ftxui::screen::Color;
 
 // --- Layout ----
 Element vbox(Children);
@@ -58,7 +58,6 @@ TAKE_ANY_ARGS(vbox)
 TAKE_ANY_ARGS(hbox)
 TAKE_ANY_ARGS(dbox)
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom
 
 #endif /* end of include guard: FTXUI_DOM_ELEMENTS_HPP */

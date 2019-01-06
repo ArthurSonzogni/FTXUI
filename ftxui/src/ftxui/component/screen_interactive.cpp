@@ -1,48 +1,48 @@
-#include "ftxui/screen_interactive.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/delegate.hpp"
-#include "ftxui/terminal.hpp"
-#include <iostream>
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
+#include <iostream>
+#include "ftxui/component/component.hpp"
+#include "ftxui/component/delegate.hpp"
+#include "ftxui/terminal.hpp"
 
-namespace ftxui {
+namespace ftxui::component {
 
 namespace {
-  constexpr int ESC = 27;
-  constexpr int WAT = 195;
-  constexpr int WAT2 = 194;
-  constexpr int WATWAIT = 91;
+constexpr int ESC = 27;
+constexpr int WAT = 195;
+constexpr int WAT2 = 194;
+constexpr int WATWAIT = 91;
 
-  Event GetEvent() {
-    int v1 = getchar();
-    if (v1 == ESC) {
-      int v2 = getchar();
-      int v3 = getchar();
+Event GetEvent() {
+  int v1 = getchar();
+  if (v1 == ESC) {
+    int v2 = getchar();
+    int v3 = getchar();
 
-      //if (v2 == WATWAIT) {
-        //int v4 = getchar();
-        //int v5 = getchar();
-        //return Event{v1, v2, v3, v4, v5};
-      //}
-      return Event{v1, v2, v3};
-    }
+    // if (v2 == WATWAIT) {
+    // int v4 = getchar();
+    // int v5 = getchar();
+    // return Event{v1, v2, v3, v4, v5};
+    //}
+    return Event{v1, v2, v3};
+  }
 
-    if (v1 == WAT) {
-      int v2 = getchar();
-      return Event{v1, v2};
-    }
+  if (v1 == WAT) {
+    int v2 = getchar();
+    return Event{v1, v2};
+  }
 
-    if (v1 == WAT2) {
-      int v2 = getchar();
-      return Event{v1, v2};
-    }
+  if (v1 == WAT2) {
+    int v2 = getchar();
+    return Event{v1, v2};
+  }
 
-    return Event{v1};
-  };
+  return Event{v1};
 };
+};  // namespace
 
 class ScreenInteractive::Delegate : public component::Delegate {
  public:
@@ -66,7 +66,6 @@ class ScreenInteractive::Delegate : public component::Delegate {
   }
 
   void OnEvent(Event event) { component_->OnEvent(event); }
-
 
   std::vector<component::Delegate*> children() override {
     std::vector<component::Delegate*> ret;
@@ -129,12 +128,14 @@ void ScreenInteractive::Loop() {
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
 
   Draw();
-  while(!quit_) {
+  while (!quit_) {
     delegate_->OnEvent(GetEvent());
     Clear();
     Draw();
-  } while(!quit_);
-  //std::cout << std::endl;
+  }
+  while (!quit_)
+    ;
+  // std::cout << std::endl;
 
   // Restore the old terminal configuration.
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_old);
@@ -144,7 +145,7 @@ void ScreenInteractive::Draw() {
   auto document = delegate_->component()->Render();
   size_t dimx;
   size_t dimy;
-  switch(dimension_) {
+  switch (dimension_) {
     case Dimension::Fixed:
       break;
     case Dimension::TerminalOutput:
@@ -162,7 +163,8 @@ void ScreenInteractive::Draw() {
   if (dimx != dimx_ || dimy != dimy_) {
     dimx_ = dimx;
     dimy_ = dimy;
-    pixels_ = std::vector<std::vector<Pixel>>(dimy, std::vector<Pixel>(dimx));
+    pixels_ = std::vector<std::vector<screen::Pixel>>(
+        dimy, std::vector<screen::Pixel>(dimx));
   }
 
   Render(*this, document.get());
@@ -182,4 +184,4 @@ std::function<void()> ScreenInteractive::ExitLoopClosure() {
   return [this]() { quit_ = true; };
 }
 
-}  // namespace ftxui
+}  // namespace ftxui::component.

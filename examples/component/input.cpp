@@ -2,18 +2,17 @@
 #include <iostream>
 #include <thread>
 
-#include "ftxui/screen_interactive.hpp"
-#include "ftxui/component/input.hpp"
 #include "ftxui/component/component_vertical.hpp"
+#include "ftxui/component/input.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/util/string.hpp"
 
 using namespace ftxui::component;
 using namespace ftxui::dom;
-using namespace ftxui;
 
 class MyComponent : ComponentVertical {
  public:
-  MyComponent(ftxui::component::Delegate* delegate)
+  MyComponent(Delegate* delegate)
       : ComponentVertical(delegate),
         input_1(delegate->NewChild()),
         input_2(delegate->NewChild()),
@@ -45,7 +44,7 @@ class MyComponent : ComponentVertical {
 };
 
 int main(int argc, const char* argv[]) {
-  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+  auto screen = ScreenInteractive::TerminalOutput();
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

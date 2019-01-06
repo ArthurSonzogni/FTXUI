@@ -2,18 +2,17 @@
 #include <thread>
 
 #include "ftxui/component/component_vertical.hpp"
-#include "ftxui/component/toggle.hpp"
 #include "ftxui/component/menu.hpp"
-#include "ftxui/screen_interactive.hpp"
+#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/toggle.hpp"
 #include "ftxui/util/string.hpp"
 
-using namespace ftxui;
 using namespace ftxui::component;
 using namespace ftxui::dom;
 
 class MyComponent : ComponentVertical {
   public:
-   MyComponent(ftxui::component::Delegate* delegate)
+   MyComponent(Delegate* delegate)
        : ComponentVertical(delegate),
          toggle(delegate->NewChild()),
          menu(delegate->NewChild()) {
@@ -39,7 +38,7 @@ class MyComponent : ComponentVertical {
  
 int main(int argc, const char *argv[])
 {
-  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+  auto screen = ScreenInteractive::TerminalOutput();
   MyComponent component(screen.delegate());
   component.on_enter = screen.ExitLoopClosure();
   screen.Loop();

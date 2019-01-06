@@ -1,8 +1,9 @@
 #include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
+
+using ftxui::screen::Screen;
 
 class Underlined : public NodeDecorator {
  public:
@@ -23,5 +24,4 @@ std::unique_ptr<Node> underlined(Child child) {
   return std::make_unique<Underlined>(unpack(std::move(child)));
 }
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom

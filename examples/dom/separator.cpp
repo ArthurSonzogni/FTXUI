@@ -1,10 +1,11 @@
-#include "ftxui/screen.hpp"
+#include "ftxui/screen/screen.hpp"
 #include "ftxui/dom/elements.hpp"
 #include <iostream>
 
 int main(int argc, const char *argv[])
 {
   using namespace ftxui::dom;
+  using namespace ftxui::screen;
   auto document =
     hbox(
       text(L"left-column"),
@@ -15,7 +16,7 @@ int main(int argc, const char *argv[])
         center(text(L"bottom-column"))
       ))
     );
-  auto screen = ftxui::Screen::TerminalFullscreen();
+  auto screen = Screen::TerminalFullscreen();
   Render(screen, document.get());
 
   std::cout << screen.ToString();

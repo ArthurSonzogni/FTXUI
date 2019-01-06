@@ -2,8 +2,7 @@
 #include "ftxui/component/delegate.hpp"
 #include <assert.h>
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 Component::Component(Delegate* delegate) {
   delegate_ = delegate;
@@ -55,5 +54,4 @@ Component* Component::Parent() {
   return parent_delegate->component();
 }
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::component

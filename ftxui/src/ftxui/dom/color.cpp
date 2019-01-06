@@ -1,15 +1,14 @@
 #include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
 
 class BgColor : public NodeDecorator {
  public:
   BgColor(Children children, Color color)
       : NodeDecorator(std::move(children)), color_(color) {}
 
-  void Render(Screen& screen) override {
+  void Render(screen::Screen& screen) override {
     for (int y = box_.top; y <= box_.bottom; ++y) {
       for (int x = box_.left; x <= box_.right; ++x) {
         screen.PixelAt(x, y).background_color = color_;
@@ -27,7 +26,7 @@ class FgColor : public NodeDecorator {
       : NodeDecorator(std::move(children)), color_(color) {}
   ~FgColor() override {}
 
-  void Render(Screen& screen) override {
+  void Render(screen::Screen& screen) override {
     for (int y = box_.top; y <= box_.bottom; ++y) {
       for (int x = box_.left; x <= box_.right; ++x) {
         screen.PixelAt(x, y).foreground_color = color_;
@@ -59,5 +58,4 @@ Decorator bgcolor(Color c) {
   };
 }
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom

@@ -1,7 +1,8 @@
 #include "ftxui/dom/node.hpp"
 
-namespace ftxui {
-namespace dom {
+namespace ftxui::dom {
+
+using ftxui::screen::Screen;
 
 class Text : public Node {
  public:
@@ -33,5 +34,4 @@ std::unique_ptr<Node> text(std::wstring text) {
   return std::make_unique<Text>(text);
 }
 
-};  // namespace dom
-};  // namespace ftxui
+};  // namespace ftxui::dom

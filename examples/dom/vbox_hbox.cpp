@@ -1,9 +1,11 @@
-#include "ftxui/screen.hpp"
+#include "ftxui/screen/screen.hpp"
 #include "ftxui/dom/elements.hpp"
 #include <iostream>
 
+
 int main(int argc, const char *argv[])
 {
+  using namespace ftxui::screen;
   using namespace ftxui::dom;
   auto document =
     vbox(
@@ -27,7 +29,7 @@ int main(int argc, const char *argv[])
         text(L"south-east")
       )
     );
-  auto screen = ftxui::Screen::TerminalFullscreen();
+  auto screen = Screen::TerminalFullscreen();
   Render(screen, document.get());
 
   std::cout << screen.ToString();

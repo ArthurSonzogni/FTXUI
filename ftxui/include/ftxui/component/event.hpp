@@ -1,10 +1,10 @@
-#ifndef FTXUI_EVENT_H_
-#define FTXUI_EVENT_H_
+#ifndef FTXUI_COMPONENT_EVENT_HPP
+#define FTXUI_COMPONENT_EVENT_HPP
 
 #include <vector>
 #include <array>
 
-namespace ftxui {
+namespace ftxui::component {
 
 struct Event{
  public:
@@ -31,7 +31,7 @@ struct Event{
 };
 
 
-} // namespace ftxui
+} // namespace ftxui::component
 
 
-#endif /* end of include guard: FTXUI_EVENT_H_ */
+#endif /* end of include guard: FTXUI_COMPONENT_EVENT_HPP */

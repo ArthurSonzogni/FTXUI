@@ -4,8 +4,7 @@
 #include "ftxui/component/component.hpp"
 #include <functional>
 
-namespace ftxui {
-namespace component {
+namespace ftxui::component {
 
 class Input : public Component {
  public:
@@ -29,7 +28,6 @@ class Input : public Component {
   int cursor_position = 0;
 };
 
-}  // namespace component
-}  // namespace ftxui
+}  // namespace ftxui::component
 
 #endif /* end of include guard: FTXUI_COMPONENT_INPUT_H_ */
