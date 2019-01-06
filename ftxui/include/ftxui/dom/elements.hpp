@@ -30,6 +30,7 @@ Element separator();
 Element gauge(float ratio);
 Element frame(Element);
 Element window(Child title, Child content);
+Element spinner(int charset_index, size_t image_index);
 
 // -- Decorator ---
 Element bold(Element);
@@ -37,10 +38,11 @@ Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
 Element blink(Element);
-Element color(Color, Element);
-Element bgcolor(Color, Element);
+
 Decorator color(Color);
 Decorator bgcolor(Color);
+Element color(Color, Element);
+Element bgcolor(Color, Element);
 
 // --- Util ---
 Element hcenter(Element);

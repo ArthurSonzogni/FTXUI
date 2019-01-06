@@ -38,6 +38,7 @@ add_library(dom
   src/ftxui/dom/node_decorator.cpp
   src/ftxui/dom/separator.cpp
   src/ftxui/dom/size.cpp
+  src/ftxui/dom/spinner.cpp
   src/ftxui/dom/text.cpp
   src/ftxui/dom/underlined.cpp
   src/ftxui/dom/util.cpp
