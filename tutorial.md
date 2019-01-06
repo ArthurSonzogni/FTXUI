@@ -24,17 +24,18 @@ It declares the following set of elements:
 // --- Layout ----
 Element vbox(Children);
 Element hbox(Children);
-Element flex();
+Element dbox(Children);
+Element filler();
 Element flex(Element);
 
 // --- Widget --
 Element text(std::wstring text);
 Element separator();
 Element gauge(float ratio);
-Element frame(Child);
-Element frame(Child title, Child content);
+Element frame(Element);
+Element window(Child title, Child content);
 
-// -- Style ---
+// -- Decorator ---
 Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
@@ -42,6 +43,8 @@ Element underlined(Element);
 Element blink(Element);
 Element color(Color, Element);
 Element bgcolor(Color, Element);
+Decorator color(Color);
+Decorator bgcolor(Color);
 
 // --- Util ---
 Element hcenter(Element);
@@ -69,12 +72,16 @@ Element bgcolor(Color, Element);
 
 ### Layout
 
-vbox (Vertical-box) and hbox (Horizontal-box) are containers. They are used to
-compose all the elements together. They will display their children one by one in one direction.
-Each elements will occupy the space it required plus a fraction of the remaining
-space dispatched to all the flexible elements.
+* vbox (Vertical-box)
+* hbox (Horizontal-box)
+* fbox (Depth-box)
+are containers. They are used to compose all the elements together. Each
+children are put side by side. If the container is flexible, the extra space
+available will be shared among the remaining flexible children.
 
-flex() is used to make an element flexible.
+flex(element) can be used to make a non-flexible element flexible.
+filler() is a flexible empty element. You can use it to children on one side of
+the container.
 
 #### Examples
 ~~~cpp
@@ -117,7 +124,7 @@ I am a piece of text.
 
 #### frame
 Add a border arround an element
-~~~c+
+~~~cpp
 frame(text(L"The element"))
 ~~~
 
@@ -164,6 +171,21 @@ frame(gauge(0.5))
 ┌────────────────────────────────────────────────────────────────────────────┐
 │██████████████████████████████████████                                      │
 └────────────────────────────────────────────────────────────────────────────┘
+~~~
+
+### Decorator
+
+Terminal supports displaying text using differet style: bold, dim, underlined,
+inverted, blink. It even support foreground and background color.
+
+Example:
+~~~cpp
+underlined(bold(text(L"This text is bold and underlined")))
+~~~
+
+Tips: The pipe operator can be used to chain Decorator:
+~~~cpp
+text(L"This text is bold")) | bold | underlined
 ~~~
 
 ## Components.
