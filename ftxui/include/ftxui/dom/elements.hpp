@@ -18,8 +18,11 @@ using Color = ftxui::screen::Color;
 Element vbox(Children);
 Element hbox(Children);
 Element dbox(Children);
+
+// -- Flexibility --
 Element filler();
 Element flex(Element);
+Decorator size(size_t width, size_t height);
 
 // --- Widget --
 Element text(std::wstring text);
