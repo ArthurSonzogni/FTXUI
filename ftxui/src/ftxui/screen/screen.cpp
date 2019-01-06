@@ -96,6 +96,7 @@ std::string Screen::ResetPosition() {
   for (size_t y = 1; y < dimy_; ++y) {
     ss << "\e[2K\r\e[1A";
   }
+  ss << '\r';
   return ss.str();
 }
 
