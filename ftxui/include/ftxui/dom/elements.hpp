@@ -43,6 +43,7 @@ Decorator bgcolor(Color);
 Element hcenter(Element);
 Element vcenter(Element);
 Element center(Element);
+Element align_right(Element);
 
 // --- Util ---
 Element nothing(Element element);

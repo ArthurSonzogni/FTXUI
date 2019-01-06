@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
-function(example name)
-  add_executable(${name} ${name}.cpp)
-  target_link_libraries(${name} PUBLIC ftxui)
-endfunction(example)
-
 add_subdirectory(component)
 add_subdirectory(dom)
-example(print_key_press)
+
+add_executable(print_key_press print_key_press.cpp)
+target_link_libraries(print_key_press PUBLIC component)

@@ -15,4 +15,8 @@ std::unique_ptr<Node> center(Element child) {
   return hcenter(vcenter(std::move(child)));
 }
 
+std::unique_ptr<Node> align_right(Element child) {
+  return hbox(filler(), std::move(child));
+}
+
 } // namespace ftxui::dom
