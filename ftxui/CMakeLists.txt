@@ -30,6 +30,7 @@ add_library(dom
 )
 
 add_library(component
+  src/ftxui/component/checkbox.cpp
   src/ftxui/component/component.cpp
   src/ftxui/component/container.cpp
   src/ftxui/component/event.cpp

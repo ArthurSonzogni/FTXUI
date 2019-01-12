@@ -13,22 +13,31 @@ class Container : public Component {
  public:
   static Container Vertical();
   static Container Horizontal();
+  static Container Tab(size_t* selector);
 
   ~Container() override = default;
 
   // Component override.
   bool OnEvent(Event event) override;
+  Element Render() override;
   Component* ActiveChild() override;
+
  protected:
   // Handlers
-  using Handler = bool (Container::*)(Event);
-  Handler handler_;
-  bool Vertical(Event event);
-  bool Horizontal(Event event);
+  using EventHandler = bool (Container::*)(Event);
+  bool VerticalEvent(Event event);
+  bool HorizontalEvent(Event event);
+  bool TabEvent(Event event) { return false; }
+  EventHandler event_handler_;
+
+  using RenderHandler = Element (Container::*)();
+  Element VerticalRender();
+  Element HorizontalRender();
+  Element TabRender();
+  RenderHandler render_handler_;
 
   size_t selected_ = 0;
-
-  Container(Handler);
+  size_t* selector_ = &selected_;
 };
 
 }  // namespace ftxui

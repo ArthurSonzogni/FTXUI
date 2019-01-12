@@ -1,7 +1,6 @@
 #ifndef FTXUI_COMPONENT_COMPONENT_HPP
 #define FTXUI_COMPONENT_COMPONENT_HPP
 
-#include "ftxui/component/delegate.hpp"
 #include "ftxui/component/event.hpp"
 #include "ftxui/dom/elements.hpp"
 

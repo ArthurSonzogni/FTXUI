@@ -6,29 +6,29 @@ Element Toggle::Render() {
   auto highlight = Focused() ? inverted : bold;
 
   Elements children;
-  for(size_t i = 0; i<options.size(); ++i) {
+  for(size_t i = 0; i<entries.size(); ++i) {
     // Separator.
     if (i != 0)
       children.push_back(separator());
 
     // Entry.
-    auto style = i == activated ? highlight : dim;
-    children.push_back(style(text(options[i])));
+    auto style = i == selected ? highlight : dim;
+    children.push_back(style(text(entries[i])));
   }
   return hbox(std::move(children));
 }
 
 bool Toggle::OnEvent(Event event) {
-  if (activated > 0 &&
+  if (selected > 0 &&
       (event == Event::ArrowLeft || event == Event::Character('h'))) {
-    activated--;
+    selected--;
     on_change();
     return true;
   }
 
-  if (activated < options.size() - 1 &&
+  if (selected < entries.size() - 1 &&
       (event == Event::ArrowRight || event == Event::Character('l'))) {
-    activated++;
+    selected++;
     on_change();
     return true;
   }

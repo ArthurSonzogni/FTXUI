@@ -94,7 +94,7 @@ Screen Screen::TerminalOutput(std::unique_ptr<Node>& element) {
 
 std::string Screen::ResetPosition() {
   std::stringstream ss;
-  //ss << '\r';
+  ss << '\r';
   for (size_t y = 1; y < dimy_; ++y) {
     ss << "\e[2K\r\e[1A";
   }

@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include <iostream>
 #include "ftxui/component/component.hpp"
-#include "ftxui/component/delegate.hpp"
 #include "ftxui/screen/terminal.hpp"
 
 namespace ftxui {
@@ -87,9 +86,9 @@ void ScreenInteractive::Loop(Component* component) {
 
   std::string reset_position;
   while (!quit_) {
+    reset_position = ResetPosition();
     Draw(component);
     std::cout << reset_position << ToString() << std::flush;
-    reset_position = ResetPosition();
     Clear();
     component->OnEvent(GetEvent());
   }
@@ -122,10 +121,8 @@ void ScreenInteractive::Draw(Component* component) {
   }
 
   if (dimx != dimx_ || dimy != dimy_) {
-    std::cerr << dimx_ << " " << dimy_ << std::endl;
     dimx_ = dimx;
     dimy_ = dimy;
-    std::cerr << dimx_ << " " << dimy_ << std::endl;
     pixels_ = std::vector<std::vector<Pixel>>(
         dimy, std::vector<Pixel>(dimx));
   }

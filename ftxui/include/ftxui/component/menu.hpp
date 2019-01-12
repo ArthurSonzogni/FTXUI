@@ -15,7 +15,7 @@ class Menu : public Component {
 
   // State.
   std::vector<std::wstring> entries = {};
-  int selected = 0;
+  size_t selected = 0;
 
   Decorator active_style = inverted;
   Decorator selected_style = bold;

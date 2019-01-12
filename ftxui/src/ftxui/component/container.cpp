@@ -4,15 +4,28 @@ namespace ftxui {
 
 // static
 Container Container::Horizontal() {
-  return Container(&Container::Horizontal);
+  Container container;
+  container.event_handler_ = &Container::HorizontalEvent;
+  container.render_handler_ = &Container::HorizontalRender;
+  return container;
 }
 
 // static
 Container Container::Vertical() {
-  return Container(&Container::Vertical);
+  Container container;
+  container.event_handler_ = &Container::VerticalEvent;
+  container.render_handler_ = &Container::VerticalRender;
+  return container;
 }
 
-Container::Container(Container::Handler handler) : handler_(handler) {}
+// static
+Container Container::Tab(size_t* selector) {
+  Container container;
+  container.event_handler_ = &Container::TabEvent;
+  container.render_handler_ = &Container::TabRender;
+  container.selector_ = selector;
+  return container;
+}
 
 bool Container::OnEvent(Event event) {
   if (!Focused())
@@ -21,14 +34,14 @@ bool Container::OnEvent(Event event) {
   if (ActiveChild()->OnEvent(event))
     return true;
 
-  return (this->*handler_)(event);
+  return (this->*event_handler_)(event);
 }
 
 Component* Container::ActiveChild() {
-  return children_[selected_ % children_.size()];
+  return children_[*selector_ % children_.size()];
 }
 
-bool Container::Vertical(Event event) {
+bool Container::VerticalEvent(Event event) {
   selected_ %= children_.size();
   // Left pressed ?
   if (event == Event::ArrowUp || event == Event::Character('k')) {
@@ -49,7 +62,7 @@ bool Container::Vertical(Event event) {
   return false;
 }
 
-bool Container::Horizontal(Event event) {
+bool Container::HorizontalEvent(Event event) {
   selected_ %= children_.size();
   // Left pressed ?
   if (event == Event::ArrowLeft || event == Event::Character('h')) {
@@ -68,6 +81,28 @@ bool Container::Horizontal(Event event) {
   }
 
   return false;
+}
+
+Element Container::Render() {
+  return (this->*render_handler_)();
+}
+
+Element Container::VerticalRender() {
+  Elements elements;
+  for(auto& it : children_)
+    elements.push_back(it->Render());
+  return vbox(std::move(elements));
+}
+
+Element Container::HorizontalRender() {
+  Elements elements;
+  for(auto& it : children_)
+    elements.push_back(it->Render());
+  return hbox(std::move(elements));
+}
+
+Element Container::TabRender() {
+  return ActiveChild()->Render();
 }
 
 }  // namespace ftxui

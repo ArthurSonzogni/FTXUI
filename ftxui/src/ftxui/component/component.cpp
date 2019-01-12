@@ -35,6 +35,9 @@ Component* Component::ActiveChild() {
 }
 
 Element Component::Render() {
+  if (children_.size() == 1)
+    return children_.front()->Render();
+
   return text(L"Not implemented component");
 }
 

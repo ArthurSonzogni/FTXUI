@@ -13,8 +13,8 @@ class Toggle : public Component {
   ~Toggle() override = default;
 
   // State.
-  size_t activated = 0;
-  std::vector<std::wstring> options = {L"On", L"Off"};
+  size_t selected = 0;
+  std::vector<std::wstring> entries = {L"On", L"Off"};
 
   // Callback.
   std::function<void()> on_change = [](){};

@@ -12,36 +12,36 @@ using namespace ftxui;
 class MyComponent : public Component {
  public:
   MyComponent() {
-    Add(&container);
-    container.Add(&toggle_1);
-    container.Add(&toggle_2);
-    container.Add(&toggle_3);
-    container.Add(&toggle_4);
+    Add(&container_);
+    container_.Add(&toggle_1_);
+    container_.Add(&toggle_2_);
+    container_.Add(&toggle_3_);
+    container_.Add(&toggle_4_);
 
-    toggle_1.options = {L"On", L"Off"};
-    toggle_2.options = {L"Enabled", L"Disabled"};
-    toggle_3.options = {L"10€", L"0€"};
-    toggle_4.options = {L"Nothing", L"One element", L"Several elements"};
+    toggle_1_.entries = {L"On", L"Off"};
+    toggle_2_.entries = {L"Enabled", L"Disabled"};
+    toggle_3_.entries = {L"10€", L"0€"};
+    toggle_4_.entries = {L"Nothing", L"One element", L"Several elements"};
   }
 
   std::function<void()> on_enter = []() {};
 
  private:
-  Container container = Container::Vertical();
-  Toggle toggle_1;
-  Toggle toggle_2;
-  Toggle toggle_3;
-  Toggle toggle_4;
+  Container container_ = Container::Vertical();
+  Toggle toggle_1_;
+  Toggle toggle_2_;
+  Toggle toggle_3_;
+  Toggle toggle_4_;
 
   Element Render() override {
     return
       vbox(
         text(L"Choose your options:"),
         text(L""),
-        hbox(text(L" * Poweroff on startup      : "), toggle_1.Render()),
-        hbox(text(L" * Out of process           : "), toggle_2.Render()),
-        hbox(text(L" * Price of the information : "), toggle_3.Render()),
-        hbox(text(L" * Number of elements       : "), toggle_4.Render())
+        hbox(text(L" * Poweroff on startup      : "), toggle_1_.Render()),
+        hbox(text(L" * Out of process           : "), toggle_2_.Render()),
+        hbox(text(L" * Price of the information : "), toggle_3_.Render()),
+        hbox(text(L" * Number of elements       : "), toggle_4_.Render())
       );
   }
 };
