@@ -6,8 +6,7 @@
 #include "ftxui/component/screen_interactive.hpp"
 
 int main(int argc, const char* argv[]) {
-  using namespace ftxui::component;
-  using namespace ftxui::screen;
+  using namespace ftxui;
   auto screen = ScreenInteractive::FixedSize(30, 3);
   Menu menu(screen.delegate());
   menu.entries = {L"entry 1", L"entry 2", L"entry 3"};

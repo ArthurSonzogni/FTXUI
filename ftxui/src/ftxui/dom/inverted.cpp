@@ -1,9 +1,9 @@
 #include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
-using ftxui::screen::Screen;
+using ftxui::Screen;
 
 class Inverted : public NodeDecorator {
  public:
@@ -24,4 +24,4 @@ std::unique_ptr<Node> inverted(Child child) {
   return std::make_unique<Inverted>(unpack(std::move(child)));
 }
 
-};  // namespace ftxui::dom
+};  // namespace ftxui

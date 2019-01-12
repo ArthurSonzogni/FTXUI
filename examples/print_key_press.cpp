@@ -6,15 +6,14 @@
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/util/string.hpp"
 
-using namespace ftxui::component;
+using namespace ftxui;
 
 class DrawKey : public Component {
  public:
-  DrawKey(Delegate* delegate)
+  DrawKey(Component::Delegate* delegate)
       : Component(delegate) {}
 
-  ftxui::dom::Element Render() override {
-    using namespace ftxui::dom;
+  Element Render() override {
     Children children;
     for (size_t i = std::max(0, (int)keys.size() - 10); i < keys.size(); ++i) {
       std::string code = "";

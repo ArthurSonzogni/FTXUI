@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-namespace ftxui::screen {
+namespace ftxui {
 
 enum class Color : uint8_t {
   // --- Transparent -----
@@ -35,6 +35,6 @@ enum class Color : uint8_t {
   YellowLight = 93,
 };
 
-}; // namespace ftxui::screen
+}; // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COLOR_H_ */

@@ -1,6 +1,6 @@
 #include "ftxui/component/component_vertical.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 ComponentVertical::ComponentVertical(Delegate* delegate)
     : ComponentDirection(delegate) {}
@@ -27,4 +27,4 @@ bool ComponentVertical::HandleDirection(Event event) {
   return false;
 }
 
-}  // namespace ftxui::component
+}  // namespace ftxui

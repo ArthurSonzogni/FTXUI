@@ -1,14 +1,13 @@
 #include "ftxui/component/input.hpp"
 #include "ftxui/util/string.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 Input::Input(Delegate* delegate): Component(delegate) {}
 Input::~Input() {}
 
 // Component implementation.
-dom::Element Input::Render() {
-  using namespace dom;
+Element Input::Render() {
   bool is_focused = Focused();
 
   // Placeholder.
@@ -75,4 +74,4 @@ bool Input::OnEvent(Event event) {
   return false;
 }
 
-}  // namespace ftxui::component
+}  // namespace ftxui

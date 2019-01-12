@@ -2,8 +2,8 @@
 #include "ftxui/screen/screen.hpp"
 #include "gtest/gtest.h"
 
-using namespace ftxui::screen;
-using namespace ftxui::dom;
+using namespace ftxui;
+using namespace ftxui;
 
 TEST(GaugeTest, zero) {
   auto root = gauge(0);

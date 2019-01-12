@@ -1,27 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 
-####################
-# ftxui::screen
-####################
 add_library(screen
   src/ftxui/screen/screen.cpp
-  src/ftxui/terminal.cpp
-  src/ftxui/util/string.cpp
+  src/ftxui/screen/terminal.cpp
+  src/ftxui/screen/string.cpp
 )
 
-target_include_directories(screen
-  PUBLIC
-    $<INSTALL_INTERFACE:include>    
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE src
-)
-
-target_compile_features(screen PUBLIC cxx_std_17)
-target_compile_options(screen PRIVATE -Wall)
-
-####################
-# ftxui::dom
-####################
 add_library(dom
   src/ftxui/dom/blink.cpp
   src/ftxui/dom/bold.cpp
@@ -45,23 +29,6 @@ add_library(dom
   src/ftxui/dom/vbox.cpp
 )
 
-target_include_directories(dom
-  PUBLIC
-    $<INSTALL_INTERFACE:include>    
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE src
-)
-
-target_link_libraries(dom
-  PUBLIC screen
-)
-
-target_compile_features(dom PUBLIC cxx_std_17)
-target_compile_options(dom PRIVATE -Wall)
-
-####################
-# ftxui::component
-####################
 add_library(component
   src/ftxui/component/component.cpp
   src/ftxui/component/component_direction.cpp
@@ -74,19 +41,20 @@ add_library(component
   src/ftxui/component/toggle.cpp
 )
 
-target_include_directories(component
-  PUBLIC
-    $<INSTALL_INTERFACE:include>    
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  PRIVATE src
-)
+target_link_libraries(dom PUBLIC screen)
+target_link_libraries(component PUBLIC dom)
 
-target_link_libraries(component
-  PUBLIC dom
-)
 
-target_compile_features(component PUBLIC cxx_std_17)
-target_compile_options(component PRIVATE -Wall)
+foreach(lib screen dom component)
+  target_include_directories(${lib}
+    PUBLIC
+      $<INSTALL_INTERFACE:include>    
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    PRIVATE src
+  )
+  target_compile_features(${lib} PUBLIC cxx_std_17)
+  target_compile_options(${lib} PRIVATE -Wall)
+endforeach()
 
 include(GNUInstallDirs)
 install(TARGETS screen dom component

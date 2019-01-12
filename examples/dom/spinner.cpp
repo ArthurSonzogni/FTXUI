@@ -9,8 +9,6 @@
 int main(int argc, const char *argv[])
 {
   using namespace ftxui;
-  using namespace ftxui::dom;
-  using namespace ftxui::screen;
   using namespace std::chrono_literals;
 
   std::string reset_position;

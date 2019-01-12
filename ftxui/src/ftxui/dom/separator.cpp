@@ -1,8 +1,8 @@
 #include "ftxui/dom/node.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
-using ftxui::screen::Screen;
+using ftxui::Screen;
 
 class Separator : public Node {
  public:
@@ -35,4 +35,4 @@ std::unique_ptr<Node> separator() {
   return std::make_unique<Separator>();
 }
 
-};  // namespace ftxui::dom
+};  // namespace ftxui

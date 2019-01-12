@@ -7,8 +7,7 @@
 
 int main(int argc, const char *argv[])
 {
-  using namespace ftxui::dom;
-  using namespace ftxui::screen;
+  using namespace ftxui;
   auto document =
     hbox(
       window(text(L" main frame ") | hcenter,

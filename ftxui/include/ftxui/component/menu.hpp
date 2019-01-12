@@ -5,7 +5,7 @@
 #include "ftxui/dom/elements.hpp"
 #include <functional>
 
-namespace ftxui::component {
+namespace ftxui {
 
 class Menu : public Component {
  public:
@@ -16,16 +16,16 @@ class Menu : public Component {
   std::vector<std::wstring> entries = {};
   int selected = 0;
 
-  dom::Decorator active_style = dom::inverted;
-  dom::Decorator selected_style = dom::bold;
-  dom::Decorator normal_style = dom::nothing;
+  Decorator active_style = inverted;
+  Decorator selected_style = bold;
+  Decorator normal_style = nothing;
 
   // State update callback.
   std::function<void()> on_change = [](){};
   std::function<void()> on_enter = [](){};
 
   // Component implementation.
-  dom::Element Render() override;
+  Element Render() override;
   bool OnEvent(Event) override;
 };
 

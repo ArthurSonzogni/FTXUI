@@ -5,7 +5,7 @@
 #include <functional>
 #include <string>
 
-namespace ftxui::component {
+namespace ftxui {
 
 class Toggle : public Component {
  public:
@@ -20,7 +20,7 @@ class Toggle : public Component {
   std::function<void()> on_change = [](){};
 
   // Component implementation.
-  dom::Element Render() override;
+  Element Render() override;
   bool OnEvent(Event) override;
 };
 

@@ -6,9 +6,9 @@
 #include <iostream>
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/delegate.hpp"
-#include "ftxui/terminal.hpp"
+#include "ftxui/screen/terminal.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 namespace {
 constexpr int ESC = 27;
@@ -42,13 +42,14 @@ Event GetEvent() {
 
   return Event{v1};
 };
+
 };  // namespace
 
-class ScreenInteractive::Delegate : public component::Delegate {
+class ScreenInteractive::Delegate : public Component::Delegate {
  public:
   Delegate() : root_(this) {}
 
-  void Register(component::Component* c) override { component_ = c; }
+  void Register(Component* c) override { component_ = c; }
 
   std::vector<std::unique_ptr<Delegate>> child_;
   Delegate* NewChild() override {
@@ -67,24 +68,24 @@ class ScreenInteractive::Delegate : public component::Delegate {
 
   void OnEvent(Event event) { component_->OnEvent(event); }
 
-  std::vector<component::Delegate*> children() override {
-    std::vector<component::Delegate*> ret;
+  std::vector<Component::Delegate*> children() override {
+    std::vector<Component::Delegate*> ret;
     for (auto& it : child_)
       ret.push_back(it.get());
     return ret;
   }
 
-  Delegate* root_;
-  Delegate* parent_ = nullptr;
-  Delegate* previous_sibling_ = nullptr;
-  Delegate* next_sibling_ = nullptr;
-  component::Component* component_;
+  Component::Delegate* root_;
+  Component::Delegate* parent_ = nullptr;
+  Component::Delegate* previous_sibling_ = nullptr;
+  Component::Delegate* next_sibling_ = nullptr;
+  Component* component_;
 
-  Delegate* Root() override { return root_; }
-  Delegate* Parent() override { return parent_; }
-  Delegate* PreviousSibling() override { return previous_sibling_; }
-  Delegate* NextSibling() override { return next_sibling_; }
-  component::Component* component() override { return component_; }
+  Component::Delegate* Root() override { return root_; }
+  Component::Delegate* Parent() override { return parent_; }
+  Component::Delegate* PreviousSibling() override { return previous_sibling_; }
+  Component::Delegate* NextSibling() override { return next_sibling_; }
+  Component* component() override { return component_; }
 };
 
 ScreenInteractive::ScreenInteractive(size_t dimx,
@@ -162,14 +163,14 @@ void ScreenInteractive::PrepareDraw() {
   if (dimx != dimx_ || dimy != dimy_) {
     dimx_ = dimx;
     dimy_ = dimy;
-    pixels_ = std::vector<std::vector<screen::Pixel>>(
-        dimy, std::vector<screen::Pixel>(dimx));
+    pixels_ = std::vector<std::vector<Pixel>>(
+        dimy, std::vector<Pixel>(dimx));
   }
 
   Render(*this, document.get());
 }
 
-component::Delegate* ScreenInteractive::delegate() {
+Component::Delegate* ScreenInteractive::delegate() {
   return delegate_.get();
 }
 
@@ -177,4 +178,4 @@ std::function<void()> ScreenInteractive::ExitLoopClosure() {
   return [this]() { quit_ = true; };
 }
 
-}  // namespace ftxui::component.
+}  // namespace ftxui.

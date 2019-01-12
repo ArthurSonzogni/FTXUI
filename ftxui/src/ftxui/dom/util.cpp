@@ -1,6 +1,6 @@
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
 Element nothing(Element element) {
   return std::move(element);
@@ -23,4 +23,4 @@ Element operator|(Element e, Decorator d) {
   return d(std::move(e));
 }
 
-}  // namespace ftxui::dom
+}  // namespace ftxui

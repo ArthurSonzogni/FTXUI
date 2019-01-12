@@ -1,6 +1,6 @@
 #include "ftxui/component/event.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 constexpr int ESC = int(27);
 
@@ -34,4 +34,4 @@ Event Event::F10{ESC, '[', '2', '1', '~'};
 Event Event::F11{ESC, '[', '2', '1', '~'};  // Same as F10 ?
 Event Event::F12{ESC, '[', '2', '4', '~'};
 
-} // namespace ftxui::component
+} // namespace ftxui

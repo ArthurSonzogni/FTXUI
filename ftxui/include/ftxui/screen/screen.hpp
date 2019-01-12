@@ -7,11 +7,11 @@
 
 #include "ftxui/screen/color.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
   class Node;
 }
 
-namespace ftxui::screen {
+namespace ftxui {
 
 struct Pixel {
   wchar_t character = U' ';
@@ -31,9 +31,9 @@ class Screen {
 
   // Constructor using the terminal.
   static Screen TerminalFullscreen();
-  static Screen TerminalOutput(std::unique_ptr<dom::Node>& element);
+  static Screen TerminalOutput(std::unique_ptr<Node>& element);
 
-  // dom::Node write into the screen using Screen::at.
+  // Node write into the screen using Screen::at.
   wchar_t& at(size_t x, size_t y);
   Pixel& PixelAt(size_t x, size_t y);
 
@@ -56,6 +56,6 @@ class Screen {
   std::vector<std::vector<Pixel>> pixels_;
 };
 
-};  // namespace ftxui::screen
+};  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_SCREEN_SCREEN */

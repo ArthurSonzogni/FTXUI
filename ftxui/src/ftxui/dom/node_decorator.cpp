@@ -1,6 +1,6 @@
 #include "ftxui/dom/node_decorator.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
 void NodeDecorator::ComputeRequirement() {
   Node::ComputeRequirement();
@@ -12,4 +12,4 @@ void NodeDecorator::SetBox(Box box) {
   children[0]->SetBox(box);
 }
 
-};  // namespace ftxui::dom
+};  // namespace ftxui

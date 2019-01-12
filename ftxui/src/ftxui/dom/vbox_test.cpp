@@ -2,8 +2,8 @@
 #include "ftxui/screen/screen.hpp"
 #include "gtest/gtest.h"
 
-using namespace ftxui::screen;
-using namespace ftxui::dom;
+using namespace ftxui;
+using namespace ftxui;
 
 TEST(VBoxTest, ScreenSmaller1) {
   auto root = vbox(text(L"text_1"), text(L"text_2"));

@@ -1,7 +1,7 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
 class Size : public Node {
  public:
@@ -32,4 +32,4 @@ Decorator size(size_t width, size_t height) {
   };
 }
 
-};  // namespace ftxui::dom
+};  // namespace ftxui

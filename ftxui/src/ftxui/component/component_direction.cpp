@@ -1,6 +1,6 @@
 #include "ftxui/component/component_direction.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 ComponentDirection::ComponentDirection(Delegate* delegate)
     : Component(delegate), active_child_(nullptr) {}
@@ -16,6 +16,7 @@ bool ComponentDirection::OnEvent(Event event) {
     return true;
 
   return HandleDirection(event);
+
 }
 
 Component* ComponentDirection::GetActiveChild() {

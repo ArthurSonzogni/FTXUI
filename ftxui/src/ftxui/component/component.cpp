@@ -2,7 +2,7 @@
 #include "ftxui/component/delegate.hpp"
 #include <assert.h>
 
-namespace ftxui::component {
+namespace ftxui {
 
 Component::Component(Delegate* delegate) {
   delegate_ = delegate;
@@ -11,8 +11,8 @@ Component::Component(Delegate* delegate) {
 
 Component::~Component() {}
 
-dom::Element Component::Render() {
-  using namespace ftxui::dom;
+Element Component::Render() {
+  using namespace ftxui;
   return text(L"Not implemented component");
 }
 
@@ -54,4 +54,4 @@ Component* Component::Parent() {
   return parent_delegate->component();
 }
 
-}  // namespace ftxui::component
+}  // namespace ftxui

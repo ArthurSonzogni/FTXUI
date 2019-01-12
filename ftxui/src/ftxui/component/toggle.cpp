@@ -1,11 +1,10 @@
 #include "ftxui/component/toggle.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 Toggle::Toggle(Delegate* delegate) : Component(delegate) {}
 
-dom::Element Toggle::Render() {
-  using namespace dom;
+Element Toggle::Render() {
   auto highlight = Focused() ? inverted : bold;
 
   Children children;
@@ -40,4 +39,4 @@ bool Toggle::OnEvent(Event event) {
   return false;
 }
 
-}  // namespace ftxui::component
+}  // namespace ftxui

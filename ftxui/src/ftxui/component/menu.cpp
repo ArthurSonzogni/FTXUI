@@ -2,12 +2,11 @@
 #include <algorithm>
 #include <iostream>
 
-namespace ftxui::component {
+namespace ftxui {
 
 Menu::Menu(Delegate* delegate) : Component(delegate) {}
 
-dom::Element Menu::Render() {
-  using namespace dom;
+Element Menu::Render() {
   std::vector<Element> elements;
   bool focused = Focused();
   for (size_t i = 0; i < entries.size(); ++i) {
@@ -49,4 +48,4 @@ bool Menu::OnEvent(Event event) {
   return false;
 }
 
-}  // namespace ftxui::component
+}  // namespace ftxui

@@ -4,7 +4,7 @@
 #include <vector>
 #include <array>
 
-namespace ftxui::component {
+namespace ftxui {
 
 struct Event{
  public:
@@ -31,7 +31,7 @@ struct Event{
 };
 
 
-} // namespace ftxui::component
+} // namespace ftxui
 
 
 #endif /* end of include guard: FTXUI_COMPONENT_EVENT_HPP */

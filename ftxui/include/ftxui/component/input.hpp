@@ -4,7 +4,7 @@
 #include "ftxui/component/component.hpp"
 #include <functional>
 
-namespace ftxui::component {
+namespace ftxui {
 
 class Input : public Component {
  public:
@@ -21,13 +21,13 @@ class Input : public Component {
   std::function<void()> on_enter = [](){};
 
   // Component implementation.
-  dom::Element Render() override;
+  Element Render() override;
   bool OnEvent(Event) override;
 
  private:
   int cursor_position = 0;
 };
 
-}  // namespace ftxui::component
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_INPUT_H_ */

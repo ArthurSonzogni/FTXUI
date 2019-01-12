@@ -5,19 +5,40 @@
 #include "ftxui/component/event.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 class Delegate;
 class Focus;
 
 class Component {
  public:
+
+  class Delegate {
+   public:
+    Delegate() {}
+    virtual ~Delegate() {}
+
+    // A Delegate shadows a component.
+    virtual void Register(Component* component) = 0;
+    virtual Component* component() = 0;
+
+    // Create new children.
+    virtual Delegate* NewChild() = 0;
+    virtual std::vector<Delegate*> children() = 0;
+
+    // Navigate in the tree.
+    virtual Delegate* PreviousSibling() = 0;
+    virtual Delegate* NextSibling() = 0;
+    virtual Delegate* Parent() = 0;
+    virtual Delegate* Root() = 0;
+  };
+
   // Constructor/Destructor.
   Component(Delegate* delegate);
   virtual ~Component();
 
   // Render the component.
-  virtual dom::Element Render();
+  virtual Element Render();
 
   // Handle an event. By default, it calls this function on each children.
   virtual bool OnEvent(Event even);
@@ -38,6 +59,6 @@ class Component {
   Delegate* delegate_;
 };
 
-}  // namespace ftxui::component
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_HPP */

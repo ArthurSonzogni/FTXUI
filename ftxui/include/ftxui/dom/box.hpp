@@ -1,7 +1,7 @@
 #ifndef FTXUI_DOM_BOX_HPP
 #define FTXUI_DOM_BOX_HPP
 
-namespace ftxui::dom {
+namespace ftxui {
 
 struct Box {
   int left;
@@ -10,6 +10,6 @@ struct Box {
   int bottom;
 };
 
-}; // namespace ftxui::dom
+}; // namespace ftxui
 
 #endif /* end of include guard: FTXUI_DOM_BOX_HPP */

@@ -1,9 +1,9 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
-using namespace ftxui::screen;
+using namespace ftxui;
 
 static const std::vector<std::vector<std::vector<std::wstring>>> elements = {
   {
@@ -276,4 +276,4 @@ std::unique_ptr<Node> spinner(int c, size_t index) {
   return vbox(std::move(lines));
 }
 
-};  // namespace ftxui::dom
+};  // namespace ftxui

@@ -8,8 +8,7 @@
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/util/string.hpp"
 
-using namespace ftxui::component;
-using namespace ftxui::dom;
+using namespace ftxui;
 
 class MyComponent : ComponentHorizontal {
   public:

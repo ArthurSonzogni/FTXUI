@@ -4,8 +4,7 @@
 
 int main(int argc, const char *argv[])
 {
-  using namespace ftxui::screen;
-  using namespace ftxui::dom;
+  using namespace ftxui;
   auto document =
     hbox(
       text(L"This text is "),

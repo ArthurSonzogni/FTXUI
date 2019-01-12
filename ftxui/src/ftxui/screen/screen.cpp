@@ -1,11 +1,11 @@
-#include "ftxui/screen/screen.hpp"
 #include "ftxui/dom/node.hpp"
-#include "ftxui/terminal.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/screen.hpp"
+#include "ftxui/screen/string.hpp"
+#include "ftxui/screen/terminal.hpp"
 
 #include <sstream>
 
-namespace ftxui::screen {
+namespace ftxui {
 
 static const wchar_t* BOLD_SET = L"\e[1m";
 static const wchar_t* BOLD_RESET = L"\e[22m"; // Can't use 21 here.
@@ -86,7 +86,7 @@ Screen Screen::TerminalFullscreen() {
 }
 
 // static
-Screen Screen::TerminalOutput(std::unique_ptr<dom::Node>& element) {
+Screen Screen::TerminalOutput(std::unique_ptr<Node>& element) {
   element->ComputeRequirement();
   Terminal::Dimensions size = Terminal::Size();
   return Screen(size.dimx, element->requirement().min.y);
@@ -106,4 +106,4 @@ void Screen::Clear() {
                                             std::vector<Pixel>(dimx_, Pixel()));
 }
 
-};  // namespace ftxui::screen
+};  // namespace ftxui

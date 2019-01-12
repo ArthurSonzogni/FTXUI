@@ -1,6 +1,6 @@
 #include "ftxui/component/component_horizontal.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 ComponentHorizontal::ComponentHorizontal(Delegate* delegate)
     : ComponentDirection(delegate) {}
@@ -27,4 +27,4 @@ bool ComponentHorizontal::HandleDirection(Event event) {
   return false;
 }
 
-}  // namespace ftxui::component
+}  // namespace ftxui

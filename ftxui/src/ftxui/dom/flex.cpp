@@ -1,7 +1,7 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
 class Flex : public Node {
  public:
@@ -34,4 +34,4 @@ std::unique_ptr<Node> flex(Element child) {
   return std::make_unique<Flex>(std::move(child));
 }
 
-};  // namespace ftxui::dom
+};  // namespace ftxui

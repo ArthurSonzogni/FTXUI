@@ -3,7 +3,7 @@
 
 #include "ftxui/component/component_direction.hpp"
 
-namespace ftxui::component {
+namespace ftxui {
 
 // A component where focus and events are automatically handled for you.
 // It assumes its children are put in the vertical direction.
@@ -13,6 +13,6 @@ class ComponentVertical : public ComponentDirection {
   bool HandleDirection(Event) override;
 };
 
-} // namespace ftxui::component
+} // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_VERTICAL_H_ */

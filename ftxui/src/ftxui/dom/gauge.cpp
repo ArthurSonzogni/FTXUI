@@ -1,9 +1,9 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
-using namespace ftxui::screen;
+using namespace ftxui;
 
 static wchar_t charset[] = L"  ▏▎▍▌▋▊▉█";
 
@@ -36,4 +36,4 @@ std::unique_ptr<Node> gauge(float progress) {
   return std::make_unique<Gauge>(progress);
 }
 
-};  // namespace ftxui::dom
+};  // namespace ftxui

@@ -10,8 +10,7 @@
 
 int main(int argc, const char *argv[])
 {
-  using namespace ftxui::screen;
-  using namespace ftxui::dom;
+  using namespace ftxui;
 
   struct Task {
     std::wstring name;

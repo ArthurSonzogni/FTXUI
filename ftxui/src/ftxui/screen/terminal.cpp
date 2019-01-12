@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "ftxui/terminal.hpp"
+#include "ftxui/screen/terminal.hpp"
 
 namespace ftxui {
 

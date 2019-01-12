@@ -8,7 +8,7 @@
 #include "ftxui/dom/requirement.hpp"
 #include "ftxui/screen/screen.hpp"
 
-namespace ftxui::dom {
+namespace ftxui {
 
 class Node {
  public:
@@ -27,7 +27,7 @@ class Node {
   virtual void SetBox(Box box);
 
   // Step 3: Draw this element.
-  virtual void Render(screen::Screen& screen);
+  virtual void Render(Screen& screen);
 
   std::vector<std::unique_ptr<Node>> children;
  protected:
@@ -35,8 +35,8 @@ class Node {
   Box box_;
 };
 
-void Render(screen::Screen& screen, Node* node);
+void Render(Screen& screen, Node* node);
 
-};  // namespace ftxui::dom
+};  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_DOM_NODE_HPP */

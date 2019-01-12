@@ -7,8 +7,7 @@
 #include "ftxui/component/toggle.hpp"
 #include "ftxui/util/string.hpp"
 
-using namespace ftxui::component;
-using namespace ftxui::dom;
+using namespace ftxui;
 
 class MyComponent : ComponentVertical {
   public:
