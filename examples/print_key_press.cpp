@@ -4,17 +4,16 @@
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 
 using namespace ftxui;
 
 class DrawKey : public Component {
  public:
-  DrawKey(Component::Delegate* delegate)
-      : Component(delegate) {}
+  ~DrawKey() override = default;
 
   Element Render() override {
-    Children children;
+    Elements children;
     for (size_t i = std::max(0, (int)keys.size() - 10); i < keys.size(); ++i) {
       std::string code = "";
       for (size_t j = 0; j < 5; ++j)
@@ -44,6 +43,6 @@ class DrawKey : public Component {
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::FixedSize(80, 10);
-  DrawKey draw_key(screen.delegate());
-  screen.Loop();
+  DrawKey draw_key;
+  screen.Loop(&draw_key);
 }

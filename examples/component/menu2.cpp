@@ -2,20 +2,20 @@
 #include <iostream>
 #include <thread>
 
-#include "ftxui/component/component_horizontal.hpp"
-#include "ftxui/component/component_vertical.hpp"
+#include "ftxui/component/container.hpp"
 #include "ftxui/component/menu.hpp"
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 
 using namespace ftxui;
 
-class MyComponent : ComponentHorizontal {
+class MyComponent : public Component {
   public:
-   MyComponent(Delegate* delegate)
-       : ComponentHorizontal(delegate),
-         left_menu(delegate->NewChild()),
-         right_menu(delegate->NewChild()) {
+   MyComponent() {
+     Add(&container);
+     container.Add(&left_menu);
+     container.Add(&right_menu);
+
      left_menu.entries = {L"0%",  L"10%", L"20%", L"30%", L"40%", L"50%",
                           L"60%", L"70%", L"80%", L"90%"};
      right_menu.entries = {L"0%",  L"1%", L"2%", L"3%", L"4%", L"5%",
@@ -23,11 +23,11 @@ class MyComponent : ComponentHorizontal {
 
      left_menu.on_enter = [this]() { on_enter(); };
      right_menu.on_enter = [this]() { on_enter(); };
-     Focus(&left_menu);
    }
 
    std::function<void()> on_enter = [](){};
   private:
+   Container container = Container::Horizontal();
    Menu left_menu;
    Menu right_menu;
 
@@ -66,7 +66,7 @@ class MyComponent : ComponentHorizontal {
 int main(int argc, const char *argv[])
 {
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component(screen.delegate());
+  MyComponent component;
   component.on_enter = screen.ExitLoopClosure();
-  screen.Loop();
+  screen.Loop(&component);
 }

@@ -5,7 +5,7 @@ namespace ftxui {
 
 class Blink : public NodeDecorator {
  public:
-  Blink(Children children) : NodeDecorator(std::move(children)) {}
+  Blink(Elements children) : NodeDecorator(std::move(children)) {}
   ~Blink() override {}
 
   void Render(Screen& screen) override {
@@ -18,7 +18,7 @@ class Blink : public NodeDecorator {
   }
 };
 
-std::unique_ptr<Node> blink(Child child) {
+std::unique_ptr<Node> blink(Element child) {
   return std::make_unique<Blink>(unpack(std::move(child)));
 }
 

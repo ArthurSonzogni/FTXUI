@@ -5,7 +5,7 @@ namespace ftxui {
 
 class HBox : public Node {
  public:
-  HBox(Children children) : Node(std::move(children)) {}
+  HBox(Elements children) : Node(std::move(children)) {}
   ~HBox() {}
 
   void ComputeRequirement() override {
@@ -59,7 +59,7 @@ class HBox : public Node {
   }
 };
 
-std::unique_ptr<Node> hbox(Children children) {
+std::unique_ptr<Node> hbox(Elements children) {
   return std::make_unique<HBox>(std::move(children));
 }
 

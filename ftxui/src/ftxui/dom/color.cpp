@@ -5,7 +5,7 @@ namespace ftxui {
 
 class BgColor : public NodeDecorator {
  public:
-  BgColor(Children children, Color color)
+  BgColor(Elements children, Color color)
       : NodeDecorator(std::move(children)), color_(color) {}
 
   void Render(Screen& screen) override {
@@ -22,7 +22,7 @@ class BgColor : public NodeDecorator {
 
 class FgColor : public NodeDecorator {
  public:
-  FgColor(Children children, Color color)
+  FgColor(Elements children, Color color)
       : NodeDecorator(std::move(children)), color_(color) {}
   ~FgColor() override {}
 
@@ -38,22 +38,22 @@ class FgColor : public NodeDecorator {
   Color color_;
 };
 
-std::unique_ptr<Node> color(Color c, Child child) {
+std::unique_ptr<Node> color(Color c, Element child) {
   return std::make_unique<FgColor>(unpack(std::move(child)), c);
 }
 
-std::unique_ptr<Node> bgcolor(Color c, Child child) {
+std::unique_ptr<Node> bgcolor(Color c, Element child) {
   return std::make_unique<BgColor>(unpack(std::move(child)), c);
 }
 
 Decorator color(Color c) {
-  return [c](Child child) {
+  return [c](Element child) {
     return color(c, std::move(child));
   };
 }
 
 Decorator bgcolor(Color c) {
-  return [c](Child child) {
+  return [c](Element child) {
     return bgcolor(c, std::move(child));
   };
 }

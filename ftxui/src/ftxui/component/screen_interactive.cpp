@@ -45,53 +45,10 @@ Event GetEvent() {
 
 };  // namespace
 
-class ScreenInteractive::Delegate : public Component::Delegate {
- public:
-  Delegate() : root_(this) {}
-
-  void Register(Component* c) override { component_ = c; }
-
-  std::vector<std::unique_ptr<Delegate>> child_;
-  Delegate* NewChild() override {
-    Delegate* child = new Delegate;
-    child->root_ = root_;
-    child->parent_ = this;
-
-    if (!child_.empty()) {
-      child_.back()->next_sibling_ = child;
-      child->previous_sibling_ = child_.back().get();
-    }
-
-    child_.emplace_back(child);
-    return child;
-  }
-
-  void OnEvent(Event event) { component_->OnEvent(event); }
-
-  std::vector<Component::Delegate*> children() override {
-    std::vector<Component::Delegate*> ret;
-    for (auto& it : child_)
-      ret.push_back(it.get());
-    return ret;
-  }
-
-  Component::Delegate* root_;
-  Component::Delegate* parent_ = nullptr;
-  Component::Delegate* previous_sibling_ = nullptr;
-  Component::Delegate* next_sibling_ = nullptr;
-  Component* component_;
-
-  Component::Delegate* Root() override { return root_; }
-  Component::Delegate* Parent() override { return parent_; }
-  Component::Delegate* PreviousSibling() override { return previous_sibling_; }
-  Component::Delegate* NextSibling() override { return next_sibling_; }
-  Component* component() override { return component_; }
-};
-
 ScreenInteractive::ScreenInteractive(size_t dimx,
                                      size_t dimy,
                                      Dimension dimension)
-    : Screen(dimx, dimy), delegate_(new Delegate), dimension_(dimension) {}
+    : Screen(dimx, dimy), dimension_(dimension) {}
 ScreenInteractive::~ScreenInteractive() {}
 
 // static
@@ -109,10 +66,10 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
   return ScreenInteractive(0, 0, Dimension::TerminalOutput);
 }
 
-void ScreenInteractive::Loop() {
-  std::cout << "\033[?9h";    /* Send Mouse Row & Column on Button Press */
-  std::cout << "\033[?1000h"; /* Send Mouse X & Y on button press and release */
-  std::cout << std::flush;
+void ScreenInteractive::Loop(Component* component) {
+  //std::cout << "\033[?9h";    [> Send Mouse Row & Column on Button Press <]
+  //std::cout << "\033[?1000h"; [> Send Mouse X & Y on button press and release <]
+  //std::cout << std::flush;
 
   // Save the old terminal configuration.
   struct termios terminal_configuration_old;
@@ -130,23 +87,27 @@ void ScreenInteractive::Loop() {
 
   std::string reset_position;
   while (!quit_) {
-    PrepareDraw();
+    Draw(component);
     std::cout << reset_position << ToString() << std::flush;
     reset_position = ResetPosition();
     Clear();
-    delegate_->OnEvent(GetEvent());
+    component->OnEvent(GetEvent());
   }
 
   // Restore the old terminal configuration.
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_old);
+
+  std::cout << std::endl;
 }
 
-void ScreenInteractive::PrepareDraw() {
-  auto document = delegate_->component()->Render();
+void ScreenInteractive::Draw(Component* component) {
+  auto document = component->Render();
   size_t dimx;
   size_t dimy;
   switch (dimension_) {
     case Dimension::Fixed:
+      dimx = dimx_;
+      dimy = dimy_;
       break;
     case Dimension::TerminalOutput:
       document->ComputeRequirement();
@@ -161,17 +122,15 @@ void ScreenInteractive::PrepareDraw() {
   }
 
   if (dimx != dimx_ || dimy != dimy_) {
+    std::cerr << dimx_ << " " << dimy_ << std::endl;
     dimx_ = dimx;
     dimy_ = dimy;
+    std::cerr << dimx_ << " " << dimy_ << std::endl;
     pixels_ = std::vector<std::vector<Pixel>>(
         dimy, std::vector<Pixel>(dimx));
   }
 
   Render(*this, document.get());
-}
-
-Component::Delegate* ScreenInteractive::delegate() {
-  return delegate_.get();
 }
 
 std::function<void()> ScreenInteractive::ExitLoopClosure() {

@@ -13,50 +13,43 @@ class Focus;
 class Component {
  public:
 
-  class Delegate {
-   public:
-    Delegate() {}
-    virtual ~Delegate() {}
-
-    // A Delegate shadows a component.
-    virtual void Register(Component* component) = 0;
-    virtual Component* component() = 0;
-
-    // Create new children.
-    virtual Delegate* NewChild() = 0;
-    virtual std::vector<Delegate*> children() = 0;
-
-    // Navigate in the tree.
-    virtual Delegate* PreviousSibling() = 0;
-    virtual Delegate* NextSibling() = 0;
-    virtual Delegate* Parent() = 0;
-    virtual Delegate* Root() = 0;
-  };
-
   // Constructor/Destructor.
-  Component(Delegate* delegate);
+  Component() = default;
   virtual ~Component();
 
-  // Render the component.
+  // Component hierarchy.
+  Component* Parent() { return parent_; }
+  void Add(Component* children);
+
+  // Renders the component.
   virtual Element Render();
 
-  // Handle an event. By default, it calls this function on each children.
-  virtual bool OnEvent(Event even);
+  // Handles an event.
+  // By default, reduce on children with a lazy OR.
+  //
+  // Returns whether the event was handled or not.
+  virtual bool OnEvent(Event);
 
-  // If this component contains children, this indicates which one is active. It
-  // can be none of them.
-  // We say an element has the focus if the chain of GetActiveChild() from the
+  // Focus management ----------------------------------------------------------
+  //
+  // If this component contains children, this indicates which one is active,
+  // nullptr if none is active.
+  //
+  // We say an element has the focus if the chain of ActiveChild() from the
   // root component contains this object.
-  virtual Component* GetActiveChild() { return nullptr; }
-  bool Active(); // True is this component is an active child.
-  bool Focused(); // True if all the ancestors are active childs.
+  virtual Component* ActiveChild();
+  // Whether this is the active child of its parent.
+  bool Active();
+  // Whether all the ancestors are active.
+  bool Focused();
 
-  Component* Parent();
-  Component* PreviousSibling();
-  Component* NextSibling();
-  
  private:
-  Delegate* delegate_;
+  Component* parent_ = nullptr;
+  void Detach();
+  void Attach(Component* parent);
+
+ protected:
+  std::vector<Component*> children_;
 };
 
 }  // namespace ftxui

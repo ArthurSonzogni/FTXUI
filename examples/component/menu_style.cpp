@@ -1,25 +1,20 @@
 #include <iostream>
 #include <thread>
 
-#include "ftxui/component/component_horizontal.hpp"
+#include "ftxui/component/container.hpp"
 #include "ftxui/component/menu.hpp"
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 
 using namespace ftxui;
 
-class MyComponent : ComponentHorizontal {
+class MyComponent : public Component {
   public:
-   MyComponent(Delegate* delegate)
-       : ComponentHorizontal(delegate),
-         menu_1(delegate->NewChild()),
-         menu_2(delegate->NewChild()),
-         menu_3(delegate->NewChild()),
-         menu_4(delegate->NewChild()),
-         menu_5(delegate->NewChild()),
-         menu_6(delegate->NewChild()) {
+   MyComponent() {
+     Add(&container);
 
      for(Menu* menu : {&menu_1, &menu_2, &menu_3, &menu_4, &menu_5, &menu_6}) {
+       container.Add(menu);
        menu->entries = {
          L"Monkey",
          L"Dog",
@@ -46,12 +41,11 @@ class MyComponent : ComponentHorizontal {
      menu_6.normal_style = dim | color(Color::Blue);
      menu_6.selected_style = color(Color::Blue);
      menu_6.active_style = bold | color(Color::Blue);
-
-     Focus(&menu_1);
    }
 
    std::function<void()> on_enter = [](){};
   private:
+   Container container = Container::Horizontal();
    Menu menu_1;
    Menu menu_2;
    Menu menu_3;
@@ -75,7 +69,7 @@ class MyComponent : ComponentHorizontal {
 int main(int argc, const char *argv[])
 {
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component(screen.delegate());
+  MyComponent component;
   component.on_enter = screen.ExitLoopClosure();
-  screen.Loop();
+  screen.Loop(&component);
 }

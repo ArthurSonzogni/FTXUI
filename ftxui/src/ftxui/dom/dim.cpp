@@ -7,7 +7,7 @@ using ftxui::Screen;
 
 class Dim : public NodeDecorator {
  public:
-  Dim(Children children) : NodeDecorator(std::move(children)) {}
+  Dim(Elements children) : NodeDecorator(std::move(children)) {}
   ~Dim() override {}
 
   void Render(Screen& screen) override {
@@ -20,7 +20,7 @@ class Dim : public NodeDecorator {
   }
 };
 
-std::unique_ptr<Node> dim(Child child) {
+std::unique_ptr<Node> dim(Element child) {
   return std::make_unique<Dim>(unpack(std::move(child)));
 }
 

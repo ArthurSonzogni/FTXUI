@@ -1,57 +1,53 @@
 #include "ftxui/component/component.hpp"
-#include "ftxui/component/delegate.hpp"
 #include <assert.h>
 
 namespace ftxui {
+void Component::Detach() { if (!parent_) return; auto it = std::find(std::begin(parent_->children_),
+                      std::end(parent_->children_), this);
+  parent_->children_.erase(it);
 
-Component::Component(Delegate* delegate) {
-  delegate_ = delegate;
-  delegate_->Register(this);
 }
 
-Component::~Component() {}
+void Component::Attach(Component* parent) {
+  Detach();
+  parent_ = parent;
+  parent_->children_.push_back(this);
+}
 
-Element Component::Render() {
-  using namespace ftxui;
-  return text(L"Not implemented component");
+void Component::Add(Component* child) {
+  child->Attach(this);
+}
+
+Component::~Component() {
+  Detach();
 }
 
 bool Component::OnEvent(Event event) {
-  return false;
-}
-
-bool Component::Focused() {
-  Delegate* current = delegate_->Root();
-  while (current) {
-    if (current == delegate_)
+  for(Component* child : children_) {
+    if (child->OnEvent(event))
       return true;
-
-    Component* active_child = current->component()->GetActiveChild();
-    current = active_child ? active_child->delegate_ : nullptr;
   }
   return false;
 }
 
-bool Component::Active() {
-  Delegate* parent = delegate_->Parent();
-  return parent && parent->component()->GetActiveChild() == this;
+Component* Component::ActiveChild() {
+  return children_.empty() ? nullptr : children_.front();
 }
 
-Component* Component::PreviousSibling() {
-  Delegate* sibling = delegate_->PreviousSibling();
-  return sibling ? sibling->component() : nullptr;
+Element Component::Render() {
+  return text(L"Not implemented component");
 }
 
-Component* Component::NextSibling() {
-  Delegate* sibling = delegate_->NextSibling();
-  return sibling ? sibling->component() : nullptr;
-}
-
-Component* Component::Parent() {
-  Delegate* parent_delegate = delegate_->Parent();
-  if (!parent_delegate)
-    return nullptr;
-  return parent_delegate->component();
+bool Component::Focused() {
+  Component* current = this;
+  for(;;) {
+    Component* parent = current->parent_;
+    if (!parent)
+      return true;
+    if (parent->ActiveChild() != current)
+      return false;
+    current = parent;
+  }
 }
 
 }  // namespace ftxui

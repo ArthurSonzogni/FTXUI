@@ -10,7 +10,7 @@ namespace ftxui {
 class Toggle : public Component {
  public:
   // Constructor.
-  Toggle(Delegate*);
+  ~Toggle() override = default;
 
   // State.
   size_t activated = 0;

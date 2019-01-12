@@ -5,7 +5,7 @@ namespace ftxui {
 
 class Bold : public NodeDecorator {
  public:
-  Bold(Children children) : NodeDecorator(std::move(children)) {}
+  Bold(Elements children) : NodeDecorator(std::move(children)) {}
   ~Bold() override {}
 
   void Render(Screen& screen) override {
@@ -18,7 +18,7 @@ class Bold : public NodeDecorator {
   }
 };
 
-std::unique_ptr<Node> bold(Child child) {
+std::unique_ptr<Node> bold(Element child) {
   return std::make_unique<Bold>(unpack(std::move(child)));
 }
 

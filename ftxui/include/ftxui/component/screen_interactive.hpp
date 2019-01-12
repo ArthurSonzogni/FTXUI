@@ -1,31 +1,25 @@
 #ifndef FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 #define FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 
-#include "ftxui/component/component.hpp"
 #include "ftxui/screen/screen.hpp"
 #include <functional>
 #include <memory>
 
 namespace ftxui {
+class Component;
 
-
-class ScreenInteractive : public ftxui::Screen {
+class ScreenInteractive : public Screen {
   public:
     static ScreenInteractive FixedSize(size_t dimx, size_t dimy);
     static ScreenInteractive Fullscreen();
     static ScreenInteractive TerminalOutput();
 
     ~ScreenInteractive();
-    void Loop();
+    void Loop(Component*);
     std::function<void()> ExitLoopClosure();
 
-    Component::Delegate* delegate();
-
   private:
-   class Delegate;
-   std::unique_ptr<Delegate> delegate_;
-
-   void PrepareDraw();
+   void Draw(Component* component);
    bool quit_ = false;
 
    enum class Dimension {
@@ -34,7 +28,6 @@ class ScreenInteractive : public ftxui::Screen {
      Fullscreen,
    };
    Dimension dimension_ = Dimension::Fixed;
-
    ScreenInteractive(size_t dimx, size_t dimy, Dimension dimension);
 };
 

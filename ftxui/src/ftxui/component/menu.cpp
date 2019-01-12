@@ -4,8 +4,6 @@
 
 namespace ftxui {
 
-Menu::Menu(Delegate* delegate) : Component(delegate) {}
-
 Element Menu::Render() {
   std::vector<Element> elements;
   bool focused = Focused();

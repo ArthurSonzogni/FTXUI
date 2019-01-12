@@ -31,9 +31,7 @@ add_library(dom
 
 add_library(component
   src/ftxui/component/component.cpp
-  src/ftxui/component/component_direction.cpp
-  src/ftxui/component/component_horizontal.cpp
-  src/ftxui/component/component_vertical.cpp
+  src/ftxui/component/container.cpp
   src/ftxui/component/event.cpp
   src/ftxui/component/input.cpp
   src/ftxui/component/menu.cpp

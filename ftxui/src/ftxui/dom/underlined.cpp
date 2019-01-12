@@ -7,7 +7,7 @@ using ftxui::Screen;
 
 class Underlined : public NodeDecorator {
  public:
-  Underlined(Children children) : NodeDecorator(std::move(children)) {}
+  Underlined(Elements children) : NodeDecorator(std::move(children)) {}
   ~Underlined() override {}
 
   void Render(Screen& screen) override {
@@ -20,7 +20,7 @@ class Underlined : public NodeDecorator {
   }
 };
 
-std::unique_ptr<Node> underlined(Child child) {
+std::unique_ptr<Node> underlined(Element child) {
   return std::make_unique<Underlined>(unpack(std::move(child)));
 }
 

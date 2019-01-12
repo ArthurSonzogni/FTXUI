@@ -7,7 +7,7 @@ using ftxui::Screen;
 
 class Inverted : public NodeDecorator {
  public:
-  Inverted(Children children) : NodeDecorator(std::move(children)) {}
+  Inverted(Elements children) : NodeDecorator(std::move(children)) {}
   ~Inverted() override {}
 
   void Render(Screen& screen) override {
@@ -20,7 +20,7 @@ class Inverted : public NodeDecorator {
   }
 };
 
-std::unique_ptr<Node> inverted(Child child) {
+std::unique_ptr<Node> inverted(Element child) {
   return std::make_unique<Inverted>(unpack(std::move(child)));
 }
 

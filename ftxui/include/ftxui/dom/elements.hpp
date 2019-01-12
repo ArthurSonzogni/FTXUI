@@ -9,15 +9,13 @@
 namespace ftxui {
 
 using Element = std::unique_ptr<Node>;
+using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
-using Child = std::unique_ptr<Node>;
-using Children = std::vector<Child>;
-using Color = ftxui::Color;
 
 // --- Layout ----
-Element vbox(Children);
-Element hbox(Children);
-Element dbox(Children);
+Element vbox(Elements);
+Element hbox(Elements);
+Element dbox(Elements);
 
 // -- Flexibility --
 Element filler();
@@ -29,7 +27,7 @@ Element text(std::wstring text);
 Element separator();
 Element gauge(float ratio);
 Element frame(Element);
-Element window(Child title, Child content);
+Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
 
 // -- Decorator ---

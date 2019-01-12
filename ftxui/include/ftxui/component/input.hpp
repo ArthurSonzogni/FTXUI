@@ -9,8 +9,8 @@ namespace ftxui {
 class Input : public Component {
  public:
   // Constructor.
-  Input(Delegate*);
-  ~Input() override;
+  Input() = default;
+  ~Input() override = default;
 
   // State.
   std::wstring content;

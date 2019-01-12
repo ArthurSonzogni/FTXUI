@@ -2,7 +2,7 @@
 
 // Turn a set of arguments into a vector.
 template <class... Args>
-Children unpack(Args... args) {
+Elements unpack(Args... args) {
   using T = std::common_type_t<Args...>;
   std::vector<T> vec;
   (vec.push_back(std::forward<Args>(args)), ...);

@@ -1,28 +1,28 @@
 #include <iostream>
 #include <thread>
 
-#include "ftxui/component/component_vertical.hpp"
+#include "ftxui/component/container.hpp"
 #include "ftxui/component/menu.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/toggle.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 
 using namespace ftxui;
 
-class MyComponent : ComponentVertical {
+class MyComponent : public Component {
   public:
-   MyComponent(Delegate* delegate)
-       : ComponentVertical(delegate),
-         toggle(delegate->NewChild()),
-         menu(delegate->NewChild()) {
+   MyComponent() {
+     Add(&container);
+     container.Add(&toggle);
+     container.Add(&menu);
 
      toggle.options = {L" left ", L" middle ", L" end "};
      menu.entries = {L" top ", L" middle ", L" bottom "};
-     Focus(&toggle);
    }
 
    std::function<void()> on_enter = [](){};
   private:
+   Container container = Container::Vertical();
    Toggle toggle;
    Menu menu;
 
@@ -38,7 +38,7 @@ class MyComponent : ComponentVertical {
 int main(int argc, const char *argv[])
 {
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component(screen.delegate());
+  MyComponent component;
   component.on_enter = screen.ExitLoopClosure();
-  screen.Loop();
+  screen.Loop(&component);
 }

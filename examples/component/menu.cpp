@@ -8,10 +8,13 @@
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
   auto screen = ScreenInteractive::FixedSize(30, 3);
-  Menu menu(screen.delegate());
+
+  Menu menu;
   menu.entries = {L"entry 1", L"entry 2", L"entry 3"};
   menu.selected = 0;
   menu.on_enter = screen.ExitLoopClosure();
 
-  screen.Loop();
+  screen.Loop(&menu);
+
+  std::cout << "Selected element = " << menu.selected << std::endl;
 }

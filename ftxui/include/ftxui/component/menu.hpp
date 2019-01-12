@@ -10,7 +10,8 @@ namespace ftxui {
 class Menu : public Component {
  public:
   // Constructor.
-  Menu(Delegate*);
+  Menu() = default;
+  ~Menu() override = default;
 
   // State.
   std::vector<std::wstring> entries = {};

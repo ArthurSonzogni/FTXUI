@@ -9,7 +9,7 @@ namespace ftxui {
 // Helper class.
 class NodeDecorator : public Node {
  public:
-  NodeDecorator(Children children) : Node(std::move(children)) {}
+  NodeDecorator(Elements children) : Node(std::move(children)) {}
   ~NodeDecorator() override {}
   void ComputeRequirement() override;
   void SetBox(Box box) override;

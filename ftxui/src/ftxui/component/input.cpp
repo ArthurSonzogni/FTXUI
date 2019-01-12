@@ -1,10 +1,7 @@
 #include "ftxui/component/input.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 
 namespace ftxui {
-
-Input::Input(Delegate* delegate): Component(delegate) {}
-Input::~Input() {}
 
 // Component implementation.
 Element Input::Render() {

@@ -2,33 +2,32 @@
 #include <iostream>
 #include <thread>
 
-#include "ftxui/component/component_horizontal.hpp"
-#include "ftxui/component/component_vertical.hpp"
+#include "ftxui/component/container.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/toggle.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 
 using namespace ftxui;
 
-class MyComponent : ComponentVertical {
+class MyComponent : public Component {
  public:
-  MyComponent(Delegate* delegate)
-      : ComponentVertical(delegate),
-        toggle_1(delegate->NewChild()),
-        toggle_2(delegate->NewChild()),
-        toggle_3(delegate->NewChild()),
-        toggle_4(delegate->NewChild()) {
+  MyComponent() {
+    Add(&container);
+    container.Add(&toggle_1);
+    container.Add(&toggle_2);
+    container.Add(&toggle_3);
+    container.Add(&toggle_4);
+
     toggle_1.options = {L"On", L"Off"};
     toggle_2.options = {L"Enabled", L"Disabled"};
     toggle_3.options = {L"10€", L"0€"};
     toggle_4.options = {L"Nothing", L"One element", L"Several elements"};
-
-    Focus(&toggle_1);
   }
 
   std::function<void()> on_enter = []() {};
 
  private:
+  Container container = Container::Vertical();
   Toggle toggle_1;
   Toggle toggle_2;
   Toggle toggle_3;
@@ -45,23 +44,11 @@ class MyComponent : ComponentVertical {
         hbox(text(L" * Number of elements       : "), toggle_4.Render())
       );
   }
-
-  bool OnEvent(Event event) override {
-    if (ComponentVertical::OnEvent(event))
-      return true;
-
-    if (event == Event::Return) {
-      on_enter();
-      return true;
-    }
-
-    return false;
-  }
 };
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component(screen.delegate());
+  MyComponent component;
   component.on_enter = screen.ExitLoopClosure();
-  screen.Loop();
+  screen.Loop(&component);
 }

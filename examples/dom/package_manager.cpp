@@ -4,7 +4,7 @@
 
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/screen/screen.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 #include <list>
 #include <vector>
 

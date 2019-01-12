@@ -2,13 +2,10 @@
 
 namespace ftxui {
 
-Toggle::Toggle(Delegate* delegate) : Component(delegate) {}
-
 Element Toggle::Render() {
   auto highlight = Focused() ? inverted : bold;
 
-  Children children;
-
+  Elements children;
   for(size_t i = 0; i<options.size(); ++i) {
     // Separator.
     if (i != 0)

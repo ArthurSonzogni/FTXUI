@@ -9,7 +9,7 @@ static wchar_t charset[] = L"┌┐└┘─│┬┴┤├";
 
 class Frame : public Node {
  public:
-  Frame(Children children) : Node(std::move(children)) {}
+  Frame(Elements children) : Node(std::move(children)) {}
   ~Frame() override {}
 
   void ComputeRequirement() override {
@@ -81,16 +81,16 @@ class Frame : public Node {
   }
 };
 
-std::unique_ptr<Node> frame(Child child) {
+std::unique_ptr<Node> frame(Element child) {
   return std::make_unique<Frame>(unpack(std::move(child)));
 }
 
-std::unique_ptr<Node> window(Child title, Child content) {
+std::unique_ptr<Node> window(Element title, Element content) {
   return std::make_unique<Frame>(unpack(std::move(content), std::move(title)));
 }
 
 Decorator boxed() {
-  return [](Child child) {
+  return [](Element child) {
     return frame(std::move(child));
   };
 }

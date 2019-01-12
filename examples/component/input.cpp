@@ -1,31 +1,29 @@
-#include <chrono>
 #include <iostream>
-#include <thread>
 
-#include "ftxui/component/component_vertical.hpp"
+#include "ftxui/component/container.hpp"
 #include "ftxui/component/input.hpp"
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 
 using namespace ftxui;
 
-class MyComponent : ComponentVertical {
+class MyComponent : public Component {
  public:
-  MyComponent(Delegate* delegate)
-      : ComponentVertical(delegate),
-        input_1(delegate->NewChild()),
-        input_2(delegate->NewChild()),
-        input_3(delegate->NewChild()) {
+  MyComponent() {
+    Add(&container);
+    container.Add(&input_1);
+    container.Add(&input_2);
+    container.Add(&input_3);
 
     input_1.placeholder = L"input1";
     input_2.placeholder = L"input2";
     input_3.placeholder = L"input3";
-    Focus(&input_1);
   }
 
   std::function<void()> on_enter = []() {};
 
  private:
+  Container container = Container::Vertical();
   Input input_1;
   Input input_2;
   Input input_3;
@@ -44,7 +42,7 @@ class MyComponent : ComponentVertical {
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component(screen.delegate());
+  MyComponent component;
   component.on_enter = screen.ExitLoopClosure();
-  screen.Loop();
+  screen.Loop(&component);
 }

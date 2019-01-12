@@ -5,7 +5,7 @@ namespace ftxui {
 
 class VBox : public Node {
  public:
-  VBox(Children children) : Node(std::move(children)) {}
+  VBox(Elements children) : Node(std::move(children)) {}
   ~VBox() {}
 
   void ComputeRequirement() {
@@ -59,7 +59,7 @@ class VBox : public Node {
   }
 };
 
-std::unique_ptr<Node> vbox(Children children) {
+std::unique_ptr<Node> vbox(Elements children) {
   return std::make_unique<VBox>(std::move(children));
 }
 
