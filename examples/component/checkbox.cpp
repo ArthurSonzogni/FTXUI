@@ -20,11 +20,21 @@ class MyComponent : public Component {
       box_1_.label = L"Build examples";
       box_2_.label = L"Build tests";
       box_3_.label = L"Use WebAssembly";
+      box_3_.state = true;
+    }
+
+    Element Render() {
+      return
+        window(text(L" Checkbox "),
+          hbox(
+            container_.Render()
+          )
+        );
     }
 };
 
 int main(int argc, const char *argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = ScreenInteractive::FixedSize(30,5);
   MyComponent component;
   screen.Loop(&component);
   return 0;

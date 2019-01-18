@@ -15,8 +15,10 @@ class CheckBox : public Component {
   bool state = false;
   std::wstring label = L"label";
 
-  std::wstring checked = L"[X] ";
-  std::wstring unchecked = L"[ ] ";
+  //std::wstring checked = L"[X] ";
+  //std::wstring unchecked = L"[ ] ";
+  std::wstring checked = L"☑ ";
+  std::wstring unchecked = L"☐ ";
 
   // State update callback.
   std::function<void()> on_change = [](){};
