@@ -1,16 +1,22 @@
-Table of content.
+- [Introduction](#introduction)
 - [DOM](#dom)
   * [Style](#style)
   * [Layout](#layout)
+    + [Examples](#examples)
   * [Widget.](#widget)
     + [text](#text)
     + [frame](#frame)
     + [separator](#separator)
     + [gauge](#gauge)
+  * [Decorator](#decorator)
 - [Components.](#components)
   * [Input](#input)
   * [Menu](#menu)
   * [Toggle.](#toggle)
+
+## Introduction
+I highly recommand to not take too long on the tutorial, instead you should try
+to understand the /example/*.
 
 ## DOM
 All the dom element are declared in one header:
@@ -22,18 +28,22 @@ It declares the following set of elements:
 
 ~~~cpp
 // --- Layout ----
-Element vbox(Children);
-Element hbox(Children);
-Element dbox(Children);
+Element vbox(Elements);
+Element hbox(Elements);
+Element dbox(Elements);
+
+// -- Flexibility --
 Element filler();
 Element flex(Element);
+Decorator size(size_t width, size_t height);
 
 // --- Widget --
 Element text(std::wstring text);
 Element separator();
 Element gauge(float ratio);
 Element frame(Element);
-Element window(Child title, Child content);
+Element window(Element title, Element content);
+Element spinner(int charset_index, size_t image_index);
 
 // -- Decorator ---
 Element bold(Element);
@@ -41,15 +51,17 @@ Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
 Element blink(Element);
-Element color(Color, Element);
-Element bgcolor(Color, Element);
+
 Decorator color(Color);
 Decorator bgcolor(Color);
+Element color(Color, Element);
+Element bgcolor(Color, Element);
 
 // --- Util ---
 Element hcenter(Element);
 Element vcenter(Element);
 Element center(Element);
+Element align_right(Element);
 
 // --- Util ---
 Element nothing(Element element);
@@ -74,21 +86,21 @@ Element bgcolor(Color, Element);
 
 * vbox (Vertical-box)
 * hbox (Horizontal-box)
-* fbox (Depth-box)
+* dbox (Depth-box)
 are containers. They are used to compose all the elements together. Each
 children are put side by side. If the container is flexible, the extra space
 available will be shared among the remaining flexible children.
 
-flex(element) can be used to make a non-flexible element flexible.
-filler() is a flexible empty element. You can use it to children on one side of
-the container.
+flex(element) can be used to make a non-flexible element flexible. filler() is a
+flexible empty element. You can use it align children on one side of the
+container.
 
 #### Examples
 ~~~cpp
   hbox(
-    frame(text(L"left")),
-    flex(frame(text(L"middle"))),
-    frame(text(L"right"))
+    text(L"left") | frame ,
+    text(L"middle") | frame | flex,
+    text(L"right") | frame
   );
 ~~~
 ~~~bash
@@ -99,9 +111,9 @@ the container.
 
 ~~~cpp
   hbox(
-    frame(text(L"left")),
-    flex(frame(text(L"middle"))),
-    flex(frame(text(L"right")))
+    text(L"left") | frame ,
+    text(L"middle") | frame | flex,
+    text(L"right") | frame | flex
   );
 ~~~
 ~~~bash
@@ -190,6 +202,7 @@ text(L"This text is bold")) | bold | underlined
 
 ## Components.
 
+dom element are stateless. 
 ### Input
   TODO(arthursonzogni): Add Video
 ### Menu

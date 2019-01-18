@@ -38,6 +38,9 @@ void Render(Screen& screen, Node* node) {
 
   // Step 3: Draw the element.
   node->Render(screen);
+
+  // Step 4: Apply shaders
+  screen.ApplyShader();
 }
 
 };  // namespace ftxui

@@ -50,6 +50,8 @@ class Screen {
   // Fill with space.
   void Clear();
 
+  void ApplyShader();
+
  protected:
   size_t dimx_;
   size_t dimy_;

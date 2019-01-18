@@ -22,6 +22,10 @@ static const wchar_t* BLINK_RESET = L"\e[25m";
 static const wchar_t* INVERTED_SET = L"\e[7m";
 static const wchar_t* INVERTED_RESET = L"\e[27m";
 
+static const char* MOVE_LEFT = "\r";
+static const char* MOVE_UP = "\e[1A";
+static const char* CLEAR_LINE = "\e[2K";
+
 Screen::Screen(size_t dimx, size_t dimy)
     : dimx_(dimx), dimy_(dimy), pixels_(dimy, std::vector<Pixel>(dimx)) {}
 
@@ -94,9 +98,9 @@ Screen Screen::TerminalOutput(std::unique_ptr<Node>& element) {
 
 std::string Screen::ResetPosition() {
   std::stringstream ss;
-  ss << '\r';
+  ss << MOVE_LEFT << CLEAR_LINE;
   for (size_t y = 1; y < dimy_; ++y) {
-    ss << "\e[2K\r\e[1A";
+    ss << MOVE_UP << CLEAR_LINE;
   }
   return ss.str();
 }
@@ -105,5 +109,38 @@ void Screen::Clear() {
   pixels_ = std::vector<std::vector<Pixel>>(dimy_,
                                             std::vector<Pixel>(dimx_, Pixel()));
 }
+
+void Screen::ApplyShader() {
+
+  // Merge box characters togethers.
+  for(size_t y = 1; y<dimy_; ++y) {
+    for(size_t x = 1; x<dimx_; ++x) {
+      wchar_t& left = at(x - 1, y);
+      wchar_t& top = at(x, y - 1);
+      wchar_t& cur = at(x, y);
+
+      // Left vs current
+      if (cur== U'│' && left == U'─')
+        cur= U'┤';
+      if (cur== U'─' && left == U'│')
+        left = U'├';
+      if (cur== U'├' && left == U'─')
+        cur= U'┼';
+      if (cur== U'─' && left == U'┤')
+        left = U'┼';
+
+      // Top vs current
+      if (cur== U'─' && top == U'│')
+        cur= U'┴';
+      if (cur== U'│' && top == U'─')
+        top = U'┬';
+      if (cur== U'┬' && top == U'│')
+        cur= U'┼';
+      if (cur== U'│' && top == U'┴')
+        top = U'┼';
+    }
+  }
+}
+
 
 };  // namespace ftxui

@@ -61,20 +61,6 @@ class Frame : public Node {
       screen.at(box_.right,y) = charset[5];
     }
 
-    // Try to merge with separator.
-    for(float x = box_.left + 1; x<box_.right; ++x) {
-      if (screen.at(x, box_.top + 1) == charset[5])
-        screen.at(x, box_.top) = charset[6];
-      if (screen.at(x, box_.bottom - 1) == charset[5])
-        screen.at(x, box_.bottom) = charset[7];
-    }
-    for(float y = box_.top + 1; y<box_.bottom; ++y) {
-      if (screen.at(box_.left+1, y) == charset[4])
-        screen.at(box_.left, y) = charset[9];
-      if (screen.at(box_.right-1, y) == charset[4])
-        screen.at(box_.right,y) = charset[8];
-    }
-
     // Draw title.
     if (children.size() == 2)
       children[1]->Render(screen);

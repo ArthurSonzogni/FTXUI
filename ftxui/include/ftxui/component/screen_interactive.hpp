@@ -12,6 +12,7 @@ class ScreenInteractive : public Screen {
   public:
     static ScreenInteractive FixedSize(size_t dimx, size_t dimy);
     static ScreenInteractive Fullscreen();
+    static ScreenInteractive FitComponent();
     static ScreenInteractive TerminalOutput();
 
     ~ScreenInteractive();
@@ -23,9 +24,10 @@ class ScreenInteractive : public Screen {
    bool quit_ = false;
 
    enum class Dimension {
+     FitComponent,
      Fixed,
-     TerminalOutput,
      Fullscreen,
+     TerminalOutput,
    };
    Dimension dimension_ = Dimension::Fixed;
    ScreenInteractive(size_t dimx, size_t dimy, Dimension dimension);

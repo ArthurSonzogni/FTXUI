@@ -20,6 +20,9 @@ class CheckBox : public Component {
   std::wstring checked = L"☑ ";
   std::wstring unchecked = L"☐ ";
 
+  Decorator focused_style = inverted;
+  Decorator unfocused_style = nothing;
+
   // State update callback.
   std::function<void()> on_change = [](){};
 

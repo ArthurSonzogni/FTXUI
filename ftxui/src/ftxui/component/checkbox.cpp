@@ -4,8 +4,8 @@
 namespace ftxui {
 
 Element CheckBox::Render() {
-  auto style = Focused() ? bold : nothing;
-  return text((state ? checked : unchecked) + label) | style;
+  auto style = Focused() ? focused_style : unfocused_style;
+  return hbox(text(state ? checked : unchecked), text(label) | style);
 }
 
 bool CheckBox::OnEvent(Event event) {

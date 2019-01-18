@@ -65,6 +65,11 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
   return ScreenInteractive(0, 0, Dimension::TerminalOutput);
 }
 
+// static
+ScreenInteractive ScreenInteractive::FitComponent() {
+  return ScreenInteractive(0, 0, Dimension::FitComponent);
+}
+
 void ScreenInteractive::Loop(Component* component) {
   //std::cout << "\033[?9h";    [> Send Mouse Row & Column on Button Press <]
   //std::cout << "\033[?1000h"; [> Send Mouse X & Y on button press and release <]
@@ -114,9 +119,13 @@ void ScreenInteractive::Draw(Component* component) {
       dimy = document->requirement().min.y;
       break;
     case Dimension::Fullscreen:
-      document->ComputeRequirement();
       dimx = Terminal::Size().dimx;
       dimy = Terminal::Size().dimy;
+      break;
+    case Dimension::FitComponent:
+      document->ComputeRequirement();
+      dimx = document->requirement().min.x;
+      dimy = document->requirement().min.y;
       break;
   }
 

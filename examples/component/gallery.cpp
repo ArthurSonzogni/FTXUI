@@ -22,18 +22,16 @@ class MyComponent : public Component {
   MyComponent() {
     Add(&container);
     menu.entries = {
-        L"Browse the web",
-        L"Meditate",
-        L"Sleep",
-        L"Eat",
+        L"Menu 1",
+        L"Menu 2",
+        L"Menu 3",
+        L"Menu 4",
     };
     container.Add(&menu);
 
     toggle.entries = {
-        L"Browse the web",
-        L"Meditate",
-        L"Sleep",
-        L"Eat",
+        L"Toggle_1",
+        L"Toggle_2",
     };
     container.Add(&toggle);
 
@@ -44,10 +42,10 @@ class MyComponent : public Component {
     checkbox_container.Add(&checkbox2);
 
     radiobox.entries = {
-        L"Browse the web",
-        L"Meditate",
-        L"Sleep",
-        L"Eat",
+        L"Radiobox 1",
+        L"Radiobox 2",
+        L"Radiobox 3",
+        L"Radiobox 4",
     };
     container.Add(&radiobox);
 
@@ -56,7 +54,7 @@ class MyComponent : public Component {
   }
 
   Element Render(std::wstring name, Component& component) {
-    return hbox(text(name) | size(10,1), separator(), component.Render());
+    return hbox(text(name) | size(8,1), separator(), component.Render());
   }
 
   Element Render() override {
@@ -76,7 +74,7 @@ class MyComponent : public Component {
 };
 
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = ScreenInteractive::FitComponent();
   MyComponent component;
   screen.Loop(&component);
 
