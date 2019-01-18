@@ -7,6 +7,9 @@ A C++ library for making text based user interface.
  * Simple and elegant syntax (in my opinion).
  * No dependencies.
 
+## Other features
+ * vim navigation friendly (h,j,k,l)
+
 ## Example:
 ~~~cpp
   vbox(
@@ -33,8 +36,7 @@ See [Tutorial](./tutorial.md)
 
 ## Build using CMake
 ~~~bash
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 make
 sudo make install
@@ -59,8 +61,7 @@ main.cpp
 
 int main(int argc, const char *argv[])
 {
-  using namespace ftxui::screen;
-  using namespace ftxui::dom;
+  using namespace ftxui;
   auto document =
     hbox(
       text(L"left") | bold,
