@@ -3,7 +3,7 @@
 namespace ftxui {
 
 Element Toggle::Render() {
-  auto highlight = Focused() ? inverted : bold;
+  bool is_focused = Focused();
 
   Elements children;
   for(size_t i = 0; i<entries.size(); ++i) {
@@ -12,8 +12,11 @@ Element Toggle::Render() {
       children.push_back(separator());
 
     // Entry.
-    auto style = i == selected ? highlight : dim;
-    children.push_back(style(text(entries[i])));
+    auto style = (selected != int(i))
+                     ? normal_style
+                     : is_focused ? focused_style : selected_style;
+    auto focused = (selected != int(i)) ? nothing : is_focused ? focus : select;
+    children.push_back(text(entries[i]) | style | focused);
   }
   return hbox(std::move(children));
 }
@@ -26,7 +29,7 @@ bool Toggle::OnEvent(Event event) {
     return true;
   }
 
-  if (selected < entries.size() - 1 &&
+  if (selected < int(entries.size()) - 1 &&
       (event == Event::ArrowRight || event == Event::Character('l'))) {
     selected++;
     on_change();

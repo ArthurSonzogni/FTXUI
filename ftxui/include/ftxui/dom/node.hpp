@@ -4,8 +4,8 @@
 #include <memory>
 #include <vector>
 
-#include "ftxui/dom/box.hpp"
 #include "ftxui/dom/requirement.hpp"
+#include "ftxui/screen/box.hpp"
 #include "ftxui/screen/screen.hpp"
 
 namespace ftxui {

@@ -34,7 +34,7 @@ class MyComponent : public Component {
    Element Render() override {
      int sum = left_menu.selected * 10 + right_menu.selected;
      return
-       frame(
+       border(
          vbox(
            // -------- Top panel --------------
            hbox(

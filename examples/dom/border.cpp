@@ -15,13 +15,11 @@ int main(int argc, const char *argv[])
           text(L"Line 1"),
           text(L"Line 2"),
           text(L"Line 3"),
-          frame(
-            vbox(
-              text(L"Line 4"),
-              text(L"Line 5"),
-              text(L"Line 6")
-            )
-          ),
+          vbox(
+            text(L"Line 4"),
+            text(L"Line 5"),
+            text(L"Line 6")
+          ) | border,
           hbox(
             window(text(L"frame 2"),
               vbox(

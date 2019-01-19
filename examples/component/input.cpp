@@ -30,7 +30,7 @@ class MyComponent : public Component {
 
   Element Render() override {
     return
-      frame(
+      border(
         vbox(
           hbox(text(L" input_1 : "), input_1.Render()),
           hbox(text(L" input_2 : "), input_2.Render()),

@@ -13,8 +13,12 @@ class Toggle : public Component {
   ~Toggle() override = default;
 
   // State.
-  size_t selected = 0;
+  int selected = 0;
   std::vector<std::wstring> entries = {L"On", L"Off"};
+
+  Decorator focused_style = inverted;
+  Decorator selected_style = bold;
+  Decorator normal_style = dim;
 
   // Callback.
   std::function<void()> on_change = [](){};

@@ -9,8 +9,12 @@ Element RadioBox::Render() {
   for (size_t i = 0; i < entries.size(); ++i) {
     auto style =
         (focused == int(i) && is_focused) ? focused_style : unfocused_style;
+    auto focus_management =
+        (focused != int(i)) ? nothing : is_focused ? focus : select;
+
     const std::wstring& symbol = selected == int(i) ? checked : unchecked;
-    elements.push_back(hbox(text(symbol), text(entries[i]) | style));
+    elements.push_back(hbox(text(symbol), text(entries[i]) | style) |
+                       focus_management);
   }
   return vbox(std::move(elements));
 }
@@ -30,7 +34,7 @@ bool RadioBox::OnEvent(Event event) {
     return true;
   }
 
-  if (event == Event::Character(' ')) {
+  if (event == Event::Character(' ') || event==Event::Return) {
     selected = focused;
     on_change();
   }

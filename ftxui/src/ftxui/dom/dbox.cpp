@@ -17,6 +17,11 @@ class DBox : public Node {
       child->ComputeRequirement();
       requirement_.min.x = std::max(requirement_.min.x, child->requirement().min.x);
       requirement_.min.y = std::max(requirement_.min.y, child->requirement().min.y);
+
+      if (requirement_.selection < child->requirement().selection) {
+        requirement_.selection = child->requirement().selection;
+        requirement_.selected_box = child->requirement().selected_box;
+      }
     }
   }
 

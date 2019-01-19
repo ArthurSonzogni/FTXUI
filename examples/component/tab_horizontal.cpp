@@ -50,7 +50,7 @@ class MyComponent : public Component {
         toggle_.Render(),
         separator(),
         tab_container_.Render()
-      ) | frame;
+      ) | border;
   }
 
  private:

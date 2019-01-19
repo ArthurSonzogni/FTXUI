@@ -15,6 +15,12 @@ class VBox : public Node {
     requirement_.flex.y = 1;
     for (auto& child : children) {
       child->ComputeRequirement();
+      if (requirement_.selection < child->requirement().selection) {
+        requirement_.selection = child->requirement().selection;
+        requirement_.selected_box = child->requirement().selected_box;
+        requirement_.selected_box.y_min += requirement_.min.y;
+        requirement_.selected_box.y_max += requirement_.min.y;
+      }
       requirement_.min.y += child->requirement().min.y;
       requirement_.min.x =
           std::max(requirement_.min.x, child->requirement().min.x);
@@ -28,33 +34,33 @@ class VBox : public Node {
     for (auto& child : children)
       flex_sum += child->requirement().flex.y;
 
-    int space = box.bottom - box.top + 1;
+    int space = box.y_max - box.y_min + 1;
     int extra_space = space - requirement_.min.y;
 
     int remaining_flex = flex_sum;
     int remaining_extra_space = extra_space;
 
-    int y = box.top;
+    int y = box.y_min;
     for (auto& child : children) {
-      if (y > box.bottom)
+      if (y > box.y_max)
         break;
 
       Box child_box = box;
-      child_box.top = y;
+      child_box.y_min = y;
 
-      child_box.bottom = y + child->requirement().min.y - 1;
+      child_box.y_max = y + child->requirement().min.y - 1;
 
       if (child->requirement().flex.y && remaining_extra_space > 0) {
         int added_space = remaining_extra_space * child->requirement().flex.y /
                           remaining_flex;
         remaining_extra_space -= added_space;
         remaining_flex -= child->requirement().flex.y;
-        child_box.bottom += added_space;
+        child_box.y_max += added_space;
       }
-      child_box.bottom = std::min(child_box.bottom, box.bottom);
+      child_box.y_max = std::min(child_box.y_max, box.y_max);
 
       child->SetBox(child_box);
-      y = child_box.bottom + 1;
+      y = child_box.y_max + 1;
     }
   }
 };

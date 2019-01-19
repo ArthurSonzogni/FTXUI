@@ -24,7 +24,7 @@ int main(int argc, const char *argv[])
         )
       );
     }
-    auto document = hbox(vbox(std::move(entries)) | frame, filler());
+    auto document = hbox(vbox(std::move(entries)) | border, filler());
     auto screen = Screen::TerminalOutput(document);
     Render(screen, document.get());
     std::cout << reset_position << screen.ToString() << std::flush;

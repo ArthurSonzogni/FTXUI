@@ -22,19 +22,10 @@ class MyComponent : public Component {
       box_3_.label = L"Use WebAssembly";
       box_3_.state = true;
     }
-
-    Element Render() {
-      return
-        window(text(L" Checkbox "),
-          hbox(
-            container_.Render()
-          )
-        );
-    }
 };
 
 int main(int argc, const char *argv[]) {
-  auto screen = ScreenInteractive::FixedSize(30,5);
+  auto screen = ScreenInteractive::TerminalOutput();
   MyComponent component;
   screen.Loop(&component);
   return 0;

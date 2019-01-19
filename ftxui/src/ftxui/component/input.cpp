@@ -26,12 +26,15 @@ Element Input::Render() {
   std::wstring part_after_cursor = cursor_position < (int)content.size() - 1
                                        ? content.substr(cursor_position + 1)
                                        : L"";
+  auto focused = 
+    is_focused ? focus : select;
+
   return
     hbox(
       text(part_before_cursor),
-      text(part_at_cursor) | underlined,
+      text(part_at_cursor) | underlined | focused,
       text(part_after_cursor)
-    ) | flex | inverted;
+    ) | flex | inverted | frame;
 }
 bool Input::OnEvent(Event event) {
   std::wstring c;

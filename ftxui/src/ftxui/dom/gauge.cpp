@@ -18,14 +18,14 @@ class Gauge : public Node {
   }
 
   void Render(Screen& screen) override {
-    float y = box_.top;
-    float limit = box_.left + progress_ * (box_.right - box_.left + 1);
+    float y = box_.y_min;
+    float limit = box_.x_min + progress_ * (box_.x_max - box_.x_min + 1);
     int limit_int = limit;
-    int x = box_.left;
+    int x = box_.x_min;
     while (x < limit_int)
       screen.at(x++, y) = charset[9];
     screen.at(x++, y) = charset[int(9*(limit-limit_int))];
-    while (x <= box_.right)
+    while (x <= box_.x_max)
       screen.at(x++, y) = charset[0];
   }
  private:

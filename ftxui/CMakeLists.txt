@@ -1,14 +1,16 @@
 cmake_minimum_required(VERSION 3.0)
 
 add_library(screen
+  src/ftxui/screen/box.cpp
   src/ftxui/screen/screen.cpp
-  src/ftxui/screen/terminal.cpp
   src/ftxui/screen/string.cpp
+  src/ftxui/screen/terminal.cpp
 )
 
 add_library(dom
   src/ftxui/dom/blink.cpp
   src/ftxui/dom/bold.cpp
+  src/ftxui/dom/border.cpp
   src/ftxui/dom/color.cpp
   src/ftxui/dom/composite_decorator.cpp
   src/ftxui/dom/dbox.cpp

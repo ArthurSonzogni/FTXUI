@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "ftxui/screen/color.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
   class Node;
@@ -51,6 +52,7 @@ class Screen {
   void Clear();
 
   void ApplyShader();
+  Box stencil;
 
  protected:
   size_t dimx_;

@@ -14,11 +14,11 @@ A C++ library for making text based user interface.
 ~~~cpp
   vbox(
     hbox(
-      text(L"left") | frame,
-      text(L"middle") | frame | flex,
-      text(L"right") | frame
+      text(L"left") | border,
+      text(L"middle") | border | flex,
+      text(L"right") | border
     ),
-    gauge(0.5) | frame
+    gauge(0.5) | border
   )
 ~~~
 

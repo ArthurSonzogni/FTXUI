@@ -7,6 +7,7 @@
 
 namespace ftxui {
 
+namespace {
 static const wchar_t* BOLD_SET = L"\e[1m";
 static const wchar_t* BOLD_RESET = L"\e[22m"; // Can't use 21 here.
 
@@ -26,8 +27,20 @@ static const char* MOVE_LEFT = "\r";
 static const char* MOVE_UP = "\e[1A";
 static const char* CLEAR_LINE = "\e[2K";
 
+bool In(const Box& stencil, int x, int y) {
+  return stencil.x_min <= x && x <= stencil.x_max &&  //
+         stencil.y_min <= y && y <= stencil.y_max;
+}
+
+Pixel dev_null_pixel;
+
+} // namespace
+
 Screen::Screen(size_t dimx, size_t dimy)
-    : dimx_(dimx), dimy_(dimy), pixels_(dimy, std::vector<Pixel>(dimx)) {}
+    : stencil({0, int(dimx) - 1, 0, int(dimy) - 1}),
+      dimx_(dimx),
+      dimy_(dimy),
+      pixels_(dimy, std::vector<Pixel>(dimx)) {}
 
 void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
   if (next.bold != previous.bold)
@@ -76,11 +89,11 @@ std::string Screen::ToString() {
 }
 
 wchar_t& Screen::at(size_t x, size_t y) {
-  return pixels_[y][x].character;
+  return PixelAt(x,y).character;
 }
 
 Pixel& Screen::PixelAt(size_t x, size_t y) {
-  return pixels_[y][x];
+  return In(stencil, x, y) ? pixels_[y][x] : dev_null_pixel;
 }
 
 // static

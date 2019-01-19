@@ -19,7 +19,7 @@ Container Container::Vertical() {
 }
 
 // static
-Container Container::Tab(size_t* selector) {
+Container Container::Tab(int* selector) {
   Container container;
   container.event_handler_ = &Container::TabEvent;
   container.render_handler_ = &Container::TabRender;
@@ -53,7 +53,7 @@ bool Container::VerticalEvent(Event event) {
 
   // Left pressed ?
   if (event == Event::ArrowDown || event == Event::Character('j')) {
-    if (selected_ != children_.size() - 1) {
+    if (selected_ != int(children_.size()) - 1) {
       selected_++;
       return true;
     }
@@ -74,7 +74,7 @@ bool Container::HorizontalEvent(Event event) {
 
   // Left pressed ?
   if (event == Event::ArrowRight || event == Event::Character('l')) {
-    if (selected_ != children_.size() - 1) {
+    if (selected_ != int(children_.size()) - 1) {
       selected_++;
       return true;
     }

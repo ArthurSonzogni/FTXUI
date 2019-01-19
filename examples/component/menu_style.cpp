@@ -26,21 +26,21 @@ class MyComponent : public Component {
      }
 
      menu_2.selected_style = color(Color::Blue);
-     menu_2.active_style = bold | color(Color::Blue);
+     menu_2.focused_style = bold | color(Color::Blue);
 
      menu_3.selected_style = color(Color::Blue);
-     menu_3.active_style = bgcolor(Color::Blue);
+     menu_3.focused_style = bgcolor(Color::Blue);
 
      menu_4.selected_style = bgcolor(Color::Blue);
-     menu_4.active_style = bgcolor(Color::BlueLight);
+     menu_4.focused_style = bgcolor(Color::BlueLight);
 
      menu_5.normal_style = bgcolor(Color::Blue);
      menu_5.selected_style = bgcolor(Color::Yellow);
-     menu_5.active_style = bgcolor(Color::Red);
+     menu_5.focused_style = bgcolor(Color::Red);
 
      menu_6.normal_style = dim | color(Color::Blue);
      menu_6.selected_style = color(Color::Blue);
-     menu_6.active_style = bold | color(Color::Blue);
+     menu_6.focused_style = bold | color(Color::Blue);
    }
 
    std::function<void()> on_enter = [](){};
@@ -62,7 +62,7 @@ class MyComponent : public Component {
           menu_4.Render() | flex, separator(),
           menu_5.Render() | flex, separator(),
           menu_6.Render() | flex
-        ) | frame;
+        ) | border;
    }
 };
 

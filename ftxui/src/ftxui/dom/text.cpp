@@ -15,12 +15,12 @@ class Text : public Node {
   }
 
   void Render(Screen& screen) override {
-    int x = box_.left;
-    int y = box_.top;
-    if (y > box_.bottom)
+    int x = box_.x_min;
+    int y = box_.y_min;
+    if (y > box_.y_max)
       return;
     for (wchar_t c : text_) {
-      if (x > box_.right)
+      if (x > box_.x_max)
         return;
       screen.at(x++, y) = c;
     }

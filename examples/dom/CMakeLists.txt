@@ -4,7 +4,7 @@ function(example name)
 endfunction(example)
 
 example(dbox)
-example(frame)
+example(border)
 example(gauge)
 example(package_manager)
 example(separator)

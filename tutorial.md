@@ -5,7 +5,7 @@
     + [Examples](#examples)
   * [Widget.](#widget)
     + [text](#text)
-    + [frame](#frame)
+    + [border](#border)
     + [separator](#separator)
     + [gauge](#gauge)
   * [Decorator](#decorator)
@@ -27,21 +27,11 @@ All the dom element are declared in one header:
 It declares the following set of elements:
 
 ~~~cpp
-// --- Layout ----
-Element vbox(Elements);
-Element hbox(Elements);
-Element dbox(Elements);
-
-// -- Flexibility --
-Element filler();
-Element flex(Element);
-Decorator size(size_t width, size_t height);
-
-// --- Widget --
+// --- Widget ---
 Element text(std::wstring text);
 Element separator();
 Element gauge(float ratio);
-Element frame(Element);
+Element border(Element);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
 
@@ -51,19 +41,37 @@ Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
 Element blink(Element);
-
 Decorator color(Color);
 Decorator bgcolor(Color);
 Element color(Color, Element);
 Element bgcolor(Color, Element);
 
-// --- Util ---
+// --- Layout ---
+// Horizontal, Vertical or stacked set of elements.
+Element vbox(Elements);
+Element hbox(Elements);
+Element dbox(Elements);
+
+// -- Flexibility ---
+// Define how to share the remaining space when not all of it is used inside a
+// container.
+Element filler();
+Element flex(Element);
+Decorator size(size_t width, size_t height);
+
+// --- Frame ---
+// A frame is a scrollable area. The internal area is potentially larger than
+// the external one. The internal area is scrolled in order to make visible the
+// focused element.
+Element frame(Element);
+Element focus(Element);
+Element select(Element);
+
+// --- Util --------------------------------------------------------------------
 Element hcenter(Element);
 Element vcenter(Element);
 Element center(Element);
 Element align_right(Element);
-
-// --- Util ---
 Element nothing(Element element);
 ~~~
 
@@ -98,9 +106,9 @@ container.
 #### Examples
 ~~~cpp
   hbox(
-    text(L"left") | frame ,
-    text(L"middle") | frame | flex,
-    text(L"right") | frame
+    text(L"left") | border ,
+    text(L"middle") | border | flex,
+    text(L"right") | border
   );
 ~~~
 ~~~bash
@@ -111,9 +119,9 @@ container.
 
 ~~~cpp
   hbox(
-    text(L"left") | frame ,
-    text(L"middle") | frame | flex,
-    text(L"right") | frame | flex
+    text(L"left") | border ,
+    text(L"middle") | border | flex,
+    text(L"right") | border | flex
   );
 ~~~
 ~~~bash
@@ -134,10 +142,10 @@ The most simple widget. It display a text.
 I am a piece of text.
 ~~~
 
-#### frame
+#### border
 Add a border arround an element
 ~~~cpp
-frame(text(L"The element"))
+border(text(L"The element"))
 ~~~
 
 ~~~bash
@@ -152,7 +160,7 @@ Display a vertical or horizontal line to visually split the content of a
 container in two.
 
 ~~~cpp
-frame(hbox(
+border(hbox(
   vbox(
     text(L"left top"),
     text(L"left bottom")
@@ -176,7 +184,7 @@ frame(hbox(
 
 A gauge. It can be used to represent a progress bar.
 ~~~c+
-frame(gauge(0.5))
+border(gauge(0.5))
 ~~~
 
 ~~~bash

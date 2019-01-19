@@ -4,8 +4,11 @@
 namespace ftxui {
 
 Element CheckBox::Render() {
-  auto style = Focused() ? focused_style : unfocused_style;
-  return hbox(text(state ? checked : unchecked), text(label) | style);
+  bool is_focused = Focused();
+  auto style = is_focused ? focused_style : unfocused_style;
+  auto focus_management = is_focused ? focus : state ? select : nothing;
+  return hbox(text(state ? checked : unchecked),
+              text(label) | style | focus_management);
 }
 
 bool CheckBox::OnEvent(Event event) {

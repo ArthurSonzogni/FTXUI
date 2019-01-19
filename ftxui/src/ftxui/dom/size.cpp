@@ -10,6 +10,7 @@ class Size : public Node {
   ~Size() override {}
   void ComputeRequirement() override {
     Node::ComputeRequirement();
+    requirement_ = children[0]->requirement();
     requirement_.min.x = width_;
     requirement_.min.y = height_;
     requirement_.flex.x = 0;

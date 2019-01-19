@@ -13,7 +13,7 @@ class Container : public Component {
  public:
   static Container Vertical();
   static Container Horizontal();
-  static Container Tab(size_t* selector);
+  static Container Tab(int* selector);
 
   ~Container() override = default;
 
@@ -36,8 +36,8 @@ class Container : public Component {
   Element TabRender();
   RenderHandler render_handler_;
 
-  size_t selected_ = 0;
-  size_t* selector_ = &selected_;
+  int selected_ = 0;
+  int* selector_ = &selected_;
 };
 
 }  // namespace ftxui

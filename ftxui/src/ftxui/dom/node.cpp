@@ -28,13 +28,14 @@ void Render(Screen& screen, Node* node) {
   node->ComputeRequirement();
   
   Box box;
-  box.left = 0;
-  box.top = 0;
-  box.right = screen.dimx() - 1;
-  box.bottom = screen.dimy() - 1;
+  box.x_min = 0;
+  box.y_min = 0;
+  box.x_max = screen.dimx() - 1;
+  box.y_max = screen.dimy() - 1;
   
   // Step 2: Assign a dimension to the element.
   node->SetBox(box);
+  screen.stencil = box;
 
   // Step 3: Draw the element.
   node->Render(screen);
