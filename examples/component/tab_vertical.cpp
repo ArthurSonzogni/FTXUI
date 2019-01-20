@@ -1,5 +1,4 @@
 #include <iostream>
-#include <thread>
 
 #include "ftxui/component/container.hpp"
 #include "ftxui/component/menu.hpp"

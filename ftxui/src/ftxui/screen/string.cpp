@@ -1,4 +1,4 @@
-#include "ftxui/util/string.hpp"
+#include "ftxui/screen/string.hpp"
 
 #include <codecvt>
 #include <locale>

@@ -1,20 +1,40 @@
-#include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node.hpp"
 
 namespace ftxui {
 
 class Size : public Node {
  public:
-  Size(Element child, size_t width, size_t height)
-      : Node(unpack(std::move(child))), width_(width), height_(height) {}
+  Size(Element child, Direction direction, Constraint constraint, size_t value)
+      : Node(unpack(std::move(child))),
+        direction_(direction),
+        constraint_(constraint),
+        value_(value) {}
+
   ~Size() override {}
+
   void ComputeRequirement() override {
     Node::ComputeRequirement();
     requirement_ = children[0]->requirement();
-    requirement_.min.x = width_;
-    requirement_.min.y = height_;
-    requirement_.flex.x = 0;
-    requirement_.flex.y = 0;
+
+    auto& value = direction_ == WIDTH ? requirement_.min.x : requirement_.min.y;
+
+    switch (constraint_) {
+      case LESS_THAN:
+        value = std::min(value, value_);
+        break;
+      case EQUAL:
+        value = value_;
+        break;
+      case GREATER_THAN:
+        value = std::max(value, value_);
+        break;
+    }
+
+    if (direction_ == WIDTH)
+      requirement_.flex.x = 0;
+    else
+      requirement_.flex.y = 0;
   }
 
   void SetBox(Box box) override {
@@ -23,13 +43,14 @@ class Size : public Node {
   }
 
  private:
-  size_t width_;
-  size_t height_;
+  Direction direction_;
+  Constraint constraint_;
+  int value_;
 };
 
-Decorator size(size_t width, size_t height) {
+Decorator size(Direction direction, Constraint constraint, int value) {
   return [=](Element e) {
-    return std::make_unique<Size>(std::move(e), width, height);
+    return std::make_unique<Size>(std::move(e), direction, constraint, value);
   };
 }
 

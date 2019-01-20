@@ -43,7 +43,7 @@ int main(int argc, const char *argv[])
   int nb_done = 0;
 
   auto to_text = [](int number) {
-    return text(to_wstring(number)) | size(3,1);
+    return text(to_wstring(number)) | size(WIDTH, EQUAL, 3);
   };
 
   auto renderTask = [&](const Task& task) {

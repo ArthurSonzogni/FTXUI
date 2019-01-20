@@ -21,7 +21,7 @@ class MyComponent : public Component {
   }
 
   Element Render() override {
-    return radiobox.Render() | frame | size(20,10) | border;
+    return radiobox.Render() | frame | size(HEIGHT, LESS_THAN, 10) | border;
   }
 };
 

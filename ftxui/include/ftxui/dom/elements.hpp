@@ -42,7 +42,11 @@ Element dbox(Elements);
 // container.
 Element filler();
 Element flex(Element);
-Decorator size(size_t width, size_t height);
+
+// -- Size override;
+enum Direction { WIDTH, HEIGHT };
+enum Constraint { LESS_THAN, EQUAL, GREATER_THAN };
+Decorator size(Direction, Constraint, int value);
 
 // --- Frame ---
 // A frame is a scrollable area. The internal area is potentially larger than

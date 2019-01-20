@@ -54,7 +54,12 @@ class MyComponent : public Component {
   }
 
   Element Render(std::wstring name, Component& component) {
-    return hbox(text(name) | size(8,1), separator(), component.Render());
+    return
+      hbox(
+        text(name) | size(WIDTH, EQUAL, 8),
+        separator(),
+        component.Render()
+      );
   }
 
   Element Render() override {
@@ -69,7 +74,7 @@ class MyComponent : public Component {
         Render(L"radiobox", radiobox),
         separator(),
         Render(L"input", input)
-      ) | border | frame | size(10,10) | border;
+      ) | border;
   }
 };
 

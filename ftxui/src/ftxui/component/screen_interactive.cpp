@@ -123,9 +123,10 @@ void ScreenInteractive::Draw(Component* component) {
       dimy = Terminal::Size().dimy;
       break;
     case Dimension::FitComponent:
+      auto terminal = Terminal::Size();
       document->ComputeRequirement();
-      dimx = document->requirement().min.x;
-      dimy = document->requirement().min.y;
+      dimx = std::min(document->requirement().min.x, terminal.dimx);
+      dimy = std::min(document->requirement().min.y, terminal.dimy);
       break;
   }
 

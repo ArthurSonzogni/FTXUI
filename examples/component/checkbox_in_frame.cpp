@@ -25,7 +25,10 @@ class MyComponent : public Component {
     for(auto& it : checkbox) {
       content.push_back(it.Render());
     }
-    return vbox(std::move(content)) | frame | size(20, 10) | border;
+    return vbox(std::move(content))
+      | frame
+      | size(HEIGHT, LESS_THAN, 10)
+      | border;
   }
 
  private:

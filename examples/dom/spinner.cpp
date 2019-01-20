@@ -19,7 +19,8 @@ int main(int argc, const char *argv[])
       entries.push_back(separator());
       entries.push_back(
         hbox(
-          text(to_wstring(i)) | size(5,1),
+          text(to_wstring(i)) | size(WIDTH, EQUAL, 2),
+          separator(),
           spinner(i, index) | bold
         )
       );
