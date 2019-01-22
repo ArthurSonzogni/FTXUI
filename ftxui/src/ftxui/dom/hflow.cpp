@@ -36,18 +36,18 @@ class HFlow : public Node {
       }
 
       // Does the current row big enough to contain the element?
-      if (y + requirement.min.y > box.y_max)
+      if (y + requirement.min.y > box.y_max + 1)
         break; // No? Ignore the element.
 
       Box children_box;
       children_box.x_min = x;
-      children_box.x_max = x + requirement.min.x;
+      children_box.x_max = x + requirement.min.x - 1;
       children_box.y_min = y;
-      children_box.y_max = y + requirement.min.y;
+      children_box.y_max = y + requirement.min.y - 1;
       child->SetBox(children_box);
 
-      x = x + requirement.min.x + 1;
-      y_next = std::max(y_next, y + requirement.min.y + 1);
+      x = x + requirement.min.x;
+      y_next = std::max(y_next, y + requirement.min.y);
     }
   }
 };

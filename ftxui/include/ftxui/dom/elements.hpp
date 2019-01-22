@@ -19,6 +19,7 @@ Element gauge(float ratio);
 Element border(Element);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
+Elements paragraph(std::wstring text); // Use inside hflow(). Split by space.
 
 // -- Decorator ---
 Element bold(Element);
