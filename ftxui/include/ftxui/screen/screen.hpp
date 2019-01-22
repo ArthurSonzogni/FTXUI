@@ -33,6 +33,7 @@ class Screen {
   // Constructor using the terminal.
   static Screen TerminalFullscreen();
   static Screen TerminalOutput(std::unique_ptr<Node>& element);
+  static Screen FitDocument(std::unique_ptr<Node>& element);
 
   // Node write into the screen using Screen::at.
   wchar_t& at(size_t x, size_t y);

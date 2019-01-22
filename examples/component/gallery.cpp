@@ -73,7 +73,7 @@ class MyComponent : public Component {
         separator(),
         Render(L"radiobox", radiobox),
         separator(),
-        Render(L"input", input)
+        Render(L"input", input) | size(WIDTH, EQUAL, 20)
       ) | border;
   }
 };

@@ -109,6 +109,17 @@ Screen Screen::TerminalOutput(std::unique_ptr<Node>& element) {
   return Screen(size.dimx, element->requirement().min.y);
 }
 
+// static
+Screen Screen::FitDocument(std::unique_ptr<Node>& element) {
+  element->ComputeRequirement();
+  Terminal::Dimensions size = Terminal::Size();
+  return
+    Screen(
+      std::min(size.dimx, element->requirement().min.x),
+      std::min(size.dimy, element->requirement().min.y)
+    );
+}
+
 std::string Screen::ResetPosition() {
   std::stringstream ss;
   ss << MOVE_LEFT << CLEAR_LINE;

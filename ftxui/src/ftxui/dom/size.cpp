@@ -39,6 +39,8 @@ class Size : public Node {
 
   void SetBox(Box box) override {
     Node::SetBox(box);
+    if (constraint_ == LESS_THAN)
+      box.x_max = std::min(box.x_min + value_ + 1, box.x_max);
     children[0]->SetBox(box);
   }
 

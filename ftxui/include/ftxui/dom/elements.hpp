@@ -33,9 +33,10 @@ Element bgcolor(Color, Element);
 
 // --- Layout ---
 // Horizontal, Vertical or stacked set of elements.
-Element vbox(Elements);
 Element hbox(Elements);
+Element vbox(Elements);
 Element dbox(Elements);
+Element hflow(Elements);
 
 // -- Flexibility ---
 // Define how to share the remaining space when not all of it is used inside a
@@ -73,6 +74,7 @@ Decorator operator|(Decorator, Decorator);
 TAKE_ANY_ARGS(vbox)
 TAKE_ANY_ARGS(hbox)
 TAKE_ANY_ARGS(dbox)
+TAKE_ANY_ARGS(hflow)
 
 };  // namespace ftxui
 
