@@ -39,8 +39,26 @@ class Size : public Node {
 
   void SetBox(Box box) override {
     Node::SetBox(box);
-    if (constraint_ == LESS_THAN)
-      box.x_max = std::min(box.x_min + value_ + 1, box.x_max);
+
+    if (direction_ == WIDTH) {
+      switch(constraint_) {
+        case LESS_THAN:
+        case EQUAL:
+          box.x_max = std::min(box.x_min + value_ + 1, box.x_max);
+          break;
+        case GREATER_THAN:
+          break;
+      }
+    } else {
+      switch(constraint_) {
+        case LESS_THAN:
+        case EQUAL:
+          box.y_max = std::min(box.y_min + value_ + 1, box.y_max);
+          break;
+        case GREATER_THAN:
+          break;
+      }
+    }
     children[0]->SetBox(box);
   }
 
