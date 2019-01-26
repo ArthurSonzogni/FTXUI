@@ -9,17 +9,18 @@ int main(int argc, const char *argv[])
     hbox(
       text(L"left-column"),
       separator(),
-      flex(vbox(
-        center(text(L"right-column")) | flex,
+      vbox(
+        center(text(L"right-top")) | flex,
         separator(),
-        center(text(L"bottom-column"))
-      ))
-    );
-  auto screen = Screen::TerminalFullscreen();
+        center(text(L"bottom-bottom"))
+      ) | flex,
+      separator(),
+      text(L"right-column")
+    ) | border;
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document.get());
 
-  std::cout << screen.ToString();
-  getchar();
+  std::cout << screen.ToString() << std::endl;
 
   return 0;
 }

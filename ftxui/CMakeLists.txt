@@ -18,6 +18,7 @@ add_library(dom
   src/ftxui/dom/flex.cpp
   src/ftxui/dom/frame.cpp
   src/ftxui/dom/gauge.cpp
+  src/ftxui/dom/graph.cpp
   src/ftxui/dom/hbox.cpp
   src/ftxui/dom/hflow.cpp
   src/ftxui/dom/inverted.cpp

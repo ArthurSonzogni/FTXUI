@@ -16,7 +16,7 @@ int main(int argc, const char *argv[])
       text(L"color")     | color(Color::Blue)   , text(L" ") ,
       text(L"bgcolor")   | bgcolor(Color::Blue)
     );
-  auto screen = Screen::TerminalOutput(document);
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document.get());
 
   std::cout << screen.ToString();

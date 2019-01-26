@@ -44,14 +44,14 @@ Event GetEvent() {
 
 };  // namespace
 
-ScreenInteractive::ScreenInteractive(size_t dimx,
-                                     size_t dimy,
+ScreenInteractive::ScreenInteractive(int dimx,
+                                     int dimy,
                                      Dimension dimension)
     : Screen(dimx, dimy), dimension_(dimension) {}
 ScreenInteractive::~ScreenInteractive() {}
 
 // static
-ScreenInteractive ScreenInteractive::FixedSize(size_t dimx, size_t dimy) {
+ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
   return ScreenInteractive(dimx, dimy, Dimension::Fixed);
 }
 
@@ -106,8 +106,8 @@ void ScreenInteractive::Loop(Component* component) {
 
 void ScreenInteractive::Draw(Component* component) {
   auto document = component->Render();
-  size_t dimx;
-  size_t dimy;
+  int dimx;
+  int dimy;
   switch (dimension_) {
     case Dimension::Fixed:
       dimx = dimx_;

@@ -22,7 +22,7 @@ int main(int argc, const char *argv[])
     );
   }
   auto document = hbox(std::move(content));
-  auto screen = Screen::FitDocument(document);
+  auto screen = Screen::Create(Dimension::Fit(document));
   Render(screen, document.get());
   std::cout << screen.ToString() << std::endl;
 

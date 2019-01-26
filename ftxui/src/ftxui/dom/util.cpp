@@ -19,6 +19,13 @@ Decorator operator|(Decorator a, Decorator b) {
   return compose(a, b);
 }
 
+Elements operator|(Elements es, Decorator d) {
+  Elements output;
+  for (auto& it : es)
+    output.push_back(std::move(it) | d);
+  return output;
+}
+
 Element operator|(Element e, Decorator d) {
   return d(std::move(e));
 }

@@ -17,7 +17,7 @@ class CheckBox : public Component {
 
   //std::wstring checked = L"[X] ";
   //std::wstring unchecked = L"[ ] ";
-  std::wstring checked = L"☑ ";
+  std::wstring checked = L"▣ ";
   std::wstring unchecked = L"☐ ";
 
   Decorator focused_style = inverted;

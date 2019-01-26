@@ -1,5 +1,5 @@
-#include "ftxui/dom/node.hpp"
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/dom/node.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
@@ -36,8 +36,34 @@ Pixel dev_null_pixel;
 
 } // namespace
 
-Screen::Screen(size_t dimx, size_t dimy)
-    : stencil({0, int(dimx) - 1, 0, int(dimy) - 1}),
+Dimension Dimension::Fixed(int v) {
+  return Dimension{v, v};
+}
+
+Dimension Dimension::Fit(std::unique_ptr<Node>& e) {
+  e->ComputeRequirement();
+  Terminal::Dimensions size = Terminal::Size();
+  return Dimension{std::min(e->requirement().min.x, size.dimx),
+                   std::min(e->requirement().min.y, size.dimy)};
+}
+
+Dimension Dimension::Full() {
+  Terminal::Dimensions size = Terminal::Size();
+  return Dimension{size.dimx, size.dimy};
+}
+
+// static
+Screen Screen::Create(Dimension width, Dimension height) {
+  return Screen(width.dimx, height.dimy);
+}
+
+// static
+Screen Screen::Create(Dimension dimension) {
+  return Screen(dimension.dimx, dimension.dimy);
+}
+
+Screen::Screen(int dimx, int dimy)
+    : stencil({0, dimx - 1, 0, dimy - 1}),
       dimx_(dimx),
       dimy_(dimy),
       pixels_(dimy, std::vector<Pixel>(dimx)) {}
@@ -72,10 +98,10 @@ std::string Screen::ToString() {
 
   Pixel previous_pixel;
 
-  for (size_t y = 0; y < dimy_; ++y) {
+  for (int y = 0; y < dimy_; ++y) {
     if (y != 0)
       ss << '\n';
-    for (size_t x = 0; x < dimx_; ++x) {
+    for (int x = 0; x < dimx_; ++x) {
       UpdatePixelStyle(ss, previous_pixel, pixels_[y][x]);
       ss << pixels_[y][x].character;
     }
@@ -88,42 +114,18 @@ std::string Screen::ToString() {
   return to_string(ss.str());
 }
 
-wchar_t& Screen::at(size_t x, size_t y) {
+wchar_t& Screen::at(int x, int y) {
   return PixelAt(x,y).character;
 }
 
-Pixel& Screen::PixelAt(size_t x, size_t y) {
+Pixel& Screen::PixelAt(int x, int y) {
   return In(stencil, x, y) ? pixels_[y][x] : dev_null_pixel;
-}
-
-// static
-Screen Screen::TerminalFullscreen() {
-  Terminal::Dimensions size = Terminal::Size();
-  return Screen(size.dimx, size.dimy);
-}
-
-// static
-Screen Screen::TerminalOutput(std::unique_ptr<Node>& element) {
-  element->ComputeRequirement();
-  Terminal::Dimensions size = Terminal::Size();
-  return Screen(size.dimx, element->requirement().min.y);
-}
-
-// static
-Screen Screen::FitDocument(std::unique_ptr<Node>& element) {
-  element->ComputeRequirement();
-  Terminal::Dimensions size = Terminal::Size();
-  return
-    Screen(
-      std::min(size.dimx, element->requirement().min.x),
-      std::min(size.dimy, element->requirement().min.y)
-    );
 }
 
 std::string Screen::ResetPosition() {
   std::stringstream ss;
   ss << MOVE_LEFT << CLEAR_LINE;
-  for (size_t y = 1; y < dimy_; ++y) {
+  for (int y = 1; y < dimy_; ++y) {
     ss << MOVE_UP << CLEAR_LINE;
   }
   return ss.str();
@@ -137,8 +139,8 @@ void Screen::Clear() {
 void Screen::ApplyShader() {
 
   // Merge box characters togethers.
-  for(size_t y = 1; y<dimy_; ++y) {
-    for(size_t x = 1; x<dimx_; ++x) {
+  for(int y = 1; y<dimy_; ++y) {
+    for(int x = 1; x<dimx_; ++x) {
       wchar_t& left = at(x - 1, y);
       wchar_t& top = at(x, y - 1);
       wchar_t& cur = at(x, y);

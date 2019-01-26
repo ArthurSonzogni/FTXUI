@@ -24,7 +24,7 @@ int main(int argc, const char *argv[])
       ) | flex
     );
 
-  auto screen = Screen::TerminalFullscreen();
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document.get());
   std::cout << screen.ToString();
   getchar();

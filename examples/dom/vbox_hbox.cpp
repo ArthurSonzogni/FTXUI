@@ -28,7 +28,7 @@ int main(int argc, const char *argv[])
         text(L"south-east")
       )
     );
-  auto screen = Screen::TerminalFullscreen();
+  auto screen = Screen::Create(Dimension::Full());
   Render(screen, document.get());
 
   std::cout << screen.ToString();

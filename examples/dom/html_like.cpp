@@ -39,7 +39,7 @@ int main(int argc, const char* argv[]) {
             paragraph(L" A spinner "), spinner(6, i / 10)) |
         border;
 
-    auto screen = Screen::TerminalFullscreen();
+    auto screen = Screen::Create(Dimension::Full());
     Render(screen, document.get());
     std::cout << reset_position << screen.ToString() << std::flush;
 

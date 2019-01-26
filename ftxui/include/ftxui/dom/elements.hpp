@@ -3,6 +3,7 @@
 
 #include <functional>
 
+#include "ftxui/dom/graph.hpp"
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/color.hpp"
 
@@ -20,6 +21,7 @@ Element border(Element);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
 Elements paragraph(std::wstring text); // Use inside hflow(). Split by space.
+Element graph(GraphFunction&); // See graph.hpp
 
 // -- Decorator ---
 Element bold(Element);
@@ -68,6 +70,7 @@ Element nothing(Element element);
 // Pipe elements into decorator togethers.
 // Examples: text("ftxui") | bold | underlined;
 Element operator|(Element, Decorator);
+Elements operator|(Elements, Decorator);
 Decorator operator|(Decorator, Decorator);
 
 // Make container able to take any number of children as input.

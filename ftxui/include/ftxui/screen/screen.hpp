@@ -25,26 +25,32 @@ struct Pixel {
   Color foreground_color = Color::Default;
 };
 
+struct Dimension {
+  static Dimension Fixed(int);
+  static Dimension Fit(std::unique_ptr<Node>&);
+  static Dimension Full();
+
+  int dimx;
+  int dimy;
+};
+
 class Screen {
  public:
   // Constructor.
-  Screen(size_t dimx, size_t dimy);
-
-  // Constructor using the terminal.
-  static Screen TerminalFullscreen();
-  static Screen TerminalOutput(std::unique_ptr<Node>& element);
-  static Screen FitDocument(std::unique_ptr<Node>& element);
+  Screen(int dimx, int dimy);
+  static Screen Create(Dimension dimension);
+  static Screen Create(Dimension width, Dimension height);
 
   // Node write into the screen using Screen::at.
-  wchar_t& at(size_t x, size_t y);
-  Pixel& PixelAt(size_t x, size_t y);
+  wchar_t& at(int x, int y);
+  Pixel& PixelAt(int x, int y);
 
   // Convert the screen into a printable string in the terminal.
   std::string ToString();
 
   // Get screen dimensions.
-  size_t dimx() { return dimx_;}
-  size_t dimy() { return dimy_;}
+  int dimx() { return dimx_;}
+  int dimy() { return dimy_;}
 
   // Move the terminal cursor n-lines up with n = dimy().
   std::string ResetPosition();
@@ -56,8 +62,8 @@ class Screen {
   Box stencil;
 
  protected:
-  size_t dimx_;
-  size_t dimy_;
+  int dimx_;
+  int dimy_;
   std::vector<std::vector<Pixel>> pixels_;
 };
 

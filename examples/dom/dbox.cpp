@@ -16,7 +16,7 @@ int main(int argc, const char *argv[])
       ) | border,
       text(L"overlay") | border | center
     );
-  auto screen = Screen::TerminalOutput(document);
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document.get());
 
   std::cout << screen.ToString();

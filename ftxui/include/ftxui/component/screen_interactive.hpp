@@ -10,7 +10,7 @@ class Component;
 
 class ScreenInteractive : public Screen {
   public:
-    static ScreenInteractive FixedSize(size_t dimx, size_t dimy);
+    static ScreenInteractive FixedSize(int dimx, int dimy);
     static ScreenInteractive Fullscreen();
     static ScreenInteractive FitComponent();
     static ScreenInteractive TerminalOutput();
@@ -30,7 +30,7 @@ class ScreenInteractive : public Screen {
      TerminalOutput,
    };
    Dimension dimension_ = Dimension::Fixed;
-   ScreenInteractive(size_t dimx, size_t dimy, Dimension dimension);
+   ScreenInteractive(int dimx, int dimy, Dimension dimension);
 };
 
 }  // namespace ftxui

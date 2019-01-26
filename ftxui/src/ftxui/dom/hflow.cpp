@@ -12,7 +12,7 @@ class HFlow : public Node {
     requirement_.min.x = 0;
     requirement_.min.y = 0;
     requirement_.flex.x = 1;
-    requirement_.flex.y = 0;
+    requirement_.flex.y = 1;
     for(auto& child : children)
       child->ComputeRequirement();
   }
