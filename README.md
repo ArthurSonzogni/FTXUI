@@ -8,10 +8,11 @@ A simple C++ library for terminal based user interface.
 ![Demo image](./examples/component/homescreen.gif)
 
 ## Feature
- * Functional style.
+ * Functional style. Inspired by
+   [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
+   and [React](https://reactjs.org/)
  * Simple and elegant syntax (in my opinion).
  * No dependencies.
- * vim navigation friendly (h,j,k,l)
 
 ## Example:
 ~~~cpp
@@ -40,10 +41,6 @@ See [Tutorial](./tutorial.md)
 ## Project using FTXUI
 
 None! This is still a newborn project. Please add a link to your project here.
-
-## Hosted on:
- * [github](https://github.com/ArthurSonzogni/ftxui)
- * [gitlab](https://gitlab.com/ArthurSonzogni/ftxui)
 
 ## Build using CMake
 ~~~bash
@@ -87,3 +84,8 @@ int main(int argc, const char *argv[])
   return 0;
 }
 ~~~
+
+## Hosted on:
+ * [github](https://github.com/ArthurSonzogni/ftxui)
+ * [gitlab](https://gitlab.com/ArthurSonzogni/ftxui)
+
