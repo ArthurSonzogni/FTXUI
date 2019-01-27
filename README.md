@@ -1,6 +1,8 @@
 # FTXUI
+![Demo image](./examples/component/homescreen.gif)
+Functional Terminal (X) User interface
 
-A C++ library for making text based user interface.
+A simple  C++ library for terminal based user interface.
 
 ## Feature
  * Functional style.

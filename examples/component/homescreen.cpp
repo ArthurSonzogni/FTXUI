@@ -38,37 +38,44 @@ class HTopComponent : public Component {
 
   Element Render() override {
     return
-      vbox(
-        text(L"Frequency [Mhz]") | hcenter,
-        hbox(
-          vbox(
-            text(L"2400 "), filler(),
-            text(L"1200 "), filler(),
-            text(L"0% ")
-          ),
-          graph(std::ref(my_graph))
+      hbox(
+        vbox(
+          // --- Frequency ---
+          text(L"Frequency [Mhz]") | hcenter,
+          hbox(
+            vbox(
+              text(L"2400 "), filler(),
+              text(L"1200 "), filler(),
+              text(L"0% ")
+            ),
+            graph(std::ref(my_graph))
+          ) | flex,
+          separator(),
+          // --- Utilization ---
+          text(L"Utilization [%]") | hcenter,
+          hbox(
+            vbox(
+              text(L"100 "), filler(),
+              text(L"50 "), filler(),
+              text(L"0 ")
+            ),
+            graph(std::ref(my_graph)) | color(Color::RedLight)
+          ) | flex 
         ) | flex,
         separator(),
-        text(L"Utilization [%]") | hcenter,
-        hbox(
-          vbox(
-            text(L"100 "), filler(),
-            text(L"50 "), filler(),
-            text(L"0 ")
-          ),
-          graph(std::ref(my_graph)) | color(Color::RedLight)
-        ) | flex,
-        separator(),
-        text(L"Ram [Go]") | hcenter,
-        hbox(
-          vbox(
-            text(L"8192"), filler(),
-            text(L"4096 "), filler(),
-            text(L"0 ")
-          ),
-          graph(std::ref(my_graph)) | color(Color::BlueLight)
-        ) | flex
-      ) | border;
+        // --- Ram ---
+        vbox(
+          text(L"Ram [Mo]") | hcenter,
+          hbox(
+            vbox(
+              text(L"8192"), filler(),
+              text(L"4096 "), filler(),
+              text(L"0 ")
+            ),
+            graph(std::ref(my_graph)) | color(Color::BlueLight)
+         ) | flex
+       ) | flex
+     ) | flex | border;
   }
 };
 
@@ -94,6 +101,41 @@ class CompilerComponent : public Component {
       L"clang",
       L"emcc",
       L"game_maker"
+      L"Ada compilers",
+      L"ALGOL 60 compilers",
+      L"ALGOL 68 compilers",
+      L"Assemblers (Intel *86)",
+      L"Assemblers (Motorola 68*)",
+      L"Assemblers (Zilog Z80)",
+      L"Assemblers (other)",
+      L"BASIC Compilers",
+      L"BASIC interpreters",
+      L"Batch compilers",
+      L"C compilers",
+      L"Source-to-source compilers",
+      L"C++ compilers",
+      L"C# compilers",
+      L"COBOL compilers",
+      L"Common Lisp compilers",
+      L"D compilers",
+      L"DIBOL/DBL compilers",
+      L"ECMAScript interpreters",
+      L"Eiffel compilers",
+      L"Fortran compilers",
+      L"Go compilers",
+      L"Haskell compilers",
+      L"Java compilers",
+      L"Pascal compilers",
+      L"Perl Interpreters",
+      L"PHP compilers",
+      L"PL/I compilers",
+      L"Python compilers",
+      L"Scheme compilers and interpreters",
+      L"Smalltalk compilers",
+      L"Tcl Interpreters",
+      L"VMS Interpreters",
+      L"Rexx Interpreters",
+      L"CLI compilers",
     };
     container.Add(&compiler);
 
@@ -127,7 +169,9 @@ class CompilerComponent : public Component {
     return
       vbox(
         hbox(
-          window(text(L"Compiler"), compiler.Render()),
+          window(text(L"Compiler"),
+            compiler.Render() | frame | size(HEIGHT, LESS_THAN, 6)
+          ),
           window(text(L"Flags"), flag.Render()),
           vbox(
             window(text(L"Executable:"), executable.Render())
@@ -191,6 +235,81 @@ class SpinnerComponent : public Component {
   }
 };
 
+class ColorComponent : public Component {
+  Element Render() override {
+    return
+      hbox(
+        vbox(
+          color(Color::Default, text(L"Default")),
+          color(Color::Black, text(L"Black")),
+          color(Color::GrayDark, text(L"GrayDark")),
+          color(Color::GrayLight, text(L"GrayLight")),
+          color(Color::White, text(L"White")),
+          color(Color::Blue, text(L"Blue")),
+          color(Color::BlueLight, text(L"BlueLight")),
+          color(Color::Cyan, text(L"Cyan")),
+          color(Color::CyanLight, text(L"CyanLight")),
+          color(Color::Green, text(L"Green")),
+          color(Color::GreenLight, text(L"GreenLight")),
+          color(Color::Magenta, text(L"Magenta")),
+          color(Color::MagentaLight, text(L"MagentaLight")),
+          color(Color::Red, text(L"Red")),
+          color(Color::RedLight, text(L"RedLight")),
+          color(Color::Yellow, text(L"Yellow")),
+          color(Color::YellowLight, text(L"YellowLight"))
+        ),
+        vbox(
+          bgcolor(Color::Default, text(L"Default")),
+          bgcolor(Color::Black, text(L"Black")),
+          bgcolor(Color::GrayDark, text(L"GrayDark")),
+          bgcolor(Color::GrayLight, text(L"GrayLight")),
+          bgcolor(Color::White, text(L"White")),
+          bgcolor(Color::Blue, text(L"Blue")),
+          bgcolor(Color::BlueLight, text(L"BlueLight")),
+          bgcolor(Color::Cyan, text(L"Cyan")),
+          bgcolor(Color::CyanLight, text(L"CyanLight")),
+          bgcolor(Color::Green, text(L"Green")),
+          bgcolor(Color::GreenLight, text(L"GreenLight")),
+          bgcolor(Color::Magenta, text(L"Magenta")),
+          bgcolor(Color::MagentaLight, text(L"MagentaLight")),
+          bgcolor(Color::Red, text(L"Red")),
+          bgcolor(Color::RedLight, text(L"RedLight")),
+          bgcolor(Color::Yellow, text(L"Yellow")),
+          bgcolor(Color::YellowLight, text(L"YellowLight"))
+        )
+      ) | hcenter | border;
+  }
+};
+
+class GaugeComponent : public Component {
+  Element RenderGauge(int delta) {
+    float progress = (shift + delta) % 1000 / 1000.f;
+    return hbox(text(std::to_wstring(int(progress * 100)) + L"% ") | size(WIDTH, EQUAL, 5),
+                gauge(progress));
+  }
+  Element Render() override {
+    return
+      vbox(
+        RenderGauge(0) | color(Color::Black),
+        RenderGauge(100) | color(Color::GrayDark),
+        RenderGauge(50) | color(Color::GrayLight),
+        RenderGauge(6894) | color(Color::White), separator(),
+        RenderGauge(6841) | color(Color::Blue),
+        RenderGauge(9813) | color(Color::BlueLight),
+        RenderGauge(98765) | color(Color::Cyan),
+        RenderGauge(98) | color(Color::CyanLight),
+        RenderGauge(9846) | color(Color::Green),
+        RenderGauge(1122) | color(Color::GreenLight),
+        RenderGauge(84) | color(Color::Magenta),
+        RenderGauge(645) | color(Color::MagentaLight),
+        RenderGauge(568) | color(Color::Red),
+        RenderGauge(2222) | color(Color::RedLight),
+        RenderGauge(220) | color(Color::Yellow),
+        RenderGauge(348) | color(Color::YellowLight)
+      ) | border;
+  };
+};
+
 class Tab : public Component {
   public:
     Container main_container = Container::Vertical();
@@ -198,22 +317,28 @@ class Tab : public Component {
     Toggle tab_selection;
     Container container = Container::Tab(&tab_selection.selected);
 
-    HTopComponent htop;
-    CompilerComponent compiler;
+    HTopComponent htop_component;
+    ColorComponent color_component;
     SpinnerComponent spinner_component;
+    GaugeComponent gauge_component;
+    CompilerComponent compiler_component;
 
     Tab() {
       Add(&main_container);
       main_container.Add(&tab_selection);
       tab_selection.entries = {
-        L"compiler",
         L"htop",
-        L"spinner"
+        L"color",
+        L"spinner",
+        L"gauge",
+        L"compiler",
       };
       main_container.Add(&container);
-      container.Add(&compiler);
-      container.Add(&htop);
+      container.Add(&htop_component);
+      container.Add(&color_component);
       container.Add(&spinner_component);
+      container.Add(&gauge_component);
+      container.Add(&compiler_component);
     }
 
     Element Render() override {
