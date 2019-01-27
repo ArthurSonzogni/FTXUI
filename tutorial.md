@@ -15,8 +15,8 @@
   * [Toggle.](#toggle)
 
 ## Introduction
-I highly recommand to not take too long on the tutorial, instead you should try
-to understand the /example/*.
+I **highly** recommand not to take too much time reading the tutorial. Instead,
+you should try to read the examples (in ./example/).
 
 ## DOM
 All the dom element are declared in one header:
@@ -30,10 +30,14 @@ It declares the following set of elements:
 // --- Widget ---
 Element text(std::wstring text);
 Element separator();
+Element separator(Pixel);
 Element gauge(float ratio);
 Element border(Element);
+Decorator borderWith(Pixel);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
+Elements paragraph(std::wstring text); // Use inside hflow(). Split by space.
+Element graph(GraphFunction);
 
 // -- Decorator ---
 Element bold(Element);
@@ -48,16 +52,22 @@ Element bgcolor(Color, Element);
 
 // --- Layout ---
 // Horizontal, Vertical or stacked set of elements.
-Element vbox(Elements);
 Element hbox(Elements);
+Element vbox(Elements);
 Element dbox(Elements);
+Element hflow(Elements);
 
 // -- Flexibility ---
 // Define how to share the remaining space when not all of it is used inside a
 // container.
 Element filler();
 Element flex(Element);
-Decorator size(size_t width, size_t height);
+Element notflex(Element);
+
+// -- Size override;
+enum Direction { WIDTH, HEIGHT };
+enum Constraint { LESS_THAN, EQUAL, GREATER_THAN };
+Decorator size(Direction, Constraint, int value);
 
 // --- Frame ---
 // A frame is a scrollable area. The internal area is potentially larger than
@@ -86,22 +96,26 @@ Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
 Element blink(Element);
-Element color(Color, Element);
-Element bgcolor(Color, Element);
+Decorator color(Color);
+Decorator bgcolor(Color);
 ~~~
 
 ### Layout
 
+These layout are similar to the HTML flexbox:
 * vbox (Vertical-box)
 * hbox (Horizontal-box)
-* dbox (Depth-box)
-are containers. They are used to compose all the elements together. Each
+* dbox (Z-axis-box)
+They are used to compose all the elements together. Each
 children are put side by side. If the container is flexible, the extra space
 available will be shared among the remaining flexible children.
 
 flex(element) can be used to make a non-flexible element flexible. filler() is a
 flexible empty element. You can use it align children on one side of the
 container.
+
+An horizontal flow layout is implemented by:
+* hflow (Horizontal flow)
 
 #### Examples
 ~~~cpp
@@ -134,7 +148,7 @@ container.
 
 #### text
 
-The most simple widget. It display a text.
+The most simple widget. It displays a text.
 ~~~cpp
   text(L"I am a piece of text");
 ~~~
@@ -143,7 +157,7 @@ I am a piece of text.
 ~~~
 
 #### border
-Add a border arround an element
+Add a border around an element
 ~~~cpp
 border(text(L"The element"))
 ~~~
@@ -193,6 +207,9 @@ border(gauge(0.5))
 └────────────────────────────────────────────────────────────────────────────┘
 ~~~
 
+### graph
+[![asciicast](https://asciinema.org/a/223726.svg)](https://asciinema.org/a/223726)
+
 ### Decorator
 
 Terminal supports displaying text using differet style: bold, dim, underlined,
@@ -210,10 +227,21 @@ text(L"This text is bold")) | bold | underlined
 
 ## Components.
 
-dom element are stateless. 
+Element are stateless object. On the other side, components are used when an
+internal state is needed. Components are used to interact with the user with
+its keyboard. They handle keyboard navigation, including component focus.
+
 ### Input
-  TODO(arthursonzogni): Add Video
+[![asciicast](https://asciinema.org/a/223719.svg)](https://asciinema.org/a/223719)
+
 ### Menu
-  TODO(arthursonzogni): Add Video
+[![asciicast](https://asciinema.org/a/223720.svg)](https://asciinema.org/a/223720)
+
 ### Toggle.
-  TODO(arthursonzogni): Add video
+[![asciicast](https://asciinema.org/a/223722.svg)](https://asciinema.org/a/223722)
+
+### CheckBox
+[![asciicast](https://asciinema.org/a/223724.svg)](https://asciinema.org/a/223724)
+
+### RadioBox
+[![asciicast](https://asciinema.org/a/223725.svg)](https://asciinema.org/a/223725)

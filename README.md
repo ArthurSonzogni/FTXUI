@@ -1,8 +1,11 @@
 # FTXUI
-![Demo image](./examples/component/homescreen.gif)
-Functional Terminal (X) User interface
+
+**Functional Terminal (X) User interface**
 
 A simple  C++ library for terminal based user interface.
+
+## Demo:
+![Demo image](./examples/component/homescreen.gif)
 
 ## Feature
  * Functional style.
@@ -70,7 +73,7 @@ int main(int argc, const char *argv[])
       text(L"middle") | flex,
       text(L"right")
     ),
-  auto screen = Screen::TerminalOutput(document);
+  auto screen = Screen::Create(Dimension::Full, Dimension::Fit(document));
   Render(screen, document.get());
 
   std::cout << screen.ToString();
