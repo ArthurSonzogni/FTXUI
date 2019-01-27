@@ -1,13 +1,12 @@
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/dom/graph.hpp"
-#include "ftxui/screen/screen.hpp"
-#include "ftxui/screen/string.hpp"
 #include <chrono>
 #include <cmath>
 #include <iostream>
 #include <thread>
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/screen.hpp"
+#include "ftxui/screen/string.hpp"
 
-class Graph : public ftxui::GraphFunction {
+class Graph {
  public:
   std::vector<int> operator()(int width, int height) {
     std::vector<int> output(width);
@@ -16,8 +15,6 @@ class Graph : public ftxui::GraphFunction {
       v += 0.1 * sin((i + shift) * 0.1);
       v += 0.2 * sin((i + shift+10) * 0.15);
       v += 0.1 * sin((i + shift) * 0.03);
-      // v += 0.2*sin((i+shift)*0.3);
-      // v += 0.1*sin((i+shift)*0.9);
       v *= height;
       v += 0.5 * height;
       output[i] = v;
@@ -26,6 +23,14 @@ class Graph : public ftxui::GraphFunction {
   }
   int shift = 0;
 };
+
+std::vector<int> triangle(int width, int height) {
+  std::vector<int> output(width);
+  for (int i = 0; i < width; ++i) {
+    output[i] = i % (height - 4) + 2;
+  }
+  return output;
+}
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
@@ -36,20 +41,20 @@ int main(int argc, const char* argv[]) {
   std::string reset_position;
   for (int i = 0;; ++i) {
     auto document =
-      window(text(L"Your graphs"),
-        hbox(
-          vbox(
-            graph(my_graph), separator(),
-            graph(my_graph) | inverted
-          ) | flex,
-          separator(),
-          vbox(
-            graph(my_graph) | color(Color::BlueLight), separator(),
-            graph(my_graph) | color(Color::RedLight), separator(),
-            graph(my_graph) | color(Color::YellowLight)
-          ) | flex
-        )
-      ) | size(HEIGHT, GREATER_THAN, 40);
+      hbox(
+        vbox(
+          graph(std::ref(my_graph)), separator(),
+          graph(triangle) | inverted
+        ) | flex,
+        separator(),
+        vbox(
+          graph(std::ref(my_graph)) | color(Color::BlueLight), separator(),
+          graph(std::ref(my_graph)) | color(Color::RedLight), separator(),
+          graph(std::ref(my_graph)) | color(Color::YellowLight)
+        ) | flex
+      )
+      | border
+      | size(HEIGHT, GREATER_THAN, 40);
 
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document.get());

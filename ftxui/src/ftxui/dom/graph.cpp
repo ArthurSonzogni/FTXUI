@@ -6,7 +6,7 @@ const wchar_t charset[] = L" ▗▐▖▄▟▌▙█";
 
 class Graph : public Node {
  public:
-  Graph(GraphFunction& graph_function) : graph_function_(graph_function) {}
+  Graph(GraphFunction graph_function) : graph_function_(graph_function) {}
   ~Graph() override {}
 
   void ComputeRequirement() override {
@@ -35,10 +35,10 @@ class Graph : public Node {
   }
 
  private:
-  GraphFunction& graph_function_;
+  GraphFunction graph_function_;
 };
 
-std::unique_ptr<Node> graph(GraphFunction& graph_function) {
+std::unique_ptr<Node> graph(GraphFunction graph_function) {
   return std::make_unique<Graph>(graph_function);
 }
 

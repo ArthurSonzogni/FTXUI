@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
+find_package(Threads)
 
 add_library(screen
   src/ftxui/screen/box.cpp
@@ -48,7 +49,7 @@ add_library(component
 
 target_link_libraries(dom PUBLIC screen)
 target_link_libraries(component PUBLIC dom)
-
+target_link_libraries(component PUBLIC Threads::Threads)
 
 foreach(lib screen dom component)
   target_include_directories(${lib}
@@ -86,7 +87,6 @@ install(EXPORT ftxui-export
 # Note: For gtest, please follow:
 # https://stackoverflow.com/questions/24295876/cmake-cannot-find-a-googletest-required-library
 find_package(GTest)
-find_package(Threads)
 if (GTEST_FOUND AND THREADS_FOUND)
   add_executable(dom_tests
     src/ftxui/dom/gauge_test.cpp

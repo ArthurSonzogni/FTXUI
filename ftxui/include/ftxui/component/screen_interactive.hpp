@@ -1,9 +1,15 @@
 #ifndef FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 #define FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 
-#include "ftxui/screen/screen.hpp"
+#include <condition_variable>
 #include <functional>
 #include <memory>
+#include <mutex>
+#include <queue>
+#include <atomic>
+
+#include "ftxui/component/event.hpp"
+#include "ftxui/screen/screen.hpp"
 
 namespace ftxui {
 class Component;
@@ -19,9 +25,11 @@ class ScreenInteractive : public Screen {
     void Loop(Component*);
     std::function<void()> ExitLoopClosure();
 
+    void PostEvent(Event event);
+
   private:
    void Draw(Component* component);
-   bool quit_ = false;
+   void EventLoop(Component* component);
 
    enum class Dimension {
      FitComponent,
@@ -31,6 +39,11 @@ class ScreenInteractive : public Screen {
    };
    Dimension dimension_ = Dimension::Fixed;
    ScreenInteractive(int dimx, int dimy, Dimension dimension);
+
+   std::condition_variable events_queue_wait;
+   std::mutex events_queue_mutex;
+   std::queue<Event> events_queue;
+   std::atomic<bool> quit_ = false;
 };
 
 }  // namespace ftxui

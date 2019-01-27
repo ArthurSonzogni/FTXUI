@@ -5,19 +5,21 @@ namespace ftxui {
 
 // Component implementation.
 Element Input::Render() {
+  cursor_position = std::max(0, std::min<int>(content.size(), cursor_position));
+  auto main_decorator = flex | size(HEIGHT, EQUAL, 1);
   bool is_focused = Focused();
 
   // Placeholder.
   if (content.size() == 0) {
     if (is_focused)
-      return text(placeholder) | dim | inverted | flex;
+      return text(placeholder) | dim | inverted | main_decorator;
     else
-      return text(placeholder) | dim | flex;
+      return text(placeholder) | dim | main_decorator;
   }
 
   // Not focused.
   if (!is_focused)
-    return text(content) | flex;
+    return text(content) | main_decorator;
 
   std::wstring part_before_cursor = content.substr(0,cursor_position);
   std::wstring part_at_cursor = cursor_position < (int)content.size()
@@ -34,9 +36,11 @@ Element Input::Render() {
       text(part_before_cursor),
       text(part_at_cursor) | underlined | focused,
       text(part_after_cursor)
-    ) | flex | inverted | frame;
+    ) | flex | inverted | frame | main_decorator;
+    
 }
 bool Input::OnEvent(Event event) {
+  cursor_position = std::max(0, std::min<int>(content.size(), cursor_position));
   std::wstring c;
 
   // Backspace.
@@ -50,7 +54,12 @@ bool Input::OnEvent(Event event) {
 
   // Enter.
   if (event == Event::Return) {
+    on_enter();
     return true;
+  }
+
+  if (event == Event::Custom) {
+    return false;
   }
 
   if (event == Event::ArrowLeft && cursor_position > 0) {

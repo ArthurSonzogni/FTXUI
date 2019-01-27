@@ -5,12 +5,20 @@ namespace ftxui {
 
 using namespace ftxui;
 
-static wchar_t charset[] = L"┌┐└┘─│┬┴┤├";
+static wchar_t simple_border_charset[] = L"┌┐└┘─│┬┴┤├";
 
 class Border : public Node {
  public:
-  Border(Elements children) : Node(std::move(children)) {}
+  Border(Elements children)
+      : Node(std::move(children)),
+        charset(std::begin(simple_border_charset),
+                std::end(simple_border_charset)) {}
+  Border(Elements children, Pixel pixel)
+      : Node(std::move(children)), charset_pixel(10, pixel) {}
   ~Border() override {}
+
+  std::vector<Pixel> charset_pixel; 
+  std::vector<wchar_t> charset;
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -52,6 +60,13 @@ class Border : public Node {
     if (box_.x_min >= box_.x_max || box_.y_min >= box_.y_max)
       return;
 
+    if (!charset.empty())
+      RenderPixel(screen);
+    else
+      RenderChar(screen);
+  }
+
+  void RenderPixel(Screen& screen) {
     screen.at(box_.x_min, box_.y_min) = charset[0];
     screen.at(box_.x_max, box_.y_min) = charset[1];
     screen.at(box_.x_min, box_.y_max) = charset[2];
@@ -69,6 +84,21 @@ class Border : public Node {
     if (children.size() == 2)
       children[1]->Render(screen);
   }
+
+  void RenderChar(Screen& screen) {
+    screen.PixelAt(box_.x_min, box_.y_min) = charset_pixel[0];
+    screen.PixelAt(box_.x_max, box_.y_min) = charset_pixel[1];
+    screen.PixelAt(box_.x_min, box_.y_max) = charset_pixel[2];
+    screen.PixelAt(box_.x_max, box_.y_max) = charset_pixel[3];
+    for(float x = box_.x_min + 1; x<box_.x_max; ++x) {
+      screen.PixelAt(x, box_.y_min) = charset_pixel[4];
+      screen.PixelAt(x, box_.y_max) = charset_pixel[4];
+    }
+    for(float y = box_.y_min + 1; y<box_.y_max; ++y) {
+      screen.PixelAt(box_.x_min, y) = charset_pixel[5];
+      screen.PixelAt(box_.x_max,y) = charset_pixel[5];
+    }
+  }
 };
 
 std::unique_ptr<Node> border(Element child) {
@@ -79,9 +109,9 @@ std::unique_ptr<Node> window(Element title, Element content) {
   return std::make_unique<Border>(unpack(std::move(content), std::move(title)));
 }
 
-Decorator boxed() {
-  return [](Element child) {
-    return border(std::move(child));
+Decorator borderWith(Pixel pixel) {
+  return [pixel](Element child) {
+    return std::make_unique<Border>(unpack(std::move(child)), pixel);
   };
 }
 

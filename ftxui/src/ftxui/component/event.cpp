@@ -34,4 +34,6 @@ Event Event::F10{ESC, '[', '2', '1', '~'};
 Event Event::F11{ESC, '[', '2', '1', '~'};  // Same as F10 ?
 Event Event::F12{ESC, '[', '2', '4', '~'};
 
+Event Event::Custom{0, 0, 0, 0, 0};
+
 } // namespace ftxui

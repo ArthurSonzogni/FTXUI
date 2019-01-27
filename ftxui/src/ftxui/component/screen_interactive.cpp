@@ -6,6 +6,7 @@
 #include <iostream>
 #include "ftxui/component/component.hpp"
 #include "ftxui/screen/terminal.hpp"
+#include <thread>
 
 namespace ftxui {
 
@@ -70,6 +71,28 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   return ScreenInteractive(0, 0, Dimension::FitComponent);
 }
 
+void ScreenInteractive::PostEvent(Event event) { 
+  std::unique_lock<std::mutex> lock(events_queue_mutex);
+  events_queue.push(event);
+  events_queue_wait.notify_one();
+}
+
+void ScreenInteractive::EventLoop(Component* component) {
+  bool handled = 0;
+  for (;;) {
+    std::unique_lock<std::mutex> lock(events_queue_mutex);
+    while (!events_queue.empty()) {
+      component->OnEvent(events_queue.front());
+      events_queue.pop();
+      handled = true;
+    }
+
+    if (handled)
+      return;
+    events_queue_wait.wait(lock);
+  }
+}
+
 void ScreenInteractive::Loop(Component* component) {
   //std::cout << "\033[?9h";    [> Send Mouse Row & Column on Button Press <]
   //std::cout << "\033[?1000h"; [> Send Mouse X & Y on button press and release <]
@@ -89,17 +112,24 @@ void ScreenInteractive::Loop(Component* component) {
   terminal_configuration_new.c_lflag &= ~ECHO;
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
 
+  std::thread read_char([this]() {
+    while (!quit_)
+      PostEvent(GetEvent());
+  });
+
   std::string reset_position;
   while (!quit_) {
     reset_position = ResetPosition();
     Draw(component);
     std::cout << reset_position << ToString() << std::flush;
     Clear();
-    component->OnEvent(GetEvent());
+    EventLoop(component);
   }
 
   // Restore the old terminal configuration.
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_old);
+
+  read_char.join();
 
   std::cout << std::endl;
 }

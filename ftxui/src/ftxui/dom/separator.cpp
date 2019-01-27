@@ -23,16 +23,34 @@ class Separator : public Node {
     else
       c = U'│';
 
+    Pixel p;
+    p.character = c;
+    RenderWithPixel(screen, p);
+  }
+
+  void RenderWithPixel(Screen& screen, Pixel pixel) {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.at(x, y) = c;
+        screen.PixelAt(x, y) = pixel;
       }
     }
   }
 };
 
+class SeparatorWithPixel : public Separator {
+ public:
+  SeparatorWithPixel(Pixel p) : p(p) {}
+  ~SeparatorWithPixel() override {}
+  void Render(Screen& screen) override { RenderWithPixel(screen, p); }
+  Pixel p;
+};
+
 std::unique_ptr<Node> separator() {
   return std::make_unique<Separator>();
+}
+
+std::unique_ptr<Node> separator(Pixel pixel) {
+  return std::make_unique<SeparatorWithPixel>(pixel);
 }
 
 };  // namespace ftxui

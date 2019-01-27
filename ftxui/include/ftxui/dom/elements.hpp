@@ -3,7 +3,6 @@
 
 #include <functional>
 
-#include "ftxui/dom/graph.hpp"
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/color.hpp"
 
@@ -12,16 +11,19 @@ namespace ftxui {
 using Element = std::unique_ptr<Node>;
 using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
+using GraphFunction = std::function<std::vector<int>(int,int)>;
 
 // --- Widget ---
 Element text(std::wstring text);
 Element separator();
+Element separator(Pixel);
 Element gauge(float ratio);
 Element border(Element);
+Decorator borderWith(Pixel);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
 Elements paragraph(std::wstring text); // Use inside hflow(). Split by space.
-Element graph(GraphFunction&); // See graph.hpp
+Element graph(GraphFunction);
 
 // -- Decorator ---
 Element bold(Element);
@@ -46,6 +48,7 @@ Element hflow(Elements);
 // container.
 Element filler();
 Element flex(Element);
+Element notflex(Element);
 
 // -- Size override;
 enum Direction { WIDTH, HEIGHT };
