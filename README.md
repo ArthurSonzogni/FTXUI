@@ -2,7 +2,7 @@
 
 **Functional Terminal (X) User interface**
 
-A simple  C++ library for terminal based user interface.
+A simple C++ library for terminal based user interface.
 
 ## Demo:
 ![Demo image](./examples/component/homescreen.gif)
@@ -11,8 +11,6 @@ A simple  C++ library for terminal based user interface.
  * Functional style.
  * Simple and elegant syntax (in my opinion).
  * No dependencies.
-
-## Other features
  * vim navigation friendly (h,j,k,l)
 
 ## Example:
@@ -38,6 +36,10 @@ A simple  C++ library for terminal based user interface.
 
 ## Tutorial
 See [Tutorial](./tutorial.md)
+
+## Project using FTXUI
+
+None! This is still a newborn project. Please add a link to your project here.
 
 ## Build using CMake
 ~~~bash
