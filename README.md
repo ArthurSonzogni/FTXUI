@@ -41,6 +41,10 @@ See [Tutorial](./tutorial.md)
 
 None! This is still a newborn project. Please add a link to your project here.
 
+## Hosted on:
+ * [github](https://github.com/ArthurSonzogni/ftxui)
+ * [gitlab](https://gitlab.com/ArthurSonzogni/ftxui)
+
 ## Build using CMake
 ~~~bash
 mkdir build && cd build
