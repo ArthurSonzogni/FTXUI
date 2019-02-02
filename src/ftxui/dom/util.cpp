@@ -3,7 +3,7 @@
 namespace ftxui {
 
 Element nothing(Element element) {
-  return std::move(element);
+  return element;
 }
 
 Decorator compose(Decorator a, Decorator b) {

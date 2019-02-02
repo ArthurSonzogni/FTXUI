@@ -35,55 +35,16 @@ A simple C++ library for terminal based user interface.
 └────────────────────────────────────────────────────────────────────────────┘
 ~~~
 
+## Build
+
+* With [CMake](https://cmake.org) : See [Instructions](./tutorial/build-with-cmake.md)
+* With [nxxm](https://nxxm.github.io) :See [Instructions](./tutorial/build-with-nxxm.md)
+
 ## Tutorial
-See [Tutorial](./tutorial.md)
+See [Tutorial](./tutorial/tutorial.md)
 
 ## Project using FTXUI
-
 None! This is still a newborn project. Please add a link to your project here.
-
-## Build using CMake
-~~~bash
-mkdir build && cd build
-cmake ..
-make
-sudo make install
-~~~
-
-## Use library using CMake
-
-CMakeLists.txt
-~~~cmake
-cmake_minimum_required(VERSION 3.0)
-
-find_package(ftxui REQUIRED)
-add_executable(main main.cpp)
-target_link_libraries(main PUBLIC ftxui::dom)
-~~~
-
-main.cpp
-~~~cpp
-#include "ftxui/screen/screen.hpp"
-#include "ftxui/dom/elements.hpp"
-#include <iostream>
-
-int main(int argc, const char *argv[])
-{
-  using namespace ftxui;
-  auto document =
-    hbox(
-      text(L"left") | bold,
-      text(L"middle") | flex,
-      text(L"right")
-    ),
-  auto screen = Screen::Create(Dimension::Full, Dimension::Fit(document));
-  Render(screen, document.get());
-
-  std::cout << screen.ToString();
-
-  return 0;
-}
-~~~
 
 ## Hosted on:
  * [github](https://github.com/ArthurSonzogni/ftxui)

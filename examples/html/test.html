@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en_US">
+<head>
+  <meta charset="utf-8">
+
+
+  <style>
+    html, body, textarea{
+      margin:0;
+      padding:0;
+      width: 100%;
+      height: 100%;
+      overflow:hidden;
+    }
+
+    body {
+      background-color:gray;
+    };
+
+    textarea {
+      white-space: pre-wrap;
+      background-color:white;
+    }
+  </style>
+
+  <script type="text/c++">
+    #include <iostream>
+
+    #include "ftxui/screen/screen.hpp"
+    #include "ftxui/dom/elements.hpp"
+
+    int main() {
+      using namespace ftxui;
+      auto document =
+        hbox(
+          window(text(L" main frame ") | hcenter,
+            vbox(
+              text(L"Line 1"),
+              text(L"Line 2"),
+              text(L"Line 3"),
+              vbox(
+                text(L"Line 4"),
+                text(L"Line 5"),
+                text(L"Line 6")
+              ) | border,
+              hbox(
+                window(text(L"frame 2"),
+                  vbox(
+                    text(L"Line 4"),
+                    gauge(0.5) | border,
+                    text(L"Line 6")
+                  )
+                ),
+                window(text(L"frame 3"),
+                  vbox(
+                    text(L"Line 7"),
+                    text(L"Line 8"),
+                    text(L"Line 9")
+                  )
+                )
+              ),
+              text(L"footer footer footer footer footer")
+            )
+          ),
+          filler()
+        );
+      auto screen = Screen::Create(Dimension::Fit(document));
+      Render(screen, document.get());
+      std::cout << screen.ToString() << std::endl;
+      return 0;
+    }
+  </script> 
+</head>
+<body>
+  <textarea id="box"></textarea>
+</body>
+  <script>
+    window.Module = {
+      'print': function(text) {
+        console.log(text);
+        document.getElementById("box").value += text + '\n';
+      }
+    };
+  </script>
+</html>

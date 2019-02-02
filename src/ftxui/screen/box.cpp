@@ -1,5 +1,5 @@
 #include "ftxui/screen/box.hpp"
-#include <cmath>
+#include <algorithm>
 
 namespace ftxui {
 // static
