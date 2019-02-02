@@ -38,6 +38,8 @@ bool Container::OnEvent(Event event) {
 }
 
 Component* Container::ActiveChild() {
+  if (children_.size() == 0)
+    return nullptr;
   return children_[*selector_ % children_.size()];
 }
 
@@ -91,6 +93,8 @@ Element Container::VerticalRender() {
   Elements elements;
   for(auto& it : children_)
     elements.push_back(it->Render());
+  if (elements.size() == 0)
+    return text(L"Empty container");
   return vbox(std::move(elements));
 }
 
@@ -98,11 +102,16 @@ Element Container::HorizontalRender() {
   Elements elements;
   for(auto& it : children_)
     elements.push_back(it->Render());
+  if (elements.size() == 0)
+    return text(L"Empty container");
   return hbox(std::move(elements));
 }
 
 Element Container::TabRender() {
-  return ActiveChild()->Render();
+  Component* active_child = ActiveChild();
+  if (active_child)
+    return active_child->Render();
+  return text(L"Empty container");
 }
 
 }  // namespace ftxui
