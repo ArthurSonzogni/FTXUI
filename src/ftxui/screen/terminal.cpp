@@ -13,7 +13,6 @@ Terminal::Dimensions Terminal::Size() {
 #else
   winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-  std::cerr << w.ws_col << "," << w.ws_row << std::endl;
   return Dimensions{w.ws_col, w.ws_row};
 #endif
 }
