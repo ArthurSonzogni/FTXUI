@@ -3,7 +3,7 @@
 .nxxm/deps
 ~~~json
 {
-  "arthursonzogni/ftxui": {}
+  "ArthurSonzogni/FTXUI": {}
 }
 ~~~
 
