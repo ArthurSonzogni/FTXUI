@@ -71,25 +71,21 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   return ScreenInteractive(0, 0, Dimension::FitComponent);
 }
 
-void ScreenInteractive::PostEvent(Event event) { 
+void ScreenInteractive::PostEvent(Event event) {
   std::unique_lock<std::mutex> lock(events_queue_mutex);
   events_queue.push(event);
-  events_queue_wait.notify_one();
+  events_queue_cv.notify_one();
 }
 
 void ScreenInteractive::EventLoop(Component* component) {
-  bool handled = 0;
-  for (;;) {
-    std::unique_lock<std::mutex> lock(events_queue_mutex);
-    while (!events_queue.empty()) {
-      component->OnEvent(events_queue.front());
-      events_queue.pop();
-      handled = true;
-    }
+  std::unique_lock<std::mutex> lock(events_queue_mutex);
+  while (!quit_ && events_queue.empty())
+    events_queue_cv.wait(lock);
 
-    if (handled)
-      return;
-    events_queue_wait.wait(lock);
+  // After the wait, we own the lock.
+  while (!events_queue.empty()) {
+    component->OnEvent(events_queue.front());
+    events_queue.pop();
   }
 }
 

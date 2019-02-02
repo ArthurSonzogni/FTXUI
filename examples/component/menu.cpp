@@ -7,7 +7,7 @@
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
-  auto screen = ScreenInteractive::FixedSize(30, 3);
+  auto screen = ScreenInteractive::TerminalOutput();
 
   Menu menu;
   menu.entries = {L"entry 1", L"entry 2", L"entry 3"};

@@ -40,7 +40,7 @@ class ScreenInteractive : public Screen {
    Dimension dimension_ = Dimension::Fixed;
    ScreenInteractive(int dimx, int dimy, Dimension dimension);
 
-   std::condition_variable events_queue_wait;
+   std::condition_variable events_queue_cv;
    std::mutex events_queue_mutex;
    std::queue<Event> events_queue;
    std::atomic<bool> quit_ = false;
