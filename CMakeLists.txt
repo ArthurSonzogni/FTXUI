@@ -87,7 +87,7 @@ write_basic_package_version_file(
 )
 
 install(EXPORT ftxui-export
-  FILE ftxui-targets.cmake
+  FILE ftxui-config.cmake
 	NAMESPACE ftxui::
 	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
 )
