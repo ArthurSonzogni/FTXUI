@@ -1,0 +1,11 @@
+image: registry.gitlab.com/nxxm/nxxm/ci/ubuntu-cpp:latest
+
+stages:
+  - build
+
+build-wasm:
+  stage: build
+  image: registry.gitlab.com/nxxm/nxxm/ci/ubuntu-cpp:latest
+  script:
+    - nxxm . --verbose
+
