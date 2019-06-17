@@ -46,10 +46,16 @@ TEST(VBoxTest, ScreenSmaller1Flex) {
 
 TEST(VBoxTest, ScreenFitFlex) {
   auto root = vbox(text(L"text_1"), filler(), text(L"text_2"));
-  Screen screen(15, 10);
+  Screen screen(7, 5);
   Render(screen, root.get());
 
-  EXPECT_EQ("text_1\ntext_2", screen.ToString());
+  EXPECT_EQ(
+    "text_1 \n"
+    "       \n"
+    "       \n"
+    "       \n"
+    "text_2 "
+  ,screen.ToString());
 }
 
 TEST(VBoxTest, ScreenBigger1Flex) {
