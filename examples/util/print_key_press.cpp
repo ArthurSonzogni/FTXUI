@@ -17,7 +17,7 @@ class DrawKey : public Component {
     for (size_t i = std::max(0, (int)keys.size() - 10); i < keys.size(); ++i) {
       std::wstring code;
       for(auto& it : keys[i].input())
-        code += L" " + std::to_wstring((int)it);
+        code += L" " + std::to_wstring((unsigned int)it);
 
       code = L"(" + code + L" ) -> " + keys[i].character() + L")";
       children.push_back(text(code));

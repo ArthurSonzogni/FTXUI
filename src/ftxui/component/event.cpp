@@ -128,7 +128,7 @@ Event Event::GetEvent(std::function<char()> getchar) {
       return ParseESC(getchar, input);
   }
 
-  if (input[0] < 32)  // C0
+  if (input[0] >= 0 && input[0] < 32)  // C0
     return Event::Special(input);
 
   return ParseUTF8(getchar, input);
