@@ -1,22 +1,32 @@
 #ifndef FTXUI_COMPONENT_EVENT_HPP
 #define FTXUI_COMPONENT_EVENT_HPP
 
-#include <vector>
 #include <array>
+#include <vector>
+#include <functional>
 
 namespace ftxui {
 
-struct Event{
+// Documentation:
+// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+//
+struct Event {
  public:
-  // --- Character ---
-  static Event Character(int);
+  // --- Constructor section ---------------------------------------------------
+  static Event Character(char);
+  static Event Character(wchar_t);
+
+  static Event Character(const std::string&);
+  static Event Special(const std::string&);
+
+  static Event GetEvent(std::function<char()> getchar);
 
   // --- Arrow ---
   static Event ArrowLeft;
   static Event ArrowRight;
   static Event ArrowUp;
   static Event ArrowDown;
-  
+
   // --- Other ---
   static Event Backspace;
   static Event Delete;
@@ -27,15 +37,20 @@ struct Event{
   // --- Custom ---
   static Event Custom;
 
-  bool operator==(const Event& other) { return values == other.values; }
+  //--- Method section ---------------------------------------------------------
+  bool is_character() { return is_character_; }
+  wchar_t character() { return character_; }
+  const std::string& input() { return input_; }
 
-  // Internal representation.
-  std::array<int, 5> values = {0, 0, 0, 0, 0};
-  
+  bool operator==(const Event& other) { return input_ == other.input_; }
+
+  //--- State section ----------------------------------------------------------
+ private:
+  std::string input_;
+  bool is_character_ = false;
+  wchar_t character_ = '?';
 };
 
-
-} // namespace ftxui
-
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_EVENT_HPP */

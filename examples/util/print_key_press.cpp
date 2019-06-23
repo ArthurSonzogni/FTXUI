@@ -15,19 +15,12 @@ class DrawKey : public Component {
   Element Render() override {
     Elements children;
     for (size_t i = std::max(0, (int)keys.size() - 10); i < keys.size(); ++i) {
-      std::string code = "";
-      for (size_t j = 0; j < 5; ++j)
-        code += " " + std::to_string(keys[i].values[j]);
+      std::wstring code;
+      for(auto& it : keys[i].input())
+        code += L" " + std::to_wstring((int)it);
 
-      try {
-        std::string line = code + " -> " + std::to_string(keys[i].values[0]) +
-                           " (" + char(keys[i].values[0]) + ")";
-        children.push_back(text(to_wstring(line)));
-      } catch (...) {
-        std::string line =
-            code + " -> " + std::to_string(keys[i].values[0]) + " (undefined)";
-        children.push_back(text(to_wstring(line)));
-      }
+      code = L"(" + code + L" ) -> " + keys[i].character() + L")";
+      children.push_back(text(code));
     }
     return vbox(std::move(children));
   }

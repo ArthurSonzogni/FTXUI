@@ -9,7 +9,7 @@ namespace ftxui {
 
 namespace {
 static const wchar_t* BOLD_SET = L"\e[1m";
-static const wchar_t* BOLD_RESET = L"\e[22m"; // Can't use 21 here.
+static const wchar_t* BOLD_RESET = L"\e[22m";  // Can't use 21 here.
 
 static const wchar_t* DIM_SET = L"\e[2m";
 static const wchar_t* DIM_RESET = L"\e[22m";
@@ -34,7 +34,7 @@ bool In(const Box& stencil, int x, int y) {
 
 Pixel dev_null_pixel;
 
-} // namespace
+}  // namespace
 
 Dimension Dimension::Fixed(int v) {
   return Dimension{v, v};
@@ -86,8 +86,11 @@ void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
 
   if (next.foreground_color != previous.foreground_color ||
       next.background_color != previous.background_color) {
-    ss << L"\e[" + to_wstring(std::to_string((uint8_t)next.foreground_color)) + L"m";
-    ss << L"\e[" + to_wstring(std::to_string(10 + (uint8_t)next.background_color)) + L"m";
+    ss << L"\e[" + to_wstring(std::to_string((uint8_t)next.foreground_color)) +
+              L"m";
+    ss << L"\e[" +
+              to_wstring(std::to_string(10 + (uint8_t)next.background_color)) +
+              L"m";
   }
 
   previous = next;
@@ -105,7 +108,6 @@ std::string Screen::ToString() {
       UpdatePixelStyle(ss, previous_pixel, pixels_[y][x]);
       ss << pixels_[y][x].character;
     }
-
   }
 
   Pixel final_pixel;
@@ -115,7 +117,7 @@ std::string Screen::ToString() {
 }
 
 wchar_t& Screen::at(int x, int y) {
-  return PixelAt(x,y).character;
+  return PixelAt(x, y).character;
 }
 
 Pixel& Screen::PixelAt(int x, int y) {
@@ -137,36 +139,34 @@ void Screen::Clear() {
 }
 
 void Screen::ApplyShader() {
-
   // Merge box characters togethers.
-  for(int y = 1; y<dimy_; ++y) {
-    for(int x = 1; x<dimx_; ++x) {
+  for (int y = 1; y < dimy_; ++y) {
+    for (int x = 1; x < dimx_; ++x) {
       wchar_t& left = at(x - 1, y);
       wchar_t& top = at(x, y - 1);
       wchar_t& cur = at(x, y);
 
       // Left vs current
-      if (cur== U'│' && left == U'─')
-        cur= U'┤';
-      if (cur== U'─' && left == U'│')
+      if (cur == U'│' && left == U'─')
+        cur = U'┤';
+      if (cur == U'─' && left == U'│')
         left = U'├';
-      if (cur== U'├' && left == U'─')
-        cur= U'┼';
-      if (cur== U'─' && left == U'┤')
+      if (cur == U'├' && left == U'─')
+        cur = U'┼';
+      if (cur == U'─' && left == U'┤')
         left = U'┼';
 
       // Top vs current
-      if (cur== U'─' && top == U'│')
-        cur= U'┴';
-      if (cur== U'│' && top == U'─')
+      if (cur == U'─' && top == U'│')
+        cur = U'┴';
+      if (cur == U'│' && top == U'─')
         top = U'┬';
-      if (cur== U'┬' && top == U'│')
-        cur= U'┼';
-      if (cur== U'│' && top == U'┴')
+      if (cur == U'┬' && top == U'│')
+        cur = U'┼';
+      if (cur == U'│' && top == U'┴')
         top = U'┼';
     }
   }
 }
-
 
 };  // namespace ftxui

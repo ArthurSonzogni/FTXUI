@@ -36,7 +36,7 @@ Decorator bgcolor(Color);
 Element color(Color, Element);
 Element bgcolor(Color, Element);
 
-// --- Layout ---
+// --- Layout is
 // Horizontal, Vertical or stacked set of elements.
 Element hbox(Elements);
 Element vbox(Elements);

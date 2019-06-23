@@ -4,46 +4,12 @@
 #include <termios.h>
 #include <unistd.h>
 #include <iostream>
-#include "ftxui/component/component.hpp"
-#include "ftxui/screen/terminal.hpp"
 #include <thread>
+#include "ftxui/component/component.hpp"
+#include "ftxui/screen/string.hpp"
+#include "ftxui/screen/terminal.hpp"
 
 namespace ftxui {
-
-namespace {
-constexpr int ESC = 27;
-constexpr int WAT = 195;
-constexpr int WAT2 = 194;
-constexpr int WATWAIT = 91;
-
-Event GetEvent() {
-  int v1 = getchar();
-  if (v1 == ESC) {
-    int v2 = getchar();
-    int v3 = getchar();
-
-    // if (v2 == WATWAIT) {
-    // int v4 = getchar();
-    // int v5 = getchar();
-    // return Event{v1, v2, v3, v4, v5};
-    //}
-    return Event{v1, v2, v3};
-  }
-
-  if (v1 == WAT) {
-    int v2 = getchar();
-    return Event{v1, v2};
-  }
-
-  if (v1 == WAT2) {
-    int v2 = getchar();
-    return Event{v1, v2};
-  }
-
-  return Event{v1};
-};
-
-};  // namespace
 
 ScreenInteractive::ScreenInteractive(int dimx,
                                      int dimy,
@@ -109,8 +75,10 @@ void ScreenInteractive::Loop(Component* component) {
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
 
   std::thread read_char([this]() {
-    while (!quit_)
-      PostEvent(GetEvent());
+    while (!quit_) {
+      auto event = Event::GetEvent([] { return (char)getchar(); });
+      PostEvent(std::move(event));
+    }
   });
 
   std::string reset_position;

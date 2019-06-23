@@ -73,10 +73,8 @@ bool Input::OnEvent(Event event) {
   }
 
   // Content
-  constexpr char ESC = char(27);
-  if (event.values[0] != ESC) {
-    wchar_t v = (char)event.values[0];
-    content.insert(cursor_position, 1, v);
+  if (event.is_character()) {
+    content.insert(cursor_position, 1, event.character());
     cursor_position++;
     return true;
   }
