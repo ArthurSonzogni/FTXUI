@@ -12,6 +12,7 @@ A simple C++ library for terminal based user interface.
    [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
    and [React](https://reactjs.org/)
  * Simple and elegant syntax (in my opinion).
+ * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms)
  * No dependencies.
 
 ## Example:
