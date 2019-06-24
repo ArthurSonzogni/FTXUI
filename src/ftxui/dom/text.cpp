@@ -1,4 +1,5 @@
 #include "ftxui/dom/node.hpp"
+#include "ftxui/screen/string.hpp"
 
 namespace ftxui {
 
@@ -10,7 +11,7 @@ class Text : public Node {
   ~Text() {}
 
   void ComputeRequirement() override {
-    requirement_.min.x = text_.size();
+    requirement_.min.x = wstring_width(text_);
     requirement_.min.y = 1;
   }
 
@@ -22,7 +23,8 @@ class Text : public Node {
     for (wchar_t c : text_) {
       if (x > box_.x_max)
         return;
-      screen.at(x++, y) = c;
+      screen.at(x, y) = c;
+      x += wchar_width(c);
     }
   }
 

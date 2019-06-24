@@ -43,16 +43,6 @@ Event ParseUTF8(std::function<char()>& getchar, std::string& input) {
   return Event::Character(input);
 }
 
-void ParsePs(std::function<char()> getchar, std::string input) {
-  while (1) {
-    char key = getchar();
-    input += key;
-    if ('0' <= key && key <= '9')
-      continue;
-    return;
-  }
-}
-
 Event ParseCSI(std::function<char()> getchar, std::string& input) {
   while (1) {
     char c = getchar();

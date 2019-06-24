@@ -14,6 +14,7 @@ add_library(screen
   src/ftxui/screen/screen.cpp
   src/ftxui/screen/string.cpp
   src/ftxui/screen/terminal.cpp
+  src/ftxui/screen/wcwidth.cpp
 )
 
 add_library(dom

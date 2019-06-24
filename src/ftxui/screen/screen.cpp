@@ -104,9 +104,12 @@ std::string Screen::ToString() {
   for (int y = 0; y < dimy_; ++y) {
     if (y != 0)
       ss << '\n';
-    for (int x = 0; x < dimx_; ++x) {
-      UpdatePixelStyle(ss, previous_pixel, pixels_[y][x]);
-      ss << pixels_[y][x].character;
+    for (int x = 0; x < dimx_;) {
+      auto& pixel = pixels_[y][x];
+      wchar_t c = pixel.character;
+      UpdatePixelStyle(ss, previous_pixel, pixel);
+      ss << c;
+      x += wchar_width(c);
     }
   }
 
