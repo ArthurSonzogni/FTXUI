@@ -44,6 +44,9 @@ class ScreenInteractive : public Screen {
    std::mutex events_queue_mutex;
    std::queue<Event> events_queue;
    std::atomic<bool> quit_ = false;
+
+   std::string set_cursor_position;
+   std::string reset_cursor_position;
 };
 
 }  // namespace ftxui

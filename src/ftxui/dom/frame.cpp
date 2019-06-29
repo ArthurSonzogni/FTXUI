@@ -45,6 +45,11 @@ class Focus : public Select {
     Select::ComputeRequirement();
     requirement_.selection = Requirement::FOCUSED;
   };
+
+  void Render(Screen& screen) override {
+    Select::Render(screen);
+    screen.SetCursor(Screen::Cursor{box_.x_min, box_.y_min});
+  }
 };
 
 std::unique_ptr<Node> focus(Element child) {

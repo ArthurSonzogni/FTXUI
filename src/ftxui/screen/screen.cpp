@@ -139,8 +139,11 @@ std::string Screen::ResetPosition() {
 void Screen::Clear() {
   pixels_ = std::vector<std::vector<Pixel>>(dimy_,
                                             std::vector<Pixel>(dimx_, Pixel()));
+  cursor_.x = dimx_ - 1;
+  cursor_.y = dimy_ - 1;
 }
 
+// clang-format off
 void Screen::ApplyShader() {
   // Merge box characters togethers.
   for (int y = 1; y < dimy_; ++y) {
@@ -150,26 +153,19 @@ void Screen::ApplyShader() {
       wchar_t& cur = at(x, y);
 
       // Left vs current
-      if (cur == U'│' && left == U'─')
-        cur = U'┤';
-      if (cur == U'─' && left == U'│')
-        left = U'├';
-      if (cur == U'├' && left == U'─')
-        cur = U'┼';
-      if (cur == U'─' && left == U'┤')
-        left = U'┼';
+      if (cur == U'│' && left == U'─') cur = U'┤';
+      if (cur == U'─' && left == U'│') left = U'├';
+      if (cur == U'├' && left == U'─') cur = U'┼';
+      if (cur == U'─' && left == U'┤') left = U'┼';
 
       // Top vs current
-      if (cur == U'─' && top == U'│')
-        cur = U'┴';
-      if (cur == U'│' && top == U'─')
-        top = U'┬';
-      if (cur == U'┬' && top == U'│')
-        cur = U'┼';
-      if (cur == U'│' && top == U'┴')
-        top = U'┼';
+      if (cur == U'─' && top == U'│') cur = U'┴';
+      if (cur == U'│' && top == U'─') top = U'┬';
+      if (cur == U'┬' && top == U'│') cur = U'┼';
+      if (cur == U'│' && top == U'┴') top = U'┼';
     }
   }
 }
+// clang-format on
 
 };  // namespace ftxui

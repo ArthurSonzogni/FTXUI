@@ -3,13 +3,29 @@
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
+#include <csignal>
 #include <iostream>
+#include <stack>
 #include <thread>
 #include "ftxui/component/component.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
 namespace ftxui {
+
+static const char* HIDE_CURSOR = "\e[?25l";
+static const char* SHOW_CURSOR = "\e[?25h";
+
+std::stack<std::function<void()>> on_exit_functions;
+void OnExit(int signal) {
+  while (!on_exit_functions.empty()) {
+    on_exit_functions.top()();
+    on_exit_functions.pop();
+  }
+
+  if (signal == SIGINT)
+    std::quick_exit(SIGINT);
+}
 
 ScreenInteractive::ScreenInteractive(int dimx,
                                      int dimy,
@@ -56,13 +72,18 @@ void ScreenInteractive::EventLoop(Component* component) {
 }
 
 void ScreenInteractive::Loop(Component* component) {
-  //std::cout << "\033[?9h";    [> Send Mouse Row & Column on Button Press <]
-  //std::cout << "\033[?1000h"; [> Send Mouse X & Y on button press and release <]
-  //std::cout << std::flush;
+  // Install a SIGINT handler and restore the old handler on exit.
+  auto old_sigint_handler = std::signal(SIGINT, OnExit);
+  on_exit_functions.push(
+      [old_sigint_handler]() { std::signal(SIGINT, old_sigint_handler); });
 
-  // Save the old terminal configuration.
+  // Save the old terminal configuration and restore it on exit.
   struct termios terminal_configuration_old;
   tcgetattr(STDIN_FILENO, &terminal_configuration_old);
+  on_exit_functions.push(
+      [terminal_configuration_old = terminal_configuration_old]() {
+        tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_old);
+      });
 
   // Set the new terminal configuration
   struct termios terminal_configuration_new;
@@ -74,28 +95,31 @@ void ScreenInteractive::Loop(Component* component) {
   terminal_configuration_new.c_lflag &= ~ECHO;
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
 
-  std::thread read_char([this]() {
+  // Hide the cursor and show it at exit.
+  std::cout << HIDE_CURSOR << std::flush;
+  on_exit_functions.push([&]{
+    std::cout << reset_cursor_position;
+    std::cout << SHOW_CURSOR;
+    std::cout << std::flush;
+  });
+
+  std::thread read_char([this] {
     while (!quit_) {
       auto event = Event::GetEvent([] { return (char)getchar(); });
       PostEvent(std::move(event));
     }
   });
 
-  std::string reset_position;
   while (!quit_) {
-    reset_position = ResetPosition();
+    std::cout << reset_cursor_position << ResetPosition();
     Draw(component);
-    std::cout << reset_position << ToString() << std::flush;
+    std::cout << ToString() << set_cursor_position << std::flush;
     Clear();
     EventLoop(component);
   }
 
-  // Restore the old terminal configuration.
-  tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_old);
-
   read_char.join();
-
-  std::cout << std::endl;
+  OnExit(0);
 }
 
 void ScreenInteractive::Draw(Component* component) {
@@ -124,14 +148,33 @@ void ScreenInteractive::Draw(Component* component) {
       break;
   }
 
+  // Resize the screen if needed.
   if (dimx != dimx_ || dimy != dimy_) {
     dimx_ = dimx;
     dimy_ = dimy;
     pixels_ = std::vector<std::vector<Pixel>>(
         dimy, std::vector<Pixel>(dimx));
+    cursor_.x = dimx_ - 1;
+    cursor_.y = dimy_ - 1;
   }
 
   Render(*this, document.get());
+
+  // Set cursor position for user using tools to insert CJK characters.
+  set_cursor_position = "";
+  reset_cursor_position = "";
+
+  int dx = dimx_ - 1 - cursor_.x;
+  int dy = dimy_ - 1 - cursor_.y;
+
+  if (dx != 0) {
+    set_cursor_position += "\e[" + std::to_string(dx) + "D";
+    reset_cursor_position += "\e[" + std::to_string(dx) + "C";
+  }
+  if (dy != 0) {
+    set_cursor_position +=  "\e[" + std::to_string(dy) + "A";
+    reset_cursor_position += "\e[" + std::to_string(dy) + "B";
+  }
 }
 
 std::function<void()> ScreenInteractive::ExitLoopClosure() {

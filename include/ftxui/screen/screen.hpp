@@ -61,10 +61,18 @@ class Screen {
   void ApplyShader();
   Box stencil;
 
+  struct Cursor {
+    int x;
+    int y;
+  };
+  Cursor cursor() const { return cursor_; }
+  void SetCursor(Cursor cursor) { cursor_ = cursor; }
+
  protected:
   int dimx_;
   int dimy_;
   std::vector<std::vector<Pixel>> pixels_;
+  Cursor cursor_;
 };
 
 };  // namespace ftxui
