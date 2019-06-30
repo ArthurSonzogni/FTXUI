@@ -31,7 +31,7 @@ void OnExit(int signal) {
 }
 
 std::function<void()> on_resize = []{};
-void OnResize(int signal) {
+void OnResize(int /* signal */) {
   on_resize();
 }
 

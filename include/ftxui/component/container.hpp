@@ -27,7 +27,7 @@ class Container : public Component {
   using EventHandler = bool (Container::*)(Event);
   bool VerticalEvent(Event event);
   bool HorizontalEvent(Event event);
-  bool TabEvent(Event event) { return false; }
+  bool TabEvent(Event) { return false; }
   EventHandler event_handler_;
 
   using RenderHandler = Element (Container::*)();

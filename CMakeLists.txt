@@ -68,7 +68,7 @@ foreach(lib screen dom component)
     PRIVATE src
   )
   target_compile_features(${lib} PUBLIC cxx_std_17)
-  target_compile_options(${lib} PRIVATE -Wall)
+  target_compile_options(${lib} PRIVATE -Wall -Werror -Wextra)
 endforeach()
 
 include(GNUInstallDirs)
