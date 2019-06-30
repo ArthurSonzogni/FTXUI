@@ -16,6 +16,9 @@ namespace ftxui {
 static const char* HIDE_CURSOR = "\e[?25l";
 static const char* SHOW_CURSOR = "\e[?25h";
 
+static const char* DISABLE_LINE_WRAP = "\e[7l";
+static const char* ENABLE_LINE_WRAP = "\e[7h";
+
 std::stack<std::function<void()>> on_exit_functions;
 void OnExit(int signal) {
   while (!on_exit_functions.empty()) {
@@ -25,6 +28,11 @@ void OnExit(int signal) {
 
   if (signal == SIGINT)
     quick_exit(SIGINT);
+}
+
+std::function<void()> on_resize = []{};
+void OnResize(int signal) {
+  on_resize();
 }
 
 ScreenInteractive::ScreenInteractive(int dimx,
@@ -96,12 +104,20 @@ void ScreenInteractive::Loop(Component* component) {
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
 
   // Hide the cursor and show it at exit.
-  std::cout << HIDE_CURSOR << std::flush;
-  on_exit_functions.push([&]{
+  std::cout << HIDE_CURSOR;
+  std::cout << DISABLE_LINE_WRAP;
+  std::cout << std::flush;
+  on_exit_functions.push([&] {
     std::cout << reset_cursor_position;
     std::cout << SHOW_CURSOR;
+    std::cout << ENABLE_LINE_WRAP;
     std::cout << std::flush;
   });
+
+  // Handle resize.
+  on_resize = [&] { PostEvent(Event::Special({0})); };
+  auto old_sigwinch_handler = std::signal(SIGWINCH, OnResize);
+  on_exit_functions.push([&] { std::signal(SIGWINCH, old_sigwinch_handler); });
 
   std::thread read_char([this] {
     while (!quit_) {
@@ -117,7 +133,6 @@ void ScreenInteractive::Loop(Component* component) {
     Clear();
     EventLoop(component);
   }
-
   read_char.join();
   OnExit(0);
 }
