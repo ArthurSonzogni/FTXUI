@@ -24,7 +24,7 @@ void OnExit(int signal) {
   }
 
   if (signal == SIGINT)
-    std::quick_exit(SIGINT);
+    quick_exit(SIGINT);
 }
 
 ScreenInteractive::ScreenInteractive(int dimx,

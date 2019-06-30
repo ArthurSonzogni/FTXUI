@@ -2,8 +2,9 @@
 #define FTXUI_COMPONENT_EVENT_HPP
 
 #include <array>
-#include <vector>
 #include <functional>
+#include <string>
+#include <vector>
 
 namespace ftxui {
 
