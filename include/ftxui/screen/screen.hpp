@@ -62,8 +62,8 @@ class Screen {
   Box stencil;
 
   struct Cursor {
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
   };
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
