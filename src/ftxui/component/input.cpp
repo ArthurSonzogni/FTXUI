@@ -52,6 +52,14 @@ bool Input::OnEvent(Event event) {
     return true;
   }
 
+  // Delete
+  if (event == Event::Delete) {
+    if (cursor_position == int(content.size()))
+      return false;
+    content.erase(cursor_position, 1);
+    return true;
+  }
+
   // Enter.
   if (event == Event::Return) {
     on_enter();
