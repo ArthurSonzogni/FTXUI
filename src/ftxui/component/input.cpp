@@ -12,7 +12,7 @@ Element Input::Render() {
   // Placeholder.
   if (content.size() == 0) {
     if (is_focused)
-      return text(placeholder) | dim | inverted | main_decorator;
+      return text(placeholder) | focus | dim | inverted | main_decorator;
     else
       return text(placeholder) | dim | main_decorator;
   }
