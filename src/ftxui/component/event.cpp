@@ -1,3 +1,4 @@
+#include <iostream>
 #include "ftxui/component/event.hpp"
 #include "ftxui/screen/string.hpp"
 
@@ -48,14 +49,17 @@ Event ParseCSI(std::function<char()> getchar, std::string& input) {
     char c = getchar();
     input += c;
 
-    if (c >= ' ' && c <= '/')
+    if (c >= '0' && c<= '9')
+      continue;
+
+    if (c == ';')
+      continue;
+
+    if (c >= ' ' && c <= '~')
       return Event::Special(input);
 
     // Invalid ESC in CSI.
     if (c == '\e')
-      return Event::Special(input);
-
-    if (c >= '@' && c <= 'v')
       return Event::Special(input);
   }
 }
@@ -89,12 +93,9 @@ Event ParseOSC(std::function<char()> getchar, std::string& input) {
 Event ParseESC(std::function<char()> getchar, std::string& input) {
   input += getchar();
   switch (input.back()) {
-    case 'P':
-      return ParseDCS(getchar, input);
-    case '[':
-      return ParseCSI(getchar, input);
-    case ']':
-      return ParseOSC(getchar, input);
+    case 'P': return ParseDCS(getchar, input);
+    case '[': return ParseCSI(getchar, input);
+    case ']': return ParseOSC(getchar, input);
     default:
       input += getchar();
       return Event::Special(input);
