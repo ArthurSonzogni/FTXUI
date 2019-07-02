@@ -19,7 +19,11 @@ class DrawKey : public Component {
       for(auto& it : keys[i].input())
         code += L" " + std::to_wstring((unsigned int)it);
 
-      code = L"(" + code + L" ) -> " + keys[i].character() + L")";
+      code = L"(" + code + L" ) -> ";
+      if (keys[i].is_character())
+        code +=  keys[i].character();
+      else
+        code +=  L"(special)";
       children.push_back(text(code));
     }
     return vbox(std::move(children));

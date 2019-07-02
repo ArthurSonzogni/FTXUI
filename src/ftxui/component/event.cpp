@@ -122,6 +122,9 @@ Event Event::GetEvent(std::function<char()> getchar) {
   if (input[0] >= 0 && input[0] < 32)  // C0
     return Event::Special(input);
 
+  if (input[0] == 127) // Delete
+    return Event::Special(input);
+
   return ParseUTF8(getchar, input);
 }
 

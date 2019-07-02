@@ -49,7 +49,7 @@ struct Event {
  private:
   std::string input_;
   bool is_character_ = false;
-  wchar_t character_ = '?';
+  wchar_t character_ = U'?';
 };
 
 }  // namespace ftxui
