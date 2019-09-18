@@ -111,7 +111,7 @@ void ScreenInteractive::Loop(Component* component) {
     std::cout << reset_cursor_position;
     std::cout << SHOW_CURSOR;
     std::cout << ENABLE_LINE_WRAP;
-    std::cout << std::flush;
+    std::cout << std::endl;
   });
 
   // Handle resize.
