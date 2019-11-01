@@ -44,45 +44,33 @@ Component* Container::ActiveChild() {
 }
 
 bool Container::VerticalEvent(Event event) {
-  selected_ %= children_.size();
-  // Left pressed ?
-  if (event == Event::ArrowUp || event == Event::Character('k')) {
-    if (selected_ != 0) {
-      selected_--;
-      return true;
-    }
-  }
+  int old_selected = selected_;
+  if (event == Event::ArrowUp || event == Event::Character('k'))
+    selected_--;
+  if (event == Event::ArrowDown || event == Event::Character('j'))
+    selected_++;
+  if (event == Event::Tab && children_.size())
+    selected_ = (selected_ + 1) % children_.size();
+  if (event == Event::TabReverse && children_.size())
+    selected_ = (selected_ + children_.size() - 1) % children_.size();
 
-  // Left pressed ?
-  if (event == Event::ArrowDown || event == Event::Character('j')) {
-    if (selected_ != int(children_.size()) - 1) {
-      selected_++;
-      return true;
-    }
-  }
-
-  return false;
+  selected_ = std::max(0, std::min(int(children_.size()) - 1, selected_));
+  return old_selected != selected_;
 }
 
 bool Container::HorizontalEvent(Event event) {
-  selected_ %= children_.size();
-  // Left pressed ?
-  if (event == Event::ArrowLeft || event == Event::Character('h')) {
-    if (selected_ != 0) {
-      selected_--;
-      return true;
-    }
-  }
+  int old_selected = selected_;
+  if (event == Event::ArrowLeft || event == Event::Character('h'))
+    selected_--;
+  if (event == Event::ArrowRight || event == Event::Character('l'))
+    selected_++;
+  if (event == Event::Tab && children_.size())
+    selected_ = (selected_ + 1) % children_.size();
+  if (event == Event::TabReverse && children_.size())
+    selected_ = (selected_ + children_.size() - 1) % children_.size();
 
-  // Left pressed ?
-  if (event == Event::ArrowRight || event == Event::Character('l')) {
-    if (selected_ != int(children_.size()) - 1) {
-      selected_++;
-      return true;
-    }
-  }
-
-  return false;
+  selected_ = std::max(0, std::min(int(children_.size()) - 1, selected_));
+  return old_selected != selected_;
 }
 
 Element Container::Render() {
@@ -91,7 +79,7 @@ Element Container::Render() {
 
 Element Container::VerticalRender() {
   Elements elements;
-  for(auto& it : children_)
+  for (auto& it : children_)
     elements.push_back(it->Render());
   if (elements.size() == 0)
     return text(L"Empty container");
@@ -100,7 +88,7 @@ Element Container::VerticalRender() {
 
 Element Container::HorizontalRender() {
   Elements elements;
-  for(auto& it : children_)
+  for (auto& it : children_)
     elements.push_back(it->Render());
   if (elements.size() == 0)
     return text(L"Empty container");

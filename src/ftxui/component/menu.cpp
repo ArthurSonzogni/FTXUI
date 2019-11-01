@@ -22,15 +22,19 @@ bool Menu::OnEvent(Event event) {
   if (!Focused())
     return false;
 
-  int new_selected = selected;
+  int old_selected = selected;
   if (event == Event::ArrowUp || event == Event::Character('k'))
-    new_selected--;
+    selected--;
   if (event == Event::ArrowDown || event == Event::Character('j'))
-    new_selected++;
-  new_selected = std::max(0, std::min(int(entries.size()) - 1, new_selected));
+    selected++;
+  if (event == Event::Tab && entries.size())
+    selected = (selected + 1) % entries.size();
+  if (event == Event::TabReverse && entries.size())
+    selected = (selected + entries.size() - 1) % entries.size();
 
-  if (selected != new_selected) {
-    selected = new_selected;
+  selected = std::max(0, std::min(int(entries.size()) - 1, selected));
+
+  if (selected != old_selected) {
     on_change();
     return true;
   }

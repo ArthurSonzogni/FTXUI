@@ -33,6 +33,8 @@ struct Event {
   static Event Delete;
   static Event Return;
   static Event Escape;
+  static Event Tab;
+  static Event TabReverse;
   static Event F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12;
 
   // --- Custom ---

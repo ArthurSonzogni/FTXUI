@@ -28,7 +28,13 @@ bool RadioBox::OnEvent(Event event) {
     new_focused--;
   if (event == Event::ArrowDown || event == Event::Character('j'))
     new_focused++;
+  if (event == Event::Tab && entries.size())
+    new_focused = (new_focused + 1) % entries.size();
+  if (event == Event::TabReverse && entries.size())
+    new_focused = (new_focused + entries.size() - 1) % entries.size();
+
   new_focused = std::max(0, std::min(int(entries.size()) - 1, new_focused));
+
   if (focused != new_focused) {
     focused = new_focused;
     return true;

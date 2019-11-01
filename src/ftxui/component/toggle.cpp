@@ -6,7 +6,7 @@ Element Toggle::Render() {
   bool is_focused = Focused();
 
   Elements children;
-  for(size_t i = 0; i<entries.size(); ++i) {
+  for (size_t i = 0; i < entries.size(); ++i) {
     // Separator.
     if (i != 0)
       children.push_back(separator());
@@ -22,21 +22,18 @@ Element Toggle::Render() {
 }
 
 bool Toggle::OnEvent(Event event) {
-  if (selected > 0 &&
-      (event == Event::ArrowLeft || event == Event::Character('h'))) {
+  int old_selected = selected;
+  if (event == Event::ArrowLeft || event == Event::Character('h'))
     selected--;
-    on_change();
-    return true;
-  }
-
-  if (selected < int(entries.size()) - 1 &&
-      (event == Event::ArrowRight || event == Event::Character('l'))) {
+  if (event == Event::ArrowRight || event == Event::Character('l'))
     selected++;
-    on_change();
-    return true;
-  }
+  if (event == Event::Tab && entries.size())
+    selected = (selected + 1) % entries.size();
+  if (event == Event::TabReverse && entries.size())
+    selected = (selected + entries.size() - 1) % entries.size();
 
-  return false;
+  selected = std::max(0, std::min(int(entries.size()) - 1, selected));
+  return old_selected != selected;
 }
 
 }  // namespace ftxui
