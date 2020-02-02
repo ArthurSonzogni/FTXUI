@@ -11,6 +11,11 @@
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
+#if defined(__clang__) && defined (__APPLE__)
+    // Quick exit is missing in standard CLang headers
+    #define quick_exit(a) exit(a)
+#endif
+
 namespace ftxui {
 
 static const char* HIDE_CURSOR = "\e[?25l";
