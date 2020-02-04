@@ -14,16 +14,17 @@
 ## Level 2: ftxui::Node
   A hierarchial set of element.
   They handle layout and render themself on the screen (level 1)
-  See ftxui/dom/elements.hpp
+  See [elements.hpp](./dom/elements.hpp)
 
   You can make implement your own.
 
 ## Level 3: ftxui::Component
   A hierarchical set of components.
   Components store some state and react to events:
-    * keyboard
-    * mouse
-    * terminal event
+  * keyboard
+  * mouse
+  * terminal event
+    
   Components renders themself by producing ftxui::Node (Level 2)
 
   Implement your own!
