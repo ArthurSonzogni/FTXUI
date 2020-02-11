@@ -107,7 +107,8 @@ Event Event::GetEvent(std::function<char()> getchar) {
   std::string input;
   input += getchar();
 
-  switch (input[0]) {
+  unsigned char head = input[0];
+  switch (head) {
     case 24:           // CAN
     case 26:           // SUB
       return Event();  // Ignored.
@@ -119,10 +120,10 @@ Event Event::GetEvent(std::function<char()> getchar) {
       return ParseESC(getchar, input);
   }
 
-  if (input[0] >= 0 && input[0] < 32)  // C0
+  if (head < 32)  // C0
     return Event::Special(input);
 
-  if (input[0] == 127) // Delete
+  if (head == 127)  // Delete
     return Event::Special(input);
 
   return ParseUTF8(getchar, input);
