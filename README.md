@@ -42,6 +42,7 @@ A simple C++ library for terminal based user interface.
 * [nxxm](https://nxxm.github.io) → [Instructions](./tutorial/build-with-nxxm.md)
 
 ## Tutorial
+See [Starter cmake project](https://github.com/ArthurSonzogni/ftxui-starter)
 See [Tutorial](./tutorial/tutorial.md)
 
 ## Project using FTXUI
