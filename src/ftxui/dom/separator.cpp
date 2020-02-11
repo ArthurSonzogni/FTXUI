@@ -53,4 +53,4 @@ std::unique_ptr<Node> separator(Pixel pixel) {
   return std::make_unique<SeparatorWithPixel>(pixel);
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

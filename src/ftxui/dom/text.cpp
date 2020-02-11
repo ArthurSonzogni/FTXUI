@@ -36,4 +36,4 @@ std::unique_ptr<Node> text(std::wstring text) {
   return std::make_unique<Text>(text);
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

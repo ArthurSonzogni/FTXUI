@@ -58,4 +58,4 @@ Decorator bgcolor(Color c) {
   };
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

@@ -37,6 +37,6 @@ class Node {
 
 void Render(Screen& screen, Node* node);
 
-};  // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_DOM_NODE_HPP */

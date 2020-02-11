@@ -55,4 +55,4 @@ std::unique_ptr<Node> notflex(Element child) {
   return std::make_unique<NotFlex>(std::move(child));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

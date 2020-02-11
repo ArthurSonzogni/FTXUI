@@ -12,4 +12,4 @@ void NodeDecorator::SetBox(Box box) {
   children[0]->SetBox(box);
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

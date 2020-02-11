@@ -276,4 +276,4 @@ std::unique_ptr<Node> spinner(int c, size_t index) {
   return vbox(std::move(lines));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

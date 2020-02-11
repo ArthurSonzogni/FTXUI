@@ -44,4 +44,4 @@ void Render(Screen& screen, Node* node) {
   screen.ApplyShader();
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

@@ -15,6 +15,6 @@ class NodeDecorator : public Node {
   void SetBox(Box box) override;
 };
 
-};  // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_DOM_NODE_DECORATOR_H_ */

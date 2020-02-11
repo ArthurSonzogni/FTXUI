@@ -42,4 +42,4 @@ std::unique_ptr<Node> graph(GraphFunction graph_function) {
   return std::make_unique<Graph>(graph_function);
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

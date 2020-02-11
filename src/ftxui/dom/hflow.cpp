@@ -56,4 +56,4 @@ std::unique_ptr<Node> hflow(Elements children) {
   return std::make_unique<HFlow>(std::move(children));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

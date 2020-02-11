@@ -18,11 +18,11 @@
 
 namespace ftxui {
 
-static const char* HIDE_CURSOR = "\e[?25l";
-static const char* SHOW_CURSOR = "\e[?25h";
+static const char* HIDE_CURSOR = "\x1B[?25l";
+static const char* SHOW_CURSOR = "\x1B[?25h";
 
-static const char* DISABLE_LINE_WRAP = "\e[7l";
-static const char* ENABLE_LINE_WRAP = "\e[7h";
+static const char* DISABLE_LINE_WRAP = "\x1B[7l";
+static const char* ENABLE_LINE_WRAP = "\x1B[7h";
 
 std::stack<std::function<void()>> on_exit_functions;
 void OnExit(int signal) {
@@ -188,12 +188,12 @@ void ScreenInteractive::Draw(Component* component) {
   int dy = dimy_ - 1 - cursor_.y;
 
   if (dx != 0) {
-    set_cursor_position += "\e[" + std::to_string(dx) + "D";
-    reset_cursor_position += "\e[" + std::to_string(dx) + "C";
+    set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
+    reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
   }
   if (dy != 0) {
-    set_cursor_position +=  "\e[" + std::to_string(dy) + "A";
-    reset_cursor_position += "\e[" + std::to_string(dy) + "B";
+    set_cursor_position +=  "\x1B[" + std::to_string(dy) + "A";
+    reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
   }
 }
 

@@ -36,4 +36,4 @@ std::unique_ptr<Node> gauge(float progress) {
   return std::make_unique<Gauge>(progress);
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

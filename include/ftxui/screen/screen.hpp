@@ -75,6 +75,6 @@ class Screen {
   Cursor cursor_;
 };
 
-};  // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_SCREEN_SCREEN */

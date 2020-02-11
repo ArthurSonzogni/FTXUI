@@ -22,4 +22,4 @@ std::unique_ptr<Node> blink(Element child) {
   return std::make_unique<Blink>(unpack(std::move(child)));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

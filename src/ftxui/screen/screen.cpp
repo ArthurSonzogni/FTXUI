@@ -8,24 +8,24 @@
 namespace ftxui {
 
 namespace {
-static const wchar_t* BOLD_SET = L"\e[1m";
-static const wchar_t* BOLD_RESET = L"\e[22m";  // Can't use 21 here.
+static const wchar_t* BOLD_SET = L"\x1B[1m";
+static const wchar_t* BOLD_RESET = L"\x1B[22m";  // Can't use 21 here.
 
-static const wchar_t* DIM_SET = L"\e[2m";
-static const wchar_t* DIM_RESET = L"\e[22m";
+static const wchar_t* DIM_SET = L"\x1B[2m";
+static const wchar_t* DIM_RESET = L"\x1B[22m";
 
-static const wchar_t* UNDERLINED_SET = L"\e[4m";
-static const wchar_t* UNDERLINED_RESET = L"\e[24m";
+static const wchar_t* UNDERLINED_SET = L"\x1B[4m";
+static const wchar_t* UNDERLINED_RESET = L"\x1B[24m";
 
-static const wchar_t* BLINK_SET = L"\e[5m";
-static const wchar_t* BLINK_RESET = L"\e[25m";
+static const wchar_t* BLINK_SET = L"\x1B[5m";
+static const wchar_t* BLINK_RESET = L"\x1B[25m";
 
-static const wchar_t* INVERTED_SET = L"\e[7m";
-static const wchar_t* INVERTED_RESET = L"\e[27m";
+static const wchar_t* INVERTED_SET = L"\x1B[7m";
+static const wchar_t* INVERTED_RESET = L"\x1B[27m";
 
 static const char* MOVE_LEFT = "\r";
-static const char* MOVE_UP = "\e[1A";
-static const char* CLEAR_LINE = "\e[2K";
+static const char* MOVE_UP = "\x1B[1A";
+static const char* CLEAR_LINE = "\x1B[2K";
 
 bool In(const Box& stencil, int x, int y) {
   return stencil.x_min <= x && x <= stencil.x_max &&  //
@@ -86,9 +86,9 @@ void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
 
   if (next.foreground_color != previous.foreground_color ||
       next.background_color != previous.background_color) {
-    ss << L"\e[" + to_wstring(std::to_string((uint8_t)next.foreground_color)) +
-              L"m";
-    ss << L"\e[" +
+    ss << L"\x1B[" +
+              to_wstring(std::to_string((uint8_t)next.foreground_color)) + L"m";
+    ss << L"\x1B[" +
               to_wstring(std::to_string(10 + (uint8_t)next.background_color)) +
               L"m";
   }
@@ -168,4 +168,4 @@ void Screen::ApplyShader() {
 }
 // clang-format on
 
-};  // namespace ftxui
+}  // namespace ftxui

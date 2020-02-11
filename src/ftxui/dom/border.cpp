@@ -115,4 +115,4 @@ Decorator borderWith(Pixel pixel) {
   };
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

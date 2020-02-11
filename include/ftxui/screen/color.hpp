@@ -35,6 +35,6 @@ enum class Color : uint8_t {
   YellowLight = 93,
 };
 
-}; // namespace ftxui
+} // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COLOR_H_ */

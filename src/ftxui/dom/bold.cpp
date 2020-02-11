@@ -22,4 +22,4 @@ std::unique_ptr<Node> bold(Element child) {
   return std::make_unique<Bold>(unpack(std::move(child)));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

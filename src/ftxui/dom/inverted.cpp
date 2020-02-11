@@ -24,4 +24,4 @@ std::unique_ptr<Node> inverted(Element child) {
   return std::make_unique<Inverted>(unpack(std::move(child)));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

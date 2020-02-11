@@ -74,4 +74,4 @@ Decorator size(Direction direction, Constraint constraint, int value) {
   };
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

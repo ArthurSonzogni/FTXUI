@@ -59,7 +59,7 @@ Event ParseCSI(std::function<char()> getchar, std::string& input) {
       return Event::Special(input);
 
     // Invalid ESC in CSI.
-    if (c == '\e')
+    if (c == '\x1B')
       return Event::Special(input);
   }
 }
@@ -68,7 +68,7 @@ Event ParseDCS(std::function<char()> getchar, std::string& input) {
   // Parse until the string terminator ST.
   while (1) {
     input += getchar();
-    if (input.back() != '\e')
+    if (input.back() != '\x1B')
       continue;
     input += getchar();
     if (input.back() != '\\')
@@ -81,7 +81,7 @@ Event ParseOSC(std::function<char()> getchar, std::string& input) {
   // Parse until the string terminator ST.
   while (1) {
     input += getchar();
-    if (input.back() != '\e')
+    if (input.back() != '\x1B')
       continue;
     input += getchar();
     if (input.back() != '\\')
@@ -115,7 +115,7 @@ Event Event::GetEvent(std::function<char()> getchar) {
     case 'P':
       return ParseDCS(getchar, input);
 
-    case '\e':
+    case '\x1B':
       return ParseESC(getchar, input);
   }
 
@@ -129,28 +129,28 @@ Event Event::GetEvent(std::function<char()> getchar) {
 }
 
 // --- Arrow ---
-Event Event::ArrowLeft = Event::Special("\e[D");
-Event Event::ArrowRight = Event::Special("\e[C");
-Event Event::ArrowUp = Event::Special("\e[A");
-Event Event::ArrowDown = Event::Special("\e[B");
+Event Event::ArrowLeft = Event::Special("\x1B[D");
+Event Event::ArrowRight = Event::Special("\x1B[C");
+Event Event::ArrowUp = Event::Special("\x1B[A");
+Event Event::ArrowDown = Event::Special("\x1B[B");
 Event Event::Backspace = Event::Special({127});
-Event Event::Delete = Event::Special("\e[3~");
-Event Event::Escape = Event::Special("\e");
+Event Event::Delete = Event::Special("\x1B[3~");
+Event Event::Escape = Event::Special("\x1B");
 Event Event::Return = Event::Special({10});
 Event Event::Tab = Event::Special({9});
 Event Event::TabReverse = Event::Special({27, 91, 90});
-Event Event::F1 = Event::Special("\e[OP");
-Event Event::F2 = Event::Special("\e[OQ");
-Event Event::F3 = Event::Special("\e[OR");
-Event Event::F4 = Event::Special("\e[OS");
-Event Event::F5 = Event::Special("\e[15~");
-Event Event::F6 = Event::Special("\e[17~");
-Event Event::F7 = Event::Special("\e[18~");
-Event Event::F8 = Event::Special("\e[19~");
-Event Event::F9 = Event::Special("\e[20~");
-Event Event::F10 = Event::Special("\e[21~");
-Event Event::F11 = Event::Special("\e[21~");  // Doesn't exist
-Event Event::F12 = Event::Special("\e[24~");
+Event Event::F1 = Event::Special("\x1B[OP");
+Event Event::F2 = Event::Special("\x1B[OQ");
+Event Event::F3 = Event::Special("\x1B[OR");
+Event Event::F4 = Event::Special("\x1B[OS");
+Event Event::F5 = Event::Special("\x1B[15~");
+Event Event::F6 = Event::Special("\x1B[17~");
+Event Event::F7 = Event::Special("\x1B[18~");
+Event Event::F8 = Event::Special("\x1B[19~");
+Event Event::F9 = Event::Special("\x1B[20~");
+Event Event::F10 = Event::Special("\x1B[21~");
+Event Event::F11 = Event::Special("\x1B[21~");  // Doesn't exist
+Event Event::F12 = Event::Special("\x1B[24~");
 Event Event::Custom = Event::Special({0});
 
 }  // namespace ftxui

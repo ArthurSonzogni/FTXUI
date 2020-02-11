@@ -12,6 +12,6 @@ struct Box {
   static Box Intersection(Box a, Box b);
 };
 
-}; // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_SCREEN_BOX_HPP */

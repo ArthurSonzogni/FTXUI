@@ -76,7 +76,7 @@ foreach(lib screen dom component)
     PRIVATE src
   )
   target_compile_features(${lib} PUBLIC cxx_std_17)
-  target_compile_options(${lib} PRIVATE -Wall -Werror -Wextra)
+  target_compile_options(${lib} PRIVATE -Wall -Werror -pedantic -Wextra)
 endforeach()
 
 if(FTXUI_ENABLE_INSTALL)

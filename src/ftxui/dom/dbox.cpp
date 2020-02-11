@@ -37,4 +37,4 @@ std::unique_ptr<Node> dbox(Elements children) {
   return std::make_unique<DBox>(std::move(children));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

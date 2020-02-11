@@ -123,4 +123,4 @@ std::unique_ptr<Node> frame(Element child) {
   return std::make_unique<Frame>(unpack(std::move(child)));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

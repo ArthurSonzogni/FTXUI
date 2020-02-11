@@ -24,4 +24,4 @@ std::unique_ptr<Node> dim(Element child) {
   return std::make_unique<Dim>(unpack(std::move(child)));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

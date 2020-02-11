@@ -24,4 +24,4 @@ std::unique_ptr<Node> underlined(Element child) {
   return std::make_unique<Underlined>(unpack(std::move(child)));
 }
 
-};  // namespace ftxui
+}  // namespace ftxui

@@ -65,14 +65,10 @@ class MyComponent : public Component {
   Element Render() override {
     return
       vbox(
-        Render(L"menu", menu),
-        separator(),
-        Render(L"toggle", toggle),
-        separator(),
-        Render(L"checkbox", checkbox_container),
-        separator(),
-        Render(L"radiobox", radiobox),
-        separator(),
+        Render(L"menu", menu), separator(),
+        Render(L"toggle", toggle), separator(),
+        Render(L"checkbox", checkbox_container), separator(),
+        Render(L"radiobox", radiobox), separator(),
         Render(L"input", input) | size(WIDTH, LESS_THAN, 30)
       ) | border;
   }

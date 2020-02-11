@@ -21,6 +21,6 @@ struct Requirement {
   Box selected_box;
 };
 
-}; // namespace ftxui
+} // namespace ftxui
 
 #endif /* end of include guard: FTXUI_REQUIREMENT_HPP */

@@ -11,7 +11,7 @@ namespace ftxui {
 using Element = std::unique_ptr<Node>;
 using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
-using GraphFunction = std::function<std::vector<int>(int,int)>;
+using GraphFunction = std::function<std::vector<int>(int, int)>;
 
 // --- Widget ---
 Element text(std::wstring text);
@@ -22,7 +22,7 @@ Element border(Element);
 Decorator borderWith(Pixel);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
-Elements paragraph(std::wstring text); // Use inside hflow(). Split by space.
+Elements paragraph(std::wstring text);  // Use inside hflow(). Split by space.
 Element graph(GraphFunction);
 
 // -- Decorator ---
@@ -83,6 +83,6 @@ TAKE_ANY_ARGS(hbox)
 TAKE_ANY_ARGS(dbox)
 TAKE_ANY_ARGS(hflow)
 
-};  // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_DOM_ELEMENTS_HPP */
