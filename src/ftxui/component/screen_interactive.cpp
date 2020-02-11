@@ -144,8 +144,8 @@ void ScreenInteractive::Loop(Component* component) {
 
 void ScreenInteractive::Draw(Component* component) {
   auto document = component->Render();
-  int dimx;
-  int dimy;
+  int dimx = 0;
+  int dimy = 0;
   switch (dimension_) {
     case Dimension::Fixed:
       dimx = dimx_;
