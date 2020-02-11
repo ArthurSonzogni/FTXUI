@@ -4,6 +4,10 @@ project(ftxui
   VERSION 0.1
 )
 
+option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
+option(FTXUI_BUILD_TESTS "Set to ON to build tests" ON)
+option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
+
 enable_testing()
 
 cmake_minimum_required(VERSION 3.0)
@@ -56,6 +60,10 @@ add_library(component
   src/ftxui/component/toggle.cpp
 )
 
+add_library(ftxui::screen ALIAS screen)
+add_library(ftxui::dom ALIAS dom)
+add_library(ftxui::component ALIAS component)
+
 target_link_libraries(dom PUBLIC screen)
 target_link_libraries(component PUBLIC dom)
 target_link_libraries(component PUBLIC Threads::Threads)
@@ -71,32 +79,37 @@ foreach(lib screen dom component)
   target_compile_options(${lib} PRIVATE -Wall -Werror -Wextra)
 endforeach()
 
-include(GNUInstallDirs)
-install(TARGETS screen dom component
-    EXPORT ftxui-export
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/
-)
+if(FTXUI_ENABLE_INSTALL)
+  include(GNUInstallDirs)
+  install(TARGETS screen dom component
+      EXPORT ftxui-export
+      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/
+      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/
+  )
 
-install(DIRECTORY include/ftxui DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+  install(DIRECTORY include/ftxui DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-  ftxui-config.cmake
-  VERSION ${PACKAGE_VERSION}
-  COMPATIBILITY AnyNewerVersion
-)
+  include(CMakePackageConfigHelpers)
+  write_basic_package_version_file(
+    ftxui-config.cmake
+    VERSION ${PACKAGE_VERSION}
+    COMPATIBILITY AnyNewerVersion
+  )
 
-install(EXPORT ftxui-export
-  FILE ftxui-config.cmake
-	NAMESPACE ftxui::
-	DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
-)
+  install(EXPORT ftxui-export
+    FILE ftxui-config.cmake
+	  NAMESPACE ftxui::
+	  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+  )
+endif()
+
+export(TARGETS screen dom component NAMESPACE ftxui::
+  FILE ${PROJECT_BINARY_DIR}/ftxui-targets.cmake)
 
 # Note: For gtest, please follow:
 # https://stackoverflow.com/questions/24295876/cmake-cannot-find-a-googletest-required-library
 find_package(GTest)
-if (GTEST_FOUND AND THREADS_FOUND)
+if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
   add_executable(dom_tests
     tests/gauge_test.cpp
     tests/hbox_test.cpp
@@ -115,7 +128,8 @@ if (GTEST_FOUND AND THREADS_FOUND)
   )
   gtest_discover_tests(dom_tests)
   add_test(dom_tests dom_tests)
-
 endif()
 
-add_subdirectory(examples)
+if(FTXUI_BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
