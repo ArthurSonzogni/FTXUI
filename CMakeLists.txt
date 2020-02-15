@@ -65,8 +65,7 @@ add_library(ftxui::dom ALIAS dom)
 add_library(ftxui::component ALIAS component)
 
 target_link_libraries(dom PUBLIC screen)
-target_link_libraries(component PUBLIC dom)
-target_link_libraries(component PUBLIC Threads::Threads)
+target_link_libraries(component PUBLIC dom Threads::Threads)
 
 foreach(lib screen dom component)
   target_include_directories(${lib}

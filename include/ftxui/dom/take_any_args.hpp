@@ -1,7 +1,7 @@
 #include <type_traits>
 
 template <class T>
-void Merge(Elements& container, T t) {}
+void Merge(Elements&, T) {}
 
 template <>
 inline void Merge(Elements& container, Element element) {
