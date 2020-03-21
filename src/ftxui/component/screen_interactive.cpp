@@ -1,8 +1,6 @@
 #include "ftxui/component/screen_interactive.hpp"
 
 #include <stdio.h>
-#include <termios.h>
-#include <unistd.h>
 
 #include <algorithm>
 #include <csignal>
@@ -14,8 +12,17 @@
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
+#ifdef WIN32
+  #define WIN32_LEAN_AND_MEAN
+  #define NOMINMAX
+  #include <Windows.h>
+#else
+  #include <termios.h>
+  #include <unistd.h>
+#endif
+
+// Quick exit is missing in standard CLang headers
 #if defined(__clang__) && defined(__APPLE__)
-  // Quick exit is missing in standard CLang headers
   #define quick_exit(a) exit(a)
 #endif
 
@@ -98,6 +105,24 @@ void ScreenInteractive::Loop(Component* component) {
   install_signal_handler(SIGWINCH, OnResize);
 
   // Save the old terminal configuration and restore it on exit.
+#ifdef WIN32
+  // some special utf8 dance needed.
+  SetConsoleOutputCP(CP_UTF8);
+  setvbuf(stdout, nullptr, _IONBF, 0);
+
+  DWORD original_mode = 0;
+  GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), &original_mode);
+  on_exit_functions.push([original_mode]() {
+    SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), original_mode);
+  });
+
+  DWORD mode = original_mode;
+  // disable echo
+  mode &= ~ENABLE_ECHO_INPUT;
+  mode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
+  mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+  SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), mode);
+#else
   struct termios terminal_configuration_old;
   tcgetattr(STDIN_FILENO, &terminal_configuration_old);
   on_exit_functions.push(
@@ -114,6 +139,7 @@ void ScreenInteractive::Loop(Component* component) {
   // Do not print after a key press.
   terminal_configuration_new.c_lflag &= ~ECHO;
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
+#endif
 
   // Hide the cursor and show it at exit.
   std::cout << HIDE_CURSOR;
