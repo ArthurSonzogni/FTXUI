@@ -7,6 +7,7 @@
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
+
 namespace ftxui {
 
 namespace {
