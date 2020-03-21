@@ -69,16 +69,32 @@ target_link_libraries(component PUBLIC dom Threads::Threads)
 foreach(lib screen dom component)
   target_include_directories(${lib}
     PUBLIC
-      $<INSTALL_INTERFACE:include>    
+      $<INSTALL_INTERFACE:include>
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE
       src
   )
+
+  # C++17 is used. We requires fold expression at least.
   set_property(TARGET ${lib} PROPERTY CXX_STANDARD 17)
-  target_compile_options(${lib} PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror -Wno-sign-compare>
-)
+
+  # Force Microsoft Visual Studio to decode sources files in UTF-8. This applies
+  # to the library and the library users.
+  if (MSVC)
+    target_compile_options(${lib} PUBLIC "/utf-8>")
+  endif()
+
+  # Add as many warning as possible:
+  if (MSVC)
+    target_compile_options(${lib} PRIVATE "/W4")
+    target_compile_options(${lib} PRIVATE "/WX")
+  else()
+    target_compile_options(${lib} PRIVATE "-Wall")
+    target_compile_options(${lib} PRIVATE "-Wextra")
+    target_compile_options(${lib} PRIVATE "-pedantic")
+    target_compile_options(${lib} PRIVATE "-Werror")
+    target_compile_options(${lib} PRIVATE "-Wno-sign-compare")
+  endif()
 endforeach()
 
 if(FTXUI_ENABLE_INSTALL)
