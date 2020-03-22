@@ -74,7 +74,7 @@ foreach(lib screen dom component)
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     PRIVATE src
   )
-  target_compile_features(${lib} PUBLIC cxx_std_17)
+  set_property(TARGET ${lib} PROPERTY CXX_STANDARD 17)
   target_compile_options(${lib} PRIVATE -Wall -Werror -pedantic -Wextra -Wno-sign-compare)
 endforeach()
 

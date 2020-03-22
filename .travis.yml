@@ -1,0 +1,33 @@
+sudo: false
+
+language:
+  - cpp
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build .
+
+notifications:
+  email: false
+
+jobs:
+  include:
+    # ubuntu 16.04, gcc-9
+    - os: linux
+      compiler: gcc
+      addons: { apt: { packages: ["g++-9", "ninja-build"],
+                       sources: ["ubuntu-toolchain-r-test"] } }
+
+    # ubuntu 16.04, clang-8
+    - os: linux
+      compiler: clang
+      addons: { apt: { packages: ["clang-8", "ninja-build"],
+                       sources: ["llvm-toolchain-xenial-8"] } }
+
+    # OS X High Sierra 10.13
+    - os: osx
+
+    # Windows
+    - os: windows
