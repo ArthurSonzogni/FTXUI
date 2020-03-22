@@ -1,5 +1,5 @@
-#include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node.hpp"
 
 namespace ftxui {
 
@@ -15,8 +15,10 @@ class DBox : public Node {
     requirement_.flex.y = 0;
     for (auto& child : children) {
       child->ComputeRequirement();
-      requirement_.min.x = std::max(requirement_.min.x, child->requirement().min.x);
-      requirement_.min.y = std::max(requirement_.min.y, child->requirement().min.y);
+      requirement_.min.x =
+          std::max(requirement_.min.x, child->requirement().min.x);
+      requirement_.min.y =
+          std::max(requirement_.min.y, child->requirement().min.y);
 
       if (requirement_.selection < child->requirement().selection) {
         requirement_.selection = child->requirement().selection;

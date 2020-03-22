@@ -14,19 +14,17 @@ notifications:
 
 jobs:
   include:
-    # ubuntu 16.04, gcc-9
+    # Ubuntu
     - os: linux
+      dist: bionic
       compiler: gcc
-      addons: { apt: { packages: ["g++-9", "ninja-build"],
-                       sources: ["ubuntu-toolchain-r-test"] } }
 
-    # ubuntu 16.04, clang-8
+    # Ubuntu
     - os: linux
+      dist: bionic
       compiler: clang
-      addons: { apt: { packages: ["clang-8", "ninja-build"],
-                       sources: ["llvm-toolchain-xenial-8"] } }
 
-    # OS X High Sierra 10.13
+    # OS X
     - os: osx
 
     # Windows

@@ -1,5 +1,5 @@
-#include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node.hpp"
 
 namespace ftxui {
 
@@ -24,10 +24,11 @@ class Gauge : public Node {
     int x = box_.x_min;
     while (x < limit_int)
       screen.at(x++, y) = charset[9];
-    screen.at(x++, y) = charset[int(9*(limit-limit_int))];
+    screen.at(x++, y) = charset[int(9 * (limit - limit_int))];
     while (x <= box_.x_max)
       screen.at(x++, y) = charset[0];
   }
+
  private:
   float progress_;
 };

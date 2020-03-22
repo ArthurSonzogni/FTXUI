@@ -1,11 +1,12 @@
-#include "ftxui/screen/screen.hpp"
-#include "ftxui/screen/string.hpp"
-#include "ftxui/dom/elements.hpp"
 #include <iostream>
 
-int main(int argc, const char *argv[])
-{
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/screen.hpp"
+#include "ftxui/screen/string.hpp"
+
+int main(int argc, const char* argv[]) {
   using namespace ftxui;
+  // clang-format off
   auto make_box = [](const std::wstring title) {
     return
       window(
@@ -21,6 +22,7 @@ int main(int argc, const char *argv[])
         | size(WIDTH, EQUAL, x)
     );
   }
+  // clang-format on
   auto document = hbox(std::move(content));
   auto screen = Screen::Create(Dimension::Fit(document));
   Render(screen, document.get());

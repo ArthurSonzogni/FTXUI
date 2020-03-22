@@ -1,5 +1,5 @@
-#include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node.hpp"
 
 namespace ftxui {
 
@@ -19,4 +19,4 @@ std::unique_ptr<Node> align_right(Element child) {
   return hbox(filler(), std::move(child));
 }
 
-} // namespace ftxui
+}  // namespace ftxui

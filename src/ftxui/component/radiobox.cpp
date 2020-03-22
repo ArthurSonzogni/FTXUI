@@ -1,5 +1,6 @@
 #include "ftxui/component/radiobox.hpp"
 #include <functional>
+#include <algorithm>
 
 namespace ftxui {
 

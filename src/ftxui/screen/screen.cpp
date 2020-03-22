@@ -1,9 +1,11 @@
 #include "ftxui/screen/screen.hpp"
+
+#include <algorithm>
+#include <sstream>
+
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
-
-#include <sstream>
 
 namespace ftxui {
 

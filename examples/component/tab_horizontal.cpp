@@ -44,13 +44,9 @@ class MyComponent : public Component {
 
   std::function<void()> on_enter = []() {};
 
-  Element Render(){
-    return
-      vbox(
-        toggle_.Render(),
-        separator(),
-        tab_container_.Render()
-      ) | border;
+  Element Render() {
+    return vbox(toggle_.Render(), separator(), tab_container_.Render()) |
+           border;
   }
 
  private:

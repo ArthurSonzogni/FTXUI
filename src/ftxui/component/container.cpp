@@ -1,5 +1,7 @@
 #include "ftxui/component/container.hpp"
 
+#include <algorithm>
+
 namespace ftxui {
 
 // static

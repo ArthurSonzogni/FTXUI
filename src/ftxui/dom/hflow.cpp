@@ -1,5 +1,5 @@
-#include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node.hpp"
 
 namespace ftxui {
 
@@ -13,7 +13,7 @@ class HFlow : public Node {
     requirement_.min.y = 0;
     requirement_.flex.x = 1;
     requirement_.flex.y = 1;
-    for(auto& child : children)
+    for (auto& child : children)
       child->ComputeRequirement();
   }
 
@@ -23,7 +23,7 @@ class HFlow : public Node {
     // The position of the first component.
     int x = box.x_min;
     int y = box.y_min;
-    int y_next = y; // The position of next row of elements.
+    int y_next = y;  // The position of next row of elements.
 
     for (auto& child : children) {
       Requirement requirement = child->requirement();
@@ -37,7 +37,7 @@ class HFlow : public Node {
 
       // Does the current row big enough to contain the element?
       if (y + requirement.min.y > box.y_max + 1)
-        break; // No? Ignore the element.
+        break;  // No? Ignore the element.
 
       Box children_box;
       children_box.x_min = x;

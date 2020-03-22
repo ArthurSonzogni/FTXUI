@@ -1,11 +1,16 @@
 #include "ftxui/component/component.hpp"
+
 #include <assert.h>
 
+#include <algorithm>
+
 namespace ftxui {
-void Component::Detach() { if (!parent_) return; auto it = std::find(std::begin(parent_->children_),
+void Component::Detach() {
+  if (!parent_)
+    return;
+  auto it = std::find(std::begin(parent_->children_),
                       std::end(parent_->children_), this);
   parent_->children_.erase(it);
-
 }
 
 void Component::Attach(Component* parent) {
@@ -23,7 +28,7 @@ Component::~Component() {
 }
 
 bool Component::OnEvent(Event event) {
-  for(Component* child : children_) {
+  for (Component* child : children_) {
     if (child->OnEvent(event))
       return true;
   }
@@ -43,7 +48,7 @@ Element Component::Render() {
 
 bool Component::Focused() {
   Component* current = this;
-  for(;;) {
+  for (;;) {
     Component* parent = current->parent_;
     if (!parent)
       return true;

@@ -1,7 +1,8 @@
+#include "ftxui/component/input.hpp"
+
 #include <iostream>
 
 #include "ftxui/component/container.hpp"
-#include "ftxui/component/input.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/screen/string.hpp"
 
@@ -28,6 +29,7 @@ class MyComponent : public Component {
   Input input_2;
   Input input_3;
 
+  // clang-format off
   Element Render() override {
     return
       border(
@@ -38,6 +40,7 @@ class MyComponent : public Component {
         )
       );
   }
+  // clang-format on
 };
 
 int main(int argc, const char* argv[]) {

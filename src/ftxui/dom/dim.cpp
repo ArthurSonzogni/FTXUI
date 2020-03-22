@@ -1,5 +1,5 @@
-#include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node_decorator.hpp"
 
 namespace ftxui {
 
@@ -14,7 +14,7 @@ class Dim : public NodeDecorator {
     Node::Render(screen);
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x,y).dim = true; 
+        screen.PixelAt(x, y).dim = true;
       }
     }
   }

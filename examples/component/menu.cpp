@@ -1,8 +1,9 @@
+#include "ftxui/component/menu.hpp"
+
 #include <chrono>
 #include <iostream>
 #include <thread>
 
-#include "ftxui/component/menu.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 
 int main(int argc, const char* argv[]) {

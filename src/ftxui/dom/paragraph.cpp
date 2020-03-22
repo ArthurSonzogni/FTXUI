@@ -1,4 +1,5 @@
 #include <sstream>
+
 #include "ftxui/dom/elements.hpp"
 
 namespace ftxui {

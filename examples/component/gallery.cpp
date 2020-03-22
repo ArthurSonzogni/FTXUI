@@ -1,8 +1,8 @@
+#include "ftxui/component/checkbox.hpp"
 #include "ftxui/component/container.hpp"
 #include "ftxui/component/input.hpp"
 #include "ftxui/component/menu.hpp"
 #include "ftxui/component/radiobox.hpp"
-#include "ftxui/component/checkbox.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/toggle.hpp"
 
@@ -53,6 +53,7 @@ class MyComponent : public Component {
     container.Add(&input);
   }
 
+  // clang-format off
   Element Render(std::wstring name, Component& component) {
     return
       hbox(
@@ -72,6 +73,7 @@ class MyComponent : public Component {
         Render(L"input", input) | size(WIDTH, LESS_THAN, 30)
       ) | border;
   }
+  // clang-format on
 };
 
 int main(int argc, const char* argv[]) {

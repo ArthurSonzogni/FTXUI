@@ -1,5 +1,5 @@
-#include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node_decorator.hpp"
 
 namespace ftxui {
 

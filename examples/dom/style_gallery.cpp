@@ -5,6 +5,7 @@
 int main(int argc, const char *argv[])
 {
   using namespace ftxui;
+  // clang-format off
   auto document =
     hbox(
       text(L"normal")                           , text(L" ") ,
@@ -16,6 +17,7 @@ int main(int argc, const char *argv[])
       text(L"color")     | color(Color::Blue)   , text(L" ") ,
       text(L"bgcolor")   | bgcolor(Color::Blue)
     );
+  // clang-format on
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document.get());
 

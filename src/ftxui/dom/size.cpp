@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/dom/node.hpp"
 
@@ -41,7 +43,7 @@ class Size : public Node {
     Node::SetBox(box);
 
     if (direction_ == WIDTH) {
-      switch(constraint_) {
+      switch (constraint_) {
         case LESS_THAN:
         case EQUAL:
           box.x_max = std::min(box.x_min + value_ + 1, box.x_max);
@@ -50,7 +52,7 @@ class Size : public Node {
           break;
       }
     } else {
-      switch(constraint_) {
+      switch (constraint_) {
         case LESS_THAN:
         case EQUAL:
           box.y_max = std::min(box.y_min + value_ + 1, box.y_max);

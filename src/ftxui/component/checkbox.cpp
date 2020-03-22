@@ -1,4 +1,5 @@
 #include "ftxui/component/checkbox.hpp"
+
 #include <functional>
 
 namespace ftxui {
@@ -17,7 +18,7 @@ bool CheckBox::OnEvent(Event event) {
     on_change();
     return true;
   }
-  return false;  
+  return false;
 }
 
 }  // namespace ftxui

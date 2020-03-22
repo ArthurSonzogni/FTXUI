@@ -10,27 +10,33 @@
 using namespace ftxui;
 
 class MyComponent : public Component {
-  public:
-   MyComponent() {
-     Add(&container);
-     container.Add(&left_menu);
-     container.Add(&right_menu);
+ public:
+  MyComponent() {
+    Add(&container);
+    container.Add(&left_menu);
+    container.Add(&right_menu);
 
-     left_menu.entries = {L"0%",  L"10%", L"20%", L"30%", L"40%", L"50%",
-                          L"60%", L"70%", L"80%", L"90%"};
-     right_menu.entries = {L"0%",  L"1%", L"2%", L"3%", L"4%", L"5%",
-                           L"6%", L"7%", L"8%", L"9%", L"10%"};
+    left_menu.entries = {
+        L"0%",  L"10%", L"20%", L"30%", L"40%",
+        L"50%", L"60%", L"70%", L"80%", L"90%",
+    };
+    right_menu.entries = {
+        L"0%", L"1%", L"2%", L"3%", L"4%",  L"5%",
+        L"6%", L"7%", L"8%", L"9%", L"10%",
+    };
 
-     left_menu.on_enter = [this]() { on_enter(); };
-     right_menu.on_enter = [this]() { on_enter(); };
-   }
+    left_menu.on_enter = [this]() { on_enter(); };
+    right_menu.on_enter = [this]() { on_enter(); };
+  }
 
-   std::function<void()> on_enter = [](){};
-  private:
-   Container container = Container::Horizontal();
-   Menu left_menu;
-   Menu right_menu;
+  std::function<void()> on_enter = []() {};
 
+ private:
+  Container container = Container::Horizontal();
+  Menu left_menu;
+  Menu right_menu;
+
+  // clang-format off
    Element Render() override {
      int sum = left_menu.selected * 10 + right_menu.selected;
      return
@@ -61,10 +67,10 @@ class MyComponent : public Component {
          )
        );
    }
+  // clang-format on
 };
 
-int main(int argc, const char *argv[])
-{
+int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
   MyComponent component;
   component.on_enter = screen.ExitLoopClosure();

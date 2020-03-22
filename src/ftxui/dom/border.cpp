@@ -1,5 +1,5 @@
-#include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node.hpp"
 
 namespace ftxui {
 
@@ -17,7 +17,7 @@ class Border : public Node {
       : Node(std::move(children)), charset_pixel(10, pixel) {}
   ~Border() override {}
 
-  std::vector<Pixel> charset_pixel; 
+  std::vector<Pixel> charset_pixel;
   std::vector<wchar_t> charset;
 
   void ComputeRequirement() override {
@@ -71,13 +71,13 @@ class Border : public Node {
     screen.at(box_.x_max, box_.y_min) = charset[1];
     screen.at(box_.x_min, box_.y_max) = charset[2];
     screen.at(box_.x_max, box_.y_max) = charset[3];
-    for(float x = box_.x_min + 1; x<box_.x_max; ++x) {
+    for (float x = box_.x_min + 1; x < box_.x_max; ++x) {
       screen.at(x, box_.y_min) = charset[4];
       screen.at(x, box_.y_max) = charset[4];
     }
-    for(float y = box_.y_min + 1; y<box_.y_max; ++y) {
+    for (float y = box_.y_min + 1; y < box_.y_max; ++y) {
       screen.at(box_.x_min, y) = charset[5];
-      screen.at(box_.x_max,y) = charset[5];
+      screen.at(box_.x_max, y) = charset[5];
     }
 
     // Draw title.
@@ -90,13 +90,13 @@ class Border : public Node {
     screen.PixelAt(box_.x_max, box_.y_min) = charset_pixel[1];
     screen.PixelAt(box_.x_min, box_.y_max) = charset_pixel[2];
     screen.PixelAt(box_.x_max, box_.y_max) = charset_pixel[3];
-    for(float x = box_.x_min + 1; x<box_.x_max; ++x) {
+    for (float x = box_.x_min + 1; x < box_.x_max; ++x) {
       screen.PixelAt(x, box_.y_min) = charset_pixel[4];
       screen.PixelAt(x, box_.y_max) = charset_pixel[4];
     }
-    for(float y = box_.y_min + 1; y<box_.y_max; ++y) {
+    for (float y = box_.y_min + 1; y < box_.y_max; ++y) {
       screen.PixelAt(box_.x_min, y) = charset_pixel[5];
-      screen.PixelAt(box_.x_max,y) = charset_pixel[5];
+      screen.PixelAt(box_.x_max, y) = charset_pixel[5];
     }
   }
 };

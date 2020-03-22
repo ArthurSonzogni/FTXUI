@@ -10,7 +10,6 @@ option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 
 enable_testing()
 
-cmake_minimum_required(VERSION 3.0)
 find_package(Threads)
 
 add_library(screen
@@ -72,10 +71,14 @@ foreach(lib screen dom component)
     PUBLIC
       $<INSTALL_INTERFACE:include>    
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    PRIVATE src
+    PRIVATE
+      src
   )
   set_property(TARGET ${lib} PROPERTY CXX_STANDARD 17)
-  target_compile_options(${lib} PRIVATE -Wall -Werror -pedantic -Wextra -Wno-sign-compare)
+  target_compile_options(${lib} PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -pedantic -Werror -Wno-sign-compare>
+)
 endforeach()
 
 if(FTXUI_ENABLE_INSTALL)

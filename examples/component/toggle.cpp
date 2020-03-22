@@ -1,10 +1,11 @@
+#include "ftxui/component/toggle.hpp"
+
 #include <chrono>
 #include <iostream>
 #include <thread>
 
 #include "ftxui/component/container.hpp"
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/component/toggle.hpp"
 #include "ftxui/screen/string.hpp"
 
 using namespace ftxui;
@@ -33,6 +34,7 @@ class MyComponent : public Component {
   Toggle toggle_3_;
   Toggle toggle_4_;
 
+  // clang-format off
   Element Render() override {
     return
       vbox(
@@ -44,6 +46,7 @@ class MyComponent : public Component {
         hbox(text(L" * Number of elements       : "), toggle_4_.Render())
       );
   }
+  // clang-format on
 };
 
 int main(int argc, const char* argv[]) {

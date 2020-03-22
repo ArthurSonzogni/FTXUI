@@ -1,5 +1,7 @@
-#include <iostream>
 #include "ftxui/component/event.hpp"
+
+#include <iostream>
+
 #include "ftxui/screen/string.hpp"
 
 namespace ftxui {
@@ -49,7 +51,7 @@ Event ParseCSI(std::function<char()> getchar, std::string& input) {
     char c = getchar();
     input += c;
 
-    if (c >= '0' && c<= '9')
+    if (c >= '0' && c <= '9')
       continue;
 
     if (c == ';')
@@ -93,9 +95,12 @@ Event ParseOSC(std::function<char()> getchar, std::string& input) {
 Event ParseESC(std::function<char()> getchar, std::string& input) {
   input += getchar();
   switch (input.back()) {
-    case 'P': return ParseDCS(getchar, input);
-    case '[': return ParseCSI(getchar, input);
-    case ']': return ParseOSC(getchar, input);
+    case 'P':
+      return ParseDCS(getchar, input);
+    case '[':
+      return ParseCSI(getchar, input);
+    case ']':
+      return ParseOSC(getchar, input);
     default:
       input += getchar();
       return Event::Special(input);

@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <thread>
+
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"
@@ -13,7 +14,7 @@ class Graph {
     for (int i = 0; i < width; ++i) {
       float v = 0;
       v += 0.1 * sin((i + shift) * 0.1);
-      v += 0.2 * sin((i + shift+10) * 0.15);
+      v += 0.2 * sin((i + shift + 10) * 0.15);
       v += 0.1 * sin((i + shift) * 0.03);
       v *= height;
       v += 0.5 * height;
@@ -40,6 +41,7 @@ int main(int argc, const char* argv[]) {
 
   std::string reset_position;
   for (int i = 0;; ++i) {
+    // clang-format off
     auto document =
       hbox(
         vbox(
@@ -55,6 +57,7 @@ int main(int argc, const char* argv[]) {
       )
       | border
       | size(HEIGHT, GREATER_THAN, 40);
+    // clang-format on
 
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document.get());

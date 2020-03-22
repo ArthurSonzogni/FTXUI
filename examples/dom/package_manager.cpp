@@ -1,15 +1,14 @@
 #include <chrono>
 #include <iostream>
+#include <list>
 #include <thread>
+#include <vector>
 
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"
-#include <list>
-#include <vector>
 
-int main(int argc, const char *argv[])
-{
+int main(int argc, const char* argv[]) {
   using namespace ftxui;
 
   struct Task {
@@ -46,6 +45,7 @@ int main(int argc, const char *argv[])
     return text(to_wstring(number)) | size(WIDTH, EQUAL, 3);
   };
 
+  // clang-format off
   auto renderTask = [&](const Task& task) {
     auto style = (task.downloaded == task.size) ? dim : bold;
     return
@@ -87,9 +87,10 @@ int main(int argc, const char *argv[])
         hbox(renderSummary(), filler())
       );
   };
+  // clang-format on
 
-  auto updateModel = [&](){
-    for(auto& task : displayed_task) {
+  auto updateModel = [&]() {
+    for (auto& task : displayed_task) {
       if (task.downloaded != task.size) {
         task.downloaded++;
       } else if (task.number_of_threads) {
@@ -111,8 +112,7 @@ int main(int argc, const char *argv[])
   };
 
   std::string reset_position;
-  for(;;) {
-
+  for (;;) {
     // Draw.
     auto document = render();
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));

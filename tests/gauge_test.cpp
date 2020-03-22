@@ -7,7 +7,7 @@ using namespace ftxui;
 
 TEST(GaugeTest, zero) {
   auto root = gauge(0);
-  Screen screen(11,1);
+  Screen screen(11, 1);
   Render(screen, root.get());
 
   EXPECT_EQ("           ", screen.ToString());
@@ -15,7 +15,7 @@ TEST(GaugeTest, zero) {
 
 TEST(GaugeTest, half) {
   auto root = gauge(0.5);
-  Screen screen(11,1);
+  Screen screen(11, 1);
   Render(screen, root.get());
 
   EXPECT_EQ("█████▍     ", screen.ToString());
@@ -24,7 +24,7 @@ TEST(GaugeTest, half) {
 
 TEST(GaugeTest, one) {
   auto root = gauge(1.0);
-  Screen screen(11,1);
+  Screen screen(11, 1);
   Render(screen, root.get());
 
   EXPECT_EQ("███████████", screen.ToString());

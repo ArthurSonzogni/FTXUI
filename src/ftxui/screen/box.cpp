@@ -1,4 +1,5 @@
 #include "ftxui/screen/box.hpp"
+
 #include <algorithm>
 
 namespace ftxui {

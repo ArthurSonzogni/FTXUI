@@ -1,9 +1,10 @@
+#include "ftxui/screen/terminal.hpp"
+
 #include <stdio.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
-#include <iostream>
 
-#include "ftxui/screen/terminal.hpp"
+#include <iostream>
 
 namespace ftxui {
 

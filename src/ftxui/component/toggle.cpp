@@ -1,4 +1,5 @@
 #include "ftxui/component/toggle.hpp"
+#include <algorithm>
 
 namespace ftxui {
 

@@ -1,5 +1,6 @@
 #include "ftxui/component/input.hpp"
 #include "ftxui/screen/string.hpp"
+#include <algorithm>
 
 namespace ftxui {
 
@@ -31,13 +32,14 @@ Element Input::Render() {
   auto focused = 
     is_focused ? focus : select;
 
+  // clang-format off
   return
     hbox(
       text(part_before_cursor),
       text(part_at_cursor) | underlined | focused,
       text(part_after_cursor)
     ) | flex | inverted | frame | main_decorator;
-    
+  // clang-format off
 }
 bool Input::OnEvent(Event event) {
   cursor_position = std::max(0, std::min<int>(content.size(), cursor_position));

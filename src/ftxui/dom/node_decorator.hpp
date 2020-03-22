@@ -1,8 +1,8 @@
 #ifndef FTXUI_DOM_NODE_DECORATOR_H_
 #define FTXUI_DOM_NODE_DECORATOR_H_
 
-#include "ftxui/dom/node.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node.hpp"
 
 namespace ftxui {
 

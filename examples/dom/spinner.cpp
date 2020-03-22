@@ -17,6 +17,7 @@ int main(int argc, const char *argv[])
     for(int i = 0; i<22; ++i) {
       if (i != 0)
       entries.push_back(separator());
+      // clang-format off
       entries.push_back(
         hbox(
           text(to_wstring(i)) | size(WIDTH, EQUAL, 2),
@@ -24,6 +25,7 @@ int main(int argc, const char *argv[])
           spinner(i, index) | bold
         )
       );
+      // clang-format on
     }
     auto document = hbox(vbox(std::move(entries)) | border, filler());
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));

@@ -6,6 +6,7 @@
 int main(int argc, const char *argv[])
 {
   using namespace ftxui;
+  // clang-format off
   auto document =
     vbox(
       hbox(
@@ -28,6 +29,7 @@ int main(int argc, const char *argv[])
         text(L"south-east")
       )
     );
+  // clang-format on
   auto screen = Screen::Create(Dimension::Full());
   Render(screen, document.get());
 

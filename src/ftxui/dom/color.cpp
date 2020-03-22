@@ -1,5 +1,5 @@
-#include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node_decorator.hpp"
 
 namespace ftxui {
 
@@ -47,15 +47,11 @@ std::unique_ptr<Node> bgcolor(Color c, Element child) {
 }
 
 Decorator color(Color c) {
-  return [c](Element child) {
-    return color(c, std::move(child));
-  };
+  return [c](Element child) { return color(c, std::move(child)); };
 }
 
 Decorator bgcolor(Color c) {
-  return [c](Element child) {
-    return bgcolor(c, std::move(child));
-  };
+  return [c](Element child) { return bgcolor(c, std::move(child)); };
 }
 
 }  // namespace ftxui

@@ -10,6 +10,7 @@
 #include "ftxui/component/component.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
+#include <algorithm>
 
 #if defined(__clang__) && defined (__APPLE__)
     // Quick exit is missing in standard CLang headers
