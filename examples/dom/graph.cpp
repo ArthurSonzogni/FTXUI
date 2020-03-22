@@ -7,18 +7,19 @@
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"
 
+
 class Graph {
  public:
   std::vector<int> operator()(int width, int height) {
     std::vector<int> output(width);
     for (int i = 0; i < width; ++i) {
       float v = 0;
-      v += 0.1 * sin((i + shift) * 0.1);
-      v += 0.2 * sin((i + shift + 10) * 0.15);
-      v += 0.1 * sin((i + shift) * 0.03);
+      v += 0.1f * sin((i + shift) * 0.1f);
+      v += 0.2f * sin((i + shift + 10) * 0.15f);
+      v += 0.1f * sin((i + shift) * 0.03f);
       v *= height;
-      v += 0.5 * height;
-      output[i] = v;
+      v += 0.5f * height;
+      output[i] = static_cast<int>(v);
     }
     return output;
   }

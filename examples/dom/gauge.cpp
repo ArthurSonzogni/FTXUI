@@ -5,12 +5,13 @@
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/screen/screen.hpp"
 
+
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
   using namespace std::chrono_literals;
 
   std::string reset_position;
-  for (float percentage = 0; percentage <= 1.0; percentage += 0.002) {
+  for (float percentage = 0.0f; percentage <= 1.0f; percentage += 0.002f) {
     std::wstring data_downloaded =
         std::to_wstring(int(percentage * 5000)) + L"/5000";
     // clang-format off
