@@ -7,6 +7,12 @@
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
+#ifdef WIN32
+  #define WIN32_LEAN_AND_MEAN
+  #define NOMINMAX
+  #include <Windows.h>
+#endif
+
 namespace ftxui {
 
 namespace {
@@ -68,7 +74,17 @@ Screen::Screen(int dimx, int dimy)
     : stencil({0, dimx - 1, 0, dimy - 1}),
       dimx_(dimx),
       dimy_(dimy),
-      pixels_(dimy, std::vector<Pixel>(dimx)) {}
+      pixels_(dimy, std::vector<Pixel>(dimx)) {
+#if defined(WIN32)
+  // The placement of this call is a bit weird, however we can assume that
+  // anybody who instantiates a Screen object eventually wants to output
+  // something to the console.
+  // As we require UTF8 for all input/output operations we will just switch to
+  // UTF8 encoding here
+  SetConsoleOutputCP(CP_UTF8);
+  SetConsoleCP(CP_UTF8);
+#endif
+}
 
 void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
   if (next.bold != previous.bold)

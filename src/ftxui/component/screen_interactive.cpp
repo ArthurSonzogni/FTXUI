@@ -101,44 +101,41 @@ void ScreenInteractive::EventLoop(Component* component) {
 void ScreenInteractive::Loop(Component* component) {
   // Install a SIGINT handler and restore the old handler on exit.
   install_signal_handler(SIGINT, OnExit);
-  // Handle resize.
-  install_signal_handler(SIGWINCH, OnResize);
 
   // Save the old terminal configuration and restore it on exit.
 #ifdef WIN32
-  // some special utf8 dance needed.
-  SetConsoleOutputCP(CP_UTF8);
-  setvbuf(stdout, nullptr, _IONBF, 0);
+  // Enable VT processing on stdout and stdin
+  auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+  auto stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
 
-  DWORD original_mode = 0;
-  GetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), &original_mode);
-  on_exit_functions.push([original_mode]() {
-    SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), original_mode);
-  });
+  DWORD out_mode = 0;
+  DWORD in_mode = 0;
+  GetConsoleMode(stdout_handle, &out_mode);
+  GetConsoleMode(stdin_handle, &in_mode);
+  on_exit_functions.push([=] { SetConsoleMode(stdout_handle, out_mode); });
+  on_exit_functions.push([=] { SetConsoleMode(stdin_handle, in_mode); });
 
-  DWORD mode = original_mode;
-  // disable echo
-  mode &= ~ENABLE_ECHO_INPUT;
-  mode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
-  mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-  SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), mode);
+  out_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+  out_mode |= DISABLE_NEWLINE_AUTO_RETURN;
+
+  in_mode &= ~ENABLE_ECHO_INPUT;
+  in_mode &= ~ENABLE_LINE_INPUT;
+  in_mode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
+  in_mode |= ENABLE_WINDOW_INPUT;
+
+  SetConsoleMode(stdin_handle, in_mode);
+  SetConsoleMode(stdout_handle, out_mode);
 #else
-  struct termios terminal_configuration_old;
-  tcgetattr(STDIN_FILENO, &terminal_configuration_old);
-  on_exit_functions.push(
-      [terminal_configuration_old = terminal_configuration_old]() {
-        tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_old);
-      });
+  // Handle resize.
+  install_signal_handler(SIGWINCH, OnResize);
 
-  // Set the new terminal configuration
-  struct termios terminal_configuration_new;
-  terminal_configuration_new = terminal_configuration_old;
+  struct termios terminal;
+  tcgetattr(STDIN_FILENO, &terminal);
+  on_exit_functions.push([=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
 
-  // Non canonique terminal.
-  terminal_configuration_new.c_lflag &= ~ICANON;
-  // Do not print after a key press.
-  terminal_configuration_new.c_lflag &= ~ECHO;
-  tcsetattr(STDIN_FILENO, TCSANOW, &terminal_configuration_new);
+  terminal.c_lflag &= ~ICANON;  // Non canonique terminal.
+  terminal.c_lflag &= ~ECHO;    // Do not print after a key press.
+  tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 #endif
 
   // Hide the cursor and show it at exit.
