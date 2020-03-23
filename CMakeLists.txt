@@ -81,7 +81,7 @@ foreach(lib screen dom component)
   # Force Microsoft Visual Studio to decode sources files in UTF-8. This applies
   # to the library and the library users.
   if (MSVC)
-    target_compile_options(${lib} PUBLIC "/utf-8>")
+    target_compile_options(${lib} PUBLIC "/utf-8")
   endif()
 
   # Add as many warning as possible:
