@@ -25,6 +25,7 @@ static const char* SHOW_CURSOR = "\x1B[?25h";
 static const char* DISABLE_LINE_WRAP = "\x1B[7l";
 static const char* ENABLE_LINE_WRAP = "\x1B[7h";
 
+using SignalHandler = void(int);
 std::stack<std::function<void()>> on_exit_functions;
 void OnExit(int signal) {
   while (!on_exit_functions.empty()) {
@@ -35,6 +36,11 @@ void OnExit(int signal) {
   if (signal == SIGINT)
     quick_exit(SIGINT);
 }
+
+auto install_signal_handler = [](int sig, SignalHandler handler) {
+  auto old_signal_handler = std::signal(sig, handler);
+  on_exit_functions.push([&]() { std::signal(sig, old_signal_handler); });
+};
 
 std::function<void()> on_resize = []{};
 void OnResize(int /* signal */) {
@@ -87,9 +93,9 @@ void ScreenInteractive::EventLoop(Component* component) {
 
 void ScreenInteractive::Loop(Component* component) {
   // Install a SIGINT handler and restore the old handler on exit.
-  auto old_sigint_handler = std::signal(SIGINT, OnExit);
-  on_exit_functions.push(
-      [old_sigint_handler]() { std::signal(SIGINT, old_sigint_handler); });
+  install_signal_handler(SIGINT, OnExit);
+  // Handle resize.
+  install_signal_handler(SIGWINCH, OnResize);
 
   // Save the old terminal configuration and restore it on exit.
   struct termios terminal_configuration_old;
@@ -120,11 +126,7 @@ void ScreenInteractive::Loop(Component* component) {
     std::cout << std::endl;
   });
 
-  // Handle resize.
-  on_resize = [&] { PostEvent(Event::Special({0})); };
-  auto old_sigwinch_handler = std::signal(SIGWINCH, OnResize);
-  on_exit_functions.push([&] { std::signal(SIGWINCH, old_sigwinch_handler); });
-
+  // Spawn a thread. It will listen for new characters being typed.
   std::thread read_char([this] {
     while (!quit_) {
       auto event = Event::GetEvent([] { return (char)getchar(); });
@@ -132,6 +134,7 @@ void ScreenInteractive::Loop(Component* component) {
     }
   });
 
+  // The main loop.
   while (!quit_) {
     std::cout << reset_cursor_position << ResetPosition();
     Draw(component);
