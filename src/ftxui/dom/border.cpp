@@ -5,8 +5,6 @@
 
 namespace ftxui {
 
-using namespace ftxui;
-
 static wchar_t simple_border_charset[] = L"┌┐└┘─│┬┴┤├";
 
 class Border : public Node {

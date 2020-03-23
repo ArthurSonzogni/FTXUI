@@ -3,8 +3,6 @@
 
 namespace ftxui {
 
-using namespace ftxui;
-
 static const std::vector<std::vector<std::vector<std::wstring>>> elements = {
     {
         {L"Replaced by the gauge"},

@@ -3,8 +3,6 @@
 
 namespace ftxui {
 
-using namespace ftxui;
-
 static wchar_t charset[] = L"  ▏▎▍▌▋▊▉█";
 
 class Gauge : public Node {

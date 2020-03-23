@@ -6,8 +6,6 @@
 
 namespace ftxui {
 
-using namespace ftxui;
-
 // -----------------------------------------------------------------------------
 
 class Select : public Node {
