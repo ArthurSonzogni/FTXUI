@@ -1,8 +1,9 @@
 #ifndef FTXUI_COMPONENT_RADIOBOX_HPP
 #define FTXUI_COMPONENT_RADIOBOX_HPP
 
-#include "ftxui/component/component.hpp"
 #include <functional>
+
+#include "ftxui/component/component.hpp"
 
 namespace ftxui {
 
@@ -23,7 +24,7 @@ class RadioBox : public Component {
   Decorator unfocused_style = nothing;
 
   // State update callback.
-  std::function<void()> on_change = [](){};
+  std::function<void()> on_change = []() {};
 
   // Component implementation.
   Element Render() override;

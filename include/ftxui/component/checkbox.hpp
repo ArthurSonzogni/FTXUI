@@ -1,8 +1,9 @@
 #ifndef FTXUI_COMPONENT_CHECKBOX_HPP
 #define FTXUI_COMPONENT_CHECKBOX_HPP
 
-#include "ftxui/component/component.hpp"
 #include <functional>
+
+#include "ftxui/component/component.hpp"
 
 namespace ftxui {
 
@@ -15,8 +16,8 @@ class CheckBox : public Component {
   bool state = false;
   std::wstring label = L"label";
 
-  //std::wstring checked = L"[X] ";
-  //std::wstring unchecked = L"[ ] ";
+  // std::wstring checked = L"[X] ";
+  // std::wstring unchecked = L"[ ] ";
   std::wstring checked = L"▣ ";
   std::wstring unchecked = L"☐ ";
 
@@ -24,7 +25,7 @@ class CheckBox : public Component {
   Decorator unfocused_style = nothing;
 
   // State update callback.
-  std::function<void()> on_change = [](){};
+  std::function<void()> on_change = []() {};
 
   // Component implementation.
   Element Render() override;

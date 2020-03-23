@@ -29,7 +29,8 @@ class Node {
   // Step 3: Draw this element.
   virtual void Render(Screen& screen);
 
- std::vector<std::unique_ptr<Node>> children;
+  std::vector<std::unique_ptr<Node>> children;
+
  protected:
   Requirement requirement_;
   Box box_;

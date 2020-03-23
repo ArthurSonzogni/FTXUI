@@ -59,8 +59,9 @@
  * Latest version: http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
  */
 
-#include "ftxui/screen/string.hpp"
 #include <wchar.h>
+
+#include "ftxui/screen/string.hpp"
 
 namespace {
 struct interval {

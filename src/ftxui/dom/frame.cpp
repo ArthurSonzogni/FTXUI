@@ -4,8 +4,6 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/util/autoreset.hpp"
 
-#include <algorithm>
-
 namespace ftxui {
 
 using namespace ftxui;

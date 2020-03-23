@@ -11,7 +11,6 @@ class Focus;
 
 class Component {
  public:
-
   // Constructor/Destructor.
   Component() = default;
   virtual ~Component();

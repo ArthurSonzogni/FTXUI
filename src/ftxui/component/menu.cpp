@@ -1,7 +1,7 @@
 #include "ftxui/component/menu.hpp"
+
 #include <algorithm>
 #include <iostream>
-#include <algorithm>
 
 namespace ftxui {
 

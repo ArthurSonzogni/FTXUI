@@ -10,7 +10,7 @@ inline void Merge(Elements& container, Element element) {
 
 template <>
 inline void Merge(Elements& container, Elements elements) {
-  for(auto& element : elements)
+  for (auto& element : elements)
     container.push_back(std::move(element));
 }
 
@@ -23,8 +23,8 @@ Elements unpack(Args... args) {
 }
 
 // Make |container| able to take any number of argments.
-#define TAKE_ANY_ARGS(container) \
-template <class... Args> \
-Element container(Args... children) { \
-  return container(unpack(std::forward<Args>(children)...)); \
-}
+#define TAKE_ANY_ARGS(container)                               \
+  template <class... Args>                                     \
+  Element container(Args... children) {                        \
+    return container(unpack(std::forward<Args>(children)...)); \
+  }

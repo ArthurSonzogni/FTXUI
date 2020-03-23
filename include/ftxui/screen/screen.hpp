@@ -1,15 +1,15 @@
 #ifndef FTXUI_SCREEN_SCREEN
 #define FTXUI_SCREEN_SCREEN
 
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
 
-#include "ftxui/screen/color.hpp"
 #include "ftxui/screen/box.hpp"
+#include "ftxui/screen/color.hpp"
 
 namespace ftxui {
-  class Node;
+class Node;
 }
 
 namespace ftxui {
@@ -49,8 +49,8 @@ class Screen {
   std::string ToString();
 
   // Get screen dimensions.
-  int dimx() { return dimx_;}
-  int dimy() { return dimy_;}
+  int dimx() { return dimx_; }
+  int dimy() { return dimy_; }
 
   // Move the terminal cursor n-lines up with n = dimy().
   std::string ResetPosition();

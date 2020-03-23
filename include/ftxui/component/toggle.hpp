@@ -1,9 +1,10 @@
 #ifndef FTXUI_COMPONENT_TOGGLE_H_
 #define FTXUI_COMPONENT_TOGGLE_H_
 
-#include "ftxui/component/component.hpp"
 #include <functional>
 #include <string>
+
+#include "ftxui/component/component.hpp"
 
 namespace ftxui {
 
@@ -21,13 +22,13 @@ class Toggle : public Component {
   Decorator normal_style = dim;
 
   // Callback.
-  std::function<void()> on_change = [](){};
+  std::function<void()> on_change = []() {};
 
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
 };
 
-}  // namespace ftxui::Component
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_TOGGLE_H_ */

@@ -1,6 +1,7 @@
 #include "ftxui/component/radiobox.hpp"
-#include <functional>
+
 #include <algorithm>
+#include <functional>
 
 namespace ftxui {
 
@@ -41,7 +42,7 @@ bool RadioBox::OnEvent(Event event) {
     return true;
   }
 
-  if (event == Event::Character(' ') || event==Event::Return) {
+  if (event == Event::Character(' ') || event == Event::Return) {
     selected = focused;
     on_change();
   }

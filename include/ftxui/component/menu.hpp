@@ -1,9 +1,10 @@
 #ifndef FTXUI_COMPONENT_MENU
 #define FTXUI_COMPONENT_MENU
 
+#include <functional>
+
 #include "ftxui/component/component.hpp"
 #include "ftxui/dom/elements.hpp"
-#include <functional>
 
 namespace ftxui {
 
@@ -22,14 +23,14 @@ class Menu : public Component {
   Decorator normal_style = nothing;
 
   // State update callback.
-  std::function<void()> on_change = [](){};
-  std::function<void()> on_enter = [](){};
+  std::function<void()> on_change = []() {};
+  std::function<void()> on_enter = []() {};
 
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
 };
 
-}  // namespace ftxui::Component
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_MENU */

@@ -1,6 +1,8 @@
 #include "ftxui/component/input.hpp"
-#include "ftxui/screen/string.hpp"
+
 #include <algorithm>
+
+#include "ftxui/screen/string.hpp"
 
 namespace ftxui {
 
@@ -22,15 +24,14 @@ Element Input::Render() {
   if (!is_focused)
     return text(content) | main_decorator;
 
-  std::wstring part_before_cursor = content.substr(0,cursor_position);
+  std::wstring part_before_cursor = content.substr(0, cursor_position);
   std::wstring part_at_cursor = cursor_position < (int)content.size()
                                     ? content.substr(cursor_position, 1)
                                     : L" ";
   std::wstring part_after_cursor = cursor_position < (int)content.size() - 1
                                        ? content.substr(cursor_position + 1)
                                        : L"";
-  auto focused = 
-    is_focused ? focus : select;
+  auto focused = is_focused ? focus : select;
 
   // clang-format off
   return

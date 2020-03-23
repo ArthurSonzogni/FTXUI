@@ -1,7 +1,7 @@
+#include <algorithm>
+
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/dom/node.hpp"
-
-#include <algorithm>
 
 namespace ftxui {
 

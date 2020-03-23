@@ -3,12 +3,12 @@
 #include <stdio.h>
 
 #ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#include <Windows.h>
+  #define WIN32_LEAN_AND_MEAN
+  #define NOMINMAX
+  #include <Windows.h>
 #else
-#include <sys/ioctl.h>
-#include <unistd.h>
+  #include <sys/ioctl.h>
+  #include <unistd.h>
 #endif
 
 #include <iostream>

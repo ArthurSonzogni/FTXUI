@@ -3,18 +3,20 @@
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
+
+#include <algorithm>
 #include <csignal>
 #include <iostream>
 #include <stack>
 #include <thread>
+
 #include "ftxui/component/component.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
-#include <algorithm>
 
-#if defined(__clang__) && defined (__APPLE__)
-    // Quick exit is missing in standard CLang headers
-    #define quick_exit(a) exit(a)
+#if defined(__clang__) && defined(__APPLE__)
+  // Quick exit is missing in standard CLang headers
+  #define quick_exit(a) exit(a)
 #endif
 
 namespace ftxui {
@@ -42,14 +44,12 @@ auto install_signal_handler = [](int sig, SignalHandler handler) {
   on_exit_functions.push([&]() { std::signal(sig, old_signal_handler); });
 };
 
-std::function<void()> on_resize = []{};
+std::function<void()> on_resize = [] {};
 void OnResize(int /* signal */) {
   on_resize();
 }
 
-ScreenInteractive::ScreenInteractive(int dimx,
-                                     int dimy,
-                                     Dimension dimension)
+ScreenInteractive::ScreenInteractive(int dimx, int dimy, Dimension dimension)
     : Screen(dimx, dimy), dimension_(dimension) {}
 ScreenInteractive::~ScreenInteractive() {}
 
@@ -176,8 +176,7 @@ void ScreenInteractive::Draw(Component* component) {
   if (dimx != dimx_ || dimy != dimy_) {
     dimx_ = dimx;
     dimy_ = dimy;
-    pixels_ = std::vector<std::vector<Pixel>>(
-        dimy, std::vector<Pixel>(dimx));
+    pixels_ = std::vector<std::vector<Pixel>>(dimy, std::vector<Pixel>(dimx));
     cursor_.x = dimx_ - 1;
     cursor_.y = dimy_ - 1;
   }
@@ -196,7 +195,7 @@ void ScreenInteractive::Draw(Component* component) {
     reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
   }
   if (dy != 0) {
-    set_cursor_position +=  "\x1B[" + std::to_string(dy) + "A";
+    set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
     reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
   }
 }

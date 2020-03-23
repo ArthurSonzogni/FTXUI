@@ -7,10 +7,16 @@ namespace ftxui {
 
 struct Requirement {
   // The required size to fully draw the element.
-  struct { int x = 0; int y = 0; } min;
+  struct {
+    int x = 0;
+    int y = 0;
+  } min;
 
   // How much flexibility is given to the component.
-  struct { int x = 0; int y = 0; } flex;
+  struct {
+    int x = 0;
+    int y = 0;
+  } flex;
 
   // Frame.
   enum Selection {
@@ -21,6 +27,6 @@ struct Requirement {
   Box selected_box;
 };
 
-} // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_REQUIREMENT_HPP */

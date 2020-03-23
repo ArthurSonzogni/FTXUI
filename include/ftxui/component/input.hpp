@@ -1,8 +1,9 @@
 #ifndef FTXUI_COMPONENT_INPUT_H_
 #define FTXUI_COMPONENT_INPUT_H_
 
-#include "ftxui/component/component.hpp"
 #include <functional>
+
+#include "ftxui/component/component.hpp"
 
 namespace ftxui {
 
@@ -17,8 +18,8 @@ class Input : public Component {
   std::wstring placeholder;
 
   // State update callback.
-  std::function<void()> on_change = [](){};
-  std::function<void()> on_enter = [](){};
+  std::function<void()> on_change = []() {};
+  std::function<void()> on_enter = []() {};
 
   // Component implementation.
   Element Render() override;
