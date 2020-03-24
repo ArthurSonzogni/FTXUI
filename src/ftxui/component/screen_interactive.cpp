@@ -58,8 +58,8 @@ void OnResize(int /* signal */) {
 
 ScreenInteractive::ScreenInteractive(int dimx, int dimy, Dimension dimension)
     : Screen(dimx, dimy), dimension_(dimension) {
-  event_consumer_ = MakeConsumer<Event>();
-  event_producer_ = event_consumer_->MakeProducer();
+  event_receiver_ = MakeReceiver<Event>();
+  event_sender_ = event_receiver_->MakeSender();
 }
 
 ScreenInteractive::~ScreenInteractive() {}
@@ -85,7 +85,7 @@ ScreenInteractive ScreenInteractive::FitComponent() {
 }
 
 void ScreenInteractive::PostEvent(Event event) {
-  event_producer_->Send(event);
+  event_sender_->Send(event);
 }
 
 void ScreenInteractive::Loop(Component* component) {
@@ -140,25 +140,25 @@ void ScreenInteractive::Loop(Component* component) {
     std::cout << std::endl;
   });
 
-  auto char_consumer = MakeConsumer<char>();
+  auto char_receiver = MakeReceiver<char>();
 
   // Spawn a thread to produce char.
-  auto char_producer = char_consumer->MakeProducer();
+  auto char_sender = char_receiver->MakeSender();
   std::thread read_char([&] {
     // TODO(arthursonzogni): Use a timeout so that it doesn't block even if the
     // user doesn't generate new chars.
     while (!quit_)
-      char_producer->Send((char)getchar());
-    char_producer.reset();
+      char_sender->Send((char)getchar());
+    char_sender.reset();
   });
 
   // Spawn a thread producing events and consumer chars.
-  auto event_producer = event_consumer_->MakeProducer();
+  auto event_sender = event_receiver_->MakeSender();
   std::thread convert_char_to_event([&] {
     char c;
-    while (char_consumer->Receive(&c))
-      Event::Convert(char_consumer, event_producer, c);
-    event_producer.reset();
+    while (char_receiver->Receive(&c))
+      Event::Convert(char_receiver, event_sender, c);
+    event_sender.reset();
   });
 
   // The main loop.
@@ -168,7 +168,7 @@ void ScreenInteractive::Loop(Component* component) {
     std::cout << ToString() << set_cursor_position << std::flush;
     Clear();
     Event event;
-    if (event_consumer_->Receive(&event))
+    if (event_receiver_->Receive(&event))
       component->OnEvent(event);
   }
   read_char.join();

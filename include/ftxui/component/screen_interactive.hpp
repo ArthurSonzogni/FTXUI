@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include <condition_variable>
+#include <ftxui/component/receiver.hpp>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -10,7 +11,6 @@
 
 #include "ftxui/component/event.hpp"
 #include "ftxui/screen/screen.hpp"
-#include <ftxui/component/producer_consumer.hpp>
 
 namespace ftxui {
 class Component;
@@ -41,13 +41,13 @@ class ScreenInteractive : public Screen {
   Dimension dimension_ = Dimension::Fixed;
   ScreenInteractive(int dimx, int dimy, Dimension dimension);
 
-  Producer<Event> event_producer_;
-  Consumer<Event> event_consumer_;
+  Sender<Event> event_sender_;
+  Receiver<Event> event_receiver_;
 
   std::string set_cursor_position;
   std::string reset_cursor_position;
 
-  std::atomic<bool>quit_ = false;
+  std::atomic<bool> quit_ = false;
 };
 
 }  // namespace ftxui

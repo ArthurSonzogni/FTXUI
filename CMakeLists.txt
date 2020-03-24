@@ -73,7 +73,7 @@ add_library(component
   include/ftxui/component/menu.hpp
   include/ftxui/component/radiobox.hpp
   include/ftxui/component/screen_interactive.hpp
-  include/ftxui/component/producer_consumer.hpp
+  include/ftxui/component/receiver.hpp
   include/ftxui/component/toggle.hpp
 )
 

@@ -36,7 +36,7 @@ Event Event::Special(const std::string& input) {
   return event;
 }
 
-void ParseUTF8(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+void ParseUTF8(Receiver<char>& in, Sender<Event>& out, std::string& input) {
   char c;
   char mask = 0b11000000;
   for (int i = 0; i < 3; ++i) {
@@ -50,7 +50,7 @@ void ParseUTF8(Consumer<char>& in, Producer<Event>& out, std::string& input) {
   out->Send(Event::Character(input));
 }
 
-void ParseCSI(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+void ParseCSI(Receiver<char>& in, Sender<Event>& out, std::string& input) {
   char c;
   while (1) {
     if (!in->Receive(&c))
@@ -72,7 +72,7 @@ void ParseCSI(Consumer<char>& in, Producer<Event>& out, std::string& input) {
   }
 }
 
-void ParseDCS(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+void ParseDCS(Receiver<char>& in, Sender<Event>& out, std::string& input) {
   char c;
   // Parse until the string terminator ST.
   while (1) {
@@ -90,7 +90,7 @@ void ParseDCS(Consumer<char>& in, Producer<Event>& out, std::string& input) {
   }
 }
 
-void ParseOSC(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+void ParseOSC(Receiver<char>& in, Sender<Event>& out, std::string& input) {
   char c;
   // Parse until the string terminator ST.
   while (1) {
@@ -108,7 +108,7 @@ void ParseOSC(Consumer<char>& in, Producer<Event>& out, std::string& input) {
   }
 }
 
-void ParseESC(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+void ParseESC(Receiver<char>& in, Sender<Event>& out, std::string& input) {
   char c;
   if (!in->Receive(&c))
     return;
@@ -129,7 +129,7 @@ void ParseESC(Consumer<char>& in, Producer<Event>& out, std::string& input) {
 }
 
 // static
-void Event::Convert(Consumer<char>& in, Producer<Event>& out, char c) {
+void Event::Convert(Receiver<char>& in, Sender<Event>& out, char c) {
   std::string input;
   input += c;
 
