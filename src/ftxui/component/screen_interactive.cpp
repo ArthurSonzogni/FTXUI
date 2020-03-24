@@ -126,9 +126,6 @@ void ScreenInteractive::Loop(Component* component) {
   SetConsoleMode(stdin_handle, in_mode);
   SetConsoleMode(stdout_handle, out_mode);
 #else
-  // Handle resize.
-  install_signal_handler(SIGWINCH, OnResize);
-
   struct termios terminal;
   tcgetattr(STDIN_FILENO, &terminal);
   on_exit_functions.push([=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
@@ -136,6 +133,10 @@ void ScreenInteractive::Loop(Component* component) {
   terminal.c_lflag &= ~ICANON;  // Non canonique terminal.
   terminal.c_lflag &= ~ECHO;    // Do not print after a key press.
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
+
+  // Handle resize.
+  on_resize = [&] { PostEvent(Event::Special({0})); };
+  install_signal_handler(SIGWINCH, OnResize);
 #endif
 
   // Hide the cursor and show it at exit.
