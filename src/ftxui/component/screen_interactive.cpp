@@ -57,7 +57,11 @@ void OnResize(int /* signal */) {
 }
 
 ScreenInteractive::ScreenInteractive(int dimx, int dimy, Dimension dimension)
-    : Screen(dimx, dimy), dimension_(dimension) {}
+    : Screen(dimx, dimy), dimension_(dimension) {
+  event_consumer_ = MakeConsumer<Event>();
+  event_producer_ = event_consumer_->MakeProducer();
+}
+
 ScreenInteractive::~ScreenInteractive() {}
 
 // static
@@ -81,21 +85,7 @@ ScreenInteractive ScreenInteractive::FitComponent() {
 }
 
 void ScreenInteractive::PostEvent(Event event) {
-  std::unique_lock<std::mutex> lock(events_queue_mutex);
-  events_queue.push(event);
-  events_queue_cv.notify_one();
-}
-
-void ScreenInteractive::EventLoop(Component* component) {
-  std::unique_lock<std::mutex> lock(events_queue_mutex);
-  while (!quit_ && events_queue.empty())
-    events_queue_cv.wait(lock);
-
-  // After the wait, we own the lock.
-  while (!events_queue.empty()) {
-    component->OnEvent(events_queue.front());
-    events_queue.pop();
-  }
+  event_producer_->Send(event);
 }
 
 void ScreenInteractive::Loop(Component* component) {
@@ -150,12 +140,25 @@ void ScreenInteractive::Loop(Component* component) {
     std::cout << std::endl;
   });
 
-  // Spawn a thread. It will listen for new characters being typed.
-  std::thread read_char([this] {
-    while (!quit_) {
-      auto event = Event::GetEvent([] { return (char)getchar(); });
-      PostEvent(std::move(event));
-    }
+  auto char_consumer = MakeConsumer<char>();
+
+  // Spawn a thread to produce char.
+  auto char_producer = char_consumer->MakeProducer();
+  std::thread read_char([&] {
+    // TODO(arthursonzogni): Use a timeout so that it doesn't block even if the
+    // user doesn't generate new chars.
+    while (!quit_)
+      char_producer->Send((char)getchar());
+    char_producer.reset();
+  });
+
+  // Spawn a thread producing events and consumer chars.
+  auto event_producer = event_consumer_->MakeProducer();
+  std::thread convert_char_to_event([&] {
+    char c;
+    while (char_consumer->Receive(&c))
+      Event::Convert(char_consumer, event_producer, c);
+    event_producer.reset();
   });
 
   // The main loop.
@@ -164,9 +167,12 @@ void ScreenInteractive::Loop(Component* component) {
     Draw(component);
     std::cout << ToString() << set_cursor_position << std::flush;
     Clear();
-    EventLoop(component);
+    Event event;
+    if (event_consumer_->Receive(&event))
+      component->OnEvent(event);
   }
   read_char.join();
+  convert_char_to_event.join();
   OnExit(0);
 }
 

@@ -18,9 +18,17 @@ add_library(screen
   src/ftxui/screen/string.cpp
   src/ftxui/screen/terminal.cpp
   src/ftxui/screen/wcwidth.cpp
+  include/ftxui/screen/box.hpp
+  include/ftxui/screen/color.hpp
+  include/ftxui/screen/screen.hpp
+  include/ftxui/screen/string.hpp
 )
 
 add_library(dom
+  include/ftxui/dom/elements.hpp
+  include/ftxui/dom/node.hpp
+  include/ftxui/dom/requirement.hpp
+  include/ftxui/dom/take_any_args.hpp
   src/ftxui/dom/blink.cpp
   src/ftxui/dom/bold.cpp
   src/ftxui/dom/border.cpp
@@ -57,6 +65,16 @@ add_library(component
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/screen_interactive.cpp
   src/ftxui/component/toggle.cpp
+  include/ftxui/component/checkbox.hpp
+  include/ftxui/component/component.hpp
+  include/ftxui/component/container.hpp
+  include/ftxui/component/event.hpp
+  include/ftxui/component/input.hpp
+  include/ftxui/component/menu.hpp
+  include/ftxui/component/radiobox.hpp
+  include/ftxui/component/screen_interactive.hpp
+  include/ftxui/component/producer_consumer.hpp
+  include/ftxui/component/toggle.hpp
 )
 
 add_library(ftxui::screen ALIAS screen)

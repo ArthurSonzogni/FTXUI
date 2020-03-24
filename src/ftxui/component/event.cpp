@@ -36,19 +36,25 @@ Event Event::Special(const std::string& input) {
   return event;
 }
 
-Event ParseUTF8(std::function<char()>& getchar, std::string& input) {
-  if ((input[0] & 0b11000000) == 0b11000000)
-    input += getchar();
-  if ((input[0] & 0b11100000) == 0b11100000)
-    input += getchar();
-  if ((input[0] & 0b11110000) == 0b11110000)
-    input += getchar();
-  return Event::Character(input);
+void ParseUTF8(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+  char c;
+  char mask = 0b11000000;
+  for (int i = 0; i < 3; ++i) {
+    if ((input[0] & mask) == mask) {
+      if (!in->Receive(&c))
+        return;
+      input += c;
+    }
+    mask = mask >> 1 | 0b10000000;
+  }
+  out->Send(Event::Character(input));
 }
 
-Event ParseCSI(std::function<char()> getchar, std::string& input) {
+void ParseCSI(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+  char c;
   while (1) {
-    char c = getchar();
+    if (!in->Receive(&c))
+      return;
     input += c;
 
     if (c >= '0' && c <= '9')
@@ -58,80 +64,95 @@ Event ParseCSI(std::function<char()> getchar, std::string& input) {
       continue;
 
     if (c >= ' ' && c <= '~')
-      return Event::Special(input);
+      return out->Send(Event::Special(input));
 
     // Invalid ESC in CSI.
     if (c == '\x1B')
-      return Event::Special(input);
+      return out->Send(Event::Special(input));
   }
 }
 
-Event ParseDCS(std::function<char()> getchar, std::string& input) {
+void ParseDCS(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+  char c;
   // Parse until the string terminator ST.
   while (1) {
-    input += getchar();
+    if (!in->Receive(&c))
+      return;
+    input += c;
     if (input.back() != '\x1B')
       continue;
-    input += getchar();
+    if (!in->Receive(&c))
+      return;
+    input += c;
     if (input.back() != '\\')
       continue;
-    return Event::Special(input);
+    return out->Send(Event::Special(input));
   }
 }
 
-Event ParseOSC(std::function<char()> getchar, std::string& input) {
+void ParseOSC(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+  char c;
   // Parse until the string terminator ST.
   while (1) {
-    input += getchar();
+    if (!in->Receive(&c))
+      return;
+    input += c;
     if (input.back() != '\x1B')
       continue;
-    input += getchar();
+    if (!in->Receive(&c))
+      return;
+    input += c;
     if (input.back() != '\\')
       continue;
-    return Event::Special(input);
+    return out->Send(Event::Special(input));
   }
 }
 
-Event ParseESC(std::function<char()> getchar, std::string& input) {
-  input += getchar();
-  switch (input.back()) {
+void ParseESC(Consumer<char>& in, Producer<Event>& out, std::string& input) {
+  char c;
+  if (!in->Receive(&c))
+    return;
+  input += c;
+  switch (c) {
     case 'P':
-      return ParseDCS(getchar, input);
+      return ParseDCS(in, out, input);
     case '[':
-      return ParseCSI(getchar, input);
+      return ParseCSI(in, out, input);
     case ']':
-      return ParseOSC(getchar, input);
+      return ParseOSC(in, out, input);
     default:
-      input += getchar();
-      return Event::Special(input);
+      if (!in->Receive(&c))
+        return;
+      input += c;
+      out->Send(Event::Special(input));
   }
 }
 
 // static
-Event Event::GetEvent(std::function<char()> getchar) {
+void Event::Convert(Consumer<char>& in, Producer<Event>& out, char c) {
   std::string input;
-  input += getchar();
+  input += c;
 
   unsigned char head = input[0];
   switch (head) {
-    case 24:           // CAN
-    case 26:           // SUB
-      return Event();  // Ignored.
+    case 24:  // CAN
+    case 26:  // SUB
+      return;
 
     case 'P':
-      return ParseDCS(getchar, input);
+      return ParseDCS(in, out, input);
 
     case '\x1B':
-      return ParseESC(getchar, input);
+      return ParseESC(in, out, input);
   }
 
   if (head < 32)  // C0
-    return Event::Special(input);
+    return out->Send(Event::Special(input));
 
   if (head == 127)  // Delete
-    return Event::Special(input);
+    return out->Send(Event::Special(input));
 
-  return ParseUTF8(getchar, input);
+  return ParseUTF8(in, out, input);
 }
 
 // --- Arrow ---

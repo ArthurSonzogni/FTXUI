@@ -5,6 +5,7 @@
 #include <functional>
 #include <string>
 #include <vector>
+#include <ftxui/component/producer_consumer.hpp>
 
 namespace ftxui {
 
@@ -20,7 +21,7 @@ struct Event {
   static Event Character(const std::string&);
   static Event Special(const std::string&);
 
-  static Event GetEvent(std::function<char()> getchar);
+  static void Convert(Consumer<char>& in, Producer<Event>& out, char c);
 
   // --- Arrow ---
   static Event ArrowLeft;

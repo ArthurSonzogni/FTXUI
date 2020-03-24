@@ -10,6 +10,7 @@
 
 #include "ftxui/component/event.hpp"
 #include "ftxui/screen/screen.hpp"
+#include <ftxui/component/producer_consumer.hpp>
 
 namespace ftxui {
 class Component;
@@ -40,13 +41,13 @@ class ScreenInteractive : public Screen {
   Dimension dimension_ = Dimension::Fixed;
   ScreenInteractive(int dimx, int dimy, Dimension dimension);
 
-  std::condition_variable events_queue_cv;
-  std::mutex events_queue_mutex;
-  std::queue<Event> events_queue;
-  std::atomic<bool> quit_ = false;
+  Producer<Event> event_producer_;
+  Consumer<Event> event_consumer_;
 
   std::string set_cursor_position;
   std::string reset_cursor_position;
+
+  std::atomic<bool>quit_ = false;
 };
 
 }  // namespace ftxui
