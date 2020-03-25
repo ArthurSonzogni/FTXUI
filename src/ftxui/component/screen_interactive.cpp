@@ -28,6 +28,21 @@
 
 namespace ftxui {
 
+// Produce a stream of Event from a stream of char.
+void CharToEventStream(Receiver<char> receiver, Sender<Event> sender) {
+  char c;
+  while (receiver->Receive(&c))
+    Event::Convert(receiver, sender, c);
+}
+
+// Read char from the terminal.
+void UnixEventListener(std::atomic<bool>* quit, Sender<char> sender) {
+  // TODO(arthursonzogni): Use a timeout so that it doesn't block even if the
+  // user doesn't generate new chars.
+  while (!*quit)
+    sender->Send((char)getchar());
+}
+
 static const char* HIDE_CURSOR = "\x1B[?25l";
 static const char* SHOW_CURSOR = "\x1B[?25h";
 
@@ -85,7 +100,8 @@ ScreenInteractive ScreenInteractive::FitComponent() {
 }
 
 void ScreenInteractive::PostEvent(Event event) {
-  event_sender_->Send(event);
+  if (!quit_)
+    event_sender_->Send(event);
 }
 
 void ScreenInteractive::Loop(Component* component) {
@@ -140,26 +156,20 @@ void ScreenInteractive::Loop(Component* component) {
     std::cout << std::endl;
   });
 
+  // Produce a stream of Event from a stream of char.
   auto char_receiver = MakeReceiver<char>();
-
-  // Spawn a thread to produce char.
   auto char_sender = char_receiver->MakeSender();
-  std::thread read_char([&] {
-    // TODO(arthursonzogni): Use a timeout so that it doesn't block even if the
-    // user doesn't generate new chars.
-    while (!quit_)
-      char_sender->Send((char)getchar());
-    char_sender.reset();
-  });
-
-  // Spawn a thread producing events and consumer chars.
   auto event_sender = event_receiver_->MakeSender();
-  std::thread convert_char_to_event([&] {
-    char c;
-    while (char_receiver->Receive(&c))
-      Event::Convert(char_receiver, event_sender, c);
-    event_sender.reset();
-  });
+  auto char_to_event_stream = std::thread(
+      CharToEventStream, std::move(char_receiver), std::move(event_sender));
+
+  // Depending on the OS, start a thread that will produce events and/or chars.
+#if defined(WIN32)
+  // TODO(arthursonzogni) implement here.
+#else
+  auto unix_event_listener =
+      std::thread(&UnixEventListener, &quit_, std::move(char_sender));
+#endif
 
   // The main loop.
   while (!quit_) {
@@ -171,8 +181,9 @@ void ScreenInteractive::Loop(Component* component) {
     if (event_receiver_->Receive(&event))
       component->OnEvent(event);
   }
-  read_char.join();
-  convert_char_to_event.join();
+
+  char_to_event_stream.join();
+  unix_event_listener.join();
   OnExit(0);
 }
 
@@ -231,7 +242,10 @@ void ScreenInteractive::Draw(Component* component) {
 }
 
 std::function<void()> ScreenInteractive::ExitLoopClosure() {
-  return [this]() { quit_ = true; };
+  return [this]() {
+    quit_ = true;
+    event_sender_.reset();
+  };
 }
 
 }  // namespace ftxui.

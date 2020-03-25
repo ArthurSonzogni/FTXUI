@@ -162,6 +162,7 @@ if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
   target_include_directories(dom_tests
     PRIVATE ${GTest_INCLUDE_DIRS}
   )
+  set_property(TARGET dom_tests PROPERTY CXX_STANDARD 17)
   gtest_discover_tests(dom_tests)
   add_test(dom_tests dom_tests)
 endif()
