@@ -13,7 +13,8 @@
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
-#if defined(WIN32)
+
+#if defined(_WIN32)
   #define WIN32_LEAN_AND_MEAN
   #define NOMINMAX
   #include <Windows.h>
@@ -39,7 +40,7 @@ void CharToEventStream(Receiver<char> receiver, Sender<Event> sender) {
     Event::Convert(receiver, sender, c);
 }
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 void Win32EventListener(std::atomic<bool>* quit,
                         Sender<char> char_sender,
@@ -162,7 +163,7 @@ void ScreenInteractive::PostEvent(Event event) {
 
 void ScreenInteractive::Loop(Component* component) {
   // Save the old terminal configuration and restore it on exit.
-#if defined(WIN32)
+#if defined(_WIN32)
   // Enable VT processing on stdout and stdin
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
   auto stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
@@ -217,7 +218,7 @@ void ScreenInteractive::Loop(Component* component) {
       CharToEventStream, std::move(char_receiver), std::move(event_sender_1));
 
   // Depending on the OS, start a thread that will produce events and/or chars.
-#if defined(WIN32)
+#if defined(_WIN32)
   auto event_sender_2 = event_receiver_->MakeSender();
   auto event_listener =
       std::thread(&Win32EventListener, &quit_, std::move(char_sender),
