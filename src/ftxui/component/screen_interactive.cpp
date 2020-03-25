@@ -9,10 +9,8 @@
 #include <thread>
 
 #include "ftxui/component/component.hpp"
-#include "ftxui/component/event_input_listener.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
-
 
 #if defined(_WIN32)
   #define WIN32_LEAN_AND_MEAN
