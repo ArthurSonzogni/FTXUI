@@ -1,3 +1,4 @@
+#include <iostream>
 #include <algorithm>
 
 #include "ftxui/dom/elements.hpp"
@@ -44,9 +45,6 @@ class VBox : public Node {
 
     int y = box.y_min;
     for (auto& child : children) {
-      if (y > box.y_max)
-        break;
-
       Box child_box = box;
       child_box.y_min = y;
 

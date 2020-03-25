@@ -44,9 +44,6 @@ class HBox : public Node {
 
     int x = box.x_min;
     for (auto& child : children) {
-      if (x > box.x_max)
-        break;
-
       Box child_box = box;
       child_box.x_min = x;
 
