@@ -183,7 +183,9 @@ void ScreenInteractive::Loop(Component* component) {
   }
 
   char_to_event_stream.join();
+#if !defined(WIN32)
   unix_event_listener.join();
+#endif
   OnExit(0);
 }
 
