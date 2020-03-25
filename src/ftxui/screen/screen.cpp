@@ -7,7 +7,7 @@
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
-#ifdef WIN32
+#if defined(WIN32)
   #define WIN32_LEAN_AND_MEAN
   #define NOMINMAX
   #include <Windows.h>

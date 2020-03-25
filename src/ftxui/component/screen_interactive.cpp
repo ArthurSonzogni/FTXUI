@@ -9,13 +9,17 @@
 #include <thread>
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/component/event_input_listener.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
-#ifdef WIN32
+#if defined(WIN32)
   #define WIN32_LEAN_AND_MEAN
   #define NOMINMAX
   #include <Windows.h>
+  #ifndef UNICODE
+    #error Must be compiled in UNICODE mode
+  #endif
 #else
   #include <termios.h>
   #include <unistd.h>
@@ -35,6 +39,56 @@ void CharToEventStream(Receiver<char> receiver, Sender<Event> sender) {
     Event::Convert(receiver, sender, c);
 }
 
+#if defined(WIN32)
+
+void Win32EventListener(std::atomic<bool>* quit,
+                        Sender<char> char_sender,
+                        Sender<Event> event_sender) {
+  auto console = GetStdHandle(STD_INPUT_HANDLE);
+  while (!*quit) {
+    // Throttle ReadConsoleInput by waiting 250ms, this wait function will
+    // return if there is input in the console.
+    auto wait_result = WaitForSingleObject(console, 250);
+    if (wait_result == WAIT_TIMEOUT)
+      continue;
+
+    DWORD number_of_events = 0;
+    if (!GetNumberOfConsoleInputEvents(console, &number_of_events))
+      continue;
+    if (number_of_events <= 0)
+      continue;
+
+    std::vector<INPUT_RECORD> records{number_of_events};
+    DWORD number_of_events_read = 0;
+    ReadConsoleInput(console, records.data(),
+                     (DWORD)(records.size() * sizeof(INPUT_RECORD)),
+                     &number_of_events_read);
+    records.resize(number_of_events_read);
+
+    for (const auto& r : records) {
+      switch (r.EventType) {
+        case KEY_EVENT: {
+          auto key_event = r.Event.KeyEvent;
+          // ignore UP key events
+          if (key_event.bKeyDown == FALSE)
+            continue;
+          char_sender->Send((char)key_event.uChar.UnicodeChar);
+        } break;
+        case WINDOW_BUFFER_SIZE_EVENT:
+          event_sender->Send(Event::Special({0}));
+          break;
+        case MENU_EVENT:
+        case FOCUS_EVENT:
+        case MOUSE_EVENT:
+          // TODO(mauve): Implement later.
+          break;
+      }
+    }
+  }
+}
+
+#else
+
 // Read char from the terminal.
 void UnixEventListener(std::atomic<bool>* quit, Sender<char> sender) {
   // TODO(arthursonzogni): Use a timeout so that it doesn't block even if the
@@ -42,6 +96,8 @@ void UnixEventListener(std::atomic<bool>* quit, Sender<char> sender) {
   while (!*quit)
     sender->Send((char)getchar());
 }
+
+#endif
 
 static const char* HIDE_CURSOR = "\x1B[?25l";
 static const char* SHOW_CURSOR = "\x1B[?25h";
@@ -105,11 +161,8 @@ void ScreenInteractive::PostEvent(Event event) {
 }
 
 void ScreenInteractive::Loop(Component* component) {
-  // Install a SIGINT handler and restore the old handler on exit.
-  install_signal_handler(SIGINT, OnExit);
-
   // Save the old terminal configuration and restore it on exit.
-#ifdef WIN32
+#if defined(WIN32)
   // Enable VT processing on stdout and stdin
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
   auto stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
@@ -141,7 +194,7 @@ void ScreenInteractive::Loop(Component* component) {
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
   // Handle resize.
-  on_resize = [&] { PostEvent(Event::Special({0})); };
+  on_resize = [&] { event_sender_->Send(Event::Special({0})); };
   install_signal_handler(SIGWINCH, OnResize);
 #endif
 
@@ -159,15 +212,18 @@ void ScreenInteractive::Loop(Component* component) {
   // Produce a stream of Event from a stream of char.
   auto char_receiver = MakeReceiver<char>();
   auto char_sender = char_receiver->MakeSender();
-  auto event_sender = event_receiver_->MakeSender();
+  auto event_sender_1 = event_receiver_->MakeSender();
   auto char_to_event_stream = std::thread(
-      CharToEventStream, std::move(char_receiver), std::move(event_sender));
+      CharToEventStream, std::move(char_receiver), std::move(event_sender_1));
 
   // Depending on the OS, start a thread that will produce events and/or chars.
 #if defined(WIN32)
-  // TODO(arthursonzogni) implement here.
+  auto event_sender_2 = event_receiver_->MakeSender();
+  auto event_listener =
+      std::thread(&Win32EventListener, &quit_, std::move(char_sender),
+                  std::move(event_sender_2));
 #else
-  auto unix_event_listener =
+  auto event_listener =
       std::thread(&UnixEventListener, &quit_, std::move(char_sender));
 #endif
 
@@ -183,9 +239,7 @@ void ScreenInteractive::Loop(Component* component) {
   }
 
   char_to_event_stream.join();
-#if !defined(WIN32)
-  unix_event_listener.join();
-#endif
+  event_listener.join();
   OnExit(0);
 }
 

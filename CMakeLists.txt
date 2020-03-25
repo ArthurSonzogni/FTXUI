@@ -114,6 +114,11 @@ foreach(lib screen dom component)
     target_compile_options(${lib} PRIVATE "-Werror")
     target_compile_options(${lib} PRIVATE "-Wno-sign-compare")
   endif()
+
+  # Force Win32 to UNICODE
+  if(MSVC)
+    target_compile_definitions(${lib} PRIVATE UNICODE _UNICODE)
+  endif()
 endforeach()
 
 if(FTXUI_ENABLE_INSTALL)
