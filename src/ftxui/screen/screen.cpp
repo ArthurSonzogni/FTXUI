@@ -7,7 +7,8 @@
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
-#if defined(WIN32)
+
+#if defined(_WIN32)
   #define WIN32_LEAN_AND_MEAN
   #define NOMINMAX
   #include <Windows.h>
@@ -75,7 +76,7 @@ Screen::Screen(int dimx, int dimy)
       dimx_(dimx),
       dimy_(dimy),
       pixels_(dimy, std::vector<Pixel>(dimx)) {
-#if defined(WIN32)
+#if defined(_WIN32)
   // The placement of this call is a bit weird, however we can assume that
   // anybody who instantiates a Screen object eventually wants to output
   // something to the console.

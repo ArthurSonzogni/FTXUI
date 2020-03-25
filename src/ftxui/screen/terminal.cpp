@@ -2,7 +2,8 @@
 
 #include <stdio.h>
 
-#if defined(WIN32)
+
+#if defined(_WIN32)
   #define WIN32_LEAN_AND_MEAN
   #define NOMINMAX
   #include <Windows.h>
@@ -18,7 +19,7 @@ namespace ftxui {
 Terminal::Dimensions Terminal::Size() {
 #if defined(__EMSCRIPTEN__)
   return Dimensions{80, 43};
-#elif defined(WIN32)
+#elif defined(_WIN32)
   CONSOLE_SCREEN_BUFFER_INFO csbi;
   int columns, rows;
 
