@@ -38,14 +38,13 @@ Event Event::Special(const std::string& input) {
 
 void ParseUTF8(Receiver<char>& in, Sender<Event>& out, std::string& input) {
   char c;
-  char mask = 0b11000000;
-  for (int i = 0; i < 3; ++i) {
-    if ((input[0] & mask) == mask) {
-      if (!in->Receive(&c))
-        return;
-      input += c;
-    }
-    mask = mask >> 1 | 0b10000000;
+  unsigned char head = static_cast<unsigned char>(input[0]);
+  for (int i = 0; i < 3; ++i, head <<= 1) {
+    if ((head & 0b11000000) != 0b11000000)
+      break;
+    if (!in->Receive(&c))
+      return;
+    input += c;
   }
   out->Send(Event::Character(input));
 }
