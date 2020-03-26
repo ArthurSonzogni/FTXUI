@@ -157,6 +157,7 @@ if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
   add_executable(tests
     src/ftxui/component/toggle_test.cpp
     src/ftxui/component/radiobox_test.cpp
+    src/ftxui/component/container_test.cpp
     src/ftxui/dom/gauge_test.cpp
     src/ftxui/dom/hbox_test.cpp
     src/ftxui/dom/text_test.cpp
