@@ -3,7 +3,6 @@
 #include "gtest/gtest.h"
 
 using namespace ftxui;
-using namespace ftxui;
 
 TEST(ToggleTest, leftRightArrow) {
   Toggle toggle;
