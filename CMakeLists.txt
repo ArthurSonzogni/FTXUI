@@ -154,6 +154,7 @@ export(TARGETS screen dom component NAMESPACE ftxui::
 find_package(GTest)
 if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
   add_executable(tests
+    src/ftxui/component/toggle_test.cpp
     src/ftxui/dom/gauge_test.cpp
     src/ftxui/dom/hbox_test.cpp
     src/ftxui/dom/text_test.cpp
@@ -161,7 +162,7 @@ if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
   )
 
   target_link_libraries(tests
-    PRIVATE dom
+    PRIVATE component
     PRIVATE Threads::Threads
     PRIVATE ${GTEST_BOTH_LIBRARIES}
   )
