@@ -153,25 +153,25 @@ export(TARGETS screen dom component NAMESPACE ftxui::
 # https://stackoverflow.com/questions/24295876/cmake-cannot-find-a-googletest-required-library
 find_package(GTest)
 if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
-  add_executable(dom_tests
-    tests/gauge_test.cpp
-    tests/hbox_test.cpp
-    tests/text_test.cpp
-    tests/vbox_test.cpp
+  add_executable(tests
+    src/ftxui/dom/gauge_test.cpp
+    src/ftxui/dom/hbox_test.cpp
+    src/ftxui/dom/text_test.cpp
+    src/ftxui/dom/vbox_test.cpp
   )
 
-  target_link_libraries(dom_tests
+  target_link_libraries(tests
     PRIVATE dom
     PRIVATE Threads::Threads
     PRIVATE ${GTEST_BOTH_LIBRARIES}
   )
 
-  target_include_directories(dom_tests
+  target_include_directories(tests
     PRIVATE ${GTest_INCLUDE_DIRS}
   )
-  set_property(TARGET dom_tests PROPERTY CXX_STANDARD 17)
-  gtest_discover_tests(dom_tests)
-  add_test(dom_tests dom_tests)
+  set_property(TARGET tests PROPERTY CXX_STANDARD 17)
+  gtest_discover_tests(tests)
+  add_test(tests tests)
 endif()
 
 if(FTXUI_BUILD_EXAMPLES)
