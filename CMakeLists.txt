@@ -63,6 +63,7 @@ add_library(component
   src/ftxui/component/input.cpp
   src/ftxui/component/menu.cpp
   src/ftxui/component/radiobox.cpp
+  src/ftxui/component/radiobox.cpp
   src/ftxui/component/screen_interactive.cpp
   src/ftxui/component/toggle.cpp
   include/ftxui/component/checkbox.hpp
@@ -155,6 +156,7 @@ find_package(GTest)
 if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
   add_executable(tests
     src/ftxui/component/toggle_test.cpp
+    src/ftxui/component/radiobox_test.cpp
     src/ftxui/dom/gauge_test.cpp
     src/ftxui/dom/hbox_test.cpp
     src/ftxui/dom/text_test.cpp
