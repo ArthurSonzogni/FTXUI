@@ -1,6 +1,8 @@
 #ifndef FTXUI_COMPONENT_RECEIVER_HPP_
 #define FTXUI_COMPONENT_RECEIVER_HPP_
 
+#include <iostream>
+
 #include <atomic>
 #include <condition_variable>
 #include <functional>
@@ -47,13 +49,13 @@ template<class T> Receiver<T> MakeReceiver();
 template <class T>
 class SenderImpl {
  public:
-  void Send(T t) { sender_->Receive(std::move(t)); }
-  ~SenderImpl() { sender_->senders_--; }
+  void Send(T t) { receiver_->Receive(std::move(t)); }
+  ~SenderImpl() { receiver_->ReleaseSender();}
 
  private:
   friend class ReceiverImpl<T>;
-  SenderImpl(ReceiverImpl<T>* consumer) : sender_(consumer) {}
-  ReceiverImpl<T>* sender_;
+  SenderImpl(ReceiverImpl<T>* consumer) : receiver_(consumer) {}
+  ReceiverImpl<T>* receiver_;
 };
 
 template <class T>
@@ -65,9 +67,9 @@ class ReceiverImpl {
   }
 
   bool Receive(T* t) {
-    while (senders_) {
+    while (senders_ || !queue_.empty()) {
       std::unique_lock<std::mutex> lock(mutex_);
-      while (queue_.empty())
+      if (queue_.empty())
         notifier_.wait(lock);
       if (queue_.empty())
         continue;
@@ -82,8 +84,16 @@ class ReceiverImpl {
   friend class SenderImpl<T>;
 
   void Receive(T t) {
-    std::unique_lock<std::mutex> lock(mutex_);
-    queue_.push(std::move(t));
+    {
+      std::unique_lock<std::mutex> lock(mutex_);
+      queue_.push(std::move(t));
+    }
+    notifier_.notify_one();
+  }
+
+  void ReleaseSender() {
+    std::cerr << __func__ << std::endl;
+    senders_--;
     notifier_.notify_one();
   }
 
