@@ -1,9 +1,10 @@
 # FTXUI
-[![Build Status](https://travis-ci.com/ArthurSonzogni/FTXUI.svg?branch=master)](https://travis-ci.com/ArthurSonzogni/FTXUI)
 
 **Functional Terminal (X) User interface**
 
 A simple C++ library for terminal based user interface.
+
+[![Build Status](https://travis-ci.com/ArthurSonzogni/FTXUI.svg?branch=master)](https://travis-ci.com/ArthurSonzogni/FTXUI)
 
 ## Demo:
 ![Demo image](./examples/component/homescreen.gif)
