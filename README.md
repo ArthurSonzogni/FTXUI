@@ -1,4 +1,5 @@
 # FTXUI
+[![Build Status](https://travis-ci.com/ArthurSonzogni/FTXUI.svg?branch=master)](https://travis-ci.com/ArthurSonzogni/FTXUI)
 
 **Functional Terminal (X) User interface**
 
