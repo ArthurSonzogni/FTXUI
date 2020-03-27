@@ -50,12 +50,12 @@ TEST(VBoxTest, ScreenFitFlex) {
   Render(screen, root.get());
 
   EXPECT_EQ(
-    "text_1 \n"
-    "       \n"
-    "       \n"
-    "       \n"
-    "text_2 "
-  ,screen.ToString());
+      "text_1 \n"
+      "       \n"
+      "       \n"
+      "       \n"
+      "text_2 ",
+      screen.ToString());
 }
 
 TEST(VBoxTest, ScreenBigger1Flex) {

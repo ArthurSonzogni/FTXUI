@@ -70,5 +70,4 @@ TEST(ToggleTest, Tab) {
   toggle.OnEvent(Event::TabReverse);
   EXPECT_EQ(toggle.selected, 1);
   toggle.OnEvent(Event::TabReverse);
-
 }

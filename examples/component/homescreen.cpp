@@ -10,7 +10,6 @@
 #include "ftxui/component/toggle.hpp"
 #include "ftxui/screen/string.hpp"
 
-
 using namespace ftxui;
 
 int shift = 0;

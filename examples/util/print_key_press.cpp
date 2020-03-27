@@ -16,14 +16,14 @@ class DrawKey : public Component {
     Elements children;
     for (size_t i = std::max(0, (int)keys.size() - 10); i < keys.size(); ++i) {
       std::wstring code;
-      for(auto& it : keys[i].input())
+      for (auto& it : keys[i].input())
         code += L" " + std::to_wstring((unsigned int)it);
 
       code = L"(" + code + L" ) -> ";
       if (keys[i].is_character())
-        code +=  keys[i].character();
+        code += keys[i].character();
       else
-        code +=  L"(special)";
+        code += L"(special)";
       children.push_back(text(code));
     }
     return vbox(std::move(children));

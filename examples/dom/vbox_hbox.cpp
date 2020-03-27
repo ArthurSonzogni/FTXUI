@@ -1,10 +1,9 @@
-#include "ftxui/screen/screen.hpp"
-#include "ftxui/dom/elements.hpp"
 #include <iostream>
 
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/screen.hpp"
 
-int main(int argc, const char *argv[])
-{
+int main(int argc, const char* argv[]) {
   using namespace ftxui;
   // clang-format off
   auto document =

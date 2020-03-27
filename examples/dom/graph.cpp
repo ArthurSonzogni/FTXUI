@@ -7,7 +7,6 @@
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"
 
-
 class Graph {
  public:
   std::vector<int> operator()(int width, int height) {

@@ -58,10 +58,14 @@ TEST(Receiver, BasicWithThread) {
   s1_bis.reset();
 
   char c;
-  EXPECT_TRUE(r3->Receive(&c));EXPECT_EQ(c, '1');
-  EXPECT_TRUE(r3->Receive(&c)); EXPECT_EQ(c, '2');
-  EXPECT_TRUE(r3->Receive(&c)); EXPECT_EQ(c, '3');
-  EXPECT_TRUE(r3->Receive(&c)); EXPECT_EQ(c, '4');
+  EXPECT_TRUE(r3->Receive(&c));
+  EXPECT_EQ(c, '1');
+  EXPECT_TRUE(r3->Receive(&c));
+  EXPECT_EQ(c, '2');
+  EXPECT_TRUE(r3->Receive(&c));
+  EXPECT_EQ(c, '3');
+  EXPECT_TRUE(r3->Receive(&c));
+  EXPECT_EQ(c, '4');
   EXPECT_FALSE(r3->Receive(&c));
 
   // Thread will end at the end of the stream.

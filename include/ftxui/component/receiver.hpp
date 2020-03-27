@@ -1,11 +1,10 @@
 #ifndef FTXUI_COMPONENT_RECEIVER_HPP_
 #define FTXUI_COMPONENT_RECEIVER_HPP_
 
-#include <iostream>
-
 #include <atomic>
 #include <condition_variable>
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <mutex>
 #include <queue>
@@ -50,7 +49,7 @@ template <class T>
 class SenderImpl {
  public:
   void Send(T t) { receiver_->Receive(std::move(t)); }
-  ~SenderImpl() { receiver_->ReleaseSender();}
+  ~SenderImpl() { receiver_->ReleaseSender(); }
 
  private:
   friend class ReceiverImpl<T>;

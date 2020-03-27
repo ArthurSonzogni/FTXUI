@@ -1,5 +1,5 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/dom/node.hpp"

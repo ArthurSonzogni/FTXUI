@@ -75,5 +75,4 @@ TEST(RadioboxTest, Navigation) {
   radiobox.OnEvent(Event::TabReverse);
   EXPECT_EQ(radiobox.focused, 1);
   radiobox.OnEvent(Event::TabReverse);
-
 }
