@@ -4,7 +4,10 @@
 
 A simple C++ library for terminal based user interface.
 
-[![Build Status](https://travis-ci.com/ArthurSonzogni/FTXUI.svg?branch=master)](https://travis-ci.com/ArthurSonzogni/FTXUI)
+![Travis (.com)](https://img.shields.io/travis/com/arthursonzogni/FTXUI?logo=travis)
+![GitHub issues](https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI)
+![GitHub](https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black)
+![GitHub contributors](https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue)
 
 ## Demo:
 ![Demo image](./examples/component/homescreen.gif)
