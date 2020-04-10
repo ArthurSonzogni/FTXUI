@@ -1,9 +1,18 @@
 # FTXUI
 
-![Travis (.com)](https://img.shields.io/travis/com/arthursonzogni/FTXUI?logo=travis)
-![GitHub issues](https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI)
+[![travis][badge.travis]][travis]
+[![issues][badge.issues]][issues]
+[![license][badge.license]][license]
 ![GitHub](https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black)
 ![GitHub contributors](https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue)
+
+[badge.travis]: https://img.shields.io/travis/com/arthursonzogni/FTXUI?logo=travis
+[badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI
+[badge.license]: https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black
+
+[travis]: https://travis-ci.org/ArthurSonzogni/smk
+[issues]: https://github.com/ArthurSonzogni/FTXUI/issues
+[license]: http://opensource.org/licenses/MIT
 
 **Functional Terminal (X) User interface**
 
