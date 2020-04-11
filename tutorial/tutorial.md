@@ -1,21 +1,39 @@
+Table of content:
+=================
+
 - [Introduction](#introduction)
 - [DOM](#dom)
-  * [Style](#style)
-  * [Layout](#layout)
-    + [Examples](#examples)
   * [Widget.](#widget)
     + [text](#text)
     + [border](#border)
     + [separator](#separator) [gauge](#gauge)
-  * [Decorator](#decorator)
+  * [Style](#style)
+  * [Layout](#layout)
+    + [Examples](#examples)
 - [Components.](#components)
   * [Input](#input)
   * [Menu](#menu)
   * [Toggle.](#toggle)
 
 ## Introduction
-I **highly** recommand not to take too much time reading the tutorial. Instead,
-you should try to read the examples (in ./example/).
+I recommand not to take too much time reading the tutorial. Instead,
+you should try to read the examples (in [./examples/](../examples)).
+
+The library is split in 3 parts:
+- [ftxui/screen/](../include/ftxui/screen/)
+
+  It defines a ftxui::Screen. A Screen is a grid of ftxui::Pixel. A Pixel contains a character and its associated style.
+  Once the screen is ready, you can display it on the terminal.
+  
+- [ftuix/dom/](../include/ftxui/dom/)
+
+  These are a set of hierachical ftxui::Element declared in [ftxui/dom/elements.hpp](../ftxui/dom/elements.hpp).
+  An element can render itself on the the Screen. It manage layout and is responsive to the Screen dimensions.
+
+- [ftuix/component/](../include/ftxui/component)
+  The part is only needed if you need to respond to the User input. It defines a set of ftxui::Component.
+  The use can navigates using the arrow keys and interact with widgets like checkbox/inputbox/... You can make you own
+  components.
 
 ## DOM
 All the dom element are declared in one header:
@@ -84,65 +102,6 @@ Element align_right(Element);
 Element nothing(Element element);
 ~~~
 
-### Style
-A terminal console can usually display colored text and colored background.
-The text can also have different effects: bold, dim, underlined, inverted,
-blink.
-
-~~~cpp
-Element bold(Element);
-Element dim(Element);
-Element inverted(Element);
-Element underlined(Element);
-Element blink(Element);
-Decorator color(Color);
-Decorator bgcolor(Color);
-~~~
-
-### Layout
-
-These layout are similar to the HTML flexbox:
-* vbox (Vertical-box)
-* hbox (Horizontal-box)
-* dbox (Z-axis-box)
-They are used to compose all the elements together. Each
-children are put side by side. If the container is flexible, the extra space
-available will be shared among the remaining flexible children.
-
-flex(element) can be used to make a non-flexible element flexible. filler() is a
-flexible empty element. You can use it align children on one side of the
-container.
-
-An horizontal flow layout is implemented by:
-* hflow (Horizontal flow)
-
-#### Examples
-~~~cpp
-  hbox(
-    text(L"left") | border ,
-    text(L"middle") | border | flex,
-    text(L"right") | border
-  );
-~~~
-~~~bash
-┌────┐┌─────────────────────────────────────────────────────────────────┐┌─────┐
-│left││middle                                                           ││right│
-└────┘└─────────────────────────────────────────────────────────────────┘└─────┘
-~~~
-
-~~~cpp
-  hbox(
-    text(L"left") | border ,
-    text(L"middle") | border | flex,
-    text(L"right") | border | flex
-  );
-~~~
-~~~bash
-┌────┐┌───────────────────────────────────┐┌───────────────────────────────────┐
-│left││middle                             ││right                              │
-└────┘└───────────────────────────────────┘└───────────────────────────────────┘
-~~~
-
 ### Widget.
 
 #### text
@@ -206,13 +165,24 @@ border(gauge(0.5))
 └────────────────────────────────────────────────────────────────────────────┘
 ~~~
 
-### graph
+#### graph
 [![asciicast](https://asciinema.org/a/223726.svg)](https://asciinema.org/a/223726)
 
-### Decorator
 
-Terminal supports displaying text using differet style: bold, dim, underlined,
-inverted, blink. It even support foreground and background color.
+### Style
+A terminal console can usually display colored text and colored background.
+The text can also have different effects: bold, dim, underlined, inverted,
+blink.
+
+~~~cpp
+Element bold(Element);
+Element dim(Element);
+Element inverted(Element);
+Element underlined(Element);
+Element blink(Element);
+Decorator color(Color);
+Decorator bgcolor(Color);
+~~~
 
 Example:
 ~~~cpp
@@ -223,6 +193,52 @@ Tips: The pipe operator can be used to chain Decorator:
 ~~~cpp
 text(L"This text is bold")) | bold | underlined
 ~~~
+
+### Layout
+
+These layout are similar to the HTML flexbox:
+* vbox (Vertical-box)
+* hbox (Horizontal-box)
+* dbox (Z-axis-box)
+They are used to compose all the elements together. Each
+children are put side by side. If the container is flexible, the extra space
+available will be shared among the remaining flexible children.
+
+flex(element) can be used to make a non-flexible element flexible. filler() is a
+flexible empty element. You can use it align children on one side of the
+container.
+
+An horizontal flow layout is implemented by:
+* hflow (Horizontal flow)
+
+#### Examples
+~~~cpp
+  hbox(
+    text(L"left") | border ,
+    text(L"middle") | border | flex,
+    text(L"right") | border
+  );
+~~~
+~~~bash
+┌────┐┌─────────────────────────────────────────────────────────────────┐┌─────┐
+│left││middle                                                           ││right│
+└────┘└─────────────────────────────────────────────────────────────────┘└─────┘
+~~~
+
+~~~cpp
+  hbox(
+    text(L"left") | border ,
+    text(L"middle") | border | flex,
+    text(L"right") | border | flex
+  );
+~~~
+~~~bash
+┌────┐┌───────────────────────────────────┐┌───────────────────────────────────┐
+│left││middle                             ││right                              │
+└────┘└───────────────────────────────────┘└───────────────────────────────────┘
+~~~
+
+
 
 ## Components.
 
