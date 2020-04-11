@@ -5,7 +5,7 @@
 [![license][badge.license]][license]
 [![contributors][badge.contributors]][contributors]
 
-[badge.travis]: https://img.shields.io/travis/com/arthursonzogni/FTXUI?logo=travis
+[badge.travis]: https://img.shields.io/travis/com/arthursonzogni/FTXUI
 [badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI
 [badge.license]: https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black
 [badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue
