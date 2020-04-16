@@ -6,8 +6,9 @@ language:
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DFTXUI_BUILD_TESTS=ON
   - cmake --build .
+  - ./tests --gtest_color=yes
 
 notifications:
   email: false

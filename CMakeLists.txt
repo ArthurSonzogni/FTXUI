@@ -5,8 +5,8 @@ project(ftxui
 )
 
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
-option(FTXUI_BUILD_TESTS "Set to ON to build tests" ON)
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
+option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 
 enable_testing()
 
@@ -150,10 +150,28 @@ endif()
 export(TARGETS screen dom component NAMESPACE ftxui::
   FILE ${PROJECT_BINARY_DIR}/ftxui-targets.cmake)
 
-# Note: For gtest, please follow:
-# https://stackoverflow.com/questions/24295876/cmake-cannot-find-a-googletest-required-library
-find_package(GTest)
-if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
+
+if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4") 
+  set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
+  include(FetchContent)
+
+  FetchContent_Declare(
+      googletest
+      GIT_REPOSITORY "https://github.com/google/googletest"
+      GIT_TAG        master
+  )
+
+  FetchContent_GetProperties(googletest)
+  if(NOT googletest_POPULATED)
+    message(STATUS "Fetching googletest...")
+    FetchContent_Populate(googletest)
+    message(STATUS "... done")
+    add_subdirectory(
+      ${googletest_SOURCE_DIR}
+      ${googletest_BINARY_DIR}
+      EXCLUDE_FROM_ALL)
+  endif()
+
   add_executable(tests
     src/ftxui/component/toggle_test.cpp
     src/ftxui/component/radiobox_test.cpp
@@ -167,15 +185,10 @@ if (FTXUI_BUILD_TESTS AND GTEST_FOUND AND THREADS_FOUND)
 
   target_link_libraries(tests
     PRIVATE component
-    PRIVATE Threads::Threads
-    PRIVATE ${GTEST_BOTH_LIBRARIES}
+    PRIVATE gtest gtest_main
   )
 
-  target_include_directories(tests
-    PRIVATE ${GTest_INCLUDE_DIRS}
-  )
   set_property(TARGET tests PROPERTY CXX_STANDARD 17)
-  gtest_discover_tests(tests)
   add_test(tests tests)
 endif()
 

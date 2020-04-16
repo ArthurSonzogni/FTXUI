@@ -91,7 +91,6 @@ class ReceiverImpl {
   }
 
   void ReleaseSender() {
-    std::cerr << __func__ << std::endl;
     senders_--;
     notifier_.notify_one();
   }
