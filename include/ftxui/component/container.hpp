@@ -37,7 +37,7 @@ class Container : public Component {
   RenderHandler render_handler_;
 
   int selected_ = 0;
-  int* selector_ = &selected_;
+  int* selector_ = nullptr;
 };
 
 }  // namespace ftxui

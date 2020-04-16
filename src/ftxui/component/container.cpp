@@ -42,7 +42,9 @@ bool Container::OnEvent(Event event) {
 Component* Container::ActiveChild() {
   if (children_.size() == 0)
     return nullptr;
-  return children_[*selector_ % children_.size()];
+
+  int selected = selector_ ? *selector_ : selected_;
+  return children_[selected % children_.size()];
 }
 
 bool Container::VerticalEvent(Event event) {
