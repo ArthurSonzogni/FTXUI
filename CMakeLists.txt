@@ -152,13 +152,14 @@ export(TARGETS screen dom component NAMESPACE ftxui::
 
 
 if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4") 
+  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
   set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
   include(FetchContent)
 
-  FetchContent_Declare(
-      googletest
-      GIT_REPOSITORY "https://github.com/google/googletest"
-      GIT_TAG        master
+  FetchContent_Declare( googletest
+    GIT_REPOSITORY "https://github.com/google/googletest"
+    GIT_TAG        release-1.10.0
   )
 
   FetchContent_GetProperties(googletest)
@@ -185,11 +186,12 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
 
   target_link_libraries(tests
     PRIVATE component
-    PRIVATE gtest gtest_main
+    PRIVATE gtest
+    PRIVATE gmock
+    PRIVATE gtest_main
   )
 
   set_property(TARGET tests PROPERTY CXX_STANDARD 17)
-  add_test(tests tests)
 endif()
 
 if(FTXUI_BUILD_EXAMPLES)

@@ -8,7 +8,7 @@ script:
   - cd build
   - cmake .. -DFTXUI_BUILD_TESTS=ON
   - cmake --build .
-  - ./tests --gtest_color=yes
+  - "${FTXUI_TEST_EXE}"
 
 notifications:
   email: false
@@ -19,14 +19,22 @@ jobs:
     - os: linux
       dist: bionic
       compiler: gcc
+      env:
+        - FTXUI_TEST_EXE="./tests --gtest_color=yes"
 
     # Ubuntu
     - os: linux
       dist: bionic
       compiler: clang
+      env:
+        - FTXUI_TEST_EXE="./tests --gtest_color=yes"
 
     # OS X
     - os: osx
+      env:
+        - FTXUI_TEST_EXE="./tests --gtest_color=yes"
 
     # Windows
     - os: windows
+      env:
+        - FTXUI_TEST_EXE="./Debug/tests.exe --gtest_color=yes"
