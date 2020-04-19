@@ -66,8 +66,9 @@ A simple C++ library for terminal based user interface.
 - [Tutorial](./tutorial/tutorial.md)
 
 ## Project using FTXUI
-None! This is still a newborn project. Feel free to add a link to your project
-here.
+
+Feel free to add your projects here:
+- [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 
 ## Hosted on:
  * [github](https://github.com/ArthurSonzogni/ftxui)
