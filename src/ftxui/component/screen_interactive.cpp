@@ -26,6 +26,7 @@
 #else
   #include <termios.h>
   #include <unistd.h>
+  #include <sys/select.h>
 #endif
 
 // Quick exit is missing in standard CLang headers
@@ -94,10 +95,21 @@ void Win32EventListener(std::atomic<bool>* quit,
 
 // Read char from the terminal.
 void UnixEventListener(std::atomic<bool>* quit, Sender<char> sender) {
-  // TODO(arthursonzogni): Use a timeout so that it doesn't block even if the
-  // user doesn't generate new chars.
-  while (!*quit)
-    sender->Send((char)getchar());
+  fd_set readfds;
+  FD_ZERO(&readfds);
+
+  struct timeval timeout;
+  timeout.tv_sec = 0;
+  timeout.tv_usec = 300000;
+
+  while (!*quit) {
+    FD_SET(STDIN_FILENO, &readfds);
+    if (!select(1, &readfds, NULL, NULL, &timeout))
+      continue;
+
+    char c = getchar();
+    sender->Send(c);
+  }
 }
 
 #endif
