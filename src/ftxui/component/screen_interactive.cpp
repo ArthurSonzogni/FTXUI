@@ -211,6 +211,11 @@ void ScreenInteractive::Loop(Component* component) {
   // Handle resize.
   on_resize = [&] { event_sender_->Send(Event::Special({0})); };
   install_signal_handler(SIGWINCH, OnResize);
+
+  // Install a SIGINT handler and restore the old handler on exit.
+  auto old_sigint_handler = std::signal(SIGINT, OnExit);
+  on_exit_functions.push(
+      [old_sigint_handler]() { std::signal(SIGINT, old_sigint_handler); });
 #endif
 
   // Hide the cursor and show it at exit.
