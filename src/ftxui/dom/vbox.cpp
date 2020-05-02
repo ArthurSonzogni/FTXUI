@@ -54,7 +54,7 @@ class VBox : public Node {
 
       child_box.y_max = y + child->requirement().min.y - 1;
 
-      if (child->requirement().flex.y && remaining_extra_space > 0) {
+      if (child->requirement().flex.y) {
         int added_space = remaining_extra_space * child->requirement().flex.y /
                           remaining_flex;
         remaining_extra_space -= added_space;

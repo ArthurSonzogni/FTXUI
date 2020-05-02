@@ -53,7 +53,7 @@ TEST(HBoxTest, ScreenSmaller1Flex) {
   Screen screen(11, 1);
   Render(screen, root.get());
 
-  EXPECT_EQ("text_1text_", screen.ToString());
+  EXPECT_EQ("text_text_2", screen.ToString());
 }
 
 TEST(HBoxTest, ScreenSmaller2Flex) {
@@ -61,7 +61,7 @@ TEST(HBoxTest, ScreenSmaller2Flex) {
   Screen screen(10, 1);
   Render(screen, root.get());
 
-  EXPECT_EQ("text_1text", screen.ToString());
+  EXPECT_EQ("texttext_2", screen.ToString());
 }
 
 TEST(HBoxTest, ScreenFitFlex) {

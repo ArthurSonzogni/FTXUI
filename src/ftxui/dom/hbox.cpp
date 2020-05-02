@@ -53,7 +53,7 @@ class HBox : public Node {
 
       child_box.x_max = x + child->requirement().min.x - 1;
 
-      if (child->requirement().flex.x && remaining_extra_space > 0) {
+      if (child->requirement().flex.x) {
         int added_space = remaining_extra_space * child->requirement().flex.x /
                           remaining_flex;
         remaining_extra_space -= added_space;
