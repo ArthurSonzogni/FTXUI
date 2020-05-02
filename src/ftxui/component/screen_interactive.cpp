@@ -26,7 +26,7 @@
 #else
   #include <termios.h>
   #include <unistd.h>
-  #include <sys/select.h>
+  #include <fcntl.h>
 #endif
 
 // Quick exit is missing in standard CLang headers
@@ -93,22 +93,28 @@ void Win32EventListener(std::atomic<bool>* quit,
 
 #else
 
+int CheckStdinReady(int usec_timeout) {
+  timeval tv = {0, usec_timeout};
+  fd_set fds;
+  FD_ZERO(&fds);
+  FD_SET(STDIN_FILENO, &fds);
+  select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
+  return FD_ISSET(STDIN_FILENO, &fds);
+}
+
 // Read char from the terminal.
 void UnixEventListener(std::atomic<bool>* quit, Sender<char> sender) {
-  fd_set readfds;
-  FD_ZERO(&readfds);
-
-  struct timeval timeout;
-  timeout.tv_sec = 0;
-  timeout.tv_usec = 300000;
+  const int buffer_size = 100;
+  const int timeout_usec = 50000;
+  // short CHAR_AVAILABLE_TO_READ = POLLIN | POLLPRI;
 
   while (!*quit) {
-    FD_SET(STDIN_FILENO, &readfds);
-    if (!select(1, &readfds, NULL, NULL, &timeout))
+    if (!CheckStdinReady(timeout_usec))
       continue;
-
-    char c = getchar();
-    sender->Send(c);
+    char buff[buffer_size];
+    int l = read(fileno(stdin), buff, buffer_size);
+    for (int i = 0; i < l; ++i)
+      sender->Send(buff[i]);
   }
 }
 
@@ -211,6 +217,12 @@ void ScreenInteractive::Loop(Component* component) {
 
   terminal.c_lflag &= ~ICANON;  // Non canonique terminal.
   terminal.c_lflag &= ~ECHO;    // Do not print after a key press.
+  terminal.c_cc[VMIN] = 0;
+  terminal.c_cc[VTIME] = 0;
+  auto oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+  fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+  on_exit_functions.push([=] { fcntl(STDIN_FILENO, F_GETFL, oldf); });
+
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
   // Handle resize.
