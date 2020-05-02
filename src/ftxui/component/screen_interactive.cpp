@@ -26,7 +26,6 @@
 #else
   #include <termios.h>
   #include <unistd.h>
-  #include <fcntl.h>
 #endif
 
 // Quick exit is missing in standard CLang headers
@@ -106,7 +105,6 @@ int CheckStdinReady(int usec_timeout) {
 void UnixEventListener(std::atomic<bool>* quit, Sender<char> sender) {
   const int buffer_size = 100;
   const int timeout_usec = 50000;
-  // short CHAR_AVAILABLE_TO_READ = POLLIN | POLLPRI;
 
   while (!*quit) {
     if (!CheckStdinReady(timeout_usec))
@@ -219,9 +217,9 @@ void ScreenInteractive::Loop(Component* component) {
   terminal.c_lflag &= ~ECHO;    // Do not print after a key press.
   terminal.c_cc[VMIN] = 0;
   terminal.c_cc[VTIME] = 0;
-  auto oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-  fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-  on_exit_functions.push([=] { fcntl(STDIN_FILENO, F_GETFL, oldf); });
+  //auto oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+  //fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+  //on_exit_functions.push([=] { fcntl(STDIN_FILENO, F_GETFL, oldf); });
 
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
