@@ -124,6 +124,9 @@ static const char* SHOW_CURSOR = "\x1B[?25h";
 static const char* DISABLE_LINE_WRAP = "\x1B[7l";
 static const char* ENABLE_LINE_WRAP = "\x1B[7h";
 
+static const char* USE_ALTERNATIVE_SCREEN = "\x1B[?1049h";
+static const char* USE_NORMAL_SCREEN = "\x1B[?1049l";
+
 using SignalHandler = void(int);
 std::stack<std::function<void()>> on_exit_functions;
 void OnExit(int signal) {
@@ -146,8 +149,13 @@ void OnResize(int /* signal */) {
   on_resize();
 }
 
-ScreenInteractive::ScreenInteractive(int dimx, int dimy, Dimension dimension)
-    : Screen(dimx, dimy), dimension_(dimension) {
+ScreenInteractive::ScreenInteractive(int dimx,
+                                     int dimy,
+                                     Dimension dimension,
+                                     bool use_alternative_screen)
+    : Screen(dimx, dimy),
+      dimension_(dimension),
+      use_alternative_screen_(use_alternative_screen) {
   event_receiver_ = MakeReceiver<Event>();
   event_sender_ = event_receiver_->MakeSender();
 }
@@ -156,22 +164,22 @@ ScreenInteractive::~ScreenInteractive() {}
 
 // static
 ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
-  return ScreenInteractive(dimx, dimy, Dimension::Fixed);
+  return ScreenInteractive(dimx, dimy, Dimension::Fixed, false);
 }
 
 // static
 ScreenInteractive ScreenInteractive::Fullscreen() {
-  return ScreenInteractive(0, 0, Dimension::Fullscreen);
+  return ScreenInteractive(0, 0, Dimension::Fullscreen, true);
 }
 
 // static
 ScreenInteractive ScreenInteractive::TerminalOutput() {
-  return ScreenInteractive(0, 0, Dimension::TerminalOutput);
+  return ScreenInteractive(0, 0, Dimension::TerminalOutput, false);
 }
 
 // static
 ScreenInteractive ScreenInteractive::FitComponent() {
-  return ScreenInteractive(0, 0, Dimension::FitComponent);
+  return ScreenInteractive(0, 0, Dimension::FitComponent, false);
 }
 
 void ScreenInteractive::PostEvent(Event event) {
@@ -256,6 +264,11 @@ void ScreenInteractive::Loop(Component* component) {
   auto event_listener =
       std::thread(&UnixEventListener, &quit_, std::move(char_sender));
 #endif
+
+  if (use_alternative_screen_) {
+    std::cout << USE_ALTERNATIVE_SCREEN;
+    on_exit_functions.push([] { std::cout << USE_NORMAL_SCREEN; });
+  }
 
   // The main loop.
   while (!quit_) {

@@ -43,7 +43,11 @@ class ScreenInteractive : public Screen {
     TerminalOutput,
   };
   Dimension dimension_ = Dimension::Fixed;
-  ScreenInteractive(int dimx, int dimy, Dimension dimension);
+  bool use_alternative_screen_ = false;
+  ScreenInteractive(int dimx,
+                    int dimy,
+                    Dimension dimension,
+                    bool use_alternative_screen);
 
   Sender<Event> event_sender_;
   Receiver<Event> event_receiver_;
