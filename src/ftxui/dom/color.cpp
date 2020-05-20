@@ -42,12 +42,12 @@ class FgColor : public NodeDecorator {
   Color color_;
 };
 
-std::unique_ptr<Node> color(Color c, Element child) {
-  return std::make_unique<FgColor>(unpack(std::move(child)), c);
+Element color(Color c, Element child) {
+  return std::make_shared<FgColor>(unpack(std::move(child)), c);
 }
 
-std::unique_ptr<Node> bgcolor(Color c, Element child) {
-  return std::make_unique<BgColor>(unpack(std::move(child)), c);
+Element bgcolor(Color c, Element child) {
+  return std::make_shared<BgColor>(unpack(std::move(child)), c);
 }
 
 Decorator color(Color c) {

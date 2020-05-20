@@ -69,8 +69,8 @@ class VBox : public Node {
   }
 };
 
-std::unique_ptr<Node> vbox(Elements children) {
-  return std::make_unique<VBox>(std::move(children));
+Element vbox(Elements children) {
+  return std::make_shared<VBox>(std::move(children));
 }
 
 }  // namespace ftxui

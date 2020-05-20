@@ -36,8 +36,8 @@ class Text : public Node {
   std::wstring text_;
 };
 
-std::unique_ptr<Node> text(std::wstring text) {
-  return std::make_unique<Text>(text);
+Element text(std::wstring text) {
+  return std::make_shared<Text>(text);
 }
 
 }  // namespace ftxui

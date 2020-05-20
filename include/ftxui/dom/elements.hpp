@@ -6,20 +6,22 @@
 #define FTXUI_DOM_ELEMENTS_HPP
 
 #include <functional>
+#include <memory>
 
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/color.hpp"
+#include "ftxui/screen/screen.hpp"
 
 namespace ftxui {
-
-using Element = std::unique_ptr<Node>;
+class Node;
+using Element = std::shared_ptr<Node>;
 using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
 using GraphFunction = std::function<std::vector<int>(int, int)>;
 
 // --- Widget ---
 Element text(std::wstring text);
-Element separator();
+Element separator(void);
 Element separator(Pixel);
 Element gauge(float ratio);
 Element border(Element);

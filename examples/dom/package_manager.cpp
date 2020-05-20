@@ -49,49 +49,54 @@ int main(int argc, const char* argv[]) {
     return text(to_wstring(number)) | size(WIDTH, EQUAL, 3);
   };
 
-  // clang-format off
   auto renderTask = [&](const Task& task) {
     auto style = (task.downloaded == task.size) ? dim : bold;
-    return
-      hbox(
+    return hbox({
         text(task.name) | style,
         separator(),
         to_text(task.downloaded),
         text(L"/"),
         to_text(task.size),
         separator(),
-        gauge(task.downloaded / float(task.size))
-      );
+        gauge(task.downloaded / float(task.size)),
+    });
   };
 
   auto renderSummary = [&]() {
-    return
-      window(text(L" Summary "),
-        vbox(
-          hbox(text(L"- done:   "), to_text(nb_done) | bold) | color(Color::Green),
-          hbox(text(L"- active: "), to_text(nb_active) | bold ) | color(Color::RedLight),
-          hbox(text(L"- queue:  "), to_text(nb_queued) | bold) | color(Color::Red)
-        )
-      );
+    auto summary = vbox({
+        hbox({
+            text(L"- done:   "),
+            to_text(nb_done) | bold,
+        }) | color(Color::Green),
+        hbox({
+            text(L"- active: "),
+            to_text(nb_active) | bold,
+        }) | color(Color::RedLight),
+        hbox({
+            text(L"- queue:  "),
+            to_text(nb_queued) | bold,
+        }) | color(Color::Red),
+    });
+
+    return window(text(L" Summary "), summary);
   };
 
-  auto render = [&](){
+  auto render = [&]() {
     std::vector<Element> entries;
-    for(auto& task : displayed_task)
+    for (auto& task : displayed_task)
       entries.push_back(renderTask(task));
 
-    return
-      vbox(
+    return vbox({
         // List of tasks.
-        window(text(L" Task "),
-          vbox(std::move(entries))
-        ),
+        window(text(L" Task "), vbox(std::move(entries))),
 
         // Summary.
-        hbox(renderSummary(), filler())
-      );
+        hbox({
+            renderSummary(),
+            filler(),
+        }),
+    });
   };
-  // clang-format on
 
   auto updateModel = [&]() {
     for (auto& task : displayed_task) {

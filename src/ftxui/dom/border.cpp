@@ -105,17 +105,17 @@ class Border : public Node {
   }
 };
 
-std::unique_ptr<Node> border(Element child) {
-  return std::make_unique<Border>(unpack(std::move(child)));
+Element border(Element child) {
+  return std::make_shared<Border>(unpack(std::move(child)));
 }
 
-std::unique_ptr<Node> window(Element title, Element content) {
-  return std::make_unique<Border>(unpack(std::move(content), std::move(title)));
+Element window(Element title, Element content) {
+  return std::make_shared<Border>(unpack(std::move(content), std::move(title)));
 }
 
 Decorator borderWith(Pixel pixel) {
   return [pixel](Element child) {
-    return std::make_unique<Border>(unpack(std::move(child)), pixel);
+    return std::make_shared<Border>(unpack(std::move(child)), pixel);
   };
 }
 

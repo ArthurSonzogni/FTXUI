@@ -31,7 +31,7 @@ struct Pixel {
 
 struct Dimension {
   static Dimension Fixed(int);
-  static Dimension Fit(std::unique_ptr<Node>&);
+  static Dimension Fit(std::shared_ptr<Node>&);
   static Dimension Full();
 
   int dimx;

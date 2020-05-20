@@ -41,8 +41,8 @@ class DBox : public Node {
   }
 };
 
-std::unique_ptr<Node> dbox(Elements children) {
-  return std::make_unique<DBox>(std::move(children));
+Element dbox(Elements children) {
+  return std::make_shared<DBox>(std::move(children));
 }
 
 }  // namespace ftxui

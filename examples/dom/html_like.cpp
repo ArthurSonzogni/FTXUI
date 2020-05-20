@@ -15,11 +15,11 @@ int main(int argc, const char* argv[]) {
   using namespace std::chrono_literals;
 
   auto img1 = []() { return text(L"img") | border; };
-  auto img2 = []() { return vbox(text(L"big"), text(L"image")) | border; };
+  auto img2 = []() { return vbox({text(L"big"), text(L"image")}) | border; };
 
   std::string reset_position;
   for (int i = 0;; ++i) {
-    auto document =
+    auto document =  //
         hflow(
             paragraph(L"Hello world! Here is an image:"), img1(),
             paragraph(L" Here is a text "), text(L"underlined ") | underlined,

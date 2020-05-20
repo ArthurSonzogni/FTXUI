@@ -57,14 +57,14 @@ class MyComponent : public Component {
   // clang-format off
    Element Render() override {
      return
-        hbox(
+        hbox({
           menu_1.Render() | flex, separator(),
           menu_2.Render() | flex, separator(),
           menu_3.Render() | flex, separator(),
           menu_4.Render() | flex, separator(),
           menu_5.Render() | flex, separator(),
-          menu_6.Render() | flex
-        ) | border;
+          menu_6.Render() | flex,
+        }) | border;
    }
   // clang-format on
 };

@@ -33,18 +33,13 @@ class MyComponent : public Component {
   Input input_2;
   Input input_3;
 
-  // clang-format off
   Element Render() override {
-    return
-      border(
-        vbox(
-          hbox(text(L" input_1 : "), input_1.Render()),
-          hbox(text(L" input_2 : "), input_2.Render()),
-          hbox(text(L" input_3 : "), input_3.Render())
-        )
-      );
+    return border(vbox({
+        hbox({text(L" input_1 : "), input_1.Render()}),
+        hbox({text(L" input_2 : "), input_2.Render()}),
+        hbox({text(L" input_3 : "), input_3.Render()}),
+    }));
   }
-  // clang-format on
 };
 
 int main(int argc, const char* argv[]) {

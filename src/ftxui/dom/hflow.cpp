@@ -58,8 +58,8 @@ class HFlow : public Node {
   }
 };
 
-std::unique_ptr<Node> hflow(Elements children) {
-  return std::make_unique<HFlow>(std::move(children));
+Element hflow(Elements children) {
+  return std::make_shared<HFlow>(std::move(children));
 }
 
 }  // namespace ftxui

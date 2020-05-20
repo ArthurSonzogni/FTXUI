@@ -68,8 +68,8 @@ class HBox : public Node {
   }
 };
 
-std::unique_ptr<Node> hbox(Elements children) {
-  return std::make_unique<HBox>(std::move(children));
+Element hbox(Elements children) {
+  return std::make_shared<HBox>(std::move(children));
 }
 
 }  // namespace ftxui

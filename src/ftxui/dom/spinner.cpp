@@ -245,7 +245,7 @@ static const std::vector<std::vector<std::vector<std::wstring>>> elements = {
          L" LOLLOL ",
      }}};
 
-std::unique_ptr<Node> spinner(int c, size_t index) {
+Element spinner(int c, size_t index) {
   if (c == 0) {
     index %= 40;
     if (index > 20)

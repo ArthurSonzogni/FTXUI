@@ -42,8 +42,8 @@ class Graph : public Node {
   GraphFunction graph_function_;
 };
 
-std::unique_ptr<Node> graph(GraphFunction graph_function) {
-  return std::make_unique<Graph>(graph_function);
+Element graph(GraphFunction graph_function) {
+  return std::make_shared<Graph>(graph_function);
 }
 
 }  // namespace ftxui

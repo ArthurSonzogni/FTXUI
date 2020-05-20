@@ -35,8 +35,8 @@ class Gauge : public Node {
   float progress_;
 };
 
-std::unique_ptr<Node> gauge(float progress) {
-  return std::make_unique<Gauge>(progress);
+Element gauge(float progress) {
+  return std::make_shared<Gauge>(progress);
 }
 
 }  // namespace ftxui

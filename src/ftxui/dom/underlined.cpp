@@ -24,8 +24,8 @@ class Underlined : public NodeDecorator {
   }
 };
 
-std::unique_ptr<Node> underlined(Element child) {
-  return std::make_unique<Underlined>(unpack(std::move(child)));
+Element underlined(Element child) {
+  return std::make_shared<Underlined>(unpack(std::move(child)));
 }
 
 }  // namespace ftxui

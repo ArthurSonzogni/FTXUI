@@ -132,17 +132,19 @@ Display a vertical or horizontal line to visually split the content of a
 container in two.
 
 ~~~cpp
-border(hbox(
-  vbox(
-    text(L"left top"),
-    text(L"left bottom")
-  ),
-  separator(),
-  vbox(
-    text(L"right top"),
-    text(L"right bottom")
-  )
-));
+border(
+  hbox({
+    vbox({
+      text(L"left top"),
+      text(L"left bottom"),
+    }),
+    separator(),
+    vbox({
+      text(L"right top"),
+      text(L"right bottom"),
+    }),
+  })
+);
 ~~~
 
 ~~~bash
@@ -213,11 +215,11 @@ An horizontal flow layout is implemented by:
 
 #### Examples
 ~~~cpp
-  hbox(
+  hbox({
     text(L"left") | border ,
     text(L"middle") | border | flex,
-    text(L"right") | border
-  );
+    text(L"right") | border,
+    });
 ~~~
 ~~~bash
 ┌────┐┌─────────────────────────────────────────────────────────────────┐┌─────┐
@@ -226,11 +228,11 @@ An horizontal flow layout is implemented by:
 ~~~
 
 ~~~cpp
-  hbox(
+  hbox({
     text(L"left") | border ,
     text(L"middle") | border | flex,
-    text(L"right") | border | flex
-  );
+    text(L"right") | border | flex,
+    });
 ~~~
 ~~~bash
 ┌────┐┌───────────────────────────────────┐┌───────────────────────────────────┐

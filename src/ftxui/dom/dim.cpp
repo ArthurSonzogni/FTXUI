@@ -24,8 +24,8 @@ class Dim : public NodeDecorator {
   }
 };
 
-std::unique_ptr<Node> dim(Element child) {
-  return std::make_unique<Dim>(unpack(std::move(child)));
+Element dim(Element child) {
+  return std::make_shared<Dim>(unpack(std::move(child)));
 }
 
 }  // namespace ftxui

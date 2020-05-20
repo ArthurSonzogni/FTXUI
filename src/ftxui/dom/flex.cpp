@@ -47,16 +47,16 @@ class NotFlex : public Flex {
   }
 };
 
-std::unique_ptr<Node> filler() {
-  return std::make_unique<Flex>();
+Element filler() {
+  return std::make_shared<Flex>();
 }
 
-std::unique_ptr<Node> flex(Element child) {
-  return std::make_unique<Flex>(std::move(child));
+Element flex(Element child) {
+  return std::make_shared<Flex>(std::move(child));
 }
 
-std::unique_ptr<Node> notflex(Element child) {
-  return std::make_unique<NotFlex>(std::move(child));
+Element notflex(Element child) {
+  return std::make_shared<NotFlex>(std::move(child));
 }
 
 }  // namespace ftxui

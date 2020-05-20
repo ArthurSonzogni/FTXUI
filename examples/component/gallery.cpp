@@ -57,27 +57,28 @@ class MyComponent : public Component {
     container.Add(&input);
   }
 
-  // clang-format off
   Element Render(std::wstring name, Component& component) {
-    return
-      hbox(
+    return hbox({
         text(name) | size(WIDTH, EQUAL, 8),
         separator(),
-        component.Render()
-      );
+        component.Render(),
+    });
   }
 
   Element Render() override {
-    return
-      vbox(
-        Render(L"menu", menu), separator(),
-        Render(L"toggle", toggle), separator(),
-        Render(L"checkbox", checkbox_container), separator(),
-        Render(L"radiobox", radiobox), separator(),
-        Render(L"input", input) | size(WIDTH, LESS_THAN, 30)
-      ) | border;
+    return vbox({
+               Render(L"menu", menu),
+               separator(),
+               Render(L"toggle", toggle),
+               separator(),
+               Render(L"checkbox", checkbox_container),
+               separator(),
+               Render(L"radiobox", radiobox),
+               separator(),
+               Render(L"input", input) | size(WIDTH, LESS_THAN, 30),
+           }) |
+           border;
   }
-  // clang-format on
 };
 
 int main(int argc, const char* argv[]) {

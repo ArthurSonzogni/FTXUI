@@ -41,49 +41,60 @@ class HTopComponent : public Component {
   HTopComponent() {}
   ~HTopComponent() override {}
 
-  // clang-format off
   Element Render() override {
-    return
-      hbox(
-        vbox(
-          // --- Frequency ---
-          text(L"Frequency [Mhz]") | hcenter,
-          hbox(
-            vbox(
-              text(L"2400 "), filler(),
-              text(L"1200 "), filler(),
-              text(L"0% ")
-            ),
-            graph(std::ref(my_graph))
-          ) | flex,
-          separator(),
-          // --- Utilization ---
-          text(L"Utilization [%]") | hcenter,
-          hbox(
-            vbox(
-              text(L"100 "), filler(),
-              text(L"50 "), filler(),
-              text(L"0 ")
-            ),
-            graph(std::ref(my_graph)) | color(Color::RedLight)
-          ) | flex 
-        ) | flex,
-        separator(),
-        // --- Ram ---
-        vbox(
-          text(L"Ram [Mo]") | hcenter,
-          hbox(
-            vbox(
-              text(L"8192"), filler(),
-              text(L"4096 "), filler(),
-              text(L"0 ")
-            ),
-            graph(std::ref(my_graph)) | color(Color::BlueLight)
-         ) | flex
-       ) | flex
-     ) | flex | border;
+    auto frequency = vbox({
+        text(L"Frequency [Mhz]") | hcenter,
+        hbox({
+            vbox({
+                text(L"2400 "),
+                filler(),
+                text(L"1200 "),
+                filler(),
+                text(L"0% "),
+            }),
+            graph(std::ref(my_graph)) | flex,
+        }) | flex,
+    });
+
+    auto utilization = vbox({
+        text(L"Utilization [%]") | hcenter,
+        hbox({
+            vbox({
+                text(L"100 "),
+                filler(),
+                text(L"50 "),
+                filler(),
+                text(L"0 "),
+            }),
+            graph(std::ref(my_graph)) | color(Color::RedLight),
+        }) | flex,
+    });
+
+    auto ram = vbox({
+        text(L"Ram [Mo]") | hcenter,
+        hbox({
+            vbox({
+                text(L"8192"),
+                filler(),
+                text(L"4096 "),
+                filler(),
+                text(L"0 "),
+            }),
+            graph(std::ref(my_graph)) | color(Color::BlueLight),
+        }) | flex,
+    });
+
+    return hbox({
+               vbox({
+                   frequency | flex,
+                   separator(),
+                   utilization | flex,
+               }) | flex,
+               separator(),
+               ram | flex,
+           }) |
+           flex | border;
   }
-  // clang-format on
 };
 
 class CompilerComponent : public Component {
@@ -173,37 +184,38 @@ class CompilerComponent : public Component {
     input_container.Add(&input);
   }
 
-  // clang-format off
   Element Render() override {
-    return
-      vbox(
-        hbox(
-          window(text(L"Compiler"),
-            compiler.Render() | frame | size(HEIGHT, LESS_THAN, 6)
-          ),
-          window(text(L"Flags"), flag.Render()),
-          vbox(
-            window(text(L"Executable:"), executable.Render())
-              | size(WIDTH, EQUAL, 20),
-            window(text(L"Input"),
-              hbox(
-                vbox(
-                  hbox(text(L"Add: "), input_add.Render())
-                    | size(WIDTH, EQUAL, 20)
-                    | size(HEIGHT, EQUAL, 1),
-                  filler()
-                ),
-                separator(),
-                input.Render() | frame | size(HEIGHT, EQUAL, 3) | flex
-              )
-            ) | size(WIDTH, EQUAL, 60)
-          ),
-          filler()
-        ),
-        hflow(RenderCommandLine())
-      ) | border;
+    auto compiler_win = window(text(L"Compiler"), compiler.Render() | frame);
+    auto flags_win = window(text(L"Flags"), flag.Render());
+    auto executable_win = window(text(L"Executable:"), executable.Render());
+    auto input_win =
+        window(text(L"Input"),
+               hbox({
+                   vbox({
+                       hbox({
+                           text(L"Add: "),
+                           input_add.Render(),
+                       }) | size(WIDTH, EQUAL, 20) |
+                           size(HEIGHT, EQUAL, 1),
+                       filler(),
+                   }),
+                   separator(),
+                   input.Render() | frame | size(HEIGHT, EQUAL, 3) | flex,
+               }));
+    return vbox({
+               hbox({
+                   compiler_win | size(HEIGHT, LESS_THAN, 6),
+                   flags_win,
+                   vbox({
+                       executable_win | size(WIDTH, EQUAL, 20),
+                       input_win | size(WIDTH, EQUAL, 60),
+                   }),
+                   filler(),
+               }),
+               hflow(RenderCommandLine()),
+           }) |
+           border;
   }
-  // clang-format on
 
   Elements RenderCommandLine() {
     Elements line;
@@ -230,100 +242,94 @@ class CompilerComponent : public Component {
 };
 
 class SpinnerComponent : public Component {
-  // clang-format off
   Element Render() override {
     Elements entries;
-    for(int i = 0; i<22; ++i) {
+    for (int i = 0; i < 22; ++i) {
       if (i != 0)
-      entries.push_back(
-        spinner(i, shift/2)
-          | bold
-          | size(WIDTH, GREATER_THAN, 2)
-          | border
-      );
+        entries.push_back(spinner(i, shift / 2) | bold |
+                          size(WIDTH, GREATER_THAN, 2) | border);
     }
     return hflow(std::move(entries)) | border;
   }
-  // clang-format on
 };
 
 class ColorComponent : public Component {
-  // clang-format off
   Element Render() override {
-    return
-      hbox(
-        vbox(
-          color(Color::Default, text(L"Default")),
-          color(Color::Black, text(L"Black")),
-          color(Color::GrayDark, text(L"GrayDark")),
-          color(Color::GrayLight, text(L"GrayLight")),
-          color(Color::White, text(L"White")),
-          color(Color::Blue, text(L"Blue")),
-          color(Color::BlueLight, text(L"BlueLight")),
-          color(Color::Cyan, text(L"Cyan")),
-          color(Color::CyanLight, text(L"CyanLight")),
-          color(Color::Green, text(L"Green")),
-          color(Color::GreenLight, text(L"GreenLight")),
-          color(Color::Magenta, text(L"Magenta")),
-          color(Color::MagentaLight, text(L"MagentaLight")),
-          color(Color::Red, text(L"Red")),
-          color(Color::RedLight, text(L"RedLight")),
-          color(Color::Yellow, text(L"Yellow")),
-          color(Color::YellowLight, text(L"YellowLight"))
-        ),
-        vbox(
-          bgcolor(Color::Default, text(L"Default")),
-          bgcolor(Color::Black, text(L"Black")),
-          bgcolor(Color::GrayDark, text(L"GrayDark")),
-          bgcolor(Color::GrayLight, text(L"GrayLight")),
-          bgcolor(Color::White, text(L"White")),
-          bgcolor(Color::Blue, text(L"Blue")),
-          bgcolor(Color::BlueLight, text(L"BlueLight")),
-          bgcolor(Color::Cyan, text(L"Cyan")),
-          bgcolor(Color::CyanLight, text(L"CyanLight")),
-          bgcolor(Color::Green, text(L"Green")),
-          bgcolor(Color::GreenLight, text(L"GreenLight")),
-          bgcolor(Color::Magenta, text(L"Magenta")),
-          bgcolor(Color::MagentaLight, text(L"MagentaLight")),
-          bgcolor(Color::Red, text(L"Red")),
-          bgcolor(Color::RedLight, text(L"RedLight")),
-          bgcolor(Color::Yellow, text(L"Yellow")),
-          bgcolor(Color::YellowLight, text(L"YellowLight"))
-        )
-      ) | hcenter | border;
-    // clang-format on
+    return hbox({
+               vbox({
+                   color(Color::Default, text(L"Default")),
+                   color(Color::Black, text(L"Black")),
+                   color(Color::GrayDark, text(L"GrayDark")),
+                   color(Color::GrayLight, text(L"GrayLight")),
+                   color(Color::White, text(L"White")),
+                   color(Color::Blue, text(L"Blue")),
+                   color(Color::BlueLight, text(L"BlueLight")),
+                   color(Color::Cyan, text(L"Cyan")),
+                   color(Color::CyanLight, text(L"CyanLight")),
+                   color(Color::Green, text(L"Green")),
+                   color(Color::GreenLight, text(L"GreenLight")),
+                   color(Color::Magenta, text(L"Magenta")),
+                   color(Color::MagentaLight, text(L"MagentaLight")),
+                   color(Color::Red, text(L"Red")),
+                   color(Color::RedLight, text(L"RedLight")),
+                   color(Color::Yellow, text(L"Yellow")),
+                   color(Color::YellowLight, text(L"YellowLight")),
+               }),
+               vbox({
+                   bgcolor(Color::Default, text(L"Default")),
+                   bgcolor(Color::Black, text(L"Black")),
+                   bgcolor(Color::GrayDark, text(L"GrayDark")),
+                   bgcolor(Color::GrayLight, text(L"GrayLight")),
+                   bgcolor(Color::White, text(L"White")),
+                   bgcolor(Color::Blue, text(L"Blue")),
+                   bgcolor(Color::BlueLight, text(L"BlueLight")),
+                   bgcolor(Color::Cyan, text(L"Cyan")),
+                   bgcolor(Color::CyanLight, text(L"CyanLight")),
+                   bgcolor(Color::Green, text(L"Green")),
+                   bgcolor(Color::GreenLight, text(L"GreenLight")),
+                   bgcolor(Color::Magenta, text(L"Magenta")),
+                   bgcolor(Color::MagentaLight, text(L"MagentaLight")),
+                   bgcolor(Color::Red, text(L"Red")),
+                   bgcolor(Color::RedLight, text(L"RedLight")),
+                   bgcolor(Color::Yellow, text(L"Yellow")),
+                   bgcolor(Color::YellowLight, text(L"YellowLight")),
+               }),
+           }) |
+           hcenter | border;
   }
 };
 
 class GaugeComponent : public Component {
-  // clang-format off
   Element RenderGauge(int delta) {
     float progress = (shift + delta) % 1000 / 1000.f;
-    return hbox(text(std::to_wstring(int(progress * 100)) + L"% ") | size(WIDTH, EQUAL, 5),
-                gauge(progress));
+    return hbox({
+        text(std::to_wstring(int(progress * 100)) + L"% ") |
+            size(WIDTH, EQUAL, 5),
+        gauge(progress),
+    });
   }
   Element Render() override {
-    return
-      vbox(
-        RenderGauge(0) | color(Color::Black),
-        RenderGauge(100) | color(Color::GrayDark),
-        RenderGauge(50) | color(Color::GrayLight),
-        RenderGauge(6894) | color(Color::White), separator(),
-        RenderGauge(6841) | color(Color::Blue),
-        RenderGauge(9813) | color(Color::BlueLight),
-        RenderGauge(98765) | color(Color::Cyan),
-        RenderGauge(98) | color(Color::CyanLight),
-        RenderGauge(9846) | color(Color::Green),
-        RenderGauge(1122) | color(Color::GreenLight),
-        RenderGauge(84) | color(Color::Magenta),
-        RenderGauge(645) | color(Color::MagentaLight),
-        RenderGauge(568) | color(Color::Red),
-        RenderGauge(2222) | color(Color::RedLight),
-        RenderGauge(220) | color(Color::Yellow),
-        RenderGauge(348) | color(Color::YellowLight)
-      ) | border;
+    return vbox({
+               RenderGauge(0) | color(Color::Black),
+               RenderGauge(100) | color(Color::GrayDark),
+               RenderGauge(50) | color(Color::GrayLight),
+               RenderGauge(6894) | color(Color::White),
+               separator(),
+               RenderGauge(6841) | color(Color::Blue),
+               RenderGauge(9813) | color(Color::BlueLight),
+               RenderGauge(98765) | color(Color::Cyan),
+               RenderGauge(98) | color(Color::CyanLight),
+               RenderGauge(9846) | color(Color::Green),
+               RenderGauge(1122) | color(Color::GreenLight),
+               RenderGauge(84) | color(Color::Magenta),
+               RenderGauge(645) | color(Color::MagentaLight),
+               RenderGauge(568) | color(Color::Red),
+               RenderGauge(2222) | color(Color::RedLight),
+               RenderGauge(220) | color(Color::Yellow),
+               RenderGauge(348) | color(Color::YellowLight),
+           }) |
+           border;
   };
-  // clang-format on
 };
 
 class Tab : public Component {
@@ -354,8 +360,11 @@ class Tab : public Component {
   }
 
   Element Render() override {
-    return vbox(text(L"FTXUI Demo") | bold | hcenter,
-                tab_selection.Render() | hcenter, container.Render());
+    return vbox({
+        text(L"FTXUI Demo") | bold | hcenter,
+        tab_selection.Render() | hcenter,
+        container.Render(),
+    });
   }
 };
 

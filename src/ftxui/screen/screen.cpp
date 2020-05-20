@@ -52,7 +52,7 @@ Dimension Dimension::Fixed(int v) {
   return Dimension{v, v};
 }
 
-Dimension Dimension::Fit(std::unique_ptr<Node>& e) {
+Dimension Dimension::Fit(std::shared_ptr<Node>& e) {
   e->ComputeRequirement();
   Terminal::Dimensions size = Terminal::Size();
   return Dimension{std::min(e->requirement().min.x, size.dimx),

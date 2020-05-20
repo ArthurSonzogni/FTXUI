@@ -20,17 +20,17 @@ int main(int argc, const char* argv[]) {
     for (int i = 0; i < 22; ++i) {
       if (i != 0)
         entries.push_back(separator());
-      // clang-format off
-      entries.push_back(
-        hbox(
-          text(to_wstring(i)) | size(WIDTH, EQUAL, 2),
-          separator(),
-          spinner(i, index) | bold
-        )
-      );
-      // clang-format on
+      entries.push_back(  //
+          hbox({
+              text(to_wstring(i)) | size(WIDTH, EQUAL, 2),
+              separator(),
+              spinner(i, index) | bold,
+          }));
     }
-    auto document = hbox(vbox(std::move(entries)) | border, filler());
+    auto document = hbox({
+        vbox(std::move(entries)) | border,
+        filler(),
+    });
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document.get());
     std::cout << reset_position << screen.ToString() << std::flush;

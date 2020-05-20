@@ -14,7 +14,7 @@ namespace ftxui {
 
 class Select : public Node {
  public:
-  Select(std::vector<std::unique_ptr<Node>> children)
+  Select(std::vector<std::shared_ptr<Node>> children)
       : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
@@ -34,15 +34,15 @@ class Select : public Node {
   }
 };
 
-std::unique_ptr<Node> select(Element child) {
-  return std::make_unique<Select>(unpack(std::move(child)));
+Element select(Element child) {
+  return std::make_shared<Select>(unpack(std::move(child)));
 }
 
 // -----------------------------------------------------------------------------
 
 class Focus : public Select {
  public:
-  Focus(std::vector<std::unique_ptr<Node>> children)
+  Focus(std::vector<Element> children)
       : Select(std::move(children)) {}
 
   void ComputeRequirement() override {
@@ -56,15 +56,15 @@ class Focus : public Select {
   }
 };
 
-std::unique_ptr<Node> focus(Element child) {
-  return std::make_unique<Focus>(unpack(std::move(child)));
+Element focus(Element child) {
+  return std::make_shared<Focus>(unpack(std::move(child)));
 }
 
 // -----------------------------------------------------------------------------
 
 class Frame : public Node {
  public:
-  Frame(std::vector<std::unique_ptr<Node>> children)
+  Frame(std::vector<Element> children)
       : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
@@ -123,8 +123,8 @@ class Frame : public Node {
   }
 };
 
-std::unique_ptr<Node> frame(Element child) {
-  return std::make_unique<Frame>(unpack(std::move(child)));
+Element frame(Element child) {
+  return std::make_shared<Frame>(unpack(std::move(child)));
 }
 
 }  // namespace ftxui

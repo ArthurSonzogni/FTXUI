@@ -14,10 +14,13 @@
 
 namespace ftxui {
 
+using Element = std::shared_ptr<Node>;
+using Elements = std::vector<std::shared_ptr<Node>>;
+
 class Node {
  public:
   Node();
-  Node(std::vector<std::unique_ptr<Node>> children);
+  Node(Elements children);
   virtual ~Node();
 
   // Step 1: Compute layout requirement. Tell parent what dimensions this
@@ -33,7 +36,7 @@ class Node {
   // Step 3: Draw this element.
   virtual void Render(Screen& screen);
 
-  std::vector<std::unique_ptr<Node>> children;
+  std::vector<Element> children;
 
  protected:
   Requirement requirement_;

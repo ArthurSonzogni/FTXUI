@@ -45,23 +45,23 @@ int main(int argc, const char* argv[]) {
 
   std::string reset_position;
   for (int i = 0;; ++i) {
-    // clang-format off
     auto document =
-      hbox(
-        vbox(
-          graph(std::ref(my_graph)), separator(),
-          graph(triangle) | inverted
-        ) | flex,
-        separator(),
-        vbox(
-          graph(std::ref(my_graph)) | color(Color::BlueLight), separator(),
-          graph(std::ref(my_graph)) | color(Color::RedLight), separator(),
-          graph(std::ref(my_graph)) | color(Color::YellowLight)
-        ) | flex
-      )
-      | border
-      | size(HEIGHT, GREATER_THAN, 40);
-    // clang-format on
+        hbox({
+            vbox({
+                graph(std::ref(my_graph)),
+                separator(),
+                graph(triangle) | inverted,
+            }) | flex,
+            separator(),
+            vbox({
+                graph(std::ref(my_graph)) | color(Color::BlueLight),
+                separator(),
+                graph(std::ref(my_graph)) | color(Color::RedLight),
+                separator(),
+                graph(std::ref(my_graph)) | color(Color::YellowLight),
+            }) | flex,
+        }) |
+        border | size(HEIGHT, GREATER_THAN, 40);
 
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document.get());

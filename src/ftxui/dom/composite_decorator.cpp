@@ -7,19 +7,19 @@
 
 namespace ftxui {
 
-std::unique_ptr<Node> hcenter(Element child) {
+Element hcenter(Element child) {
   return hbox(filler(), std::move(child), filler());
 }
 
-std::unique_ptr<Node> vcenter(Element child) {
+Element vcenter(Element child) {
   return vbox(filler(), std::move(child), filler());
 }
 
-std::unique_ptr<Node> center(Element child) {
+Element center(Element child) {
   return hcenter(vcenter(std::move(child)));
 }
 
-std::unique_ptr<Node> align_right(Element child) {
+Element align_right(Element child) {
   return hbox(filler(), std::move(child));
 }
 

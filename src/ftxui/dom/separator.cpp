@@ -49,12 +49,12 @@ class SeparatorWithPixel : public Separator {
   Pixel p;
 };
 
-std::unique_ptr<Node> separator() {
-  return std::make_unique<Separator>();
+Element separator() {
+  return std::make_shared<Separator>();
 }
 
-std::unique_ptr<Node> separator(Pixel pixel) {
-  return std::make_unique<SeparatorWithPixel>(pixel);
+Element separator(Pixel pixel) {
+  return std::make_shared<SeparatorWithPixel>(pixel);
 }
 
 }  // namespace ftxui

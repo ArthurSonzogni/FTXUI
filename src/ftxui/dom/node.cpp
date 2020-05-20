@@ -9,8 +9,7 @@ namespace ftxui {
 using ftxui::Screen;
 
 Node::Node() {}
-Node::Node(std::vector<std::unique_ptr<Node>> children)
-    : children(std::move(children)) {}
+Node::Node(Elements children) : children(std::move(children)) {}
 Node::~Node() {}
 
 void Node::ComputeRequirement() {

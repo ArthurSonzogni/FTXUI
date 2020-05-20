@@ -76,7 +76,7 @@ class Size : public Node {
 
 Decorator size(Direction direction, Constraint constraint, int value) {
   return [=](Element e) {
-    return std::make_unique<Size>(std::move(e), direction, constraint, value);
+    return std::make_shared<Size>(std::move(e), direction, constraint, value);
   };
 }
 

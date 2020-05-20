@@ -38,19 +38,24 @@ class MyComponent : public Component {
   Toggle toggle_3_;
   Toggle toggle_4_;
 
-  // clang-format off
   Element Render() override {
-    return
-      vbox(
+    return vbox({
         text(L"Choose your options:"),
         text(L""),
         hbox(text(L" * Poweroff on startup      : "), toggle_1_.Render()),
         hbox(text(L" * Out of process           : "), toggle_2_.Render()),
         hbox(text(L" * Price of the information : "), toggle_3_.Render()),
-        hbox(text(L" * Number of elements       : "), toggle_4_.Render())
-      );
+        hbox(text(L" * Number of elements       : "), toggle_4_.Render()),
+    });
   }
-  // clang-format on
+
+  bool OnEvent(Event event) {
+    if (event == Event::Return) {
+      on_enter();
+      return true;
+    }
+    return Component::OnEvent(event);
+  }
 };
 
 int main(int argc, const char* argv[]) {

@@ -40,38 +40,39 @@ class MyComponent : public Component {
   Menu left_menu;
   Menu right_menu;
 
-  // clang-format off
-   Element Render() override {
-     int sum = left_menu.selected * 10 + right_menu.selected;
-     return
-       border(
-         vbox(
-           // -------- Top panel --------------
-           hbox(
-             // -------- Left Menu --------------
-             vbox(
-               hcenter(bold(text(L"Percentage by 10%"))),
-               separator(),
-               left_menu.Render()
-             ) | flex,
-             // -------- Right Menu --------------
-             vbox(
-               hcenter(bold(text(L"Percentage by 1%"))),
-               separator(),
-               right_menu.Render()
-             ) | flex,
-             filler()
-           ),
-           separator(),
-           // -------- Bottom panel --------------
-           vbox(
-             hbox(text(L" gauge : "), gauge(sum/100.0)),
-             hbox(text(L"  text : "), text(to_wstring(std::to_string(sum) + " %")))
-           ) | flex
-         )
-       );
-   }
-  // clang-format on
+  Element Render() override {
+    int sum = left_menu.selected * 10 + right_menu.selected;
+    return border(vbox({
+        // -------- Top panel --------------
+        hbox({
+            // -------- Left Menu --------------
+            vbox({
+                hcenter(bold(text(L"Percentage by 10%"))),
+                separator(),
+                left_menu.Render(),
+            }) | flex,
+            // -------- Right Menu --------------
+            vbox({
+                hcenter(bold(text(L"Percentage by 1%"))),
+                separator(),
+                right_menu.Render(),
+            }) | flex,
+            filler(),
+        }),
+        separator(),
+        // -------- Bottom panel --------------
+        vbox({
+            hbox({
+                text(L" gauge : "),
+                gauge(sum / 100.0),
+            }),
+            hbox({
+                text(L"  text : "),
+                text(to_wstring(std::to_string(sum) + " %")),
+            }),
+        }) | flex,
+    }));
+  }
 };
 
 int main(int argc, const char* argv[]) {
