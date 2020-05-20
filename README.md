@@ -37,14 +37,14 @@ A simple C++ library for terminal based user interface.
 
 ## Example:
 ~~~cpp
-  vbox(
-    hbox(
+  vbox({
+    hbox({
       text(L"left") | border,
       text(L"middle") | border | flex,
       text(L"right") | border
-    ),
+    }),
     gauge(0.5) | border
-  )
+  })
 ~~~
 
 ~~~bash
