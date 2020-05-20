@@ -27,7 +27,7 @@ void Node::Render(Screen& screen) {
 }
 
 void Render(Screen& screen, const Element& element) {
-  Render(screen, element);
+  Render(screen, element.get());
 }
 
 void Render(Screen& screen, Node* node) {
