@@ -30,7 +30,7 @@ class DrawKey : public Component {
         code += L"(special)";
       children.push_back(text(code));
     }
-    return vbox(std::move(children));
+    return window(text(L"keys"), vbox(std::move(children)));
   }
 
   bool OnEvent(Event event) override {
@@ -43,7 +43,7 @@ class DrawKey : public Component {
 };
 
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::FixedSize(80, 10);
+  auto screen = ScreenInteractive::TerminalOutput();
   DrawKey draw_key;
   screen.Loop(&draw_key);
 }
