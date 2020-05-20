@@ -65,7 +65,7 @@
           filler()
         );
       auto screen = Screen::Create(Dimension::Fit(document));
-      Render(screen, document.get());
+      Render(screen, document);
       std::cout << screen.ToString() << std::endl;
       return 0;
     }

@@ -12,7 +12,7 @@ using namespace ftxui;
 TEST(TextTest, ScreenHeightSmaller) {
   auto element = text(L"test");
   Screen screen(2, 0);
-  Render(screen, element.get());
+  Render(screen, element);
 
   EXPECT_EQ("", screen.ToString());
 }
@@ -20,7 +20,7 @@ TEST(TextTest, ScreenHeightSmaller) {
 TEST(TextTest, ScreenSmaller) {
   auto element = text(L"test");
   Screen screen(2, 1);
-  Render(screen, element.get());
+  Render(screen, element);
 
   EXPECT_EQ("te", screen.ToString());
 }
@@ -28,7 +28,7 @@ TEST(TextTest, ScreenSmaller) {
 TEST(TextTest, ScreenFit) {
   auto element = text(L"test");
   Screen screen(4, 1);
-  Render(screen, element.get());
+  Render(screen, element);
 
   EXPECT_EQ("test", screen.ToString());
 }
@@ -36,7 +36,7 @@ TEST(TextTest, ScreenFit) {
 TEST(TextTest, ScreenBigger) {
   auto element = text(L"test");
   Screen screen(6, 1);
-  Render(screen, element.get());
+  Render(screen, element);
 
   EXPECT_EQ("test  ", screen.ToString());
 }
@@ -44,7 +44,7 @@ TEST(TextTest, ScreenBigger) {
 TEST(TextTest, ScreenBigger2) {
   auto element = text(L"test");
   Screen screen(6, 2);
-  Render(screen, element.get());
+  Render(screen, element);
 
   EXPECT_EQ("test  \n      ", screen.ToString());
 }
@@ -53,7 +53,7 @@ TEST(TextTest, ScreenBigger2) {
 TEST(TextTest, CJK) {
   auto element = text(L"测试") | border;
   Screen screen(6, 3);
-  Render(screen, element.get());
+  Render(screen, element);
   EXPECT_EQ(
       "┌────┐\n"
       "│测试│\n"
@@ -65,7 +65,7 @@ TEST(TextTest, CJK) {
 TEST(TextTest, CJK_2) {
   auto element = text(L"测试") | border;
   Screen screen(5, 3);
-  Render(screen, element.get());
+  Render(screen, element);
   EXPECT_EQ(
       "┌───┐\n"
       "│测试\n"
@@ -77,7 +77,7 @@ TEST(TextTest, CJK_2) {
 TEST(TextTest, CJK_3) {
   auto element = text(L"测试") | border;
   Screen screen(4, 3);
-  Render(screen, element.get());
+  Render(screen, element);
   EXPECT_EQ(
       "┌──┐\n"
       "│测│\n"

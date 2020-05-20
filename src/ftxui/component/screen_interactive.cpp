@@ -321,7 +321,7 @@ void ScreenInteractive::Draw(Component* component) {
     cursor_.y = dimy_ - 1;
   }
 
-  Render(*this, document.get());
+  Render(*this, document);
 
   // Set cursor position for user using tools to insert CJK characters.
   set_cursor_position = "";

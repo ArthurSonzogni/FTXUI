@@ -32,7 +32,7 @@ int main(int argc, const char* argv[]) {
         filler(),
     });
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
-    Render(screen, document.get());
+    Render(screen, document);
     std::cout << reset_position << screen.ToString() << std::flush;
     reset_position = screen.ResetPosition();
 

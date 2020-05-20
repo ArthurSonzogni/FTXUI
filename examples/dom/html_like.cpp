@@ -45,7 +45,7 @@ int main(int argc, const char* argv[]) {
         border;
 
     auto screen = Screen::Create(Dimension::Full());
-    Render(screen, document.get());
+    Render(screen, document);
     std::cout << reset_position << screen.ToString() << std::flush;
 
     reset_position = screen.ResetPosition();

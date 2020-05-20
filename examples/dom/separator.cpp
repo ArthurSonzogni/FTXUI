@@ -22,7 +22,7 @@ int main(int argc, const char* argv[]) {
                   }) |
                   border;
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
-  Render(screen, document.get());
+  Render(screen, document);
 
   std::cout << screen.ToString() << std::endl;
 

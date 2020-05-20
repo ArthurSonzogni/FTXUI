@@ -30,7 +30,7 @@ int main(int argc, const char* argv[]) {
           }),
       });
   auto screen = Screen::Create(Dimension::Full());
-  Render(screen, document.get());
+  Render(screen, document);
 
   std::cout << screen.ToString();
   getchar();

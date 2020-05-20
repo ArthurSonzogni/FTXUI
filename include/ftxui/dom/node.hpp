@@ -43,6 +43,7 @@ class Node {
   Box box_;
 };
 
+void Render(Screen& screen, const Element& node);
 void Render(Screen& screen, Node* node);
 
 }  // namespace ftxui

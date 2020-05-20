@@ -15,7 +15,7 @@ int main(int argc, const char* argv[]) {
       text(L". Do you like it?"),
   });
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
-  Render(screen, document.get());
+  Render(screen, document);
 
   std::cout << screen.ToString();
 

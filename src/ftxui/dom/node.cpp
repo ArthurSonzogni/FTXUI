@@ -26,6 +26,10 @@ void Node::Render(Screen& screen) {
     child->Render(screen);
 }
 
+void Render(Screen& screen, const Element& element) {
+  Render(screen, element);
+}
+
 void Render(Screen& screen, Node* node) {
   // Step 1: Find what dimension this elements wants to be.
   node->ComputeRequirement();
