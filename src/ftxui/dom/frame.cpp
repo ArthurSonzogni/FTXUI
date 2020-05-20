@@ -42,8 +42,7 @@ Element select(Element child) {
 
 class Focus : public Select {
  public:
-  Focus(std::vector<Element> children)
-      : Select(std::move(children)) {}
+  Focus(std::vector<Element> children) : Select(std::move(children)) {}
 
   void ComputeRequirement() override {
     Select::ComputeRequirement();
@@ -64,8 +63,7 @@ Element focus(Element child) {
 
 class Frame : public Node {
  public:
-  Frame(std::vector<Element> children)
-      : Node(std::move(children)) {}
+  Frame(std::vector<Element> children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();

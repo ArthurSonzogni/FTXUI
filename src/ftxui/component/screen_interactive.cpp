@@ -225,9 +225,9 @@ void ScreenInteractive::Loop(Component* component) {
   terminal.c_lflag &= ~ECHO;    // Do not print after a key press.
   terminal.c_cc[VMIN] = 0;
   terminal.c_cc[VTIME] = 0;
-  //auto oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-  //fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-  //on_exit_functions.push([=] { fcntl(STDIN_FILENO, F_GETFL, oldf); });
+  // auto oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
+  // fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
+  // on_exit_functions.push([=] { fcntl(STDIN_FILENO, F_GETFL, oldf); });
 
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
