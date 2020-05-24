@@ -37,7 +37,7 @@ bool Container::OnEvent(Event event) {
   if (!Focused())
     return false;
 
-  if (ActiveChild()->OnEvent(event))
+  if (ActiveChild() && ActiveChild()->OnEvent(event))
     return true;
 
   return (this->*event_handler_)(event);
