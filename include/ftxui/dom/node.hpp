@@ -14,6 +14,7 @@
 
 namespace ftxui {
 
+class Node;
 using Element = std::shared_ptr<Node>;
 using Elements = std::vector<std::shared_ptr<Node>>;
 

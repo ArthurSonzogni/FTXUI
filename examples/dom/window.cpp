@@ -8,15 +8,8 @@
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
-  auto document = hbox({
-      text(L"This text is "),
-      text(L"inverted") | inverted,
-      text(L". Do you like it?"),
-  });
-  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
+  auto document = window(text(L"Title"), text(L"content"));
+  auto screen = Screen::Create(Dimension::Fixed(30), Dimension::Fixed(6));
   Render(screen, document);
-
-  std::cout << screen.ToString();
-
-  return 0;
+  std::cout << screen.ToString() << std::endl;
 }

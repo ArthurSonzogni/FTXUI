@@ -22,7 +22,7 @@ int main(int argc, const char *argv[]) {
       text(L"left") | bold | border,
       text(L"middle") | flex | border,
       text(L"right") | border,
-      });
+    });
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);
 

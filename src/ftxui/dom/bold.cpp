@@ -22,6 +22,8 @@ class Bold : public NodeDecorator {
   }
 };
 
+/// @brief Use a bold font, for elements with more emphasis.
+/// @ingroup dom
 Element bold(Element child) {
   return std::make_shared<Bold>(unpack(std::move(child)));
 }

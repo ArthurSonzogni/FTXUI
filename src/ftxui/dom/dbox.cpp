@@ -43,6 +43,10 @@ class DBox : public Node {
   }
 };
 
+/// @brief Stack several element on top of each other.
+/// @param The input element.
+/// @return The right aligned element.
+/// @ingroup dom
 Element dbox(Elements children) {
   return std::make_shared<DBox>(std::move(children));
 }

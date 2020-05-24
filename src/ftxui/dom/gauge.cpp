@@ -39,6 +39,24 @@ class Gauge : public Node {
   float progress_;
 };
 
+/// @brief Draw a high definition progress bar.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge. It can be used to represent a progress bar.
+/// ~~~cpp
+/// border(gauge(0.5))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+/// ┌──────────────────────────────────────────────────────────────────────────┐
+/// │█████████████████████████████████████                                     │
+/// └──────────────────────────────────────────────────────────────────────────┘
+/// ~~~
 Element gauge(float progress) {
   return std::make_shared<Gauge>(progress);
 }

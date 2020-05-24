@@ -44,6 +44,8 @@ class Graph : public Node {
   GraphFunction graph_function_;
 };
 
+/// @brief Draw a graph using a GraphFunction.
+/// @param graph_function the function to be called to get the data.
 Element graph(GraphFunction graph_function) {
   return std::make_shared<Graph>(graph_function);
 }

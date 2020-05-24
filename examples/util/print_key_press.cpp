@@ -3,12 +3,11 @@
 // the LICENSE file.
 
 #include <chrono>
+#include <ftxui/component/component.hpp>
+#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/screen/string.hpp>
 #include <iostream>
 #include <thread>
-
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/screen/string.hpp"
 
 using namespace ftxui;
 

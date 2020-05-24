@@ -9,6 +9,8 @@
 
 namespace ftxui {
 
+/// @brief The set of supported terminal colors.
+/// @ingroup screen
 enum class Color : uint8_t {
   // --- Transparent -----
   Default = 39,

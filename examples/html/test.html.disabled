@@ -26,8 +26,8 @@
   <script type="text/c++">
     #include <iostream>
 
-    #include "ftxui/screen/screen.hpp"
-    #include "ftxui/dom/elements.hpp"
+    #include <ftxui/screen/screen.hpp>
+    #include <ftxui/dom/elements.hpp>
 
     int main() {
       using namespace ftxui;
