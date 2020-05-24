@@ -63,7 +63,8 @@ Element focus(Element child) {
 
 class Frame : public Node {
  public:
-  Frame(std::vector<Element> children, bool x_frame, bool y_frame) : Node(std::move(children)), x_frame_(x_frame), y_frame_(y_frame) {}
+  Frame(std::vector<Element> children, bool x_frame, bool y_frame)
+      : Node(std::move(children)), x_frame_(x_frame), y_frame_(y_frame) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -109,6 +110,10 @@ class Frame : public Node {
   bool y_frame_;
 };
 
+/// @brief Allow an element to be displayed inside a 'virtual' area. It size can
+/// be larger than its container. In this case only a smaller portion is
+/// displayed. The view is scrollable to make the focused element visible.
+/// @seealso focus
 Element frame(Element child) {
   return std::make_shared<Frame>(unpack(std::move(child)), true, true);
 }

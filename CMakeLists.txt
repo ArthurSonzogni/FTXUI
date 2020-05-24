@@ -7,6 +7,7 @@ project(ftxui
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
+option(FTXUI_BUILD_DOCS "Set to ON to build tests" ON)
 
 enable_testing()
 
@@ -196,4 +197,8 @@ endif()
 
 if(FTXUI_BUILD_EXAMPLES)
   add_subdirectory(examples)
+endif()
+
+if(FTXUI_BUILD_DOCS)
+  add_subdirectory(doc)
 endif()

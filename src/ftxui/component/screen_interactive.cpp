@@ -24,7 +24,7 @@
   #ifndef NOMINMAX
     #define NOMINMAX
   #endif
-  #include <Windows.h> 
+  #include <Windows.h>
   #ifndef UNICODE
     #error Must be compiled in UNICODE mode
   #endif

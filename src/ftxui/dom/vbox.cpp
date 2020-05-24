@@ -129,6 +129,18 @@ class VBox : public Node {
   }
 };
 
+/// @brief A container displaying elements vertically one by one.
+/// @param children The elements in the container
+/// @return The container.
+///
+/// #### Example
+///
+/// ```cpp
+/// vbox({
+///   text(L"Up"),
+///   text(L"Down"),
+/// });
+/// ```
 Element vbox(Elements children) {
   return std::make_shared<VBox>(std::move(children));
 }

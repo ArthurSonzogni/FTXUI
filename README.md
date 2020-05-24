@@ -58,12 +58,12 @@ A simple C++ library for terminal based user interface.
 
 ## Build
 
-* [CMake](https://cmake.org) →  [Instructions](./tutorial/build-with-cmake.md)
-* [nxxm](https://nxxm.github.io) → [Instructions](./tutorial/build-with-nxxm.md)
+* [CMake](https://cmake.org) →  [Instructions](./doc/build-with-cmake.md)
+* [nxxm](https://nxxm.github.io) → [Instructions](./doc/build-with-nxxm.md)
 
 ## Tutorial
 - [Starter cmake project](https://github.com/ArthurSonzogni/ftxui-starter)
-- [Tutorial](./tutorial/tutorial.md)
+- [Tutorial](./doc/tutorial.md)
 
 ## Project using FTXUI
 

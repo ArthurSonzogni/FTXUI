@@ -17,3 +17,11 @@ for file in $files
 do
   clang-format -i $file
 done
+
+exampleList="./doc/example_list.md"
+echo "# Examples" > $exampleList
+files=$(find ./examples/ -iname "*.cpp")
+for f in $files
+do
+  echo "@example $f" >> $exampleList
+done

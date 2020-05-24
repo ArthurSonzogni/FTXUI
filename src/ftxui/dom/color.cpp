@@ -42,18 +42,60 @@ class FgColor : public NodeDecorator {
   Color color_;
 };
 
-Element color(Color c, Element child) {
-  return std::make_shared<FgColor>(unpack(std::move(child)), c);
+/// @brief Set the foreground color of an element.
+/// @param The color of the output element.
+/// @param The input element.
+/// @return The output element colored.
+/// @ingroup dom
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = color(Color::Green, text(L"Success")),
+/// ```
+Element color(Color color, Element child) {
+  return std::make_shared<FgColor>(unpack(std::move(child)), color);
 }
 
-Element bgcolor(Color c, Element child) {
-  return std::make_shared<BgColor>(unpack(std::move(child)), c);
+/// @brief Set the background color of an element.
+/// @param The color of the output element.
+/// @param The input element.
+/// @return The output element colored.
+/// @ingroup dom
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = bgcolor(Color::Green, text(L"Success")),
+/// ```
+Element bgcolor(Color color, Element child) {
+  return std::make_shared<BgColor>(unpack(std::move(child)), color);
 }
 
+/// @brief Decorate using a foreground color.
+/// @param c The foreground color to be applied.
+/// @return The Decorator applying the color.
+/// @ingroup dom
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = text(L"red") | color(Color::Red);
+/// ```
 Decorator color(Color c) {
   return [c](Element child) { return color(c, std::move(child)); };
 }
 
+/// @brief Decorate using a background color.
+/// @param The background color to be applied.
+/// @return The Decorator applying the color.
+/// @ingroup dom
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = text(L"red") | bgcolor(Color::Red);
+/// ```
 Decorator bgcolor(Color c) {
   return [c](Element child) { return bgcolor(c, std::move(child)); };
 }

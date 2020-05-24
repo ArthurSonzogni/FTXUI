@@ -128,6 +128,18 @@ class HBox : public Node {
   }
 };
 
+/// @brief A container displaying elements horizontally one by one.
+/// @param children The elements in the container
+/// @return The container.
+///
+/// #### Example
+///
+/// ```cpp
+/// hbox({
+///   text(L"Left"),
+///   text(L"Right"),
+/// });
+/// ```
 Element hbox(Elements children) {
   return std::make_shared<HBox>(std::move(children));
 }

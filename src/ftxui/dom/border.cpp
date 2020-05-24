@@ -1,7 +1,6 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-
 #include <algorithm>
 
 #include "ftxui/dom/elements.hpp"
@@ -104,15 +103,60 @@ class Border : public Node {
     }
   }
 };
-
+/// @brief Draw a border around the element.
+/// @ingroup dom
+///
+/// Add a border around an element
+///
+/// ### Example
+///
+/// ```cpp
+/// // Use 'border' as a function...
+/// Element document = border(text(L"The element"));
+///
+/// // ...Or as a 'pipe'.
+/// Element document = text(L"The element") | border;
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// ┌───────────┐
+/// │The element│
+/// └───────────┘
+/// ```
 Element border(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)));
 }
 
+/// @brief Draw window with a title and a border around the element.
+/// @param title The title of the window.
+/// @param content The element to be wrapped.
+/// @ingroup dom
+/// @seealso border
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = window(text(L"Title"),
+///                           text(L"content")
+///                    );
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// ┌Title──┐
+/// │content│
+/// └───────┘
+/// ```
 Element window(Element title, Element content) {
   return std::make_shared<Border>(unpack(std::move(content), std::move(title)));
 }
 
+/// @brief Same as border but with a constant Pixel around the element.
+/// @ingroup dom
+/// @seealso border
 Decorator borderWith(Pixel pixel) {
   return [pixel](Element child) {
     return std::make_shared<Border>(unpack(std::move(child)), pixel);

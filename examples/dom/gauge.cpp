@@ -3,11 +3,10 @@
 // the LICENSE file.
 
 #include <chrono>
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/screen/screen.hpp>
 #include <iostream>
 #include <thread>
-
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/screen.hpp"
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

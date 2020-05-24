@@ -17,7 +17,10 @@ class Node;
 }
 
 namespace ftxui {
+using Element = std::shared_ptr<Node>;
 
+/// @brief A unicode character and its associated style.
+/// @ingroup screen
 struct Pixel {
   wchar_t character = U' ';
   bool blink = false;
@@ -29,18 +32,24 @@ struct Pixel {
   Color foreground_color = Color::Default;
 };
 
+/// @brief Define how the Screen's dimensions should look like.
+/// @ingroup screen
 struct Dimension {
+  /// coucou
   static Dimension Fixed(int);
-  static Dimension Fit(std::shared_ptr<Node>&);
+  /// @brief coucou
+  static Dimension Fit(Element&);
   static Dimension Full();
 
   int dimx;
   int dimy;
 };
 
+/// @brief A rectangular grid of Pixel.
+/// @ingroup screen
 class Screen {
  public:
-  // Constructor.
+  // Constructors:
   Screen(int dimx, int dimy);
   static Screen Create(Dimension dimension);
   static Screen Create(Dimension width, Dimension height);

@@ -73,28 +73,33 @@ void WindowsEmulateVT100Terminal() {
 
 }  // namespace
 
+/// A fixed dimension.
 Dimension Dimension::Fixed(int v) {
   return Dimension{v, v};
 }
 
-Dimension Dimension::Fit(std::shared_ptr<Node>& e) {
+/// The minimal dimension that will fit the given element.
+Dimension Dimension::Fit(Element& e) {
   e->ComputeRequirement();
   Terminal::Dimensions size = Terminal::Size();
   return Dimension{std::min(e->requirement().min_x, size.dimx),
                    std::min(e->requirement().min_y, size.dimy)};
 }
 
+/// Use the terminal dimensions.
 Dimension Dimension::Full() {
   Terminal::Dimensions size = Terminal::Size();
   return Dimension{size.dimx, size.dimy};
 }
 
 // static
+/// Create a screen with the given dimension along the x-axis and y-axis.
 Screen Screen::Create(Dimension width, Dimension height) {
   return Screen(width.dimx, height.dimy);
 }
 
 // static
+/// Create a screen with the given dimension.
 Screen Screen::Create(Dimension dimension) {
   return Screen(dimension.dimx, dimension.dimy);
 }
@@ -144,6 +149,7 @@ void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
   previous = next;
 }
 
+/// Produce a std::string that can be used to print the Screen on the terminal.
 std::string Screen::ToString() {
   std::wstringstream ss;
 
@@ -167,14 +173,39 @@ std::string Screen::ToString() {
   return to_string(ss.str());
 }
 
+/// @brief Access a character a given position.
+/// @param x The character position along the x-axis.
+/// @param y The character position along the y-axis.
 wchar_t& Screen::at(int x, int y) {
   return PixelAt(x, y).character;
 }
 
+/// @brief Access a Pixel at a given position.
+/// @param x The pixel position along the x-axis.
+/// @param y The pixel position along the y-axis.
 Pixel& Screen::PixelAt(int x, int y) {
   return In(stencil, x, y) ? pixels_[y][x] : dev_null_pixel;
 }
 
+/// @brief Return a string to be printed in order to reset the cursor position
+///        to the beginning of the screen.
+///
+/// ```cpp
+/// std::string reset_position;
+/// while(true) {
+///   auto document = render();
+///   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
+///   Render(screen, document);
+///   std::cout << reset_position << screen.ToString() << std::flush;
+///   reset_position = screen.ResetPosition();
+///
+///   using namespace std::chrono_literals;
+///   std::this_thread::sleep_for(0.01s);
+/// }
+/// ```
+///
+/// @return The string to print in order to reset the cursor position to the
+///         beginning.
 std::string Screen::ResetPosition() {
   std::stringstream ss;
   ss << MOVE_LEFT << CLEAR_LINE;
@@ -184,6 +215,7 @@ std::string Screen::ResetPosition() {
   return ss.str();
 }
 
+/// @brief Clear all the pixel from the screen.
 void Screen::Clear() {
   pixels_ = std::vector<std::vector<Pixel>>(dimy_,
                                             std::vector<Pixel>(dimx_, Pixel()));

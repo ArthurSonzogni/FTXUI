@@ -1,45 +1,65 @@
-Table of content:
-=================
-
-- [Introduction](#introduction)
-- [DOM](#dom)
-  * [Widget.](#widget)
-    + [text](#text)
-    + [border](#border)
-    + [separator](#separator) [gauge](#gauge)
-  * [Style](#style)
-  * [Layout](#layout)
-    + [Examples](#examples)
-- [Components.](#components)
-  * [Input](#input)
-  * [Menu](#menu)
-  * [Toggle.](#toggle)
-
 ## Introduction
-I recommand not to take too much time reading the tutorial. Instead,
-you should try to read the examples (in [./examples/](../examples)).
 
 The library is split in 3 parts:
-- [ftxui/screen/](../include/ftxui/screen/)
 
-  It defines a ftxui::Screen. A Screen is a grid of ftxui::Pixel. A Pixel contains a character and its associated style.
-  Once the screen is ready, you can display it on the terminal.
-  
-- [ftuix/dom/](../include/ftxui/dom/)
+1. ftxui/screen/
+2. ftxui/dom/
+3. ftxui/component/
 
-  These are a set of hierachical ftxui::Element declared in [ftxui/dom/elements.hpp](../ftxui/dom/elements.hpp).
-  An element can render itself on the the Screen. It manage layout and is responsive to the Screen dimensions.
+# ftxui/screen/
 
-- [ftuix/component/](../include/ftxui/component)
-  The part is only needed if you need to respond to the User input. It defines a set of ftxui::Component.
-  The use can navigates using the arrow keys and interact with widgets like checkbox/inputbox/... You can make you own
+It defines a ftxui::Screen. This is a grid of ftxui::Pixel. A Pixel represent a
+unicode character and its style. The screen can be printed as a string using ftxui::Screen::ToString().
+
+Example:
+~~~cpp
+  #include <ftxui/screen/screen.hpp>
+
+  int main(void) {
+    using namespace ftxui;
+    auto screen = ftxui::Screen(Dimension::Fixed(32), Dimension::Fixed(10));
+
+    auto& pixel = screen.PixelAt(10,10);
+    pixel.character = U'A';
+    pixel.bold = true;
+
+    std::cout << screen.ToString();
+    return EXIT_SUCCESS;
+  }
+~~~
+
+
+2. [ftuix/dom/](../include/ftxui/dom/)
+  These are a set of hierachical ftxui::Element declared in
+  [ftxui/dom/elements.hpp](../ftxui/dom/elements.hpp).  An element can render
+  itself on the the Screen. It manage layout and is responsive to the Screen
+  dimensions.
+
+3. [ftuix/component/](../include/ftxui/component)
+  The part is only needed if you need to respond to the User input. It defines a
+  set of ftxui::Component.  The use can navigates using the arrow keys and
+  interact with widgets like checkbox/inputbox/... You can make you own
   components.
+
+~~~cpp
+  using namespace ftxui;
+
+  auto document = text(L"Hello world");
+
+  auto screen = Screen::Create(Dimension::Fit(document));
+  Render(screen, document);
+
+  std::cout << screen.ToString();
+~~~
+
+
+I recommand not to take too much time reading the tutorial. Instead,
+you should try to read the examples (in [../examples/](../examples)).
 
 ## DOM
 All the dom element are declared in one header:
-~~~cpp
-#include <ftxui/dom/elements.hpp>
-~~~
+
+\include ./ftxui/dom/elements.hpp
 
 It declares the following set of elements:
 
@@ -108,7 +128,9 @@ Element nothing(Element element);
 
 The most simple widget. It displays a text.
 ~~~cpp
-  text(L"I am a piece of text");
+using namespace ftxui;
+
+text(L"I am a piece of text");
 ~~~
 ~~~bash
 I am a piece of text.
@@ -117,6 +139,8 @@ I am a piece of text.
 #### border
 Add a border around an element
 ~~~cpp
+using namespace ftxui;
+
 border(text(L"The element"))
 ~~~
 
@@ -157,7 +181,7 @@ border(
 #### gauge
 
 A gauge. It can be used to represent a progress bar.
-~~~c+
+~~~cpp
 border(gauge(0.5))
 ~~~
 
@@ -250,6 +274,7 @@ its keyboard. They handle keyboard navigation, including component focus.
 
 ### Input
 [![asciicast](https://asciinema.org/a/223719.svg)](https://asciinema.org/a/223719)
+![asciicast](https://asciinema.org/a/223719.svg)
 
 ### Menu
 [![asciicast](https://asciinema.org/a/223720.svg)](https://asciinema.org/a/223720)

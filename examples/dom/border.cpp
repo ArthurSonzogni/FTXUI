@@ -3,41 +3,33 @@
 // the LICENSE file.
 
 #include <chrono>
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/screen/screen.hpp>
 #include <iostream>
 #include <thread>
 
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/screen.hpp"
-
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
-  auto document = hbox({
-      window(text(L" main frame ") | hcenter,
-             vbox({
-                 text(L"Line 1"),
-                 text(L"Line 2"),
-                 text(L"Line 3"),
-                 vbox({
-                     text(L"Line 4"),
-                     text(L"Line 5"),
-                     text(L"Line 6"),
-                 }) | border,
-                 hbox({
-                     window(text(L"frame 2"), vbox({
-                                                  text(L"Line 4"),
-                                                  text(L"Line 5"),
-                                                  text(L"Line 6"),
-                                              })),
-                     window(text(L"frame 3"), vbox({
-                                                  text(L"Line 7"),
-                                                  text(L"Line 8"),
-                                                  text(L"Line 9"),
-                                              })),
-                 }),
-                 text(L"footer footer footer footer footer"),
-             })),
-      filler(),
-  });
+  auto document =  //
+      hbox({
+          vbox({
+              text(L"Line 1"),
+              text(L"Line 2"),
+              text(L"Line 3"),
+          }) | border,
+
+          vbox({
+              text(L"Line 4"),
+              text(L"Line 5"),
+              text(L"Line 6"),
+          }) | border,
+
+          vbox({
+              text(L"Line 7"),
+              text(L"Line 8"),
+              text(L"Line 9"),
+          }) | border,
+      });
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);
   std::cout << screen.ToString() << std::endl;

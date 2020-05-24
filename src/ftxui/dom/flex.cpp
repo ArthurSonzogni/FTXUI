@@ -83,10 +83,33 @@ class Flex : public Node {
   FlexFunction f_;
 };
 
+/// @brief An element that will take expand proportionnally to the space left in
+/// a container.
+/// @ingroup dom
 Element filler() {
   return std::make_shared<Flex>(function_flex);
 }
 
+/// @brief Make a child element to expand proportionnally to the space left in a
+/// container.
+///
+/// #### Examples:
+///
+/// ~~~cpp
+///   hbox({
+///     text(L"left") | border ,
+///     text(L"middle") | border | flex,
+///     text(L"right") | border,
+///   });
+/// ~~~
+///
+/// #### Output:
+///
+/// ~~~bash
+/// ┌────┐┌─────────────────────────────────────────────────────────┐┌─────┐
+/// │left││middle                                                   ││right│
+/// └────┘└─────────────────────────────────────────────────────────┘└─────┘
+/// ~~~
 Element flex(Element child) {
   return std::make_shared<Flex>(function_flex, std::move(child));
 }
