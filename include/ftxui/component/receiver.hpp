@@ -21,8 +21,8 @@ namespace ftxui {
 // ---------------
 //
 // auto receiver = MakeReceiver<std:string>();
-// auto sender_1= receiver.MakeSender();
-// auto sender_2 = receiver.MakeSender();
+// auto sender_1= receiver->MakeSender();
+// auto sender_2 = receiver->MakeSender();
 //
 // Then move the senders elsewhere, potentially in a different thread.
 //
@@ -81,6 +81,11 @@ class ReceiverImpl {
       return true;
     }
     return false;
+  }
+
+  bool HasPending() {
+    std::unique_lock<std::mutex> lock(mutex_);
+    return !queue_.empty();
   }
 
  private:
