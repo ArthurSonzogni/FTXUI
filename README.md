@@ -68,6 +68,7 @@ A simple C++ library for terminal based user interface.
 ## Project using FTXUI
 
 Feel free to add your projects here:
+- [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier)
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [Just-Fast](https://github.com/GiuseppeCesarano/just-fast)
