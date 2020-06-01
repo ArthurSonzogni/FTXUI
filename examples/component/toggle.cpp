@@ -49,7 +49,7 @@ class MyComponent : public Component {
     });
   }
 
-  bool OnEvent(Event event) {
+  bool OnEvent(Event event) override {
     if (event == Event::Return) {
       on_enter();
       return true;

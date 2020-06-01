@@ -15,8 +15,10 @@ struct Requirement {
   int min_y = 0;
 
   // How much flexibility is given to the component.
-  int flex_x = 0;
-  int flex_y = 0;
+  int flex_grow_x = 0;
+  int flex_grow_y = 0;
+  int flex_shrink_x = 0;
+  int flex_shrink_y = 0;
 
   // Focus management to support the frame/focus/select element.
   enum Selection {

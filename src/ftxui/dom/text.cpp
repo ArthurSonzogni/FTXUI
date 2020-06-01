@@ -4,6 +4,7 @@
 
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/string.hpp"
+#include <algorithm>
 
 namespace ftxui {
 
@@ -36,8 +37,43 @@ class Text : public Node {
   std::wstring text_;
 };
 
+class VText : public Node {
+ public:
+  VText(std::wstring text) : Node(), text_(text) {
+    for (auto& c : text_)
+      width_ = std::max(width_, wchar_width(c));
+  }
+  ~VText() {}
+
+  void ComputeRequirement() override {
+    requirement_.min_x = width_;
+    requirement_.min_y = text_.size();
+  }
+
+  void Render(Screen& screen) override {
+    int x = box_.x_min;
+    int y = box_.y_min;
+    if (x + width_ - 1 > box_.x_max)
+      return;
+    for (wchar_t c : text_) {
+      if (y > box_.y_max)
+        return;
+      screen.at(x, y) = c;
+      y += 1;
+    }
+  }
+
+ private:
+  std::wstring text_;
+  int width_ = 1;
+};
+
 Element text(std::wstring text) {
   return std::make_shared<Text>(text);
+}
+
+Element vtext(std::wstring text) {
+  return std::make_shared<VText>(text);
 }
 
 }  // namespace ftxui

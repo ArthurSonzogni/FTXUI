@@ -15,11 +15,13 @@ class VBox : public Node {
   VBox(Elements children) : Node(std::move(children)) {}
   ~VBox() {}
 
-  void ComputeRequirement() {
+  void ComputeRequirement() override {
     requirement_.min_x = 0;
     requirement_.min_y = 0;
-    requirement_.flex_x = 0;
-    requirement_.flex_y = 1;
+    requirement_.flex_grow_x = 0;
+    requirement_.flex_grow_y = 0;
+    requirement_.flex_shrink_x = 0;
+    requirement_.flex_shrink_y = 0;
     for (auto& child : children) {
       child->ComputeRequirement();
       if (requirement_.selection < child->requirement().selection) {
@@ -34,34 +36,92 @@ class VBox : public Node {
     }
   }
 
-  void SetBox(Box box) {
+  void SetBox(Box box) override {
     Node::SetBox(box);
-
-    int flex_sum = 0;
-    for (auto& child : children)
-      flex_sum += child->requirement().flex_y;
 
     int space = box.y_max - box.y_min + 1;
     int extra_space = space - requirement_.min_y;
 
-    int remaining_flex = flex_sum;
-    int remaining_extra_space = extra_space;
+    int size = 0;
+    int flex_grow_sum = 0;
+    int flex_shrink_sum = 0;
+    int flex_shrink_size = 0;
+    for (auto& child : children) {
+      const Requirement& r = child->requirement();
+      flex_grow_sum += r.flex_grow_y;
+      flex_shrink_sum += r.min_y * r.flex_shrink_y;
+      if (r.flex_shrink_y) {
+        flex_shrink_size += r.min_y;
+      }
+      size += r.min_y;
+    }
 
+    if (extra_space >= 0)
+      SetBoxGrow(box, extra_space, flex_grow_sum);
+    else if (flex_shrink_size + extra_space >= 0)
+      SetBoxShrinkEasy(box, extra_space, flex_shrink_sum);
+    else
+      SetBoxShrinkHard(box, extra_space + flex_shrink_size,
+                       size - flex_shrink_size);
+  }
+
+  void SetBoxGrow(Box box, int extra_space, int flex_grow_sum) {
     int y = box.y_min;
     for (auto& child : children) {
       Box child_box = box;
+      const Requirement& r = child->requirement();
+
+      int added_space =
+          extra_space * r.flex_grow_y / std::max(flex_grow_sum, 1);
+      extra_space -= added_space;
+      flex_grow_sum -= r.flex_grow_y;
+
       child_box.y_min = y;
+      child_box.y_max = y + r.min_y + added_space - 1;
 
-      child_box.y_max = y + child->requirement().min_y - 1;
+      child->SetBox(child_box);
+      y = child_box.y_max + 1;
+    }
+  }
 
-      if (child->requirement().flex_y) {
-        int added_space = remaining_extra_space * child->requirement().flex_y /
-                          remaining_flex;
-        remaining_extra_space -= added_space;
-        remaining_flex -= child->requirement().flex_y;
-        child_box.y_max += added_space;
+  void SetBoxShrinkEasy(Box box, int extra_space, int flex_shrink_sum) {
+    int y = box.y_min;
+    for (auto& child : children) {
+      Box child_box = box;
+      const Requirement& r = child->requirement();
+
+      int added_space = extra_space * r.min_y * r.flex_shrink_y /
+                        std::max(flex_shrink_sum, 1);
+      extra_space -= added_space;
+      flex_shrink_sum -= r.flex_shrink_y * r.min_y;
+
+      child_box.y_min = y;
+      child_box.y_max = y + r.min_y + added_space - 1;
+
+      child->SetBox(child_box);
+      y = child_box.y_max + 1;
+    }
+  }
+
+  void SetBoxShrinkHard(Box box, int extra_space, int size) {
+    int y = box.y_min;
+    for (auto& child : children) {
+      Box child_box = box;
+      const Requirement& r = child->requirement();
+
+      if (r.flex_shrink_y) {
+        child_box.y_min = y;
+        child_box.y_max = y - 1;
+        child->SetBox(child_box);
+        continue;
       }
-      child_box.y_max = std::min(child_box.y_max, box.y_max);
+
+      int added_space = extra_space * r.min_y / std::max(1, size);
+      extra_space -= added_space;
+      size -= r.min_y;
+
+      child_box.y_min = y;
+      child_box.y_max = y + r.min_y + added_space - 1;
 
       child->SetBox(child_box);
       y = child_box.y_max + 1;

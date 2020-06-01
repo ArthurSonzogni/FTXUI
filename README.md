@@ -41,10 +41,10 @@ A simple C++ library for terminal based user interface.
     hbox({
       text(L"left") | border,
       text(L"middle") | border | flex,
-      text(L"right") | border
+      text(L"right") | border,
     }),
-    gauge(0.5) | border
-  })
+    gauge(0.5) | border,
+  });
 ~~~
 
 ~~~bash

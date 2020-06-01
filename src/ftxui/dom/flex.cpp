@@ -7,10 +7,36 @@
 
 namespace ftxui {
 
+using FlexFunction = void (*)(Requirement&);
+
+void function_flex_grow(Requirement& r) {
+  r.flex_grow_x = 1;
+  r.flex_grow_y = 1;
+}
+
+void function_flex_shrink(Requirement& r) {
+  r.flex_shrink_x = 1;
+  r.flex_shrink_y = 1;
+}
+
+void function_flex(Requirement& r) {
+  r.flex_grow_x = 1;
+  r.flex_grow_y = 1;
+  r.flex_shrink_x = 1;
+  r.flex_shrink_y = 1;
+}
+
+void function_not_flex(Requirement& r) {
+  r.flex_grow_x = 0;
+  r.flex_grow_y = 0;
+  r.flex_shrink_x = 0;
+  r.flex_shrink_y = 0;
+}
+
 class Flex : public Node {
  public:
-  Flex() {}
-  Flex(Element child) : Node(unpack(std::move(child))) {}
+  Flex(FlexFunction f) { f_ = f; }
+  Flex(FlexFunction f, Element child) : Node(unpack(std::move(child))), f_(f) {}
   ~Flex() override {}
   void ComputeRequirement() override {
     requirement_.min_x = 0;
@@ -19,8 +45,7 @@ class Flex : public Node {
       children[0]->ComputeRequirement();
       requirement_ = children[0]->requirement();
     }
-    requirement_.flex_x = 1;
-    requirement_.flex_y = 1;
+    f_(requirement_);
   }
 
   void SetBox(Box box) override {
@@ -28,35 +53,28 @@ class Flex : public Node {
       return;
     children[0]->SetBox(box);
   }
-};
 
-class NotFlex : public Flex {
- public:
-  NotFlex() {}
-  NotFlex(Element child) : Flex(std::move(child)) {}
-  ~NotFlex() override {}
-  void ComputeRequirement() override {
-    requirement_.min_x = 0;
-    requirement_.min_y = 0;
-    if (!children.empty()) {
-      children[0]->ComputeRequirement();
-      requirement_ = children[0]->requirement();
-    }
-    requirement_.flex_x = 0;
-    requirement_.flex_y = 0;
-  }
+  FlexFunction f_;
 };
 
 Element filler() {
-  return std::make_shared<Flex>();
+  return std::make_shared<Flex>(function_flex);
 }
 
 Element flex(Element child) {
-  return std::make_shared<Flex>(std::move(child));
+  return std::make_shared<Flex>(function_flex, std::move(child));
+}
+
+Element flex_grow(Element child) {
+  return std::make_shared<Flex>(function_flex_grow, std::move(child));
+}
+
+Element flex_shrink(Element child) {
+  return std::make_shared<Flex>(function_flex_shrink, std::move(child));
 }
 
 Element notflex(Element child) {
-  return std::make_shared<NotFlex>(std::move(child));
+  return std::make_shared<Flex>(function_not_flex, std::move(child));
 }
 
 }  // namespace ftxui
