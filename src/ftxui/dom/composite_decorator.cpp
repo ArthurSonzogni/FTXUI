@@ -8,19 +8,19 @@
 namespace ftxui {
 
 Element hcenter(Element child) {
-  return hbox(filler(), std::move(child), filler());
+  return hbox(filler(), std::move(child), filler()) | flex_grow;
 }
 
 Element vcenter(Element child) {
-  return vbox(filler(), std::move(child), filler());
+  return vbox(filler(), std::move(child), filler()) | flex_grow;
 }
 
 Element center(Element child) {
-  return hcenter(vcenter(std::move(child)));
+  return hcenter(vcenter(std::move(child))) | flex_grow;
 }
 
 Element align_right(Element child) {
-  return hbox(filler(), std::move(child));
+  return hbox(filler(), std::move(child)) | flex_grow;
 }
 
 }  // namespace ftxui

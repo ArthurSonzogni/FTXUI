@@ -14,10 +14,12 @@ class Graph : public Node {
   ~Graph() override {}
 
   void ComputeRequirement() override {
-    requirement_.flex_x = 1;
-    requirement_.flex_y = 1;
-    requirement_.min_x = 1;
-    requirement_.min_y = 1;
+    requirement_.flex_grow_x = 1;
+    requirement_.flex_grow_y = 1;
+    requirement_.flex_shrink_x = 1;
+    requirement_.flex_shrink_y = 1;
+    requirement_.min_x = 3;
+    requirement_.min_y = 3;
   }
 
   void Render(Screen& screen) override {

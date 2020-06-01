@@ -37,10 +37,13 @@ class Size : public Node {
         break;
     }
 
-    if (direction_ == WIDTH)
-      requirement_.flex_x = 0;
-    else
-      requirement_.flex_y = 0;
+    if (direction_ == WIDTH) {
+      requirement_.flex_grow_x = 0;
+      requirement_.flex_shrink_x = 0;
+    } else {
+      requirement_.flex_grow_y = 0;
+      requirement_.flex_shrink_y = 0;
+    }
   }
 
   void SetBox(Box box) override {

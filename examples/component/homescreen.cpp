@@ -118,7 +118,7 @@ class CompilerComponent : public Component {
         L"gcc",
         L"clang",
         L"emcc",
-        L"game_maker"
+        L"game_maker",
         L"Ada compilers",
         L"ALGOL 60 compilers",
         L"ALGOL 68 compilers",
@@ -212,9 +212,9 @@ class CompilerComponent : public Component {
                    }),
                    filler(),
                }),
-               hflow(RenderCommandLine()),
+               hflow(RenderCommandLine()) | flex_grow,
            }) |
-           border;
+           flex_grow | border;
   }
 
   Elements RenderCommandLine() {
