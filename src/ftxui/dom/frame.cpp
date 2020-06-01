@@ -23,8 +23,8 @@ class Select : public Node {
     auto& selected_box = requirement_.selected_box;
     selected_box.x_min = 0;
     selected_box.y_min = 0;
-    selected_box.x_max = requirement_.min.x;
-    selected_box.y_max = requirement_.min.y;
+    selected_box.x_max = requirement_.min_x;
+    selected_box.y_max = requirement_.min_y;
     requirement_.selection = Requirement::SELECTED;
   };
 
@@ -76,8 +76,8 @@ class Frame : public Node {
     int external_dimx = box.x_max - box.x_min;
     int external_dimy = box.y_max - box.y_min;
 
-    int internal_dimx = std::max(requirement_.min.x, external_dimx);
-    int internal_dimy = std::max(requirement_.min.y, external_dimy);
+    int internal_dimx = std::max(requirement_.min_x, external_dimx);
+    int internal_dimy = std::max(requirement_.min_y, external_dimy);
 
     auto& selected_box = requirement_.selected_box;
     int focused_dimx = selected_box.x_max - selected_box.x_min;
@@ -96,13 +96,13 @@ class Frame : public Node {
 
     // int dx = box.x_max - box.x_min;
     // int dy = box.y_max - box.y_min;
-    // int cdx = std::min(children[0].requirement().min.x
+    // int cdx = std::min(children[0].requirement().min_x
 
     // Box children_box;
     // children_box.x_min =
-    // if (box.x_max - box.x_min >= children[0].requirement().min.x && //
+    // if (box.x_max - box.x_min >= children[0].requirement().min_x && //
 
-    // box.y_max - box.y_min >= children[0].requirement().min.y) {
+    // box.y_max - box.y_min >= children[0].requirement().min_y) {
     // children_[0]->SetBox(box);
     // dx = 0;
     // dy = 0;

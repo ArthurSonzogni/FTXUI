@@ -13,14 +13,14 @@ class Flex : public Node {
   Flex(Element child) : Node(unpack(std::move(child))) {}
   ~Flex() override {}
   void ComputeRequirement() override {
-    requirement_.min.x = 0;
-    requirement_.min.y = 0;
+    requirement_.min_x = 0;
+    requirement_.min_y = 0;
     if (!children.empty()) {
       children[0]->ComputeRequirement();
       requirement_ = children[0]->requirement();
     }
-    requirement_.flex.x = 1;
-    requirement_.flex.y = 1;
+    requirement_.flex_x = 1;
+    requirement_.flex_y = 1;
   }
 
   void SetBox(Box box) override {
@@ -36,14 +36,14 @@ class NotFlex : public Flex {
   NotFlex(Element child) : Flex(std::move(child)) {}
   ~NotFlex() override {}
   void ComputeRequirement() override {
-    requirement_.min.x = 0;
-    requirement_.min.y = 0;
+    requirement_.min_x = 0;
+    requirement_.min_y = 0;
     if (!children.empty()) {
       children[0]->ComputeRequirement();
       requirement_ = children[0]->requirement();
     }
-    requirement_.flex.x = 0;
-    requirement_.flex.y = 0;
+    requirement_.flex_x = 0;
+    requirement_.flex_y = 0;
   }
 };
 

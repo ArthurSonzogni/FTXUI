@@ -15,16 +15,16 @@ class DBox : public Node {
   ~DBox() {}
 
   void ComputeRequirement() override {
-    requirement_.min.x = 0;
-    requirement_.min.y = 0;
-    requirement_.flex.x = 1;
-    requirement_.flex.y = 0;
+    requirement_.min_x = 0;
+    requirement_.min_y = 0;
+    requirement_.flex_x = 1;
+    requirement_.flex_y = 0;
     for (auto& child : children) {
       child->ComputeRequirement();
-      requirement_.min.x =
-          std::max(requirement_.min.x, child->requirement().min.x);
-      requirement_.min.y =
-          std::max(requirement_.min.y, child->requirement().min.y);
+      requirement_.min_x =
+          std::max(requirement_.min_x, child->requirement().min_x);
+      requirement_.min_y =
+          std::max(requirement_.min_y, child->requirement().min_y);
 
       if (requirement_.selection < child->requirement().selection) {
         requirement_.selection = child->requirement().selection;

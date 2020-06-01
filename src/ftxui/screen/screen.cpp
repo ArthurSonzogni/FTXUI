@@ -55,8 +55,8 @@ Dimension Dimension::Fixed(int v) {
 Dimension Dimension::Fit(std::shared_ptr<Node>& e) {
   e->ComputeRequirement();
   Terminal::Dimensions size = Terminal::Size();
-  return Dimension{std::min(e->requirement().min.x, size.dimx),
-                   std::min(e->requirement().min.y, size.dimy)};
+  return Dimension{std::min(e->requirement().min_x, size.dimx),
+                   std::min(e->requirement().min_y, size.dimy)};
 }
 
 Dimension Dimension::Full() {
