@@ -272,10 +272,12 @@ void ScreenInteractive::Loop(Component* component) {
 
   // The main loop.
   while (!quit_) {
-    std::cout << reset_cursor_position << ResetPosition();
-    Draw(component);
-    std::cout << ToString() << set_cursor_position << std::flush;
-    Clear();
+    if (!event_receiver_->HasPending()) {
+      std::cout << reset_cursor_position << ResetPosition();
+      Draw(component);
+      std::cout << ToString() << set_cursor_position << std::flush;
+      Clear();
+    }
     Event event;
     if (event_receiver_->Receive(&event))
       component->OnEvent(event);
