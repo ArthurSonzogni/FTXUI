@@ -15,21 +15,21 @@ class HBox : public Node {
   ~HBox() {}
 
   void ComputeRequirement() override {
-    requirement_.min.x = 0;
-    requirement_.min.y = 0;
-    requirement_.flex.x = 1;
-    requirement_.flex.y = 0;
+    requirement_.min_x = 0;
+    requirement_.min_y = 0;
+    requirement_.flex_x = 1;
+    requirement_.flex_y = 0;
     for (auto& child : children) {
       child->ComputeRequirement();
       if (requirement_.selection < child->requirement().selection) {
         requirement_.selection = child->requirement().selection;
         requirement_.selected_box = child->requirement().selected_box;
-        requirement_.selected_box.x_min += requirement_.min.x;
-        requirement_.selected_box.x_max += requirement_.min.x;
+        requirement_.selected_box.x_min += requirement_.min_x;
+        requirement_.selected_box.x_max += requirement_.min_x;
       }
-      requirement_.min.x += child->requirement().min.x;
-      requirement_.min.y =
-          std::max(requirement_.min.y, child->requirement().min.y);
+      requirement_.min_x += child->requirement().min_x;
+      requirement_.min_y =
+          std::max(requirement_.min_y, child->requirement().min_y);
     }
   }
 
@@ -38,10 +38,10 @@ class HBox : public Node {
 
     int flex_sum = 0;
     for (auto& child : children)
-      flex_sum += child->requirement().flex.x;
+      flex_sum += child->requirement().flex_x;
 
     int space = box.x_max - box.x_min + 1;
-    int extra_space = space - requirement_.min.x;
+    int extra_space = space - requirement_.min_x;
 
     int remaining_flex = flex_sum;
     int remaining_extra_space = extra_space;
@@ -51,13 +51,13 @@ class HBox : public Node {
       Box child_box = box;
       child_box.x_min = x;
 
-      child_box.x_max = x + child->requirement().min.x - 1;
+      child_box.x_max = x + child->requirement().min_x - 1;
 
-      if (child->requirement().flex.x) {
-        int added_space = remaining_extra_space * child->requirement().flex.x /
+      if (child->requirement().flex_x) {
+        int added_space = remaining_extra_space * child->requirement().flex_x /
                           remaining_flex;
         remaining_extra_space -= added_space;
-        remaining_flex -= child->requirement().flex.x;
+        remaining_flex -= child->requirement().flex_x;
         child_box.x_max += added_space;
       }
       child_box.x_max = std::min(child_box.x_max, box.x_max);

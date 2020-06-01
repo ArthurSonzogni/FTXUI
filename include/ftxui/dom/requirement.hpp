@@ -11,23 +11,20 @@ namespace ftxui {
 
 struct Requirement {
   // The required size to fully draw the element.
-  struct {
-    int x = 0;
-    int y = 0;
-  } min;
+  int min_x = 0;
+  int min_y = 0;
 
   // How much flexibility is given to the component.
-  struct {
-    int x = 0;
-    int y = 0;
-  } flex;
+  int flex_x = 0;
+  int flex_y = 0;
 
-  // Frame.
+  // Focus management to support the frame/focus/select element.
   enum Selection {
     NORMAL = 0,
     SELECTED = 1,
     FOCUSED = 2,
-  } selection = NORMAL;
+  };
+  Selection selection = NORMAL;
   Box selected_box;
 };
 

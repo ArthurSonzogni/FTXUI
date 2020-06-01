@@ -23,7 +23,7 @@ class Size : public Node {
     Node::ComputeRequirement();
     requirement_ = children[0]->requirement();
 
-    auto& value = direction_ == WIDTH ? requirement_.min.x : requirement_.min.y;
+    auto& value = direction_ == WIDTH ? requirement_.min_x : requirement_.min_y;
 
     switch (constraint_) {
       case LESS_THAN:
@@ -38,9 +38,9 @@ class Size : public Node {
     }
 
     if (direction_ == WIDTH)
-      requirement_.flex.x = 0;
+      requirement_.flex_x = 0;
     else
-      requirement_.flex.y = 0;
+      requirement_.flex_y = 0;
   }
 
   void SetBox(Box box) override {

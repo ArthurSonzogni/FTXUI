@@ -15,8 +15,8 @@ class Gauge : public Node {
   ~Gauge() override {}
 
   void ComputeRequirement() override {
-    requirement_.flex.x = 1;
-    requirement_.min.y = 1;
+    requirement_.flex_x = 1;
+    requirement_.min_y = 1;
   }
 
   void Render(Screen& screen) override {

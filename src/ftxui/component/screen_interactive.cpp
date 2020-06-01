@@ -298,7 +298,7 @@ void ScreenInteractive::Draw(Component* component) {
     case Dimension::TerminalOutput:
       document->ComputeRequirement();
       dimx = Terminal::Size().dimx;
-      dimy = document->requirement().min.y;
+      dimy = document->requirement().min_y;
       break;
     case Dimension::Fullscreen:
       dimx = Terminal::Size().dimx;
@@ -307,8 +307,8 @@ void ScreenInteractive::Draw(Component* component) {
     case Dimension::FitComponent:
       auto terminal = Terminal::Size();
       document->ComputeRequirement();
-      dimx = std::min(document->requirement().min.x, terminal.dimx);
-      dimy = std::min(document->requirement().min.y, terminal.dimy);
+      dimx = std::min(document->requirement().min_x, terminal.dimx);
+      dimy = std::min(document->requirement().min_y, terminal.dimy);
       break;
   }
 

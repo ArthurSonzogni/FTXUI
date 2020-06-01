@@ -15,10 +15,10 @@ class HFlow : public Node {
   ~HFlow() {}
 
   void ComputeRequirement() override {
-    requirement_.min.x = 0;
-    requirement_.min.y = 0;
-    requirement_.flex.x = 1;
-    requirement_.flex.y = 1;
+    requirement_.min_x = 0;
+    requirement_.min_y = 0;
+    requirement_.flex_x = 1;
+    requirement_.flex_y = 1;
     for (auto& child : children)
       child->ComputeRequirement();
   }
@@ -35,25 +35,25 @@ class HFlow : public Node {
       Requirement requirement = child->requirement();
 
       // Does it fit the end of the row?
-      if (x + requirement.min.x > box.x_max) {
+      if (x + requirement.min_x > box.x_max) {
         // No? Use the next row.
         x = box.x_min;
         y = y_next;
       }
 
       // Does the current row big enough to contain the element?
-      if (y + requirement.min.y > box.y_max + 1)
+      if (y + requirement.min_y > box.y_max + 1)
         break;  // No? Ignore the element.
 
       Box children_box;
       children_box.x_min = x;
-      children_box.x_max = x + requirement.min.x - 1;
+      children_box.x_max = x + requirement.min_x - 1;
       children_box.y_min = y;
-      children_box.y_max = y + requirement.min.y - 1;
+      children_box.y_max = y + requirement.min_y - 1;
       child->SetBox(children_box);
 
-      x = x + requirement.min.x;
-      y_next = std::max(y_next, y + requirement.min.y);
+      x = x + requirement.min_x;
+      y_next = std::max(y_next, y + requirement.min_y);
     }
   }
 };

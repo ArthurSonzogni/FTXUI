@@ -13,8 +13,8 @@ class Separator : public Node {
   Separator() {}
   ~Separator() override {}
   void ComputeRequirement() override {
-    requirement_.min.x = 1;
-    requirement_.min.y = 1;
+    requirement_.min_x = 1;
+    requirement_.min_y = 1;
   }
 
   void Render(Screen& screen) override {

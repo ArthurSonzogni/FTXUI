@@ -15,8 +15,8 @@ class Text : public Node {
   ~Text() {}
 
   void ComputeRequirement() override {
-    requirement_.min.x = wstring_width(text_);
-    requirement_.min.y = 1;
+    requirement_.min_x = wstring_width(text_);
+    requirement_.min_y = 1;
   }
 
   void Render(Screen& screen) override {

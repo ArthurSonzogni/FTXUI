@@ -27,11 +27,11 @@ class Border : public Node {
   void ComputeRequirement() override {
     Node::ComputeRequirement();
     requirement_ = children[0]->requirement();
-    requirement_.min.x += 2;
-    requirement_.min.y += 2;
+    requirement_.min_x += 2;
+    requirement_.min_y += 2;
     if (children.size() == 2) {
-      requirement_.min.x =
-          std::max(requirement_.min.x, children[1]->requirement().min.x + 2);
+      requirement_.min_x =
+          std::max(requirement_.min_x, children[1]->requirement().min_x + 2);
     }
     requirement_.selected_box.x_min++;
     requirement_.selected_box.x_max++;
