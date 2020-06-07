@@ -63,7 +63,7 @@ Element focus(Element child) {
 
 class Frame : public Node {
  public:
-  Frame(std::vector<Element> children) : Node(std::move(children)) {}
+  Frame(std::vector<Element> children, bool x_frame, bool y_frame) : Node(std::move(children)), x_frame_(x_frame), y_frame_(y_frame) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -72,46 +72,30 @@ class Frame : public Node {
 
   void SetBox(Box box) override {
     Node::SetBox(box);
-
-    int external_dimx = box.x_max - box.x_min;
-    int external_dimy = box.y_max - box.y_min;
-
-    int internal_dimx = std::max(requirement_.min_x, external_dimx);
-    int internal_dimy = std::max(requirement_.min_y, external_dimy);
-
     auto& selected_box = requirement_.selected_box;
-    int focused_dimx = selected_box.x_max - selected_box.x_min;
-    int focused_dimy = selected_box.y_max - selected_box.y_min;
-    int dx = selected_box.x_min - external_dimx / 2 + focused_dimx / 2;
-    int dy = selected_box.y_min - external_dimy / 2 + focused_dimy / 2;
-    dx = std::max(0, std::min(internal_dimx - external_dimx - 1, dx));
-    dy = std::max(0, std::min(internal_dimy - external_dimy - 1, dy));
-
     Box children_box = box;
-    children_box.x_min = box.x_min - dx;
-    children_box.y_min = box.y_min - dy;
-    children_box.x_max = box.x_min + internal_dimx - dx;
-    children_box.y_max = box.y_min + internal_dimy - dy;
+
+    if (x_frame_) {
+      int external_dimx = box.x_max - box.x_min;
+      int internal_dimx = std::max(requirement_.min_x, external_dimx);
+      int focused_dimx = selected_box.x_max - selected_box.x_min;
+      int dx = selected_box.x_min - external_dimx / 2 + focused_dimx / 2;
+      dx = std::max(0, std::min(internal_dimx - external_dimx - 1, dx));
+      children_box.x_min = box.x_min - dx;
+      children_box.x_max = box.x_min + internal_dimx - dx;
+    }
+
+    if (y_frame_) {
+      int external_dimy = box.y_max - box.y_min;
+      int internal_dimy = std::max(requirement_.min_y, external_dimy);
+      int focused_dimy = selected_box.y_max - selected_box.y_min;
+      int dy = selected_box.y_min - external_dimy / 2 + focused_dimy / 2;
+      dy = std::max(0, std::min(internal_dimy - external_dimy - 1, dy));
+      children_box.y_min = box.y_min - dy;
+      children_box.y_max = box.y_min + internal_dimy - dy;
+    }
+
     children[0]->SetBox(children_box);
-
-    // int dx = box.x_max - box.x_min;
-    // int dy = box.y_max - box.y_min;
-    // int cdx = std::min(children[0].requirement().min_x
-
-    // Box children_box;
-    // children_box.x_min =
-    // if (box.x_max - box.x_min >= children[0].requirement().min_x && //
-
-    // box.y_max - box.y_min >= children[0].requirement().min_y) {
-    // children_[0]->SetBox(box);
-    // dx = 0;
-    // dy = 0;
-    // return;
-    //}
-
-    // Box children_box;
-    // children_box.x_min = box.x_min;
-    // children_box.y_min = box.x_min;
   }
 
   void Render(Screen& screen) override {
@@ -119,10 +103,22 @@ class Frame : public Node {
                            Box::Intersection(box_, screen.stencil));
     children[0]->Render(screen);
   }
+
+ private:
+  bool x_frame_;
+  bool y_frame_;
 };
 
 Element frame(Element child) {
-  return std::make_shared<Frame>(unpack(std::move(child)));
+  return std::make_shared<Frame>(unpack(std::move(child)), true, true);
+}
+
+Element xframe(Element child) {
+  return std::make_shared<Frame>(unpack(std::move(child)), true, false);
+}
+
+Element yframe(Element child) {
+  return std::make_shared<Frame>(unpack(std::move(child)), false, true);
 }
 
 }  // namespace ftxui

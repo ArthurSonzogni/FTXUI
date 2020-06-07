@@ -19,6 +19,14 @@ using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
 using GraphFunction = std::function<std::vector<int>(int, int)>;
 
+// Pipe elements into decorator togethers.
+// For instance the next lines are equivalents:
+// -> text("ftxui") | bold | underlined 
+// -> underlined(bold(text(L"FTXUI")))
+Element operator|(Element, Decorator);
+Elements operator|(Elements, Decorator);
+Decorator operator|(Decorator, Decorator);
+
 // --- Widget ---
 Element text(std::wstring text);
 Element vtext(std::wstring text);
@@ -69,6 +77,8 @@ Decorator size(Direction, Constraint, int value);
 // the external one. The internal area is scrolled in order to make visible the
 // focused element.
 Element frame(Element);
+Element xframe(Element);
+Element yframe(Element);
 Element focus(Element);
 Element select(Element);
 
@@ -78,12 +88,6 @@ Element vcenter(Element);
 Element center(Element);
 Element align_right(Element);
 Element nothing(Element element);
-
-// Pipe elements into decorator togethers.
-// Examples: text("ftxui") | bold | underlined;
-Element operator|(Element, Decorator);
-Elements operator|(Elements, Decorator);
-Decorator operator|(Decorator, Decorator);
 
 // Make container able to take any number of children as input.
 #include "take_any_args.hpp"
