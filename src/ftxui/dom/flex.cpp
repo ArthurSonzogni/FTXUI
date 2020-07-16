@@ -14,8 +14,24 @@ void function_flex_grow(Requirement& r) {
   r.flex_grow_y = 1;
 }
 
+void function_xflex_grow(Requirement& r) {
+  r.flex_grow_x = 1;
+}
+
+void function_yflex_grow(Requirement& r) {
+  r.flex_grow_y = 1;
+}
+
 void function_flex_shrink(Requirement& r) {
   r.flex_shrink_x = 1;
+  r.flex_shrink_y = 1;
+}
+
+void function_xflex_shrink(Requirement& r) {
+  r.flex_shrink_x = 1;
+}
+
+void function_yflex_shrink(Requirement& r) {
   r.flex_shrink_y = 1;
 }
 
@@ -23,6 +39,16 @@ void function_flex(Requirement& r) {
   r.flex_grow_x = 1;
   r.flex_grow_y = 1;
   r.flex_shrink_x = 1;
+  r.flex_shrink_y = 1;
+}
+
+void function_xflex(Requirement& r) {
+  r.flex_grow_x = 1;
+  r.flex_shrink_x = 1;
+}
+
+void function_yflex(Requirement& r) {
+  r.flex_grow_y = 1;
   r.flex_shrink_y = 1;
 }
 
@@ -65,12 +91,36 @@ Element flex(Element child) {
   return std::make_shared<Flex>(function_flex, std::move(child));
 }
 
+Element xflex(Element child) {
+  return std::make_shared<Flex>(function_xflex, std::move(child));
+}
+
+Element yflex(Element child) {
+  return std::make_shared<Flex>(function_yflex, std::move(child));
+}
+
 Element flex_grow(Element child) {
   return std::make_shared<Flex>(function_flex_grow, std::move(child));
 }
 
+Element xflex_grow(Element child) {
+  return std::make_shared<Flex>(function_xflex_grow, std::move(child));
+}
+
+Element yflex_grow(Element child) {
+  return std::make_shared<Flex>(function_yflex_grow, std::move(child));
+}
+
 Element flex_shrink(Element child) {
   return std::make_shared<Flex>(function_flex_shrink, std::move(child));
+}
+
+Element xflex_shrink(Element child) {
+  return std::make_shared<Flex>(function_xflex_shrink, std::move(child));
+}
+
+Element yflex_shrink(Element child) {
+  return std::make_shared<Flex>(function_yflex_shrink, std::move(child));
 }
 
 Element notflex(Element child) {
