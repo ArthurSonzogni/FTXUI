@@ -104,11 +104,15 @@ foreach(lib screen dom component)
   endif()
 
   # Add as many warning as possible:
-  if (MSVC)
-    target_compile_options(${lib} PRIVATE "/W4")
-    target_compile_options(${lib} PRIVATE "/WX")
-    target_compile_options(${lib} PRIVATE "/wd4244")
-    target_compile_options(${lib} PRIVATE "/wd4267")
+  if (WIN32)
+    if (MSVC)
+      target_compile_options(${lib} PRIVATE "/W4")
+      target_compile_options(${lib} PRIVATE "/WX")
+      target_compile_options(${lib} PRIVATE "/wd4244")
+      target_compile_options(${lib} PRIVATE "/wd4267")
+    endif()
+    # Force Win32 to UNICODE
+    target_compile_definitions(${lib} PRIVATE UNICODE _UNICODE)
   else()
     target_compile_options(${lib} PRIVATE "-Wall")
     target_compile_options(${lib} PRIVATE "-Wextra")
@@ -117,10 +121,6 @@ foreach(lib screen dom component)
     target_compile_options(${lib} PRIVATE "-Wno-sign-compare")
   endif()
 
-  # Force Win32 to UNICODE
-  if(MSVC)
-    target_compile_definitions(${lib} PRIVATE UNICODE _UNICODE)
-  endif()
 endforeach()
 
 if(FTXUI_ENABLE_INSTALL)

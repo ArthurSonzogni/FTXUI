@@ -4,10 +4,13 @@
 
 #include "ftxui/component/screen_interactive.hpp"
 
+#define DEFINE_CONSOLEV2_PROPERTIES
+
 #include <stdio.h>
 
 #include <algorithm>
 #include <csignal>
+#include <cstdlib>
 #include <iostream>
 #include <stack>
 #include <thread>
@@ -18,8 +21,10 @@
 
 #if defined(_WIN32)
   #define WIN32_LEAN_AND_MEAN
-  #define NOMINMAX
-  #include <Windows.h>
+  #ifndef NOMINMAX
+    #define NOMINMAX
+  #endif
+  #include <Windows.h> 
   #ifndef UNICODE
     #error Must be compiled in UNICODE mode
   #endif
@@ -136,7 +141,7 @@ void OnExit(int signal) {
   }
 
   if (signal == SIGINT)
-    quick_exit(SIGINT);
+    std::exit(SIGINT);
 }
 
 auto install_signal_handler = [](int sig, SignalHandler handler) {
@@ -206,13 +211,21 @@ void ScreenInteractive::Loop(Component* component) {
   on_exit_functions.push([=] { SetConsoleMode(stdout_handle, out_mode); });
   on_exit_functions.push([=] { SetConsoleMode(stdin_handle, in_mode); });
 
-  out_mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-  out_mode |= DISABLE_NEWLINE_AUTO_RETURN;
+  // https://docs.microsoft.com/en-us/windows/console/setconsolemode
+  const int enable_virtual_terminal_processing = 0x0004;
+  const int disable_newline_auto_return = 0x0008;
+  out_mode |= enable_virtual_terminal_processing;
+  out_mode |= disable_newline_auto_return;
 
-  in_mode &= ~ENABLE_ECHO_INPUT;
-  in_mode &= ~ENABLE_LINE_INPUT;
-  in_mode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
-  in_mode |= ENABLE_WINDOW_INPUT;
+  // https://docs.microsoft.com/en-us/windows/console/setconsolemode
+  const int enable_line_input = 0x0002;
+  const int enable_echo_input = 0x0004;
+  const int enable_virtual_terminal_input = 0x0200;
+  const int enable_window_input = 0x0008;
+  in_mode &= ~enable_echo_input;
+  in_mode &= ~enable_line_input;
+  in_mode |= enable_virtual_terminal_input;
+  in_mode |= enable_window_input;
 
   SetConsoleMode(stdin_handle, in_mode);
   SetConsoleMode(stdout_handle, out_mode);
