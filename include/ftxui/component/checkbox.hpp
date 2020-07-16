@@ -20,10 +20,13 @@ class CheckBox : public Component {
   bool state = false;
   std::wstring label = L"label";
 
-  // std::wstring checked = L"[X] ";
-  // std::wstring unchecked = L"[ ] ";
+#if defined(_WIN32)
+  std::wstring checked = L"[X] ";
+  std::wstring unchecked = L"[ ] ";
+#else
   std::wstring checked = L"▣ ";
   std::wstring unchecked = L"☐ ";
+#endif
 
   Decorator focused_style = inverted;
   Decorator unfocused_style = nothing;
