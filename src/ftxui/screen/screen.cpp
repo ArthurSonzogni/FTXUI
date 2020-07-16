@@ -48,6 +48,29 @@ bool In(const Box& stencil, int x, int y) {
 
 Pixel dev_null_pixel;
 
+#if defined(_WIN32)
+void WindowsEmulateVT100Terminal() {
+  static bool done = false;
+  if (done)
+    return;
+  done = true;
+
+  // Enable VT processing on stdout and stdin
+  auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+  DWORD out_mode = 0;
+  GetConsoleMode(stdout_handle, &out_mode);
+
+  // https://docs.microsoft.com/en-us/windows/console/setconsolemode
+  const int enable_virtual_terminal_processing = 0x0004;
+  const int disable_newline_auto_return = 0x0008;
+  out_mode |= enable_virtual_terminal_processing;
+  out_mode |= disable_newline_auto_return;
+
+  SetConsoleMode(stdout_handle, out_mode);
+}
+#endif
+
 }  // namespace
 
 Dimension Dimension::Fixed(int v) {
@@ -89,6 +112,7 @@ Screen::Screen(int dimx, int dimy)
   // UTF8 encoding here
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
+  WindowsEmulateVT100Terminal();
 #endif
 }
 
