@@ -8,11 +8,11 @@
 namespace ftxui {
 
 Element hcenter(Element child) {
-  return hbox(filler(), std::move(child), filler()) | flex_grow;
+  return hbox(filler(), std::move(child), filler()) | xflex_grow;
 }
 
 Element vcenter(Element child) {
-  return vbox(filler(), std::move(child), filler()) | flex_grow;
+  return vbox(filler(), std::move(child), filler()) | yflex_grow;
 }
 
 Element center(Element child) {

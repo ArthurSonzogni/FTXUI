@@ -363,7 +363,7 @@ class Tab : public Component {
     return vbox({
         text(L"FTXUI Demo") | bold | hcenter,
         tab_selection.Render() | hcenter,
-        container.Render(),
+        container.Render() | flex,
     });
   }
 };
