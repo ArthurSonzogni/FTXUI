@@ -166,7 +166,11 @@ Event Event::ArrowDown = Event::Special("\x1B[B");
 Event Event::Backspace = Event::Special({127});
 Event Event::Delete = Event::Special("\x1B[3~");
 Event Event::Escape = Event::Special("\x1B");
+#if defined(_WIN32)
+Event Event::Return = Event::Special({13});
+#else
 Event Event::Return = Event::Special({10});
+#endif
 Event Event::Tab = Event::Special({9});
 Event Event::TabReverse = Event::Special({27, 91, 90});
 Event Event::F1 = Event::Special("\x1B[OP");
