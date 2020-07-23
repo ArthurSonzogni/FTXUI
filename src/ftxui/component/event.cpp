@@ -142,9 +142,6 @@ void Event::Convert(Receiver<char>& in, Sender<Event>& out, char c) {
     case 26:  // SUB
       return;
 
-    case 'P':
-      return ParseDCS(in, out, input);
-
     case '\x1B':
       return ParseESC(in, out, input);
   }
