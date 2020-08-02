@@ -75,3 +75,30 @@ TEST(ToggleTest, Tab) {
   EXPECT_EQ(toggle.selected, 1);
   toggle.OnEvent(Event::TabReverse);
 }
+
+TEST(ToggleTest, OnChange) {
+  Toggle toggle;
+  toggle.entries = {L"1", L"2", L"3"};
+
+  int counter = 0;
+  toggle.on_change = [&] { counter++; };
+
+  EXPECT_FALSE(toggle.OnEvent(Event::ArrowLeft)); // Reached far left.
+  EXPECT_EQ(counter, 0);
+
+  EXPECT_TRUE(toggle.OnEvent(Event::ArrowRight)); // [0] -> [1]
+  EXPECT_EQ(counter, 1);
+  EXPECT_TRUE(toggle.OnEvent(Event::ArrowRight)); // [1] -> [2]
+  EXPECT_EQ(counter, 2);
+ 
+  EXPECT_FALSE(toggle.OnEvent(Event::ArrowRight)); // Reached far right.
+  EXPECT_EQ(counter, 2);
+
+  EXPECT_TRUE(toggle.OnEvent(Event::ArrowLeft)); // [2] -> [1]
+  EXPECT_EQ(counter, 3);
+  EXPECT_TRUE(toggle.OnEvent(Event::ArrowLeft)); // [1] -> [0]
+  EXPECT_EQ(counter, 4);
+
+  EXPECT_FALSE(toggle.OnEvent(Event::ArrowLeft)); // Reached far left.
+  EXPECT_EQ(counter, 4);
+}
