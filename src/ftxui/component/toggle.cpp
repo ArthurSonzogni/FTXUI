@@ -39,6 +39,10 @@ bool Toggle::OnEvent(Event event) {
     selected = (selected + entries.size() - 1) % entries.size();
 
   selected = std::max(0, std::min(int(entries.size()) - 1, selected));
+
+  if (old_selected != selected)
+    on_change();
+
   return old_selected != selected;
 }
 
