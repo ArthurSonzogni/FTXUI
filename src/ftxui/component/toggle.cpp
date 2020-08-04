@@ -40,10 +40,17 @@ bool Toggle::OnEvent(Event event) {
 
   selected = std::max(0, std::min(int(entries.size()) - 1, selected));
 
-  if (old_selected != selected)
+  if (old_selected != selected) {
     on_change();
+    return true;
+  }
 
-  return old_selected != selected;
+  if (event == Event::Return) {
+    on_enter();
+    return true;
+  }
+
+  return false;
 }
 
 }  // namespace ftxui

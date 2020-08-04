@@ -27,7 +27,8 @@ class Toggle : public Component {
 
   // Callback.
   std::function<void()> on_change = []() {};
-
+  std::function<void()> on_enter = []() {};
+  
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
