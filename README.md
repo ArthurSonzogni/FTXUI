@@ -56,14 +56,11 @@ A simple C++ library for terminal based user interface.
 └────────────────────────────────────────────────────────────────────────────┘
 ~~~
 
-## Build
+# Documentation:
 
-* [CMake](https://cmake.org) →  [Instructions](./doc/build-with-cmake.md)
-* [nxxm](https://nxxm.github.io) → [Instructions](./doc/build-with-nxxm.md)
-
-## Tutorial
-- [Starter cmake project](https://github.com/ArthurSonzogni/ftxui-starter)
-- [Tutorial](./doc/tutorial.md)
+- [Documentation](https://arthursonzogni.com/FTXUI/doc/)
+- [Build using CMake](https://arthursonzogni.com/FTXUI/doc/#build-using-cmake)
+- [Build using nxxm](https://arthursonzogni.com/FTXUI/doc/#build-using-cmake)
 
 ## Project using FTXUI
 
