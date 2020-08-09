@@ -67,6 +67,8 @@
 
 #include "ftxui/screen/string.hpp"
 
+namespace ftxui {
+
 namespace {
 struct interval {
   int first;
@@ -303,3 +305,5 @@ int wstring_width_cjk(const std::wstring& text) {
   }
   return width;
 }
+
+}  // namespace ftxui

@@ -10,35 +10,7 @@
 
 namespace ftxui {
 
-// static
-Event Event::Character(const std::string& input) {
-  Event event;
-  event.input_ = input;
-  event.is_character_ = true;
-  event.character_ = to_wstring(input)[0];
-  return event;
-}
-
-// static
-Event Event::Character(char c) {
-  return Character(wchar_t(c));
-}
-
-// static
-Event Event::Character(wchar_t c) {
-  Event event;
-  event.input_ = {(char)c};
-  event.is_character_ = true;
-  event.character_ = c;
-  return event;
-}
-
-// static
-Event Event::Special(const std::string& input) {
-  Event event;
-  event.input_ = std::move(input);
-  return event;
-}
+namespace {
 
 void ParseUTF8(Receiver<char>& in, Sender<Event>& out, std::string& input) {
   char c;
@@ -129,6 +101,38 @@ void ParseESC(Receiver<char>& in, Sender<Event>& out, std::string& input) {
       input += c;
       out->Send(Event::Special(input));
   }
+}
+
+}  // namespace
+
+// static
+Event Event::Character(const std::string& input) {
+  Event event;
+  event.input_ = input;
+  event.is_character_ = true;
+  event.character_ = to_wstring(input)[0];
+  return event;
+}
+
+// static
+Event Event::Character(char c) {
+  return Character(wchar_t(c));
+}
+
+// static
+Event Event::Character(wchar_t c) {
+  Event event;
+  event.input_ = {(char)c};
+  event.is_character_ = true;
+  event.character_ = c;
+  return event;
+}
+
+// static
+Event Event::Special(const std::string& input) {
+  Event event;
+  event.input_ = std::move(input);
+  return event;
 }
 
 // static

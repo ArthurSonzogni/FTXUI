@@ -26,7 +26,10 @@ int main(void) {
       text(L"right")  | border,
     });
 
-  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
+  auto screen = Screen::Create(
+    Dimension::Full(),       // Width
+    Dimension::Fit(document) // Height
+  );
   Render(screen, document);
   std::cout << screen.ToString() << std::endl;
 
@@ -42,7 +45,7 @@ int main(void) {
 ```
 
 **cmake**
-```cpp
+```
 cmake_minimum_required (VERSION 3.11)
 
 include(FetchContent)
@@ -64,20 +67,17 @@ target_link_libraries(main
 set_target_properties(main PROPERTIES CXX_STANDARD 17)
 ```
 
-# Modules
+# List of modules.
 
 The project is split into 3 modules:
-1. ftxui/screen
-2. ftxui/dom
-3. ftxui/component
 
-ftxui/screen defines a ftxui::Screen, this is a grid of ftxui::Pixel.
+1. **ftxui/screen** defines a ftxui::Screen, this is a grid of ftxui::Pixel.
 
-ftxui/dom is the main module. It defines a hierarchical set of ftxui::Element.
+2. **ftxui/dom** is the main module. It defines a hierarchical set of ftxui::Element.
 An element draws something on the ftxui::Screen. It is responsive to the size of
 its container.
 
-ftxui/component. The part is only needed if you need to respond to the User
+3. **ftxui/component** The part is only needed if you need to respond to the User
 input. It defines a set of ftxui::Component.  The use can navigates using the
 arrow keys and interact with widgets like checkbox/inputbox/... You can make you
 own components.
@@ -85,19 +85,20 @@ own components.
 ## screen
 
 It defines a ftxui::Screen. This is a grid of ftxui::Pixel. A Pixel represent a
-unicode character and its style. The screen can be printed as a string using ftxui::Screen::ToString().
+unicode character and its associated style (bold, colors, etc...).
+The screen can be printed as a string using ftxui::Screen::ToString().
 
-Example:
 ~~~cpp
   #include <ftxui/screen/screen.hpp>
 
   int main(void) {
     using namespace ftxui;
-    auto screen = ftxui::Screen(Dimension::Fixed(32), Dimension::Fixed(10));
+    auto screen = Screen(Dimension::Fixed(32), Dimension::Fixed(10));
 
     auto& pixel = screen.PixelAt(10,10);
     pixel.character = U'A';
     pixel.bold = true;
+    pixel.foreground_color = Color::Blue;
 
     std::cout << screen.ToString();
     return EXIT_SUCCESS;
@@ -108,11 +109,45 @@ Example:
 
 This module defines a hierachical set of Element. An element manages layout and can be responsive to the terminal dimensions.
 
-They are declared in ftxui/dom/elements.hpp>
+
+**Example:**
+```cpp
+// Define the document
+Element document = vbox({
+    text(L"The window") | bold | color(Color::Blue),
+    gauge(0.5)
+    text(L"The footer")
+  });
+
+// Add a border.
+document = border(document);
+```
+
+**List of elements**
+
+You only need one header: ftxui/dom/elements.hpp
 
 \include ftxui/dom/elements.hpp
 
-### text
+## component
+
+Finally, the ftxui/component directory defines the logic to get interactivity.
+
+Please take a look at ./examples/component
+
+This provides:
+1. A main loop.
+2. Get events and respond to them.
+3. A predefined implementation of "keyboard navigation".
+4. A set of predefined widget: CheckBox, RadioBox, Input, Menu, Toggle.
+
+# ftxui/dom
+
+Every elements of the dom are declared from:
+
+\include ftxui/dom/elements.hpp
+
+## text
 
 The most simple widget. It displays a text.
 ~~~cpp
@@ -124,7 +159,7 @@ text(L"I am a piece of text");
 I am a piece of text.
 ~~~
 
-### border
+## border
 
 Add a border around an element
 ~~~cpp
@@ -139,7 +174,23 @@ border(text(L"The element"))
 └───────────┘
 ~~~
 
-### separator
+## window
+
+A ftxui::window is a ftxui::border, but with some text on top of the border.
+Add a border around an element
+~~~cpp
+using namespace ftxui;
+
+window(L"The window", text(L"The element"))
+~~~
+
+~~~bash
+┌The window─┐
+│The element│
+└───────────┘
+~~~
+
+## separator
 
 Display a vertical or horizontal line to visually split the content of a
 container in two.
@@ -160,7 +211,7 @@ border(
 └────┴─────┘
 ~~~
 
-### gauge
+## gauge
 
 A gauge. It can be used to represent a progress bar.
 ~~~cpp
@@ -173,11 +224,54 @@ border(gauge(0.5))
 └────────────────────────────────────────────────────────────────────────────┘
 ~~~
 
-### graph
-[![asciicast](https://asciinema.org/a/223726.svg)](https://asciinema.org/a/223726)
+## graph
+@htmlonly
+<script id="asciicast-223726" src="https://asciinema.org/a/223726.js" async></script>
+@endhtmlonly
 
+## Colors
+A terminal console can usually display colored text and colored background.
 
-### Style
+~~~cpp
+Decorator color(Color);
+Decorator bgcolor(Color);
+~~~
+
+The following colors are available:
+- Default
+
+- Black
+- GrayDark
+- GrayLight
+
+- White
+
+- Blue
+- BlueLight
+
+- Cyan
+- CyanLight
+
+- Green
+- GreenLight
+
+- Magenta
+- MagentaLight
+
+- Red
+- RedLight
+
+- Yellow
+- YellowLight
+
+Example:
+```cpp
+text(L"Blue foreground") | color(Color::Blue);
+text(L"Blue backgrond") | bgcolor(Color::Blue);
+text(L"Black on white") | color(Color::Black) | bgcolor(Color::White);
+```
+
+## Style
 A terminal console can usually display colored text and colored background.
 The text can also have different effects: bold, dim, underlined, inverted,
 blink.
@@ -202,7 +296,7 @@ Tips: The pipe operator can be used to chain Decorator:
 text(L"This text is bold")) | bold | underlined
 ~~~
 
-### Layout
+## Layout
 
 These layout are similar to the HTML flexbox:
 * vbox (Vertical-box)
@@ -246,23 +340,125 @@ An horizontal flow layout is implemented by:
 └────┘└───────────────────────────────────┘└───────────────────────────────────┘
 ~~~
 
-## Components.
+# ftxui/component
 
 Element are stateless object. On the other side, components are used when an
 internal state is needed. Components are used to interact with the user with
 its keyboard. They handle keyboard navigation, including component focus.
 
-### Input
-[![asciicast](https://asciinema.org/a/223719.svg)](https://asciinema.org/a/223719)
+## Input
 
-### Menu
-[![asciicast](https://asciinema.org/a/223720.svg)](https://asciinema.org/a/223720)
+@htmlonly
+<script id="asciicast-223719" src="https://asciinema.org/a/223719.js" async></script>
+@endhtmlonly
 
-### Toggle.
-[![asciicast](https://asciinema.org/a/223722.svg)](https://asciinema.org/a/223722)
+## Menu
+@htmlonly
+<script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
+@endhtmlonly
 
-### CheckBox
-[![asciicast](https://asciinema.org/a/223724.svg)](https://asciinema.org/a/223724)
+## Toggle.
+@htmlonly
+<script id="asciicast-223722" src="https://asciinema.org/a/223722.js" async></script>
+@endhtmlonly
 
-### RadioBox
-[![asciicast](https://asciinema.org/a/223725.svg)](https://asciinema.org/a/223725)
+## CheckBox
+@htmlonly
+<script id="asciicast-223724" src="https://asciinema.org/a/223724.js" async></script>
+@endhtmlonly
+
+## RadioBox
+@htmlonly
+<script id="asciicast-223725" src="https://asciinema.org/a/223725.js" async></script>
+@endhtmlonly
+
+# Build
+
+Assuming this example example.cpp file.
+
+**main.cpp**
+~~~cpp
+#include "ftxui/screen/screen.hpp"
+#include "ftxui/dom/elements.hpp"
+#include <iostream>
+
+int main(int argc, const char *argv[]) {
+  using namespace ftxui;
+  auto document =
+    hbox({
+      text(L"left") | bold | border,
+      text(L"middle") | flex | border,
+      text(L"right") | border,
+    });
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
+  Render(screen, document);
+
+  std::cout << screen.ToString();
+
+  return 0;
+}
+~~~
+
+## Using CMake
+
+CMakeLists.txt
+~~~cmake
+cmake_minimum_required (VERSION 3.11)
+
+# --- Fetch FTXUI --------------------------------------------------------------
+include(FetchContent)
+
+set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
+FetchContent_Declare(ftxui
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
+  # Specify a GIT TAG here.
+)
+
+FetchContent_GetProperties(ftxui)
+if(NOT ftxui_POPULATED)
+  FetchContent_Populate(ftxui)
+  add_subdirectory(${ftxui_SOURCE_DIR} ${ftxui_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
+# ------------------------------------------------------------------------------
+
+project(ftxui-starter
+  LANGUAGES CXX
+  VERSION 1.0.0
+)
+
+add_executable(ftxui-starter src/main.cpp)
+target_include_directories(ftxui-starter PRIVATE src)
+
+target_link_libraries(ftxui-starter
+  PRIVATE ftxui::screen
+  PRIVATE ftxui::dom
+  PRIVATE ftxui::component # Not needed for this example.
+)
+
+# C++17 is used. We requires fold expressions at least.
+set_target_properties(ftxui-starter PROPERTIES CXX_STANDARD 17)
+
+~~~
+
+Build
+~~~
+mkdir build && cd build
+cmake ..
+make
+./main
+~~~
+
+## Using NXXM
+
+**.nxxm/deps**
+~~~json
+{
+  "ArthurSonzogni/FTXUI": {}
+}
+~~~
+
+Build:
+~~~
+nxxm . -t clang-cxx17
+~~~

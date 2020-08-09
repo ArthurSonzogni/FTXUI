@@ -7,6 +7,7 @@
 #include <codecvt>
 #include <locale>
 
+namespace ftxui {
 #ifdef _MSC_VER
   #pragma warning(push)
   #pragma warning(disable : 4996)  // codecvt_utf8_utf16 is deprecated
@@ -25,3 +26,5 @@ std::wstring to_wstring(const std::string& s) {
 #ifdef _MSC_VER
   #pragma warning(pop)
 #endif
+
+}  // namespace ftxui

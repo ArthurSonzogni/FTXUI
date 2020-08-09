@@ -4,8 +4,6 @@
 
 #include "ftxui/component/screen_interactive.hpp"
 
-#define DEFINE_CONSOLEV2_PROPERTIES
-
 #include <stdio.h>
 
 #include <algorithm>
@@ -20,6 +18,7 @@
 #include "ftxui/screen/terminal.hpp"
 
 #if defined(_WIN32)
+  #define DEFINE_CONSOLEV2_PROPERTIES
   #define WIN32_LEAN_AND_MEAN
   #ifndef NOMINMAX
     #define NOMINMAX
@@ -40,6 +39,7 @@
 
 namespace ftxui {
 
+namespace {
 // Produce a stream of Event from a stream of char.
 void CharToEventStream(Receiver<char> receiver, Sender<Event> sender) {
   char c;
@@ -153,6 +153,8 @@ std::function<void()> on_resize = [] {};
 void OnResize(int /* signal */) {
   on_resize();
 }
+
+}  // namespace
 
 ScreenInteractive::ScreenInteractive(int dimx,
                                      int dimy,
