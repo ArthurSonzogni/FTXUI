@@ -1,7 +1,15 @@
 cmake_minimum_required(VERSION 3.0)
+
+execute_process(
+  COMMAND git rev-list --count HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE git_version
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.1
+  VERSION 0.1.${git_version}
 )
 
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)

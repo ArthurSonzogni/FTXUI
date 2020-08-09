@@ -7,6 +7,8 @@
 
 namespace ftxui {
 
+namespace {
+
 using FlexFunction = void (*)(Requirement&);
 
 void function_flex_grow(Requirement& r) {
@@ -58,6 +60,8 @@ void function_not_flex(Requirement& r) {
   r.flex_shrink_x = 0;
   r.flex_shrink_y = 0;
 }
+
+}  // namespace
 
 class Flex : public Node {
  public:
