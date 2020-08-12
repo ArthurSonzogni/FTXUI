@@ -68,6 +68,7 @@ A simple C++ library for terminal based user interface.
 Feel free to add your projects here:
 - [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier)
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
+- [ltuiny](https://github.com/adrianoviana87/ltuiny)
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [Just-Fast](https://github.com/GiuseppeCesarano/just-fast)
 - [simpPRU](https://github.com/VedantParanjape/simpPRU)
