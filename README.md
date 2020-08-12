@@ -70,6 +70,7 @@ Feel free to add your projects here:
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [Just-Fast](https://github.com/GiuseppeCesarano/just-fast)
+- [simpPRU](https://github.com/VedantParanjape/simpPRU)
 
 ## Hosted on:
  * [github](https://github.com/ArthurSonzogni/ftxui)
