@@ -1,7 +1,3 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include "ftxui/screen/screen.hpp"
 
 #include <algorithm>
@@ -12,11 +8,11 @@
 #include "ftxui/screen/terminal.hpp"
 
 #if defined(_WIN32)
-  #define WIN32_LEAN_AND_MEAN
-  #ifndef NOMINMAX
-    #define NOMINMAX
-  #endif
-  #include <Windows.h>
+#define WIN32_LEAN_AND_MEAN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <Windows.h>
 #endif
 
 namespace ftxui {
@@ -249,3 +245,7 @@ void Screen::ApplyShader() {
 // clang-format on
 
 }  // namespace ftxui
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

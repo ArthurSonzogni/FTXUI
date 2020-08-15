@@ -1,7 +1,3 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include "ftxui/component/container.hpp"
 
 #include "gtest/gtest.h"
@@ -78,3 +74,7 @@ TEST(ContainerTest, HorizontalEvent) {
   EXPECT_EQ(container.ActiveChild(), &c1);
   container.OnEvent(Event::TabReverse);
 }
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

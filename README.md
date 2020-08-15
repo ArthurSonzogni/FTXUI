@@ -30,10 +30,7 @@ A simple C++ library for terminal based user interface.
  * Simple and elegant syntax (in my opinion).
  * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
  * No dependencies.
- * Cross platform:
-   - Linux (main target)
-   - Windows (experimental, thanks to mauve@)
-   - Mac (never tested, but must WORK)
+ * Cross platform (mostly). Linux (main target), Windows (experimental), Mac.
 
 ## Example:
 ~~~cpp
