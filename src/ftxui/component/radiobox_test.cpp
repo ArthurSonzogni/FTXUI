@@ -1,7 +1,3 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include "ftxui/component/radiobox.hpp"
 
 #include "gtest/gtest.h"
@@ -80,3 +76,7 @@ TEST(RadioboxTest, Navigation) {
   EXPECT_EQ(radiobox.focused, 1);
   radiobox.OnEvent(Event::TabReverse);
 }
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

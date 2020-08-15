@@ -1,7 +1,3 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include "ftxui/component/screen_interactive.hpp"
 
 #include <stdio.h>
@@ -18,23 +14,23 @@
 #include "ftxui/screen/terminal.hpp"
 
 #if defined(_WIN32)
-  #define DEFINE_CONSOLEV2_PROPERTIES
-  #define WIN32_LEAN_AND_MEAN
-  #ifndef NOMINMAX
-    #define NOMINMAX
-  #endif
-  #include <Windows.h>
-  #ifndef UNICODE
-    #error Must be compiled in UNICODE mode
-  #endif
+#define DEFINE_CONSOLEV2_PROPERTIES
+#define WIN32_LEAN_AND_MEAN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <Windows.h>
+#ifndef UNICODE
+#error Must be compiled in UNICODE mode
+#endif
 #else
-  #include <termios.h>
-  #include <unistd.h>
+#include <termios.h>
+#include <unistd.h>
 #endif
 
 // Quick exit is missing in standard CLang headers
 #if defined(__clang__) && defined(__APPLE__)
-  #define quick_exit(a) exit(a)
+#define quick_exit(a) exit(a)
 #endif
 
 namespace ftxui {
@@ -365,3 +361,7 @@ std::function<void()> ScreenInteractive::ExitLoopClosure() {
 }
 
 }  // namespace ftxui.
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

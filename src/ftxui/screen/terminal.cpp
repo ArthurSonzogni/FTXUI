@@ -1,18 +1,14 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include "ftxui/screen/terminal.hpp"
 
 #include <stdio.h>
 
 #if defined(_WIN32)
-  #define WIN32_LEAN_AND_MEAN
-  #define NOMINMAX
-  #include <Windows.h>
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#include <Windows.h>
 #else
-  #include <sys/ioctl.h>
-  #include <unistd.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
 #endif
 
 #include <iostream>
@@ -38,3 +34,7 @@ Terminal::Dimensions Terminal::Size() {
 }
 
 }  // namespace ftxui
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
