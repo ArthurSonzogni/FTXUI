@@ -85,54 +85,51 @@ a:not([href]) {
 }
 
 a.el {
-    font-weight: normal;
+  font-weight: normal;
 }
 
 .image {
-    text-align: left;
+  text-align: left;
 }
 
 .tip {
-    background-image: url(tip.png);
-    background-position: left center;
-    background-repeat: no-repeat;
-    padding-left: 30px;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    min-height: 31px;
-    display: block;
-    font-style:italic;
+  background-image: url(tip.png);
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: 30px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  min-height: 31px;
+  display: block;
+  font-style:italic;
 }
 
 .warn {
-    background-image: url(warn.png);
-    background-position: left center;
-    background-repeat: no-repeat;
-    padding-left: 48px;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    min-height: 31px;
-    display: block;
-    font-style:italic;
+  background-image: url(warn.png);
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: 48px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  min-height: 31px;
+  display: block;
+  font-style:italic;
 }
 
-#projectname
-{
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 2em;
-    font-weight: bold;
-}
-    
-#projectbrief
-{
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 0.8em;
+#projectname {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 2em;
+  font-weight: bold;
 }
 
-#projectnumber
-{
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 1em;
+#projectbrief {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.8em;
+}
+
+#projectnumber {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 1em;
 }
 
 div.contents {
@@ -151,8 +148,7 @@ div.toc {
   border-radius: 7px;
 }
 
-div.header
-{
+div.header {
   width: 980px;
   padding: 10px;
   margin-top: 10px;
@@ -164,17 +160,16 @@ div.header
   border: 1px solid #d1d5da;
 }
 
-div.headertitle
-{
-	padding: 0;
+div.headertitle {
+  padding: 0;
 }
 
 .title ol {
-    margin: 0;
+  margin: 0;
 }
 
 .title ol li {
-    list-style-type: none;
+  list-style-type: none;
 }
 
 .ui-resizable-e {
@@ -250,10 +245,10 @@ span.charliteral {
 }
 
 blockquote {
-        background-color: #EEEEEE;
-        border-left: 2px solid #606060;
-        margin: 0 24px 0 4px;
-        padding: 0 12px 0 16px;
+  background-color: #EEEEEE;
+  border-left: 2px solid #606060;
+  margin: 0 24px 0 4px;
+  padding: 0 12px 0 16px;
 }
 
 /* @end */
@@ -278,12 +273,12 @@ img {
 }
 
 #side-nav {
-    width: 25%;
-    max-width: 50%;
+  width: 25%;
+  max-width: 50%;
 }
 
 .memtitle {
-    background-image: none;
+  background-image: none;
 }
 
 .memproto {

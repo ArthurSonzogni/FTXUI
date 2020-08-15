@@ -45,7 +45,7 @@ int main(void) {
 ```
 
 **cmake**
-```
+```c
 cmake_minimum_required (VERSION 3.11)
 
 include(FetchContent)
@@ -144,15 +144,12 @@ This provides:
 # ftxui/dom
 
 Every elements of the dom are declared from:
-
-\include ftxui/dom/elements.hpp
+\ref ftxui/dom/elements.hpp
 
 ## text
 
 The most simple widget. It displays a text.
 ~~~cpp
-using namespace ftxui;
-
 text(L"I am a piece of text");
 ~~~
 ~~~bash
@@ -163,8 +160,6 @@ I am a piece of text.
 
 Add a border around an element
 ~~~cpp
-using namespace ftxui;
-
 border(text(L"The element"))
 ~~~
 
@@ -179,8 +174,6 @@ border(text(L"The element"))
 A ftxui::window is a ftxui::border, but with some text on top of the border.
 Add a border around an element
 ~~~cpp
-using namespace ftxui;
-
 window(L"The window", text(L"The element"))
 ~~~
 
@@ -378,8 +371,8 @@ Assuming this example example.cpp file.
 
 **main.cpp**
 ~~~cpp
-#include "ftxui/screen/screen.hpp"
-#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/screen.c
+#include "ftxui/dom/elements.c
 #include <iostream>
 
 int main(int argc, const char *argv[]) {
