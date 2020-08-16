@@ -129,7 +129,7 @@ Element border(Element child) {
 /// @param title The title of the window.
 /// @param content The element to be wrapped.
 /// @ingroup dom
-/// @seealso border
+/// @see border
 ///
 /// ### Example
 ///
@@ -152,7 +152,7 @@ Element window(Element title, Element content) {
 
 /// @brief Same as border but with a constant Pixel around the element.
 /// @ingroup dom
-/// @seealso border
+/// @see border
 Decorator borderWith(Pixel pixel) {
   return [pixel](Element child) {
     return std::make_shared<Border>(unpack(std::move(child)), pixel);

@@ -18,7 +18,7 @@ class Blink : public NodeDecorator {
   }
 };
 
-/// @brief The text drawn alternate in between visible and hidden.
+/// @brief The text drawn alternates in between visible and hidden.
 /// @ingroup dom
 Element blink(Element child) {
   return std::make_shared<Blink>(unpack(std::move(child)));

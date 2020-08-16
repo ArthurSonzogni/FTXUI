@@ -5,10 +5,7 @@
 
 namespace ftxui {
 
-// A component where focus and events are automatically handled for you.
-// List of container:
-//
-// Please use HorizontalContainer or VerticalContainer.
+/// @brief A component where focus and events are automatically handled for you.
 class Container : public Component {
  public:
   static Container Vertical();

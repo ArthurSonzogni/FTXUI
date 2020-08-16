@@ -20,6 +20,8 @@ class Underlined : public NodeDecorator {
   }
 };
 
+/// @brief Make the underlined element to be underlined.
+/// @ingroup dom
 Element underlined(Element child) {
   return std::make_shared<Underlined>(unpack(std::move(child)));
 }

@@ -341,26 +341,40 @@ its keyboard. They handle keyboard navigation, including component focus.
 
 ## Input
 
+The component: \ref ftxui::Input
+
 @htmlonly
 <script id="asciicast-223719" src="https://asciinema.org/a/223719.js" async></script>
 @endhtmlonly
 
 ## Menu
+
+The component: \ref ftxui::Menu
+
 @htmlonly
 <script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
 @endhtmlonly
 
 ## Toggle.
+
+The component: \ref ftxui::Toggle
+
 @htmlonly
 <script id="asciicast-223722" src="https://asciinema.org/a/223722.js" async></script>
 @endhtmlonly
 
 ## CheckBox
+
+The component: \ref ftxui::CheckBox
+
 @htmlonly
 <script id="asciicast-223724" src="https://asciinema.org/a/223724.js" async></script>
 @endhtmlonly
 
 ## RadioBox
+
+The component: \ref ftxui::RadioBox
+
 @htmlonly
 <script id="asciicast-223725" src="https://asciinema.org/a/223725.js" async></script>
 @endhtmlonly

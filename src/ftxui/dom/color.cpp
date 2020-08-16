@@ -39,8 +39,8 @@ class FgColor : public NodeDecorator {
 };
 
 /// @brief Set the foreground color of an element.
-/// @param The color of the output element.
-/// @param The input element.
+/// @param color The color of the output element.
+/// @param child The input element.
 /// @return The output element colored.
 /// @ingroup dom
 ///
@@ -54,8 +54,8 @@ Element color(Color color, Element child) {
 }
 
 /// @brief Set the background color of an element.
-/// @param The color of the output element.
-/// @param The input element.
+/// @param color The color of the output element.
+/// @param child The input element.
 /// @return The output element colored.
 /// @ingroup dom
 ///
@@ -83,7 +83,7 @@ Decorator color(Color c) {
 }
 
 /// @brief Decorate using a background color.
-/// @param The background color to be applied.
+/// @param color The background color to be applied.
 /// @return The Decorator applying the color.
 /// @ingroup dom
 ///
@@ -92,8 +92,8 @@ Decorator color(Color c) {
 /// ```cpp
 /// Element document = text(L"red") | bgcolor(Color::Red);
 /// ```
-Decorator bgcolor(Color c) {
-  return [c](Element child) { return bgcolor(c, std::move(child)); };
+Decorator bgcolor(Color color) {
+  return [color](Element child) { return bgcolor(color, std::move(child)); };
 }
 
 }  // namespace ftxui

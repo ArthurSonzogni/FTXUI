@@ -7,6 +7,9 @@
 
 namespace ftxui {
 
+/// @brief A list of selectable element. One and only one can be selected at
+/// the same time.
+/// @ingroup component
 class RadioBox : public Component {
  public:
   // Constructor.

@@ -3,6 +3,8 @@
 #include <algorithm>
 
 namespace ftxui {
+/// @return the biggest Box contained in both |a| and |b|.
+/// @ingroup screen
 // static
 Box Box::Intersection(Box a, Box b) {
   return Box{

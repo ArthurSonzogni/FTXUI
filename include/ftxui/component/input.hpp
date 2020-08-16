@@ -7,6 +7,8 @@
 
 namespace ftxui {
 
+/// @brief An input box. The user can type text into it.
+/// @ingroup component.
 class Input : public Component {
  public:
   // Constructor.

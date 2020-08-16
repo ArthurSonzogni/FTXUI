@@ -64,10 +64,51 @@ class VText : public Node {
   int width_ = 1;
 };
 
+/// @brief Display a pieve of unicode text.
+/// @ingroup dom
+/// @see ftxui::to_wstring
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = text(L"Hello world!");
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// Hello world!
+/// ```
 Element text(std::wstring text) {
   return std::make_shared<Text>(text);
 }
 
+/// @brief Display a pieve of unicode text vertically.
+/// @ingroup dom
+/// @see ftxui::to_wstring
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = vtext(L"Hello world!");
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// H
+/// e
+/// l
+/// l
+/// o
+///
+/// w
+/// o
+/// r
+/// l
+/// d
+/// !
+/// ```
 Element vtext(std::wstring text) {
   return std::make_shared<VText>(text);
 }

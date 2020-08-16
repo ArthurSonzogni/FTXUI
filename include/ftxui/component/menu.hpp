@@ -8,6 +8,8 @@
 
 namespace ftxui {
 
+/// @brief A list of items. The user can navigate through them.
+/// @ingroup component
 class Menu : public Component {
  public:
   // Constructor.

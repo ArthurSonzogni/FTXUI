@@ -3,6 +3,7 @@
 
 namespace ftxui {
 
+/// Assign a value to a variable, reset its old value when going out of scope.
 template <typename T>
 class AutoReset {
  public:

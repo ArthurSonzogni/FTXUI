@@ -73,6 +73,12 @@ class Size : public Node {
   int value_;
 };
 
+/// @brief Apply a constraint on the size of an element.
+/// @param direction Whether the WIDTH of the HEIGHT of the element must be
+///                  constrained.
+/// @param constrain The type of constaint.
+/// @param value the value.
+/// @ingroup dom
 Decorator size(Direction direction, Constraint constraint, int value) {
   return [=](Element e) {
     return std::make_shared<Size>(std::move(e), direction, constraint, value);
