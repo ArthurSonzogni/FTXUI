@@ -92,6 +92,7 @@ Element filler() {
 
 /// @brief Make a child element to expand proportionnally to the space left in a
 /// container.
+/// @ingroup dom
 ///
 /// #### Examples:
 ///
@@ -114,38 +115,56 @@ Element flex(Element child) {
   return std::make_shared<Flex>(function_flex, std::move(child));
 }
 
+/// @brief Expand/Minimize if possible/needed on the X axis.
+/// @ingroup dom
 Element xflex(Element child) {
   return std::make_shared<Flex>(function_xflex, std::move(child));
 }
 
+/// @brief Expand/Minimize if possible/needed on the Y axis.
+/// @ingroup dom
 Element yflex(Element child) {
   return std::make_shared<Flex>(function_yflex, std::move(child));
 }
 
+/// @brief Expand if possible.
+/// @ingroup dom
 Element flex_grow(Element child) {
   return std::make_shared<Flex>(function_flex_grow, std::move(child));
 }
 
+/// @brief Expand if possible on the X axis.
+/// @ingroup dom
 Element xflex_grow(Element child) {
   return std::make_shared<Flex>(function_xflex_grow, std::move(child));
 }
 
+/// @brief Expand if possible on the Y axis.
+/// @ingroup dom
 Element yflex_grow(Element child) {
   return std::make_shared<Flex>(function_yflex_grow, std::move(child));
 }
 
+/// @brief Minimize if needed.
+/// @ingroup dom
 Element flex_shrink(Element child) {
   return std::make_shared<Flex>(function_flex_shrink, std::move(child));
 }
 
+/// @brief Minimize if needed on the X axis.
+/// @ingroup dom
 Element xflex_shrink(Element child) {
   return std::make_shared<Flex>(function_xflex_shrink, std::move(child));
 }
 
+/// @brief Minimize if needed on the Y axis.
+/// @ingroup dom
 Element yflex_shrink(Element child) {
   return std::make_shared<Flex>(function_yflex_shrink, std::move(child));
 }
 
+/// @brief Make the element not flexible.
+/// @ingroup dom
 Element notflex(Element child) {
   return std::make_shared<Flex>(function_not_flex, std::move(child));
 }

@@ -109,7 +109,7 @@ class Frame : public Node {
 /// @brief Allow an element to be displayed inside a 'virtual' area. It size can
 /// be larger than its container. In this case only a smaller portion is
 /// displayed. The view is scrollable to make the focused element visible.
-/// @seealso focus
+/// @see focus
 Element frame(Element child) {
   return std::make_shared<Frame>(unpack(std::move(child)), true, true);
 }

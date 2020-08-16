@@ -61,13 +61,13 @@ Element flex(Element);         // Expand/Minimize if possible/needed.
 Element flex_grow(Element);    // Expand element if possible.
 Element flex_shrink(Element);  // Minimize element if needed.
 
-Element xflex(Element);         // Expand/Minimize if possible/needed.
-Element xflex_grow(Element);    // Expand element if possible.
-Element xflex_shrink(Element);  // Minimize element if needed.
+Element xflex(Element);         // Expand/Minimize if possible/needed on X axis.
+Element xflex_grow(Element);    // Expand element if possible on X axis.
+Element xflex_shrink(Element);  // Minimize element if needed on X axis.
 
-Element yflex(Element);         // Expand/Minimize if possible/needed.
-Element yflex_grow(Element);    // Expand element if possible.
-Element yflex_shrink(Element);  // Minimize element if needed.
+Element yflex(Element);         // Expand/Minimize if possible/needed on Y axis.
+Element yflex_grow(Element);    // Expand element if possible on Y axis.
+Element yflex_shrink(Element);  // Minimize element if needed on Y axis.
 
 Element notflex(Element);  // Reset the flex attribute.
 Element filler();          // A blank expandable element.

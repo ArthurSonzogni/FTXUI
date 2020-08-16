@@ -96,17 +96,18 @@
   <namespace>
     <briefdescription visible="yes"/>
     <memberdecl>
+      <functions title=""/>
+      <enums title=""/>
+      <typedefs title=""/>
+      <classes visible="yes" title=""/>
+      <structs visible="yes" title=""/>
+
       <nestednamespaces visible="yes" title=""/>
       <constantgroups visible="yes" title=""/>
       <interfaces visible="yes" title=""/>
-      <classes visible="yes" title=""/>
-      <structs visible="yes" title=""/>
       <exceptions visible="yes" title=""/>
-      <typedefs title=""/>
       <sequences title=""/>
       <dictionaries title=""/>
-      <enums title=""/>
-      <functions title=""/>
       <variables title=""/>
       <membergroups visible="yes"/>
     </memberdecl>

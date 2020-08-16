@@ -20,6 +20,9 @@ class Inverted : public NodeDecorator {
   }
 };
 
+/// @brief Add a filter that will invert the foreground and the background
+/// colors.
+/// @ingroup dom
 Element inverted(Element child) {
   return std::make_shared<Inverted>(unpack(std::move(child)));
 }

@@ -4,6 +4,11 @@
 
 namespace ftxui {
 
+/// @brief Return a vector of ftxui::text for every word of the string. This is
+/// useful combined with ftxui::hflow.
+/// @param the_text The string to be splitted.
+/// @ingroup dom
+/// @see hflow.
 Elements paragraph(std::wstring the_text) {
   Elements output;
   std::wstringstream ss(the_text);

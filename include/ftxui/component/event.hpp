@@ -9,6 +9,9 @@
 
 namespace ftxui {
 
+/// @brief Represent an event. It can be key press event, a terminal resize, or
+/// more ...
+//
 // Documentation:
 // https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 //

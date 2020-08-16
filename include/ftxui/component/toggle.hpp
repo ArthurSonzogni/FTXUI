@@ -8,6 +8,8 @@
 
 namespace ftxui {
 
+/// @brief An horizontal list of elements. The user can navigate through them.
+/// @ingroup component
 class Toggle : public Component {
  public:
   // Constructor.

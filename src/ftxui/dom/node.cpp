@@ -8,24 +8,34 @@ Node::Node() {}
 Node::Node(Elements children) : children(std::move(children)) {}
 Node::~Node() {}
 
+/// @brief Compute how much space an elements needs.
+/// @ingroup dom
 void Node::ComputeRequirement() {
   for (auto& child : children)
     child->ComputeRequirement();
 }
 
+/// @brief Assign a position and a dimension to an element for drawing.
+/// @ingroup dom
 void Node::SetBox(Box box) {
   box_ = box;
 }
 
+/// @brief Display an element on a ftxui::Screen.
+/// @ingroup dom
 void Node::Render(Screen& screen) {
   for (auto& child : children)
     child->Render(screen);
 }
 
+/// @brief Display an element on a ftxui::Screen.
+/// @ingroup dom
 void Render(Screen& screen, const Element& element) {
   Render(screen, element.get());
 }
 
+/// @brief Display an element on a ftxui::Screen.
+/// @ingroup dom
 void Render(Screen& screen, Node* node) {
   // Step 1: Find what dimension this elements wants to be.
   node->ComputeRequirement();

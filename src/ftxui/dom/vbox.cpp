@@ -128,6 +128,7 @@ class VBox : public Node {
 /// @brief A container displaying elements vertically one by one.
 /// @param children The elements in the container
 /// @return The container.
+/// @ingroup dom
 ///
 /// #### Example
 ///

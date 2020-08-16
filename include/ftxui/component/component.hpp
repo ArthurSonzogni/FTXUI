@@ -9,6 +9,9 @@ namespace ftxui {
 class Delegate;
 class Focus;
 
+/// @brief It implement rendering itself as ftxui::Element. It implement
+/// keyboard navigation by responding to ftxui::Event.
+/// @ingroup component
 class Component {
  public:
   // Constructor/Destructor.
@@ -16,7 +19,7 @@ class Component {
   virtual ~Component();
 
   // Component hierarchy.
-  Component* Parent() { return parent_; }
+  Component* Parent();
   void Add(Component* children);
 
   // Renders the component.

@@ -67,14 +67,46 @@ void WindowsEmulateVT100Terminal() {
 }
 #endif
 
+void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
+  if (next.bold != previous.bold)
+    ss << (next.bold ? BOLD_SET : BOLD_RESET);
+
+  if (next.dim != previous.dim)
+    ss << (next.dim ? DIM_SET : DIM_RESET);
+
+  if (next.underlined != previous.underlined)
+    ss << (next.underlined ? UNDERLINED_SET : UNDERLINED_RESET);
+
+  if (next.blink != previous.blink)
+    ss << (next.blink ? BLINK_SET : BLINK_RESET);
+
+  if (next.inverted != previous.inverted)
+    ss << (next.inverted ? INVERTED_SET : INVERTED_RESET);
+
+  if (next.foreground_color != previous.foreground_color ||
+      next.background_color != previous.background_color) {
+    ss << L"\x1B[" +
+              to_wstring(std::to_string((uint8_t)next.foreground_color)) + L"m";
+    ss << L"\x1B[" +
+              to_wstring(std::to_string(10 + (uint8_t)next.background_color)) +
+              L"m";
+  }
+
+  previous = next;
+}
+
 }  // namespace
 
 /// A fixed dimension.
+/// @see Fit
+/// @see Full
 Dimension Dimension::Fixed(int v) {
   return Dimension{v, v};
 }
 
 /// The minimal dimension that will fit the given element.
+/// @see Fixed 
+/// @see Full
 Dimension Dimension::Fit(Element& e) {
   e->ComputeRequirement();
   Terminal::Dimensions size = Terminal::Size();
@@ -83,6 +115,8 @@ Dimension Dimension::Fit(Element& e) {
 }
 
 /// Use the terminal dimensions.
+/// @see Fixed 
+/// @see Fit
 Dimension Dimension::Full() {
   Terminal::Dimensions size = Terminal::Size();
   return Dimension{size.dimx, size.dimy};
@@ -115,34 +149,6 @@ Screen::Screen(int dimx, int dimy)
   SetConsoleCP(CP_UTF8);
   WindowsEmulateVT100Terminal();
 #endif
-}
-
-void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
-  if (next.bold != previous.bold)
-    ss << (next.bold ? BOLD_SET : BOLD_RESET);
-
-  if (next.dim != previous.dim)
-    ss << (next.dim ? DIM_SET : DIM_RESET);
-
-  if (next.underlined != previous.underlined)
-    ss << (next.underlined ? UNDERLINED_SET : UNDERLINED_RESET);
-
-  if (next.blink != previous.blink)
-    ss << (next.blink ? BLINK_SET : BLINK_RESET);
-
-  if (next.inverted != previous.inverted)
-    ss << (next.inverted ? INVERTED_SET : INVERTED_RESET);
-
-  if (next.foreground_color != previous.foreground_color ||
-      next.background_color != previous.background_color) {
-    ss << L"\x1B[" +
-              to_wstring(std::to_string((uint8_t)next.foreground_color)) + L"m";
-    ss << L"\x1B[" +
-              to_wstring(std::to_string(10 + (uint8_t)next.background_color)) +
-              L"m";
-  }
-
-  previous = next;
 }
 
 /// Produce a std::string that can be used to print the Screen on the terminal.
