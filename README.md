@@ -9,7 +9,7 @@
 [badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI
 [badge.license]: https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black
 [badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue
-[travis]: https://travis-ci.com/ArthurSonzogni/FTXUI.svg?branch=mùaster
+[travis]: https://travis-ci.com/ArthurSonzogni/FTXUI.svg?branch=master
 [issues]: https://github.com/ArthurSonzogni/FTXUI/issues
 [license]: http://opensource.org/licenses/MIT
 [contributors]: https://github.com/ArthurSonzogni/FTXUI/graphs/contributors
