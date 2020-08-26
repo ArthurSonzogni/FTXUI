@@ -9,7 +9,7 @@ execute_process(
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.2.${git_version}
+  VERSION 0.3.${git_version}
 )
 
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
@@ -41,6 +41,7 @@ add_library(dom
   src/ftxui/dom/blink.cpp
   src/ftxui/dom/bold.cpp
   src/ftxui/dom/border.cpp
+  src/ftxui/dom/clear_under.cpp
   src/ftxui/dom/color.cpp
   src/ftxui/dom/composite_decorator.cpp
   src/ftxui/dom/dbox.cpp

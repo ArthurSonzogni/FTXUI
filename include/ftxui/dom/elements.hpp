@@ -94,6 +94,10 @@ Element center(Element);
 Element align_right(Element);
 Element nothing(Element element);
 
+// Before drawing the |element| clear the pixel below. This is useful in
+// combinaison with dbox.
+Element clear_under(Element element);
+
 // Make container able to take any number of children as input.
 #include "take_any_args.hpp"
 TAKE_ANY_ARGS(vbox)
