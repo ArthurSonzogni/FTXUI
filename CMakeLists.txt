@@ -65,6 +65,18 @@ add_library(dom
 )
 
 add_library(component
+  include/ftxui/component/button.hpp
+  include/ftxui/component/checkbox.hpp
+  include/ftxui/component/component.hpp
+  include/ftxui/component/container.hpp
+  include/ftxui/component/event.hpp
+  include/ftxui/component/input.hpp
+  include/ftxui/component/menu.hpp
+  include/ftxui/component/radiobox.hpp
+  include/ftxui/component/receiver.hpp
+  include/ftxui/component/screen_interactive.hpp
+  include/ftxui/component/toggle.hpp
+  src/ftxui/component/button.cpp
   src/ftxui/component/checkbox.cpp
   src/ftxui/component/component.cpp
   src/ftxui/component/container.cpp
@@ -75,16 +87,6 @@ add_library(component
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/screen_interactive.cpp
   src/ftxui/component/toggle.cpp
-  include/ftxui/component/checkbox.hpp
-  include/ftxui/component/component.hpp
-  include/ftxui/component/container.hpp
-  include/ftxui/component/event.hpp
-  include/ftxui/component/input.hpp
-  include/ftxui/component/menu.hpp
-  include/ftxui/component/radiobox.hpp
-  include/ftxui/component/screen_interactive.hpp
-  include/ftxui/component/receiver.hpp
-  include/ftxui/component/toggle.hpp
 )
 
 add_library(ftxui::screen ALIAS screen)

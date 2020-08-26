@@ -3,6 +3,7 @@
 // the LICENSE file.
 
 #include "ftxui/component/checkbox.hpp"
+#include "ftxui/component/button.hpp"
 #include "ftxui/component/container.hpp"
 #include "ftxui/component/input.hpp"
 #include "ftxui/component/menu.hpp"
@@ -21,6 +22,7 @@ class MyComponent : public Component {
   CheckBox checkbox2;
   RadioBox radiobox;
   Input input;
+  Button button;
 
  public:
   MyComponent() {
@@ -55,6 +57,10 @@ class MyComponent : public Component {
 
     input.placeholder = L"Input placeholder";
     container.Add(&input);
+
+    button.label = L"Quit";
+    button.on_click = [&] { on_quit(); };
+    container.Add(&button);
   }
 
   Element Render(std::wstring name, Component& component) {
@@ -66,24 +72,30 @@ class MyComponent : public Component {
   }
 
   Element Render() override {
-    return vbox({
-               Render(L"menu", menu),
-               separator(),
-               Render(L"toggle", toggle),
-               separator(),
-               Render(L"checkbox", checkbox_container),
-               separator(),
-               Render(L"radiobox", radiobox),
-               separator(),
-               Render(L"input", input) | size(WIDTH, LESS_THAN, 30),
-           }) |
-           border;
+    return  //
+        vbox({
+            Render(L"menu", menu),
+            separator(),
+            Render(L"toggle", toggle),
+            separator(),
+            Render(L"checkbox", checkbox_container),
+            separator(),
+            Render(L"radiobox", radiobox),
+            separator(),
+            Render(L"input", input) | size(WIDTH, LESS_THAN, 30),
+            separator(),
+            Render(L"button", button),
+        }) |
+        border;
   }
+
+  std::function<void()> on_quit = [] {};
 };
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::FitComponent();
   MyComponent component;
+  component.on_quit = screen.ExitLoopClosure();
   screen.Loop(&component);
 
   return 0;
