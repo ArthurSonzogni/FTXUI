@@ -18,6 +18,7 @@ class Container : public Component {
   bool OnEvent(Event event) override;
   Element Render() override;
   Component* ActiveChild() override;
+  virtual void SetActiveChild(Component*) override;
 
  protected:
   // Handlers

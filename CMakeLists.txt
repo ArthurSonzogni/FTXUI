@@ -9,7 +9,7 @@ execute_process(
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.1.${git_version}
+  VERSION 0.2.${git_version}
 )
 
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)

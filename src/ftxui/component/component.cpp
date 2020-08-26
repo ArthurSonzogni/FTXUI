@@ -58,9 +58,16 @@ Component* Component::ActiveChild() {
   return children_.empty() ? nullptr : children_.front();
 }
 
+/// @brief Returns if the element if the currently active child of its parent.
+/// @ingroup component
+bool Component::Active() {
+  return !parent_ || parent_->ActiveChild() == this;
+}
+
 /// @brief Returns if the elements if focused by the user.
 /// True when the Component is focused by the user. An element is Focused when
 /// it is with all its ancestors the ActiveChild() of their parents.
+/// @ingroup component
 bool Component::Focused() {
   Component* current = this;
   for (;;) {
@@ -70,6 +77,23 @@ bool Component::Focused() {
     if (parent->ActiveChild() != current)
       return false;
     current = parent;
+  }
+}
+
+/// @brief Make the |child| to be the "active" one.
+/// @argument child the child to become active.
+/// @ingroup component
+void Component::SetActiveChild(Component*) {}
+
+/// @brief Configure all the ancestors to give focus to this component.
+/// @ingroup component
+void Component::TakeFocus() {
+  Component* child = this;
+  Component* parent = parent_;
+  while (parent) {
+    parent->SetActiveChild(child);
+    child = parent;
+    parent = parent->parent_;
   }
 }
 
