@@ -47,6 +47,15 @@ Component* Container::ActiveChild() {
   return children_[selected % children_.size()];
 }
 
+void Container::SetActiveChild(Component* child) {
+  for(size_t i = 0; i < children_.size(); ++i) {
+    if (children_[i] == child) {
+      (selector_ ? *selector_ : selected_) = i;
+      return;
+    }
+  }
+}
+
 bool Container::VerticalEvent(Event event) {
   int old_selected = selected_;
   if (event == Event::ArrowUp || event == Event::Character('k'))

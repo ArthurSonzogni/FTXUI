@@ -39,10 +39,17 @@ class Component {
   // We say an element has the focus if the chain of ActiveChild() from the
   // root component contains this object.
   virtual Component* ActiveChild();
+
   // Whether this is the active child of its parent.
   bool Active();
   // Whether all the ancestors are active.
   bool Focused();
+
+  // Make the |child| to be the "active" one.
+  virtual void SetActiveChild(Component* child);
+
+  // Configure all the ancestors to give focus to this component.
+  void TakeFocus();
 
  private:
   Component* parent_ = nullptr;
