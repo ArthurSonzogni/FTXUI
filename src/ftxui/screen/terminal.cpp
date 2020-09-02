@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include <cstdlib>
+
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
@@ -31,6 +33,11 @@ Terminal::Dimensions Terminal::Size() {
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   return Dimensions{w.ws_col, w.ws_row};
 #endif
+}
+
+bool Terminal::CanSupportTrueColors() {
+  std::string COLORTERM = std::getenv("COLORTERM");
+  return COLORTERM.compare("24bit") || COLORTERM.compare("trueColor");
 }
 
 }  // namespace ftxui

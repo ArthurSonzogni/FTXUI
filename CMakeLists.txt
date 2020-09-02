@@ -23,6 +23,7 @@ find_package(Threads)
 
 add_library(screen
   src/ftxui/screen/box.cpp
+  src/ftxui/screen/color.cpp
   src/ftxui/screen/screen.cpp
   src/ftxui/screen/string.cpp
   src/ftxui/screen/terminal.cpp
@@ -122,6 +123,7 @@ foreach(lib screen dom component)
       target_compile_options(${lib} PRIVATE "/WX")
       target_compile_options(${lib} PRIVATE "/wd4244")
       target_compile_options(${lib} PRIVATE "/wd4267")
+      target_compile_options(${lib} PRIVATE "/D_CRT_SECURE_NO_WARNINGS")
     endif()
     # Force Win32 to UNICODE
     target_compile_definitions(${lib} PRIVATE UNICODE _UNICODE)
@@ -163,7 +165,7 @@ export(TARGETS screen dom component NAMESPACE ftxui::
   FILE ${PROJECT_BINARY_DIR}/ftxui-targets.cmake)
 
 
-if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4") 
+if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
   set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
