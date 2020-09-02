@@ -23,6 +23,7 @@ find_package(Threads)
 
 add_library(screen
   src/ftxui/screen/box.cpp
+  src/ftxui/screen/color.cpp
   src/ftxui/screen/screen.cpp
   src/ftxui/screen/string.cpp
   src/ftxui/screen/terminal.cpp
@@ -163,7 +164,7 @@ export(TARGETS screen dom component NAMESPACE ftxui::
   FILE ${PROJECT_BINARY_DIR}/ftxui-targets.cmake)
 
 
-if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4") 
+if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
   set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)

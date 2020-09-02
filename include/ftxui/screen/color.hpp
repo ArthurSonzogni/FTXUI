@@ -2,39 +2,77 @@
 #define FTXUI_SCREEN_COLOR
 
 #include <cstdint>
+#include <string>
 
 namespace ftxui {
 
-/// @brief The set of supported terminal colors.
+/// @brief Enum indicating to the terminal how to interpret and display the
+/// color.
 /// @ingroup screen
-enum class Color : uint8_t {
+enum class ColorType : uint8_t {
+  None,
+  Basic,
+  Palette256,
+  TrueColor,
+};
+
+/// @brief A class representing terminal colors.
+/// @ingroup screen
+class Color {
+ public:
+  // --- Static instances representing the basic color set -----
+
   // --- Transparent -----
-  Default = 39,
+  static Color Default;
 
   // --- Grayscale -----
-  Black = 30,
-  GrayDark = 90,
-  GrayLight = 37,
-  White = 97,
+  static Color Black;
+  static Color GrayDark;
+  static Color GrayLight;
+  static Color White;
 
   // --- Hue -----
-  Blue = 34,
-  BlueLight = 94,
+  static Color Blue;
+  static Color BlueLight;
 
-  Cyan = 36,
-  CyanLight = 96,
+  static Color Cyan;
+  static Color CyanLight;
 
-  Green = 32,
-  GreenLight = 92,
+  static Color Green;
+  static Color GreenLight;
 
-  Magenta = 35,
-  MagentaLight = 95,
+  static Color Magenta;
+  static Color MagentaLight;
 
-  Red = 31,
-  RedLight = 91,
+  static Color Red;
+  static Color RedLight;
 
-  Yellow = 33,
-  YellowLight = 93,
+  static Color Yellow;
+  static Color YellowLight;
+
+ public:
+  // --- Public Constructors ------
+  static Color Color256(int index);
+  static Color ColorRGB(int r, int g, int b);
+
+  // --- Operators ------
+  bool operator==(const Color& rhs) const;
+  bool operator!=(const Color& rhs) const;
+
+  std::wstring ToTerminalColorCode(ColorType maximum_color_type_available,
+                                   bool is_background_color) const;
+
+ protected:
+  // --- Protected Constructors ------
+  // prefer available static instances if you want to use a basic color
+  static Color ColorBasic(int index);
+  Color();
+
+  ColorType type_ = ColorType::None;
+  int index_ = -1;
+  int r_ = -1;
+  int g_ = -1;
+  int b_ = -1;
 };
 
 }  // namespace ftxui
