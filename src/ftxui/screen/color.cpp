@@ -62,8 +62,6 @@ Color Color::ColorBasic(int index) {
   return color;
 }
 
-Color::Color() {}
-
 // --- Static instances representing the basic color set -----
 // --- Transparent -----
 Color Color::Default = ColorBasic(39);

@@ -51,7 +51,6 @@ class Color {
   static Color YellowLight;
 
  public:
-  // --- Public Constructors ------
   static Color Color256(int index);
   static Color ColorRGB(int r, int g, int b);
 
@@ -62,10 +61,8 @@ class Color {
   std::wstring ToTerminalColorCode(bool is_background_color) const;
 
  protected:
-  // --- Protected Constructors ------
   // prefer available static instances if you want to use a basic color
   static Color ColorBasic(int index);
-  Color();
 
   ColorType type_ = ColorType::None;
   int index_ = -1;
