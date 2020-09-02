@@ -4,6 +4,7 @@
 
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
+#include <ftxui/screen/terminal.hpp>
 #include <iostream>
 
 #include "ftxui/screen/string.hpp"
@@ -13,9 +14,11 @@ int main(int argc, const char* argv[]) {
   // clang-format off
   auto terminal_info =
     vbox(
-      text(L"Basic Color support : NA"),
-      text(L"256 Color support : NA"),
-      text(L"TrueColor support : NA")
+      text(L"Basic Color support : unknown"),
+      text(L"256 Color support : unknown"),
+      (Terminal::CanSupportTrueColors() ?
+        text(L"TrueColor support : Yes"):
+        text(L"TrueColor support : No"))
     );
 
   auto basic_color_display =
@@ -76,14 +79,12 @@ int main(int argc, const char* argv[]) {
       palette_256_color_display->children.push_back(hbox());
       ++y;
     }
-    int color_index = y+(i%16)*16;
-    std::string number = std::to_string(color_index);
-    while(number.length() < 3)
+    std::string number = std::to_string(i);
+    while(number.length() < 4)
     {
       number.push_back(' ');
     }
-    palette_256_color_display->children.back()->children.push_back(bgcolor(Color::Color256(color_index),text(to_wstring(number))));
-    palette_256_color_display->children.back()->children.push_back(text(L" "));
+    palette_256_color_display->children.back()->children.push_back(bgcolor(Color::Color256(i),text(to_wstring(number))));
   }
 
   auto true_color_display =

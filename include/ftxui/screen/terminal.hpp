@@ -10,6 +10,8 @@ class Terminal {
     int dimy;
   };
 
+  static bool CanSupportTrueColors();
+
   static Dimensions Size();
 };
 

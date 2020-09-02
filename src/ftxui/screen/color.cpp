@@ -15,31 +15,26 @@ bool Color::operator!=(const Color& rhs) const {
   return !operator==(rhs);
 }
 
-std::wstring Color::ToTerminalColorCode(ColorType maximum_color_type_available,
-                                        bool is_background_color) const {
-  if (maximum_color_type_available < type_) {
-    // conversion will be necessary;
-  } else {
-    switch (type_) {
-      case ColorType::None:
-        return L"";
+std::wstring Color::ToTerminalColorCode(bool is_background_color) const {
+  switch (type_) {
+    case ColorType::None:
+      return L"";
 
-      case ColorType::Basic:
-        return to_wstring(
-            std::to_string((is_background_color ? 10 : 0) + index_));
+    case ColorType::Basic:
+      return to_wstring(
+          std::to_string((is_background_color ? 10 : 0) + index_));
 
-      case ColorType::Palette256:
-        return to_wstring(std::to_string(is_background_color ? 48 : 38)  //
-                          + ";5;"                                        //
-                          + std::to_string(index_));                     //
+    case ColorType::Palette256:
+      return to_wstring(std::to_string(is_background_color ? 48 : 38)  //
+                        + ";5;"                                        //
+                        + std::to_string(index_));                     //
 
-      case ColorType::TrueColor:
-        return to_wstring(std::to_string(is_background_color ? 48 : 38)  //
-                          + ";2;"                                        //
-                          + std::to_string(r_) + ";"                     //
-                          + std::to_string(g_) + ";"                     //
-                          + std::to_string(b_));                         //
-    }
+    case ColorType::TrueColor:
+      return to_wstring(std::to_string(is_background_color ? 48 : 38)  //
+                        + ";2;"                                        //
+                        + std::to_string(r_) + ";"                     //
+                        + std::to_string(g_) + ";"                     //
+                        + std::to_string(b_));                         //
   }
   return L"";
 }

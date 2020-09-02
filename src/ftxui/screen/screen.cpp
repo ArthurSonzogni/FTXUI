@@ -85,14 +85,8 @@ void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
 
   if (next.foreground_color != previous.foreground_color ||
       next.background_color != previous.background_color) {
-    ss << L"\x1B[" +
-              next.foreground_color                                  //
-                  .ToTerminalColorCode(ColorType::TrueColor, false)  //
-              + L"m";
-    ss << L"\x1B[" +
-              next.background_color                                 //
-                  .ToTerminalColorCode(ColorType::TrueColor, true)  //
-              + L"m";
+    ss << L"\x1B[" + next.foreground_color.ToTerminalColorCode(false) + L"m";
+    ss << L"\x1B[" + next.background_color.ToTerminalColorCode(true) + L"m";
   }
 
   previous = next;

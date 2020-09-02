@@ -59,8 +59,7 @@ class Color {
   bool operator==(const Color& rhs) const;
   bool operator!=(const Color& rhs) const;
 
-  std::wstring ToTerminalColorCode(ColorType maximum_color_type_available,
-                                   bool is_background_color) const;
+  std::wstring ToTerminalColorCode(bool is_background_color) const;
 
  protected:
   // --- Protected Constructors ------
