@@ -85,11 +85,8 @@ void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
 
   if (next.foreground_color != previous.foreground_color ||
       next.background_color != previous.background_color) {
-    ss << L"\x1B[" +
-              to_wstring(std::to_string((uint8_t)next.foreground_color)) + L"m";
-    ss << L"\x1B[" +
-              to_wstring(std::to_string(10 + (uint8_t)next.background_color)) +
-              L"m";
+    ss << L"\x1B[" + next.foreground_color.Print(false) + L"m";
+    ss << L"\x1B[" + next.background_color.Print(true) + L"m";
   }
 
   previous = next;
@@ -105,7 +102,7 @@ Dimension Dimension::Fixed(int v) {
 }
 
 /// The minimal dimension that will fit the given element.
-/// @see Fixed 
+/// @see Fixed
 /// @see Full
 Dimension Dimension::Fit(Element& e) {
   e->ComputeRequirement();
@@ -115,7 +112,7 @@ Dimension Dimension::Fit(Element& e) {
 }
 
 /// Use the terminal dimensions.
-/// @see Fixed 
+/// @see Fixed
 /// @see Fit
 Dimension Dimension::Full() {
   Terminal::Dimensions size = Terminal::Size();
