@@ -1,5 +1,7 @@
 #include "ftxui/screen/color.hpp"
 
+#include <algorithm>
+
 #include "ftxui/screen/string.hpp"
 
 namespace ftxui {
@@ -27,10 +29,16 @@ std::wstring Color::ToTerminalColorCode(ColorType maximum_color_type_available,
             std::to_string((is_background_color ? 10 : 0) + index_));
 
       case ColorType::Palette256:
-        return L"";
+        return to_wstring(std::to_string(is_background_color ? 48 : 38)  //
+                          + ";5;"                                        //
+                          + std::to_string(index_));                     //
 
       case ColorType::TrueColor:
-        return L"";
+        return to_wstring(std::to_string(is_background_color ? 48 : 38)  //
+                          + ";2;"                                        //
+                          + std::to_string(r_) + ";"                     //
+                          + std::to_string(g_) + ";"                     //
+                          + std::to_string(b_));                         //
     }
   }
   return L"";
@@ -39,16 +47,16 @@ std::wstring Color::ToTerminalColorCode(ColorType maximum_color_type_available,
 Color Color::Color256(int index) {
   Color color;
   color.type_ = ColorType::Palette256;
-  color.index_ = index;
+  color.index_ = std::clamp(index, 0, 255);
   return color;
 }
 
 Color Color::ColorRGB(int r, int g, int b) {
   Color color;
   color.type_ = ColorType::TrueColor;
-  color.r_ = r;
-  color.g_ = g;
-  color.b_ = b;
+  color.r_ = std::clamp(r, 0, 255);
+  color.g_ = std::clamp(g, 0, 255);
+  color.b_ = std::clamp(b, 0, 255);
   return color;
 }
 
