@@ -10,8 +10,22 @@ namespace ftxui {
 /// @ingroup screen
 class Color {
  public:
+  enum Palette16 : uint8_t;
+  enum Palette256: uint8_t;
+
+  Color(); // Transparent.
+  Color(Palette16 index);   // Implicit conversion from index to Color.
+  Color(Palette256 index);  // Implicit conversion from index to Color.
+  Color(uint8_t red, uint8_t green, uint8_t blue);
+  static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
+  static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);
+
+  //---------------------------
+  // List of colors:
+  //---------------------------
+
   // clang-format off
-  enum Palette16 {
+  enum Palette16 : uint8_t {
     Black        = 30,
     Blue         = 34,
     BlueLight    = 94,
@@ -31,7 +45,7 @@ class Color {
     YellowLight  = 93,
   };
 
-  enum Palette256 {
+  enum Palette256 : uint8_t {
     Aquamarine1        = 122,
     Aquamarine1Bis     = 86,
     Aquamarine3        = 79,
@@ -274,14 +288,6 @@ class Color {
     Yellow4Bis         = 106,
   };
   // clang-format on
-
- public:
-  Color(); // Transparent.
-  Color(Palette256 index);  // Implicit conversion from index to Color.
-  Color(Palette16 index);   // Implicit conversion from index to Color.
-  Color(uint8_t red, uint8_t green, uint8_t blue);
-  static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
-  static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);
 
   // --- Operators ------
   bool operator==(const Color& rhs) const;

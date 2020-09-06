@@ -230,7 +230,9 @@ Decorator color(Color);
 Decorator bgcolor(Color);
 ~~~
 
-The following colors are available:
+### Palette16
+
+On most terminal the following colors are supported:
 - Default
 
 - Black
@@ -263,6 +265,32 @@ text(L"Blue foreground") | color(Color::Blue);
 text(L"Blue backgrond") | bgcolor(Color::Blue);
 text(L"Black on white") | color(Color::Black) | bgcolor(Color::White);
 ```
+
+### Palette256
+
+On terminal supporting 256 colors. 
+@htmlonly
+<script id="asciicast-OAUc3n6QrkmrLt7XEEb8AzbLt" src="https://asciinema.org/a/OAUc3n6QrkmrLt7XEEb8AzbLt.js" async></script>
+@endhtmlonly
+
+```cpp
+text(L"HotPink") | color(Color::HotPink);
+```
+
+### TrueColor
+
+On terminal supporting trueColor, you can directly chose the 24bit RGB color:
+
+There are two constructors:
+```cpp
+ftxui::Color::RGB(uint8_t red, uint8_t green, uint8_t blue);
+ftxui::Color::HSV(uint8_t hue, uint8_t saturation, uint8_t value);
+```
+
+@htmlonly
+<script id="asciicast-dk5r8IcCH0aFIIgWG0keSEHMG" src="https://asciinema.org/a/dk5r8IcCH0aFIIgWG0keSEHMG.js" async></script>
+<script id="asciicast-xwzzghmqcqzIuyLwCpQFEqbEu" src="https://asciinema.org/a/xwzzghmqcqzIuyLwCpQFEqbEu.js" async></script>
+@endhtmlonly
 
 ## Style
 A terminal console can usually display colored text and colored background.
