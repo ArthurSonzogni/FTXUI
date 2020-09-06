@@ -11,9 +11,9 @@ namespace ftxui {
 class Color {
  public:
   enum Palette16 : uint8_t;
-  enum Palette256: uint8_t;
+  enum Palette256 : uint8_t;
 
-  Color(); // Transparent.
+  Color();                  // Transparent.
   Color(Palette16 index);   // Implicit conversion from index to Color.
   Color(Palette256 index);  // Implicit conversion from index to Color.
   Color(uint8_t red, uint8_t green, uint8_t blue);

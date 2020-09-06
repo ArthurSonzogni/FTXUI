@@ -1,7 +1,3 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include "ftxui/component/button.hpp"
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/container.hpp"
@@ -24,7 +20,7 @@ class Content : public Component {
   }
 
   Element Render() final {
-    auto button_elements= hbox({
+    auto button_elements = hbox({
         button_rate_ftxui.Render(),
         filler(),
         button_quit_.Render(),
@@ -126,3 +122,7 @@ int main(int argc, const char* argv[]) {
   screen.Loop(&my_component);
   return 0;
 }
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

@@ -6,7 +6,7 @@ namespace ftxui {
 
 Element Button::Render() {
   if (Focused())
-    return text(label) | border |inverted;
+    return text(label) | border | inverted;
   else
     return text(label) | border;
 }
