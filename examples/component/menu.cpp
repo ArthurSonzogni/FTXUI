@@ -1,7 +1,3 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include "ftxui/component/menu.hpp"
 
 #include <chrono>
@@ -23,3 +19,7 @@ int main(int argc, const char* argv[]) {
 
   std::cout << "Selected element = " << menu.selected << std::endl;
 }
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

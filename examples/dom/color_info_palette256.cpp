@@ -1,14 +1,10 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
 #include <algorithm>
-#include <ftxui/screen/terminal.hpp>
+#include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color_info.hpp>
-#include "ftxui/screen/string.hpp"
+#include <ftxui/screen/screen.hpp>
+#include <ftxui/screen/terminal.hpp>
 #include <iostream>
+#include "ftxui/screen/string.hpp"
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
@@ -55,29 +51,32 @@ int main(int argc, const char* argv[]) {
           best_index = j;
         }
       }
-      std::swap(column[i+1], column[best_index]);
+      std::swap(column[i + 1], column[best_index]);
     }
   }
 
   // Draw every columns
   Elements columns_elements;
-  for(auto& column : info_columns) {
+  for (auto& column : info_columns) {
     Elements column_elements;
-    for(auto& it : column) {
+    for (auto& it : column) {
       column_elements.push_back(hbox({
-        text(L"     ") | bgcolor(Color(Color::Palette256(it.index))),
-        text(to_wstring(std::string(it.name))),
+          text(L"     ") | bgcolor(Color(Color::Palette256(it.index))),
+          text(to_wstring(std::string(it.name))),
       }));
     }
     columns_elements.push_back(vbox(std::move(column_elements)));
   }
   auto document = hbox(std::move(columns_elements));
 
-  auto screen =
-      Screen::Create(Dimension::Full(), Dimension::Fit(document));
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);
 
   std::cout << screen.ToString();
 
   return 0;
 }
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

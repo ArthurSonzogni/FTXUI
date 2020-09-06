@@ -7,7 +7,8 @@
 
 namespace ftxui {
 
-/// @brief A Checkbox. It can be checked or unchecked.Display an element on a ftxui::Screen.
+/// @brief A Checkbox. It can be checked or unchecked.Display an element on a
+/// ftxui::Screen.
 /// @ingroup dom
 class CheckBox : public Component {
  public:
@@ -15,19 +16,19 @@ class CheckBox : public Component {
   CheckBox() = default;
   ~CheckBox() override = default;
 
-  bool state = false; // The current state. true=checked, false:unchecked.
-  std::wstring label = L"label"; // The CheckBox label.
+  bool state = false;  // The current state. true=checked, false:unchecked.
+  std::wstring label = L"label";  // The CheckBox label.
 
 #if defined(_WIN32)
-  std::wstring checked = L"[X] "; /// Prefix for  a "checked" state.
-  std::wstring unchecked = L"[ ] "; /// Prefix for  an "unchecked" state.
+  std::wstring checked = L"[X] ";    /// Prefix for  a "checked" state.
+  std::wstring unchecked = L"[ ] ";  /// Prefix for  an "unchecked" state.
 #else
-  std::wstring checked = L"▣ "; /// Prefix for  a "checked" state.
-  std::wstring unchecked = L"☐ "; /// Prefix for  a "unchecked" state.
+  std::wstring checked = L"▣ ";    /// Prefix for  a "checked" state.
+  std::wstring unchecked = L"☐ ";  /// Prefix for  a "unchecked" state.
 #endif
 
-  Decorator focused_style = inverted; /// Decorator used when focused.
-  Decorator unfocused_style = nothing; /// Decorator used when unfocused.
+  Decorator focused_style = inverted;   /// Decorator used when focused.
+  Decorator unfocused_style = nothing;  /// Decorator used when unfocused.
 
   /// Called when the user change the state of the CheckBox.
   std::function<void()> on_change = []() {};

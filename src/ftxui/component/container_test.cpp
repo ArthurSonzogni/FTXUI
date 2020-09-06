@@ -199,7 +199,7 @@ TEST(ContainerTest, SetActiveChild) {
 }
 
 TEST(ContainerTest, TakeFocus) {
-  auto c= Container::Horizontal();
+  auto c = Container::Horizontal();
   auto c1 = Container::Vertical();
   auto c2 = Container::Vertical();
   auto c3 = Container::Vertical();

@@ -41,7 +41,7 @@ Elements operator|(Elements elements, Decorator decorator) {
 /// @brief From an element, apply a decorator.
 /// @return the decorated element.
 /// @ingroup dom
-/// 
+///
 /// ### Example
 ///
 /// Both of these are equivalent:

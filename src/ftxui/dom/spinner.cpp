@@ -245,7 +245,7 @@ static const std::vector<std::vector<std::vector<std::wstring>>> elements = {
 /// ASCII art "video".
 /// @param charset_index The type of "video".
 /// @param image_index The "frame" of the video. You need to increase this for
-///every "step".
+/// every "step".
 /// @ingroup dom
 Element spinner(int charset_index, size_t image_index) {
   if (charset_index == 0) {

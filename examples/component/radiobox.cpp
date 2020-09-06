@@ -1,7 +1,3 @@
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
-
 #include "ftxui/component/radiobox.hpp"
 
 #include "ftxui/component/component.hpp"
@@ -22,3 +18,7 @@ int main(int argc, const char* argv[]) {
   screen.Loop(&radiobox);
   return 0;
 }
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

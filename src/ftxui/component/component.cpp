@@ -13,7 +13,7 @@ Component::~Component() {
 /// @brief Return the parent Component, or nul if any.
 /// @see Attach
 /// @see Detach
-/// @see Parent 
+/// @see Parent
 /// @ingroup component
 Component* Component::Parent() {
   return parent_;
@@ -100,7 +100,7 @@ void Component::TakeFocus() {
 /// @brief Detach this children from its parent.
 /// @see Attach
 /// @see Detach
-/// @see Parent 
+/// @see Parent
 /// @ingroup component
 void Component::Detach() {
   if (!parent_)
@@ -113,14 +113,13 @@ void Component::Detach() {
 /// @brief Attach this element to its parent.
 /// @see Attach
 /// @see Detach
-/// @see Parent 
+/// @see Parent
 /// @ingroup component
 void Component::Attach(Component* parent) {
   Detach();
   parent_ = parent;
   parent_->children_.push_back(this);
 }
-
 
 }  // namespace ftxui
 
