@@ -68,6 +68,7 @@ Feel free to add your projects here:
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [Just-Fast](https://github.com/GiuseppeCesarano/just-fast)
 - [simpPRU](https://github.com/VedantParanjape/simpPRU)
+- [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
 
 ## Hosted on:
  * [github](https://github.com/ArthurSonzogni/ftxui)
