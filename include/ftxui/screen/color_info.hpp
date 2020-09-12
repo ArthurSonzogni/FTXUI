@@ -7,7 +7,8 @@ namespace ftxui {
 
 struct ColorInfo {
   const char* name;
-  uint8_t index;
+  uint8_t index_256;
+  uint8_t index_16;
   uint8_t red;
   uint8_t green;
   uint8_t blue;
@@ -17,6 +18,7 @@ struct ColorInfo {
 };
 
 ColorInfo GetColorInfo(Color::Palette256 index);
+ColorInfo GetColorInfo(Color::Palette16 index);
 
 }  // namespace ftxui
 
