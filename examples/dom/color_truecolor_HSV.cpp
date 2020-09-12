@@ -10,10 +10,13 @@ int main(int argc, const char* argv[]) {
 
   int saturation = 255;
   Elements array;
-  for (int value = 0; value < 255; value += 10) {
+  for (int value = 0; value < 255; value += 20) {
     Elements line;
-    for (int hue = 0; hue < 255; hue += 2)
-      line.push_back(text(L" ") | bgcolor(Color::HSV(hue, saturation, value)));
+    for (int hue = 0; hue < 255; hue += 2) {
+      line.push_back(text(L"▀")                                   //
+                     | color(Color::HSV(hue, saturation, value))  //
+                     | bgcolor(Color::HSV(hue, saturation, value + 10)));
+    }
     array.push_back(hbox(std::move(line)));
   }
 

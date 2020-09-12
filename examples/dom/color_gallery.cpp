@@ -1,12 +1,15 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/terminal.hpp>
+#include <ftxui/screen/color_info.hpp>
 #include <iostream>
 
 #include "ftxui/screen/string.hpp"
 
+using namespace ftxui;
+#include "./color_info_sorted_2d.ipp" // ColorInfoSorted2D.
+
 int main(int argc, const char* argv[]) {
-  using namespace ftxui;
   // clang-format off
   auto terminal_info =
     vbox(
@@ -19,7 +22,8 @@ int main(int argc, const char* argv[]) {
 
   auto basic_color_display =
     vbox(
-      text(L"Basic Color Set:"),
+      text(L"16 color palette:"),
+      separator(),
       hbox(
         vbox(
           color(Color::Default, text(L"Default")),
@@ -63,37 +67,53 @@ int main(int argc, const char* argv[]) {
     );
 
   // clang-format on
-  auto palette_256_color_display = vbox(text(L"256 color palette:"));
-
-  int y = -1;
-  for (int i = 0; i < 256; ++i) {
-    if (i % 16 == 0) {
-      palette_256_color_display->children.push_back(hbox());
-      ++y;
+  auto palette_256_color_display = text(L"256 colors palette:");
+  {
+    std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
+    Elements columns;
+    for (auto& column : info_columns) {
+      Elements column_elements;
+      for (auto& it : column) {
+        column_elements.push_back(
+            text(L"   ") | bgcolor(Color(Color::Palette256(it.index_256))));
+      }
+      columns.push_back(hbox(std::move(column_elements)));
     }
-    std::string number = std::to_string(i);
-    while (number.length() < 4) {
-      number.push_back(' ');
-    }
-    palette_256_color_display->children.back()->children.push_back(
-        bgcolor(Color::Palette256(i), text(to_wstring(number))));
+    palette_256_color_display = vbox({
+        palette_256_color_display,
+        separator(),
+        vbox(columns),
+    });
   }
 
-  auto true_color_display = vbox(text(L"a true color grandient:"));
-
-  for (int i = 0; i < 17; ++i) {
-    true_color_display->children.push_back(hbox());
-
-    for (int j = 0; j < 30; ++j) {
-      true_color_display->children.back()->children.push_back(
-          bgcolor(Color(50 + i * 5, 100 + j, 150), text(L" ")));
+  // True color display.
+  auto true_color_display = text(L"TrueColors: 24bits:");
+  {
+    int saturation = 255;
+    Elements array;
+    for (int value = 0; value < 255; value += 16) {
+      Elements line;
+      for (int hue = 0; hue < 255; hue += 6) {
+        line.push_back(text(L"▀")                                   //
+                       | color(Color::HSV(hue, saturation, value))  //
+                       | bgcolor(Color::HSV(hue, saturation, value + 8)));
+      }
+      array.push_back(hbox(std::move(line)));
     }
+    true_color_display = vbox({
+        true_color_display,
+        separator(),
+        vbox(std::move(array)),
+    });
   }
 
-  auto document =
-      vbox(terminal_info, text(L""),
-           hbox(basic_color_display, text(L"  "), palette_256_color_display,
-                text(L" "), true_color_display));
+  auto document = vbox(terminal_info, hbox({
+                                          basic_color_display,
+                                          text(L" "),
+                                          palette_256_color_display,
+                                          text(L" "),
+                                          true_color_display,
+                                      }));
   // clang-format on
 
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
