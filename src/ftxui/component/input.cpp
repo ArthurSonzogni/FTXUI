@@ -52,6 +52,7 @@ bool Input::OnEvent(Event event) {
       return false;
     content.erase(cursor_position - 1, 1);
     cursor_position--;
+    on_change();
     return true;
   }
 
@@ -60,6 +61,7 @@ bool Input::OnEvent(Event event) {
     if (cursor_position == int(content.size()))
       return false;
     content.erase(cursor_position, 1);
+    on_change();
     return true;
   }
 
@@ -87,6 +89,7 @@ bool Input::OnEvent(Event event) {
   if (event.is_character()) {
     content.insert(cursor_position, 1, event.character());
     cursor_position++;
+    on_change();
     return true;
   }
   return false;

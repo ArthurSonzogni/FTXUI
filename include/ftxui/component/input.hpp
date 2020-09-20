@@ -20,8 +20,8 @@ class Input : public Component {
   std::wstring placeholder;
 
   // State update callback.
-  std::function<void()> on_change = []() {};
-  std::function<void()> on_enter = []() {};
+  std::function<void()> on_change = [] {};
+  std::function<void()> on_enter = [] {};
 
   // Component implementation.
   Element Render() override;
