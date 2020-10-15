@@ -36,7 +36,11 @@ Terminal::Dimensions Terminal::Size() {
 }
 
 bool Terminal::CanSupportTrueColors() {
-  std::string COLORTERM = std::getenv("COLORTERM");
+  char *COLORTERM_RAW = std::getenv("COLORTERM");
+  if (nullptr == COLORTERM_RAW) {
+    return false;
+  }
+  std::string COLORTERM = COLORTERM_RAW;
   return COLORTERM.compare("24bit") || COLORTERM.compare("trueColor");
 }
 
