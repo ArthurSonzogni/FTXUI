@@ -153,10 +153,13 @@ std::string Screen::ToString() {
   std::wstringstream ss;
 
   Pixel previous_pixel;
+  Pixel final_pixel;
 
   for (int y = 0; y < dimy_; ++y) {
-    if (y != 0)
+    if (y != 0) {
+      UpdatePixelStyle(ss, previous_pixel, final_pixel);
       ss << '\n';
+    }
     for (int x = 0; x < dimx_;) {
       auto& pixel = pixels_[y][x];
       wchar_t c = pixel.character;
@@ -166,7 +169,6 @@ std::string Screen::ToString() {
     }
   }
 
-  Pixel final_pixel;
   UpdatePixelStyle(ss, previous_pixel, final_pixel);
 
   return to_string(ss.str());
