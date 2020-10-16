@@ -162,12 +162,12 @@ if(FTXUI_ENABLE_INSTALL)
   )
 
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ftxui-config.cmake
-          DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
   )
   install(EXPORT ftxui-export
-          FILE ftxui-config-version.cmake
-          NAMESPACE ftxui::
-          DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+    FILE ftxui-config-version.cmake
+    NAMESPACE ftxui::
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
   )
 endif()
 
