@@ -90,12 +90,13 @@ The screen can be printed as a string using ftxui::Screen::ToString().
 
 ~~~cpp
   #include <ftxui/screen/screen.hpp>
+  #include <iostream>
 
   int main(void) {
     using namespace ftxui;
-    auto screen = Screen(Dimension::Fixed(32), Dimension::Fixed(10));
+    auto screen = Screen::Create(Dimension::Fixed(32), Dimension::Fixed(10));
 
-    auto& pixel = screen.PixelAt(10,10);
+    auto& pixel = screen.PixelAt(9,9);
     pixel.character = U'A';
     pixel.bold = true;
     pixel.foreground_color = Color::Blue;
