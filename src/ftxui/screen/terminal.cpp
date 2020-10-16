@@ -35,13 +35,34 @@ Terminal::Dimensions Terminal::Size() {
 #endif
 }
 
-bool Terminal::CanSupportTrueColors() {
-  char *COLORTERM_RAW = std::getenv("COLORTERM");
-  if (nullptr == COLORTERM_RAW) {
-    return false;
+namespace {
+
+const char* Safe(const char* c) {
+  return c ? c : "";
+}
+
+static bool cached = false;
+Terminal::Color cached_supported_color;
+Terminal::Color ComputeColorSupport() {
+  std::string COLORTERM = Safe(std::getenv("COLORTERM"));
+  if (COLORTERM.compare("24bit") || COLORTERM.compare("trueColor"))
+    return Terminal::Color::TrueColor;
+
+  std::string TERM = Safe(std::getenv("TERM"));
+  if (COLORTERM.compare("256") || COLORTERM.compare("256"))
+    return Terminal::Color::Palette256;
+
+  return Terminal::Color::Palette16;
+}
+
+}  // namespace
+
+Terminal::Color Terminal::ColorSupport() {
+  if (!cached) {
+    cached = true;
+    cached_supported_color = ComputeColorSupport();
   }
-  std::string COLORTERM = COLORTERM_RAW;
-  return COLORTERM.compare("24bit") || COLORTERM.compare("trueColor");
+  return cached_supported_color;
 }
 
 }  // namespace ftxui

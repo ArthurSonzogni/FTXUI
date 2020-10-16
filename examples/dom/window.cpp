@@ -2,12 +2,21 @@
 #include <ftxui/screen/screen.hpp>
 #include <iostream>
 
-int main(int argc, const char* argv[]) {
+int main(void) {
   using namespace ftxui;
-  auto document = window(text(L"Title"), text(L"content"));
-  auto screen = Screen::Create(Dimension::Fixed(30), Dimension::Fixed(6));
+  Element document = graph([](int x, int y) {
+                       std::vector<int> result(x, 0);
+                       for (int i{0}; i < x; ++i) {
+                         result[i] = ((3 * i) / 2) % y;
+                       }
+                       return result;
+                     }) |
+                     color(Color::Red) | border | color(Color::Green) |
+                     bgcolor(Color::DarkBlue);
+
+  auto screen = Screen::Create(Dimension::Fixed(80), Dimension::Fixed(10));
   Render(screen, document);
-  std::cout << screen.ToString() << std::endl;
+  std::cout << screen.ToString() << '\n';
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

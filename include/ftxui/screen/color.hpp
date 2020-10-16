@@ -10,10 +10,12 @@ namespace ftxui {
 /// @ingroup screen
 class Color {
  public:
+  enum Palette1 : uint8_t;
   enum Palette16 : uint8_t;
   enum Palette256 : uint8_t;
 
   Color();                  // Transparent.
+  Color(Palette1 index);    // Transparent.
   Color(Palette16 index);   // Implicit conversion from index to Color.
   Color(Palette256 index);  // Implicit conversion from index to Color.
   Color(uint8_t red, uint8_t green, uint8_t blue);
@@ -23,26 +25,28 @@ class Color {
   //---------------------------
   // List of colors:
   //---------------------------
-
   // clang-format off
+  enum Palette1 : uint8_t{
+    Default, // Transparent
+  };
+
   enum Palette16 : uint8_t {
-    Black        = 30,
-    Blue         = 34,
-    BlueLight    = 94,
-    Cyan         = 36,
-    CyanLight    = 96,
-    Default      = 39, // Transparent
-    GrayDark     = 90,
-    GrayLight    = 37,
-    Green        = 32,
-    GreenLight   = 92,
-    Magenta      = 35,
-    MagentaLight = 95,
-    Red          = 31,
-    RedLight     = 91,
-    White        = 97,
-    Yellow       = 33,
-    YellowLight  = 93,
+    Black        = 0,
+    Red          = 1,
+    Green        = 2,
+    Yellow       = 3,
+    Blue         = 4,
+    Magenta      = 5,
+    Cyan         = 6,
+    GrayLight    = 7,
+    GrayDark     = 8,
+    RedLight     = 9,
+    GreenLight   = 10,
+    YellowLight  = 11,
+    BlueLight    = 12,
+    MagentaLight = 13,
+    CyanLight    = 14,
+    White        = 15,
   };
 
   enum Palette256 : uint8_t {
@@ -297,6 +301,7 @@ class Color {
 
  private:
   enum class ColorType : uint8_t {
+    Palette1,
     Palette16,
     Palette256,
     TrueColor,

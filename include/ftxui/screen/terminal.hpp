@@ -9,10 +9,15 @@ class Terminal {
     int dimx;
     int dimy;
   };
-
-  static bool CanSupportTrueColors();
-
   static Dimensions Size();
+
+  enum Color {
+    Palette1,
+    Palette16,
+    Palette256,
+    TrueColor,
+  };
+  static Color ColorSupport();
 };
 
 }  // namespace ftxui
