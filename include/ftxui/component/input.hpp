@@ -18,6 +18,7 @@ class Input : public Component {
   // State.
   std::wstring content;
   std::wstring placeholder;
+  int cursor_position = 0;
 
   // State update callback.
   std::function<void()> on_change = [] {};
@@ -26,9 +27,6 @@ class Input : public Component {
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
-
- private:
-  int cursor_position = 0;
 };
 
 }  // namespace ftxui
