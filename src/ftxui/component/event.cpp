@@ -1,105 +1,9 @@
 #include "ftxui/component/event.hpp"
 
 #include <iostream>
-
 #include "ftxui/screen/string.hpp"
 
 namespace ftxui {
-
-namespace {
-
-void ParseUTF8(Receiver<char>& in, Sender<Event>& out, std::string& input) {
-  char c;
-  unsigned char head = static_cast<unsigned char>(input[0]);
-  for (int i = 0; i < 3; ++i, head <<= 1) {
-    if ((head & 0b11000000) != 0b11000000)
-      break;
-    if (!in->Receive(&c))
-      return;
-    input += c;
-  }
-  out->Send(Event::Character(input));
-}
-
-void ParseCSI(Receiver<char>& in, Sender<Event>& out, std::string& input) {
-  char c;
-  while (1) {
-    if (!in->Receive(&c))
-      return;
-    input += c;
-
-    if (c >= '0' && c <= '9')
-      continue;
-
-    if (c == ';')
-      continue;
-
-    if (c >= ' ' && c <= '~')
-      return out->Send(Event::Special(input));
-
-    // Invalid ESC in CSI.
-    if (c == '\x1B')
-      return out->Send(Event::Special(input));
-  }
-}
-
-void ParseDCS(Receiver<char>& in, Sender<Event>& out, std::string& input) {
-  char c;
-  // Parse until the string terminator ST.
-  while (1) {
-    if (!in->Receive(&c))
-      return;
-    input += c;
-    if (input.back() != '\x1B')
-      continue;
-    if (!in->Receive(&c))
-      return;
-    input += c;
-    if (input.back() != '\\')
-      continue;
-    return out->Send(Event::Special(input));
-  }
-}
-
-void ParseOSC(Receiver<char>& in, Sender<Event>& out, std::string& input) {
-  char c;
-  // Parse until the string terminator ST.
-  while (1) {
-    if (!in->Receive(&c))
-      return;
-    input += c;
-    if (input.back() != '\x1B')
-      continue;
-    if (!in->Receive(&c))
-      return;
-    input += c;
-    if (input.back() != '\\')
-      continue;
-    return out->Send(Event::Special(input));
-  }
-}
-
-void ParseESC(Receiver<char>& in, Sender<Event>& out, std::string& input) {
-  char c;
-  if (!in->Receive(&c))
-    return;
-  input += c;
-  switch (c) {
-    case 'P':
-      return ParseDCS(in, out, input);
-    case '[':
-      return ParseCSI(in, out, input);
-    case ']':
-      return ParseOSC(in, out, input);
-    default:
-      if (!in->Receive(&c))
-        return;
-      input += c;
-      out->Send(Event::Special(input));
-  }
-}
-
-}  // namespace
 
 // static
 Event Event::Character(const std::string& input) {
@@ -129,30 +33,6 @@ Event Event::Special(const std::string& input) {
   Event event;
   event.input_ = std::move(input);
   return event;
-}
-
-// static
-void Event::Convert(Receiver<char>& in, Sender<Event>& out, char c) {
-  std::string input;
-  input += c;
-
-  unsigned char head = input[0];
-  switch (head) {
-    case 24:  // CAN
-    case 26:  // SUB
-      return;
-
-    case '\x1B':
-      return ParseESC(in, out, input);
-  }
-
-  if (head < 32)  // C0
-    return out->Send(Event::Special(input));
-
-  if (head == 127)  // Delete
-    return out->Send(Event::Special(input));
-
-  return ParseUTF8(in, out, input);
 }
 
 // --- Arrow ---

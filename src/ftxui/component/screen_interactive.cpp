@@ -10,6 +10,7 @@
 #include <thread>
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/component/terminal_input_parser.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
 
@@ -36,25 +37,23 @@
 namespace ftxui {
 
 namespace {
-// Produce a stream of Event from a stream of char.
-void CharToEventStream(Receiver<char> receiver, Sender<Event> sender) {
-  char c;
-  while (receiver->Receive(&c))
-    Event::Convert(receiver, sender, c);
-}
 
+constexpr int timeout_milliseconds = 20;
+constexpr int timeout_microseconds = timeout_milliseconds * 1000;
 #if defined(_WIN32)
 
-void Win32EventListener(std::atomic<bool>* quit,
-                        Sender<char> char_sender,
-                        Sender<Event> event_sender) {
+void EventListener(std::atomic<bool>* quit,
+                        Sender<Event> out) {
   auto console = GetStdHandle(STD_INPUT_HANDLE);
+  auto parser = TerminalInputParser(out.Clone());
   while (!*quit) {
     // Throttle ReadConsoleInput by waiting 250ms, this wait function will
     // return if there is input in the console.
-    auto wait_result = WaitForSingleObject(console, 250);
-    if (wait_result == WAIT_TIMEOUT)
+    auto wait_result = WaitForSingleObject(console, timeout_milliseconds);
+    if (wait_result == WAIT_TIMEOUT) {
+      parser.Timeout(timeout_milliseconds);
       continue;
+    }
 
     DWORD number_of_events = 0;
     if (!GetNumberOfConsoleInputEvents(console, &number_of_events))
@@ -76,10 +75,10 @@ void Win32EventListener(std::atomic<bool>* quit,
           // ignore UP key events
           if (key_event.bKeyDown == FALSE)
             continue;
-          char_sender->Send((char)key_event.uChar.UnicodeChar);
+          parser.Add((char)key_event.uChar.UnicodeChar);
         } break;
         case WINDOW_BUFFER_SIZE_EVENT:
-          event_sender->Send(Event::Special({0}));
+          out->Send(Event::Special({0}));
           break;
         case MENU_EVENT:
         case FOCUS_EVENT:
@@ -103,17 +102,21 @@ int CheckStdinReady(int usec_timeout) {
 }
 
 // Read char from the terminal.
-void UnixEventListener(std::atomic<bool>* quit, Sender<char> sender) {
+void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
   const int buffer_size = 100;
-  const int timeout_usec = 50000;
+
+  auto parser = TerminalInputParser(std::move(out));
 
   while (!*quit) {
-    if (!CheckStdinReady(timeout_usec))
+    if (!CheckStdinReady(timeout_microseconds)) {
+      parser.Timeout(timeout_milliseconds);
       continue;
+    }
+
     char buff[buffer_size];
     int l = read(fileno(stdin), buff, buffer_size);
     for (int i = 0; i < l; ++i)
-      sender->Send(buff[i]);
+      parser.Add(buff[i]);
   }
 }
 
@@ -258,23 +261,8 @@ void ScreenInteractive::Loop(Component* component) {
     std::cout << std::endl;
   });
 
-  // Produce a stream of Event from a stream of char.
-  auto char_receiver = MakeReceiver<char>();
-  auto char_sender = char_receiver->MakeSender();
-  auto event_sender_1 = event_receiver_->MakeSender();
-  auto char_to_event_stream = std::thread(
-      CharToEventStream, std::move(char_receiver), std::move(event_sender_1));
-
-  // Depending on the OS, start a thread that will produce events and/or chars.
-#if defined(_WIN32)
-  auto event_sender_2 = event_receiver_->MakeSender();
   auto event_listener =
-      std::thread(&Win32EventListener, &quit_, std::move(char_sender),
-                  std::move(event_sender_2));
-#else
-  auto event_listener =
-      std::thread(&UnixEventListener, &quit_, std::move(char_sender));
-#endif
+      std::thread(&EventListener, &quit_, event_receiver_->MakeSender());
 
   if (use_alternative_screen_) {
     std::cout << USE_ALTERNATIVE_SCREEN;
@@ -294,7 +282,6 @@ void ScreenInteractive::Loop(Component* component) {
       component->OnEvent(event);
   }
 
-  char_to_event_stream.join();
   event_listener.join();
   OnExit(0);
 }

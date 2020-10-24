@@ -51,6 +51,8 @@ class SenderImpl {
   void Send(T t) { receiver_->Receive(std::move(t)); }
   ~SenderImpl() { receiver_->ReleaseSender(); }
 
+  Sender<T> Clone() { return receiver_->MakeSender(); }
+
  private:
   friend class ReceiverImpl<T>;
   SenderImpl(ReceiverImpl<T>* consumer) : receiver_(consumer) {}
@@ -61,6 +63,7 @@ template <class T>
 class ReceiverImpl {
  public:
   Sender<T> MakeSender() {
+    std::unique_lock<std::mutex> lock(mutex_);
     senders_++;
     return std::unique_ptr<SenderImpl<T>>(new SenderImpl<T>(this));
   }
