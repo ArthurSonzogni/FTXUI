@@ -21,7 +21,7 @@ std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
   // Make 8 colums, one gray and seven colored.
   std::vector<std::vector<ColorInfo>> info_columns(8);
   info_columns[0] = info_gray;
-  for (int i = 0; i < info_color.size(); ++i) {
+  for (size_t i = 0; i < info_color.size(); ++i) {
     info_columns[1 + 7 * i / info_color.size()].push_back(info_color[i]);
   }
 
@@ -31,10 +31,10 @@ std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
               [](const ColorInfo& A, const ColorInfo& B) {
                 return A.value < B.value;
               });
-    for (int i = 0; i < column.size() - 1; ++i) {
+    for (size_t i = 0; i < column.size() - 1; ++i) {
       int best_index = i + 1;
       int best_distance = 255 * 255 * 3;
-      for (int j = i + 1; j < column.size(); ++j) {
+      for (size_t j = i + 1; j < column.size(); ++j) {
         int dx = column[i].red - column[j].red;
         int dy = column[i].green - column[j].green;
         int dz = column[i].blue - column[j].blue;

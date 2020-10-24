@@ -91,6 +91,8 @@ add_library(component
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/screen_interactive.cpp
   src/ftxui/component/toggle.cpp
+  src/ftxui/component/terminal_input_parser.cpp
+  src/ftxui/component/terminal_input_parser.hpp
 )
 
 add_library(ftxui::screen ALIAS screen)
@@ -199,7 +201,7 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
 
   add_executable(tests
     src/ftxui/component/container_test.cpp
-    src/ftxui/component/event_test.cpp
+    src/ftxui/component/terminal_input_parser_test.cpp
     src/ftxui/component/radiobox_test.cpp
     src/ftxui/component/receiver_test.cpp
     src/ftxui/component/toggle_test.cpp
@@ -214,6 +216,9 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
     PRIVATE gtest
     PRIVATE gmock
     PRIVATE gtest_main
+  )
+  target_include_directories(tests
+    PRIVATE src
   )
 
   set_property(TARGET tests PROPERTY CXX_STANDARD 17)

@@ -23,8 +23,6 @@ struct Event {
   static Event Character(const std::string&);
   static Event Special(const std::string&);
 
-  static void Convert(Receiver<char>& in, Sender<Event>& out, char c);
-
   // --- Arrow ---
   static const Event ArrowLeft;
   static const Event ArrowRight;
