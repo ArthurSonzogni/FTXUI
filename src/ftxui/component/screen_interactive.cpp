@@ -45,7 +45,7 @@ constexpr int timeout_microseconds = timeout_milliseconds * 1000;
 void EventListener(std::atomic<bool>* quit,
                         Sender<Event> out) {
   auto console = GetStdHandle(STD_INPUT_HANDLE);
-  auto parser = TerminalInputParser(out.Clone());
+  auto parser = TerminalInputParser(out->Clone());
   while (!*quit) {
     // Throttle ReadConsoleInput by waiting 250ms, this wait function will
     // return if there is input in the console.
