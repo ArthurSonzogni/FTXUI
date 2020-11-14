@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 execute_process(
   COMMAND git rev-list --count HEAD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   OUTPUT_VARIABLE git_version
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
