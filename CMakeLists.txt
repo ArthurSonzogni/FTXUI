@@ -1,11 +1,17 @@
 cmake_minimum_required(VERSION 3.0)
 
-execute_process(
-  COMMAND git rev-list --count HEAD
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  OUTPUT_VARIABLE git_version
-  OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+find_package(Git QUIET)
+if (Git_FOUND)
+  message("git found")
+  execute_process(
+    COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_VARIABLE git_version
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+else()
+  set(git_version 0)
+endif()
 
 project(ftxui
   LANGUAGES CXX
