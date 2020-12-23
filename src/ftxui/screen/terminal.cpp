@@ -41,15 +41,19 @@ const char* Safe(const char* c) {
   return c ? c : "";
 }
 
+bool Contains(const std::string& s, const char* key) {
+  return s.find(key) != std::string::npos;
+}
+
 static bool cached = false;
 Terminal::Color cached_supported_color;
 Terminal::Color ComputeColorSupport() {
   std::string COLORTERM = Safe(std::getenv("COLORTERM"));
-  if (COLORTERM.compare("24bit") || COLORTERM.compare("trueColor"))
+  if (Contains(COLORTERM, "24bit") || Contains(COLORTERM, "truecolor"))
     return Terminal::Color::TrueColor;
 
   std::string TERM = Safe(std::getenv("TERM"));
-  if (COLORTERM.compare("256") || COLORTERM.compare("256"))
+  if (Contains(COLORTERM, "256") || Contains(TERM, "256"))
     return Terminal::Color::Palette256;
 
   return Terminal::Color::Palette16;
