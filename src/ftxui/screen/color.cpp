@@ -2,7 +2,9 @@
 
 #include <algorithm>
 
+#include "ftxui/screen/color_info.hpp"
 #include "ftxui/screen/string.hpp"
+#include "ftxui/screen/terminal.hpp"
 
 namespace ftxui {
 
@@ -36,7 +38,7 @@ std::wstring Color::Print(bool is_background_color) const {
       return palette16code[index_][is_background_color];
 
     case ColorType::Palette256:
-      return (is_background_color ? L"48;5;" : L"38;5") + to_wstring(index_);
+      return (is_background_color ? L"48;5;" : L"38;5;") + to_wstring(index_);
 
     case ColorType::TrueColor:
       return (is_background_color ? L"48;2;" : L"38;2;")  //
@@ -61,7 +63,12 @@ Color::Color(Palette16 index) : type_(ColorType::Palette16), index_(index) {}
 
 /// @brief Build a transparent using Palette256 colors.
 /// @ingroup screen
-Color::Color(Palette256 index) : type_(ColorType::Palette256), index_(index) {}
+Color::Color(Palette256 index) : type_(ColorType::Palette256), index_(index) {
+  if (Terminal::ColorSupport() >= Terminal::Color::Palette256)
+    return;
+  type_ = ColorType::Palette16;
+  index_ = GetColorInfo(Color::Palette256(index_)).index_16;
+}
 
 /// @brief Build a Color from its RGB representation.
 /// https://en.wikipedia.org/wiki/RGB_color_model
@@ -71,7 +78,32 @@ Color::Color(Palette256 index) : type_(ColorType::Palette256), index_(index) {}
 /// @param blue The quantity of blue [0,255]
 /// @ingroup screen
 Color::Color(uint8_t red, uint8_t green, uint8_t blue)
-    : type_(ColorType::TrueColor), red_(red), green_(green), blue_(blue) {}
+    : type_(ColorType::TrueColor), red_(red), green_(green), blue_(blue) {
+  if (Terminal::ColorSupport() == Terminal::Color::TrueColor)
+    return;
+
+  int closest = 256 * 256 * 3;
+  int best = 0;
+  for (int i = 16; i < 256; ++i) {
+    ColorInfo color_info = GetColorInfo(Color::Palette256(i));
+    int dr = color_info.red - red;
+    int dg = color_info.green - green;
+    int db = color_info.blue - blue;
+    int dist = dr * dr + dg * dg + db * db;
+    if (closest > dist) {
+      closest = dist;
+      best = i;
+    }
+  }
+
+  if (Terminal::ColorSupport() == Terminal::Color::Palette256) {
+    type_ = ColorType::Palette256;
+    index_ = best;
+  } else {
+    type_ = ColorType::Palette16;
+    index_ = GetColorInfo(Color::Palette256(best)).index_16;
+  }
+}
 
 /// @brief Build a Color from its RGB representation.
 /// https://en.wikipedia.org/wiki/RGB_color_model
