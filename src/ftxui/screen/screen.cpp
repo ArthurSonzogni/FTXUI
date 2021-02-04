@@ -164,8 +164,15 @@ std::string Screen::ToString() {
       auto& pixel = pixels_[y][x];
       wchar_t c = pixel.character;
       UpdatePixelStyle(ss, previous_pixel, pixel);
+
+      auto width = wchar_width(c);
+      if (width <= 0) {
+          // Avoid an infinite loop for non-printable characters
+          c = L' ';
+          width = 1;
+      }
       ss << c;
-      x += wchar_width(c);
+      x += width;
     }
   }
 
