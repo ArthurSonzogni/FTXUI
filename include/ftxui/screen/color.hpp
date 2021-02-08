@@ -4,6 +4,12 @@
 #include <cstdint>
 #include <string>
 
+#ifdef RGB
+// Workaround for wingdi.h (via Windows.h) defining macros that break things.
+// https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-rgb
+#undef RGB
+#endif
+
 namespace ftxui {
 
 /// @brief A class representing terminal colors.
