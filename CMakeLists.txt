@@ -142,6 +142,7 @@ foreach(lib screen dom component)
     target_compile_options(${lib} PRIVATE "-Wextra")
     target_compile_options(${lib} PRIVATE "-pedantic")
     target_compile_options(${lib} PRIVATE "-Werror")
+    target_compile_options(${lib} PRIVATE "-Wmissing-declarations")
     target_compile_options(${lib} PRIVATE "-Wno-sign-compare")
   endif()
 
