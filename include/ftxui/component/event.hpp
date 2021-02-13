@@ -11,10 +11,16 @@ namespace ftxui {
 
 /// @brief Represent an event. It can be key press event, a terminal resize, or
 /// more ...
-//
-// Documentation:
-// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-//
+///
+/// For example:
+/// - Printable character can be created using Event::Character('a').
+/// - Some special are predefined, like Event::ArrowLeft.
+/// - One can find arbitrary code for special Events using:
+///   ./example/util/print_key_press
+///  For instance, CTLR+A maps to Event::Special({1});
+///
+/// Useful documentation about xterm specification:
+/// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 struct Event {
   // --- Constructor section ---------------------------------------------------
   static Event Character(char);
