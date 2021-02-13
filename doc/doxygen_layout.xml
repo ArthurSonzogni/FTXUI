@@ -5,7 +5,7 @@
     <tab type="examples" visible="yes" title="" intro=""/>  
     <tab type="filelist" visible="yes" title=""/>
 
-    <tab type="pages" visible="yes" title="" intro=""/>
+    <tab type="pages" visible="no" title="" intro=""/>
     <tab type="modules" visible="yes" title="" intro=""/>
     <tab type="namespaces" visible="yes" title="">
       <tab type="namespacelist" visible="yes" title="" intro=""/>
