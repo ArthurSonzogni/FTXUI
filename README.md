@@ -69,6 +69,9 @@ Feel free to add your projects here:
 - [Just-Fast](https://github.com/GiuseppeCesarano/just-fast)
 - [simpPRU](https://github.com/VedantParanjape/simpPRU)
 - [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
+- [hastur](https://github.com/robinlinden/hastur)
+- [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
+-
 
 ## Hosted on:
  * [github](https://github.com/ArthurSonzogni/ftxui)
