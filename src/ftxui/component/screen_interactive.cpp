@@ -64,7 +64,7 @@ void EventListener(std::atomic<bool>* quit,
     std::vector<INPUT_RECORD> records{number_of_events};
     DWORD number_of_events_read = 0;
     ReadConsoleInput(console, records.data(),
-                     (DWORD)(records.size() * sizeof(INPUT_RECORD)),
+                     (DWORD)records.size(),
                      &number_of_events_read);
     records.resize(number_of_events_read);
 
