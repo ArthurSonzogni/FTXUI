@@ -250,6 +250,11 @@ void ScreenInteractive::Loop(Component* component) {
   install_signal_handler(SIGWINCH, OnResize);
 #endif
 
+  if (use_alternative_screen_) {
+    std::cout << USE_ALTERNATIVE_SCREEN;
+    on_exit_functions.push([] { std::cout << USE_NORMAL_SCREEN; });
+  }
+
   // Hide the cursor and show it at exit.
   std::cout << HIDE_CURSOR;
   std::cout << DISABLE_LINE_WRAP;
@@ -263,11 +268,6 @@ void ScreenInteractive::Loop(Component* component) {
 
   auto event_listener =
       std::thread(&EventListener, &quit_, event_receiver_->MakeSender());
-
-  if (use_alternative_screen_) {
-    std::cout << USE_ALTERNATIVE_SCREEN;
-    on_exit_functions.push([] { std::cout << USE_NORMAL_SCREEN; });
-  }
 
   // The main loop.
   while (!quit_) {
