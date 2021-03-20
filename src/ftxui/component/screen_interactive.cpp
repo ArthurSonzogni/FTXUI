@@ -92,6 +92,8 @@ void EventListener(std::atomic<bool>* quit,
 
 #else
 
+#include <sys/time.h>
+
 int CheckStdinReady(int usec_timeout) {
   timeval tv = {0, usec_timeout};
   fd_set fds;
