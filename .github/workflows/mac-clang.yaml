@@ -1,4 +1,4 @@
-name: Linux Clang
+name: MacOS Clang
 
 on:
   - pull_request
@@ -6,8 +6,8 @@ on:
 
 jobs:
   build:
-    name: Linux Clang
-    runs-on: ubuntu-latest
+    name: MacOS Clang
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: seanmiddleditch/gha-setup-ninja@master
@@ -16,7 +16,7 @@ jobs:
           mkdir build;
           cd build;
           cmake ..
-          -DCMAKE_CXX_COMPILER=clang++-9
+          -DCMAKE_CXX_COMPILER=clang++
           -DFTXUI_BUILD_TESTS=ON;
           cmake --build . --config Release;
 

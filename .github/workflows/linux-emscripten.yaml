@@ -1,7 +1,8 @@
-name: Linux Emscripten - Build
+name: Linux Emscripten
 
 on:
   - pull_request
+  - push
 
 jobs:
   build:

@@ -1,15 +1,11 @@
 # FTXUI
 
-[![continuous-integration][badge.continuous-integration]][continuous-integration]
 [![issues][badge.issues]][issues]
 [![license][badge.license]][license]
 [![contributors][badge.contributors]][contributors]
-
-[badge.continuous-integration]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/continuous-integration.yaml/badge.svg
 [badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI
 [badge.license]: https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black
 [badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue
-[continuous-integration]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/continuous-integration.yaml
 [issues]: https://github.com/ArthurSonzogni/FTXUI/issues
 [license]: http://opensource.org/licenses/MIT
 [contributors]: https://github.com/ArthurSonzogni/FTXUI/graphs/contributors
@@ -17,7 +13,6 @@
 **Functional Terminal (X) User interface**
 
 A simple C++ library for terminal based user interface.
-
 
 ## Demo:
 ![Demo image](./examples/component/homescreen.gif)
@@ -30,6 +25,25 @@ A simple C++ library for terminal based user interface.
  * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
  * No dependencies.
  * Cross platform (mostly). Linux (main target), Windows (experimental), Mac.
+
+## Operating systems
+- [![linux-gcc][badge.linux-gcc]][link.linux-gcc]
+- [![linux-clang][badge.linux-clang]][link.linux-clang]
+- [![linux-emscripten][badge.linux-emscripten]][link.linux-emscripten]
+- [![windows-msvc][badge.windows-msvc]][link.windows-msvc]
+- [![mac-clang][badge.mac-clang]][link.mac-clang]
+
+[badge.linux-gcc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-gcc.yaml/badge.svg
+[badge.linux-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-clang.yaml/badge.svg
+[badge.linux-emscripten]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-emscripten.yaml/badge.svg
+[badge.windows-msvc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/windows-msvc.yaml/badge.svg
+[badge.mac-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/mac-clang.yaml/badge.svg
+
+[link.linux-gcc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-gcc.yaml
+[link.linux-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-clang.yaml
+[link.linux-emscripten]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-emscripten.yaml
+[link.windows-msvc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/windows-msvc.yaml
+[link.mac-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/mac-clang.yaml
 
 ## Example:
 ~~~cpp

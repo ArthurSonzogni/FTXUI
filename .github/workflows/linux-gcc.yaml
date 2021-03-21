@@ -1,7 +1,8 @@
-name: Linux GCC - Build & tests
+name: Linux GCC
 
 on:
   - pull_request
+  - push
 
 jobs:
   build:
