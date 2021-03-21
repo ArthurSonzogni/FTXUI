@@ -2,6 +2,7 @@ name: Windows MSVC
 
 on:
   - pull_request
+  - push
 
 jobs:
   build:
