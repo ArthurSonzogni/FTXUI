@@ -3,9 +3,11 @@
 [![issues][badge.issues]][issues]
 [![license][badge.license]][license]
 [![contributors][badge.contributors]][contributors]
+
 [badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI
 [badge.license]: https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black
 [badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue
+
 [issues]: https://github.com/ArthurSonzogni/FTXUI/issues
 [license]: http://opensource.org/licenses/MIT
 [contributors]: https://github.com/ArthurSonzogni/FTXUI/graphs/contributors
@@ -33,11 +35,11 @@ A simple C++ library for terminal based user interface.
 - [![windows-msvc][badge.windows-msvc]][link.windows-msvc]
 - [![mac-clang][badge.mac-clang]][link.mac-clang]
 
-[badge.linux-gcc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-gcc.yaml/badge.svg
-[badge.linux-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-clang.yaml/badge.svg
-[badge.linux-emscripten]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-emscripten.yaml/badge.svg
-[badge.windows-msvc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/windows-msvc.yaml/badge.svg
-[badge.mac-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/mac-clang.yaml/badge.svg
+[badge.linux-gcc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-gcc.yaml/badge.svg?branch=master
+[badge.linux-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-clang.yaml/badge.svg?branch=master
+[badge.linux-emscripten]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-emscripten.yaml/badge.svg?branch=master
+[badge.windows-msvc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/windows-msvc.yaml/badge.svg?branch=master
+[badge.mac-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/mac-clang.yaml/badge.svg?branch=master
 
 [link.linux-gcc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-gcc.yaml
 [link.linux-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-clang.yaml
