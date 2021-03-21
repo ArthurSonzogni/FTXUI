@@ -1,0 +1,25 @@
+name: Linux GCC - Build & tests
+
+on:
+  - pull_request
+
+jobs:
+  build:
+    name: Linux GCC
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Build
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+          -DCMAKE_CXX_COMPILER=g++-9
+          -DFTXUI_BUILD_TESTS=ON;
+          cmake --build . --config Release;
+
+      - name: Tests
+        run: >
+          cd build;
+          ./tests

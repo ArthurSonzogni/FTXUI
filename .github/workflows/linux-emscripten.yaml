@@ -1,0 +1,20 @@
+name: Linux Emscripten - Build
+
+on:
+  - pull_request
+
+jobs:
+  build:
+    name: Linux Emscripten
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - uses: mymindstorm/setup-emsdk@v7
+      - name: Build
+        run: >
+          mkdir build;
+          cd build;
+          emcmake cmake ..
+          -DFTXUI_BUILD_TESTS=ON;
+          cmake --build . --config Release;
