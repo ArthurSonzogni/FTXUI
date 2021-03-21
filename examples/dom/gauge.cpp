@@ -19,7 +19,8 @@ int main(int argc, const char* argv[]) {
     });
     auto screen = Screen(100, 1);
     Render(screen, document);
-    std::cout << reset_position << screen.ToString() << std::flush;
+    std::cout << reset_position;
+    screen.Print();
     reset_position = screen.ResetPosition();
 
     std::this_thread::sleep_for(0.01s);

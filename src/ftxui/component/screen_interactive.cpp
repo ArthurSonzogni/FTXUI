@@ -38,6 +38,11 @@ namespace ftxui {
 
 namespace {
 
+void Flush() {
+  // Emscripten doesn't implement flush. We interpret zero as flush.
+  std::cout << std::flush << (char)0;
+}
+
 constexpr int timeout_milliseconds = 20;
 constexpr int timeout_microseconds = timeout_milliseconds * 1000;
 #if defined(_WIN32)
@@ -90,8 +95,25 @@ void EventListener(std::atomic<bool>* quit,
   }
 }
 
-#else
+#elif defined(__EMSCRIPTEN__)
+#include <emscripten.h>
 
+// Read char from the terminal.
+void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
+  (void)timeout_microseconds;
+  auto parser = TerminalInputParser(std::move(out));
+
+  char c;
+  while (!*quit) {
+    while(read(STDIN_FILENO, &c, 1), c)
+      parser.Add(c);
+
+    emscripten_sleep(1);
+    parser.Timeout(1);
+  }
+}
+
+#else
 #include <sys/time.h>
 
 int CheckStdinReady(int usec_timeout) {
@@ -260,12 +282,13 @@ void ScreenInteractive::Loop(Component* component) {
   // Hide the cursor and show it at exit.
   std::cout << HIDE_CURSOR;
   std::cout << DISABLE_LINE_WRAP;
-  std::cout << std::flush;
+  Flush();
   on_exit_functions.push([&] {
     std::cout << reset_cursor_position;
     std::cout << SHOW_CURSOR;
     std::cout << ENABLE_LINE_WRAP;
     std::cout << std::endl;
+    Flush();
   });
 
   auto event_listener =
@@ -276,7 +299,8 @@ void ScreenInteractive::Loop(Component* component) {
     if (!event_receiver_->HasPending()) {
       std::cout << reset_cursor_position << ResetPosition();
       Draw(component);
-      std::cout << ToString() << set_cursor_position << std::flush;
+      std::cout << ToString() << set_cursor_position;
+      Flush();
       Clear();
     }
     Event event;

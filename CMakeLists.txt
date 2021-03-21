@@ -148,6 +148,13 @@ foreach(lib screen dom component)
 
 endforeach()
 
+if (EMSCRIPTEN)
+  #string(APPEND CMAKE_CXX_FLAGS " -s ASSERTIONS=1")
+  string(APPEND CMAKE_CXX_FLAGS " -s ASYNCIFY")
+  string(APPEND CMAKE_CXX_FLAGS " -s USE_PTHREADS")
+  string(APPEND CMAKE_CXX_FLAGS " -s PROXY_TO_PTHREAD")
+endif()
+
 if(FTXUI_ENABLE_INSTALL)
   include(GNUInstallDirs)
   install(TARGETS screen dom component

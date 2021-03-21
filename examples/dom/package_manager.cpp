@@ -123,7 +123,8 @@ int main(int argc, const char* argv[]) {
     auto document = render();
     auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
     Render(screen, document);
-    std::cout << reset_position << screen.ToString() << std::flush;
+    std::cout << reset_position;
+    screen.Print();
     reset_position = screen.ResetPosition();
 
     // Simulate time.
