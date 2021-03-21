@@ -1,0 +1,26 @@
+name: Linux Clang - Build & tests
+
+on:
+  - pull_request
+
+jobs:
+  build:
+    name: Linux Clang
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: Build
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+          -DCMAKE_CXX_COMPILER=clang++-9
+          -DFTXUI_BUILD_TESTS=ON;
+          cmake --build . --config Release;
+
+      - name: Tests
+        if: ${{ matrix.config.test }}
+        run: >
+          cd build;
+          ./tests
