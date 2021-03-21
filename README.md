@@ -30,9 +30,11 @@ A simple C++ library for terminal based user interface.
 
 ## Operating systems
 - [![linux-gcc][badge.linux-gcc]][link.linux-gcc]
-- [![linux-clang][badge.linux-clang]][link.linux-clang]
-- [![linux-emscripten][badge.linux-emscripten]][link.linux-emscripten]
+[![linux-clang][badge.linux-clang]][link.linux-clang]
+[![linux-emscripten][badge.linux-emscripten]][link.linux-emscripten]
+
 - [![windows-msvc][badge.windows-msvc]][link.windows-msvc]
+
 - [![mac-clang][badge.mac-clang]][link.mac-clang]
 
 [badge.linux-gcc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-gcc.yaml/badge.svg?branch=master
