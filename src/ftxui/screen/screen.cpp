@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <sstream>
+#include <iostream>
 
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/string.hpp"
@@ -149,6 +150,7 @@ Screen::Screen(int dimx, int dimy)
 }
 
 /// Produce a std::string that can be used to print the Screen on the terminal.
+/// Don't forget to flush stdout. Alternatively, you can use Screen::Print();
 std::string Screen::ToString() {
   std::wstringstream ss;
 
@@ -158,7 +160,7 @@ std::string Screen::ToString() {
   for (int y = 0; y < dimy_; ++y) {
     if (y != 0) {
       UpdatePixelStyle(ss, previous_pixel, final_pixel);
-      ss << '\n';
+      ss << L"\r\n";
     }
     for (int x = 0; x < dimx_;) {
       auto& pixel = pixels_[y][x];
@@ -179,6 +181,10 @@ std::string Screen::ToString() {
   UpdatePixelStyle(ss, previous_pixel, final_pixel);
 
   return to_string(ss.str());
+}
+
+void Screen::Print() {
+  std::cout << ToString() << std::flush << (char)0;
 }
 
 /// @brief Access a character a given position.
@@ -254,6 +260,7 @@ void Screen::ApplyShader() {
     }
   }
 }
+
 // clang-format on
 
 }  // namespace ftxui

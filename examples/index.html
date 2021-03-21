@@ -1,0 +1,164 @@
+<!DOCTYPE html> <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>FTXUI examples WebAssembly</title>
+    <script src="https://cdn.jsdelivr.net/npm/xterm@4.11.0/lib/xterm.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.11.0/css/xterm.css"></link>
+  </head>
+  <body>
+    <script id="example_script"></script>
+    <div class="page">
+      <h1>FTXUI WebAssembly Example </h1>
+      <p>
+        <a href="https://github.com/ArthurSonzogni/FTXUI">FTXUI</a> is a single
+        C++ library for terminal user interface.
+      </p>
+      <p>
+        On this page, you can try all the examples contained in: <a
+        href="https://github.com/ArthurSonzogni/FTXUI/tree/master/examples">./example/</a>
+        Those are compiled using WebAssembly.
+      </p>
+      <select id="selectExample"></select>
+      <div id="terminal"></div>
+    </div>
+  </body>
+  <script>
+    let example_list = [
+      "./component/button.js",
+      "./component/checkbox.js",
+      "./component/checkbox_in_frame.js",
+      "./component/gallery.js",
+      "./component/homescreen.js",
+      "./component/input.js",
+      "./component/menu.js",
+      "./component/menu2.js",
+      "./component/menu_style.js",
+      "./component/radiobox.js",
+      "./component/radiobox_in_frame.js",
+      "./component/tab_horizontal.js",
+      "./component/tab_vertical.js",
+      "./component/toggle.js",
+      "./component/modal_dialog.js",
+
+      "./dom/border.js",
+      "./dom/color_gallery.js",
+      "./dom/dbox.js",
+      "./dom/gauge.js",
+      "./dom/graph.js",
+      "./dom/hflow.js",
+      "./dom/html_like.js",
+      "./dom/package_manager.js",
+      "./dom/paragraph.js",
+      "./dom/separator.js",
+      "./dom/size.js",
+      "./dom/spinner.js",
+      "./dom/style_blink.js",
+      "./dom/style_bold.js",
+      "./dom/style_color.js",
+      "./dom/color_truecolor_RGB.js",
+      "./dom/color_truecolor_HSV.js",
+      "./dom/color_info_palette256.js",
+      "./dom/style_dim.js",
+      "./dom/style_gallery.js",
+      "./dom/style_inverted.js",
+      "./dom/style_underlined.js",
+      "./dom/vbox_hbox.js",
+      "./dom/window.js",
+
+      "./util/print_key_press.js",
+    ];
+
+    const url_search_params = new URLSearchParams(window.location.search);
+    const example_index = url_search_params.get("id") || 16;
+    const example = example_list[example_index];
+
+    var select = document.getElementById("selectExample"); 
+
+    for(var i = 0; i < example_list.length; i++) {
+        var opt = example_list[i];
+        var el = document.createElement("option");
+        el.textContent = opt;
+        el.value = opt;
+        select.appendChild(el);
+    }
+    select.selectedIndex = example_index;
+    select.addEventListener("change", () => {
+      location.href = (location.href).split('?')[0] + "?id=" + select.selectedIndex;
+    });
+
+    let stdin_buffer = [];
+    let stdin = () => {
+      return stdin_buffer.shift() || 0;
+    }
+
+    stdout_buffer = [];
+    let stdout = code => {
+      if (code == 0) {
+        term.write(new Uint8Array(stdout_buffer));
+        stdout_buffer = [];
+      } else {
+        stdout_buffer.push(code)
+      }
+    }
+    let stderr = code => console.log(code);
+    var term = new Terminal();
+    term.open(document.querySelector('#terminal'));
+    term.resize(140,43);
+    const onBinary = e => {
+      for(c of e)
+        stdin_buffer.push(c.charCodeAt(0));
+    }
+    term.onBinary(onBinary);
+    term.onData(onBinary)
+    window.Module = {
+      preRun: () => { FS.init(stdin, stdout, stderr); },
+      postRun: [],
+      onRuntimeInitialized: () => {},
+    };
+    document.querySelector("#example_script").src = example
+  </script>
+
+  <style>
+    body {
+      background-color:#EEE;
+      padding:20px;
+      font-family: Helvetica, sans-serif;
+      font-size: 130%;
+    }
+
+    .page {
+      max-width:1300px;
+      margin: auto;
+    }
+
+    h1 {
+      text-decoration: underline;
+    }
+
+    select {
+      display:block;
+      padding: .6em 1.4em .5em .8em;
+      border-radius: 20px 20px 0px 0px;
+      font-size: 16px;
+      font-family: sans-serif;
+      font-weight: 700;
+
+      color: #444;
+      line-height: 1.3;
+      background-color:black;
+      border:0px;
+      color:white;
+      transition: color 0.2s linear;
+      transition: background-color 0.2s linear;
+    }
+
+    #terminal {
+      padding:10px;
+      border:none;
+      background-color:black;
+      padding:auto;
+    }
+
+  </style>
+
+</html>

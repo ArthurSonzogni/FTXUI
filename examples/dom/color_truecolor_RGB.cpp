@@ -45,7 +45,7 @@ int main(int argc, const char* argv[]) {
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);
 
-  std::cout << screen.ToString();
+  screen.Print();
 
   return 0;
 }

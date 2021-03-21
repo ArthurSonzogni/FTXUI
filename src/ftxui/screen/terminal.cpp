@@ -19,7 +19,7 @@ namespace ftxui {
 
 Terminal::Dimensions Terminal::Size() {
 #if defined(__EMSCRIPTEN__)
-  return Dimensions{80, 43};
+  return Dimensions{140, 43};
 #elif defined(_WIN32)
   CONSOLE_SCREEN_BUFFER_INFO csbi;
   int columns, rows;
@@ -48,6 +48,10 @@ bool Contains(const std::string& s, const char* key) {
 static bool cached = false;
 Terminal::Color cached_supported_color;
 Terminal::Color ComputeColorSupport() {
+#if defined(__EMSCRIPTEN__)
+  return Terminal::Color::TrueColor;
+#endif
+
   std::string COLORTERM = Safe(std::getenv("COLORTERM"));
   if (Contains(COLORTERM, "24bit") || Contains(COLORTERM, "truecolor"))
     return Terminal::Color::TrueColor;

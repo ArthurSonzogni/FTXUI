@@ -28,7 +28,7 @@ int main(int argc, const char* argv[]) {
       });
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);
-  std::cout << screen.ToString() << std::endl;
+  screen.Print();
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

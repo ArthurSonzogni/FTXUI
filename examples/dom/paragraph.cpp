@@ -25,7 +25,7 @@ int main(int argc, const char* argv[]) {
 
   auto screen = Screen::Create(Dimension::Full(), Dimension::Full());
   Render(screen, document);
-  std::cout << screen.ToString();
+  screen.Print();
   getchar();
 
   return 0;

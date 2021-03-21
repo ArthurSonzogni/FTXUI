@@ -16,7 +16,7 @@ int main(void) {
 
   auto screen = Screen::Create(Dimension::Fixed(80), Dimension::Fixed(10));
   Render(screen, document);
-  std::cout << screen.ToString() << '\n';
+  screen.Print();
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

@@ -42,7 +42,7 @@ TEST(TextTest, ScreenBigger2) {
   Screen screen(6, 2);
   Render(screen, element);
 
-  EXPECT_EQ("test  \n      ", screen.ToString());
+  EXPECT_EQ("test  \r\n      ", screen.ToString());
 }
 
 // See https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-504871456
@@ -51,8 +51,8 @@ TEST(TextTest, CJK) {
   Screen screen(6, 3);
   Render(screen, element);
   EXPECT_EQ(
-      "┌────┐\n"
-      "│测试│\n"
+      "┌────┐\r\n"
+      "│测试│\r\n"
       "└────┘",
       screen.ToString());
 }
@@ -63,8 +63,8 @@ TEST(TextTest, CJK_2) {
   Screen screen(5, 3);
   Render(screen, element);
   EXPECT_EQ(
-      "┌───┐\n"
-      "│测试\n"
+      "┌───┐\r\n"
+      "│测试\r\n"
       "└───┘",
       screen.ToString());
 }
@@ -75,8 +75,8 @@ TEST(TextTest, CJK_3) {
   Screen screen(4, 3);
   Render(screen, element);
   EXPECT_EQ(
-      "┌──┐\n"
-      "│测│\n"
+      "┌──┐\r\n"
+      "│测│\r\n"
       "└──┘",
       screen.ToString());
 }

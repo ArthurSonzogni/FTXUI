@@ -56,6 +56,7 @@ class Screen {
 
   // Convert the screen into a printable string in the terminal.
   std::string ToString();
+  void Print();
 
   // Get screen dimensions.
   int dimx() { return dimx_; }
