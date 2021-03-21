@@ -1,22 +1,22 @@
-name: Linux Clang
+name: Windows MSVC
 
 on:
   - pull_request
-  - push
 
 jobs:
   build:
-    name: Linux Clang
-    runs-on: ubuntu-latest
+    name: Windows MSVC
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
       - uses: seanmiddleditch/gha-setup-ninja@master
+      - uses: ilammy/msvc-dev-cmd@v1
       - name: Build
         run: >
           mkdir build;
           cd build;
           cmake ..
-          -DCMAKE_CXX_COMPILER=clang++-9
+          -DCMAKE_CXX_COMPILER="cl"
           -DFTXUI_BUILD_TESTS=ON;
           cmake --build . --config Release;
 
@@ -24,4 +24,4 @@ jobs:
         if: ${{ matrix.config.test }}
         run: >
           cd build;
-          ./tests
+          ./tests.exe
