@@ -129,7 +129,7 @@ foreach(lib screen dom component)
   # Add as many warning as possible:
   if (WIN32)
     if (MSVC)
-      target_compile_options(${lib} PRIVATE "/W4")
+      target_compile_options(${lib} PRIVATE "/W3")
       target_compile_options(${lib} PRIVATE "/WX")
       target_compile_options(${lib} PRIVATE "/wd4244")
       target_compile_options(${lib} PRIVATE "/wd4267")
