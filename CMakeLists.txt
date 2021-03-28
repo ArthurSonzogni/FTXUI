@@ -215,9 +215,10 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
 
   add_executable(tests
     src/ftxui/component/container_test.cpp
-    src/ftxui/component/terminal_input_parser_test.cpp
+    src/ftxui/component/input_test.cpp
     src/ftxui/component/radiobox_test.cpp
     src/ftxui/component/receiver_test.cpp
+    src/ftxui/component/terminal_input_parser_test.cpp
     src/ftxui/component/toggle_test.cpp
     src/ftxui/dom/gauge_test.cpp
     src/ftxui/dom/hbox_test.cpp
