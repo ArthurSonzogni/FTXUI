@@ -146,14 +146,17 @@ void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
 
 #endif
 
-static const char* HIDE_CURSOR = "\x1B[?25l";
-static const char* SHOW_CURSOR = "\x1B[?25h";
+static const char SHOW_CURSOR[] = "\x1B[?25h";
+static const char HIDE_CURSOR[] = "\x1B[?25l";
 
-static const char* DISABLE_LINE_WRAP = "\x1B[7l";
-static const char* ENABLE_LINE_WRAP = "\x1B[7h";
+static const char ENABLE_LINE_WRAP[] = "\x1B[7h";
+static const char DISABLE_LINE_WRAP[] = "\x1B[7l";
 
-static const char* USE_ALTERNATIVE_SCREEN = "\x1B[?1049h";
-static const char* USE_NORMAL_SCREEN = "\x1B[?1049l";
+static const char USE_ALTERNATIVE_SCREEN[] = "\x1B[?1049h";
+static const char USE_NORMAL_SCREEN[] = "\x1B[?1049l";
+
+static const char ENABLE_MOUSE[] = "\x1B[?1000;1006;1015h";
+static const char DISABLE_MOUSE[] = "\x1B[?1000;10006;1015l";
 
 using SignalHandler = void(int);
 std::stack<std::function<void()>> on_exit_functions;
@@ -278,6 +281,9 @@ void ScreenInteractive::Loop(Component* component) {
     std::cout << USE_ALTERNATIVE_SCREEN;
     on_exit_functions.push([] { std::cout << USE_NORMAL_SCREEN; });
   }
+
+  std::cout << ENABLE_MOUSE;
+  on_exit_functions.push([] { std::cout << DISABLE_MOUSE; });
 
   // Hide the cursor and show it at exit.
   std::cout << HIDE_CURSOR;
