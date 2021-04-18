@@ -10,6 +10,7 @@ struct Box {
   int y_max;
 
   static Box Intersection(Box a, Box b);
+  bool Contain(int x, int y);
 };
 
 }  // namespace ftxui

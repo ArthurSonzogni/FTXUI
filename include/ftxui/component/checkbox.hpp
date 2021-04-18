@@ -38,7 +38,11 @@ class CheckBox : public Component {
   bool OnEvent(Event) override;
 
  private:
+  bool OnMouseEvent(Event event);
+
   int cursor_position = 0;
+  Box box_;
+
 };
 
 }  // namespace ftxui

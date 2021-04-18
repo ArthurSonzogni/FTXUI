@@ -310,8 +310,11 @@ void ScreenInteractive::Loop(Component* component) {
       Clear();
     }
     Event event;
-    if (event_receiver_->Receive(&event))
+    if (event_receiver_->Receive(&event)) {
+      if (event.is_mouse())
+        event.MoveMouse(-1, -1);
       component->OnEvent(event);
+    }
   }
 
   event_listener.join();

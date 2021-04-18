@@ -31,6 +31,11 @@ class Menu : public Component {
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
+
+ private:
+  bool OnMouseEvent(Event);
+
+  std::vector<Box> boxes_;
 };
 
 }  // namespace ftxui

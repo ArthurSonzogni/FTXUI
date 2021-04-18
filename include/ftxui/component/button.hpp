@@ -25,6 +25,8 @@ class Button : public Component {
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
+ private:
+  Box box_;
 };
 
 }  // namespace ftxui

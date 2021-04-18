@@ -7,6 +7,8 @@ namespace ftxui {
 Element Toggle::Render() {
   bool is_focused = Focused();
 
+  boxes_.resize(entries.size());
+
   Elements children;
   for (size_t i = 0; i < entries.size(); ++i) {
     // Separator.
@@ -14,16 +16,19 @@ Element Toggle::Render() {
       children.push_back(separator());
 
     // Entry.
-    auto style = (selected != int(i))
-                     ? normal_style
-                     : is_focused ? focused_style : selected_style;
+    auto style = (selected != int(i)) ? normal_style
+                 : is_focused         ? focused_style
+                                      : selected_style;
     auto focused = (selected != int(i)) ? nothing : is_focused ? focus : select;
-    children.push_back(text(entries[i]) | style | focused);
+    children.push_back(text(entries[i]) | style | focused | reflect(boxes_[i]));
   }
   return hbox(std::move(children));
 }
 
 bool Toggle::OnEvent(Event event) {
+  if (event.is_mouse())
+    return OnMouseEvent(event);
+
   int old_selected = selected;
   if (event == Event::ArrowLeft || event == Event::Character('h'))
     selected--;
@@ -46,6 +51,23 @@ bool Toggle::OnEvent(Event event) {
     return true;
   }
 
+  return false;
+}
+
+bool Toggle::OnMouseEvent(Event event) {
+  for (int i = 0; i < boxes_.size(); ++i) {
+    if (!boxes_[i].Contain(event.mouse_x(), event.mouse_y()))
+      continue;
+
+    if (event.is_mouse_left_down()) {
+      if (selected != i) {
+        selected = i;
+        TakeFocus();
+        on_change();
+      }
+      return true;
+    }
+  }
   return false;
 }
 

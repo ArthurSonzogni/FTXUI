@@ -39,7 +39,9 @@ class RadioBox : public Component {
   bool OnEvent(Event) override;
 
  private:
+  bool OnMouseEvent(Event event);
   int cursor_position = 0;
+  std::vector<Box> boxes_;
 };
 
 }  // namespace ftxui

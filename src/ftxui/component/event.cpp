@@ -107,6 +107,28 @@ Event Event::MouseMiddleDown(std::string input, int x, int y) {
   return event;
 }
 
+bool Event::is_mouse() const {
+  switch (type_) {
+    case Type::Unknown:
+    case Type::Character:
+      return false;
+    case Type::MouseMove:
+    case Type::MouseUp:
+    case Type::MouseLeftDown:
+    case Type::MouseLeftMove:
+    case Type::MouseMiddleDown:
+    case Type::MouseMiddleMove:
+    case Type::MouseRightDown:
+    case Type::MouseRightMove:
+      return true;
+  };
+}
+
+void Event::MoveMouse(int dx, int dy) {
+  mouse_.x += dx;
+  mouse_.y += dy;
+}
+
 // --- Arrow ---
 const Event Event::ArrowLeft = Event::Special("\x1B[D");
 const Event Event::ArrowRight = Event::Special("\x1B[C");

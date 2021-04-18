@@ -36,6 +36,9 @@ class Container : public Component {
 
   int selected_ = 0;
   int* selector_ = nullptr;
+
+ private:
+  bool OnMouseEvent(Event event);
 };
 
 }  // namespace ftxui

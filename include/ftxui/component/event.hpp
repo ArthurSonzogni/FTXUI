@@ -59,6 +59,7 @@ struct Event {
   bool is_character() const { return type_ == Type::Character;}
   wchar_t character() const { return character_; }
 
+  bool is_mouse() const;
   bool is_mouse_left_down() const { return type_ == Type::MouseLeftDown; }
   bool is_mouse_left_move() const { return type_ == Type::MouseLeftMove; }
   bool is_mouse_middle_down() const { return type_ == Type::MouseMiddleDown; }
@@ -73,6 +74,8 @@ struct Event {
   const std::string& input() const { return input_; }
 
   bool operator==(const Event& other) const { return input_ == other.input_; }
+
+  void MoveMouse(int dx, int dy);
 
   //--- State section ----------------------------------------------------------
  private:

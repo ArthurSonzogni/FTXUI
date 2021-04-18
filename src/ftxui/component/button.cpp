@@ -5,13 +5,26 @@
 namespace ftxui {
 
 Element Button::Render() {
-  if (Focused())
-    return text(label) | border | inverted;
-  else
-    return text(label) | border;
+  return text(label) |                       //
+         border |                            //
+         (Focused() ? inverted : nothing) |  //
+         reflect(box_);
 }
 
 bool Button::OnEvent(Event event) {
+  if (event.is_mouse() && box_.Contain(event.mouse_x(), event.mouse_y())) {
+    if (event.is_mouse_move()) {
+      TakeFocus();
+      return true;
+    }
+    if (event.is_mouse_left_down()) {
+      on_click();
+      return true;
+    }
+
+    return false;
+  }
+
   if (event == Event::Return) {
     on_click();
     return true;

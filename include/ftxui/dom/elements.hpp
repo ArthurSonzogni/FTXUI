@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "ftxui/dom/node.hpp"
+#include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
 #include "ftxui/screen/screen.hpp"
 
@@ -76,6 +77,9 @@ Element filler();          // A blank expandable element.
 enum Direction { WIDTH, HEIGHT };
 enum Constraint { LESS_THAN, EQUAL, GREATER_THAN };
 Decorator size(Direction, Constraint, int value);
+
+// -- 
+Decorator reflect(Box& box);
 
 // --- Frame ---
 // A frame is a scrollable area. The internal area is potentially larger than

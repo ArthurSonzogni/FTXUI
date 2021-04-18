@@ -30,6 +30,10 @@ class Toggle : public Component {
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
+
+ private:
+  bool OnMouseEvent(Event event);
+  std::vector<Box> boxes_;
 };
 
 }  // namespace ftxui
