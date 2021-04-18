@@ -23,10 +23,35 @@ class DrawKey : public Component {
         code += L" " + std::to_wstring((unsigned int)it);
 
       code = L"(" + code + L" ) -> ";
-      if (keys[i].is_character())
-        code += keys[i].character();
-      else
+      if (keys[i].is_character()) {
+        code += std::wstring(L"character(") + keys[i].character() + L")";
+      } else if (keys[i].is_mouse_move()) {
+        code += L"mouse_move(" +  //
+                std::to_wstring(keys[i].mouse_x()) + L"," +
+                std::to_wstring(keys[i].mouse_y()) + L")";
+      } else if (keys[i].is_mouse_up()) {
+        code += L"mouse_up(" +  //
+                std::to_wstring(keys[i].mouse_x()) + L"," +
+                std::to_wstring(keys[i].mouse_y()) + L")";
+      } else if (keys[i].is_mouse_left_down()) {
+        code += L"mouse_left_down(" +  //
+                std::to_wstring(keys[i].mouse_x()) + L"," +
+                std::to_wstring(keys[i].mouse_y()) + L")";
+      } else if (keys[i].is_mouse_left_move()) {
+        code += L"mouse_left_move(" +  //
+                std::to_wstring(keys[i].mouse_x()) + L"," +
+                std::to_wstring(keys[i].mouse_y()) + L")";
+      } else if (keys[i].is_mouse_right_down()) {
+        code += L"mouse_right_down(" +  //
+                std::to_wstring(keys[i].mouse_x()) + L"," +
+                std::to_wstring(keys[i].mouse_y()) + L")";
+      } else if (keys[i].is_mouse_right_move()) {
+        code += L"mouse_right_move(" +  //
+                std::to_wstring(keys[i].mouse_x()) + L"," +
+                std::to_wstring(keys[i].mouse_y()) + L")";
+      } else {
         code += L"(special)";
+      }
       children.push_back(text(code));
     }
     return window(text(L"keys"), vbox(std::move(children)));

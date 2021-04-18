@@ -30,28 +30,56 @@ bool TerminalInputParser::Eat() {
   return position_ < (int)pending_.size();
 }
 
-void TerminalInputParser::Send(TerminalInputParser::Type type) {
-  switch (type) {
+void TerminalInputParser::Send(TerminalInputParser::Output output) {
+  switch (output.type) {
     case UNCOMPLETED:
       return;
 
     case DROP:
-      pending_.clear();
-      return;
+      break;
 
     case CHARACTER:
       out_->Send(Event::Character(std::move(pending_)));
-      pending_.clear();
-      return;
+      break;
 
     case SPECIAL:
       out_->Send(Event::Special(std::move(pending_)));
-      pending_.clear();
-      return;
+      break;
+
+    case MOUSE_MOVE:
+      out_->Send(
+          Event::MouseMove(std::move(pending_), output.mouse.x, output.mouse.y));
+      break;
+
+    case MOUSE_UP:
+      out_->Send(
+          Event::MouseUp(std::move(pending_), output.mouse.x, output.mouse.y));
+      break;
+
+    case MOUSE_LEFT_DOWN:
+      out_->Send(Event::MouseLeftDown(std::move(pending_), output.mouse.x,
+                                      output.mouse.y));
+      break;
+
+    case MOUSE_LEFT_MOVE:
+      out_->Send(Event::MouseLeftMove(std::move(pending_), output.mouse.x,
+                                  output.mouse.y));
+      break;
+
+    case MOUSE_RIGHT_DOWN:
+      out_->Send(Event::MouseRightDown(std::move(pending_), output.mouse.x,
+                                      output.mouse.y));
+      break;
+
+    case MOUSE_RIGHT_MOVE:
+      out_->Send(Event::MouseRightMove(std::move(pending_), output.mouse.x,
+                                  output.mouse.y));
+      break;
   }
+  pending_.clear();
 }
 
-TerminalInputParser::Type TerminalInputParser::Parse() {
+TerminalInputParser::Output TerminalInputParser::Parse() {
   if (!Eat())
     return UNCOMPLETED;
 
@@ -75,7 +103,7 @@ TerminalInputParser::Type TerminalInputParser::Parse() {
   return ParseUTF8();
 }
 
-TerminalInputParser::Type TerminalInputParser::ParseUTF8() {
+TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   unsigned char head = static_cast<unsigned char>(Current());
   for (int i = 0; i < 3; ++i, head <<= 1) {
     if ((head & 0b11000000) != 0b11000000)
@@ -86,7 +114,7 @@ TerminalInputParser::Type TerminalInputParser::ParseUTF8() {
   return CHARACTER;
 }
 
-TerminalInputParser::Type TerminalInputParser::ParseESC() {
+TerminalInputParser::Output TerminalInputParser::ParseESC() {
   if (!Eat())
     return UNCOMPLETED;
   switch (Current()) {
@@ -103,7 +131,7 @@ TerminalInputParser::Type TerminalInputParser::ParseESC() {
   }
 }
 
-TerminalInputParser::Type TerminalInputParser::ParseDCS() {
+TerminalInputParser::Output TerminalInputParser::ParseDCS() {
   // Parse until the string terminator ST.
   while (1) {
     if (!Eat())
@@ -122,19 +150,35 @@ TerminalInputParser::Type TerminalInputParser::ParseDCS() {
   }
 }
 
-TerminalInputParser::Type TerminalInputParser::ParseCSI() {
+TerminalInputParser::Output TerminalInputParser::ParseCSI() {
+  int argument;
+  std::vector<int> arguments;
   while (true) {
     if (!Eat())
       return UNCOMPLETED;
 
-    if (Current() >= '0' && Current() <= '9')
+    if (Current() >= '0' && Current() <= '9') {
+      argument *= 10;
+      argument += int(Current() - '0');
       continue;
+    }
 
-    if (Current() == ';')
+    if (Current() == ';') {
+      arguments.push_back(argument);
+      argument = 0;
       continue;
+    }
 
-    if (Current() >= ' ' && Current() <= '~')
-      return SPECIAL;
+    if (Current() >= ' ' && Current() <= '~') {
+      arguments.push_back(argument);
+      argument = 0;
+      switch (Current()) {
+        case 'M':
+          return ParseMouse(std::move(arguments));
+        default:
+          return SPECIAL;
+      }
+    }
 
     // Invalid ESC in CSI.
     if (Current() == '\x1B')
@@ -142,7 +186,7 @@ TerminalInputParser::Type TerminalInputParser::ParseCSI() {
   }
 }
 
-TerminalInputParser::Type TerminalInputParser::ParseOSC() {
+TerminalInputParser::Output TerminalInputParser::ParseOSC() {
   // Parse until the string terminator ST.
   while (true) {
     if (!Eat())
@@ -156,4 +200,28 @@ TerminalInputParser::Type TerminalInputParser::ParseOSC() {
     return SPECIAL;
   }
 }
+
+TerminalInputParser::Output TerminalInputParser::ParseMouse(
+    std::vector<int> arguments) {
+  if (arguments.size() != 3)
+    return SPECIAL;
+  switch(arguments[0]) {
+    case 32:
+      return Output(MOUSE_LEFT_DOWN, arguments[1], arguments[2]);
+    case 64:
+      return Output(MOUSE_LEFT_MOVE, arguments[1], arguments[2]);
+
+    case 34:
+      return Output(MOUSE_RIGHT_DOWN, arguments[1], arguments[2]);
+    case 66:
+      return Output(MOUSE_RIGHT_MOVE, arguments[1], arguments[2]);
+
+    case 35:
+      return Output(MOUSE_UP, arguments[1], arguments[2]);
+    case 67:
+      return Output(MOUSE_MOVE, arguments[1], arguments[2]);
+  }
+  return SPECIAL;
+}
+
 }  // namespace ftxui

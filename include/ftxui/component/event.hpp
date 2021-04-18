@@ -26,8 +26,14 @@ struct Event {
   static Event Character(char);
   static Event Character(wchar_t);
 
-  static Event Character(const std::string&);
-  static Event Special(const std::string&);
+  static Event Character(std::string);
+  static Event Special(std::string);
+  static Event MouseMove(std::string, int x, int y);
+  static Event MouseUp(std::string, int x, int y);
+  static Event MouseLeftMove(std::string, int x, int y);
+  static Event MouseLeftDown(std::string, int x, int y);
+  static Event MouseRightMove(std::string, int x, int y);
+  static Event MouseRightDown(std::string, int x, int y);
 
   // --- Arrow ---
   static const Event ArrowLeft;
@@ -48,17 +54,47 @@ struct Event {
   static Event Custom;
 
   //--- Method section ---------------------------------------------------------
-  bool is_character() const { return is_character_; }
+  bool is_character() const { return type_ == Type::Character;}
   wchar_t character() const { return character_; }
+
+  bool is_mouse_left_down() const { return type_ == Type::MouseLeftDown; }
+  bool is_mouse_left_move() const { return type_ == Type::MouseLeftMove; }
+  bool is_mouse_right_down() const { return type_ == Type::MouseRightDown; }
+  bool is_mouse_right_move() const { return type_ == Type::MouseRightMove; }
+  bool is_mouse_up() const { return type_ == Type::MouseUp; }
+  bool is_mouse_move() const { return type_ == Type::MouseMove; }
+  int mouse_x() const { return mouse_.x; }
+  int mouse_y() const { return mouse_.y; }
+
   const std::string& input() const { return input_; }
 
   bool operator==(const Event& other) const { return input_ == other.input_; }
 
   //--- State section ----------------------------------------------------------
  private:
+  enum class Type {
+    Unknown,
+    Character,
+    MouseMove,
+    MouseUp,
+    MouseLeftDown,
+    MouseLeftMove,
+    MouseRightDown,
+    MouseRightMove,
+  };
+
+  struct Mouse {
+    int x;
+    int y;
+  };
+
+  Type type_ = Type::Unknown;
+
+  union {
+    wchar_t character_ = U'?';
+    Mouse mouse_;
+  };
   std::string input_;
-  bool is_character_ = false;
-  wchar_t character_ = U'?';
 };
 
 

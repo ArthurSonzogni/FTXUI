@@ -20,18 +20,42 @@ class TerminalInputParser {
   bool Eat();
 
   enum Type {
-    UNCOMPLETED = 0,
-    DROP = 1,
-    CHARACTER = 2,
-    SPECIAL = 3,
+    UNCOMPLETED,
+    DROP,
+    CHARACTER,
+    SPECIAL,
+    MOUSE_UP,
+    MOUSE_MOVE,
+    MOUSE_LEFT_DOWN,
+    MOUSE_LEFT_MOVE,
+    MOUSE_RIGHT_DOWN,
+    MOUSE_RIGHT_MOVE,
   };
-  void Send(Type type);
-  Type Parse();
-  Type ParseUTF8();
-  Type ParseESC();
-  Type ParseDCS();
-  Type ParseCSI();
-  Type ParseOSC();
+
+  struct Mouse {
+    int x;
+    int y;
+    Mouse(int x, int y) : x(x), y(y) {}
+  };
+
+  struct Output {
+    Type type;
+    union {
+      Mouse mouse;
+    };
+
+    Output(Type type) : type(type) {}
+    Output(Type type, int x, int y) : type(type), mouse(x, y) {}
+  };
+
+  void Send(Output type);
+  Output Parse();
+  Output ParseUTF8();
+  Output ParseESC();
+  Output ParseDCS();
+  Output ParseCSI();
+  Output ParseOSC();
+  Output ParseMouse(std::vector<int> arguments);
 
   Sender<Event> out_;
   int position_ = -1;

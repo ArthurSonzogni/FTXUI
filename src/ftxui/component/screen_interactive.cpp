@@ -155,8 +155,8 @@ static const char DISABLE_LINE_WRAP[] = "\x1B[7l";
 static const char USE_ALTERNATIVE_SCREEN[] = "\x1B[?1049h";
 static const char USE_NORMAL_SCREEN[] = "\x1B[?1049l";
 
-static const char ENABLE_MOUSE[] = "\x1B[?1000;1006;1015h";
-static const char DISABLE_MOUSE[] = "\x1B[?1000;10006;1015l";
+static const char ENABLE_MOUSE[] = "\x1B[?1000;1003;1006;1015h";
+static const char DISABLE_MOUSE[] = "\x1B[?1000;1003;10006;1015l";
 
 using SignalHandler = void(int);
 std::stack<std::function<void()>> on_exit_functions;
