@@ -41,6 +41,14 @@ class DrawKey : public Component {
         code += L"mouse_left_move(" +  //
                 std::to_wstring(keys[i].mouse_x()) + L"," +
                 std::to_wstring(keys[i].mouse_y()) + L")";
+      } else if (keys[i].is_mouse_middle_down()) {
+        code += L"mouse_middle_down(" +  //
+                std::to_wstring(keys[i].mouse_x()) + L"," +
+                std::to_wstring(keys[i].mouse_y()) + L")";
+      } else if (keys[i].is_mouse_middle_move()) {
+        code += L"mouse_middle_move(" +  //
+                std::to_wstring(keys[i].mouse_x()) + L"," +
+                std::to_wstring(keys[i].mouse_y()) + L")";
       } else if (keys[i].is_mouse_right_down()) {
         code += L"mouse_right_down(" +  //
                 std::to_wstring(keys[i].mouse_x()) + L"," +

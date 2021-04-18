@@ -32,6 +32,8 @@ struct Event {
   static Event MouseUp(std::string, int x, int y);
   static Event MouseLeftMove(std::string, int x, int y);
   static Event MouseLeftDown(std::string, int x, int y);
+  static Event MouseMiddleMove(std::string, int x, int y);
+  static Event MouseMiddleDown(std::string, int x, int y);
   static Event MouseRightMove(std::string, int x, int y);
   static Event MouseRightDown(std::string, int x, int y);
 
@@ -59,6 +61,8 @@ struct Event {
 
   bool is_mouse_left_down() const { return type_ == Type::MouseLeftDown; }
   bool is_mouse_left_move() const { return type_ == Type::MouseLeftMove; }
+  bool is_mouse_middle_down() const { return type_ == Type::MouseMiddleDown; }
+  bool is_mouse_middle_move() const { return type_ == Type::MouseMiddleMove; }
   bool is_mouse_right_down() const { return type_ == Type::MouseRightDown; }
   bool is_mouse_right_move() const { return type_ == Type::MouseRightMove; }
   bool is_mouse_up() const { return type_ == Type::MouseUp; }
@@ -79,6 +83,8 @@ struct Event {
     MouseUp,
     MouseLeftDown,
     MouseLeftMove,
+    MouseMiddleDown,
+    MouseMiddleMove,
     MouseRightDown,
     MouseRightMove,
   };

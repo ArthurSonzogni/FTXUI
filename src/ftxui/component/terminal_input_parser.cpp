@@ -66,6 +66,16 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
                                   output.mouse.y));
       break;
 
+    case MOUSE_MIDDLE_DOWN:
+      out_->Send(Event::MouseMiddleDown(std::move(pending_), output.mouse.x,
+                                      output.mouse.y));
+      break;
+
+    case MOUSE_MIDDLE_MOVE:
+      out_->Send(Event::MouseMiddleMove(std::move(pending_), output.mouse.x,
+                                  output.mouse.y));
+      break;
+
     case MOUSE_RIGHT_DOWN:
       out_->Send(Event::MouseRightDown(std::move(pending_), output.mouse.x,
                                       output.mouse.y));
@@ -210,6 +220,11 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(
       return Output(MOUSE_LEFT_DOWN, arguments[1], arguments[2]);
     case 64:
       return Output(MOUSE_LEFT_MOVE, arguments[1], arguments[2]);
+
+    case 33:
+      return Output(MOUSE_MIDDLE_DOWN, arguments[1], arguments[2]);
+    case 65:
+      return Output(MOUSE_MIDDLE_MOVE, arguments[1], arguments[2]);
 
     case 34:
       return Output(MOUSE_RIGHT_DOWN, arguments[1], arguments[2]);

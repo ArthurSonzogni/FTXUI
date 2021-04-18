@@ -28,6 +28,8 @@ class TerminalInputParser {
     MOUSE_MOVE,
     MOUSE_LEFT_DOWN,
     MOUSE_LEFT_MOVE,
+    MOUSE_MIDDLE_DOWN,
+    MOUSE_MIDDLE_MOVE,
     MOUSE_RIGHT_DOWN,
     MOUSE_RIGHT_MOVE,
   };

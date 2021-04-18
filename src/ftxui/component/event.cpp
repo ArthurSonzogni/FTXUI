@@ -74,6 +74,22 @@ Event Event::MouseRightDown(std::string input, int x, int y) {
 }
 
 // static
+Event Event::MouseMiddleMove(std::string input, int x, int y) {
+  Event event;
+  event.input_ = std::move(input);
+  event.type_ = Type::MouseMiddleMove;
+  event.mouse_ = {x, y};
+  return event;
+}
+
+// static
+Event Event::Special(std::string input) {
+  Event event;
+  event.input_ = std::move(input);
+  return event;
+}
+
+// static
 Event Event::MouseRightMove(std::string input, int x, int y) {
   Event event;
   event.input_ = std::move(input);
@@ -83,9 +99,11 @@ Event Event::MouseRightMove(std::string input, int x, int y) {
 }
 
 // static
-Event Event::Special(std::string input) {
+Event Event::MouseMiddleDown(std::string input, int x, int y) {
   Event event;
   event.input_ = std::move(input);
+  event.type_ = Type::MouseMiddleDown;
+  event.mouse_ = {x, y};
   return event;
 }
 
