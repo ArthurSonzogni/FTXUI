@@ -88,7 +88,7 @@ Feel free to add your projects here:
 - [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
 - [hastur](https://github.com/robinlinden/hastur)
 - [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
--
+- [todoman](https://github.com/aaleino/todoman)
 
 ## Hosted on:
  * [github](https://github.com/ArthurSonzogni/ftxui)
