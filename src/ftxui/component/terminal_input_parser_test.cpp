@@ -66,6 +66,25 @@ TEST(Event, EscapeKeyEnoughWait) {
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
+TEST(Event, GnomeTerminalMouse) {
+  auto event_receiver = MakeReceiver<Event>();
+  {
+    auto parser = TerminalInputParser(event_receiver->MakeSender());
+    parser.Add('\x1B');
+    parser.Add('[');
+    parser.Add('<');
+    parser.Add('1');
+    parser.Add(';');
+    parser.Add('1');
+    parser.Add('M');
+  }
+
+  Event received;
+  EXPECT_TRUE(event_receiver->Receive(&received));
+  EXPECT_TRUE(received.is_mouse());
+  EXPECT_FALSE(event_receiver->Receive(&received));
+}
+
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.

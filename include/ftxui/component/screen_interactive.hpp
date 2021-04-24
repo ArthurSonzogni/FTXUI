@@ -52,6 +52,9 @@ class ScreenInteractive : public Screen {
   std::string reset_cursor_position;
 
   std::atomic<bool> quit_ = false;
+
+  int cursor_x_ = 0;
+  int cursor_y_ = 0;
 };
 
 }  // namespace ftxui

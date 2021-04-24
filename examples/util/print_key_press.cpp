@@ -17,7 +17,7 @@ class DrawKey : public Component {
 
   Element Render() override {
     Elements children;
-    for (size_t i = std::max(0, (int)keys.size() - 10); i < keys.size(); ++i) {
+    for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
       std::wstring code;
       for (auto& it : keys[i].input())
         code += L" " + std::to_wstring((unsigned int)it);

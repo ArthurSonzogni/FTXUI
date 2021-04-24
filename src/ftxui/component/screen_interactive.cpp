@@ -156,7 +156,9 @@ static const char USE_ALTERNATIVE_SCREEN[] = "\x1B[?1049h";
 static const char USE_NORMAL_SCREEN[] = "\x1B[?1049l";
 
 static const char ENABLE_MOUSE[] = "\x1B[?1000;1003;1006;1015h";
-static const char DISABLE_MOUSE[] = "\x1B[?1000;1003;10006;1015l";
+static const char DISABLE_MOUSE[] = "\x1B[?1000;1003;1006;1015l";
+
+static const char REQUEST_CURSOR_LINE[] = "\x1b[6n";
 
 using SignalHandler = void(int);
 std::stack<std::function<void()>> on_exit_functions;
@@ -304,17 +306,30 @@ void ScreenInteractive::Loop(Component* component) {
   while (!quit_) {
     if (!event_receiver_->HasPending()) {
       std::cout << reset_cursor_position << ResetPosition();
+      static int i = -2;
+      if (i % 30 == 0)
+        std::cout << REQUEST_CURSOR_LINE;
+      ++i;
       Draw(component);
       std::cout << ToString() << set_cursor_position;
       Flush();
       Clear();
     }
+
     Event event;
-    if (event_receiver_->Receive(&event)) {
-      if (event.is_mouse())
-        event.MoveMouse(-1, -1);
-      component->OnEvent(event);
+    if (!event_receiver_->Receive(&event))
+      break;
+
+    if (event.is_cursor_reporting()) {
+      cursor_x_ = event.mouse_y();
+      cursor_y_ = event.mouse_x();
+      continue;
     }
+
+    if (event.is_mouse())
+      event.MoveMouse(-cursor_x_, -cursor_y_);
+
+    component->OnEvent(event);
   }
 
   event_listener.join();

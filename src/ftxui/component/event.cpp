@@ -107,10 +107,19 @@ Event Event::MouseMiddleDown(std::string input, int x, int y) {
   return event;
 }
 
+Event Event::CursorReporting(std::string input, int x, int y) {
+  Event event;
+  event.input_ = std::move(input);
+  event.type_ = Type::CursorReporting;
+  event.mouse_ = {x, y};
+  return event;
+}
+
 bool Event::is_mouse() const {
   switch (type_) {
     case Type::Unknown:
     case Type::Character:
+    case Type::CursorReporting:
       return false;
     case Type::MouseMove:
     case Type::MouseUp:

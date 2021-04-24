@@ -5,10 +5,8 @@
 namespace ftxui {
 
 Element Button::Render() {
-  return text(label) |                       //
-         border |                            //
-         (Focused() ? inverted : nothing) |  //
-         reflect(box_);
+  auto style = Focused() ? inverted : nothing;
+  return text(label) | border | style | reflect(box_);
 }
 
 bool Button::OnEvent(Event event) {

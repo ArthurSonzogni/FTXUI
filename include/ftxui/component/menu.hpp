@@ -19,10 +19,12 @@ class Menu : public Component {
   // State.
   std::vector<std::wstring> entries = {};
   int selected = 0;
+  int focused = 0;
 
+  Decorator normal_style = nothing;
   Decorator focused_style = inverted;
   Decorator selected_style = bold;
-  Decorator normal_style = nothing;
+  Decorator selected_focused_style = focused_style | selected_style;
 
   // State update callback.
   std::function<void()> on_change = []() {};

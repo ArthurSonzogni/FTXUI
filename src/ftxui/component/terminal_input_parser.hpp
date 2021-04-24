@@ -32,6 +32,7 @@ class TerminalInputParser {
     MOUSE_MIDDLE_MOVE,
     MOUSE_RIGHT_DOWN,
     MOUSE_RIGHT_MOVE,
+    CURSOR_REPORTING,
   };
 
   struct Mouse {
@@ -58,6 +59,7 @@ class TerminalInputParser {
   Output ParseCSI();
   Output ParseOSC();
   Output ParseMouse(std::vector<int> arguments);
+  Output ParseCursorReporting(std::vector<int> arguments);
 
   Sender<Event> out_;
   int position_ = -1;

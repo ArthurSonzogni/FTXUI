@@ -13,7 +13,7 @@ class MyComponent : public Component {
   MyComponent() {
     Add(&container);
 
-    for (Menu* menu : {&menu_1, &menu_2, &menu_3, &menu_4, &menu_5, &menu_6}) {
+    for (Menu* menu : {&menu_1, &menu_2, &menu_3, &menu_4, &menu_5, &menu_6,}) {
       container.Add(menu);
       menu->entries = {
           L"Monkey", L"Dog", L"Cat", L"Bird", L"Elephant",
@@ -21,22 +21,27 @@ class MyComponent : public Component {
       menu->on_enter = [this]() { on_enter(); };
     }
 
-    menu_2.selected_style = color(Color::Blue);
     menu_2.focused_style = bold | color(Color::Blue);
+    menu_2.selected_style = color(Color::Blue);
+    menu_2.selected_focused_style = bold | color(Color::Blue);
 
     menu_3.selected_style = color(Color::Blue);
     menu_3.focused_style = bgcolor(Color::Blue);
+    menu_3.selected_focused_style = bgcolor(Color::Blue);
 
     menu_4.selected_style = bgcolor(Color::Blue);
     menu_4.focused_style = bgcolor(Color::BlueLight);
+    menu_4.selected_focused_style = bgcolor(Color::BlueLight);
 
     menu_5.normal_style = bgcolor(Color::Blue);
     menu_5.selected_style = bgcolor(Color::Yellow);
     menu_5.focused_style = bgcolor(Color::Red);
+    menu_5.selected_focused_style = bgcolor(Color::Red);
 
     menu_6.normal_style = dim | color(Color::Blue);
     menu_6.selected_style = color(Color::Blue);
     menu_6.focused_style = bold | color(Color::Blue);
+    menu_6.selected_focused_style = bold | color(Color::Blue);
   }
 
   std::function<void()> on_enter = []() {};

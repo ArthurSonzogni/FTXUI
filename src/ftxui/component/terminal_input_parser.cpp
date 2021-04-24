@@ -85,6 +85,11 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       out_->Send(Event::MouseRightMove(std::move(pending_), output.mouse.x,
                                   output.mouse.y));
       break;
+
+    case CURSOR_REPORTING:
+      out_->Send(Event::CursorReporting(std::move(pending_), output.mouse.x,
+                                        output.mouse.y));
+      break;
   }
   pending_.clear();
 }
@@ -179,12 +184,14 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
       continue;
     }
 
-    if (Current() >= ' ' && Current() <= '~') {
+    if (Current() >= ' ' && Current() <= '~' && Current() != '<') {
       arguments.push_back(argument);
       argument = 0;
       switch (Current()) {
         case 'M':
           return ParseMouse(std::move(arguments));
+        case 'R':
+          return ParseCursorReporting(std::move(arguments));
         default:
           return SPECIAL;
       }
@@ -235,8 +242,18 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(
       return Output(MOUSE_UP, arguments[1], arguments[2]);
     case 67:
       return Output(MOUSE_MOVE, arguments[1], arguments[2]);
+
+    default:
+      return Output(MOUSE_MOVE, arguments[1], arguments[2]);
   }
   return SPECIAL;
+}
+
+TerminalInputParser::Output TerminalInputParser::ParseCursorReporting(
+    std::vector<int> arguments) {
+  if (arguments.size() != 2)
+    return SPECIAL;
+  return Output(CURSOR_REPORTING, arguments[0], arguments[1]);
 }
 
 }  // namespace ftxui
