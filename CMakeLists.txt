@@ -201,7 +201,7 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
 
   FetchContent_Declare( googletest
     GIT_REPOSITORY "https://github.com/google/googletest"
-    GIT_TAG        release-1.10.0
+    GIT_TAG        23ef29555ef4789f555f1ba8c51b4c52975f0907
   )
 
   FetchContent_GetProperties(googletest)

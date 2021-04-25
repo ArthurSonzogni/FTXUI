@@ -5,8 +5,6 @@
 
 namespace ftxui {
 
-Box box;
-
 // Helper class.
 class Reflect : public Node {
  public:
