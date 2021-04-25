@@ -27,6 +27,11 @@ class Input : public Component {
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
+
+ private:
+  bool OnMouseEvent(Event);
+  Box input_box_;
+  Box cursor_box_;
 };
 
 }  // namespace ftxui

@@ -10,7 +10,7 @@
     <div class="page">
       <h1>FTXUI WebAssembly Example </h1>
       <p>
-        <a href="https://github.com/ArthurSonzogni/FTXUI">FTXUI</a> is a single
+        <a href="https://github.com/ArthurSonzogni/FTXUI">FTXUI</a> is a simple
         C++ library for terminal user interface.
       </p>
       <p>
@@ -69,10 +69,8 @@
     ];
 
     const url_search_params = new URLSearchParams(window.location.search);
-    const example_index = url_search_params.get("id") || 16;
-    const example = example_list[example_index];
-
-    var select = document.getElementById("selectExample"); 
+    const example = url_search_params.get("file") || "./dom/color_gallery.js"
+    const select = document.getElementById("selectExample"); 
 
     for(var i = 0; i < example_list.length; i++) {
         var opt = example_list[i];
@@ -81,9 +79,10 @@
         el.value = opt;
         select.appendChild(el);
     }
-    select.selectedIndex = example_index;
+    select.selectedIndex = example_list.findIndex(path => path == example) || 0;
     select.addEventListener("change", () => {
-      location.href = (location.href).split('?')[0] + "?id=" + select.selectedIndex;
+      location.href = (location.href).split('?')[0] + "?file=" +
+            example_list[select.selectedIndex];
     });
 
     let stdin_buffer = [];
@@ -94,6 +93,7 @@
     stdout_buffer = [];
     let stdout = code => {
       if (code == 0) {
+        console.log(code);
         term.write(new Uint8Array(stdout_buffer));
         stdout_buffer = [];
       } else {

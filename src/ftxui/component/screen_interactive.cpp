@@ -40,7 +40,7 @@ namespace {
 
 void Flush() {
   // Emscripten doesn't implement flush. We interpret zero as flush.
-  std::cout << std::flush << (char)0;
+  std::cout << '\0' << std::flush;
 }
 
 constexpr int timeout_milliseconds = 20;
@@ -352,6 +352,8 @@ void ScreenInteractive::Loop(Component* component) {
       DECMode::kMouseUtf8,
       DECMode::kMouseSgrExtMode,
   });
+
+  flush();
 
   auto event_listener =
       std::thread(&EventListener, &quit_, event_receiver_->MakeSender());

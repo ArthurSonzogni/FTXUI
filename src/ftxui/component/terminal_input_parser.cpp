@@ -41,19 +41,23 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
 
     case CHARACTER:
       out_->Send(Event::Character(std::move(pending_)));
+      pending_.clear();
       return;
 
     case SPECIAL:
       out_->Send(Event::Special(std::move(pending_)));
+      pending_.clear();
       return;
 
     case MOUSE:
       out_->Send(Event::Mouse(std::move(pending_), output.mouse));
+      pending_.clear();
       return;
 
     case CURSOR_REPORTING:
       out_->Send(Event::CursorReporting(std::move(pending_), output.cursor.x,
                                         output.cursor.y));
+      pending_.clear();
       return;
   }
   // NOT_REACHED().
@@ -133,7 +137,7 @@ TerminalInputParser::Output TerminalInputParser::ParseDCS() {
 
 TerminalInputParser::Output TerminalInputParser::ParseCSI() {
   bool altered = false;
-  int argument;
+  int argument = 0;
   std::vector<int> arguments;
   while (true) {
     if (!Eat())
@@ -205,9 +209,8 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(
   output.mouse.button = Mouse::Button((arguments[0] & 3) +  //
                                       ((arguments[0] & 64) >> 4));
   output.mouse.motion = Mouse::Motion(pressed);
-  output.mouse.shift = arguments[0] & 4;
-  output.mouse.meta = arguments[0] & 8;
-  output.mouse.control = arguments[0] & 16;
+  output.mouse.shift = bool(arguments[0] & 4);
+  output.mouse.meta = bool(arguments[0] & 8);
   output.mouse.x = arguments[1];
   output.mouse.y = arguments[2];
   return output;

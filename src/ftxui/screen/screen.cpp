@@ -184,7 +184,7 @@ std::string Screen::ToString() {
 }
 
 void Screen::Print() {
-  std::cout << ToString() << std::flush << (char)0;
+  std::cout << ToString() << '\0' << std::flush;
 }
 
 /// @brief Access a character a given position.
