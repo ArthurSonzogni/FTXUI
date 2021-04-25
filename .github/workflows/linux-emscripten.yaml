@@ -17,5 +17,4 @@ jobs:
           mkdir build;
           cd build;
           emcmake cmake ..
-          -DFTXUI_BUILD_TESTS=ON;
           cmake --build . --config Release;
