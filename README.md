@@ -28,7 +28,7 @@ A simple C++ library for terminal based user interface.
  * No dependencies.
  * Cross platform (mostly). Linux (main target), Windows (experimental), Mac.
  * Keyboard navigation.
- * Mouse support (very soon)
+ * Mouse support (very soon, [feedback](https://github.com/ArthurSonzogni/FTXUI/issues/7#issuecomment-826339732) needed)
 
 ## Operating systems
 - [![linux-gcc][badge.linux-gcc]][link.linux-gcc]
