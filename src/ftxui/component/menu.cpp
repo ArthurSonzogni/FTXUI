@@ -61,12 +61,13 @@ bool Menu::OnEvent(Event event) {
 
 bool Menu::OnMouseEvent(Event event) {
   for (int i = 0; i < boxes_.size(); ++i) {
-    if (!boxes_[i].Contain(event.mouse_x(), event.mouse_y()))
+    if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
       continue;
 
+    TakeFocus();
     focused = i;
-    if (event.is_mouse_left_down()) {
-      TakeFocus();
+    if (event.mouse().button == Mouse::Left &&
+        event.mouse().motion == Mouse::Released) {
       if (selected != i) {
         selected = i;
         on_change();

@@ -83,6 +83,7 @@ add_library(component
   include/ftxui/component/event.hpp
   include/ftxui/component/input.hpp
   include/ftxui/component/menu.hpp
+  include/ftxui/component/mouse.hpp
   include/ftxui/component/radiobox.hpp
   include/ftxui/component/receiver.hpp
   include/ftxui/component/screen_interactive.hpp

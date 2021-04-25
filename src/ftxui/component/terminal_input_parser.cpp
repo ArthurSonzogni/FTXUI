@@ -36,62 +36,28 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
 
     case DROP:
-      break;
+      pending_.clear();
+      return;
 
     case CHARACTER:
       out_->Send(Event::Character(std::move(pending_)));
-      break;
+      return;
 
     case SPECIAL:
       out_->Send(Event::Special(std::move(pending_)));
-      break;
+      return;
 
-    case MOUSE_MOVE:
-      out_->Send(
-          Event::MouseMove(std::move(pending_), output.mouse.x, output.mouse.y));
-      break;
-
-    case MOUSE_UP:
-      out_->Send(
-          Event::MouseUp(std::move(pending_), output.mouse.x, output.mouse.y));
-      break;
-
-    case MOUSE_LEFT_DOWN:
-      out_->Send(Event::MouseLeftDown(std::move(pending_), output.mouse.x,
-                                      output.mouse.y));
-      break;
-
-    case MOUSE_LEFT_MOVE:
-      out_->Send(Event::MouseLeftMove(std::move(pending_), output.mouse.x,
-                                  output.mouse.y));
-      break;
-
-    case MOUSE_MIDDLE_DOWN:
-      out_->Send(Event::MouseMiddleDown(std::move(pending_), output.mouse.x,
-                                      output.mouse.y));
-      break;
-
-    case MOUSE_MIDDLE_MOVE:
-      out_->Send(Event::MouseMiddleMove(std::move(pending_), output.mouse.x,
-                                  output.mouse.y));
-      break;
-
-    case MOUSE_RIGHT_DOWN:
-      out_->Send(Event::MouseRightDown(std::move(pending_), output.mouse.x,
-                                      output.mouse.y));
-      break;
-
-    case MOUSE_RIGHT_MOVE:
-      out_->Send(Event::MouseRightMove(std::move(pending_), output.mouse.x,
-                                  output.mouse.y));
-      break;
+    case MOUSE:
+      out_->Send(Event::Mouse(std::move(pending_), output.mouse));
+      return;
 
     case CURSOR_REPORTING:
-      out_->Send(Event::CursorReporting(std::move(pending_), output.mouse.x,
-                                        output.mouse.y));
-      break;
+      out_->Send(Event::CursorReporting(std::move(pending_), output.cursor.x,
+                                        output.cursor.y));
+      return;
   }
-  pending_.clear();
+  // NOT_REACHED().
+
 }
 
 TerminalInputParser::Output TerminalInputParser::Parse() {
@@ -166,11 +132,17 @@ TerminalInputParser::Output TerminalInputParser::ParseDCS() {
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseCSI() {
+  bool altered = false;
   int argument;
   std::vector<int> arguments;
   while (true) {
     if (!Eat())
       return UNCOMPLETED;
+
+    if (Current() == '<') {
+      altered = true;
+      continue;
+    }
 
     if (Current() >= '0' && Current() <= '9') {
       argument *= 10;
@@ -189,7 +161,9 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
       argument = 0;
       switch (Current()) {
         case 'M':
-          return ParseMouse(std::move(arguments));
+          return ParseMouse(altered, true, std::move(arguments));
+        case 'm':
+          return ParseMouse(altered, false, std::move(arguments));
         case 'R':
           return ParseCursorReporting(std::move(arguments));
         default:
@@ -219,41 +193,34 @@ TerminalInputParser::Output TerminalInputParser::ParseOSC() {
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseMouse(
+    bool altered,
+    bool pressed,
     std::vector<int> arguments) {
   if (arguments.size() != 3)
     return SPECIAL;
-  switch(arguments[0]) {
-    case 32:
-      return Output(MOUSE_LEFT_DOWN, arguments[1], arguments[2]);
-    case 64:
-      return Output(MOUSE_LEFT_MOVE, arguments[1], arguments[2]);
 
-    case 33:
-      return Output(MOUSE_MIDDLE_DOWN, arguments[1], arguments[2]);
-    case 65:
-      return Output(MOUSE_MIDDLE_MOVE, arguments[1], arguments[2]);
+  (void)altered;
 
-    case 34:
-      return Output(MOUSE_RIGHT_DOWN, arguments[1], arguments[2]);
-    case 66:
-      return Output(MOUSE_RIGHT_MOVE, arguments[1], arguments[2]);
-
-    case 35:
-      return Output(MOUSE_UP, arguments[1], arguments[2]);
-    case 67:
-      return Output(MOUSE_MOVE, arguments[1], arguments[2]);
-
-    default:
-      return Output(MOUSE_MOVE, arguments[1], arguments[2]);
-  }
-  return SPECIAL;
+  Output output(MOUSE);
+  output.mouse.button = Mouse::Button((arguments[0] & 3) +  //
+                                      ((arguments[0] & 64) >> 4));
+  output.mouse.motion = Mouse::Motion(pressed);
+  output.mouse.shift = arguments[0] & 4;
+  output.mouse.meta = arguments[0] & 8;
+  output.mouse.control = arguments[0] & 16;
+  output.mouse.x = arguments[1];
+  output.mouse.y = arguments[2];
+  return output;
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseCursorReporting(
     std::vector<int> arguments) {
   if (arguments.size() != 2)
     return SPECIAL;
-  return Output(CURSOR_REPORTING, arguments[0], arguments[1]);
+  Output output(CURSOR_REPORTING);
+  output.cursor.y = arguments[0];
+  output.cursor.x = arguments[1];
+  return output;
 }
 
 }  // namespace ftxui

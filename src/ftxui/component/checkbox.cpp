@@ -26,15 +26,13 @@ bool CheckBox::OnEvent(Event event) {
 }
 
 bool CheckBox::OnMouseEvent(Event event) {
-  if (!box_.Contain(event.mouse_x(), event.mouse_y()))
+  if (!box_.Contain(event.mouse().x, event.mouse().y))
     return false;
 
-  if (event.is_mouse_move()) {
-    TakeFocus();
-    return true;
-  }
+  TakeFocus();
 
-  if (event.is_mouse_left_down()) {
+  if (event.mouse().button == Mouse::Left &&
+      event.mouse().motion == Mouse::Pressed) {
     state = !state;
     on_change();
     return true;

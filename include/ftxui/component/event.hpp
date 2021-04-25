@@ -2,6 +2,7 @@
 #define FTXUI_COMPONENT_EVENT_HPP
 
 #include <array>
+#include <ftxui/component/mouse.hpp>
 #include <ftxui/component/receiver.hpp>
 #include <functional>
 #include <string>
@@ -28,14 +29,7 @@ struct Event {
 
   static Event Character(std::string);
   static Event Special(std::string);
-  static Event MouseMove(std::string, int x, int y);
-  static Event MouseUp(std::string, int x, int y);
-  static Event MouseLeftMove(std::string, int x, int y);
-  static Event MouseLeftDown(std::string, int x, int y);
-  static Event MouseMiddleMove(std::string, int x, int y);
-  static Event MouseMiddleDown(std::string, int x, int y);
-  static Event MouseRightMove(std::string, int x, int y);
-  static Event MouseRightDown(std::string, int x, int y);
+  static Event Mouse(std::string, Mouse mouse);
   static Event CursorReporting(std::string, int x, int y);
 
   // --- Arrow ---
@@ -60,51 +54,38 @@ struct Event {
   bool is_character() const { return type_ == Type::Character;}
   wchar_t character() const { return character_; }
 
-  bool is_mouse() const;
-  bool is_mouse_left_down() const { return type_ == Type::MouseLeftDown; }
-  bool is_mouse_left_move() const { return type_ == Type::MouseLeftMove; }
-  bool is_mouse_middle_down() const { return type_ == Type::MouseMiddleDown; }
-  bool is_mouse_middle_move() const { return type_ == Type::MouseMiddleMove; }
-  bool is_mouse_right_down() const { return type_ == Type::MouseRightDown; }
-  bool is_mouse_right_move() const { return type_ == Type::MouseRightMove; }
-  bool is_mouse_up() const { return type_ == Type::MouseUp; }
-  bool is_mouse_move() const { return type_ == Type::MouseMove; }
+  bool is_mouse() const { return type_ == Type::Mouse; }
+  struct Mouse& mouse() {
+    return mouse_;
+  }
+
   bool is_cursor_reporting() const { return type_ == Type::CursorReporting; }
-  int mouse_x() const { return mouse_.x; }
-  int mouse_y() const { return mouse_.y; }
+  int cursor_x() const { return cursor_.x; }
+  int cursor_y() const { return cursor_.y; }
 
   const std::string& input() const { return input_; }
 
   bool operator==(const Event& other) const { return input_ == other.input_; }
-
-  void MoveMouse(int dx, int dy);
 
   //--- State section ----------------------------------------------------------
  private:
   enum class Type {
     Unknown,
     Character,
-    MouseMove,
-    MouseUp,
-    MouseLeftDown,
-    MouseLeftMove,
-    MouseMiddleDown,
-    MouseMiddleMove,
-    MouseRightDown,
-    MouseRightMove,
+    Mouse,
     CursorReporting,
   };
+  Type type_ = Type::Unknown;
 
-  struct Mouse {
+  struct Cursor {
     int x;
     int y;
   };
 
-  Type type_ = Type::Unknown;
-
   union {
     wchar_t character_ = U'?';
-    Mouse mouse_;
+    struct Mouse mouse_;
+    struct Cursor cursor_;
   };
   std::string input_;
 };

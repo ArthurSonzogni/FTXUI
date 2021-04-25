@@ -10,12 +10,11 @@ Element Button::Render() {
 }
 
 bool Button::OnEvent(Event event) {
-  if (event.is_mouse() && box_.Contain(event.mouse_x(), event.mouse_y())) {
-    if (event.is_mouse_move()) {
-      TakeFocus();
-      return true;
-    }
-    if (event.is_mouse_left_down()) {
+  if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
+    TakeFocus();
+
+    if (event.mouse().button == Mouse::Left &&
+        event.mouse().motion == Mouse::Pressed) {
       on_click();
       return true;
     }

@@ -24,31 +24,23 @@ class TerminalInputParser {
     DROP,
     CHARACTER,
     SPECIAL,
-    MOUSE_UP,
-    MOUSE_MOVE,
-    MOUSE_LEFT_DOWN,
-    MOUSE_LEFT_MOVE,
-    MOUSE_MIDDLE_DOWN,
-    MOUSE_MIDDLE_MOVE,
-    MOUSE_RIGHT_DOWN,
-    MOUSE_RIGHT_MOVE,
+    MOUSE,
     CURSOR_REPORTING,
   };
 
-  struct Mouse {
+  struct CursorReporting {
     int x;
     int y;
-    Mouse(int x, int y) : x(x), y(y) {}
   };
 
   struct Output {
     Type type;
     union {
       Mouse mouse;
+      CursorReporting cursor;
     };
 
     Output(Type type) : type(type) {}
-    Output(Type type, int x, int y) : type(type), mouse(x, y) {}
   };
 
   void Send(Output type);
@@ -58,7 +50,7 @@ class TerminalInputParser {
   Output ParseDCS();
   Output ParseCSI();
   Output ParseOSC();
-  Output ParseMouse(std::vector<int> arguments);
+  Output ParseMouse(bool altered, bool pressed, std::vector<int> arguments);
   Output ParseCursorReporting(std::vector<int> arguments);
 
   Sender<Event> out_;

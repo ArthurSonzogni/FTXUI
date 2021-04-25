@@ -56,16 +56,14 @@ bool RadioBox::OnEvent(Event event) {
 
 bool RadioBox::OnMouseEvent(Event event) {
   for (int i = 0; i < boxes_.size(); ++i) {
-    if (!boxes_[i].Contain(event.mouse_x(), event.mouse_y()))
+    if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
       continue;
 
-    if (event.is_mouse_move()) {
-      focused = i;
-      TakeFocus();
-      return true;
-    }
+    focused = i;
+    TakeFocus();
 
-    if (event.is_mouse_left_down()) {
+    if (event.mouse().button == Mouse::Left &&
+        event.mouse().motion == Mouse::Pressed) {
       cursor_position = i;
       TakeFocus();
       if (selected != i) {

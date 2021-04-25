@@ -11,6 +11,60 @@
 
 using namespace ftxui;
 
+std::wstring Stringify(Event event) {
+  std::wstring out;
+  for (auto& it : event.input())
+    out += L" " + std::to_wstring((unsigned int)it);
+
+  out = L"(" + out + L" ) -> ";
+  if (event.is_character()) {
+    out += std::wstring(L"character(") + event.character() + L")";
+  } else if (event.is_mouse()) {
+    out += L"mouse";
+    switch (event.mouse().button) {
+      case Mouse::Left:
+        out += L"_left";
+        break;
+      case Mouse::Middle:
+        out += L"_middle";
+        break;
+      case Mouse::Right:
+        out += L"_right";
+        break;
+      case Mouse::None:
+        out += L"_none";
+        break;
+      case Mouse::WheelUp:
+        out += L"_wheel_up";
+        break;
+      case Mouse::WheelDown:
+        out += L"_wheel_down";
+        break;
+    }
+    switch (event.mouse().motion) {
+      case Mouse::Pressed:
+        out += L"_pressed";
+        break;
+      case Mouse::Released:
+        out += L"_released";
+        break;
+    }
+    if (event.mouse().control)
+      out += L"_control";
+    if (event.mouse().shift)
+      out += L"_shift";
+    if (event.mouse().meta)
+      out += L"_meta";
+
+    out += L"(" +  //
+            std::to_wstring(event.mouse().x) + L"," +
+            std::to_wstring(event.mouse().y) + L")";
+  } else {
+    out += L"(special)";
+  }
+  return out;
+}
+
 class DrawKey : public Component {
  public:
   ~DrawKey() override = default;
@@ -18,49 +72,7 @@ class DrawKey : public Component {
   Element Render() override {
     Elements children;
     for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
-      std::wstring code;
-      for (auto& it : keys[i].input())
-        code += L" " + std::to_wstring((unsigned int)it);
-
-      code = L"(" + code + L" ) -> ";
-      if (keys[i].is_character()) {
-        code += std::wstring(L"character(") + keys[i].character() + L")";
-      } else if (keys[i].is_mouse_move()) {
-        code += L"mouse_move(" +  //
-                std::to_wstring(keys[i].mouse_x()) + L"," +
-                std::to_wstring(keys[i].mouse_y()) + L")";
-      } else if (keys[i].is_mouse_up()) {
-        code += L"mouse_up(" +  //
-                std::to_wstring(keys[i].mouse_x()) + L"," +
-                std::to_wstring(keys[i].mouse_y()) + L")";
-      } else if (keys[i].is_mouse_left_down()) {
-        code += L"mouse_left_down(" +  //
-                std::to_wstring(keys[i].mouse_x()) + L"," +
-                std::to_wstring(keys[i].mouse_y()) + L")";
-      } else if (keys[i].is_mouse_left_move()) {
-        code += L"mouse_left_move(" +  //
-                std::to_wstring(keys[i].mouse_x()) + L"," +
-                std::to_wstring(keys[i].mouse_y()) + L")";
-      } else if (keys[i].is_mouse_middle_down()) {
-        code += L"mouse_middle_down(" +  //
-                std::to_wstring(keys[i].mouse_x()) + L"," +
-                std::to_wstring(keys[i].mouse_y()) + L")";
-      } else if (keys[i].is_mouse_middle_move()) {
-        code += L"mouse_middle_move(" +  //
-                std::to_wstring(keys[i].mouse_x()) + L"," +
-                std::to_wstring(keys[i].mouse_y()) + L")";
-      } else if (keys[i].is_mouse_right_down()) {
-        code += L"mouse_right_down(" +  //
-                std::to_wstring(keys[i].mouse_x()) + L"," +
-                std::to_wstring(keys[i].mouse_y()) + L")";
-      } else if (keys[i].is_mouse_right_move()) {
-        code += L"mouse_right_move(" +  //
-                std::to_wstring(keys[i].mouse_x()) + L"," +
-                std::to_wstring(keys[i].mouse_y()) + L")";
-      } else {
-        code += L"(special)";
-      }
-      children.push_back(text(code));
+      children.push_back(text(Stringify(keys[i])));
     }
     return window(text(L"keys"), vbox(std::move(children)));
   }

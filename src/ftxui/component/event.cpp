@@ -29,56 +29,11 @@ Event Event::Character(wchar_t c) {
 }
 
 // static
-Event Event::MouseMove(std::string input, int x, int y) {
+Event Event::Mouse(std::string input, struct Mouse mouse) {
   Event event;
   event.input_ = std::move(input);
-  event.type_ = Type::MouseMove;
-  event.mouse_ = {x, y};
-  return event;
-}
-
-// static
-Event Event::MouseUp(std::string input, int x, int y) {
-  Event event;
-  event.input_ = std::move(input);
-  event.type_ = Type::MouseUp;
-  event.mouse_ = {x, y};
-  return event;
-}
-
-// static
-Event Event::MouseLeftDown(std::string input, int x, int y) {
-  Event event;
-  event.input_ = std::move(input);
-  event.type_ = Type::MouseLeftDown;
-  event.mouse_ = {x, y};
-  return event;
-}
-
-// static
-Event Event::MouseLeftMove(std::string input, int x, int y) {
-  Event event;
-  event.input_ = std::move(input);
-  event.type_ = Type::MouseLeftMove;
-  event.mouse_ = {x, y};
-  return event;
-}
-
-// static
-Event Event::MouseRightDown(std::string input, int x, int y) {
-  Event event;
-  event.input_ = std::move(input);
-  event.type_ = Type::MouseRightDown;
-  event.mouse_ = {x, y};
-  return event;
-}
-
-// static
-Event Event::MouseMiddleMove(std::string input, int x, int y) {
-  Event event;
-  event.input_ = std::move(input);
-  event.type_ = Type::MouseMiddleMove;
-  event.mouse_ = {x, y};
+  event.type_ = Type::Mouse;
+  event.mouse_ = mouse;
   return event;
 }
 
@@ -90,52 +45,13 @@ Event Event::Special(std::string input) {
 }
 
 // static
-Event Event::MouseRightMove(std::string input, int x, int y) {
-  Event event;
-  event.input_ = std::move(input);
-  event.type_ = Type::MouseRightMove;
-  event.mouse_ = {x, y};
-  return event;
-}
-
-// static
-Event Event::MouseMiddleDown(std::string input, int x, int y) {
-  Event event;
-  event.input_ = std::move(input);
-  event.type_ = Type::MouseMiddleDown;
-  event.mouse_ = {x, y};
-  return event;
-}
-
 Event Event::CursorReporting(std::string input, int x, int y) {
   Event event;
   event.input_ = std::move(input);
   event.type_ = Type::CursorReporting;
-  event.mouse_ = {x, y};
+  event.cursor_.x = x;
+  event.cursor_.y = y;
   return event;
-}
-
-bool Event::is_mouse() const {
-  switch (type_) {
-    case Type::Unknown:
-    case Type::Character:
-    case Type::CursorReporting:
-      return false;
-    case Type::MouseMove:
-    case Type::MouseUp:
-    case Type::MouseLeftDown:
-    case Type::MouseLeftMove:
-    case Type::MouseMiddleDown:
-    case Type::MouseMiddleMove:
-    case Type::MouseRightDown:
-    case Type::MouseRightMove:
-      return true;
-  };
-}
-
-void Event::MoveMouse(int dx, int dy) {
-  mouse_.x += dx;
-  mouse_.y += dy;
 }
 
 // --- Arrow ---

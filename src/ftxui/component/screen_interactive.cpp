@@ -146,19 +146,53 @@ void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
 
 #endif
 
-static const char SHOW_CURSOR[] = "\x1B[?25h";
-static const char HIDE_CURSOR[] = "\x1B[?25l";
+const std::string CSI = "\x1b[";
 
-static const char ENABLE_LINE_WRAP[] = "\x1B[7h";
-static const char DISABLE_LINE_WRAP[] = "\x1B[7l";
+// DEC: Digital Equipment Corporation
+enum class DECMode {
+  kLineWrap = 7,
+  kMouseX10 = 9,
+  kCursor = 25,
+  kMouseVt200 = 1000,
+  kMouseAnyEvent = 1003,
+  kMouseUtf8 = 1005,
+  kMouseSgrExtMode = 1006,
+  kMouseUrxvtMode = 1015,
+  kMouseSgrPixelsMode = 1016,
+  kAlternateScreen = 1049,
+};
 
-static const char USE_ALTERNATIVE_SCREEN[] = "\x1B[?1049h";
-static const char USE_NORMAL_SCREEN[] = "\x1B[?1049l";
+// Device Status Report (DSR) {
+enum class DSRMode {
+  kCursor = 6,
+};
 
-static const char ENABLE_MOUSE[] = "\x1B[?1000;1003;1006;1015h";
-static const char DISABLE_MOUSE[] = "\x1B[?1000;1003;1006;1015l";
+const std::string Serialize(std::vector<DECMode> parameters) {
+  bool first = true;
+  std::string out;
+  for (DECMode parameter : parameters) {
+    if (!first)
+      out += ";";
+    out += std::to_string(int(parameter));
+    first = false;
+  }
+  return out;
+}
 
-static const char REQUEST_CURSOR_LINE[] = "\x1b[6n";
+// DEC Private Mode Set (DECSET)
+const std::string Set(std::vector<DECMode> parameters) {
+  return CSI + "?" + Serialize(parameters) + "h";
+}
+
+// DEC Private Mode Reset (DECRST)
+const std::string Reset(std::vector<DECMode> parameters) {
+  return CSI + "?" + Serialize(parameters) + "l";
+}
+
+// Device Status Report (DSR)
+const std::string DeviceStatusReport(DSRMode ps) {
+  return CSI + std::to_string(int(ps)) + "n";
+}
 
 using SignalHandler = void(int);
 std::stack<std::function<void()>> on_exit_functions;
@@ -279,24 +313,44 @@ void ScreenInteractive::Loop(Component* component) {
   install_signal_handler(SIGWINCH, OnResize);
 #endif
 
+  // Commit state:
+  auto flush = [&] {
+    Flush();
+    on_exit_functions.push([] { Flush(); });
+  };
+
+  auto enable = [&](std::vector<DECMode> parameters) {
+    std::cout << Set(parameters);
+    on_exit_functions.push([=] { std::cout << Reset(parameters); });
+  };
+
+  auto disable = [&](std::vector<DECMode> parameters) {
+    std::cout << Reset(parameters);
+    on_exit_functions.push([=] { std::cout << Set(parameters); });
+  };
+
+  flush();
+
   if (use_alternative_screen_) {
-    std::cout << USE_ALTERNATIVE_SCREEN;
-    on_exit_functions.push([] { std::cout << USE_NORMAL_SCREEN; });
+    enable({
+        DECMode::kAlternateScreen,
+    });
   }
 
-  std::cout << ENABLE_MOUSE;
-  on_exit_functions.push([] { std::cout << DISABLE_MOUSE; });
+  // On exit, reset cursor one line after the current drawing.
+  on_exit_functions.push(
+      [=] { std::cout << reset_cursor_position << std::endl; });
 
-  // Hide the cursor and show it at exit.
-  std::cout << HIDE_CURSOR;
-  std::cout << DISABLE_LINE_WRAP;
-  Flush();
-  on_exit_functions.push([&] {
-    std::cout << reset_cursor_position;
-    std::cout << SHOW_CURSOR;
-    std::cout << ENABLE_LINE_WRAP;
-    std::cout << std::endl;
-    Flush();
+  disable({
+      DECMode::kCursor,
+      DECMode::kLineWrap,
+  });
+
+  enable({
+      //DECMode::kMouseVt200,
+      DECMode::kMouseAnyEvent,
+      DECMode::kMouseUtf8,
+      DECMode::kMouseSgrExtMode,
   });
 
   auto event_listener =
@@ -307,8 +361,8 @@ void ScreenInteractive::Loop(Component* component) {
     if (!event_receiver_->HasPending()) {
       std::cout << reset_cursor_position << ResetPosition();
       static int i = -2;
-      if (i % 30 == 0)
-        std::cout << REQUEST_CURSOR_LINE;
+      if (i % 10 == 0)
+        std::cout << DeviceStatusReport(DSRMode::kCursor);
       ++i;
       Draw(component);
       std::cout << ToString() << set_cursor_position;
@@ -321,13 +375,15 @@ void ScreenInteractive::Loop(Component* component) {
       break;
 
     if (event.is_cursor_reporting()) {
-      cursor_x_ = event.mouse_y();
-      cursor_y_ = event.mouse_x();
+      cursor_x_ = event.cursor_x();
+      cursor_y_ = event.cursor_y();
       continue;
     }
 
-    if (event.is_mouse())
-      event.MoveMouse(-cursor_x_, -cursor_y_);
+    if (event.is_mouse()) {
+      event.mouse().x -= cursor_x_;
+      event.mouse().y -= cursor_y_;
+    }
 
     component->OnEvent(event);
   }
