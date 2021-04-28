@@ -1,6 +1,7 @@
 #ifndef FTXUI_COMPONENT_COMPONENT_HPP
 #define FTXUI_COMPONENT_COMPONENT_HPP
 
+#include <memory>
 #include "ftxui/component/event.hpp"
 #include "ftxui/dom/elements.hpp"
 
@@ -59,6 +60,8 @@ class Component {
  protected:
   std::vector<Component*> children_;
 };
+
+using ComponentPtr = std::unique_ptr<Component>;
 
 }  // namespace ftxui
 

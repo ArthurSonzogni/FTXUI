@@ -87,6 +87,7 @@ add_library(component
   include/ftxui/component/radiobox.hpp
   include/ftxui/component/receiver.hpp
   include/ftxui/component/screen_interactive.hpp
+  include/ftxui/component/slider.hpp
   include/ftxui/component/toggle.hpp
   src/ftxui/component/button.cpp
   src/ftxui/component/checkbox.cpp
@@ -98,9 +99,10 @@ add_library(component
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/screen_interactive.cpp
-  src/ftxui/component/toggle.cpp
+  src/ftxui/component/slider.cpp
   src/ftxui/component/terminal_input_parser.cpp
   src/ftxui/component/terminal_input_parser.hpp
+  src/ftxui/component/toggle.cpp
 )
 
 add_library(ftxui::screen ALIAS screen)
