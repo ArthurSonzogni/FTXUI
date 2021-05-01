@@ -1,4 +1,5 @@
 #include "ftxui/component/checkbox.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 #include <functional>
 
@@ -26,6 +27,8 @@ bool CheckBox::OnEvent(Event event) {
 }
 
 bool CheckBox::OnMouseEvent(Event event) {
+  if (!event.screen()->CaptureMouse())
+    return false;
   if (!box_.Contain(event.mouse().x, event.mouse().y))
     return false;
 

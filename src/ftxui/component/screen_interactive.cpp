@@ -9,6 +9,7 @@
 #include <stack>
 #include <thread>
 
+#include "ftxui/component/captured_mouse.hpp"
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"
 #include "ftxui/screen/string.hpp"
@@ -216,6 +217,16 @@ void OnResize(int /* signal */) {
   on_resize();
 }
 
+class CapturedMouseImpl : public CapturedMouseInterface {
+ public:
+  CapturedMouseImpl(std::function<void(void)> callback)
+      : callback_(callback) {}
+  ~CapturedMouseImpl() override { callback_(); }
+
+ private:
+  std::function<void(void)> callback_;
+};
+
 }  // namespace
 
 ScreenInteractive::ScreenInteractive(int dimx,
@@ -254,6 +265,14 @@ ScreenInteractive ScreenInteractive::FitComponent() {
 void ScreenInteractive::PostEvent(Event event) {
   if (!quit_)
     event_sender_->Send(event);
+}
+
+CapturedMouse ScreenInteractive::CaptureMouse() {
+  if (mouse_captured)
+    return nullptr;
+  mouse_captured = true;
+  return std::make_unique<CapturedMouseImpl>(
+      [this] { mouse_captured = false; });
 }
 
 void ScreenInteractive::Loop(Component* component) {
@@ -387,6 +406,7 @@ void ScreenInteractive::Loop(Component* component) {
       event.mouse().y -= cursor_y_;
     }
 
+    event.SetScreen(this);
     component->OnEvent(event);
   }
 

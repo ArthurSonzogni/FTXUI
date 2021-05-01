@@ -1,9 +1,13 @@
 #include "ftxui/component/slider.hpp"
+#include "ftxui/component/captured_mouse.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 namespace ftxui {
-class SliderInt : public Component {
+
+template<class T>
+class SliderImpl : public Component {
  public:
-  SliderInt(std::wstring label, int* value, int min, int max, int increment)
+  SliderImpl(std::wstring label, T* value, T min, T max, T increment)
       : label_(label),
         value_(value),
         min_(min),
@@ -45,36 +49,59 @@ class SliderInt : public Component {
   }
 
   bool OnMouseEvent(Event event) {
-    if (!box_.Contain(event.mouse().x, event.mouse().y))
-      return false;
-    TakeFocus();
-    if (!gauge_box_.Contain(event.mouse().x, event.mouse().y))
-      return false;
-    if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed) {
-      *value_ = min_ + (event.mouse().x - gauge_box_.x_min) * (max_ - min_) /
-                          (gauge_box_.x_max - gauge_box_.x_min);
+    if (captured_mouse_ && event.mouse().motion == Mouse::Released) {
+      captured_mouse_ = nullptr;
+      return true;
     }
-    return true;
+
+    if (box_.Contain(event.mouse().x, event.mouse().y) &&
+        event.screen()->CaptureMouse()) {
+      TakeFocus();
+    }
+
+    if (event.mouse().button == Mouse::Left &&
+        event.mouse().motion == Mouse::Pressed &&
+        gauge_box_.Contain(event.mouse().x, event.mouse().y) &&
+        !captured_mouse_) {
+      captured_mouse_ = event.screen()->CaptureMouse();
+    }
+
+    if (captured_mouse_) {
+      *value_ = min_ + (event.mouse().x - gauge_box_.x_min) * (max_ - min_) /
+                           (gauge_box_.x_max - gauge_box_.x_min);
+      *value_ = std::max(min_, std::min(max_, *value_));
+      return true;
+    }
+    return false;
   }
 
  private:
   std::wstring label_;
-  int* value_;
-  int min_;
-  int max_;
-  int increment_ = 1;
+  T* value_;
+  T min_;
+  T max_;
+  T increment_ = 1;
   Box box_;
   Box gauge_box_;
+  CapturedMouse captured_mouse_;
 };
 
-ComponentPtr Slider(std::wstring label,
-                    int* value,
-                    int min,
-                    int max,
-                    int increment) {
-  return std::make_unique<SliderInt>(std::move(label), value, min, max,
-                                     increment);
+template <class T>
+ComponentPtr Slider(std::wstring label, T* value, T min, T max, T increment) {
+  return std::make_unique<SliderImpl<T>>(std::move(label), value, min, max,
+                                         increment);
 }
+
+template ComponentPtr Slider(std::wstring label,
+                             int* value,
+                             int min,
+                             int max,
+                             int increment);
+
+template ComponentPtr Slider(std::wstring label,
+                             float* value,
+                             float min,
+                             float max,
+                             float increment);
 
 }  // namespace ftxui

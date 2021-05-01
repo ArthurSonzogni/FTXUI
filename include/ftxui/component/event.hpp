@@ -10,6 +10,8 @@
 
 namespace ftxui {
 
+class ScreenInteractive;
+
 /// @brief Represent an event. It can be key press event, a terminal resize, or
 /// more ...
 ///
@@ -65,6 +67,9 @@ struct Event {
 
   const std::string& input() const { return input_; }
 
+  ScreenInteractive* screen() { return screen_; }
+  void SetScreen(ScreenInteractive* screen) { screen_ = screen; }
+
   bool operator==(const Event& other) const { return input_ == other.input_; }
 
   //--- State section ----------------------------------------------------------
@@ -88,6 +93,8 @@ struct Event {
     struct Cursor cursor_;
   };
   std::string input_;
+
+  ScreenInteractive* screen_;
 };
 
 

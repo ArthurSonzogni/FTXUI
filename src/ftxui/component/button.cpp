@@ -1,4 +1,5 @@
 #include "ftxui/component/button.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 #include <functional>
 
@@ -11,6 +12,9 @@ Element Button::Render() {
 
 bool Button::OnEvent(Event event) {
   if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
+    if (!event.screen()->CaptureMouse())
+      return false;
+
     TakeFocus();
 
     if (event.mouse().button == Mouse::Left &&

@@ -9,6 +9,7 @@
 #include <mutex>
 #include <queue>
 
+#include "ftxui/component/captured_mouse.hpp"
 #include "ftxui/component/event.hpp"
 #include "ftxui/screen/screen.hpp"
 
@@ -27,6 +28,7 @@ class ScreenInteractive : public Screen {
   std::function<void()> ExitLoopClosure();
 
   void PostEvent(Event event);
+  CapturedMouse CaptureMouse();
 
  private:
   void Draw(Component* component);
@@ -55,6 +57,8 @@ class ScreenInteractive : public Screen {
 
   int cursor_x_ = 0;
   int cursor_y_ = 0;
+
+  bool mouse_captured = false;
 };
 
 }  // namespace ftxui

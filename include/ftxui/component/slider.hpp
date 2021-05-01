@@ -11,11 +11,14 @@ namespace ftxui {
 // float max = 100.f,
 // float increment = (max - min) * 0.05f);
 
+template<class T> // T = {int, float}
 ComponentPtr Slider(std::wstring label,
-                    int* value,
-                    int min,
-                    int max,
-                    int increment);
+                    T* value,
+                    T min,
+                    T max,
+                    T increment);
+
+
 }  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_SLIDER_HPP */

@@ -5,6 +5,7 @@
 #include "ftxui/component/menu.hpp"
 #include "ftxui/component/radiobox.hpp"
 #include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/slider.hpp"
 #include "ftxui/component/toggle.hpp"
 
 using namespace ftxui;
@@ -19,6 +20,13 @@ class MyComponent : public Component {
   RadioBox radiobox;
   Input input;
   Button button;
+
+  int slider_value_1_ = 12;
+  int slider_value_2_ = 56;
+  int slider_value_3_ = 128;
+  ComponentPtr slider_1_ = Slider(L"R:", &slider_value_1_, 0, 256, 1);
+  ComponentPtr slider_2_ = Slider(L"G:", &slider_value_2_, 0, 256, 1);
+  ComponentPtr slider_3_ = Slider(L"B:", &slider_value_3_, 0, 256, 1);
 
  public:
   MyComponent() {
@@ -54,17 +62,25 @@ class MyComponent : public Component {
     input.placeholder = L"Input placeholder";
     container.Add(&input);
 
+    container.Add(slider_1_.get());
+    container.Add(slider_2_.get());
+    container.Add(slider_3_.get());
+
     button.label = L"Quit";
     button.on_click = [&] { on_quit(); };
     container.Add(&button);
   }
 
-  Element Render(std::wstring name, Component& component) {
+  Element Render(std::wstring name, Element element) {
     return hbox({
         text(name) | size(WIDTH, EQUAL, 8),
         separator(),
-        component.Render(),
-    });
+        element | xflex,
+    }) | xflex;
+  }
+
+  Element Render(std::wstring name, Component& component) {
+    return Render(name, component.Render());
   }
 
   Element Render() override {
@@ -78,11 +94,18 @@ class MyComponent : public Component {
             separator(),
             Render(L"radiobox", radiobox),
             separator(),
-            Render(L"input", input) | size(WIDTH, LESS_THAN, 30),
+            Render(L"input", input) | size(WIDTH, LESS_THAN, 50),
+            separator(),
+            Render(L"slider",  //
+                   vbox({
+                       slider_1_->Render(),
+                       slider_2_->Render(),
+                       slider_3_->Render(),
+                   })),
             separator(),
             Render(L"button", button),
         }) |
-        border;
+        xflex | size(WIDTH, GREATER_THAN, 40) | border;
   }
 
   std::function<void()> on_quit = [] {};

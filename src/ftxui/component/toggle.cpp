@@ -1,4 +1,5 @@
 #include "ftxui/component/toggle.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 #include <algorithm>
 
@@ -59,6 +60,8 @@ bool Toggle::OnEvent(Event event) {
 }
 
 bool Toggle::OnMouseEvent(Event event) {
+  if (!event.screen()->CaptureMouse())
+    return false;
   for (int i = 0; i < boxes_.size(); ++i) {
     if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
       continue;

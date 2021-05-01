@@ -1,4 +1,5 @@
 #include "ftxui/component/radiobox.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 #include <algorithm>
 #include <functional>
@@ -23,6 +24,8 @@ Element RadioBox::Render() {
 }
 
 bool RadioBox::OnEvent(Event event) {
+  if (!event.screen()->CaptureMouse())
+    return false;
   if (event.is_mouse())
     return OnMouseEvent(event);
 
@@ -55,6 +58,8 @@ bool RadioBox::OnEvent(Event event) {
 }
 
 bool RadioBox::OnMouseEvent(Event event) {
+  if (!event.screen()->CaptureMouse())
+    return false;
   for (int i = 0; i < boxes_.size(); ++i) {
     if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
       continue;

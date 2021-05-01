@@ -1,4 +1,5 @@
 #include "ftxui/component/input.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 #include <algorithm>
 
@@ -102,6 +103,8 @@ bool Input::OnEvent(Event event) {
 }
 
 bool Input::OnMouseEvent(Event event) {
+  if (!event.screen()->CaptureMouse())
+    return false;
   if (!input_box_.Contain(event.mouse().x, event.mouse().y))
     return false;
 

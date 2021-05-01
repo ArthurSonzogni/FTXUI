@@ -77,6 +77,7 @@ add_library(dom
 
 add_library(component
   include/ftxui/component/button.hpp
+  include/ftxui/component/captured_mouse.hpp
   include/ftxui/component/checkbox.hpp
   include/ftxui/component/component.hpp
   include/ftxui/component/container.hpp

@@ -1,4 +1,5 @@
 #include "ftxui/component/menu.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -27,6 +28,8 @@ Element Menu::Render() {
 }
 
 bool Menu::OnEvent(Event event) {
+  if (!event.screen()->CaptureMouse())
+    return false;
   if (event.is_mouse())
     return OnMouseEvent(event);
 
@@ -60,6 +63,8 @@ bool Menu::OnEvent(Event event) {
 }
 
 bool Menu::OnMouseEvent(Event event) {
+  if (!event.screen()->CaptureMouse())
+    return false;
   for (int i = 0; i < boxes_.size(); ++i) {
     if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
       continue;

@@ -52,13 +52,13 @@ class Component {
   // Configure all the ancestors to give focus to this component.
   void TakeFocus();
 
+ protected:
+  std::vector<Component*> children_;
+
  private:
   Component* parent_ = nullptr;
   void Detach();
   void Attach(Component* parent);
-
- protected:
-  std::vector<Component*> children_;
 };
 
 using ComponentPtr = std::unique_ptr<Component>;
