@@ -1,25 +1,43 @@
 #include "ftxui/component/menu.hpp"
 
+#include <stddef.h>
 #include <algorithm>
-#include <iostream>
+#include <memory>
+#include <utility>
+
+#include "ftxui/component/captured_mouse.hpp"
+#include "ftxui/component/mouse.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 namespace ftxui {
 
 Element Menu::Render() {
-  std::vector<Element> elements;
-  bool is_focused = Focused();
+  Elements elements;
+  bool is_menu_focused = Focused();
+  boxes_.resize(entries.size());
   for (size_t i = 0; i < entries.size(); ++i) {
-    auto style = (selected != int(i))
-                     ? normal_style
-                     : is_focused ? focused_style : selected_style;
-    auto focused = (selected != int(i)) ? nothing : is_focused ? focus : select;
-    auto icon = (selected != int(i)) ? L"  " : L"> ";
-    elements.push_back(text(icon + entries[i]) | style | focused);
+    bool is_focused = (focused == int(i)) && is_menu_focused;
+    bool is_selected = (selected == int(i));
+
+    auto style = is_selected
+                     ? (is_focused ? selected_focused_style : selected_style)
+                     : (is_focused ? focused_style : normal_style);
+    auto focus_management = !is_selected      ? nothing
+                            : is_menu_focused ? focus
+                                              : select;
+    auto icon = is_selected ? L"> " : L"  ";
+    elements.push_back(text(icon + entries[i]) | style | focus_management |
+                       reflect(boxes_[i]));
   }
   return vbox(std::move(elements));
 }
 
 bool Menu::OnEvent(Event event) {
+  if (!CaptureMouse(event))
+    return false;
+  if (event.is_mouse())
+    return OnMouseEvent(event);
+
   if (!Focused())
     return false;
 
@@ -36,6 +54,7 @@ bool Menu::OnEvent(Event event) {
   selected = std::max(0, std::min(int(entries.size()) - 1, selected));
 
   if (selected != old_selected) {
+    focused = selected;
     on_change();
     return true;
   }
@@ -45,6 +64,27 @@ bool Menu::OnEvent(Event event) {
     return true;
   }
 
+  return false;
+}
+
+bool Menu::OnMouseEvent(Event event) {
+  if (!CaptureMouse(event))
+    return false;
+  for (int i = 0; i < boxes_.size(); ++i) {
+    if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
+      continue;
+
+    TakeFocus();
+    focused = i;
+    if (event.mouse().button == Mouse::Left &&
+        event.mouse().motion == Mouse::Released) {
+      if (selected != i) {
+        selected = i;
+        on_change();
+      }
+      return true;
+    }
+  }
   return false;
 }
 

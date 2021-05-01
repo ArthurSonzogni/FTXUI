@@ -1,10 +1,11 @@
-#include "ftxui/component/menu.hpp"
+#include <functional>  // for function
+#include <iostream>    // for basic_ostream::ope...
+#include <string>      // for wstring, allocator
+#include <vector>      // for vector
 
-#include <chrono>
-#include <iostream>
-#include <thread>
-
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/menu.hpp"                // for Menu
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/screen/box.hpp"                    // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

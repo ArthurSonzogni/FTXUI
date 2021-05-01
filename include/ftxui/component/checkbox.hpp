@@ -1,11 +1,13 @@
 #ifndef FTXUI_COMPONENT_CHECKBOX_HPP
 #define FTXUI_COMPONENT_CHECKBOX_HPP
 
-#include <functional>
+#include <string>
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
+struct Event;
 
 /// @brief A Checkbox. It can be checked or unchecked.Display an element on a
 /// ftxui::Screen.
@@ -38,7 +40,10 @@ class CheckBox : public Component {
   bool OnEvent(Event) override;
 
  private:
+  bool OnMouseEvent(Event event);
+
   int cursor_position = 0;
+  Box box_;
 };
 
 }  // namespace ftxui

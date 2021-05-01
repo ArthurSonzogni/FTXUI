@@ -1,12 +1,15 @@
 #ifndef FTXUI_COMPONENT_TOGGLE_H_
 #define FTXUI_COMPONENT_TOGGLE_H_
 
-#include <functional>
 #include <string>
+#include <vector>
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
+struct Event;
 
 /// @brief An horizontal list of elements. The user can navigate through them.
 /// @ingroup component
@@ -16,12 +19,14 @@ class Toggle : public Component {
   ~Toggle() override = default;
 
   // State.
-  int selected = 0;
   std::vector<std::wstring> entries = {L"On", L"Off"};
+  int selected = 0;
+  int focused = 0;
 
+  Decorator normal_style = dim;
   Decorator focused_style = inverted;
   Decorator selected_style = bold;
-  Decorator normal_style = dim;
+  Decorator selected_focused_style = focused_style | selected_style;
 
   // Callback.
   std::function<void()> on_change = []() {};
@@ -30,6 +35,10 @@ class Toggle : public Component {
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
+
+ private:
+  bool OnMouseEvent(Event event);
+  std::vector<Box> boxes_;
 };
 
 }  // namespace ftxui

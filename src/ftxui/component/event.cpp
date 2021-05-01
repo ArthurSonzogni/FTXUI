@@ -1,16 +1,16 @@
 #include "ftxui/component/event.hpp"
 
-#include <iostream>
+#include "ftxui/component/mouse.hpp"
 #include "ftxui/screen/string.hpp"
 
 namespace ftxui {
 
 // static
-Event Event::Character(const std::string& input) {
+Event Event::Character(std::string input) {
   Event event;
-  event.input_ = input;
-  event.is_character_ = true;
   event.character_ = to_wstring(input)[0];
+  event.input_ = std::move(input);
+  event.type_ = Type::Character;
   return event;
 }
 
@@ -23,15 +23,34 @@ Event Event::Character(char c) {
 Event Event::Character(wchar_t c) {
   Event event;
   event.input_ = {(char)c};
-  event.is_character_ = true;
+  event.type_ = Type::Character;
   event.character_ = c;
   return event;
 }
 
 // static
-Event Event::Special(const std::string& input) {
+Event Event::Mouse(std::string input, struct Mouse mouse) {
   Event event;
   event.input_ = std::move(input);
+  event.type_ = Type::Mouse;
+  event.mouse_ = mouse;
+  return event;
+}
+
+// static
+Event Event::Special(std::string input) {
+  Event event;
+  event.input_ = std::move(input);
+  return event;
+}
+
+// static
+Event Event::CursorReporting(std::string input, int x, int y) {
+  Event event;
+  event.input_ = std::move(input);
+  event.type_ = Type::CursorReporting;
+  event.cursor_.x = x;
+  event.cursor_.y = y;
   return event;
 }
 

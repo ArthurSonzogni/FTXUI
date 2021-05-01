@@ -1,4 +1,9 @@
+#include <memory>  // for __shared_ptr_access
+#include <vector>  // for vector
+
 #include "ftxui/dom/node_decorator.hpp"
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
 
 namespace ftxui {
 

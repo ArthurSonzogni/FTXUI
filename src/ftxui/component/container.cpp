@@ -1,6 +1,8 @@
 #include "ftxui/component/container.hpp"
 
+#include <stddef.h>
 #include <algorithm>
+#include <vector>
 
 namespace ftxui {
 
@@ -30,6 +32,9 @@ Container Container::Tab(int* selector) {
 }
 
 bool Container::OnEvent(Event event) {
+  if (event.is_mouse())
+    return OnMouseEvent(event);
+
   if (!Focused())
     return false;
 
@@ -113,6 +118,17 @@ Element Container::TabRender() {
   if (active_child)
     return active_child->Render();
   return text(L"Empty container");
+}
+
+bool Container::OnMouseEvent(Event event) {
+  if (selector_)
+    return ActiveChild()->OnEvent(event);
+
+  for (Component* child : children_) {
+    if (child->OnEvent(event))
+      return true;
+  }
+  return false;
 }
 
 }  // namespace ftxui

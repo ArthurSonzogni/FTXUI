@@ -1,12 +1,12 @@
+#include <algorithm>  // for min
+#include <iostream>  // for operator<<, basic_ostream, wstringstream, stringstream, flush, cout, ostream
+#include <sstream>   // IWYU pragma: keep
+
+#include "ftxui/dom/node.hpp"         // for Element, Node
+#include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/screen.hpp"
-
-#include <algorithm>
-#include <sstream>
-#include <iostream>
-
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/string.hpp"
-#include "ftxui/screen/terminal.hpp"
+#include "ftxui/screen/string.hpp"    // for to_string, wchar_width
+#include "ftxui/screen/terminal.hpp"  // for Terminal::Dimensions, Terminal
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
@@ -169,9 +169,9 @@ std::string Screen::ToString() {
 
       auto width = wchar_width(c);
       if (width <= 0) {
-          // Avoid an infinite loop for non-printable characters
-          c = L' ';
-          width = 1;
+        // Avoid an infinite loop for non-printable characters
+        c = L' ';
+        width = 1;
       }
       ss << c;
       x += width;
@@ -184,7 +184,7 @@ std::string Screen::ToString() {
 }
 
 void Screen::Print() {
-  std::cout << ToString() << std::flush << (char)0;
+  std::cout << ToString() << '\0' << std::flush;
 }
 
 /// @brief Access a character a given position.

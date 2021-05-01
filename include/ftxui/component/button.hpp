@@ -2,10 +2,14 @@
 #define FTXUI_COMPONENT_BUTTON_HPP
 
 #include <functional>
+#include <string>
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
+struct Event;
 
 /// @brief A button. An action is associated to the click event.
 /// @ingroup dom
@@ -25,6 +29,9 @@ class Button : public Component {
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
+
+ private:
+  Box box_;
 };
 
 }  // namespace ftxui

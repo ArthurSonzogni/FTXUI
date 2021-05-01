@@ -1,8 +1,9 @@
-#include <chrono>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
-#include <iostream>
-#include <thread>
+#include <memory>
+
+#include "ftxui/dom/node.hpp"
+#include "ftxui/screen/box.hpp"
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

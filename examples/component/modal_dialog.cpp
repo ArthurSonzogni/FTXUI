@@ -1,7 +1,14 @@
-#include "ftxui/component/button.hpp"
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include <functional>  // for function
+#include <memory>      // for allocator_traits<>...
+#include <string>      // for operator+, wstring
+#include <vector>      // for vector
+
+#include "ftxui/component/button.hpp"              // for Button
+#include "ftxui/component/component.hpp"           // for Component
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"                  // for Element, operator|
+#include "ftxui/screen/box.hpp"                    // for ftxui
 
 using namespace ftxui;
 

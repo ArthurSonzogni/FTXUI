@@ -1,7 +1,9 @@
-#include "ftxui/component/terminal_input_parser.hpp"
-#include "ftxui/component/receiver.hpp"
+#include <gtest/gtest-message.h>    // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult
 
-#include "gtest/gtest.h"
+#include "ftxui/component/receiver.hpp"  // for MakeReceiver, ReceiverImpl
+#include "ftxui/component/terminal_input_parser.hpp"
+#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, Suite...
 
 using namespace ftxui;
 
@@ -63,6 +65,84 @@ TEST(Event, EscapeKeyEnoughWait) {
   Event received;
   EXPECT_TRUE(event_receiver->Receive(&received));
   EXPECT_EQ(received, Event::Escape);
+  EXPECT_FALSE(event_receiver->Receive(&received));
+}
+
+TEST(Event, MouseLeftClick) {
+  auto event_receiver = MakeReceiver<Event>();
+  {
+    auto parser = TerminalInputParser(event_receiver->MakeSender());
+    parser.Add('\x1B');
+    parser.Add('[');
+    parser.Add('3');
+    parser.Add('2');
+    parser.Add(';');
+    parser.Add('1');
+    parser.Add('2');
+    parser.Add(';');
+    parser.Add('4');
+    parser.Add('2');
+    parser.Add('M');
+  }
+
+  Event received;
+  EXPECT_TRUE(event_receiver->Receive(&received));
+  EXPECT_TRUE(received.is_mouse());
+  EXPECT_EQ(Mouse::Left, received.mouse().button);
+  EXPECT_EQ(12, received.mouse().x);
+  EXPECT_EQ(42, received.mouse().y);
+  EXPECT_FALSE(event_receiver->Receive(&received));
+}
+
+TEST(Event, MouseMiddleClick) {
+  auto event_receiver = MakeReceiver<Event>();
+  {
+    auto parser = TerminalInputParser(event_receiver->MakeSender());
+    parser.Add('\x1B');
+    parser.Add('[');
+    parser.Add('3');
+    parser.Add('3');
+    parser.Add(';');
+    parser.Add('1');
+    parser.Add('2');
+    parser.Add(';');
+    parser.Add('4');
+    parser.Add('2');
+    parser.Add('M');
+  }
+
+  Event received;
+  EXPECT_TRUE(event_receiver->Receive(&received));
+  EXPECT_TRUE(received.is_mouse());
+  EXPECT_EQ(Mouse::Middle, received.mouse().button);
+  EXPECT_EQ(12, received.mouse().x);
+  EXPECT_EQ(42, received.mouse().y);
+  EXPECT_FALSE(event_receiver->Receive(&received));
+}
+
+TEST(Event, MouseRightClick) {
+  auto event_receiver = MakeReceiver<Event>();
+  {
+    auto parser = TerminalInputParser(event_receiver->MakeSender());
+    parser.Add('\x1B');
+    parser.Add('[');
+    parser.Add('3');
+    parser.Add('4');
+    parser.Add(';');
+    parser.Add('1');
+    parser.Add('2');
+    parser.Add(';');
+    parser.Add('4');
+    parser.Add('2');
+    parser.Add('M');
+  }
+
+  Event received;
+  EXPECT_TRUE(event_receiver->Receive(&received));
+  EXPECT_TRUE(received.is_mouse());
+  EXPECT_EQ(Mouse::Right, received.mouse().button);
+  EXPECT_EQ(12, received.mouse().x);
+  EXPECT_EQ(42, received.mouse().y);
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 

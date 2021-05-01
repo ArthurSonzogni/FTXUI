@@ -1,0 +1,8 @@
+[
+  { symbol: [ "VMIN", private, "<termios.h>", public ] },
+  { symbol: [ "VTIME", private, "<termios.h>", public ] },
+  { symbol: [ "ECHO", private, "<termios.h>", public ] },
+  { symbol: [ "ICANON", private, "<termios.h>", public ] },
+  { symbol: [ "termios", private, "<termios.h>", public ] },
+  { symbol: [ "TCSANOW", private, "<termios.h>", public ] },
+]

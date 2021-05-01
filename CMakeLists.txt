@@ -15,7 +15,7 @@ endif()
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.3.${git_version}
+  VERSION 0.4.${git_version}
 )
 
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
@@ -65,6 +65,7 @@ add_library(dom
   src/ftxui/dom/node.cpp
   src/ftxui/dom/node_decorator.cpp
   src/ftxui/dom/paragraph.cpp
+  src/ftxui/dom/reflect.cpp
   src/ftxui/dom/separator.cpp
   src/ftxui/dom/size.cpp
   src/ftxui/dom/spinner.cpp
@@ -76,15 +77,18 @@ add_library(dom
 
 add_library(component
   include/ftxui/component/button.hpp
+  include/ftxui/component/captured_mouse.hpp
   include/ftxui/component/checkbox.hpp
   include/ftxui/component/component.hpp
   include/ftxui/component/container.hpp
   include/ftxui/component/event.hpp
   include/ftxui/component/input.hpp
   include/ftxui/component/menu.hpp
+  include/ftxui/component/mouse.hpp
   include/ftxui/component/radiobox.hpp
   include/ftxui/component/receiver.hpp
   include/ftxui/component/screen_interactive.hpp
+  include/ftxui/component/slider.hpp
   include/ftxui/component/toggle.hpp
   src/ftxui/component/button.cpp
   src/ftxui/component/checkbox.cpp
@@ -96,9 +100,10 @@ add_library(component
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/screen_interactive.cpp
-  src/ftxui/component/toggle.cpp
+  src/ftxui/component/slider.cpp
   src/ftxui/component/terminal_input_parser.cpp
   src/ftxui/component/terminal_input_parser.hpp
+  src/ftxui/component/toggle.cpp
 )
 
 add_library(ftxui::screen ALIAS screen)
@@ -107,6 +112,14 @@ add_library(ftxui::component ALIAS component)
 
 target_link_libraries(dom PUBLIC screen)
 target_link_libraries(component PUBLIC dom Threads::Threads)
+  find_program(iwyu_path NAMES include-what-you-use iwyu)
+  if(iwyu_path)
+    set_property(TARGET ${lib}
+      PROPERTY ${iwyu_path} -Xiwyu
+        --mapping_file ${CMAKE_CURRENT_SOURCE_DIR}/iwyu.impl
+    )
+  endif()
+
 
 foreach(lib screen dom component)
   target_include_directories(${lib}
@@ -199,7 +212,7 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
 
   FetchContent_Declare( googletest
     GIT_REPOSITORY "https://github.com/google/googletest"
-    GIT_TAG        release-1.10.0
+    GIT_TAG        23ef29555ef4789f555f1ba8c51b4c52975f0907
   )
 
   FetchContent_GetProperties(googletest)

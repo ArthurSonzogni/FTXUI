@@ -14,6 +14,16 @@ Box Box::Intersection(Box a, Box b) {
       std::min(a.y_max, b.y_max),
   };
 }
+
+/// @return whether (x,y) is contained inside the box.
+/// @ingroup screen
+bool Box::Contain(int x, int y) {
+  return x_min <= x &&  //
+         x_max >= x &&  //
+         y_min <= y &&  //
+         y_max >= y;
+}
+
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

@@ -1,19 +1,18 @@
 #ifndef FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 #define FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 
-#include <atomic>
-#include <condition_variable>
+#include <atomic>  // for atomic
 #include <ftxui/component/receiver.hpp>
-#include <functional>
-#include <memory>
-#include <mutex>
-#include <queue>
+#include <memory>  // for unique_ptr
+#include <string>  // for string
 
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"
-#include "ftxui/screen/screen.hpp"
+#include "ftxui/screen/screen.hpp"  // for Screen
 
 namespace ftxui {
 class Component;
+struct Event;
 
 class ScreenInteractive : public Screen {
  public:
@@ -27,6 +26,7 @@ class ScreenInteractive : public Screen {
   std::function<void()> ExitLoopClosure();
 
   void PostEvent(Event event);
+  CapturedMouse CaptureMouse();
 
  private:
   void Draw(Component* component);
@@ -52,6 +52,11 @@ class ScreenInteractive : public Screen {
   std::string reset_cursor_position;
 
   std::atomic<bool> quit_ = false;
+
+  int cursor_x_ = 0;
+  int cursor_y_ = 0;
+
+  bool mouse_captured = false;
 };
 
 }  // namespace ftxui

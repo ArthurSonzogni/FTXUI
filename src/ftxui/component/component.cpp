@@ -1,10 +1,19 @@
 #include "ftxui/component/component.hpp"
 
-#include <assert.h>
-
 #include <algorithm>
 
+#include "ftxui/component/captured_mouse.hpp"
+#include "ftxui/component/event.hpp"
+#include "ftxui/component/screen_interactive.hpp"
+
 namespace ftxui {
+
+namespace {
+class CaptureMouseImpl : public CapturedMouseInterface {
+ public:
+  ~CaptureMouseImpl() override {}
+};
+}
 
 Component::~Component() {
   Detach();
@@ -95,6 +104,16 @@ void Component::TakeFocus() {
     child = parent;
     parent = parent->parent_;
   }
+}
+
+/// @brief Take the CapturedMouse if available. There is only one component of
+/// them. It represents a component taking priority over others.
+/// @argument event
+/// @ingroup component
+CapturedMouse Component::CaptureMouse(const Event& event) {
+  if (!event.screen_)
+    return std::make_unique<CaptureMouseImpl>();
+  return event.screen_->CaptureMouse();
 }
 
 /// @brief Detach this children from its parent.

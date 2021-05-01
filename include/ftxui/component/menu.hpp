@@ -2,11 +2,15 @@
 #define FTXUI_COMPONENT_MENU
 
 #include <functional>
+#include <string>
+#include <vector>
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
+struct Event;
 
 /// @brief A list of items. The user can navigate through them.
 /// @ingroup component
@@ -19,10 +23,12 @@ class Menu : public Component {
   // State.
   std::vector<std::wstring> entries = {};
   int selected = 0;
+  int focused = 0;
 
+  Decorator normal_style = nothing;
   Decorator focused_style = inverted;
   Decorator selected_style = bold;
-  Decorator normal_style = nothing;
+  Decorator selected_focused_style = focused_style | selected_style;
 
   // State update callback.
   std::function<void()> on_change = []() {};
@@ -31,6 +37,11 @@ class Menu : public Component {
   // Component implementation.
   Element Render() override;
   bool OnEvent(Event) override;
+
+ private:
+  bool OnMouseEvent(Event);
+
+  std::vector<Box> boxes_;
 };
 
 }  // namespace ftxui

@@ -1,4 +1,7 @@
+#include <utility>
+
 #include "ftxui/dom/node.hpp"
+#include "ftxui/screen/screen.hpp"
 
 namespace ftxui {
 

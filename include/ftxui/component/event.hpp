@@ -1,13 +1,14 @@
 #ifndef FTXUI_COMPONENT_EVENT_HPP
 #define FTXUI_COMPONENT_EVENT_HPP
 
-#include <array>
-#include <ftxui/component/receiver.hpp>
-#include <functional>
-#include <string>
+#include <ftxui/component/mouse.hpp>  // for Mouse
+#include <string>                     // for string, operator==
 #include <vector>
 
 namespace ftxui {
+
+class ScreenInteractive;
+class Component;
 
 /// @brief Represent an event. It can be key press event, a terminal resize, or
 /// more ...
@@ -26,8 +27,10 @@ struct Event {
   static Event Character(char);
   static Event Character(wchar_t);
 
-  static Event Character(const std::string&);
-  static Event Special(const std::string&);
+  static Event Character(std::string);
+  static Event Special(std::string);
+  static Event Mouse(std::string, Mouse mouse);
+  static Event CursorReporting(std::string, int x, int y);
 
   // --- Arrow ---
   static const Event ArrowLeft;
@@ -54,8 +57,18 @@ struct Event {
   static Event Custom;
 
   //--- Method section ---------------------------------------------------------
-  bool is_character() const { return is_character_; }
+  bool is_character() const { return type_ == Type::Character; }
   wchar_t character() const { return character_; }
+
+  bool is_mouse() const { return type_ == Type::Mouse; }
+  struct Mouse& mouse() {
+    return mouse_;
+  }
+
+  bool is_cursor_reporting() const { return type_ == Type::CursorReporting; }
+  int cursor_x() const { return cursor_.x; }
+  int cursor_y() const { return cursor_.y; }
+
   const std::string& input() const { return input_; }
 
   bool operator==(const Event& other) const { return input_ == other.input_; }
@@ -63,11 +76,30 @@ struct Event {
 
   //--- State section ----------------------------------------------------------
  private:
-  std::string input_;
-  bool is_character_ = false;
-  wchar_t character_ = U'?';
-};
+  friend Component;
+  friend ScreenInteractive;
+  enum class Type {
+    Unknown,
+    Character,
+    Mouse,
+    CursorReporting,
+  };
+  Type type_ = Type::Unknown;
 
+  struct Cursor {
+    int x;
+    int y;
+  };
+
+  union {
+    wchar_t character_ = U'?';
+    struct Mouse mouse_;
+    struct Cursor cursor_;
+  };
+  std::string input_;
+
+  ScreenInteractive* screen_ = nullptr;
+};
 
 }  // namespace ftxui
 

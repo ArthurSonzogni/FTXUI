@@ -1,8 +1,10 @@
+#include <gtest/gtest-message.h>    // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult
+#include <thread>                   // for thread
+#include <utility>                  // for move
+
 #include "ftxui/component/receiver.hpp"
-
-#include <thread>
-
-#include "gtest/gtest.h"
+#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ
 
 using namespace ftxui;
 

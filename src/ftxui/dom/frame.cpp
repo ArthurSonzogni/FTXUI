@@ -1,8 +1,14 @@
-#include <algorithm>
+#include <algorithm>  // for max, min
+#include <memory>     // for make_shared, shared_ptr, __shared_ptr_access
+#include <utility>    // for move
+#include <vector>     // for vector
 
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/dom/node.hpp"
-#include "ftxui/util/autoreset.hpp"
+#include "ftxui/dom/elements.hpp"  // for Element, unpack, focus, frame, select, xframe, yframe
+#include "ftxui/dom/node.hpp"  // for Node
+#include "ftxui/dom/requirement.hpp"  // for Requirement, Requirement::FOCUSED, Requirement::SELECTED
+#include "ftxui/screen/box.hpp"      // for Box
+#include "ftxui/screen/screen.hpp"   // for Screen, Screen::Cursor
+#include "ftxui/util/autoreset.hpp"  // for AutoReset
 
 namespace ftxui {
 

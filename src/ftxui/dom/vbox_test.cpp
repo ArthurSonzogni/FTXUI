@@ -1,6 +1,14 @@
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/screen.hpp"
-#include "gtest/gtest.h"
+#include <gtest/gtest-message.h>    // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult
+#include <algorithm>                // for remove
+#include <string>                   // for allocator, basic_string, string
+#include <vector>                   // for vector
+
+#include "ftxui/dom/elements.hpp"   // for vtext, operator|, Element, flex_grow
+#include "ftxui/dom/node.hpp"       // for Render
+#include "ftxui/screen/box.hpp"     // for ftxui
+#include "ftxui/screen/screen.hpp"  // for Screen
+#include "gtest/gtest_pred_impl.h"  // for Test, SuiteApiResolver, EXPECT_EQ
 
 using namespace ftxui;
 using namespace ftxui;

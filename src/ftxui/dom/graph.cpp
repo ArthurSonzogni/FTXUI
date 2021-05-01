@@ -1,4 +1,12 @@
-#include "ftxui/dom/elements.hpp"
+#include <functional>  // for function
+#include <memory>      // for make_shared
+#include <vector>      // for vector
+
+#include "ftxui/dom/elements.hpp"     // for GraphFunction, Element, graph
+#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/screen.hpp"    // for Screen
 
 namespace ftxui {
 

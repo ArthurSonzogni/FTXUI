@@ -2,6 +2,8 @@
 #define FTXUI_COMPONENT_CONTAINER_HPP
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/component/event.hpp"
+#include "ftxui/dom/elements.hpp"
 
 namespace ftxui {
 
@@ -36,6 +38,9 @@ class Container : public Component {
 
   int selected_ = 0;
   int* selector_ = nullptr;
+
+ private:
+  bool OnMouseEvent(Event event);
 };
 
 }  // namespace ftxui

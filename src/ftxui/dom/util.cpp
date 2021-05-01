@@ -1,4 +1,7 @@
-#include "ftxui/dom/elements.hpp"
+#include <functional>  // for function
+#include <utility>     // for move
+
+#include "ftxui/dom/elements.hpp"  // for Decorator, Element, Elements, operator|, nothing
 
 namespace ftxui {
 

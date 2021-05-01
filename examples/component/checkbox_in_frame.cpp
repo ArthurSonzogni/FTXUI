@@ -1,10 +1,15 @@
-#include "ftxui/component/checkbox.hpp"
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/input.hpp"
-#include "ftxui/component/menu.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/component/toggle.hpp"
-#include "ftxui/screen/string.hpp"
+#include <memory>   // for allocator_traits<>...
+#include <string>   // for operator+, wstring
+#include <utility>  // for move
+#include <vector>   // for vector
+
+#include "ftxui/component/checkbox.hpp"            // for CheckBox
+#include "ftxui/component/component.hpp"           // for Component
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"                  // for Element, operator|
+#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/screen/string.hpp"                 // for to_wstring
 
 using namespace ftxui;
 

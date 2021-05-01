@@ -1,10 +1,13 @@
 #ifndef FTXUI_COMPONENT_TERMINAL_INPUT_PARSER
 #define FTXUI_COMPONENT_TERMINAL_INPUT_PARSER
 
-#include "ftxui/component/event.hpp"
-#include "ftxui/component/receiver.hpp"
+#include <memory>  // for unique_ptr
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include <string>
+#include "ftxui/component/event.hpp"     // IWYU pragma: keep
+#include "ftxui/component/mouse.hpp"     // for Mouse
+#include "ftxui/component/receiver.hpp"  // for SenderImpl
 
 namespace ftxui {
 
@@ -20,18 +23,38 @@ class TerminalInputParser {
   bool Eat();
 
   enum Type {
-    UNCOMPLETED = 0,
-    DROP = 1,
-    CHARACTER = 2,
-    SPECIAL = 3,
+    UNCOMPLETED,
+    DROP,
+    CHARACTER,
+    SPECIAL,
+    MOUSE,
+    CURSOR_REPORTING,
   };
-  void Send(Type type);
-  Type Parse();
-  Type ParseUTF8();
-  Type ParseESC();
-  Type ParseDCS();
-  Type ParseCSI();
-  Type ParseOSC();
+
+  struct CursorReporting {
+    int x;
+    int y;
+  };
+
+  struct Output {
+    Type type;
+    union {
+      Mouse mouse;
+      CursorReporting cursor;
+    };
+
+    Output(Type type) : type(type) {}
+  };
+
+  void Send(Output type);
+  Output Parse();
+  Output ParseUTF8();
+  Output ParseESC();
+  Output ParseDCS();
+  Output ParseCSI();
+  Output ParseOSC();
+  Output ParseMouse(bool altered, bool pressed, std::vector<int> arguments);
+  Output ParseCursorReporting(std::vector<int> arguments);
 
   Sender<Event> out_;
   int position_ = -1;

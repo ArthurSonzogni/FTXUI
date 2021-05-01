@@ -1,8 +1,11 @@
 #include "ftxui/component/input.hpp"
 
 #include <algorithm>
+#include <memory>
 
-#include "ftxui/screen/string.hpp"
+#include "ftxui/component/captured_mouse.hpp"
+#include "ftxui/component/mouse.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 namespace ftxui {
 
@@ -15,14 +18,15 @@ Element Input::Render() {
   // Placeholder.
   if (content.size() == 0) {
     if (is_focused)
-      return text(placeholder) | focus | dim | inverted | main_decorator;
+      return text(placeholder) | focus | dim | inverted | main_decorator |
+             reflect(input_box_);
     else
-      return text(placeholder) | dim | main_decorator;
+      return text(placeholder) | dim | main_decorator | reflect(input_box_);
   }
 
   // Not focused.
   if (!is_focused)
-    return text(content) | main_decorator;
+    return text(content) | main_decorator | reflect(input_box_);
 
   std::wstring part_before_cursor = content.substr(0, cursor_position);
   std::wstring part_at_cursor = cursor_position < (int)content.size()
@@ -37,13 +41,18 @@ Element Input::Render() {
   return
     hbox(
       text(part_before_cursor),
-      text(part_at_cursor) | underlined | focused,
+      text(part_at_cursor) | underlined | focused | reflect(cursor_box_),
       text(part_after_cursor)
-    ) | flex | inverted | frame | main_decorator;
-  // clang-format off
+    ) | flex | inverted | frame | main_decorator | reflect(input_box_);
+  // clang-format on
 }
+
 bool Input::OnEvent(Event event) {
   cursor_position = std::max(0, std::min<int>(content.size(), cursor_position));
+
+  if (event.is_mouse())
+    return OnMouseEvent(event);
+
   std::wstring c;
 
   // Backspace.
@@ -103,6 +112,28 @@ bool Input::OnEvent(Event event) {
     return true;
   }
   return false;
+}
+
+bool Input::OnMouseEvent(Event event) {
+  if (!CaptureMouse(event))
+    return false;
+  if (!input_box_.Contain(event.mouse().x, event.mouse().y))
+    return false;
+
+  TakeFocus();
+
+  if (event.mouse().button == Mouse::Left &&
+      event.mouse().motion == Mouse::Pressed) {
+    int new_cursor_position =
+        cursor_position + event.mouse().x - cursor_box_.x_min;
+    new_cursor_position =
+        std::max(0, std::min<int>(content.size(), new_cursor_position));
+    if (cursor_position != new_cursor_position) {
+      cursor_position = new_cursor_position;
+      on_change();
+    }
+  }
+  return true;
 }
 
 }  // namespace ftxui

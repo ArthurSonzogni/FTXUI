@@ -1,8 +1,14 @@
-#include "ftxui/component/button.hpp"
+#include <functional>  // for function
+#include <memory>      // for unique_ptr, make_u...
+#include <string>      // for wstring
+#include <utility>     // for move
+#include <vector>      // for vector
 
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/button.hpp"              // for Button
+#include "ftxui/component/component.hpp"           // for Component
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/screen/box.hpp"                    // for ftxui
 
 using namespace ftxui;
 

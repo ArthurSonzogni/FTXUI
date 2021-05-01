@@ -1,12 +1,7 @@
 #include "ftxui/component/toggle.hpp"
-
-#include <chrono>
-#include <iostream>
-#include <thread>
-
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/screen/string.hpp"
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/event.hpp"               // for Event, Event::Return
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 using namespace ftxui;
 

@@ -1,11 +1,15 @@
 #ifndef FTXUI_COMPONENT_RADIOBOX_HPP
 #define FTXUI_COMPONENT_RADIOBOX_HPP
 
-#include <functional>
+#include <string>
+#include <vector>
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
+struct Event;
 
 /// @brief A list of selectable element. One and only one can be selected at
 /// the same time.
@@ -39,7 +43,9 @@ class RadioBox : public Component {
   bool OnEvent(Event) override;
 
  private:
+  bool OnMouseEvent(Event event);
   int cursor_position = 0;
+  std::vector<Box> boxes_;
 };
 
 }  // namespace ftxui

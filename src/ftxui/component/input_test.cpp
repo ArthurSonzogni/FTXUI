@@ -1,4 +1,5 @@
 #include "ftxui/component/input.hpp"
+#include "ftxui/component/event.hpp"
 
 #include "gtest/gtest.h"
 

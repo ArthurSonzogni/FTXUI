@@ -1,6 +1,10 @@
-#include "ftxui/component/container.hpp"
+#include <gtest/gtest-message.h>    // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver
+#include <memory>                   // for allocator
 
-#include "gtest/gtest.h"
+#include "ftxui/component/container.hpp"
+#include "ftxui/screen/box.hpp"     // for ftxui
+#include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, EXPEC...
 
 using namespace ftxui;
 
