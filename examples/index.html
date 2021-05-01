@@ -10,7 +10,7 @@
     <div class="page">
       <h1>FTXUI WebAssembly Example </h1>
       <p>
-        <a href="https://github.com/ArthurSonzogni/FTXUI">FTXUI</a> is a simple
+        <a href="https://github.com/ArthurSonzogni/FTXUI">FTXUI</a> is a single
         C++ library for terminal user interface.
       </p>
       <p>
@@ -93,7 +93,6 @@
     stdout_buffer = [];
     let stdout = code => {
       if (code == 0) {
-        console.log(code);
         term.write(new Uint8Array(stdout_buffer));
         stdout_buffer = [];
       } else {

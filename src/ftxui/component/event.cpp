@@ -81,6 +81,11 @@ const Event Event::F9 = Event::Special("\x1B[20~");
 const Event Event::F10 = Event::Special("\x1B[21~");
 const Event Event::F11 = Event::Special("\x1B[21~");  // Doesn't exist
 const Event Event::F12 = Event::Special("\x1B[24~");
+const Event Event::Home = Event::Special({27, 91, 72});
+const Event Event::End = Event::Special({27, 91, 70});
+const Event Event::PageUp = Event::Special({27, 91, 53, 126});
+const Event Event::PageDown = Event::Special({27, 91, 54, 126});
+
 Event Event::Custom = Event::Special({0});
 
 }  // namespace ftxui

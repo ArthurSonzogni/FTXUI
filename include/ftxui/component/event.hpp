@@ -47,6 +47,12 @@ struct Event {
   static const Event TabReverse;
   static const Event F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12;
 
+  static const Event Home;
+  static const Event End;
+
+  static const Event PageUp;
+  static const Event PageDown;
+
   // --- Custom ---
   static Event Custom;
 
@@ -66,6 +72,7 @@ struct Event {
   const std::string& input() const { return input_; }
 
   bool operator==(const Event& other) const { return input_ == other.input_; }
+  bool operator!=(const Event& other) const { return !operator==(other); }
 
   //--- State section ----------------------------------------------------------
  private:

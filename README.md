@@ -27,11 +27,13 @@ A simple C++ library for terminal based user interface.
  * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
  * No dependencies.
  * Cross platform (mostly). Linux (main target), Windows (experimental), Mac.
+ * Keyboard navigation.
+ * Mouse support (very soon, [feedback](https://github.com/ArthurSonzogni/FTXUI/issues/7#issuecomment-826339732) needed)
 
 ## Operating systems
 - [![linux-gcc][badge.linux-gcc]][link.linux-gcc]
-- [![linux-clang][badge.linux-clang]][link.linux-clang]
-- [![linux-emscripten][badge.linux-emscripten]][link.linux-emscripten]
+[![linux-clang][badge.linux-clang]][link.linux-clang]
+[![linux-emscripten][badge.linux-emscripten]][link.linux-emscripten]
 - [![windows-msvc][badge.windows-msvc]][link.windows-msvc]
 - [![mac-clang][badge.mac-clang]][link.mac-clang]
 
@@ -88,7 +90,7 @@ Feel free to add your projects here:
 - [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
 - [hastur](https://github.com/robinlinden/hastur)
 - [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
--
+- [todoman](https://github.com/aaleino/todoman)
 
 ## Hosted on:
  * [github](https://github.com/ArthurSonzogni/ftxui)

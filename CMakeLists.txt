@@ -142,7 +142,7 @@ foreach(lib screen dom component)
   # Add as many warning as possible:
   if (WIN32)
     if (MSVC)
-      target_compile_options(${lib} PRIVATE "/W4")
+      target_compile_options(${lib} PRIVATE "/W3")
       target_compile_options(${lib} PRIVATE "/WX")
       target_compile_options(${lib} PRIVATE "/wd4244")
       target_compile_options(${lib} PRIVATE "/wd4267")
@@ -228,9 +228,10 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
 
   add_executable(tests
     src/ftxui/component/container_test.cpp
-    src/ftxui/component/terminal_input_parser_test.cpp
+    src/ftxui/component/input_test.cpp
     src/ftxui/component/radiobox_test.cpp
     src/ftxui/component/receiver_test.cpp
+    src/ftxui/component/terminal_input_parser_test.cpp
     src/ftxui/component/toggle_test.cpp
     src/ftxui/dom/gauge_test.cpp
     src/ftxui/dom/hbox_test.cpp

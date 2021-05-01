@@ -110,7 +110,7 @@ void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
 
   char c;
   while (!*quit) {
-    while (read(STDIN_FILENO, &c, 1), c)
+    while(read(STDIN_FILENO, &c, 1), c)
       parser.Add(c);
 
     emscripten_sleep(1);

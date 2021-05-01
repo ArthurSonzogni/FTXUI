@@ -94,6 +94,16 @@ bool Input::OnEvent(Event event) {
     return true;
   }
 
+  if (event == Event::Home) {
+    cursor_position = 0;
+    return true;
+  }
+
+  if (event == Event::End) {
+    cursor_position = (int)content.size();
+    return true;
+  }
+
   // Content
   if (event.is_character()) {
     content.insert(cursor_position, 1, event.character());
