@@ -27,8 +27,7 @@ A simple C++ library for terminal based user interface.
  * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
  * No dependencies.
  * Cross platform (mostly). Linux (main target), Windows (experimental), Mac.
- * Keyboard navigation.
- * Mouse support (very soon, [feedback](https://github.com/ArthurSonzogni/FTXUI/issues/7#issuecomment-826339732) needed)
+ * Keyboard & mouse navigation.
 
 ## Operating systems
 - [![linux-gcc][badge.linux-gcc]][link.linux-gcc]
