@@ -1,10 +1,13 @@
 #ifndef FTXUI_COMPONENT_TERMINAL_INPUT_PARSER
 #define FTXUI_COMPONENT_TERMINAL_INPUT_PARSER
 
-#include "ftxui/component/event.hpp"
-#include "ftxui/component/receiver.hpp"
+#include <memory>  // for unique_ptr
+#include <string>  // for string
+#include <vector>  // for vector
 
-#include <string>
+#include "ftxui/component/event.hpp"     // IWYU pragma: keep
+#include "ftxui/component/mouse.hpp"     // for Mouse
+#include "ftxui/component/receiver.hpp"  // for SenderImpl
 
 namespace ftxui {
 

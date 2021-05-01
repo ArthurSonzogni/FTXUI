@@ -1,6 +1,10 @@
-#include "ftxui/component/radiobox.hpp"
+#include <gtest/gtest-message.h>  // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
 
-#include "gtest/gtest.h"
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::Tab, Event::TabReverse
+#include "ftxui/component/mouse.hpp"  // for ftxui
+#include "ftxui/component/radiobox.hpp"
+#include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, TEST
 
 using namespace ftxui;
 

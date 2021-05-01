@@ -11,13 +11,8 @@ namespace ftxui {
 // float max = 100.f,
 // float increment = (max - min) * 0.05f);
 
-template<class T> // T = {int, float}
-ComponentPtr Slider(std::wstring label,
-                    T* value,
-                    T min,
-                    T max,
-                    T increment);
-
+template <class T>  // T = {int, float}
+ComponentPtr Slider(std::wstring label, T* value, T min, T max, T increment);
 
 }  // namespace ftxui
 

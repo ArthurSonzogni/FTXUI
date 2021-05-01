@@ -4,8 +4,15 @@
 #include <ftxui/screen/string.hpp>
 #include <iostream>
 #include <list>
+#include <memory>
+#include <string>
 #include <thread>
+#include <utility>
 #include <vector>
+
+#include "ftxui/dom/node.hpp"
+#include "ftxui/screen/box.hpp"
+#include "ftxui/screen/color.hpp"
 
 /// @example examples/dom/package_manage.cpp
 

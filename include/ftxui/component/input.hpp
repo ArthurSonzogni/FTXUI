@@ -2,10 +2,14 @@
 #define FTXUI_COMPONENT_INPUT_H_
 
 #include <functional>
+#include <string>
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
+struct Event;
 
 /// @brief An input box. The user can type text into it.
 /// @ingroup component.

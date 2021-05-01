@@ -1,12 +1,15 @@
 #ifndef FTXUI_COMPONENT_TOGGLE_H_
 #define FTXUI_COMPONENT_TOGGLE_H_
 
-#include <functional>
 #include <string>
+#include <vector>
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
+struct Event;
 
 /// @brief An horizontal list of elements. The user can navigate through them.
 /// @ingroup component

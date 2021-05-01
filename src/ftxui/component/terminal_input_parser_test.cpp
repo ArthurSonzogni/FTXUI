@@ -1,7 +1,9 @@
-#include "ftxui/component/terminal_input_parser.hpp"
-#include "ftxui/component/receiver.hpp"
+#include <gtest/gtest-message.h>    // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult
 
-#include "gtest/gtest.h"
+#include "ftxui/component/receiver.hpp"  // for MakeReceiver, ReceiverImpl
+#include "ftxui/component/terminal_input_parser.hpp"
+#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, Suite...
 
 using namespace ftxui;
 

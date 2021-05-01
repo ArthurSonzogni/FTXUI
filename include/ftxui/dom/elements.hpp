@@ -78,7 +78,7 @@ enum Direction { WIDTH, HEIGHT };
 enum Constraint { LESS_THAN, EQUAL, GREATER_THAN };
 Decorator size(Direction, Constraint, int value);
 
-// -- 
+// --
 Decorator reflect(Box& box);
 
 // --- Frame ---

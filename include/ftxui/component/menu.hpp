@@ -2,11 +2,15 @@
 #define FTXUI_COMPONENT_MENU
 
 #include <functional>
+#include <string>
+#include <vector>
 
 #include "ftxui/component/component.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/box.hpp"
 
 namespace ftxui {
+struct Event;
 
 /// @brief A list of items. The user can navigate through them.
 /// @ingroup component

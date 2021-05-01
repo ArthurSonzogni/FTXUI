@@ -1,5 +1,8 @@
 #include "ftxui/component/terminal_input_parser.hpp"
 
+#include <utility>
+#include "ftxui/component/event.hpp"
+
 namespace ftxui {
 
 TerminalInputParser::TerminalInputParser(Sender<Event> out)
@@ -61,7 +64,6 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
   }
   // NOT_REACHED().
-
 }
 
 TerminalInputParser::Output TerminalInputParser::Parse() {
@@ -227,3 +229,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCursorReporting(
 }
 
 }  // namespace ftxui
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

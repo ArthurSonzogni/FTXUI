@@ -1,6 +1,7 @@
 #ifndef FTXUI_SCREEN_COLOR_INFO_HPP
 #define FTXUI_SCREEN_COLOR_INFO_HPP
 
+#include <stdint.h>
 #include <ftxui/screen/color.hpp>
 
 namespace ftxui {

@@ -1,19 +1,16 @@
+#include <cstdlib>  // for getenv
+#include <string>   // for string, allocator
+
 #include "ftxui/screen/terminal.hpp"
-
-#include <stdio.h>
-
-#include <cstdlib>
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <Windows.h>
 #else
-#include <sys/ioctl.h>
-#include <unistd.h>
+#include <sys/ioctl.h>  // for winsize, ioctl, TIOCGWINSZ
+#include <unistd.h>     // for STDOUT_FILENO
 #endif
-
-#include <iostream>
 
 namespace ftxui {
 

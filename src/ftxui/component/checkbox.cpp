@@ -1,7 +1,11 @@
-#include "ftxui/component/checkbox.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include <functional>  // for function
+#include <memory>      // for shared_ptr
 
-#include <functional>
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/checkbox.hpp"
+#include "ftxui/component/event.hpp"  // for Event, Event::Return
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 namespace ftxui {
 
@@ -27,7 +31,7 @@ bool CheckBox::OnEvent(Event event) {
 }
 
 bool CheckBox::OnMouseEvent(Event event) {
-  if (!event.screen()->CaptureMouse())
+    if (!CaptureMouse(event))
     return false;
   if (!box_.Contain(event.mouse().x, event.mouse().y))
     return false;

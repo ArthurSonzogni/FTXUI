@@ -1,13 +1,13 @@
 #ifndef FTXUI_COMPONENT_RECEIVER_HPP_
 #define FTXUI_COMPONENT_RECEIVER_HPP_
 
-#include <atomic>
-#include <condition_variable>
+#include <atomic>              // for atomic
+#include <condition_variable>  // for condition_variable
 #include <functional>
 #include <iostream>
-#include <memory>
-#include <mutex>
-#include <queue>
+#include <memory>  // for unique_ptr, make_unique
+#include <mutex>   // for mutex, unique_lock
+#include <queue>   // for queue
 
 namespace ftxui {
 
@@ -38,6 +38,7 @@ namespace ftxui {
 // clang-format off
 template<class T> class SenderImpl;
 template<class T> class ReceiverImpl;
+
 template<class T> using Sender = std::unique_ptr<SenderImpl<T>>;
 template<class T> using Receiver = std::unique_ptr<ReceiverImpl<T>>;
 template<class T> Receiver<T> MakeReceiver();

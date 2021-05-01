@@ -1,7 +1,13 @@
-#include <algorithm>
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/string.hpp"
+#include <algorithm>  // for max
+#include <memory>     // for make_shared
+#include <string>     // for wstring
+
+#include "ftxui/dom/elements.hpp"     // for Element, text, vtext
+#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/screen/string.hpp"    // for wchar_width, wstring_width
 
 namespace ftxui {
 

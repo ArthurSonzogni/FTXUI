@@ -1,5 +1,10 @@
+#include <memory>
+#include <utility>
+
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/dom/node_decorator.hpp"
+#include "ftxui/screen/box.hpp"
+#include "ftxui/screen/screen.hpp"
 
 namespace ftxui {
 

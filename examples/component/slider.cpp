@@ -1,16 +1,21 @@
-#include "ftxui/component/slider.hpp"
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/component/toggle.hpp"
-#include "ftxui/screen/string.hpp"
+#include <functional>  // for function
+#include <memory>      // for allocator, unique_ptr
+#include <string>      // for operator+, to_wstring
+
+#include "ftxui/component/component.hpp"           // for Component, Compone...
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/event.hpp"               // for Event, Event::Escape
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/slider.hpp"              // for Slider
+#include "ftxui/dom/elements.hpp"                  // for separator, operator|
+#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/screen/color.hpp"                  // for Color
 
 using namespace ftxui;
 
 Element ColorTile(int red, int green, int blue) {
-  return text(L"")
-    | size(WIDTH, GREATER_THAN, 14)
-    | size(HEIGHT, GREATER_THAN, 7)
-    | bgcolor(Color::RGB(red, green, blue));
+  return text(L"") | size(WIDTH, GREATER_THAN, 14) |
+         size(HEIGHT, GREATER_THAN, 7) | bgcolor(Color::RGB(red, green, blue));
 }
 
 Element ColorString(int red, int green, int blue) {

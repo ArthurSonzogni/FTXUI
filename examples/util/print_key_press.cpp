@@ -2,12 +2,18 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <chrono>
-#include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
-#include <ftxui/screen/string.hpp>
-#include <iostream>
-#include <thread>
+#include <stddef.h>                                // for size_t
+#include <algorithm>                               // for max
+#include <ftxui/component/component.hpp>           // for Component
+#include <ftxui/component/screen_interactive.hpp>  // for ScreenInteractive
+#include <string>                                  // for allocator, operator+
+#include <utility>                                 // for move
+#include <vector>                                  // for vector
+
+#include "ftxui/component/event.hpp"  // for Event
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left
+#include "ftxui/dom/elements.hpp"     // for text, vbox, window
+#include "ftxui/screen/box.hpp"       // for ftxui
 
 using namespace ftxui;
 
@@ -57,8 +63,8 @@ std::wstring Stringify(Event event) {
       out += L"_meta";
 
     out += L"(" +  //
-            std::to_wstring(event.mouse().x) + L"," +
-            std::to_wstring(event.mouse().y) + L")";
+           std::to_wstring(event.mouse().x) + L"," +
+           std::to_wstring(event.mouse().y) + L")";
   } else {
     out += L"(special)";
   }

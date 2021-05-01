@@ -1,11 +1,14 @@
-#include <chrono>
-#include <iostream>
-#include <thread>
+#include <functional>  // for function
+#include <string>      // for wstring, allocator
+#include <vector>      // for vector
 
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/menu.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/screen/string.hpp"
+#include "ftxui/component/component.hpp"           // for Component
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/menu.hpp"                // for Menu
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"                  // for text, separator, bold
+#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/screen/string.hpp"                 // for to_wstring
 
 using namespace ftxui;
 

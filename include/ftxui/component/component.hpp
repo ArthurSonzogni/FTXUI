@@ -1,14 +1,17 @@
 #ifndef FTXUI_COMPONENT_COMPONENT_HPP
 #define FTXUI_COMPONENT_COMPONENT_HPP
 
-#include <memory>
-#include "ftxui/component/event.hpp"
-#include "ftxui/dom/elements.hpp"
+#include <memory>  // for unique_ptr
+#include <vector>  // for vector
+
+#include "ftxui/component/captured_mouse.hpp"  // for CaptureMouse
+#include "ftxui/dom/elements.hpp"             // for Element
 
 namespace ftxui {
 
 class Delegate;
 class Focus;
+struct Event;
 
 /// @brief It implement rendering itself as ftxui::Element. It implement
 /// keyboard navigation by responding to ftxui::Event.
@@ -53,6 +56,8 @@ class Component {
   void TakeFocus();
 
  protected:
+  CapturedMouse CaptureMouse(const Event& event);
+
   std::vector<Component*> children_;
 
  private:

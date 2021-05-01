@@ -1,14 +1,16 @@
-#include <cmath>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color_info.hpp>
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/terminal.hpp>
-#include <iostream>
-
-#include "ftxui/screen/string.hpp"
+#include <memory>
+#include <utility>
+#include <vector>
 
 using namespace ftxui;
 #include "./color_info_sorted_2d.ipp"  // ColorInfoSorted2D.
+#include "ftxui/dom/node.hpp"
+#include "ftxui/screen/box.hpp"
+#include "ftxui/screen/color.hpp"
 
 int main(int argc, const char* argv[]) {
   // clang-format off

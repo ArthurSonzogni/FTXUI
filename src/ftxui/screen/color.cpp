@@ -1,7 +1,4 @@
 #include "ftxui/screen/color.hpp"
-
-#include <algorithm>
-
 #include "ftxui/screen/color_info.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"

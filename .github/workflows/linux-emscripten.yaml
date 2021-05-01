@@ -16,5 +16,5 @@ jobs:
         run: >
           mkdir build;
           cd build;
-          emcmake cmake ..
+          emcmake cmake ..;
           cmake --build . --config Release;

@@ -1,19 +1,24 @@
 #include "ftxui/component/screen_interactive.hpp"
 
-#include <stdio.h>
+#include <stdio.h>    // for fileno, stdin
+#include <algorithm>  // for copy, max, min
+#include <csignal>    // for signal, SIGINT
+#include <cstdlib>    // for exit, NULL
+#include <iostream>   // for cout, ostream
+#include <stack>      // for stack
+#include <thread>     // for thread
+#include <utility>    // for move
+#include <vector>     // for vector
 
-#include <algorithm>
-#include <csignal>
-#include <cstdlib>
-#include <iostream>
-#include <stack>
-#include <thread>
-
-#include "ftxui/component/captured_mouse.hpp"
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/terminal_input_parser.hpp"
-#include "ftxui/screen/string.hpp"
-#include "ftxui/screen/terminal.hpp"
+#include "ftxui/component/captured_mouse.hpp"         // for CapturedMouse
+#include "ftxui/component/component.hpp"              // for Component
+#include "ftxui/component/event.hpp"                  // for Event
+#include "ftxui/component/mouse.hpp"                  // for Mouse
+#include "ftxui/component/receiver.hpp"               // for ReceiverImpl
+#include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputPa...
+#include "ftxui/dom/node.hpp"                         // for Node, Render
+#include "ftxui/dom/requirement.hpp"                  // for Requirement
+#include "ftxui/screen/terminal.hpp"                  // for Terminal::Dimen...
 
 #if defined(_WIN32)
 #define DEFINE_CONSOLEV2_PROPERTIES
@@ -26,8 +31,9 @@
 #error Must be compiled in UNICODE mode
 #endif
 #else
-#include <termios.h>
-#include <unistd.h>
+#include <sys/select.h>  // for select, FD_ISSET
+#include <termios.h>     // for tcsetattr, tcge...
+#include <unistd.h>      // for STDIN_FILENO, read
 #endif
 
 // Quick exit is missing in standard CLang headers
@@ -48,8 +54,7 @@ constexpr int timeout_milliseconds = 20;
 constexpr int timeout_microseconds = timeout_milliseconds * 1000;
 #if defined(_WIN32)
 
-void EventListener(std::atomic<bool>* quit,
-                        Sender<Event> out) {
+void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
   auto console = GetStdHandle(STD_INPUT_HANDLE);
   auto parser = TerminalInputParser(out->Clone());
   while (!*quit) {
@@ -69,8 +74,7 @@ void EventListener(std::atomic<bool>* quit,
 
     std::vector<INPUT_RECORD> records{number_of_events};
     DWORD number_of_events_read = 0;
-    ReadConsoleInput(console, records.data(),
-                     (DWORD)records.size(),
+    ReadConsoleInput(console, records.data(), (DWORD)records.size(),
                      &number_of_events_read);
     records.resize(number_of_events_read);
 
@@ -106,7 +110,7 @@ void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
 
   char c;
   while (!*quit) {
-    while(read(STDIN_FILENO, &c, 1), c)
+    while (read(STDIN_FILENO, &c, 1), c)
       parser.Add(c);
 
     emscripten_sleep(1);
@@ -115,7 +119,7 @@ void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
 }
 
 #else
-#include <sys/time.h>
+#include <sys/time.h>  // for timeval
 
 int CheckStdinReady(int usec_timeout) {
   timeval tv = {0, usec_timeout};
@@ -219,8 +223,7 @@ void OnResize(int /* signal */) {
 
 class CapturedMouseImpl : public CapturedMouseInterface {
  public:
-  CapturedMouseImpl(std::function<void(void)> callback)
-      : callback_(callback) {}
+  CapturedMouseImpl(std::function<void(void)> callback) : callback_(callback) {}
   ~CapturedMouseImpl() override { callback_(); }
 
  private:
@@ -366,7 +369,7 @@ void ScreenInteractive::Loop(Component* component) {
   });
 
   enable({
-      //DECMode::kMouseVt200,
+      // DECMode::kMouseVt200,
       DECMode::kMouseAnyEvent,
       DECMode::kMouseUtf8,
       DECMode::kMouseSgrExtMode,
@@ -406,7 +409,7 @@ void ScreenInteractive::Loop(Component* component) {
       event.mouse().y -= cursor_y_;
     }
 
-    event.SetScreen(this);
+    event.screen_ = this;
     component->OnEvent(event);
   }
 

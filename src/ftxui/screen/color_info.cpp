@@ -1,4 +1,5 @@
 #include "ftxui/screen/color_info.hpp"
+#include "ftxui/screen/color.hpp"  // for Color, Color::Palette16, Color::Palette256
 
 namespace ftxui {
 

@@ -1,10 +1,15 @@
-#include <iostream>
-#include <thread>
+#include <functional>        // for function
+#include <initializer_list>  // for initializer_list
+#include <string>            // for wstring, allocator
+#include <vector>            // for vector
 
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/menu.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/screen/string.hpp"
+#include "ftxui/component/component.hpp"           // for Component
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/menu.hpp"                // for Menu
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"                  // for operator|, Element
+#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/screen/color.hpp"                  // for Color, Color::Blue
 
 using namespace ftxui;
 
@@ -13,7 +18,14 @@ class MyComponent : public Component {
   MyComponent() {
     Add(&container);
 
-    for (Menu* menu : {&menu_1, &menu_2, &menu_3, &menu_4, &menu_5, &menu_6,}) {
+    for (Menu* menu : {
+             &menu_1,
+             &menu_2,
+             &menu_3,
+             &menu_4,
+             &menu_5,
+             &menu_6,
+         }) {
       container.Add(menu);
       menu->entries = {
           L"Monkey", L"Dog", L"Cat", L"Bird", L"Elephant",

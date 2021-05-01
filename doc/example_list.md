@@ -30,6 +30,7 @@
 @example ./examples/component/checkbox_in_frame.cpp
 @example ./examples/component/menu2.cpp
 @example ./examples/component/tab_horizontal.cpp
+@example ./examples/component/slider.cpp
 @example ./examples/component/input.cpp
 @example ./examples/component/homescreen.cpp
 @example ./examples/component/radiobox.cpp

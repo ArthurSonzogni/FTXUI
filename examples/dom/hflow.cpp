@@ -1,7 +1,11 @@
+#include <stddef.h>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/string.hpp>
-#include <iostream>
+#include <string>
+
+#include "ftxui/dom/node.hpp"
+#include "ftxui/screen/box.hpp"
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

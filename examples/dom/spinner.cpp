@@ -3,7 +3,13 @@
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/screen/string.hpp>
 #include <iostream>
+#include <string>
 #include <thread>
+#include <utility>
+#include <vector>
+
+#include "ftxui/dom/node.hpp"
+#include "ftxui/screen/box.hpp"
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

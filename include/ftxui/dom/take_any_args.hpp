@@ -1,3 +1,4 @@
+// IWYU pragma: private, include "ftxui/dom/elements.hpp"
 #include <type_traits>
 
 template <class T>

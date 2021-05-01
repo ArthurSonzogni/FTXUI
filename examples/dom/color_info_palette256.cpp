@@ -1,10 +1,13 @@
-#include <algorithm>
-#include <cmath>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/color_info.hpp>
 #include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/terminal.hpp>
-#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
+
+#include "ftxui/dom/node.hpp"
+#include "ftxui/screen/box.hpp"
+#include "ftxui/screen/color.hpp"
 #include "ftxui/screen/string.hpp"
 
 using namespace ftxui;

@@ -1,8 +1,14 @@
 #include "ftxui/component/radiobox.hpp"
-#include "ftxui/component/screen_interactive.hpp"
 
+#include <stddef.h>
 #include <algorithm>
 #include <functional>
+#include <memory>
+#include <utility>
+
+#include "ftxui/component/captured_mouse.hpp"
+#include "ftxui/component/mouse.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 
 namespace ftxui {
 
@@ -13,8 +19,9 @@ Element RadioBox::Render() {
   for (size_t i = 0; i < entries.size(); ++i) {
     auto style =
         (focused == int(i) && is_focused) ? focused_style : unfocused_style;
-    auto focus_management =
-        (focused != int(i)) ? nothing : is_focused ? focus : select;
+    auto focus_management = (focused != int(i)) ? nothing
+                            : is_focused        ? focus
+                                                : select;
 
     const std::wstring& symbol = selected == int(i) ? checked : unchecked;
     elements.push_back(hbox(text(symbol), text(entries[i]) | style) |
@@ -24,7 +31,7 @@ Element RadioBox::Render() {
 }
 
 bool RadioBox::OnEvent(Event event) {
-  if (!event.screen()->CaptureMouse())
+  if (!CaptureMouse(event))
     return false;
   if (event.is_mouse())
     return OnMouseEvent(event);
@@ -58,7 +65,7 @@ bool RadioBox::OnEvent(Event event) {
 }
 
 bool RadioBox::OnMouseEvent(Event event) {
-  if (!event.screen()->CaptureMouse())
+  if (!CaptureMouse(event))
     return false;
   for (int i = 0; i < boxes_.size(); ++i) {
     if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))

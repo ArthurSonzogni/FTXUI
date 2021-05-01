@@ -1,16 +1,14 @@
 #ifndef FTXUI_COMPONENT_EVENT_HPP
 #define FTXUI_COMPONENT_EVENT_HPP
 
-#include <array>
-#include <ftxui/component/mouse.hpp>
-#include <ftxui/component/receiver.hpp>
-#include <functional>
-#include <string>
+#include <ftxui/component/mouse.hpp>  // for Mouse
+#include <string>                     // for string, operator==
 #include <vector>
 
 namespace ftxui {
 
 class ScreenInteractive;
+class Component;
 
 /// @brief Represent an event. It can be key press event, a terminal resize, or
 /// more ...
@@ -53,7 +51,7 @@ struct Event {
   static Event Custom;
 
   //--- Method section ---------------------------------------------------------
-  bool is_character() const { return type_ == Type::Character;}
+  bool is_character() const { return type_ == Type::Character; }
   wchar_t character() const { return character_; }
 
   bool is_mouse() const { return type_ == Type::Mouse; }
@@ -67,13 +65,12 @@ struct Event {
 
   const std::string& input() const { return input_; }
 
-  ScreenInteractive* screen() { return screen_; }
-  void SetScreen(ScreenInteractive* screen) { screen_ = screen; }
-
   bool operator==(const Event& other) const { return input_ == other.input_; }
 
   //--- State section ----------------------------------------------------------
  private:
+  friend Component;
+  friend ScreenInteractive;
   enum class Type {
     Unknown,
     Character,
@@ -94,9 +91,8 @@ struct Event {
   };
   std::string input_;
 
-  ScreenInteractive* screen_;
+  ScreenInteractive* screen_ = nullptr;
 };
-
 
 }  // namespace ftxui
 

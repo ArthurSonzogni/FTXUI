@@ -2,9 +2,15 @@
 #include <cmath>
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/string.hpp>
+#include <functional>
 #include <iostream>
+#include <string>
 #include <thread>
+#include <vector>
+
+#include "ftxui/dom/node.hpp"
+#include "ftxui/screen/box.hpp"
+#include "ftxui/screen/color.hpp"
 
 class Graph {
  public:

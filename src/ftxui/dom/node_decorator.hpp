@@ -1,9 +1,12 @@
 #ifndef FTXUI_DOM_NODE_DECORATOR_H_
 #define FTXUI_DOM_NODE_DECORATOR_H_
 
-#include "ftxui/dom/node.hpp"
+#include <utility>  // for move
+
+#include "ftxui/dom/node.hpp"  // for Node, Elements
 
 namespace ftxui {
+struct Box;
 
 // Helper class.
 class NodeDecorator : public Node {

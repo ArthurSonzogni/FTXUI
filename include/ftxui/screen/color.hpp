@@ -1,8 +1,8 @@
 #ifndef FTXUI_SCREEN_COLOR
 #define FTXUI_SCREEN_COLOR
 
-#include <cstdint>
-#include <string>
+#include <stdint.h>  // for uint8_t
+#include <string>    // for wstring
 
 #ifdef RGB
 // Workaround for wingdi.h (via Windows.h) defining macros that break things.

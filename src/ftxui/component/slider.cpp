@@ -1,10 +1,18 @@
 #include "ftxui/component/slider.hpp"
+
+#include <memory>
+#include <utility>
+
 #include "ftxui/component/captured_mouse.hpp"
+#include "ftxui/component/mouse.hpp"
 #include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/screen/box.hpp"
+#include "ftxui/screen/color.hpp"
 
 namespace ftxui {
 
-template<class T>
+template <class T>
 class SliderImpl : public Component {
  public:
   SliderImpl(std::wstring label, T* value, T min, T max, T increment)
@@ -55,7 +63,7 @@ class SliderImpl : public Component {
     }
 
     if (box_.Contain(event.mouse().x, event.mouse().y) &&
-        event.screen()->CaptureMouse()) {
+        CaptureMouse(event)) {
       TakeFocus();
     }
 
@@ -63,7 +71,7 @@ class SliderImpl : public Component {
         event.mouse().motion == Mouse::Pressed &&
         gauge_box_.Contain(event.mouse().x, event.mouse().y) &&
         !captured_mouse_) {
-      captured_mouse_ = event.screen()->CaptureMouse();
+      captured_mouse_ = CaptureMouse(event);
     }
 
     if (captured_mouse_) {
@@ -105,3 +113,7 @@ template ComponentPtr Slider(std::wstring label,
                              float increment);
 
 }  // namespace ftxui
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

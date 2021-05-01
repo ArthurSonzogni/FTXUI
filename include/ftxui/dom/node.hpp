@@ -1,16 +1,18 @@
 #ifndef FTXUI_DOM_NODE_HPP
 #define FTXUI_DOM_NODE_HPP
 
-#include <memory>
-#include <vector>
+#include <memory>  // for shared_ptr
+#include <vector>  // for vector
 
-#include "ftxui/dom/requirement.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"
 
 namespace ftxui {
 
 class Node;
+class Screen;
+
 using Element = std::shared_ptr<Node>;
 using Elements = std::vector<std::shared_ptr<Node>>;
 

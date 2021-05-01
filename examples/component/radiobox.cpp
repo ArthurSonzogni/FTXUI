@@ -1,8 +1,5 @@
 #include "ftxui/component/radiobox.hpp"
-
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 using namespace ftxui;
 

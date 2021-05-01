@@ -1,14 +1,23 @@
-#include <cmath>
-#include <thread>
+#include <chrono>      // for operator""s, chron...
+#include <cmath>       // for sin
+#include <functional>  // for ref, reference_wra...
+#include <string>      // for allocator, wstring
+#include <thread>      // for sleep_for, thread
+#include <utility>     // for move
+#include <vector>      // for vector
 
-#include "ftxui/component/checkbox.hpp"
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/input.hpp"
-#include "ftxui/component/menu.hpp"
-#include "ftxui/component/radiobox.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/component/toggle.hpp"
-#include "ftxui/screen/string.hpp"
+#include "ftxui/component/checkbox.hpp"            // for CheckBox
+#include "ftxui/component/component.hpp"           // for Component
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/event.hpp"               // for Event, Event::Custom
+#include "ftxui/component/input.hpp"               // for Input
+#include "ftxui/component/menu.hpp"                // for Menu
+#include "ftxui/component/radiobox.hpp"            // for RadioBox
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/toggle.hpp"              // for Toggle
+#include "ftxui/dom/elements.hpp"                  // for text, operator|
+#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/screen/color.hpp"                  // for Color, Color::Blue...
 
 using namespace ftxui;
 

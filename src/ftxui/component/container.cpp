@@ -1,6 +1,8 @@
 #include "ftxui/component/container.hpp"
 
+#include <stddef.h>
 #include <algorithm>
+#include <vector>
 
 namespace ftxui {
 

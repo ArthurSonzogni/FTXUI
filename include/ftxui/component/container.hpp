@@ -2,6 +2,8 @@
 #define FTXUI_COMPONENT_CONTAINER_HPP
 
 #include "ftxui/component/component.hpp"
+#include "ftxui/component/event.hpp"
+#include "ftxui/dom/elements.hpp"
 
 namespace ftxui {
 

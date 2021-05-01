@@ -1,6 +1,6 @@
 #include "ftxui/component/event.hpp"
 
-#include <iostream>
+#include "ftxui/component/mouse.hpp"
 #include "ftxui/screen/string.hpp"
 
 namespace ftxui {

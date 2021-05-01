@@ -1,7 +1,11 @@
-#include "ftxui/component/button.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include <functional>  // for function
+#include <memory>      // for shared_ptr
 
-#include <functional>
+#include "ftxui/component/button.hpp"
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/event.hpp"           // for Event, Event::Return
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 namespace ftxui {
 
@@ -12,7 +16,7 @@ Element Button::Render() {
 
 bool Button::OnEvent(Event event) {
   if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
-    if (!event.screen()->CaptureMouse())
+    if (!CaptureMouse(event))
       return false;
 
     TakeFocus();

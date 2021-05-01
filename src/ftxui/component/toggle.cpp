@@ -1,7 +1,12 @@
-#include "ftxui/component/toggle.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include <stddef.h>   // for size_t
+#include <algorithm>  // for max, min
+#include <memory>     // for shared_ptr, alloca...
+#include <utility>    // for move
 
-#include <algorithm>
+#include "ftxui/component/captured_mouse.hpp"      // for CapturedMouse
+#include "ftxui/component/mouse.hpp"               // for Mouse, Mouse::Left
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/toggle.hpp"
 
 namespace ftxui {
 
@@ -60,7 +65,7 @@ bool Toggle::OnEvent(Event event) {
 }
 
 bool Toggle::OnMouseEvent(Event event) {
-  if (!event.screen()->CaptureMouse())
+  if (!CaptureMouse(event))
     return false;
   for (int i = 0; i < boxes_.size(); ++i) {
     if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))

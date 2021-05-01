@@ -112,6 +112,14 @@ add_library(ftxui::component ALIAS component)
 
 target_link_libraries(dom PUBLIC screen)
 target_link_libraries(component PUBLIC dom Threads::Threads)
+  find_program(iwyu_path NAMES include-what-you-use iwyu)
+  if(iwyu_path)
+    set_property(TARGET ${lib}
+      PROPERTY ${iwyu_path} -Xiwyu
+        --mapping_file ${CMAKE_CURRENT_SOURCE_DIR}/iwyu.impl
+    )
+  endif()
+
 
 foreach(lib screen dom component)
   target_include_directories(${lib}

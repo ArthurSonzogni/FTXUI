@@ -1,10 +1,6 @@
 #include "ftxui/component/input.hpp"
-
-#include <iostream>
-
-#include "ftxui/component/container.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/screen/string.hpp"
+#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 using namespace ftxui;
 

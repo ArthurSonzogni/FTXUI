@@ -1,7 +1,12 @@
-#include <algorithm>
+#include <algorithm>  // for max
+#include <memory>     // for __shared_ptr_access, make_shared, shared_ptr
+#include <utility>    // for move
+#include <vector>     // for vector
 
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/dom/node.hpp"
+#include "ftxui/dom/elements.hpp"     // for Element, Elements, hflow
+#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
 
 namespace ftxui {
 
