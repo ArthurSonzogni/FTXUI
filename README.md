@@ -80,6 +80,7 @@ A simple C++ library for terminal based user interface.
 ## Project using FTXUI
 
 Feel free to add your projects here:
+- [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
 - [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier)
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
 - [ltuiny](https://github.com/adrianoviana87/ltuiny)
