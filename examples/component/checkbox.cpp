@@ -1,34 +1,34 @@
 #include "ftxui/component/checkbox.hpp"
-#include "ftxui/component/component.hpp"           // for Component
-#include "ftxui/component/container.hpp"           // for Container
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Checkbox, Make
+#include "ftxui/component/container.hpp"       // for Container
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
 
 using namespace ftxui;
 
-class MyComponent : public Component {
+class MyComponent : public ComponentBase {
  private:
-  CheckBox box_1_;
-  CheckBox box_2_;
-  CheckBox box_3_;
-  Container container_ = Container::Vertical();
+  std::wstring build_examples_label = L"Build examples";
+  std::wstring build_tests_label = L"Build tests";
+  std::wstring use_webassembly_label = L"Use WebAssembly";
+
+  bool build_examples_state = false;
+  bool build_tests_state = false;
+  bool use_webassembly_state = true;
+
+  Component container = Container::Vertical({
+      Checkbox(&build_examples_label, &build_examples_state),
+      Checkbox(&build_tests_label, &build_tests_state),
+      Checkbox(&use_webassembly_label, &use_webassembly_state),
+  });
 
  public:
-  MyComponent() {
-    Add(&container_);
-    container_.Add(&box_1_);
-    container_.Add(&box_2_);
-    container_.Add(&box_3_);
-    box_1_.label = L"Build examples";
-    box_2_.label = L"Build tests";
-    box_3_.label = L"Use WebAssembly";
-    box_3_.state = true;
-  }
+  MyComponent() { Add(container); }
 };
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component;
-  screen.Loop(&component);
+  screen.Loop(Make<MyComponent>());
   return 0;
 }
 

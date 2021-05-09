@@ -1,21 +1,22 @@
-#include "ftxui/component/slider.hpp"
+#include <string>   // for allocator, wstring
+#include <utility>  // for move
 
-#include <memory>
-#include <utility>
-
-#include "ftxui/component/captured_mouse.hpp"
-#include "ftxui/component/mouse.hpp"
-#include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/component.hpp"       // for Make, Slider
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
+#include "ftxui/component/screen_interactive.hpp"  // for Component
+#include "ftxui/dom/elements.hpp"  // for Element, text, color, operator|, xflex, gauge, dim, hbox, reflect, underlined, vcenter
+#include "ftxui/screen/box.hpp"    // for Box
+#include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::GrayLight
 
 namespace ftxui {
 
 template <class T>
-class SliderImpl : public Component {
+class SliderBase : public ComponentBase {
  public:
-  SliderImpl(std::wstring label, T* value, T min, T max, T increment)
+  SliderBase(std::wstring label, T* value, T min, T max, T increment)
       : label_(label),
         value_(value),
         min_(min),
@@ -53,7 +54,7 @@ class SliderImpl : public Component {
       return true;
     }
 
-    return Component::OnEvent(event);
+    return ComponentBase::OnEvent(event);
   }
 
   bool OnMouseEvent(Event event) {
@@ -62,8 +63,7 @@ class SliderImpl : public Component {
       return true;
     }
 
-    if (box_.Contain(event.mouse().x, event.mouse().y) &&
-        CaptureMouse(event)) {
+    if (box_.Contain(event.mouse().x, event.mouse().y) && CaptureMouse(event)) {
       TakeFocus();
     }
 
@@ -94,23 +94,44 @@ class SliderImpl : public Component {
   CapturedMouse captured_mouse_;
 };
 
+/// @brief An horizontal slider.
+/// @param label The name of the slider.
+/// @param value The current value of the slider.
+/// @param min The minimum value.
+/// @param max The maximum value.
+/// @param increment The increment when used by the cursor.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// int value = 50;
+/// auto slider = Slider(L"Value:", &value, 0, 100, 1);
+/// screen.Loop(slider);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// Value:[██████████████████████████                          ]
+/// ```
 template <class T>
-ComponentPtr Slider(std::wstring label, T* value, T min, T max, T increment) {
-  return std::make_unique<SliderImpl<T>>(std::move(label), value, min, max,
-                                         increment);
+Component Slider(std::wstring label, T* value, T min, T max, T increment) {
+  return Make<SliderBase<T>>(std::move(label), value, min, max, increment);
 }
 
-template ComponentPtr Slider(std::wstring label,
-                             int* value,
-                             int min,
-                             int max,
-                             int increment);
+template Component Slider(std::wstring label,
+                          int* value,
+                          int min,
+                          int max,
+                          int increment);
 
-template ComponentPtr Slider(std::wstring label,
-                             float* value,
-                             float min,
-                             float max,
-                             float increment);
+template Component Slider(std::wstring label,
+                          float* value,
+                          float min,
+                          float max,
+                          float increment);
 
 }  // namespace ftxui
 

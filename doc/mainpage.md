@@ -31,7 +31,7 @@ int main(void) {
     Dimension::Fit(document) // Height
   );
   Render(screen, document);
-  std::cout << screen.ToString() << std::endl;
+  screen.Print();
 
   return EXIT_SUCCESS;
 }
@@ -141,6 +141,13 @@ This provides:
 2. Get events and respond to them.
 3. A predefined implementation of "keyboard navigation".
 4. A set of predefined widget: CheckBox, RadioBox, Input, Menu, Toggle.
+
+
+**List of Component**
+
+You only need one header: ftxui/dom/component.hpp
+
+\include ftxui/component/component.hpp
 
 # ftxui/dom
 

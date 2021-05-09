@@ -1,24 +1,30 @@
 #include <functional>  // for function
-#include <iostream>    // for basic_ostream::ope...
-#include <string>      // for wstring, allocator
-#include <vector>      // for vector
+#include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
+#include <string>    // for wstring, allocator, basic_string
+#include <vector>    // for vector
 
-#include "ftxui/component/menu.hpp"                // for Menu
+#include "ftxui/component/captured_mouse.hpp"      // for ftxui
+#include "ftxui/component/component.hpp"           // for Menu
+#include "ftxui/component/menu.hpp"                // for MenuBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/screen/box.hpp"                    // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
   auto screen = ScreenInteractive::TerminalOutput();
 
-  Menu menu;
-  menu.entries = {L"entry 1", L"entry 2", L"entry 3"};
-  menu.selected = 0;
-  menu.on_enter = screen.ExitLoopClosure();
+  std::vector<std::wstring> entries = {
+      L"entry 1",
+      L"entry 2",
+      L"entry 3",
+  };
+  int selected = 0;
 
-  screen.Loop(&menu);
+  auto menu = Menu(&entries, &selected);
+  MenuBase::From(menu)->on_enter = screen.ExitLoopClosure();
 
-  std::cout << "Selected element = " << menu.selected << std::endl;
+  screen.Loop(menu);
+
+  std::cout << "Selected element = " << selected << std::endl;
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

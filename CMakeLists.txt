@@ -80,6 +80,7 @@ add_library(component
   include/ftxui/component/captured_mouse.hpp
   include/ftxui/component/checkbox.hpp
   include/ftxui/component/component.hpp
+  include/ftxui/component/component_base.hpp
   include/ftxui/component/container.hpp
   include/ftxui/component/event.hpp
   include/ftxui/component/input.hpp
@@ -88,7 +89,6 @@ add_library(component
   include/ftxui/component/radiobox.hpp
   include/ftxui/component/receiver.hpp
   include/ftxui/component/screen_interactive.hpp
-  include/ftxui/component/slider.hpp
   include/ftxui/component/toggle.hpp
   src/ftxui/component/button.cpp
   src/ftxui/component/checkbox.cpp

@@ -5,4 +5,7 @@
   { symbol: [ "ICANON", private, "<termios.h>", public ] },
   { symbol: [ "termios", private, "<termios.h>", public ] },
   { symbol: [ "TCSANOW", private, "<termios.h>", public ] },
+  { symbol: [ "__shared_ptr_access", private, "", public ] },
+  { symbol: [ "ftxui", private , "", public ] },
+  { include: ["ext/alloc_traits.h", "private", "<memory>", "public"] }
 ]

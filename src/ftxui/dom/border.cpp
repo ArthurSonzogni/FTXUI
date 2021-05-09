@@ -1,8 +1,9 @@
-#include <algorithm>  // for max
-#include <iterator>   // for begin, end
-#include <memory>     // for make_shared, __shared_ptr_access
-#include <utility>    // for move
-#include <vector>     // for vector
+#include <algorithm>           // for max
+#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
+#include <iterator>            // for begin, end
+#include <memory>              // for make_shared, __shared_ptr_access
+#include <utility>             // for move
+#include <vector>              // for vector
 
 #include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, Elements, border, borderWith, window
 #include "ftxui/dom/node.hpp"         // for Node

@@ -1,9 +1,11 @@
-#include <stddef.h>
-#include <memory>
-#include <string>
-#include <vector>
+#include <stddef.h>            // for size_t
+#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
+#include <memory>              // for allocator, allocator_traits<>::value_type
+#include <string>              // for basic_string, wstring
+#include <utility>             // for move
+#include <vector>              // for vector
 
-#include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/elements.hpp"  // for Element, gauge, text, vbox, spinner
 
 namespace ftxui {
 

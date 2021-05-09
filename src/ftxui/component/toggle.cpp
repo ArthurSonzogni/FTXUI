@@ -1,26 +1,38 @@
 #include <stddef.h>   // for size_t
 #include <algorithm>  // for max, min
-#include <memory>     // for shared_ptr, alloca...
+#include <memory>     // for shared_ptr, allocator_traits<>::value_type
 #include <utility>    // for move
 
-#include "ftxui/component/captured_mouse.hpp"      // for CapturedMouse
-#include "ftxui/component/mouse.hpp"               // for Mouse, Mouse::Left
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/component/toggle.hpp"
 
 namespace ftxui {
 
-Element Toggle::Render() {
+Component Toggle(const std::vector<std::wstring>* entries, int* selected) {
+  return Make<ToggleBase>(entries, selected);
+}
+
+// static
+ToggleBase* ToggleBase::From(Component component) {
+  return static_cast<ToggleBase*>(component.get());
+}
+
+ToggleBase::ToggleBase(const std::vector<std::wstring>* entries, int* selected)
+    : entries_(entries), selected_(selected) {}
+
+Element ToggleBase::Render() {
   Elements children;
   bool is_toggle_focused = Focused();
-  boxes_.resize(entries.size());
-  for (size_t i = 0; i < entries.size(); ++i) {
+  boxes_.resize(entries_->size());
+  for (size_t i = 0; i < entries_->size(); ++i) {
     // Separator.
     if (i != 0)
       children.push_back(separator());
 
     bool is_focused = (focused == int(i)) && is_toggle_focused;
-    bool is_selected = (selected == int(i));
+    bool is_selected = (*selected_ == int(i));
 
     auto style = is_selected
                      ? (is_focused ? selected_focused_style : selected_style)
@@ -28,30 +40,30 @@ Element Toggle::Render() {
     auto focus_management = !is_selected        ? nothing
                             : is_toggle_focused ? focus
                                                 : select;
-    children.push_back(text(entries[i]) | style | focus_management |
+    children.push_back(text(entries_->at(i)) | style | focus_management |
                        reflect(boxes_[i]));
   }
   return hbox(std::move(children));
 }
 
-bool Toggle::OnEvent(Event event) {
+bool ToggleBase::OnEvent(Event event) {
   if (event.is_mouse())
     return OnMouseEvent(event);
 
-  int old_selected = selected;
+  int old_selected = *selected_;
   if (event == Event::ArrowLeft || event == Event::Character('h'))
-    selected--;
+    (*selected_)--;
   if (event == Event::ArrowRight || event == Event::Character('l'))
-    selected++;
-  if (event == Event::Tab && entries.size())
-    selected = (selected + 1) % entries.size();
-  if (event == Event::TabReverse && entries.size())
-    selected = (selected + entries.size() - 1) % entries.size();
+    (*selected_)++;
+  if (event == Event::Tab && entries_->size())
+    *selected_ = (*selected_ + 1) % entries_->size();
+  if (event == Event::TabReverse && entries_->size())
+    *selected_ = (*selected_ + entries_->size() - 1) % entries_->size();
 
-  selected = std::max(0, std::min(int(entries.size()) - 1, selected));
+  *selected_ = std::max(0, std::min(int(entries_->size()) - 1, *selected_));
 
-  if (old_selected != selected) {
-    focused = selected;
+  if (old_selected != *selected_) {
+    focused = *selected_;
     on_change();
     return true;
   }
@@ -64,7 +76,7 @@ bool Toggle::OnEvent(Event event) {
   return false;
 }
 
-bool Toggle::OnMouseEvent(Event event) {
+bool ToggleBase::OnMouseEvent(Event event) {
   if (!CaptureMouse(event))
     return false;
   for (int i = 0; i < boxes_.size(); ++i) {
@@ -76,8 +88,8 @@ bool Toggle::OnMouseEvent(Event event) {
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
       TakeFocus();
-      if (selected != i) {
-        selected = i;
+      if (*selected_ != i) {
+        *selected_ = i;
         on_change();
       }
       return true;

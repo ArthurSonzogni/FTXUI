@@ -1,23 +1,63 @@
+#include <stddef.h>            // for size_t
+#include <algorithm>           // for max, min
+#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
+#include <memory>              // for shared_ptr, allocator_traits<>::value_type
+#include <utility>             // for move
+
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/menu.hpp"
-
-#include <stddef.h>
-#include <algorithm>
-#include <memory>
-#include <utility>
-
-#include "ftxui/component/captured_mouse.hpp"
-#include "ftxui/component/mouse.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released
+#include "ftxui/component/screen_interactive.hpp"  // for Component
 
 namespace ftxui {
 
-Element Menu::Render() {
+/// @brief A list of text. The focused element is selected.
+/// @param entries The list of entries in the menu.
+/// @param selected The index of the currently selected element.
+/// @ingroup component
+/// @see MenuBase
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// std::vector<std::wstring> entries = {
+///     L"entry 1",
+///     L"entry 2",
+///     L"entry 3",
+/// };
+/// int selected = 0;
+/// auto menu = Menu(&entries, &selected);
+/// screen.Loop(menu);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// > entry 1
+///   entry 2
+///   entry 3
+/// ```
+Component Menu(const std::vector<std::wstring>* entries, int* selected) {
+  return Make<MenuBase>(entries, selected);
+}
+
+// static
+MenuBase* MenuBase::From(Component component) {
+  return static_cast<MenuBase*>(component.get());
+}
+
+MenuBase::MenuBase(const std::vector<std::wstring>* entries, int* selected)
+    : entries_(entries), selected_(selected) {}
+
+Element MenuBase::Render() {
   Elements elements;
   bool is_menu_focused = Focused();
-  boxes_.resize(entries.size());
-  for (size_t i = 0; i < entries.size(); ++i) {
+  boxes_.resize(entries_->size());
+  for (size_t i = 0; i < entries_->size(); ++i) {
     bool is_focused = (focused == int(i)) && is_menu_focused;
-    bool is_selected = (selected == int(i));
+    bool is_selected = (*selected_ == int(i));
 
     auto style = is_selected
                      ? (is_focused ? selected_focused_style : selected_style)
@@ -26,13 +66,13 @@ Element Menu::Render() {
                             : is_menu_focused ? focus
                                               : select;
     auto icon = is_selected ? L"> " : L"  ";
-    elements.push_back(text(icon + entries[i]) | style | focus_management |
+    elements.push_back(text(icon + entries_->at(i)) | style | focus_management |
                        reflect(boxes_[i]));
   }
   return vbox(std::move(elements));
 }
 
-bool Menu::OnEvent(Event event) {
+bool MenuBase::OnEvent(Event event) {
   if (!CaptureMouse(event))
     return false;
   if (event.is_mouse())
@@ -41,20 +81,20 @@ bool Menu::OnEvent(Event event) {
   if (!Focused())
     return false;
 
-  int old_selected = selected;
+  int old_selected = *selected_;
   if (event == Event::ArrowUp || event == Event::Character('k'))
-    selected--;
+    (*selected_)--;
   if (event == Event::ArrowDown || event == Event::Character('j'))
-    selected++;
-  if (event == Event::Tab && entries.size())
-    selected = (selected + 1) % entries.size();
-  if (event == Event::TabReverse && entries.size())
-    selected = (selected + entries.size() - 1) % entries.size();
+    (*selected_)++;
+  if (event == Event::Tab && entries_->size())
+    *selected_ = (*selected_ + 1) % entries_->size();
+  if (event == Event::TabReverse && entries_->size())
+    *selected_ = (*selected_ + entries_->size() - 1) % entries_->size();
 
-  selected = std::max(0, std::min(int(entries.size()) - 1, selected));
+  *selected_ = std::max(0, std::min(int(entries_->size()) - 1, *selected_));
 
-  if (selected != old_selected) {
-    focused = selected;
+  if (*selected_ != old_selected) {
+    focused = *selected_;
     on_change();
     return true;
   }
@@ -67,7 +107,7 @@ bool Menu::OnEvent(Event event) {
   return false;
 }
 
-bool Menu::OnMouseEvent(Event event) {
+bool MenuBase::OnMouseEvent(Event event) {
   if (!CaptureMouse(event))
     return false;
   for (int i = 0; i < boxes_.size(); ++i) {
@@ -78,8 +118,8 @@ bool Menu::OnMouseEvent(Event event) {
     focused = i;
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Released) {
-      if (selected != i) {
-        selected = i;
+      if (*selected_ != i) {
+        *selected_ = i;
         on_change();
       }
       return true;

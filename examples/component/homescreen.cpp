@@ -1,23 +1,22 @@
-#include <chrono>      // for operator""s, chron...
+#include <array>       // for array
+#include <chrono>      // for operator""s, chrono_literals
 #include <cmath>       // for sin
-#include <functional>  // for ref, reference_wra...
-#include <string>      // for allocator, wstring
-#include <thread>      // for sleep_for, thread
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <functional>  // for ref, reference_wrapper, function
+#include <memory>      // for make_shared, __shared_ptr_access
+#include <string>  // for allocator, wstring, basic_string, operator+, to_wstring
+#include <thread>   // for sleep_for, thread
+#include <utility>  // for move
+#include <vector>   // for vector
 
-#include "ftxui/component/checkbox.hpp"            // for CheckBox
-#include "ftxui/component/component.hpp"           // for Component
-#include "ftxui/component/container.hpp"           // for Container
-#include "ftxui/component/event.hpp"               // for Event, Event::Custom
-#include "ftxui/component/input.hpp"               // for Input
-#include "ftxui/component/menu.hpp"                // for Menu
-#include "ftxui/component/radiobox.hpp"            // for RadioBox
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/component/toggle.hpp"              // for Toggle
-#include "ftxui/dom/elements.hpp"                  // for text, operator|
-#include "ftxui/screen/box.hpp"                    // for ftxui
-#include "ftxui/screen/color.hpp"                  // for Color, Color::Blue...
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Checkbox, Input, Menu, Radiobox, Toggle
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/container.hpp"       // for Container
+#include "ftxui/component/event.hpp"           // for Event, Event::Custom
+#include "ftxui/component/input.hpp"           // for InputBase
+#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for text, operator|, color, bgcolor, Element, filler, size, vbox, flex, hbox, graph, separator, EQUAL, WIDTH, hcenter, bold, border, window, Elements, HEIGHT, hflow, flex_grow, frame, gauge, LESS_THAN, spinner, dim, GREATER_THAN
+#include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::Black, Color::Blue, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default
 
 using namespace ftxui;
 
@@ -39,7 +38,7 @@ class Graph {
   }
 };
 
-class HTopComponent : public Component {
+class HTopComponent : public ComponentBase {
   Graph my_graph;
 
  public:
@@ -102,110 +101,121 @@ class HTopComponent : public Component {
   }
 };
 
-class CompilerComponent : public Component {
-  Container container = Container::Horizontal();
-  RadioBox compiler;
-  Container flag = Container::Vertical();
-  CheckBox flag_checkbox[4];
-  Container subcontainer = Container::Vertical();
-  Container input_container = Container::Horizontal();
-  Input input_add;
-  Menu input;
-  Input executable;
+const std::vector<std::wstring> compiler_entries = {
+    L"gcc",
+    L"clang",
+    L"emcc",
+    L"game_maker",
+    L"Ada compilers",
+    L"ALGOL 60 compilers",
+    L"ALGOL 68 compilers",
+    L"Assemblers (Intel *86)",
+    L"Assemblers (Motorola 68*)",
+    L"Assemblers (Zilog Z80)",
+    L"Assemblers (other)",
+    L"BASIC Compilers",
+    L"BASIC interpreters",
+    L"Batch compilers",
+    L"C compilers",
+    L"Source-to-source compilers",
+    L"C++ compilers",
+    L"C# compilers",
+    L"COBOL compilers",
+    L"Common Lisp compilers",
+    L"D compilers",
+    L"DIBOL/DBL compilers",
+    L"ECMAScript interpreters",
+    L"Eiffel compilers",
+    L"Fortran compilers",
+    L"Go compilers",
+    L"Haskell compilers",
+    L"Java compilers",
+    L"Pascal compilers",
+    L"Perl Interpreters",
+    L"PHP compilers",
+    L"PL/I compilers",
+    L"Python compilers",
+    L"Scheme compilers and interpreters",
+    L"Smalltalk compilers",
+    L"Tcl Interpreters",
+    L"VMS Interpreters",
+    L"Rexx Interpreters",
+    L"CLI compilers",
+};
+
+class CompilerComponent : public ComponentBase {
+  int compiler_selected = 0;
+  Component compiler = Radiobox(&compiler_entries, &compiler_selected);
+
+  std::array<std::wstring, 4> options_label = {
+      L"-Wall",
+      L"-Werror",
+      L"-lpthread",
+      L"-O3",
+  };
+  std::array<bool, 4> options_state = {
+      false,
+      false,
+      false,
+      false,
+  };
+  std::wstring input_add_content = L"";
+  std::wstring input_add_placeholder = L"input_files";
+  Component input_add = Input(&input_add_content, &input_add_placeholder);
+
+  std::vector<std::wstring> input_entries;
+  int input_selected = 0;
+  Component input = Menu(&input_entries, &input_selected);
+
+  std::wstring executable_content_ = L"";
+  std::wstring executable_placeholder_ = L"executable";
+  Component executable_ = Input(&executable_content_, &executable_placeholder_);
+
+  Component flags = Container::Vertical({
+      Checkbox(&options_label[0], &options_state[0]),
+      Checkbox(&options_label[1], &options_state[1]),
+      Checkbox(&options_label[2], &options_state[2]),
+      Checkbox(&options_label[3], &options_state[3]),
+  });
 
  public:
   ~CompilerComponent() override {}
   CompilerComponent() {
-    Add(&container);
+    Add(Container::Horizontal({
+        compiler,
+        flags,
+        Container::Vertical({
+            executable_,
+            Container::Horizontal({
+                input_add,
+                input,
+            }),
+        }),
+    }));
 
-    // Compiler ----------------------------------------------------------------
-    compiler.entries = {
-        L"gcc",
-        L"clang",
-        L"emcc",
-        L"game_maker",
-        L"Ada compilers",
-        L"ALGOL 60 compilers",
-        L"ALGOL 68 compilers",
-        L"Assemblers (Intel *86)",
-        L"Assemblers (Motorola 68*)",
-        L"Assemblers (Zilog Z80)",
-        L"Assemblers (other)",
-        L"BASIC Compilers",
-        L"BASIC interpreters",
-        L"Batch compilers",
-        L"C compilers",
-        L"Source-to-source compilers",
-        L"C++ compilers",
-        L"C# compilers",
-        L"COBOL compilers",
-        L"Common Lisp compilers",
-        L"D compilers",
-        L"DIBOL/DBL compilers",
-        L"ECMAScript interpreters",
-        L"Eiffel compilers",
-        L"Fortran compilers",
-        L"Go compilers",
-        L"Haskell compilers",
-        L"Java compilers",
-        L"Pascal compilers",
-        L"Perl Interpreters",
-        L"PHP compilers",
-        L"PL/I compilers",
-        L"Python compilers",
-        L"Scheme compilers and interpreters",
-        L"Smalltalk compilers",
-        L"Tcl Interpreters",
-        L"VMS Interpreters",
-        L"Rexx Interpreters",
-        L"CLI compilers",
+    InputBase::From(input_add)->on_enter = [this] {
+      input_entries.push_back(input_add_content);
+      input_add_content = L"";
     };
-    container.Add(&compiler);
-
-    // Flags    ----------------------------------------------------------------
-    container.Add(&flag);
-    flag_checkbox[0].label = L"-Wall";
-    flag_checkbox[1].label = L"-Werror";
-    flag_checkbox[2].label = L"-lpthread";
-    flag_checkbox[3].label = L"-O3";
-    for (auto& c : flag_checkbox)
-      flag.Add(&c);
-
-    container.Add(&subcontainer);
-    // Executable
-    // ----------------------------------------------------------------
-    executable.placeholder = L"executable";
-    subcontainer.Add(&executable);
-
-    // Input    ----------------------------------------------------------------
-    subcontainer.Add(&input_container);
-
-    input_add.placeholder = L"input files";
-    input_add.on_enter = [this] {
-      input.entries.push_back(input_add.content);
-      input_add.content = L"";
-    };
-    input_container.Add(&input_add);
-    input_container.Add(&input);
   }
 
   Element Render() override {
-    auto compiler_win = window(text(L"Compiler"), compiler.Render() | frame);
-    auto flags_win = window(text(L"Flags"), flag.Render());
-    auto executable_win = window(text(L"Executable:"), executable.Render());
+    auto compiler_win = window(text(L"Compiler"), compiler->Render() | frame);
+    auto flags_win = window(text(L"Flags"), flags->Render());
+    auto executable_win = window(text(L"Executable:"), executable_->Render());
     auto input_win =
         window(text(L"Input"),
                hbox({
                    vbox({
                        hbox({
                            text(L"Add: "),
-                           input_add.Render(),
+                           input_add->Render(),
                        }) | size(WIDTH, EQUAL, 20) |
                            size(HEIGHT, EQUAL, 1),
                        filler(),
                    }),
                    separator(),
-                   input.Render() | frame | size(HEIGHT, EQUAL, 3) | flex,
+                   input->Render() | frame | size(HEIGHT, EQUAL, 3) | flex,
                }));
     return vbox({
                hbox({
@@ -225,28 +235,29 @@ class CompilerComponent : public Component {
   Elements RenderCommandLine() {
     Elements line;
     // Compiler
-    line.push_back(text(compiler.entries[compiler.selected]) | bold);
+    line.push_back(text(compiler_entries[compiler_selected]) | bold);
     // flags
-    for (auto& it : flag_checkbox) {
-      if (it.state) {
+    for (int i = 0; i < 4; ++i) {
+      if (options_state[i]) {
         line.push_back(text(L" "));
-        line.push_back(text(it.label) | dim);
+        line.push_back(text(options_label[i]) | dim);
       }
     }
     // Executable
-    if (!executable.content.empty()) {
+    if (!executable_content_.empty()) {
       line.push_back(text(L" -O ") | bold);
-      line.push_back(text(executable.content) | color(Color::BlueLight) | bold);
+      line.push_back(text(executable_content_) | color(Color::BlueLight) |
+                     bold);
     }
     // Input
-    for (auto& it : input.entries) {
+    for (auto& it : input_entries) {
       line.push_back(text(L" " + it) | color(Color::RedLight));
     }
     return line;
   }
 };
 
-class SpinnerComponent : public Component {
+class SpinnerComponent : public ComponentBase {
   Element Render() override {
     Elements entries;
     for (int i = 0; i < 22; ++i) {
@@ -258,7 +269,7 @@ class SpinnerComponent : public Component {
   }
 };
 
-class ColorComponent : public Component {
+class ColorComponent : public ComponentBase {
   Element Render() override {
     return hbox({
                vbox({
@@ -304,7 +315,7 @@ class ColorComponent : public Component {
   }
 };
 
-class GaugeComponent : public Component {
+class GaugeComponent : public ComponentBase {
   Element RenderGauge(int delta) {
     float progress = (shift + delta) % 1000 / 1000.f;
     return hbox({
@@ -337,38 +348,35 @@ class GaugeComponent : public Component {
   };
 };
 
-class Tab : public Component {
+class Tab : public ComponentBase {
  public:
-  Container main_container = Container::Vertical();
+  int tab_index = 0;
+  std::vector<std::wstring> tab_entries = {
+      L"htop", L"color", L"spinner", L"gauge", L"compiler",
+  };
+  Component tab_selection = Toggle(&tab_entries, &tab_index);
+  Component container =
+      Container::Tab(&tab_index,
+                     {
+                         std::make_shared<HTopComponent>(),
+                         std::make_shared<ColorComponent>(),
+                         std::make_shared<SpinnerComponent>(),
+                         std::make_shared<GaugeComponent>(),
+                         std::make_shared<CompilerComponent>(),
+                     });
 
-  Toggle tab_selection;
-  Container container = Container::Tab(&tab_selection.selected);
+  Component main_container = Container::Vertical({
+      tab_selection,
+      container,
+  });
 
-  HTopComponent htop_component;
-  ColorComponent color_component;
-  SpinnerComponent spinner_component;
-  GaugeComponent gauge_component;
-  CompilerComponent compiler_component;
-
-  Tab() {
-    Add(&main_container);
-    main_container.Add(&tab_selection);
-    tab_selection.entries = {
-        L"htop", L"color", L"spinner", L"gauge", L"compiler",
-    };
-    main_container.Add(&container);
-    container.Add(&htop_component);
-    container.Add(&color_component);
-    container.Add(&spinner_component);
-    container.Add(&gauge_component);
-    container.Add(&compiler_component);
-  }
+  Tab() { Add(main_container); }
 
   Element Render() override {
     return vbox({
         text(L"FTXUI Demo") | bold | hcenter,
-        tab_selection.Render() | hcenter,
-        container.Render() | flex,
+        tab_selection->Render() | hcenter,
+        container->Render() | flex,
     });
   }
 };
@@ -385,8 +393,8 @@ int main(int argc, const char* argv[]) {
     }
   });
 
-  Tab tab;
-  screen.Loop(&tab);
+  Component tab = std::make_shared<Tab>();
+  screen.Loop(tab);
 
   return 0;
 }

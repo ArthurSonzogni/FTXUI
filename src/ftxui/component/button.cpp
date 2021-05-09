@@ -9,12 +9,47 @@
 
 namespace ftxui {
 
-Element Button::Render() {
-  auto style = Focused() ? inverted : nothing;
-  return text(label) | border | style | reflect(box_);
+/// @brief Draw a button. Execute a function when clicked.
+/// @param label The label of the button.
+/// @param on_click The action to execute when clicked.
+/// @ingroup component
+/// @see ButtonBase
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::FitComponent();
+/// std::wstring label = L"Click to quit";
+/// Component button = Button(&label, screen.ExitLoopClosure());
+/// screen.Loop(button)
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// ┌─────────────┐
+/// │Click to quit│
+/// └─────────────┘
+/// ```
+Component Button(const std::wstring* label, std::function<void()> on_click) {
+  return Make<ButtonBase>(label, on_click);
 }
 
-bool Button::OnEvent(Event event) {
+// static
+ButtonBase* ButtonBase::From(Component component) {
+  return static_cast<ButtonBase*>(component.get());
+}
+
+ButtonBase::ButtonBase(const std::wstring* label,
+                       std::function<void()> on_click)
+    : label_(label), on_click_(on_click) {}
+
+Element ButtonBase::Render() {
+  auto style = Focused() ? inverted : nothing;
+  return text(*label_) | border | style | reflect(box_);
+}
+
+bool ButtonBase::OnEvent(Event event) {
   if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
     if (!CaptureMouse(event))
       return false;
@@ -23,7 +58,7 @@ bool Button::OnEvent(Event event) {
 
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
-      on_click();
+      on_click_();
       return true;
     }
 
@@ -31,7 +66,7 @@ bool Button::OnEvent(Event event) {
   }
 
   if (event == Event::Return) {
-    on_click();
+    on_click_();
     return true;
   }
   return false;

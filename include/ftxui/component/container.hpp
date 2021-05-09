@@ -1,26 +1,32 @@
 #ifndef FTXUI_COMPONENT_CONTAINER_HPP
 #define FTXUI_COMPONENT_CONTAINER_HPP
 
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/event.hpp"
-#include "ftxui/dom/elements.hpp"
+#include "ftxui/component/component.hpp"       // for Component, Components
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/dom/elements.hpp"              // for Element
 
 namespace ftxui {
 
 /// @brief A component where focus and events are automatically handled for you.
-class Container : public Component {
+class Container : public ComponentBase {
  public:
-  static Container Vertical();
-  static Container Horizontal();
-  static Container Tab(int* selector);
+  static Component Vertical();
+  static Component Vertical(Components children);
+
+  static Component Horizontal();
+  static Component Horizontal(Components children);
+
+  static Component Tab(int* selector);
+  static Component Tab(int* selector, Components children);
 
   ~Container() override = default;
 
   // Component override.
   bool OnEvent(Event event) override;
   Element Render() override;
-  Component* ActiveChild() override;
-  virtual void SetActiveChild(Component*) override;
+  Component ActiveChild() override;
+  virtual void SetActiveChild(ComponentBase*) override;
 
  protected:
   // Handlers

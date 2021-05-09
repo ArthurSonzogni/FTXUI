@@ -1,51 +1,43 @@
-#include <functional>  // for function
-#include <memory>      // for unique_ptr, make_u...
-#include <string>      // for wstring
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <string>  // for operator+, to_wstring, allocator, wstring
 
-#include "ftxui/component/button.hpp"              // for Button
-#include "ftxui/component/component.hpp"           // for Component
+#include "ftxui/component/captured_mouse.hpp"      // for ftxui
+#include "ftxui/component/component.hpp"           // for Button, Make
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/container.hpp"           // for Container
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/dom/elements.hpp"  // for separator, Element, gauge, text, operator|, vbox, border
 
 using namespace ftxui;
 
-class MyComponent : public Component {
+class MyComponent : public ComponentBase {
  private:
-  std::vector<std::unique_ptr<Button>> buttons_;
-  Container container_ = Container::Horizontal();
+  std::wstring label_add = L"Increase";
+  std::wstring label_rm = L"Decrease";
+  int value_ = 50;
 
  public:
   MyComponent() {
-    Add(&container_);
+    Add(Container::Horizontal({
+        Button(&label_rm, [&] { value_--; }),
+        Button(&label_add, [&] { value_++; }),
+    }));
+  }
 
-    auto button_add = std::make_unique<Button>();
-    auto button_remove = std::make_unique<Button>();
-    container_.Add(button_add.get());
-    container_.Add(button_remove.get());
-    button_add->label = L"Add one button";
-    button_remove->label = L"Remove last button";
-
-    button_add->on_click = [&] {
-      auto extra_button = std::make_unique<Button>();
-      extra_button->label = L"extra button";
-      container_.Add(extra_button.get());
-      buttons_.push_back(std::move(extra_button));
-    };
-
-    button_remove->on_click = [&] { buttons_.resize(buttons_.size() - 1); };
-
-    buttons_.push_back(std::move(button_add));
-    buttons_.push_back(std::move(button_remove));
+  Element Render() override {
+    return vbox({
+               text(L"Value = " + std::to_wstring(value_)),
+               separator(),
+               gauge(value_ * 0.01f),
+               separator(),
+               ComponentBase::Render(),
+           }) |
+           border;
   }
 };
 
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component;
-  screen.Loop(&component);
+  auto screen = ScreenInteractive::FitComponent();
+  screen.Loop(Make<MyComponent>());
   return 0;
 }
 

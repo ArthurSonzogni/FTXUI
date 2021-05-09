@@ -1,26 +1,30 @@
 #ifndef FTXUI_COMPONENT_TOGGLE_H_
 #define FTXUI_COMPONENT_TOGGLE_H_
 
-#include <string>
-#include <vector>
+#include <functional>  // for function
+#include <string>      // for wstring
+#include <vector>      // for vector
 
-#include "ftxui/component/component.hpp"
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/component/component.hpp"       // for Component
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for Element, Decorator, operator|, bold, dim, inverted
+#include "ftxui/screen/box.hpp"  // for Box
 
 namespace ftxui {
 struct Event;
 
 /// @brief An horizontal list of elements. The user can navigate through them.
 /// @ingroup component
-class Toggle : public Component {
+class ToggleBase : public ComponentBase {
  public:
+  // Access this interface from a Component
+  static ToggleBase* From(Component component);
+
   // Constructor.
-  ~Toggle() override = default;
+  ToggleBase(const std::vector<std::wstring>* entries, int* selected);
+  ~ToggleBase() override = default;
 
   // State.
-  std::vector<std::wstring> entries = {L"On", L"Off"};
-  int selected = 0;
   int focused = 0;
 
   Decorator normal_style = dim;
@@ -36,7 +40,10 @@ class Toggle : public Component {
   Element Render() override;
   bool OnEvent(Event) override;
 
- private:
+ protected:
+  const std::vector<std::wstring>* const entries_;
+  int* selected_ = 0;
+
   bool OnMouseEvent(Event event);
   std::vector<Box> boxes_;
 };

@@ -3,15 +3,18 @@
 
 #include <atomic>  // for atomic
 #include <ftxui/component/receiver.hpp>
-#include <memory>  // for unique_ptr
-#include <string>  // for string
+#include <functional>  // for function
+#include <memory>      // for unique_ptr, shared_ptr
+#include <string>      // for string
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"
 #include "ftxui/screen/screen.hpp"  // for Screen
 
 namespace ftxui {
-class Component;
+class ComponentBase;
+
+using Component = std::shared_ptr<ComponentBase>;
 struct Event;
 
 class ScreenInteractive : public Screen {
@@ -22,15 +25,15 @@ class ScreenInteractive : public Screen {
   static ScreenInteractive TerminalOutput();
 
   ~ScreenInteractive();
-  void Loop(Component*);
+  void Loop(Component);
   std::function<void()> ExitLoopClosure();
 
   void PostEvent(Event event);
   CapturedMouse CaptureMouse();
 
  private:
-  void Draw(Component* component);
-  void EventLoop(Component* component);
+  void Draw(Component component);
+  void EventLoop(Component component);
 
   enum class Dimension {
     FitComponent,
