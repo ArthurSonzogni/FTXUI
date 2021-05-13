@@ -3,75 +3,67 @@
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Radiobox, Make, Menu
+#include "ftxui/component/component.hpp"       // for Radiobox, Make, Toggle
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/container.hpp"       // for Container
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for Element, separator, hbox, operator|, border
+#include "ftxui/dom/elements.hpp"  // for Element, separator, operator|, vbox, border
 
 using namespace ftxui;
 
-class MyComponent : public ComponentBase {
- private:
-  std::vector<std::wstring> tab_values_ = {
+int main(int argc, const char* argv[]) {
+  std::vector<std::wstring> tab_values{
       L"tab_1",
       L"tab_2",
       L"tab_3",
   };
-  int tab_selected_ = 0;
-  Component tab_toggle_ = Menu(&tab_values_, &tab_selected_);
+  int tab_selected = 0;
+  auto tab_menu = Menu(&tab_values, &tab_selected);
 
-  std::vector<std::wstring> tab_1_entries_ = {
+  std::vector<std::wstring> tab_1_entries{
       L"Forest",
       L"Water",
       L"I don't know",
   };
-  int tab_1_selected_ = 0;
+  int tab_1_selected = 0;
 
-  std::vector<std::wstring> tab_2_entries_ = {
+  std::vector<std::wstring> tab_2_entries{
       L"Hello",
       L"Hi",
       L"Hay",
   };
-  int tab_2_selected_ = 0;
+  int tab_2_selected = 0;
 
-  std::vector<std::wstring> tab_3_entries_ = {
+  std::vector<std::wstring> tab_3_entries{
       L"Table",
       L"Nothing",
       L"Is",
       L"Empty",
   };
-  int tab_3_selected_ = 0;
-
-  Component tab_container_ =
-      Container::Tab(&tab_selected_,
-                     {
-                         Radiobox(&tab_1_entries_, &tab_1_selected_),
-                         Radiobox(&tab_2_entries_, &tab_2_selected_),
-                         Radiobox(&tab_3_entries_, &tab_3_selected_),
+  int tab_3_selected = 0;
+  auto tab_container = Container::Tab(
+      &tab_selected, {
+                         Radiobox(&tab_1_entries, &tab_1_selected),
+                         Radiobox(&tab_2_entries, &tab_2_selected),
+                         Radiobox(&tab_3_entries, &tab_3_selected),
                      });
 
-  Component container_ = Container::Horizontal({
-      tab_toggle_,
-      tab_container_,
+  auto container = Container::Horizontal({
+      tab_menu,
+      tab_container,
   });
 
- public:
-  MyComponent() { Add(container_); }
-
-  Element Render() {
+  auto renderer = Renderer(container, [&] {
     return hbox({
-               tab_toggle_->Render(),
+               tab_menu->Render(),
                separator(),
-               tab_container_->Render(),
+               tab_container->Render(),
            }) |
            border;
-  }
-};
+  });
 
-int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  screen.Loop(Make<MyComponent>());
+  screen.Loop(renderer);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

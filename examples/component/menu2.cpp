@@ -12,10 +12,9 @@
 #include "ftxui/dom/elements.hpp"  // for text, separator, bold, hcenter, vbox, hbox, gauge, Element, operator|, border
 #include "ftxui/screen/string.hpp"  // for to_wstring
 
-using namespace ftxui;
+int main(int argc, const char* argv[]) {
+  using namespace ftxui;
 
-class MyComponent : public ComponentBase {
- private:
   std::vector<std::wstring> left_menu_entries = {
       L"0%",  L"10%", L"20%", L"30%", L"40%",
       L"50%", L"60%", L"70%", L"80%", L"90%",
@@ -28,12 +27,13 @@ class MyComponent : public ComponentBase {
   int right_menu_selected = 0;
   Component left_menu_ = Menu(&left_menu_entries, &left_menu_selected);
   Component right_menu_ = Menu(&right_menu_entries, &right_menu_selected);
+
   Component container = Container::Horizontal({
       left_menu_,
       right_menu_,
   });
 
-  Element Render() override {
+  auto renderer = Renderer(container, [&] {
     int sum = left_menu_selected * 10 + right_menu_selected;
     return vbox({
                // -------- Top panel --------------
@@ -67,22 +67,12 @@ class MyComponent : public ComponentBase {
                }),
            }) |
            border;
-  }
+  });
 
- public:
-  MyComponent() {
-    Add(container);
-    MenuBase::From(left_menu_)->on_enter = [this]() { on_enter(); };
-    MenuBase::From(right_menu_)->on_enter = [this]() { on_enter(); };
-  }
-  std::function<void()> on_enter = []() {};
-};
-
-int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  auto component = Make<MyComponent>();
-  component->on_enter = screen.ExitLoopClosure();
-  screen.Loop(component);
+  MenuBase::From(left_menu_)->on_enter = screen.ExitLoopClosure();
+  MenuBase::From(right_menu_)->on_enter = screen.ExitLoopClosure();
+  screen.Loop(renderer);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

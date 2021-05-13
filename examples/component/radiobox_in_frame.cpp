@@ -10,27 +10,19 @@
 
 using namespace ftxui;
 
-class MyComponent : public ComponentBase {
- private:
-  std::vector<std::wstring> entries_;
-  int selected_ = 0;
-
- public:
-  MyComponent() {
-    for (int i = 0; i < 30; ++i)
-      entries_.push_back(L"RadioBox " + to_wstring(i));
-    Add(Radiobox(&entries_, &selected_));
-  }
-
-  Element Render() override {
-    return ComponentBase::Render() | frame | size(HEIGHT, LESS_THAN, 10) |
-           border;
-  }
-};
-
 int main(int argc, const char* argv[]) {
+  std::vector<std::wstring> entries;
+  int selected = 0;
+
+  for (int i = 0; i < 30; ++i)
+    entries.push_back(L"RadioBox " + to_wstring(i));
+  auto radiobox = Radiobox(&entries, &selected);
+  auto renderer = Renderer(radiobox, [&] {
+    return radiobox->Render() | frame | size(HEIGHT, LESS_THAN, 10) | border;
+  });
+
   auto screen = ScreenInteractive::FitComponent();
-  screen.Loop(Make<MyComponent>());
+  screen.Loop(renderer);
 
   return 0;
 }

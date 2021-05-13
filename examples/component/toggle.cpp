@@ -13,70 +13,54 @@
 
 using namespace ftxui;
 
-class MyComponent : public ComponentBase {
- private:
-  std::vector<std::wstring> toggle_1_entries_ = {
+int main(int argc, const char* argv[]) {
+  std::vector<std::wstring> toggle_1_entries = {
       L"On",
       L"Off",
   };
-  std::vector<std::wstring> toggle_2_entries_ = {
+  std::vector<std::wstring> toggle_2_entries = {
       L"Enabled",
       L"Disabled",
   };
-  std::vector<std::wstring> toggle_3_entries_ = {
+  std::vector<std::wstring> toggle_3_entries = {
       L"10€",
       L"0€",
   };
-  std::vector<std::wstring> toggle_4_entries_ = {
+  std::vector<std::wstring> toggle_4_entries = {
       L"Nothing",
       L"One element",
       L"Several elements",
   };
 
-  int toggle_1_selected_ = 0;
-  int toggle_2_selected_ = 0;
-  int toggle_3_selected_ = 0;
-  int toggle_4_selected_ = 0;
-  Component toggle_1_ = Toggle(&toggle_1_entries_, &toggle_1_selected_);
-  Component toggle_2_ = Toggle(&toggle_2_entries_, &toggle_2_selected_);
-  Component toggle_3_ = Toggle(&toggle_3_entries_, &toggle_3_selected_);
-  Component toggle_4_ = Toggle(&toggle_4_entries_, &toggle_4_selected_);
+  int toggle_1_selected = 0;
+  int toggle_2_selected = 0;
+  int toggle_3_selected = 0;
+  int toggle_4_selected = 0;
+  Component toggle_1 = Toggle(&toggle_1_entries, &toggle_1_selected);
+  Component toggle_2 = Toggle(&toggle_2_entries, &toggle_2_selected);
+  Component toggle_3 = Toggle(&toggle_3_entries, &toggle_3_selected);
+  Component toggle_4 = Toggle(&toggle_4_entries, &toggle_4_selected);
 
-  std::function<void()> exit_;
+  auto container = Container::Vertical({
+      toggle_1,
+      toggle_2,
+      toggle_3,
+      toggle_4,
+  });
 
-  Element Render() override {
+  auto renderer = Renderer(container, [&] {
     return vbox({
         text(L"Choose your options:"),
         text(L""),
-        hbox(text(L" * Poweroff on startup      : "), toggle_1_->Render()),
-        hbox(text(L" * Out of process           : "), toggle_2_->Render()),
-        hbox(text(L" * Price of the information : "), toggle_3_->Render()),
-        hbox(text(L" * Number of elements       : "), toggle_4_->Render()),
+        hbox(text(L" * Poweroff on startup      : "), toggle_1->Render()),
+        hbox(text(L" * Out of process           : "), toggle_2->Render()),
+        hbox(text(L" * Price of the information : "), toggle_3->Render()),
+        hbox(text(L" * Number of elements       : "), toggle_4->Render()),
     });
-  }
+  });
 
-  bool OnEvent(Event event) override {
-    if (event == Event::Return) {
-      exit_();
-      return true;
-    }
-    return ComponentBase::OnEvent(event);
-  }
-
- public:
-  MyComponent(std::function<void()> exit) : exit_(exit) {
-    Add(Container::Vertical({
-        toggle_1_,
-        toggle_2_,
-        toggle_3_,
-        toggle_4_,
-    }));
-  }
-};
-
-int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  screen.Loop(Make<MyComponent>(screen.ExitLoopClosure()));
+  screen.Loop(renderer);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

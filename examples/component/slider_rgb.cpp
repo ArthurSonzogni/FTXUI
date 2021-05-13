@@ -26,56 +26,38 @@ Element ColorString(int red, int green, int blue) {
   );
 }
 
-class MyComponent : public ComponentBase {
- private:
-  int* red_;
-  int* green_;
-  int* blue_;
-  Component slider_red_ = Slider(L"Red  :", red_, 0, 255, 1);
-  Component slider_green_ = Slider(L"Green:", green_, 0, 255, 1);
-  Component slider_blue_ = Slider(L"Blue :", blue_, 0, 255, 1);
-  std::function<void(void)> quit_;
-
- public:
-  MyComponent(int* red, int* green, int* blue, std::function<void(void)> quit)
-      : red_(red), green_(green), blue_(blue), quit_(quit) {
-    Add(Container::Vertical({
-        slider_red_,
-        slider_green_,
-        slider_blue_,
-    }));
-  }
-
-  Element Render() {
-    return hbox({
-               ColorTile(*red_, *green_, *blue_),
-               separator(),
-               vbox({
-                   slider_red_->Render(),
-                   separator(),
-                   slider_green_->Render(),
-                   separator(),
-                   slider_blue_->Render(),
-                   separator(),
-                   ColorString(*red_, *green_, *blue_),
-               }) | xflex,
-           }) |
-           border | size(WIDTH, LESS_THAN, 80);
-  }
-
-  bool OnEvent(Event event) {
-    if (event == Event::Return || event == Event::Escape)
-      quit_();
-    return ComponentBase::OnEvent(event);
-  }
-};
-
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
   int red = 128;
   int green = 25;
   int blue = 100;
-  screen.Loop(Make<MyComponent>(&red, &green, &blue, screen.ExitLoopClosure()));
+  auto slider_red = Slider(L"Red  :", &red, 0, 255, 1);
+  auto slider_green = Slider(L"Green:", &green, 0, 255, 1);
+  auto slider_blue = Slider(L"Blue :", &blue, 0, 255, 1);
+
+  auto container = Container::Vertical({
+      slider_red,
+      slider_green,
+      slider_blue,
+  });
+
+  auto renderer = Renderer(container, [&] {
+    return hbox({
+               ColorTile(red, green, blue),
+               separator(),
+               vbox({
+                   slider_red->Render(),
+                   separator(),
+                   slider_green->Render(),
+                   separator(),
+                   slider_blue->Render(),
+                   separator(),
+                   ColorString(red, green, blue),
+               }) | xflex,
+           }) |
+           border | size(WIDTH, LESS_THAN, 80);
+  });
+  auto screen = ScreenInteractive::TerminalOutput();
+  screen.Loop(renderer);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

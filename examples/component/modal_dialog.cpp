@@ -10,121 +10,84 @@
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, filler, text, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
 
-using namespace ftxui;
+int main(int argc, const char* argv[]) {
+  using namespace ftxui;
+  auto screen = ScreenInteractive::TerminalOutput();
 
-// The main screen, at depth 0. It display the main content.
-class Content : public ComponentBase {
- private:
-  std::wstring label_rate_ftxui_ = L"Rate FTXUI";
-  std::wstring label_quit_ = L"Quit";
-  bool modal_open_ = false;
+  // There are two layers. One at depth = 0 and the modal window at depth = 1;
+  int depth = 0;
 
-  Component button_rate_ftxui_ =
-      Button(&label_rate_ftxui_, [this] { on_rate_ftxui(); });
-  Component button_quit_ = Button(&label_quit_, [this] { on_quit(); });
-  Component container_ = Container::Horizontal({
-      button_rate_ftxui_,
-      button_quit_,
-  });
-
- public:
+  // The current rating of FTXUI.
   std::wstring rating = L"3/5 stars";
-  std::function<void()> on_rate_ftxui;
-  std::function<void()> on_quit;
 
-  Content() { Add(container_); }
+  // At depth=0, two buttons. One for rating FTXUI and one for quitting.
+  std::wstring label_rate_ftxui = L"Rate FTXUI";
+  std::wstring label_quit = L"Quit";
+  auto button_rate_ftxui = Button(&label_rate_ftxui, [&] { depth = 1; });
+  auto button_quit = Button(&label_quit, screen.ExitLoopClosure());
 
-  Element Render() final {
-    auto document =  //
-        vbox({
-            text(L"Modal dialog example"),
-            separator(),
-            text(L"☆☆☆ FTXUI:" + rating + L" ☆☆☆") | bold,
-            filler(),
-            hbox({
-                button_rate_ftxui_->Render(),
-                filler(),
-                button_quit_->Render(),
-            }),
-        }) |
-        border;
-
-    return document | size(HEIGHT, GREATER_THAN, 18) | center;
-  }
-};
-
-std::vector<std::wstring> rating_labels = {
-    L"1/5 stars", L"2/5 stars", L"3/5 stars", L"4/5 stars", L"5/5 stars",
-};
-
-// The "modal" screen, at depth 1. It display the modal dialog.
-class Modal : public ComponentBase {
- private:
-  Component container_ = Container::Horizontal({
-      Button(&rating_labels[0], [this] { on_click(rating_labels[0]); }),
-      Button(&rating_labels[1], [this] { on_click(rating_labels[1]); }),
-      Button(&rating_labels[2], [this] { on_click(rating_labels[2]); }),
-      Button(&rating_labels[3], [this] { on_click(rating_labels[3]); }),
-      Button(&rating_labels[4], [this] { on_click(rating_labels[4]); }),
+  auto depth_0_container = Container::Horizontal({
+      button_rate_ftxui,
+      button_quit,
+  });
+  auto depth_0_renderer = Renderer(depth_0_container, [&] {
+    return vbox({
+               text(L"Modal dialog example"),
+               separator(),
+               text(L"☆☆☆ FTXUI:" + rating + L" ☆☆☆") | bold,
+               filler(),
+               hbox({
+                   button_rate_ftxui->Render(),
+                   filler(),
+                   button_quit->Render(),
+               }),
+           }) |
+           border | size(HEIGHT, GREATER_THAN, 18) | center;
   });
 
- public:
-  std::function<void(std::wstring)> on_click;
+  // At depth=1, The "modal" window.
+  std::vector<std::wstring> rating_labels = {
+      L"1/5 stars", L"2/5 stars", L"3/5 stars", L"4/5 stars", L"5/5 stars",
+  };
+  auto on_rating = [&](std::wstring new_rating) {
+    rating = new_rating;
+    depth = 0;
+  };
+  auto depth_1_container = Container::Horizontal({
+      Button(&rating_labels[0], [&] { on_rating(rating_labels[0]); }),
+      Button(&rating_labels[1], [&] { on_rating(rating_labels[1]); }),
+      Button(&rating_labels[2], [&] { on_rating(rating_labels[2]); }),
+      Button(&rating_labels[3], [&] { on_rating(rating_labels[3]); }),
+      Button(&rating_labels[4], [&] { on_rating(rating_labels[4]); }),
+  });
 
-  Modal() { Add(container_); }
-
-  Element Render() final {
+  auto depth_1_renderer = Renderer(depth_1_container, [&] {
     return vbox({
                text(L"Do you like FTXUI?"),
                separator(),
-               hbox(container_->Render()),
+               hbox(depth_1_container->Render()),
            }) |
            border;
-  }
-};
+  });
 
-class MyComponent : public ComponentBase {
- private:
-  std::shared_ptr<Content> content_ = std::make_shared<Content>();
-  std::shared_ptr<Modal> modal_ = std::make_shared<Modal>();
+  auto main_container = Container::Tab(&depth, {
+                                                   depth_0_renderer,
+                                                   depth_1_renderer,
+                                               });
 
-  int depth = 0;
-  Component container_ = Container::Tab(&depth,
-                                        {
-                                            content_,
-                                            modal_,
-                                        });
-
-  std::function<void()> on_quit_;
-
- public:
-  MyComponent(std::function<void()> on_quit) : on_quit_(on_quit) {
-    Add(container_);
-
-    content_->on_quit = [&] { on_quit(); };
-    content_->on_rate_ftxui = [this] { depth = 1; };
-    modal_->on_click = [&](std::wstring rating) {
-      content_->rating = rating;
-      depth = 0;
-    };
-  }
-
-  Element Render() final {
-    Element document = content_->Render();
+  auto main_renderer = Renderer(main_container, [&] {
+    Element document = depth_0_renderer->Render();
 
     if (depth == 1) {
       document = dbox({
           document,
-          modal_->Render() | clear_under | center,
+          depth_1_renderer->Render() | clear_under | center,
       });
     }
     return document;
-  }
-};
+  });
 
-int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
-  screen.Loop(Make<MyComponent>(screen.ExitLoopClosure()));
+  screen.Loop(main_renderer);
   return 0;
 }
 
