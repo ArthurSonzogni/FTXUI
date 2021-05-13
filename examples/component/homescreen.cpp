@@ -20,32 +20,32 @@
 
 using namespace ftxui;
 
-int shift = 0;
-class Graph {
- public:
-  std::vector<int> operator()(int width, int height) {
-    std::vector<int> output(width);
-    for (int i = 0; i < width; ++i) {
-      float v = 0;
-      v += 0.1f * sin((i + shift) * 0.1f);
-      v += 0.2f * sin((i + shift + 10) * 0.15f);
-      v += 0.1f * sin((i + shift) * 0.03f);
-      v *= height;
-      v += 0.5f * height;
-      output[i] = (int)v;
+int main(int argc, const char* argv[]) {
+  auto screen = ScreenInteractive::Fullscreen();
+
+  int shift = 0;
+
+  class Graph {
+   public:
+    Graph(int* shift) : shift_(shift) {}
+    std::vector<int> operator()(int width, int height) {
+      std::vector<int> output(width);
+      for (int i = 0; i < width; ++i) {
+        float v = 0;
+        v += 0.1f * sin((i + *shift_) * 0.1f);
+        v += 0.2f * sin((i + *shift_ + 10) * 0.15f);
+        v += 0.1f * sin((i + *shift_) * 0.03f);
+        v *= height;
+        v += 0.5f * height;
+        output[i] = (int)v;
+      }
+      return output;
     }
-    return output;
-  }
-};
+    int* shift_;
+  };
 
-class HTopComponent : public ComponentBase {
-  Graph my_graph;
-
- public:
-  HTopComponent() {}
-  ~HTopComponent() override {}
-
-  Element Render() override {
+  Graph my_graph(&shift);
+  auto htop = Renderer([&] {
     auto frequency = vbox({
         text(L"Frequency [Mhz]") | hcenter,
         hbox({
@@ -98,52 +98,50 @@ class HTopComponent : public ComponentBase {
                ram | flex,
            }) |
            flex | border;
-  }
-};
+  });
 
-const std::vector<std::wstring> compiler_entries = {
-    L"gcc",
-    L"clang",
-    L"emcc",
-    L"game_maker",
-    L"Ada compilers",
-    L"ALGOL 60 compilers",
-    L"ALGOL 68 compilers",
-    L"Assemblers (Intel *86)",
-    L"Assemblers (Motorola 68*)",
-    L"Assemblers (Zilog Z80)",
-    L"Assemblers (other)",
-    L"BASIC Compilers",
-    L"BASIC interpreters",
-    L"Batch compilers",
-    L"C compilers",
-    L"Source-to-source compilers",
-    L"C++ compilers",
-    L"C# compilers",
-    L"COBOL compilers",
-    L"Common Lisp compilers",
-    L"D compilers",
-    L"DIBOL/DBL compilers",
-    L"ECMAScript interpreters",
-    L"Eiffel compilers",
-    L"Fortran compilers",
-    L"Go compilers",
-    L"Haskell compilers",
-    L"Java compilers",
-    L"Pascal compilers",
-    L"Perl Interpreters",
-    L"PHP compilers",
-    L"PL/I compilers",
-    L"Python compilers",
-    L"Scheme compilers and interpreters",
-    L"Smalltalk compilers",
-    L"Tcl Interpreters",
-    L"VMS Interpreters",
-    L"Rexx Interpreters",
-    L"CLI compilers",
-};
+  const std::vector<std::wstring> compiler_entries = {
+      L"gcc",
+      L"clang",
+      L"emcc",
+      L"game_maker",
+      L"Ada compilers",
+      L"ALGOL 60 compilers",
+      L"ALGOL 68 compilers",
+      L"Assemblers (Intel *86)",
+      L"Assemblers (Motorola 68*)",
+      L"Assemblers (Zilog Z80)",
+      L"Assemblers (other)",
+      L"BASIC Compilers",
+      L"BASIC interpreters",
+      L"Batch compilers",
+      L"C compilers",
+      L"Source-to-source compilers",
+      L"C++ compilers",
+      L"C# compilers",
+      L"COBOL compilers",
+      L"Common Lisp compilers",
+      L"D compilers",
+      L"DIBOL/DBL compilers",
+      L"ECMAScript interpreters",
+      L"Eiffel compilers",
+      L"Fortran compilers",
+      L"Go compilers",
+      L"Haskell compilers",
+      L"Java compilers",
+      L"Pascal compilers",
+      L"Perl Interpreters",
+      L"PHP compilers",
+      L"PL/I compilers",
+      L"Python compilers",
+      L"Scheme compilers and interpreters",
+      L"Smalltalk compilers",
+      L"Tcl Interpreters",
+      L"VMS Interpreters",
+      L"Rexx Interpreters",
+      L"CLI compilers",
+  };
 
-class CompilerComponent : public ComponentBase {
   int compiler_selected = 0;
   Component compiler = Radiobox(&compiler_entries, &compiler_selected);
 
@@ -178,28 +176,48 @@ class CompilerComponent : public ComponentBase {
       Checkbox(&options_label[3], &options_state[3]),
   });
 
- public:
-  ~CompilerComponent() override {}
-  CompilerComponent() {
-    Add(Container::Horizontal({
-        compiler,
-        flags,
-        Container::Vertical({
-            executable_,
-            Container::Horizontal({
-                input_add,
-                input,
-            }),
-        }),
-    }));
+  auto compiler_component = Container::Horizontal({
+      compiler,
+      flags,
+      Container::Vertical({
+          executable_,
+          Container::Horizontal({
+              input_add,
+              input,
+          }),
+      }),
+  });
 
-    InputBase::From(input_add)->on_enter = [this] {
-      input_entries.push_back(input_add_content);
-      input_add_content = L"";
-    };
-  }
+  InputBase::From(input_add)->on_enter = [&] {
+    input_entries.push_back(input_add_content);
+    input_add_content = L"";
+  };
 
-  Element Render() override {
+  auto render_command = [&] {
+    Elements line;
+    // Compiler
+    line.push_back(text(compiler_entries[compiler_selected]) | bold);
+    // flags
+    for (int i = 0; i < 4; ++i) {
+      if (options_state[i]) {
+        line.push_back(text(L" "));
+        line.push_back(text(options_label[i]) | dim);
+      }
+    }
+    // Executable
+    if (!executable_content_.empty()) {
+      line.push_back(text(L" -O ") | bold);
+      line.push_back(text(executable_content_) | color(Color::BlueLight) |
+                     bold);
+    }
+    // Input
+    for (auto& it : input_entries) {
+      line.push_back(text(L" " + it) | color(Color::RedLight));
+    }
+    return line;
+  };
+
+  auto compiler_renderer = Renderer(compiler_component, [&] {
     auto compiler_win = window(text(L"Compiler"), compiler->Render() | frame);
     auto flags_win = window(text(L"Flags"), flags->Render());
     auto executable_win = window(text(L"Executable:"), executable_->Render());
@@ -227,50 +245,21 @@ class CompilerComponent : public ComponentBase {
                    }),
                    filler(),
                }),
-               hflow(RenderCommandLine()) | flex_grow,
+               hflow(render_command()) | flex_grow,
            }) |
            flex_grow | border;
-  }
+  });
 
-  Elements RenderCommandLine() {
-    Elements line;
-    // Compiler
-    line.push_back(text(compiler_entries[compiler_selected]) | bold);
-    // flags
-    for (int i = 0; i < 4; ++i) {
-      if (options_state[i]) {
-        line.push_back(text(L" "));
-        line.push_back(text(options_label[i]) | dim);
-      }
-    }
-    // Executable
-    if (!executable_content_.empty()) {
-      line.push_back(text(L" -O ") | bold);
-      line.push_back(text(executable_content_) | color(Color::BlueLight) |
-                     bold);
-    }
-    // Input
-    for (auto& it : input_entries) {
-      line.push_back(text(L" " + it) | color(Color::RedLight));
-    }
-    return line;
-  }
-};
-
-class SpinnerComponent : public ComponentBase {
-  Element Render() override {
+  auto spinner_tab_renderer = Renderer([&] {
     Elements entries;
     for (int i = 0; i < 22; ++i) {
-      if (i != 0)
-        entries.push_back(spinner(i, shift / 2) | bold |
-                          size(WIDTH, GREATER_THAN, 2) | border);
+      entries.push_back(spinner(i, shift / 2) | bold |
+                        size(WIDTH, GREATER_THAN, 2) | border);
     }
     return hflow(std::move(entries)) | border;
-  }
-};
+  });
 
-class ColorComponent : public ComponentBase {
-  Element Render() override {
+  auto color_tab_renderer = Renderer([] {
     return hbox({
                vbox({
                    color(Color::Default, text(L"Default")),
@@ -312,79 +301,67 @@ class ColorComponent : public ComponentBase {
                }),
            }) |
            hcenter | border;
-  }
-};
+  });
 
-class GaugeComponent : public ComponentBase {
-  Element RenderGauge(int delta) {
+  auto render_gauge = [&shift](int delta) {
     float progress = (shift + delta) % 1000 / 1000.f;
     return hbox({
         text(std::to_wstring(int(progress * 100)) + L"% ") |
             size(WIDTH, EQUAL, 5),
         gauge(progress),
     });
-  }
-  Element Render() override {
+  };
+
+  auto gauge_component = Renderer([render_gauge] {
     return vbox({
-               RenderGauge(0) | color(Color::Black),
-               RenderGauge(100) | color(Color::GrayDark),
-               RenderGauge(50) | color(Color::GrayLight),
-               RenderGauge(6894) | color(Color::White),
+               render_gauge(0) | color(Color::Black),
+               render_gauge(100) | color(Color::GrayDark),
+               render_gauge(50) | color(Color::GrayLight),
+               render_gauge(6894) | color(Color::White),
                separator(),
-               RenderGauge(6841) | color(Color::Blue),
-               RenderGauge(9813) | color(Color::BlueLight),
-               RenderGauge(98765) | color(Color::Cyan),
-               RenderGauge(98) | color(Color::CyanLight),
-               RenderGauge(9846) | color(Color::Green),
-               RenderGauge(1122) | color(Color::GreenLight),
-               RenderGauge(84) | color(Color::Magenta),
-               RenderGauge(645) | color(Color::MagentaLight),
-               RenderGauge(568) | color(Color::Red),
-               RenderGauge(2222) | color(Color::RedLight),
-               RenderGauge(220) | color(Color::Yellow),
-               RenderGauge(348) | color(Color::YellowLight),
+               render_gauge(6841) | color(Color::Blue),
+               render_gauge(9813) | color(Color::BlueLight),
+               render_gauge(98765) | color(Color::Cyan),
+               render_gauge(98) | color(Color::CyanLight),
+               render_gauge(9846) | color(Color::Green),
+               render_gauge(1122) | color(Color::GreenLight),
+               render_gauge(84) | color(Color::Magenta),
+               render_gauge(645) | color(Color::MagentaLight),
+               render_gauge(568) | color(Color::Red),
+               render_gauge(2222) | color(Color::RedLight),
+               render_gauge(220) | color(Color::Yellow),
+               render_gauge(348) | color(Color::YellowLight),
            }) |
            border;
-  };
-};
+  });
 
-class Tab : public ComponentBase {
- public:
   int tab_index = 0;
   std::vector<std::wstring> tab_entries = {
       L"htop", L"color", L"spinner", L"gauge", L"compiler",
   };
-  Component tab_selection = Toggle(&tab_entries, &tab_index);
-  Component container =
-      Container::Tab(&tab_index,
-                     {
-                         std::make_shared<HTopComponent>(),
-                         std::make_shared<ColorComponent>(),
-                         std::make_shared<SpinnerComponent>(),
-                         std::make_shared<GaugeComponent>(),
-                         std::make_shared<CompilerComponent>(),
-                     });
+  auto tab_selection = Toggle(&tab_entries, &tab_index);
+  auto tab_content = Container::Tab(&tab_index, {
+                                                    htop,
+                                                    color_tab_renderer,
+                                                    spinner_tab_renderer,
+                                                    gauge_component,
+                                                    compiler_renderer,
+                                                });
 
-  Component main_container = Container::Vertical({
+  auto main_container = Container::Vertical({
       tab_selection,
-      container,
+      tab_content,
   });
 
-  Tab() { Add(main_container); }
-
-  Element Render() override {
+  auto main_renderer = Renderer(main_container, [&] {
     return vbox({
         text(L"FTXUI Demo") | bold | hcenter,
         tab_selection->Render() | hcenter,
-        container->Render() | flex,
+        tab_content->Render() | flex,
     });
-  }
-};
+  });
 
-int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::Fullscreen();
-
-  std::thread update([&screen]() {
+  std::thread update([&screen, &shift]() {
     for (;;) {
       using namespace std::chrono_literals;
       std::this_thread::sleep_for(0.05s);
@@ -393,8 +370,7 @@ int main(int argc, const char* argv[]) {
     }
   });
 
-  Component tab = std::make_shared<Tab>();
-  screen.Loop(tab);
+  screen.Loop(main_renderer);
 
   return 0;
 }

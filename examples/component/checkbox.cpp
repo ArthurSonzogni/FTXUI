@@ -6,8 +6,7 @@
 
 using namespace ftxui;
 
-class MyComponent : public ComponentBase {
- private:
+int main(int argc, const char* argv[]) {
   std::wstring build_examples_label = L"Build examples";
   std::wstring build_tests_label = L"Build tests";
   std::wstring use_webassembly_label = L"Use WebAssembly";
@@ -16,19 +15,14 @@ class MyComponent : public ComponentBase {
   bool build_tests_state = false;
   bool use_webassembly_state = true;
 
-  Component container = Container::Vertical({
+  auto component = Container::Vertical({
       Checkbox(&build_examples_label, &build_examples_state),
       Checkbox(&build_tests_label, &build_tests_state),
       Checkbox(&use_webassembly_label, &use_webassembly_state),
   });
 
- public:
-  MyComponent() { Add(container); }
-};
-
-int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  screen.Loop(Make<MyComponent>());
+  screen.Loop(component);
   return 0;
 }
 

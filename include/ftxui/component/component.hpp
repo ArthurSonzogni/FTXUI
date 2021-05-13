@@ -26,6 +26,8 @@ Component Input(std::wstring* content, const std::wstring* placeholder);
 Component Menu(const std::vector<std::wstring>* entries, int* selected_);
 Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
 Component Toggle(const std::vector<std::wstring>* entries, int* selected);
+Component Renderer(Component child, std::function<Element()>);
+Component Renderer(std::function<Element()>);
 
 template <class T>  // T = {int, float}
 Component Slider(std::wstring label, T* value, T min, T max, T increment);

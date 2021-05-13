@@ -1,9 +1,7 @@
-#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
 #include <memory>  // for unique_ptr, make_unique, __shared_ptr_access
 #include <string>  // for operator+, wstring
 #include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Checkbox, Make
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/container.hpp"       // for Container
@@ -13,49 +11,28 @@
 
 using namespace ftxui;
 
-struct CheckboxAndState {
+struct CheckboxState {
   std::wstring label;
-  bool state;
-  Component component;
-};
-
-std::unique_ptr<CheckboxAndState> MakeCheckbox(std::wstring label) {
-  auto out = std::make_unique<CheckboxAndState>();
-  out->label = label;
-  out->state = false;
-  out->component = Checkbox(&out->label, &out->state);
-  return out;
-}
-
-class MyComponent : public ComponentBase {
- public:
-  MyComponent() {
-    Add(container);
-    checkbox.resize(30);
-    for (int i = 0; i < checkbox.size(); ++i) {
-      checkbox[i] = MakeCheckbox(L"CheckBox " + to_wstring(i));
-      container->Add(checkbox[i]->component);
-    }
-  }
-
-  // clang-format off
-  Element Render() override {
-    Elements content;
-    return vbox(container->Render())
-      | frame
-      | size(HEIGHT, LESS_THAN, 10)
-      | border;
-  }
-
- private:
-  std::vector<std::unique_ptr<CheckboxAndState>> checkbox;
-  Component container = Container::Vertical();
+  bool checked;
 };
 
 int main(int argc, const char* argv[]) {
+  int size = 30;
+  std::vector<CheckboxState> states(size);
+  auto container = Container::Vertical({});
+  for(int i = 0; i<size; ++i) {
+    states[i].checked = false;
+    states[i].label = L"Checkbox " + to_wstring(i);
+    container->Add(Checkbox(&states[i].label, &states[i].checked));
+  }
+
+  auto component = Renderer(container, [&] {
+    return container->Render() | frame | ftxui::size(HEIGHT, LESS_THAN, 10) |
+           border;
+  });
+
   auto screen = ScreenInteractive::FitComponent();
-  auto my_component = Make<MyComponent>();
-  screen.Loop(my_component);
+  screen.Loop(component);
 
   return 0;
 }

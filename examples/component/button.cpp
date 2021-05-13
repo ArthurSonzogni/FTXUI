@@ -1,43 +1,36 @@
 #include <string>  // for operator+, to_wstring, allocator, wstring
 
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
 #include "ftxui/component/component.hpp"           // for Button, Make
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/container.hpp"           // for Container
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for separator, Element, gauge, text, operator|, vbox, border
 
 using namespace ftxui;
 
-class MyComponent : public ComponentBase {
- private:
-  std::wstring label_add = L"Increase";
-  std::wstring label_rm = L"Decrease";
-  int value_ = 50;
+int main(int argc, const char* argv[]) {
+  int value = 50;
+  std::wstring label_dec = L"decrease";
+  std::wstring label_inc = L"increase";
 
- public:
-  MyComponent() {
-    Add(Container::Horizontal({
-        Button(&label_rm, [&] { value_--; }),
-        Button(&label_add, [&] { value_++; }),
-    }));
-  }
+  // The tree of components. This defines how to navigate using the keyboard.
+  auto buttons = Container::Horizontal({
+      Button(&label_dec, [&] { value--; }),
+      Button(&label_inc, [&] { value++; }),
+  });
 
-  Element Render() override {
+  // Modify the way to render them on screen:
+  auto component = Renderer(buttons, [&] {
     return vbox({
-               text(L"Value = " + std::to_wstring(value_)),
+               text(L"value = " + std::to_wstring(value)),
                separator(),
-               gauge(value_ * 0.01f),
+               gauge(value * 0.01f),
                separator(),
-               ComponentBase::Render(),
+               buttons->Render(),
            }) |
            border;
-  }
-};
+  });
 
-int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::FitComponent();
-  screen.Loop(Make<MyComponent>());
+  screen.Loop(component);
   return 0;
 }
 
