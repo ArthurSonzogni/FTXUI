@@ -7,6 +7,8 @@
 #include <vector>      // for vector
 
 #include "ftxui/component/component_base.hpp"
+#include "ftxui/dom/elements.hpp"   // for Element
+#include "ftxui/screen/string.hpp"  // for ConstStringRef, StringRef
 
 namespace ftxui {
 
@@ -20,9 +22,9 @@ std::shared_ptr<T> Make(Args&&... args) {
   return std::make_shared<T>(args...);
 }
 
-Component Button(const std::wstring* label, std::function<void()> on_click);
-Component Checkbox(const std::wstring* label, bool* checked);
-Component Input(std::wstring* content, const std::wstring* placeholder);
+Component Button(ConstStringRef label, std::function<void()> on_click);
+Component Checkbox(ConstStringRef label, bool* checked);
+Component Input(StringRef content, ConstStringRef placeholder);
 Component Menu(const std::vector<std::wstring>* entries, int* selected_);
 Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
 Component Toggle(const std::vector<std::wstring>* entries, int* selected);
@@ -30,7 +32,7 @@ Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);
 
 template <class T>  // T = {int, float}
-Component Slider(std::wstring label, T* value, T min, T max, T increment);
+Component Slider(StringRef label, T* value, T min, T max, T increment);
 
 namespace Container {
 Component Vertical(Components children);

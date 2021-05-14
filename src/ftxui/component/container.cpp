@@ -15,7 +15,7 @@ namespace Container {
 /// vertically using up/down arrow key or 'j'/'k' keys.
 /// @param children the list of components.
 /// @ingroup component
-/// @see ContainerBase 
+/// @see ContainerBase
 ///
 /// ### Example
 ///
@@ -35,7 +35,7 @@ Component Vertical(Components children) {
 /// horizontally using left/right arrow key or 'h'/'l' keys.
 /// @param children the list of components.
 /// @ingroup component
-/// @see ContainerBase 
+/// @see ContainerBase
 ///
 /// ### Example
 ///
@@ -57,7 +57,7 @@ Component Horizontal(Components children) {
 /// @param selector The index of the drawn children.
 /// @param children the list of components.
 /// @ingroup component
-/// @see ContainerBase 
+/// @see ContainerBase
 ///
 /// ### Example
 ///
@@ -83,7 +83,7 @@ Component ContainerBase::Vertical() {
 
 // static
 Component ContainerBase::Vertical(Components children) {
-  auto container = std::make_shared<Container>();
+  auto container = std::make_shared<ContainerBase>();
   container->event_handler_ = &ContainerBase::VerticalEvent;
   container->render_handler_ = &ContainerBase::VerticalRender;
   for (Component& child : children)
@@ -98,7 +98,7 @@ Component ContainerBase::Horizontal() {
 
 // static
 Component ContainerBase::Horizontal(Components children) {
-  auto container = std::make_shared<Container>();
+  auto container = std::make_shared<ContainerBase>();
   container->event_handler_ = &ContainerBase::HorizontalEvent;
   container->render_handler_ = &ContainerBase::HorizontalRender;
   for (Component& child : children)
@@ -113,7 +113,7 @@ Component ContainerBase::Tab(int* selector) {
 
 // static
 Component ContainerBase::Tab(int* selector, Components children) {
-  auto container = std::make_shared<Container>();
+  auto container = std::make_shared<ContainerBase>();
   container->selector_ = selector;
   container->event_handler_ = &ContainerBase::TabEvent;
   container->render_handler_ = &ContainerBase::TabRender;

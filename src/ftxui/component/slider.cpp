@@ -1,4 +1,4 @@
-#include <string>   // for allocator, wstring
+#include <string>   // for allocator
 #include <utility>  // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
@@ -10,13 +10,14 @@
 #include "ftxui/dom/elements.hpp"  // for Element, text, color, operator|, xflex, gauge, dim, hbox, reflect, underlined, vcenter
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::GrayLight
+#include "ftxui/screen/string.hpp"  // for StringRef
 
 namespace ftxui {
 
 template <class T>
 class SliderBase : public ComponentBase {
  public:
-  SliderBase(std::wstring label, T* value, T min, T max, T increment)
+  SliderBase(StringRef label, T* value, T min, T max, T increment)
       : label_(label),
         value_(value),
         min_(min),
@@ -28,7 +29,7 @@ class SliderBase : public ComponentBase {
         Focused() ? color(Color::GrayLight) : color(Color::GrayDark);
     float percent = float(*value_ - min_) / float(max_ - min_);
     return hbox({
-               text(label_) | dim | vcenter,
+               text(*label_) | dim | vcenter,
                hbox({
                    text(L"["),
                    gauge(percent) | underlined | xflex | reflect(gauge_box_),
@@ -84,7 +85,7 @@ class SliderBase : public ComponentBase {
   }
 
  private:
-  std::wstring label_;
+  StringRef label_;
   T* value_;
   T min_;
   T max_;
@@ -117,17 +118,17 @@ class SliderBase : public ComponentBase {
 /// Value:[██████████████████████████                          ]
 /// ```
 template <class T>
-Component Slider(std::wstring label, T* value, T min, T max, T increment) {
+Component Slider(StringRef label, T* value, T min, T max, T increment) {
   return Make<SliderBase<T>>(std::move(label), value, min, max, increment);
 }
 
-template Component Slider(std::wstring label,
+template Component Slider(StringRef label,
                           int* value,
                           int min,
                           int max,
                           int increment);
 
-template Component Slider(std::wstring label,
+template Component Slider(StringRef label,
                           float* value,
                           float min,
                           float max,

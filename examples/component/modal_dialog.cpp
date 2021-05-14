@@ -1,13 +1,11 @@
-#include <functional>  // for function
-#include <memory>  // for allocator, __shared_ptr_access, shared_ptr, make_shared
+#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
 #include <string>  // for wstring, operator+, basic_string, char_traits
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Button, Make
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/container.hpp"       // for Container
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/component/component.hpp"  // for Button, Renderer, Horizontal, Tab
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, filler, text, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
 
 int main(int argc, const char* argv[]) {
@@ -21,10 +19,8 @@ int main(int argc, const char* argv[]) {
   std::wstring rating = L"3/5 stars";
 
   // At depth=0, two buttons. One for rating FTXUI and one for quitting.
-  std::wstring label_rate_ftxui = L"Rate FTXUI";
-  std::wstring label_quit = L"Quit";
-  auto button_rate_ftxui = Button(&label_rate_ftxui, [&] { depth = 1; });
-  auto button_quit = Button(&label_quit, screen.ExitLoopClosure());
+  auto button_rate_ftxui = Button("Rate FTXUI", [&] { depth = 1; });
+  auto button_quit = Button("Quit", screen.ExitLoopClosure());
 
   auto depth_0_container = Container::Horizontal({
       button_rate_ftxui,

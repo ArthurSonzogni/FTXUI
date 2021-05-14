@@ -31,7 +31,7 @@ namespace ftxui {
 /// │Click to quit│
 /// └─────────────┘
 /// ```
-Component Button(const std::wstring* label, std::function<void()> on_click) {
+Component Button(ConstStringRef label, std::function<void()> on_click) {
   return Make<ButtonBase>(label, on_click);
 }
 
@@ -40,8 +40,7 @@ ButtonBase* ButtonBase::From(Component component) {
   return static_cast<ButtonBase*>(component.get());
 }
 
-ButtonBase::ButtonBase(const std::wstring* label,
-                       std::function<void()> on_click)
+ButtonBase::ButtonBase(ConstStringRef label, std::function<void()> on_click)
     : label_(label), on_click_(on_click) {}
 
 Element ButtonBase::Render() {

@@ -1,5 +1,6 @@
 #include <algorithm>  // for max, min
 #include <memory>     // for shared_ptr
+#include <string>     // for wstring, allocator, basic_string
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::Home, Event::Return
@@ -30,7 +31,7 @@ namespace ftxui {
 /// ```bash
 /// placeholder
 /// ```
-Component Input(std::wstring* content, const std::wstring* placeholder) {
+Component Input(StringRef content, ConstStringRef placeholder) {
   return Make<InputBase>(content, placeholder);
 }
 
@@ -39,7 +40,7 @@ InputBase* InputBase::From(Component component) {
   return static_cast<InputBase*>(component.get());
 }
 
-InputBase::InputBase(std::wstring* content, const std::wstring* placeholder)
+InputBase::InputBase(StringRef content, ConstStringRef placeholder)
     : content_(content), placeholder_(placeholder) {}
 
 // Component implementation.

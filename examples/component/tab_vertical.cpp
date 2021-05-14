@@ -1,13 +1,12 @@
-#include <memory>  // for __shared_ptr_access
-#include <string>  // for wstring, allocator, basic_string
+#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
+#include <string>  // for wstring, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Radiobox, Make, Toggle
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/container.hpp"       // for Container
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for Element, separator, operator|, vbox, border
+#include "ftxui/component/component.hpp"  // for Radiobox, Horizontal, Menu, Renderer, Tab
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for Element, separator, hbox, operator|, border
 
 using namespace ftxui;
 

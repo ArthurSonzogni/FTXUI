@@ -1,5 +1,3 @@
-#include <memory>  // for allocator
-
 #include "ftxui/component/captured_mouse.hpp"      // for ftxui
 #include "ftxui/component/component.hpp"           // for Slider
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive

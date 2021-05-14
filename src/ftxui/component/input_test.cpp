@@ -1,11 +1,12 @@
-#include <gtest/gtest-message.h>    // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult
+#include <gtest/gtest-message.h>  // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
 #include <memory>                   // for __shared_ptr_access
+#include <string>                   // for wstring, allocator
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Delete, Event::End, Event::Home
 #include "ftxui/component/input.hpp"
-#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, SuiteApiResolver, TEST, TestFactoryImpl
+#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
 using namespace ftxui;
 

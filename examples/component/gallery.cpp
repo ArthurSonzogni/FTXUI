@@ -1,14 +1,13 @@
 #include <functional>  // for function
-#include <memory>      // for allocator, __shared_ptr_access
+#include <memory>      // for shared_ptr, allocator, __shared_ptr_access
 #include <string>      // for wstring, basic_string
 #include <vector>      // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"  // for Slider, Checkbox, Button, Input, Make, Menu, Radiobox, Toggle
+#include "ftxui/component/component.hpp"  // for Slider, Checkbox, Vertical, Renderer, Button, Input, Menu, Radiobox, Toggle
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/container.hpp"       // for Container
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, size, xflex, text, WIDTH, hbox, vbox, EQUAL, LESS_THAN, border, GREATER_THAN
+#include "ftxui/dom/elements.hpp"  // for separator, Element, operator|, size, xflex, text, WIDTH, hbox, vbox, EQUAL, border, GREATER_THAN
 
 using namespace ftxui;
 
@@ -27,7 +26,8 @@ Component Wrap(std::wstring name, Component component) {
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::FitComponent();
 
-  // -- Menu ----------------------------------------------------------------------
+  // -- Menu
+  // ----------------------------------------------------------------------
   const std::vector<std::wstring> menu_entries = {
       L"Menu 1",
       L"Menu 2",
@@ -48,14 +48,12 @@ int main(int argc, const char* argv[]) {
   toggle = Wrap(L"Toggle", toggle);
 
   // -- Checkbox ---------------------------------------------------------------
-  std::wstring checkbox_1_label = L"checkbox1";
-  std::wstring checkbox_2_label = L"checkbox2";
   bool checkbox_1_selected = false;
   bool checkbox_2_selected = false;
 
   auto checkboxes = Container::Vertical({
-      Checkbox(&checkbox_1_label, &checkbox_1_selected),
-      Checkbox(&checkbox_2_label, &checkbox_2_selected),
+      Checkbox("checkbox1", &checkbox_1_selected),
+      Checkbox("checkbox2", &checkbox_2_selected),
   });
   checkboxes = Wrap(L"Checkbox", checkboxes);
 
@@ -72,8 +70,7 @@ int main(int argc, const char* argv[]) {
 
   // -- Input ------------------------------------------------------------------
   std::wstring input_label;
-  std::wstring input_placeholder = L"input";
-  auto input = Input(&input_label, &input_placeholder);
+  auto input = Input(&input_label, L"placeholder");
   input = Wrap(L"Input", input);
 
   // -- Button -----------------------------------------------------------------

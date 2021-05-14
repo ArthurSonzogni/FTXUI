@@ -1,8 +1,9 @@
+#include <memory>  // for __shared_ptr_access, shared_ptr
 #include <string>  // for wstring, operator+
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Make, Radiobox
+#include "ftxui/component/component.hpp"           // for Radiobox, Renderer
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, size, border, frame, HEIGHT, LESS_THAN

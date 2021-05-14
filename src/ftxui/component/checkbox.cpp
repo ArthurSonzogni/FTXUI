@@ -30,7 +30,7 @@ namespace ftxui {
 /// ```bash
 /// ☐ Make a sandwitch
 /// ```
-Component Checkbox(const std::wstring* label, bool* checked) {
+Component Checkbox(ConstStringRef label, bool* checked) {
   return Make<CheckboxBase>(label, checked);
 }
 
@@ -39,7 +39,7 @@ CheckboxBase* From(Component component) {
   return static_cast<CheckboxBase*>(component.get());
 }
 
-CheckboxBase::CheckboxBase(const std::wstring* label, bool* state)
+CheckboxBase::CheckboxBase(ConstStringRef label, bool* state)
     : label_(label), state_(state) {}
 
 Element CheckboxBase::Render() {

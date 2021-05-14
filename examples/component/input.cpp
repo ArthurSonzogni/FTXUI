@@ -1,23 +1,20 @@
 #include <memory>  // for allocator, __shared_ptr_access
-#include <string>  // for operator+, wstring, char_traits
+#include <string>  // for operator+, char_traits, wstring
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Input, Make
+#include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/container.hpp"       // for Container
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, hbox, separator, border, vbox, Element
+#include "ftxui/dom/elements.hpp"  // for text, hbox, Element, separator, operator|, vbox, border
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
 
   std::wstring first_name_;
   std::wstring last_name_;
-  std::wstring first_name_placeholder_ = L"first_name";
-  std::wstring last_name_placeholder_ = L"last_name";
 
-  Component input_first_name_ = Input(&first_name_, &first_name_placeholder_);
-  Component input_last_name_ = Input(&last_name_, &last_name_placeholder_);
+  Component input_first_name_ = Input(&first_name_, "first name");
+  Component input_last_name_ = Input(&last_name_, "last name");
 
   auto component = Container::Vertical({
       input_first_name_,

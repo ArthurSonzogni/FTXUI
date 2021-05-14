@@ -1,13 +1,10 @@
-#include <functional>  // for function
-#include <memory>      // for allocator, __shared_ptr_access
-#include <string>      // for wstring, basic_string
-#include <vector>      // for vector
+#include <memory>  // for allocator, __shared_ptr_access
+#include <string>  // for wstring, basic_string
+#include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Toggle, Make
+#include "ftxui/component/component.hpp"       // for Toggle, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/container.hpp"       // for Container
-#include "ftxui/component/event.hpp"           // for Event, Event::Return
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, hbox, vbox, Element
 

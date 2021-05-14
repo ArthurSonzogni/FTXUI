@@ -9,7 +9,7 @@
 using namespace ftxui;
 
 TEST(ContainerTest, HorizontalEvent) {
-  auto container = Container::Horizontal();
+  auto container = ContainerBase::Horizontal();
   Component c0, c1, c2;
   container->Add(c0);
   container->Add(c1);
@@ -80,7 +80,7 @@ TEST(ContainerTest, HorizontalEvent) {
 }
 
 TEST(ContainerTest, VerticalEvent) {
-  auto container = Container::Vertical();
+  auto container = ContainerBase::Vertical();
   Component c0, c1, c2;
   container->Add(c0);
   container->Add(c1);
@@ -151,7 +151,7 @@ TEST(ContainerTest, VerticalEvent) {
 }
 
 TEST(ContainerTest, SetActiveChild) {
-  auto container = Container::Horizontal();
+  auto container = ContainerBase::Horizontal();
   Component c0, c1, c2;
   container->Add(c0);
   container->Add(c1);
@@ -203,16 +203,16 @@ TEST(ContainerTest, SetActiveChild) {
 }
 
 TEST(ContainerTest, TakeFocus) {
-  auto c = Container::Horizontal();
-  auto c1 = Container::Vertical();
-  auto c2 = Container::Vertical();
-  auto c3 = Container::Vertical();
-  auto c11 = Container::Horizontal();
-  auto c12 = Container::Horizontal();
-  auto c13 = Container::Horizontal();
-  auto c21 = Container::Horizontal();
-  auto c22 = Container::Horizontal();
-  auto c23 = Container::Horizontal();
+  auto c = ContainerBase::Horizontal();
+  auto c1 = ContainerBase::Vertical();
+  auto c2 = ContainerBase::Vertical();
+  auto c3 = ContainerBase::Vertical();
+  auto c11 = ContainerBase::Horizontal();
+  auto c12 = ContainerBase::Horizontal();
+  auto c13 = ContainerBase::Horizontal();
+  auto c21 = ContainerBase::Horizontal();
+  auto c22 = ContainerBase::Horizontal();
+  auto c23 = ContainerBase::Horizontal();
 
   c->Add(c1);
   c->Add(c2);

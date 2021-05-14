@@ -2,12 +2,13 @@
 #define FTXUI_COMPONENT_CHECKBOX_HPP
 
 #include <functional>  // for function
-#include <string>      // for wstring, allocator
+#include <string>      // for allocator, wstring
 
 #include "ftxui/component/component.hpp"       // for Component
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/dom/elements.hpp"  // for Element, Decorator, inverted, nothing
-#include "ftxui/screen/box.hpp"    // for Box
+#include "ftxui/dom/elements.hpp"   // for Element, Decorator, inverted, nothing
+#include "ftxui/screen/box.hpp"     // for Box
+#include "ftxui/screen/string.hpp"  // for ConstStringRef
 
 namespace ftxui {
 struct Event;
@@ -21,7 +22,7 @@ class CheckboxBase : public ComponentBase {
   static CheckboxBase* From(Component component);
 
   // Constructor.
-  CheckboxBase(const std::wstring* label, bool* state);
+  CheckboxBase(ConstStringRef label, bool* state);
   ~CheckboxBase() override = default;
 
 #if defined(_WIN32)
@@ -45,7 +46,7 @@ class CheckboxBase : public ComponentBase {
  private:
   bool OnMouseEvent(Event event);
 
-  const std::wstring* const label_;
+  ConstStringRef label_;
   bool* const state_;
   int cursor_position = 0;
   Box box_;

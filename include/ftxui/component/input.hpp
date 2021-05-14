@@ -8,6 +8,7 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"              // for Element
 #include "ftxui/screen/box.hpp"                // for Box
+#include "ftxui/screen/string.hpp"             // for ConstStringRef, StringRef
 
 namespace ftxui {
 struct Event;
@@ -20,7 +21,7 @@ class InputBase : public ComponentBase {
   static InputBase* From(Component component);
 
   // Constructor.
-  InputBase(std::wstring* content, const std::wstring* placeholder);
+  InputBase(StringRef content, ConstStringRef placeholder);
   ~InputBase() override = default;
 
   // State.
@@ -35,8 +36,8 @@ class InputBase : public ComponentBase {
   bool OnEvent(Event) override;
 
  private:
-  std::wstring* const content_;
-  const std::wstring* const placeholder_;
+  StringRef content_;
+  ConstStringRef placeholder_;
 
   bool OnMouseEvent(Event);
   Box input_box_;

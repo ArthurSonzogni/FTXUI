@@ -1,20 +1,21 @@
-#include <string>  // for operator+, to_wstring, allocator, wstring
+#include <memory>  // for __shared_ptr_access, shared_ptr
+#include <string>  // for operator+, to_wstring
 
-#include "ftxui/component/component.hpp"           // for Button, Make
-#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for separator, Element, gauge, text, operator|, vbox, border
 
 using namespace ftxui;
 
 int main(int argc, const char* argv[]) {
   int value = 50;
-  std::wstring label_dec = L"decrease";
-  std::wstring label_inc = L"increase";
 
   // The tree of components. This defines how to navigate using the keyboard.
   auto buttons = Container::Horizontal({
-      Button(&label_dec, [&] { value--; }),
-      Button(&label_inc, [&] { value++; }),
+      Button("Decrease", [&] { value--; }),
+      Button("Increase", [&] { value++; }),
   });
 
   // Modify the way to render them on screen:

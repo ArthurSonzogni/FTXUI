@@ -8,6 +8,7 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"              // for Element
 #include "ftxui/screen/box.hpp"                // for Box
+#include "ftxui/screen/string.hpp"             // for ConstStringRef
 
 namespace ftxui {
 struct Event;
@@ -20,7 +21,7 @@ class ButtonBase : public ComponentBase {
   static ButtonBase* From(Component);
 
   // Constructor.
-  ButtonBase(const std::wstring* label, std::function<void()> on_click);
+  ButtonBase(ConstStringRef label, std::function<void()> on_click);
   ~ButtonBase() override = default;
 
   // Component implementation.
@@ -28,7 +29,7 @@ class ButtonBase : public ComponentBase {
   bool OnEvent(Event) override;
 
  private:
-  const std::wstring* label_;
+  ConstStringRef label_;
   std::function<void()> on_click_;
   Box box_;
 };

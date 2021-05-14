@@ -2,20 +2,19 @@
 #include <chrono>      // for operator""s, chrono_literals
 #include <cmath>       // for sin
 #include <functional>  // for ref, reference_wrapper, function
-#include <memory>      // for make_shared, __shared_ptr_access
-#include <string>  // for allocator, wstring, basic_string, operator+, to_wstring
-#include <thread>   // for sleep_for, thread
-#include <utility>  // for move
-#include <vector>   // for vector
+#include <memory>      // for allocator, shared_ptr, __shared_ptr_access
+#include <string>      // for wstring, basic_string, operator+, to_wstring
+#include <thread>      // for sleep_for, thread
+#include <utility>     // for move
+#include <vector>      // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"  // for Checkbox, Input, Menu, Radiobox, Toggle
+#include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, Tab, Toggle
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/container.hpp"       // for Container
 #include "ftxui/component/event.hpp"           // for Event, Event::Custom
 #include "ftxui/component/input.hpp"           // for InputBase
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, operator|, color, bgcolor, Element, filler, size, vbox, flex, hbox, graph, separator, EQUAL, WIDTH, hcenter, bold, border, window, Elements, HEIGHT, hflow, flex_grow, frame, gauge, LESS_THAN, spinner, dim, GREATER_THAN
+#include "ftxui/dom/elements.hpp"  // for text, operator|, color, bgcolor, Element, filler, size, vbox, flex, hbox, graph, separator, EQUAL, WIDTH, hcenter, bold, border, window, HEIGHT, Elements, hflow, flex_grow, frame, gauge, LESS_THAN, spinner, dim, GREATER_THAN
 #include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::Black, Color::Blue, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default
 
 using namespace ftxui;
@@ -157,17 +156,15 @@ int main(int argc, const char* argv[]) {
       false,
       false,
   };
-  std::wstring input_add_content = L"";
-  std::wstring input_add_placeholder = L"input_files";
-  Component input_add = Input(&input_add_content, &input_add_placeholder);
+  std::wstring input_add_content;
+  Component input_add = Input(&input_add_content, "input files");
 
   std::vector<std::wstring> input_entries;
   int input_selected = 0;
   Component input = Menu(&input_entries, &input_selected);
 
   std::wstring executable_content_ = L"";
-  std::wstring executable_placeholder_ = L"executable";
-  Component executable_ = Input(&executable_content_, &executable_placeholder_);
+  Component executable_ = Input(&executable_content_, "executable");
 
   Component flags = Container::Vertical({
       Checkbox(&options_label[0], &options_state[0]),
