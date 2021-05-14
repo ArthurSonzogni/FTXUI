@@ -21,8 +21,8 @@ int wstring_width_cjk(const std::wstring&);
 /// references toward a shared representation.
 class StringRef {
  public:
-  StringRef(std::wstring& ref);
   StringRef(std::wstring* ref);
+  StringRef(std::wstring ref);
   StringRef(const wchar_t* ref);
   StringRef(const char* ref);
 
@@ -38,8 +38,8 @@ class StringRef {
 /// references toward  shared representation.
 class ConstStringRef {
  public:
-  ConstStringRef(const std::wstring& ref);
   ConstStringRef(const std::wstring* ref);
+  ConstStringRef(std::wstring ref);
   ConstStringRef(const wchar_t* ref);
   ConstStringRef(const char* ref);
 
