@@ -32,11 +32,11 @@ Component Renderer(std::function<Element()>);
 template <class T>  // T = {int, float}
 Component Slider(std::wstring label, T* value, T min, T max, T increment);
 
-// namespace Component {
-// Component Vertical(Components children);
-// Component Horizontal(Components children);
-// Component Tab(int* selector, Components children);
-//}  // namespace Component
+namespace Container {
+Component Vertical(Components children);
+Component Horizontal(Components children);
+Component Tab(int* selector, Components children);
+}  // namespace Container
 
 };  // namespace ftxui
 
