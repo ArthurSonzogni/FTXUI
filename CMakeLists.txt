@@ -15,7 +15,7 @@ endif()
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.4.${git_version}
+  VERSION 0.5.${git_version}
 )
 
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
