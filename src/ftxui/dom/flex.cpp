@@ -1,7 +1,6 @@
-#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
-#include <memory>              // for make_shared, __shared_ptr_access
-#include <utility>             // for move
-#include <vector>              // for vector
+#include <memory>   // for make_shared, __shared_ptr_access
+#include <utility>  // for move
+#include <vector>   // for vector, __alloc_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for Element, unpack, filler, flex, flex_grow, flex_shrink, notflex, xflex, xflex_grow, xflex_shrink, yflex, yflex_grow, yflex_shrink
 #include "ftxui/dom/node.hpp"      // for Node

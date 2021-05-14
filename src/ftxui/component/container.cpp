@@ -1,9 +1,8 @@
-#include <stddef.h>            // for size_t
-#include <algorithm>           // for max, min
-#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
-#include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, __shared_ptr_access<>::element_type, allocator_traits<>::value_type
+#include <stddef.h>   // for size_t
+#include <algorithm>  // for max, min
+#include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator, __shared_ptr_access<>::element_type, allocator_traits<>::value_type
 #include <utility>  // for move
-#include <vector>   // for vector, allocator
+#include <vector>   // for vector, __alloc_traits<>::value_type
 
 #include "ftxui/component/container.hpp"
 

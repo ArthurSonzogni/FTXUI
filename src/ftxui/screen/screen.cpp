@@ -1,5 +1,4 @@
-#include <algorithm>           // for min
-#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
+#include <algorithm>  // for min
 #include <iostream>  // for operator<<, basic_ostream, wstringstream, stringstream, flush, cout, ostream
 #include <sstream>   // IWYU pragma: keep
 

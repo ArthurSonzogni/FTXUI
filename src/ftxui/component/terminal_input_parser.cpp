@@ -1,7 +1,10 @@
 #include "ftxui/component/terminal_input_parser.hpp"
 
-#include <utility>
-#include "ftxui/component/event.hpp"
+#include <algorithm>  // for max
+#include <memory>     // for unique_ptr
+#include <utility>    // for move
+
+#include "ftxui/component/event.hpp"  // for Event
 
 namespace ftxui {
 

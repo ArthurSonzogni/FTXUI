@@ -1,7 +1,6 @@
-#include <algorithm>           // for find_if
-#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
-#include <iterator>            // for begin, end
-#include <utility>             // for move
+#include <algorithm>  // for find_if, max
+#include <iterator>   // for begin, end
+#include <utility>    // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component.hpp"

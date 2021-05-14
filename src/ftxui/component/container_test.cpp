@@ -10,7 +10,9 @@ using namespace ftxui;
 
 TEST(ContainerTest, HorizontalEvent) {
   auto container = ContainerBase::Horizontal();
-  Component c0, c1, c2;
+  auto c0 = Container::Horizontal({});
+  auto c1 = Container::Horizontal({});
+  auto c2 = Container::Horizontal({});
   container->Add(c0);
   container->Add(c1);
   container->Add(c2);
@@ -81,7 +83,9 @@ TEST(ContainerTest, HorizontalEvent) {
 
 TEST(ContainerTest, VerticalEvent) {
   auto container = ContainerBase::Vertical();
-  Component c0, c1, c2;
+  auto c0 = Container::Horizontal({});
+  auto c1 = Container::Horizontal({});
+  auto c2 = Container::Horizontal({});
   container->Add(c0);
   container->Add(c1);
   container->Add(c2);
@@ -152,7 +156,9 @@ TEST(ContainerTest, VerticalEvent) {
 
 TEST(ContainerTest, SetActiveChild) {
   auto container = ContainerBase::Horizontal();
-  Component c0, c1, c2;
+  auto c0 = Container::Horizontal({});
+  auto c1 = Container::Horizontal({});
+  auto c2 = Container::Horizontal({});
   container->Add(c0);
   container->Add(c1);
   container->Add(c2);

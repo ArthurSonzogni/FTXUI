@@ -1,8 +1,7 @@
-#include <stddef.h>            // for size_t
-#include <algorithm>           // for max, min
-#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
-#include <memory>              // for shared_ptr, allocator_traits<>::value_type
-#include <utility>             // for move
+#include <stddef.h>   // for size_t
+#include <algorithm>  // for max, min
+#include <memory>     // for shared_ptr, allocator_traits<>::value_type
+#include <utility>    // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::Return, Event::Tab, Event::TabReverse

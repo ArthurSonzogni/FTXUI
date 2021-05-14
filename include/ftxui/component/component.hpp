@@ -30,7 +30,6 @@ Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
 Component Toggle(const std::vector<std::wstring>* entries, int* selected);
 Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);
-
 template <class T>  // T = {int, float}
 Component Slider(StringRef label, T* value, T min, T max, T increment);
 
@@ -40,7 +39,7 @@ Component Horizontal(Components children);
 Component Tab(int* selector, Components children);
 }  // namespace Container
 
-};  // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_HPP */
 

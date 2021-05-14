@@ -1,7 +1,6 @@
-#include <ext/alloc_traits.h>  // for __alloc_traits<>::value_type
-#include <memory>              // for make_shared, __shared_ptr_access
-#include <utility>             // for move
-#include <vector>              // for vector
+#include <memory>   // for make_shared, __shared_ptr_access
+#include <utility>  // for move
+#include <vector>   // for __alloc_traits<>::value_type, vector
 
 #include "ftxui/dom/elements.hpp"     // for Element, unpack, Decorator, reflect
 #include "ftxui/dom/node.hpp"         // for Node

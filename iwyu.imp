@@ -1,11 +1,11 @@
 [
-  { symbol: [ "VMIN", private, "<termios.h>", public ] },
-  { symbol: [ "VTIME", private, "<termios.h>", public ] },
   { symbol: [ "ECHO", private, "<termios.h>", public ] },
   { symbol: [ "ICANON", private, "<termios.h>", public ] },
-  { symbol: [ "termios", private, "<termios.h>", public ] },
   { symbol: [ "TCSANOW", private, "<termios.h>", public ] },
-  { symbol: [ "__shared_ptr_access", private, "", public ] },
-  { symbol: [ "ftxui", private , "", public ] },
-  { include: ["ext/alloc_traits.h", "private", "<memory>", "public"] }
+  { symbol: [ "VMIN", private, "<termios.h>", public ] },
+  { symbol: [ "VTIME", private, "<termios.h>", public ] },
+  { symbol: [ "__shared_ptr_access", private, "<memory>", public ] },
+  { symbol: [ "termios", private, "<termios.h>", public ] },
+  { symbol: ["__alloc_traits<>:value_type", private, "<vector>", public ] },
+  { include: ["<ext/alloc_traits.h>", private, "<vector>", public] },
 ]

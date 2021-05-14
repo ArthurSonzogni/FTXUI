@@ -1,11 +1,11 @@
 #ifndef FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 #define FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 
-#include <atomic>  // for atomic
-#include <ftxui/component/receiver.hpp>
-#include <functional>  // for function
-#include <memory>      // for unique_ptr, shared_ptr
-#include <string>      // for string
+#include <atomic>                        // for atomic
+#include <ftxui/component/receiver.hpp>  // for Receiver, Sender
+#include <functional>                    // for function
+#include <memory>                        // for shared_ptr
+#include <string>                        // for string
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"

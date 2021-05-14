@@ -35,7 +35,7 @@ Component Checkbox(ConstStringRef label, bool* checked) {
 }
 
 // static
-CheckboxBase* From(Component component) {
+CheckboxBase* CheckboxBase::From(Component component) {
   return static_cast<CheckboxBase*>(component.get());
 }
 

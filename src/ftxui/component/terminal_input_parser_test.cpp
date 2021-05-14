@@ -1,9 +1,12 @@
-#include <gtest/gtest-message.h>    // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult
+#include <gtest/gtest-message.h>  // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
+#include <algorithm>                // for max
+#include <memory>                   // for unique_ptr, allocator
 
+#include "ftxui/component/event.hpp"     // for Event, Event::Escape
 #include "ftxui/component/receiver.hpp"  // for MakeReceiver, ReceiverImpl
 #include "ftxui/component/terminal_input_parser.hpp"
-#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, Suite...
+#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ, EXPECT_TRUE, EXPECT_FALSE, TEST
 
 using namespace ftxui;
 
