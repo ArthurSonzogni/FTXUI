@@ -1,18 +1,23 @@
-#include "ftxui/component/radiobox.hpp"
+#include <string>  // for wstring, allocator, basic_string
+#include <vector>  // for vector
+
+#include "ftxui/component/captured_mouse.hpp"      // for ftxui
+#include "ftxui/component/component.hpp"           // for Radiobox
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 using namespace ftxui;
 
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
-  RadioBox radiobox;
-  radiobox.entries = {
+  std::vector<std::wstring> radiobox_list = {
       L"Use gcc",
       L"Use clang",
       L"Use emscripten",
       L"Use tcc",
   };
-  screen.Loop(&radiobox);
+  int selected = 0;
+
+  auto screen = ScreenInteractive::TerminalOutput();
+  screen.Loop(Radiobox(&radiobox_list, &selected));
   return 0;
 }
 

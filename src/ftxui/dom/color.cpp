@@ -1,10 +1,11 @@
-#include <memory>
+#include <memory>   // for make_shared
+#include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/dom/node_decorator.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
-#include "ftxui/screen/screen.hpp"
+#include "ftxui/dom/elements.hpp"  // for Element, unpack, Decorator, Elements, bgcolor, color
+#include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
+#include "ftxui/screen/box.hpp"          // for Box
+#include "ftxui/screen/color.hpp"        // for Color
+#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
 
 namespace ftxui {
 

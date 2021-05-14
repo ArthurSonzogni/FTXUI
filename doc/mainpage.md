@@ -31,7 +31,7 @@ int main(void) {
     Dimension::Fit(document) // Height
   );
   Render(screen, document);
-  std::cout << screen.ToString() << std::endl;
+  screen.Print();
 
   return EXIT_SUCCESS;
 }
@@ -44,28 +44,71 @@ int main(void) {
 └────┘└─────────────────────────────────────────────────────────────────┘└─────┘
 ```
 
-**cmake**
-```c
+# Build
+
+## Using CMake
+
+CMakeLists.txt
+~~~cmake
 cmake_minimum_required (VERSION 3.11)
 
+# --- Fetch FTXUI --------------------------------------------------------------
 include(FetchContent)
+
+set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
+  # Specify a GIT_TAG here.
 )
+
 FetchContent_GetProperties(ftxui)
 if(NOT ftxui_POPULATED)
   FetchContent_Populate(ftxui)
   add_subdirectory(${ftxui_SOURCE_DIR} ${ftxui_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
-add_executable(main src/main.cpp)
-target_link_libraries(main
+# ------------------------------------------------------------------------------
+
+project(ftxui-starter
+  LANGUAGES CXX
+  VERSION 1.0.0
+)
+
+add_executable(ftxui-starter src/main.cpp)
+target_include_directories(ftxui-starter PRIVATE src)
+
+target_link_libraries(ftxui-starter
   PRIVATE ftxui::screen
   PRIVATE ftxui::dom
   PRIVATE ftxui::component # Not needed for this example.
 )
-set_target_properties(main PROPERTIES CXX_STANDARD 17)
-```
+
+# C++17 is used. We requires fold expressions at least.
+set_target_properties(ftxui-starter PROPERTIES CXX_STANDARD 17)
+
+~~~
+
+Build
+~~~
+mkdir build && cd build
+cmake ..
+make
+./main
+~~~
+
+## Using NXXM
+
+**.nxxm/deps**
+~~~json
+{
+  "ArthurSonzogni/FTXUI": {}
+}
+~~~
+
+Build:
+~~~
+nxxm . -t clang-cxx17
+~~~
 
 # List of modules.
 
@@ -82,7 +125,7 @@ input. It defines a set of ftxui::Component.  The use can navigates using the
 arrow keys and interact with widgets like checkbox/inputbox/... You can make you
 own components.
 
-## screen
+# screen
 
 It defines a ftxui::Screen. This is a grid of ftxui::Pixel. A Pixel represent a
 unicode character and its associated style (bold, colors, etc...).
@@ -106,7 +149,7 @@ The screen can be printed as a string using ftxui::Screen::ToString().
   }
 ~~~
 
-## dom
+# dom
 
 This module defines a hierachical set of Element. An element manages layout and can be responsive to the terminal dimensions.
 
@@ -129,23 +172,6 @@ document = border(document);
 You only need one header: ftxui/dom/elements.hpp
 
 \include ftxui/dom/elements.hpp
-
-## component
-
-Finally, the ftxui/component directory defines the logic to get interactivity.
-
-Please take a look at ./examples/component
-
-This provides:
-1. A main loop.
-2. Get events and respond to them.
-3. A predefined implementation of "keyboard navigation".
-4. A set of predefined widget: CheckBox, RadioBox, Input, Menu, Toggle.
-
-# ftxui/dom
-
-Every elements of the dom are declared from:
-\ref ftxui/dom/elements.hpp
 
 ## text
 
@@ -219,6 +245,7 @@ border(gauge(0.5))
 ~~~
 
 ## graph
+
 @htmlonly
 <script id="asciicast-223726" src="https://asciinema.org/a/223726.js" async></script>
 @endhtmlonly
@@ -362,7 +389,25 @@ An horizontal flow layout is implemented by:
 └────┘└───────────────────────────────────┘└───────────────────────────────────┘
 ~~~
 
-# ftxui/component
+
+# component
+
+The `ftxui/component` directory defines the logic to get produce
+interactive component responding to user's events (keyboard, mouse, etc...)
+
+A ftxui::ScreenInteractive defines a main loop to render a component.
+
+A ftxui::Component is a shared pointer to a ftxui::ComponentBase. The later
+defines
+  - ftxui::ComponentBase::Render(): How to render the interface.
+  - ftxui::ComponentBase::OnEvent(): How to react to events.
+  - ftxui::ComponentBase::Add(): Give a parent/child relation ship in between
+    two component. This defines a tree a components, which help properly define
+    how keyboard navigation works.
+
+Predefined components are available in `ftxui/dom/component.hpp`:
+
+\include ftxui/component/component.hpp
 
 Element are stateless object. On the other side, components are used when an
 internal state is needed. Components are used to interact with the user with
@@ -370,7 +415,7 @@ its keyboard. They handle keyboard navigation, including component focus.
 
 ## Input
 
-The component: \ref ftxui::Input
+Produced by: ftxui::Input() from "ftxui/component/component.hpp"
 
 @htmlonly
 <script id="asciicast-223719" src="https://asciinema.org/a/223719.js" async></script>
@@ -378,7 +423,7 @@ The component: \ref ftxui::Input
 
 ## Menu
 
-The component: \ref ftxui::Menu
+Produced by: ftxui::Menu() from "ftxui/component/component.hpp"
 
 @htmlonly
 <script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
@@ -386,7 +431,7 @@ The component: \ref ftxui::Menu
 
 ## Toggle.
 
-The component: \ref ftxui::Toggle
+Produced by: ftxui::Toggle() from "ftxui/component/component.hpp"
 
 @htmlonly
 <script id="asciicast-223722" src="https://asciinema.org/a/223722.js" async></script>
@@ -394,7 +439,7 @@ The component: \ref ftxui::Toggle
 
 ## CheckBox
 
-The component: \ref ftxui::CheckBox
+Produced by: ftxui::Checkbox() from "ftxui/component/component.hpp"
 
 @htmlonly
 <script id="asciicast-223724" src="https://asciinema.org/a/223724.js" async></script>
@@ -402,99 +447,32 @@ The component: \ref ftxui::CheckBox
 
 ## RadioBox
 
-The component: \ref ftxui::RadioBox
+Produced by: ftxui::Radiobox() from "ftxui/component/component.hpp"
 
 @htmlonly
 <script id="asciicast-223725" src="https://asciinema.org/a/223725.js" async></script>
 @endhtmlonly
 
-# Build
+## Renderer
 
-Assuming this example example.cpp file.
+Produced by: ftxui::Renderer() from \ref "ftxui/component/component.hpp". This
+component decorate another one by using a different function to render an
+interface.
 
-**main.cpp**
-~~~cpp
-#include "ftxui/screen/screen.c
-#include "ftxui/dom/elements.c
-#include <iostream>
+## Container::Horizontal 
 
-int main(int argc, const char *argv[]) {
-  using namespace ftxui;
-  auto document =
-    hbox({
-      text(L"left") | bold | border,
-      text(L"middle") | flex | border,
-      text(L"right") | border,
-    });
-  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
-  Render(screen, document);
+Produced by: ftxui::Container::Horizontal() from
+"ftxui/component/component.hpp". It displays a list of components horizontally
+and handle keyboard/mouse navigation.
 
-  std::cout << screen.ToString();
+## Container::Vertial
 
-  return 0;
-}
-~~~
+Produced by: ftxui::Container::Vertical() from
+"ftxui/component/component.hpp". It displays a list of components vertically 
+and handles keyboard/mouse navigation.
 
-## Using CMake
+## Container::Tab
 
-CMakeLists.txt
-~~~cmake
-cmake_minimum_required (VERSION 3.11)
-
-# --- Fetch FTXUI --------------------------------------------------------------
-include(FetchContent)
-
-set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
-FetchContent_Declare(ftxui
-  GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  # Specify a GIT TAG here.
-)
-
-FetchContent_GetProperties(ftxui)
-if(NOT ftxui_POPULATED)
-  FetchContent_Populate(ftxui)
-  add_subdirectory(${ftxui_SOURCE_DIR} ${ftxui_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif()
-
-# ------------------------------------------------------------------------------
-
-project(ftxui-starter
-  LANGUAGES CXX
-  VERSION 1.0.0
-)
-
-add_executable(ftxui-starter src/main.cpp)
-target_include_directories(ftxui-starter PRIVATE src)
-
-target_link_libraries(ftxui-starter
-  PRIVATE ftxui::screen
-  PRIVATE ftxui::dom
-  PRIVATE ftxui::component # Not needed for this example.
-)
-
-# C++17 is used. We requires fold expressions at least.
-set_target_properties(ftxui-starter PROPERTIES CXX_STANDARD 17)
-
-~~~
-
-Build
-~~~
-mkdir build && cd build
-cmake ..
-make
-./main
-~~~
-
-## Using NXXM
-
-**.nxxm/deps**
-~~~json
-{
-  "ArthurSonzogni/FTXUI": {}
-}
-~~~
-
-Build:
-~~~
-nxxm . -t clang-cxx17
-~~~
+Produced by: ftxui::Container::Tab() from
+"ftxui/component/component.hpp". It take a list of component and display only
+one of them. This is useful for implementing a tab bar.

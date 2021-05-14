@@ -1,7 +1,8 @@
-#include "ftxui/component/event.hpp"
+#include <utility>  // for move
 
-#include "ftxui/component/mouse.hpp"
-#include "ftxui/screen/string.hpp"
+#include "ftxui/component/event.hpp"
+#include "ftxui/component/mouse.hpp"  // for Mouse
+#include "ftxui/screen/string.hpp"    // for to_wstring
 
 namespace ftxui {
 

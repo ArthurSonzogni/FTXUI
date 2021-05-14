@@ -1,59 +1,63 @@
-#include "ftxui/component/toggle.hpp"
-#include "ftxui/component/container.hpp"           // for Container
-#include "ftxui/component/event.hpp"               // for Event, Event::Return
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include <memory>  // for allocator, __shared_ptr_access
+#include <string>  // for wstring, basic_string
+#include <vector>  // for vector
+
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Toggle, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for text, hbox, vbox, Element
 
 using namespace ftxui;
 
-class MyComponent : public Component {
- public:
-  MyComponent() {
-    Add(&container_);
-    container_.Add(&toggle_1_);
-    container_.Add(&toggle_2_);
-    container_.Add(&toggle_3_);
-    container_.Add(&toggle_4_);
+int main(int argc, const char* argv[]) {
+  std::vector<std::wstring> toggle_1_entries = {
+      L"On",
+      L"Off",
+  };
+  std::vector<std::wstring> toggle_2_entries = {
+      L"Enabled",
+      L"Disabled",
+  };
+  std::vector<std::wstring> toggle_3_entries = {
+      L"10€",
+      L"0€",
+  };
+  std::vector<std::wstring> toggle_4_entries = {
+      L"Nothing",
+      L"One element",
+      L"Several elements",
+  };
 
-    toggle_1_.entries = {L"On", L"Off"};
-    toggle_2_.entries = {L"Enabled", L"Disabled"};
-    toggle_3_.entries = {L"10€", L"0€"};
-    toggle_4_.entries = {L"Nothing", L"One element", L"Several elements"};
-  }
+  int toggle_1_selected = 0;
+  int toggle_2_selected = 0;
+  int toggle_3_selected = 0;
+  int toggle_4_selected = 0;
+  Component toggle_1 = Toggle(&toggle_1_entries, &toggle_1_selected);
+  Component toggle_2 = Toggle(&toggle_2_entries, &toggle_2_selected);
+  Component toggle_3 = Toggle(&toggle_3_entries, &toggle_3_selected);
+  Component toggle_4 = Toggle(&toggle_4_entries, &toggle_4_selected);
 
-  std::function<void()> on_enter = []() {};
+  auto container = Container::Vertical({
+      toggle_1,
+      toggle_2,
+      toggle_3,
+      toggle_4,
+  });
 
- private:
-  Container container_ = Container::Vertical();
-  Toggle toggle_1_;
-  Toggle toggle_2_;
-  Toggle toggle_3_;
-  Toggle toggle_4_;
-
-  Element Render() override {
+  auto renderer = Renderer(container, [&] {
     return vbox({
         text(L"Choose your options:"),
         text(L""),
-        hbox(text(L" * Poweroff on startup      : "), toggle_1_.Render()),
-        hbox(text(L" * Out of process           : "), toggle_2_.Render()),
-        hbox(text(L" * Price of the information : "), toggle_3_.Render()),
-        hbox(text(L" * Number of elements       : "), toggle_4_.Render()),
+        hbox(text(L" * Poweroff on startup      : "), toggle_1->Render()),
+        hbox(text(L" * Out of process           : "), toggle_2->Render()),
+        hbox(text(L" * Price of the information : "), toggle_3->Render()),
+        hbox(text(L" * Number of elements       : "), toggle_4->Render()),
     });
-  }
+  });
 
-  bool OnEvent(Event event) override {
-    if (event == Event::Return) {
-      on_enter();
-      return true;
-    }
-    return Component::OnEvent(event);
-  }
-};
-
-int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component;
-  component.on_enter = screen.ExitLoopClosure();
-  screen.Loop(&component);
+  screen.Loop(renderer);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

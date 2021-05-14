@@ -1,28 +1,30 @@
 #ifndef FTXUI_COMPONENT_MENU
 #define FTXUI_COMPONENT_MENU
 
-#include <functional>
-#include <string>
-#include <vector>
+#include <functional>  // for function
+#include <string>      // for wstring
+#include <vector>      // for vector
 
-#include "ftxui/component/component.hpp"
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/component/component.hpp"       // for Component
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for Element, Decorator, operator|, bold, inverted, nothing
+#include "ftxui/screen/box.hpp"  // for Box
 
 namespace ftxui {
 struct Event;
 
 /// @brief A list of items. The user can navigate through them.
 /// @ingroup component
-class Menu : public Component {
+class MenuBase : public ComponentBase {
  public:
+  // Access this interface from a Component
+  static MenuBase* From(Component component);
+
   // Constructor.
-  Menu() = default;
-  ~Menu() override = default;
+  MenuBase(const std::vector<std::wstring>* entries, int* selected_);
+  ~MenuBase() override = default;
 
   // State.
-  std::vector<std::wstring> entries = {};
-  int selected = 0;
   int focused = 0;
 
   Decorator normal_style = nothing;
@@ -38,7 +40,10 @@ class Menu : public Component {
   Element Render() override;
   bool OnEvent(Event) override;
 
- private:
+ protected:
+  const std::vector<std::wstring>* const entries_;
+  int* selected_ = 0;
+
   bool OnMouseEvent(Event);
 
   std::vector<Box> boxes_;

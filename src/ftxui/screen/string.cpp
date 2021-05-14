@@ -25,6 +25,30 @@ std::wstring to_wstring(const std::string& s) {
 #pragma warning(pop)
 #endif
 
+StringRef::StringRef(std::wstring& ref) : borrowed_(&ref) {}
+StringRef::StringRef(std::wstring* ref) : borrowed_(ref) {}
+StringRef::StringRef(const wchar_t* ref) : owned_(ref) {}
+StringRef::StringRef(const char* ref) : owned_(to_wstring(std::string(ref))) {}
+std::wstring& StringRef::operator*() {
+  return borrowed_ ? *borrowed_ : owned_;
+}
+std::wstring* StringRef::operator->() {
+  return borrowed_ ? borrowed_ : &owned_;
+}
+
+ConstStringRef::ConstStringRef(const std::wstring& ref) : borrowed_(&ref) {}
+ConstStringRef::ConstStringRef(const std::wstring* ref) : borrowed_(ref) {}
+ConstStringRef::ConstStringRef(const wchar_t* ref) : owned_(ref) {}
+ConstStringRef::ConstStringRef(const char* ref)
+    : owned_(to_wstring(std::string(ref))) {}
+
+const std::wstring& ConstStringRef::operator*() {
+  return borrowed_ ? *borrowed_ : owned_;
+}
+const std::wstring* ConstStringRef::operator->() {
+  return borrowed_ ? borrowed_ : &owned_;
+}
+
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

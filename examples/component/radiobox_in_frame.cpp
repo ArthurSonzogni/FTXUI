@@ -1,35 +1,29 @@
+#include <memory>  // for __shared_ptr_access, shared_ptr
 #include <string>  // for wstring, operator+
 #include <vector>  // for vector
 
-#include "ftxui/component/component.hpp"           // for Component
-#include "ftxui/component/radiobox.hpp"            // for RadioBox
+#include "ftxui/component/captured_mouse.hpp"      // for ftxui
+#include "ftxui/component/component.hpp"           // for Radiobox, Renderer
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"                  // for Element, operator|
-#include "ftxui/screen/box.hpp"                    // for ftxui
-#include "ftxui/screen/string.hpp"                 // for to_wstring
+#include "ftxui/dom/elements.hpp"  // for Element, operator|, size, border, frame, HEIGHT, LESS_THAN
+#include "ftxui/screen/string.hpp"  // for to_wstring
 
 using namespace ftxui;
 
-class MyComponent : public Component {
-  RadioBox radiobox;
-
- public:
-  MyComponent() {
-    for (int i = 0; i < 30; ++i) {
-      radiobox.entries.push_back(L"RadioBox " + to_wstring(i));
-    }
-    Add(&radiobox);
-  }
-
-  Element Render() override {
-    return radiobox.Render() | frame | size(HEIGHT, LESS_THAN, 10) | border;
-  }
-};
-
 int main(int argc, const char* argv[]) {
+  std::vector<std::wstring> entries;
+  int selected = 0;
+
+  for (int i = 0; i < 30; ++i)
+    entries.push_back(L"RadioBox " + to_wstring(i));
+  auto radiobox = Radiobox(&entries, &selected);
+  auto renderer = Renderer(radiobox, [&] {
+    return radiobox->Render() | frame | size(HEIGHT, LESS_THAN, 10) | border;
+  });
+
   auto screen = ScreenInteractive::FitComponent();
-  MyComponent component;
-  screen.Loop(&component);
+  screen.Loop(renderer);
 
   return 0;
 }

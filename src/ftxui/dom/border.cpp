@@ -2,7 +2,7 @@
 #include <iterator>   // for begin, end
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <utility>    // for move
-#include <vector>     // for vector
+#include <vector>     // for vector, __alloc_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, Elements, border, borderWith, window
 #include "ftxui/dom/node.hpp"         // for Node

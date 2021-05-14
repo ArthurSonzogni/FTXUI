@@ -4,16 +4,17 @@
 
 #include <stddef.h>                                // for size_t
 #include <algorithm>                               // for max
-#include <ftxui/component/component.hpp>           // for Component
+#include <ftxui/component/component.hpp>           // for Make
 #include <ftxui/component/screen_interactive.hpp>  // for ScreenInteractive
-#include <string>                                  // for allocator, operator+
-#include <utility>                                 // for move
-#include <vector>                                  // for vector
+#include <string>  // for allocator, operator+, wstring, char_traits, to_wstring, string
+#include <utility>  // for move
+#include <vector>   // for vector
 
-#include "ftxui/component/event.hpp"  // for Event
-#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left
-#include "ftxui/dom/elements.hpp"     // for text, vbox, window
-#include "ftxui/screen/box.hpp"       // for ftxui
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::None, Mouse::Pressed, Mouse::Released, Mouse::Right, Mouse::WheelDown, Mouse::WheelUp
+#include "ftxui/dom/elements.hpp"  // for text, vbox, window, Elements, Element
 
 using namespace ftxui;
 
@@ -71,7 +72,7 @@ std::wstring Stringify(Event event) {
   return out;
 }
 
-class DrawKey : public Component {
+class DrawKey : public ComponentBase {
  public:
   ~DrawKey() override = default;
 
@@ -94,6 +95,5 @@ class DrawKey : public Component {
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  DrawKey draw_key;
-  screen.Loop(&draw_key);
+  screen.Loop(Make<DrawKey>());
 }

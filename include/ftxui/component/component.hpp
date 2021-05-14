@@ -1,77 +1,48 @@
-#ifndef FTXUI_COMPONENT_COMPONENT_HPP
-#define FTXUI_COMPONENT_COMPONENT_HPP
+#ifndef FTXUI_COMPONENT_HPP
+#define FTXUI_COMPONENT_HPP
 
-#include <memory>  // for unique_ptr
-#include <vector>  // for vector
+#include <functional>  // for function
+#include <memory>      // for shared_ptr, make_shared
+#include <string>      // for wstring
+#include <vector>      // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // for CaptureMouse
-#include "ftxui/dom/elements.hpp"             // for Element
+#include "ftxui/component/component_base.hpp"
+#include "ftxui/dom/elements.hpp"   // for Element
+#include "ftxui/screen/string.hpp"  // for ConstStringRef, StringRef
 
 namespace ftxui {
 
-class Delegate;
-class Focus;
-struct Event;
+class ComponentBase;
 
-/// @brief It implement rendering itself as ftxui::Element. It implement
-/// keyboard navigation by responding to ftxui::Event.
-/// @ingroup component
-class Component {
- public:
-  // Constructor/Destructor.
-  Component() = default;
-  virtual ~Component();
+using Component = std::shared_ptr<ComponentBase>;
+using Components = std::vector<Component>;
 
-  // Component hierarchy.
-  Component* Parent();
-  void Add(Component* children);
+template <class T, class... Args>
+std::shared_ptr<T> Make(Args&&... args) {
+  return std::make_shared<T>(args...);
+}
 
-  // Renders the component.
-  virtual Element Render();
+Component Button(ConstStringRef label, std::function<void()> on_click);
+Component Checkbox(ConstStringRef label, bool* checked);
+Component Input(StringRef content, ConstStringRef placeholder);
+Component Menu(const std::vector<std::wstring>* entries, int* selected_);
+Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
+Component Toggle(const std::vector<std::wstring>* entries, int* selected);
+Component Renderer(Component child, std::function<Element()>);
+Component Renderer(std::function<Element()>);
+template <class T>  // T = {int, float}
+Component Slider(StringRef label, T* value, T min, T max, T increment);
 
-  // Handles an event.
-  // By default, reduce on children with a lazy OR.
-  //
-  // Returns whether the event was handled or not.
-  virtual bool OnEvent(Event);
-
-  // Focus management ----------------------------------------------------------
-  //
-  // If this component contains children, this indicates which one is active,
-  // nullptr if none is active.
-  //
-  // We say an element has the focus if the chain of ActiveChild() from the
-  // root component contains this object.
-  virtual Component* ActiveChild();
-
-  // Whether this is the active child of its parent.
-  bool Active();
-  // Whether all the ancestors are active.
-  bool Focused();
-
-  // Make the |child| to be the "active" one.
-  virtual void SetActiveChild(Component* child);
-
-  // Configure all the ancestors to give focus to this component.
-  void TakeFocus();
-
- protected:
-  CapturedMouse CaptureMouse(const Event& event);
-
-  std::vector<Component*> children_;
-
- private:
-  Component* parent_ = nullptr;
-  void Detach();
-  void Attach(Component* parent);
-};
-
-using ComponentPtr = std::unique_ptr<Component>;
+namespace Container {
+Component Vertical(Components children);
+Component Horizontal(Components children);
+Component Tab(int* selector, Components children);
+}  // namespace Container
 
 }  // namespace ftxui
 
-#endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_HPP */
+#endif /* end of include guard: FTXUI_COMPONENT_HPP */
 
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.

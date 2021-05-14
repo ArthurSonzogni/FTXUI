@@ -1,132 +1,89 @@
-#include <functional>  // for function
-#include <memory>      // for allocator_traits<>...
-#include <string>      // for operator+, wstring
-#include <vector>      // for vector
+#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
+#include <string>  // for wstring, operator+, basic_string, char_traits
+#include <vector>  // for vector
 
-#include "ftxui/component/button.hpp"              // for Button
-#include "ftxui/component/component.hpp"           // for Component
-#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Button, Renderer, Horizontal, Tab
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"                  // for Element, operator|
-#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/dom/elements.hpp"  // for Element, operator|, filler, text, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
 
-using namespace ftxui;
+int main(int argc, const char* argv[]) {
+  using namespace ftxui;
+  auto screen = ScreenInteractive::TerminalOutput();
 
-// The main screen, at depth 0. It display the main content.
-class Content : public Component {
- public:
-  std::function<void()> on_rate_ftxui = [] {};
-  std::function<void()> on_quit = [] {};
-  std::wstring rating_ = L"3/5 stars";
-  Content() {
-    Add(&container_);
-    container_.Add(&button_rate_ftxui);
-    container_.Add(&button_quit_);
-    button_rate_ftxui.on_click = [&] { on_rate_ftxui(); };
-    button_quit_.on_click = [&] { on_quit(); };
-  }
+  // There are two layers. One at depth = 0 and the modal window at depth = 1;
+  int depth = 0;
 
-  Element Render() final {
-    auto button_elements = hbox({
-        button_rate_ftxui.Render(),
-        filler(),
-        button_quit_.Render(),
-    });
+  // The current rating of FTXUI.
+  std::wstring rating = L"3/5 stars";
 
-    auto document =  //
-        vbox({
-            text(L"Modal dialog example"),
-            separator(),
-            text(L"☆☆☆ FTXUI:" + rating_ + L" ☆☆☆") | bold,
-            filler(),
-            button_elements,
-        }) |
-        border;
+  // At depth=0, two buttons. One for rating FTXUI and one for quitting.
+  auto button_rate_ftxui = Button("Rate FTXUI", [&] { depth = 1; });
+  auto button_quit = Button("Quit", screen.ExitLoopClosure());
 
-    return document | size(HEIGHT, GREATER_THAN, 18) | center;
-  }
+  auto depth_0_container = Container::Horizontal({
+      button_rate_ftxui,
+      button_quit,
+  });
+  auto depth_0_renderer = Renderer(depth_0_container, [&] {
+    return vbox({
+               text(L"Modal dialog example"),
+               separator(),
+               text(L"☆☆☆ FTXUI:" + rating + L" ☆☆☆") | bold,
+               filler(),
+               hbox({
+                   button_rate_ftxui->Render(),
+                   filler(),
+                   button_quit->Render(),
+               }),
+           }) |
+           border | size(HEIGHT, GREATER_THAN, 18) | center;
+  });
 
- private:
-  Container container_ = Container::Horizontal();
-  Button button_rate_ftxui = Button(L"Rate FTXUI");
-  Button button_quit_ = Button(L"Quit");
-};
+  // At depth=1, The "modal" window.
+  std::vector<std::wstring> rating_labels = {
+      L"1/5 stars", L"2/5 stars", L"3/5 stars", L"4/5 stars", L"5/5 stars",
+  };
+  auto on_rating = [&](std::wstring new_rating) {
+    rating = new_rating;
+    depth = 0;
+  };
+  auto depth_1_container = Container::Horizontal({
+      Button(&rating_labels[0], [&] { on_rating(rating_labels[0]); }),
+      Button(&rating_labels[1], [&] { on_rating(rating_labels[1]); }),
+      Button(&rating_labels[2], [&] { on_rating(rating_labels[2]); }),
+      Button(&rating_labels[3], [&] { on_rating(rating_labels[3]); }),
+      Button(&rating_labels[4], [&] { on_rating(rating_labels[4]); }),
+  });
 
-// The "modal" screen, at depth 1. It display the modal dialog.
-class Modal : public Component {
- public:
-  std::function<void(std::wstring)> on_click;
-
-  Modal() {
-    Add(&container_);
-    buttons_.resize(5);
-    for (int i = 0; i < 5; ++i) {
-      std::wstring stars = std::to_wstring(i + 1) + L"/5 stars";
-      buttons_[i] = Button(stars);
-      buttons_[i].on_click = [&, stars] { on_click(stars); };
-      container_.Add(&buttons_[i]);
-    }
-  }
-
-  Element Render() final {
+  auto depth_1_renderer = Renderer(depth_1_container, [&] {
     return vbox({
                text(L"Do you like FTXUI?"),
                separator(),
-               hbox({
-                   buttons_[0].Render(),
-                   buttons_[1].Render(),
-                   buttons_[2].Render(),
-                   buttons_[3].Render(),
-                   buttons_[4].Render(),
-               }),
+               hbox(depth_1_container->Render()),
            }) |
            border;
-  }
+  });
 
- private:
-  Container container_ = Container::Horizontal();
-  std::vector<Button> buttons_;
-};
+  auto main_container = Container::Tab(&depth, {
+                                                   depth_0_renderer,
+                                                   depth_1_renderer,
+                                               });
 
-class MyComponent : public Component {
- public:
-  std::function<void()> on_quit = [] {};
+  auto main_renderer = Renderer(main_container, [&] {
+    Element document = depth_0_renderer->Render();
 
-  MyComponent() {
-    Add(&container_);
-    container_.Add(&content_);
-    container_.Add(&modal_);
-
-    content_.on_quit = [&] { on_quit(); };
-    content_.on_rate_ftxui = [&] { modal_.TakeFocus(); };
-    modal_.on_click = [&](std::wstring rating) {
-      content_.rating_ = rating;
-      content_.TakeFocus();
-    };
-  }
-
-  Element Render() final {
-    Element document = content_.Render();
-    if (modal_.Focused()) {
+    if (depth == 1) {
       document = dbox({
           document,
-          modal_.Render() | clear_under | center,
+          depth_1_renderer->Render() | clear_under | center,
       });
     }
     return document;
-  }
+  });
 
- private:
-  Container container_ = Container::Tab(nullptr);
-  Content content_;
-  Modal modal_;
-};
-
-int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent my_component;
-  my_component.on_quit = screen.ExitLoopClosure();
-  screen.Loop(&my_component);
+  screen.Loop(main_renderer);
   return 0;
 }
 

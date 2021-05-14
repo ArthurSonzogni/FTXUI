@@ -1,51 +1,37 @@
-#include <functional>  // for function
-#include <memory>      // for unique_ptr, make_u...
-#include <string>      // for wstring
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <memory>  // for __shared_ptr_access, shared_ptr
+#include <string>  // for operator+, to_wstring
 
-#include "ftxui/component/button.hpp"              // for Button
-#include "ftxui/component/component.hpp"           // for Component
-#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/dom/elements.hpp"  // for separator, Element, gauge, text, operator|, vbox, border
 
 using namespace ftxui;
 
-class MyComponent : public Component {
- private:
-  std::vector<std::unique_ptr<Button>> buttons_;
-  Container container_ = Container::Horizontal();
-
- public:
-  MyComponent() {
-    Add(&container_);
-
-    auto button_add = std::make_unique<Button>();
-    auto button_remove = std::make_unique<Button>();
-    container_.Add(button_add.get());
-    container_.Add(button_remove.get());
-    button_add->label = L"Add one button";
-    button_remove->label = L"Remove last button";
-
-    button_add->on_click = [&] {
-      auto extra_button = std::make_unique<Button>();
-      extra_button->label = L"extra button";
-      container_.Add(extra_button.get());
-      buttons_.push_back(std::move(extra_button));
-    };
-
-    button_remove->on_click = [&] { buttons_.resize(buttons_.size() - 1); };
-
-    buttons_.push_back(std::move(button_add));
-    buttons_.push_back(std::move(button_remove));
-  }
-};
-
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component;
-  screen.Loop(&component);
+  int value = 50;
+
+  // The tree of components. This defines how to navigate using the keyboard.
+  auto buttons = Container::Horizontal({
+      Button("Decrease", [&] { value--; }),
+      Button("Increase", [&] { value++; }),
+  });
+
+  // Modify the way to render them on screen:
+  auto component = Renderer(buttons, [&] {
+    return vbox({
+               text(L"value = " + std::to_wstring(value)),
+               separator(),
+               gauge(value * 0.01f),
+               separator(),
+               buttons->Render(),
+           }) |
+           border;
+  });
+
+  auto screen = ScreenInteractive::FitComponent();
+  screen.Loop(component);
   return 0;
 }
 

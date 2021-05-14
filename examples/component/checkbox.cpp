@@ -1,34 +1,23 @@
 #include "ftxui/component/checkbox.hpp"
-#include "ftxui/component/component.hpp"           // for Component
-#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/captured_mouse.hpp"      // for ftxui
+#include "ftxui/component/component.hpp"           // for Checkbox, Vertical
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 using namespace ftxui;
 
-class MyComponent : public Component {
- private:
-  CheckBox box_1_;
-  CheckBox box_2_;
-  CheckBox box_3_;
-  Container container_ = Container::Vertical();
-
- public:
-  MyComponent() {
-    Add(&container_);
-    container_.Add(&box_1_);
-    container_.Add(&box_2_);
-    container_.Add(&box_3_);
-    box_1_.label = L"Build examples";
-    box_2_.label = L"Build tests";
-    box_3_.label = L"Use WebAssembly";
-    box_3_.state = true;
-  }
-};
-
 int main(int argc, const char* argv[]) {
+  bool build_examples_state = false;
+  bool build_tests_state = false;
+  bool use_webassembly_state = true;
+
+  auto component = Container::Vertical({
+      Checkbox("Build examples", &build_examples_state),
+      Checkbox("Build tests", &build_tests_state),
+      Checkbox("Use WebAssembly", &use_webassembly_state),
+  });
+
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component;
-  screen.Loop(&component);
+  screen.Loop(component);
   return 0;
 }
 

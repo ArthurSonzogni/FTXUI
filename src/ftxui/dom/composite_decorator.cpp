@@ -1,5 +1,7 @@
 
-#include "ftxui/dom/elements.hpp"
+#include <utility>  // for move
+
+#include "ftxui/dom/elements.hpp"  // for Element, filler, operator|, hbox, flex_grow, vbox, xflex_grow, yflex_grow, align_right, center, hcenter, vcenter
 
 namespace ftxui {
 

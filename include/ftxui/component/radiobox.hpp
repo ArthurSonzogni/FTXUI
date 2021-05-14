@@ -1,12 +1,14 @@
 #ifndef FTXUI_COMPONENT_RADIOBOX_HPP
 #define FTXUI_COMPONENT_RADIOBOX_HPP
 
-#include <string>
-#include <vector>
+#include <functional>  // for function
+#include <string>      // for wstring, allocator
+#include <vector>      // for vector
 
-#include "ftxui/component/component.hpp"
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/component/component.hpp"       // for Component
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for Element, Decorator, inverted, nothing
+#include "ftxui/screen/box.hpp"    // for Box
 
 namespace ftxui {
 struct Event;
@@ -14,15 +16,16 @@ struct Event;
 /// @brief A list of selectable element. One and only one can be selected at
 /// the same time.
 /// @ingroup component
-class RadioBox : public Component {
+class RadioboxBase : public ComponentBase {
  public:
-  // Constructor.
-  RadioBox() = default;
-  ~RadioBox() override = default;
+  // Access this interface from a Component
+  static RadioboxBase* From(Component component);
 
-  int selected = 0;
+  // Constructor.
+  RadioboxBase(const std::vector<std::wstring>* entries, int* selected);
+  ~RadioboxBase() override = default;
+
   int focused = 0;
-  std::vector<std::wstring> entries;
 
 #if defined(_WIN32)
   std::wstring checked = L"(*) ";
@@ -43,6 +46,9 @@ class RadioBox : public Component {
   bool OnEvent(Event) override;
 
  private:
+  const std::vector<std::wstring>* const entries_;
+  int* const selected_;
+
   bool OnMouseEvent(Event event);
   int cursor_position = 0;
   std::vector<Box> boxes_;

@@ -1,9 +1,10 @@
-#include <memory>
+#include <memory>  // for make_shared
 
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/screen.hpp"
+#include "ftxui/dom/elements.hpp"     // for Element, separator
+#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/screen.hpp"    // for Pixel, Screen
 
 namespace ftxui {
 

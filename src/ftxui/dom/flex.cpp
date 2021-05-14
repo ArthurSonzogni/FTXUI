@@ -1,10 +1,11 @@
-#include <memory>
-#include <vector>
+#include <memory>   // for make_shared, __shared_ptr_access
+#include <utility>  // for move
+#include <vector>   // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/dom/node.hpp"
-#include "ftxui/dom/requirement.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/dom/elements.hpp"  // for Element, unpack, filler, flex, flex_grow, flex_shrink, notflex, xflex, xflex_grow, xflex_shrink, yflex, yflex_grow, yflex_shrink
+#include "ftxui/dom/node.hpp"      // for Node
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
 
 namespace ftxui {
 

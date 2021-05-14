@@ -1,130 +1,126 @@
 #include <functional>  // for function
-#include <memory>      // for allocator, unique_ptr
-#include <string>      // for wstring
+#include <memory>      // for shared_ptr, allocator, __shared_ptr_access
+#include <string>      // for wstring, basic_string
 #include <vector>      // for vector
 
-#include "ftxui/component/button.hpp"              // for Button
-#include "ftxui/component/checkbox.hpp"            // for CheckBox
-#include "ftxui/component/component.hpp"           // for Component, Compone...
-#include "ftxui/component/container.hpp"           // for Container
-#include "ftxui/component/input.hpp"               // for Input
-#include "ftxui/component/menu.hpp"                // for Menu
-#include "ftxui/component/radiobox.hpp"            // for RadioBox
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/component/slider.hpp"              // for Slider
-#include "ftxui/component/toggle.hpp"              // for Toggle
-#include "ftxui/dom/elements.hpp"                  // for separator, operator|
-#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Slider, Checkbox, Vertical, Renderer, Button, Input, Menu, Radiobox, Toggle
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for separator, Element, operator|, size, xflex, text, WIDTH, hbox, vbox, EQUAL, border, GREATER_THAN
 
 using namespace ftxui;
 
-class MyComponent : public Component {
-  Container container = Container::Vertical();
-  Menu menu;
-  Toggle toggle;
-  Container checkbox_container = Container::Vertical();
-  CheckBox checkbox1;
-  CheckBox checkbox2;
-  RadioBox radiobox;
-  Input input;
-  Button button;
-
-  int slider_value_1_ = 12;
-  int slider_value_2_ = 56;
-  int slider_value_3_ = 128;
-  ComponentPtr slider_1_ = Slider(L"R:", &slider_value_1_, 0, 256, 1);
-  ComponentPtr slider_2_ = Slider(L"G:", &slider_value_2_, 0, 256, 1);
-  ComponentPtr slider_3_ = Slider(L"B:", &slider_value_3_, 0, 256, 1);
-
- public:
-  MyComponent() {
-    Add(&container);
-    menu.entries = {
-        L"Menu 1",
-        L"Menu 2",
-        L"Menu 3",
-        L"Menu 4",
-    };
-    container.Add(&menu);
-
-    toggle.entries = {
-        L"Toggle_1",
-        L"Toggle_2",
-    };
-    container.Add(&toggle);
-
-    container.Add(&checkbox_container);
-    checkbox1.label = L"checkbox1";
-    checkbox_container.Add(&checkbox1);
-    checkbox2.label = L"checkbox2";
-    checkbox_container.Add(&checkbox2);
-
-    radiobox.entries = {
-        L"Radiobox 1",
-        L"Radiobox 2",
-        L"Radiobox 3",
-        L"Radiobox 4",
-    };
-    container.Add(&radiobox);
-
-    input.placeholder = L"Input placeholder";
-    container.Add(&input);
-
-    container.Add(slider_1_.get());
-    container.Add(slider_2_.get());
-    container.Add(slider_3_.get());
-
-    button.label = L"Quit";
-    button.on_click = [&] { on_quit(); };
-    container.Add(&button);
-  }
-
-  Element Render(std::wstring name, Element element) {
+// Display a component nicely with a title on the left.
+Component Wrap(std::wstring name, Component component) {
+  return Renderer(component, [name, component] {
     return hbox({
                text(name) | size(WIDTH, EQUAL, 8),
                separator(),
-               element | xflex,
+               component->Render() | xflex,
            }) |
            xflex;
-  }
-
-  Element Render(std::wstring name, Component& component) {
-    return Render(name, component.Render());
-  }
-
-  Element Render() override {
-    return  //
-        vbox({
-            Render(L"menu", menu),
-            separator(),
-            Render(L"toggle", toggle),
-            separator(),
-            Render(L"checkbox", checkbox_container),
-            separator(),
-            Render(L"radiobox", radiobox),
-            separator(),
-            Render(L"input", input) | size(WIDTH, LESS_THAN, 50),
-            separator(),
-            Render(L"slider",  //
-                   vbox({
-                       slider_1_->Render(),
-                       slider_2_->Render(),
-                       slider_3_->Render(),
-                   })),
-            separator(),
-            Render(L"button", button),
-        }) |
-        xflex | size(WIDTH, GREATER_THAN, 40) | border;
-  }
-
-  std::function<void()> on_quit = [] {};
-};
+  });
+}
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::FitComponent();
-  MyComponent component;
-  component.on_quit = screen.ExitLoopClosure();
-  screen.Loop(&component);
+
+  // -- Menu
+  // ----------------------------------------------------------------------
+  const std::vector<std::wstring> menu_entries = {
+      L"Menu 1",
+      L"Menu 2",
+      L"Menu 3",
+      L"Menu 4",
+  };
+  int menu_selected = 0;
+  auto menu = Menu(&menu_entries, &menu_selected);
+  menu = Wrap(L"Menu", menu);
+
+  // -- Toggle------------------------------------------------------------------
+  int toggle_selected = 0;
+  std::vector<std::wstring> toggle_entries = {
+      L"Toggle_1",
+      L"Toggle_2",
+  };
+  auto toggle = Toggle(&toggle_entries, &toggle_selected);
+  toggle = Wrap(L"Toggle", toggle);
+
+  // -- Checkbox ---------------------------------------------------------------
+  bool checkbox_1_selected = false;
+  bool checkbox_2_selected = false;
+
+  auto checkboxes = Container::Vertical({
+      Checkbox("checkbox1", &checkbox_1_selected),
+      Checkbox("checkbox2", &checkbox_2_selected),
+  });
+  checkboxes = Wrap(L"Checkbox", checkboxes);
+
+  // -- Radiobox ---------------------------------------------------------------
+  int radiobox_selected = 0;
+  std::vector<std::wstring> radiobox_entries = {
+      L"Radiobox 1",
+      L"Radiobox 2",
+      L"Radiobox 3",
+      L"Radiobox 4",
+  };
+  auto radiobox = Radiobox(&radiobox_entries, &radiobox_selected);
+  radiobox = Wrap(L"Radiobox", radiobox);
+
+  // -- Input ------------------------------------------------------------------
+  std::wstring input_label;
+  auto input = Input(&input_label, L"placeholder");
+  input = Wrap(L"Input", input);
+
+  // -- Button -----------------------------------------------------------------
+  std::wstring button_label = L"Quit";
+  std::function<void()> on_button_clicked_;
+  auto button = Button(&button_label, screen.ExitLoopClosure());
+  button = Wrap(L"Button", button);
+
+  // -- Slider -----------------------------------------------------------------
+  int slider_value_1 = 12;
+  int slider_value_2 = 56;
+  int slider_value_3 = 128;
+  auto sliders = Container::Vertical({
+      Slider(L"R:", &slider_value_1, 0, 256, 1),
+      Slider(L"G:", &slider_value_2, 0, 256, 1),
+      Slider(L"B:", &slider_value_3, 0, 256, 1),
+  });
+  sliders = Wrap(L"Slider", sliders);
+
+  // -- Layout -----------------------------------------------------------------
+  auto layout = Container::Vertical({
+      menu,
+      toggle,
+      checkboxes,
+      radiobox,
+      input,
+      sliders,
+      button,
+  });
+
+  auto component = Renderer(layout, [&] {
+    return vbox({
+               menu->Render(),
+               separator(),
+               toggle->Render(),
+               separator(),
+               checkboxes->Render(),
+               separator(),
+               radiobox->Render(),
+               separator(),
+               input->Render(),
+               separator(),
+               sliders->Render(),
+               separator(),
+               button->Render(),
+           }) |
+           xflex | size(WIDTH, GREATER_THAN, 40) | border;
+  });
+
+  screen.Loop(component);
 
   return 0;
 }

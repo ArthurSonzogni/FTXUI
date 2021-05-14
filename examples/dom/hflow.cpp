@@ -1,11 +1,12 @@
-#include <stddef.h>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/string.hpp>
-#include <string>
+#include <stddef.h>                // for size_t
+#include <ftxui/dom/elements.hpp>  // for operator|, size, Element, text, hcenter, Decorator, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN
+#include <ftxui/screen/screen.hpp>  // for Dimension, Screen
+#include <ftxui/screen/string.hpp>  // for to_wstring
+#include <memory>                   // for shared_ptr
+#include <string>  // for allocator, operator+, char_traits, wstring
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/dom/node.hpp"    // for Render
+#include "ftxui/screen/box.hpp"  // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

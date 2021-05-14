@@ -1,5 +1,6 @@
 #include <functional>  // for function
 #include <utility>     // for move
+#include <vector>      // for vector
 
 #include "ftxui/dom/elements.hpp"  // for Decorator, Element, Elements, operator|, nothing
 

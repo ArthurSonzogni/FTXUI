@@ -1,24 +1,23 @@
-#include "ftxui/component/screen_interactive.hpp"
-
 #include <stdio.h>    // for fileno, stdin
 #include <algorithm>  // for copy, max, min
-#include <csignal>    // for signal, SIGINT
+#include <csignal>    // for signal, SIGINT, SIGWINCH
 #include <cstdlib>    // for exit, NULL
-#include <iostream>   // for cout, ostream
-#include <stack>      // for stack
-#include <thread>     // for thread
-#include <utility>    // for move
-#include <vector>     // for vector
+#include <iostream>  // for cout, ostream, basic_ostream, operator<<, endl, flush
+#include <stack>     // for stack
+#include <thread>    // for thread
+#include <utility>   // for move
+#include <vector>    // for vector
 
-#include "ftxui/component/captured_mouse.hpp"         // for CapturedMouse
-#include "ftxui/component/component.hpp"              // for Component
-#include "ftxui/component/event.hpp"                  // for Event
-#include "ftxui/component/mouse.hpp"                  // for Mouse
-#include "ftxui/component/receiver.hpp"               // for ReceiverImpl
-#include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputPa...
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"           // for Mouse
+#include "ftxui/component/receiver.hpp"  // for ReceiverImpl, SenderImpl, MakeReceiver
+#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
 #include "ftxui/dom/requirement.hpp"                  // for Requirement
-#include "ftxui/screen/terminal.hpp"                  // for Terminal::Dimen...
+#include "ftxui/screen/terminal.hpp"  // for Terminal::Dimensions, Terminal
 
 #if defined(_WIN32)
 #define DEFINE_CONSOLEV2_PROPERTIES
@@ -31,8 +30,8 @@
 #error Must be compiled in UNICODE mode
 #endif
 #else
-#include <sys/select.h>  // for select, FD_ISSET
-#include <termios.h>     // for tcsetattr, tcge...
+#include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set
+#include <termios.h>     // for tcsetattr, tcgetattr, cc_t
 #include <unistd.h>      // for STDIN_FILENO, read
 #endif
 
@@ -110,7 +109,7 @@ void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
 
   char c;
   while (!*quit) {
-    while(read(STDIN_FILENO, &c, 1), c)
+    while (read(STDIN_FILENO, &c, 1), c)
       parser.Add(c);
 
     emscripten_sleep(1);
@@ -278,7 +277,7 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
       [this] { mouse_captured = false; });
 }
 
-void ScreenInteractive::Loop(Component* component) {
+void ScreenInteractive::Loop(Component component) {
   // Install a SIGINT handler and restore the old handler on exit.
   auto old_sigint_handler = std::signal(SIGINT, OnExit);
   on_exit_functions.push(
@@ -417,7 +416,7 @@ void ScreenInteractive::Loop(Component* component) {
   OnExit(0);
 }
 
-void ScreenInteractive::Draw(Component* component) {
+void ScreenInteractive::Draw(Component component) {
   auto document = component->Render();
   int dimx = 0;
   int dimy = 0;

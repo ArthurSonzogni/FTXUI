@@ -1,71 +1,68 @@
-#include <functional>  // for function
-#include <string>      // for wstring, allocator
-#include <vector>      // for vector
+#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
+#include <string>  // for wstring, basic_string
+#include <vector>  // for vector
 
-#include "ftxui/component/component.hpp"           // for Component
-#include "ftxui/component/container.hpp"           // for Container
-#include "ftxui/component/radiobox.hpp"            // for RadioBox
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Radiobox, Renderer, Tab, Toggle, Vertical
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/component/toggle.hpp"              // for Toggle
-#include "ftxui/dom/elements.hpp"                  // for Element, operator|
-#include "ftxui/screen/box.hpp"                    // for ftxui
+#include "ftxui/dom/elements.hpp"  // for Element, separator, operator|, vbox, border
 
 using namespace ftxui;
 
-class MyComponent : public Component {
- public:
-  MyComponent() {
-    Add(&container_);
-    container_.Add(&toggle_);
-
-    toggle_.entries = {
-        L"tab_1",
-        L"tab_2",
-        L"tab_3",
-    };
-
-    container_.Add(&tab_container_);
-
-    radiobox_1_.entries = {L"Forest", L"Water", L"I don't know"};
-    tab_container_.Add(&radiobox_1_);
-
-    radiobox_2_.entries = {
-        L"Hello",
-        L"Hi",
-        L"Hay",
-    };
-    tab_container_.Add(&radiobox_2_);
-
-    radiobox_3_.entries = {
-        L"Table",
-        L"Nothing",
-        L"Is",
-        L"Empty",
-    };
-    tab_container_.Add(&radiobox_3_);
-  }
-
-  std::function<void()> on_enter = []() {};
-
-  Element Render() {
-    return vbox(toggle_.Render(), separator(), tab_container_.Render()) |
-           border;
-  }
-
- private:
-  Toggle toggle_;
-  Container container_ = Container::Vertical();
-  Container tab_container_ = Container::Tab(&(toggle_.selected));
-  RadioBox radiobox_1_;
-  RadioBox radiobox_2_;
-  RadioBox radiobox_3_;
-};
-
 int main(int argc, const char* argv[]) {
+  std::vector<std::wstring> tab_values{
+      L"tab_1",
+      L"tab_2",
+      L"tab_3",
+  };
+  int tab_selected = 0;
+  auto tab_toggle = Toggle(&tab_values, &tab_selected);
+
+  std::vector<std::wstring> tab_1_entries{
+      L"Forest",
+      L"Water",
+      L"I don't know",
+  };
+  int tab_1_selected = 0;
+
+  std::vector<std::wstring> tab_2_entries{
+      L"Hello",
+      L"Hi",
+      L"Hay",
+  };
+  int tab_2_selected = 0;
+
+  std::vector<std::wstring> tab_3_entries{
+      L"Table",
+      L"Nothing",
+      L"Is",
+      L"Empty",
+  };
+  int tab_3_selected = 0;
+  auto tab_container = Container::Tab(
+      &tab_selected, {
+                         Radiobox(&tab_1_entries, &tab_1_selected),
+                         Radiobox(&tab_2_entries, &tab_2_selected),
+                         Radiobox(&tab_3_entries, &tab_3_selected),
+                     });
+
+  auto container = Container::Vertical({
+      tab_toggle,
+      tab_container,
+  });
+
+  auto renderer = Renderer(container, [&] {
+    return vbox({
+               tab_toggle->Render(),
+               separator(),
+               tab_container->Render(),
+           }) |
+           border;
+  });
+
   auto screen = ScreenInteractive::TerminalOutput();
-  MyComponent component;
-  component.on_enter = screen.ExitLoopClosure();
-  screen.Loop(&component);
+  screen.Loop(renderer);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

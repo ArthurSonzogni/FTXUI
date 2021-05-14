@@ -1,50 +1,36 @@
-#include <memory>   // for allocator_traits<>...
-#include <string>   // for operator+, wstring
-#include <utility>  // for move
-#include <vector>   // for vector
+#include <memory>  // for __shared_ptr_access, allocator_traits<>::value_type, shared_ptr
+#include <string>  // for operator+
+#include <vector>  // for vector
 
-#include "ftxui/component/checkbox.hpp"            // for CheckBox
-#include "ftxui/component/component.hpp"           // for Component
-#include "ftxui/component/container.hpp"           // for Container
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"                  // for Element, operator|
-#include "ftxui/screen/box.hpp"                    // for ftxui
-#include "ftxui/screen/string.hpp"                 // for to_wstring
+#include "ftxui/dom/elements.hpp"  // for Element, operator|, size, border, frame, HEIGHT, LESS_THAN
+#include "ftxui/screen/string.hpp"  // for to_wstring
 
 using namespace ftxui;
 
-class MyComponent : public Component {
- public:
-  MyComponent() {
-    Add(&container);
-    checkbox.resize(30);
-    for (int i = 0; i < checkbox.size(); ++i) {
-      checkbox[i].label = (L"CheckBox " + to_wstring(i));
-      container.Add(&checkbox[i]);
-    }
-  }
-
-  // clang-format off
-  Element Render() override {
-    Elements content;
-    for (auto& it : checkbox) {
-      content.push_back(it.Render());
-    }
-    return vbox(std::move(content))
-      | frame
-      | size(HEIGHT, LESS_THAN, 10)
-      | border;
-  }
-
- private:
-  std::vector<CheckBox> checkbox;
-  Container container = Container::Vertical();
+struct CheckboxState {
+  bool checked;
 };
 
 int main(int argc, const char* argv[]) {
+  int size = 30;
+  std::vector<CheckboxState> states(size);
+  auto container = Container::Vertical({});
+  for (int i = 0; i < size; ++i) {
+    states[i].checked = false;
+    container->Add(Checkbox(L"Checkbox" + to_wstring(i), &states[i].checked));
+  }
+
+  auto component = Renderer(container, [&] {
+    return container->Render() | frame | ftxui::size(HEIGHT, LESS_THAN, 10) |
+           border;
+  });
+
   auto screen = ScreenInteractive::FitComponent();
-  MyComponent component;
-  screen.Loop(&component);
+  screen.Loop(component);
 
   return 0;
 }

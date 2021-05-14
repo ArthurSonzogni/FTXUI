@@ -5,11 +5,12 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "ftxui/component/event.hpp"     // IWYU pragma: keep
+#include "ftxui/component/event.hpp"     // for Event (ptr only)
 #include "ftxui/component/mouse.hpp"     // for Mouse
-#include "ftxui/component/receiver.hpp"  // for SenderImpl
+#include "ftxui/component/receiver.hpp"  // for Sender
 
 namespace ftxui {
+struct Event;
 
 // Parse a sequence of |char| accross |time|. Produces |Event|.
 class TerminalInputParser {

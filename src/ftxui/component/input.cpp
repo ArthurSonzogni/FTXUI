@@ -1,39 +1,74 @@
+#include <algorithm>  // for max, min
+#include <memory>     // for shared_ptr
+#include <string>     // for wstring, allocator, basic_string
+
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::Home, Event::Return
 #include "ftxui/component/input.hpp"
-
-#include <algorithm>
-#include <memory>
-
-#include "ftxui/component/captured_mouse.hpp"
-#include "ftxui/component/mouse.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
+#include "ftxui/component/screen_interactive.hpp"  // for Component
 
 namespace ftxui {
 
+/// @brief An input box for editing text.
+/// @param content The editable content.
+/// @param placeholder The text displayed when content is still empty.
+/// @ingroup component
+/// @see InputBase
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::FitComponent();
+/// std::wstring content= L"";
+/// std::wstring placeholder = L"placeholder";
+/// Component input = Input(&content, &placeholder);
+/// screen.Loop(input);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// placeholder
+/// ```
+Component Input(StringRef content, ConstStringRef placeholder) {
+  return Make<InputBase>(content, placeholder);
+}
+
+// static
+InputBase* InputBase::From(Component component) {
+  return static_cast<InputBase*>(component.get());
+}
+
+InputBase::InputBase(StringRef content, ConstStringRef placeholder)
+    : content_(content), placeholder_(placeholder) {}
+
 // Component implementation.
-Element Input::Render() {
-  cursor_position = std::max(0, std::min<int>(content.size(), cursor_position));
+Element InputBase::Render() {
+  cursor_position =
+      std::max(0, std::min<int>(content_->size(), cursor_position));
   auto main_decorator = flex | size(HEIGHT, EQUAL, 1);
   bool is_focused = Focused();
 
-  // Placeholder.
-  if (content.size() == 0) {
+  // placeholder.
+  if (content_->size() == 0) {
     if (is_focused)
-      return text(placeholder) | focus | dim | inverted | main_decorator |
+      return text(*placeholder_) | focus | dim | inverted | main_decorator |
              reflect(input_box_);
     else
-      return text(placeholder) | dim | main_decorator | reflect(input_box_);
+      return text(*placeholder_) | dim | main_decorator | reflect(input_box_);
   }
 
   // Not focused.
   if (!is_focused)
-    return text(content) | main_decorator | reflect(input_box_);
+    return text(*content_) | main_decorator | reflect(input_box_);
 
-  std::wstring part_before_cursor = content.substr(0, cursor_position);
-  std::wstring part_at_cursor = cursor_position < (int)content.size()
-                                    ? content.substr(cursor_position, 1)
+  std::wstring part_before_cursor = content_->substr(0, cursor_position);
+  std::wstring part_at_cursor = cursor_position < (int)content_->size()
+                                    ? content_->substr(cursor_position, 1)
                                     : L" ";
-  std::wstring part_after_cursor = cursor_position < (int)content.size() - 1
-                                       ? content.substr(cursor_position + 1)
+  std::wstring part_after_cursor = cursor_position < (int)content_->size() - 1
+                                       ? content_->substr(cursor_position + 1)
                                        : L"";
   auto focused = is_focused ? focus : select;
 
@@ -47,8 +82,9 @@ Element Input::Render() {
   // clang-format on
 }
 
-bool Input::OnEvent(Event event) {
-  cursor_position = std::max(0, std::min<int>(content.size(), cursor_position));
+bool InputBase::OnEvent(Event event) {
+  cursor_position =
+      std::max(0, std::min<int>(content_->size(), cursor_position));
 
   if (event.is_mouse())
     return OnMouseEvent(event);
@@ -59,7 +95,7 @@ bool Input::OnEvent(Event event) {
   if (event == Event::Backspace) {
     if (cursor_position == 0)
       return false;
-    content.erase(cursor_position - 1, 1);
+    content_->erase(cursor_position - 1, 1);
     cursor_position--;
     on_change();
     return true;
@@ -67,9 +103,9 @@ bool Input::OnEvent(Event event) {
 
   // Delete
   if (event == Event::Delete) {
-    if (cursor_position == int(content.size()))
+    if (cursor_position == int(content_->size()))
       return false;
-    content.erase(cursor_position, 1);
+    content_->erase(cursor_position, 1);
     on_change();
     return true;
   }
@@ -89,7 +125,7 @@ bool Input::OnEvent(Event event) {
     return true;
   }
 
-  if (event == Event::ArrowRight && cursor_position < (int)content.size()) {
+  if (event == Event::ArrowRight && cursor_position < (int)content_->size()) {
     cursor_position++;
     return true;
   }
@@ -100,13 +136,13 @@ bool Input::OnEvent(Event event) {
   }
 
   if (event == Event::End) {
-    cursor_position = (int)content.size();
+    cursor_position = (int)content_->size();
     return true;
   }
 
   // Content
   if (event.is_character()) {
-    content.insert(cursor_position, 1, event.character());
+    content_->insert(cursor_position, 1, event.character());
     cursor_position++;
     on_change();
     return true;
@@ -114,7 +150,7 @@ bool Input::OnEvent(Event event) {
   return false;
 }
 
-bool Input::OnMouseEvent(Event event) {
+bool InputBase::OnMouseEvent(Event event) {
   if (!CaptureMouse(event))
     return false;
   if (!input_box_.Contain(event.mouse().x, event.mouse().y))
@@ -127,7 +163,7 @@ bool Input::OnMouseEvent(Event event) {
     int new_cursor_position =
         cursor_position + event.mouse().x - cursor_box_.x_min;
     new_cursor_position =
-        std::max(0, std::min<int>(content.size(), new_cursor_position));
+        std::max(0, std::min<int>(content_->size(), new_cursor_position));
     if (cursor_position != new_cursor_position) {
       cursor_position = new_cursor_position;
       on_change();

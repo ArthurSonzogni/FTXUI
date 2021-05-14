@@ -1,13 +1,15 @@
 #ifndef FTXUI_COMPONENT_RECEIVER_HPP_
 #define FTXUI_COMPONENT_RECEIVER_HPP_
 
-#include <atomic>              // for atomic
+#include <algorithm>           // for copy, max
+#include <atomic>              // for atomic, __atomic_base
 #include <condition_variable>  // for condition_variable
 #include <functional>
 #include <iostream>
-#include <memory>  // for unique_ptr, make_unique
-#include <mutex>   // for mutex, unique_lock
-#include <queue>   // for queue
+#include <memory>   // for unique_ptr, make_unique
+#include <mutex>    // for mutex, unique_lock
+#include <queue>    // for queue
+#include <utility>  // for move
 
 namespace ftxui {
 

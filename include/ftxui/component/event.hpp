@@ -8,7 +8,7 @@
 namespace ftxui {
 
 class ScreenInteractive;
-class Component;
+class ComponentBase;
 
 /// @brief Represent an event. It can be key press event, a terminal resize, or
 /// more ...
@@ -76,7 +76,7 @@ struct Event {
 
   //--- State section ----------------------------------------------------------
  private:
-  friend Component;
+  friend ComponentBase;
   friend ScreenInteractive;
   enum class Type {
     Unknown,
