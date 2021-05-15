@@ -66,10 +66,12 @@ int main(int argc, const char* argv[]) {
            border;
   });
 
-  auto main_container = Container::Tab(&depth, {
-                                                   depth_0_renderer,
-                                                   depth_1_renderer,
-                                               });
+  auto main_container = Container::Tab(
+      {
+          depth_0_renderer,
+          depth_1_renderer,
+      },
+      &depth);
 
   auto main_renderer = Renderer(main_container, [&] {
     Element document = depth_0_renderer->Render();

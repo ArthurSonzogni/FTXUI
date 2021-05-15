@@ -337,13 +337,15 @@ int main(int argc, const char* argv[]) {
       L"htop", L"color", L"spinner", L"gauge", L"compiler",
   };
   auto tab_selection = Toggle(&tab_entries, &tab_index);
-  auto tab_content = Container::Tab(&tab_index, {
-                                                    htop,
-                                                    color_tab_renderer,
-                                                    spinner_tab_renderer,
-                                                    gauge_component,
-                                                    compiler_renderer,
-                                                });
+  auto tab_content = Container::Tab(
+      {
+          htop,
+          color_tab_renderer,
+          spinner_tab_renderer,
+          gauge_component,
+          compiler_renderer,
+      },
+      &tab_index);
 
   auto main_container = Container::Vertical({
       tab_selection,

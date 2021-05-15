@@ -36,7 +36,7 @@ Component Slider(StringRef label, T* value, T min, T max, T increment);
 namespace Container {
 Component Vertical(Components children);
 Component Horizontal(Components children);
-Component Tab(int* selector, Components children);
+Component Tab(Components children, int* selector);
 }  // namespace Container
 
 }  // namespace ftxui

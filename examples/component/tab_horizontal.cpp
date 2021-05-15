@@ -41,11 +41,12 @@ int main(int argc, const char* argv[]) {
   };
   int tab_3_selected = 0;
   auto tab_container = Container::Tab(
-      &tab_selected, {
-                         Radiobox(&tab_1_entries, &tab_1_selected),
-                         Radiobox(&tab_2_entries, &tab_2_selected),
-                         Radiobox(&tab_3_entries, &tab_3_selected),
-                     });
+      {
+          Radiobox(&tab_1_entries, &tab_1_selected),
+          Radiobox(&tab_2_entries, &tab_2_selected),
+          Radiobox(&tab_3_entries, &tab_3_selected),
+      },
+      &tab_selected);
 
   auto container = Container::Vertical({
       tab_toggle,

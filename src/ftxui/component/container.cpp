@@ -62,15 +62,15 @@ Component Horizontal(Components children) {
 ///
 /// ```cpp
 /// int tab_drawn = 0;
-/// auto container = Container::Tab(&tab_drawn, {
+/// auto container = Container::Tab({
 ///   children_1,
 ///   children_2,
 ///   children_3,
 ///   children_4,
-/// });
+/// }, &tab_drawn);
 /// ```
-Component Tab(int* selector, Components children) {
-  return ContainerBase::Tab(selector, std::move(children));
+Component Tab(Components children, int* selector) {
+  return ContainerBase::Tab(std::move(children), selector);
 }
 
 }  // namespace Container
@@ -107,11 +107,11 @@ Component ContainerBase::Horizontal(Components children) {
 
 // static
 Component ContainerBase::Tab(int* selector) {
-  return Tab(selector, {});
+  return Tab({}, selector);
 }
 
 // static
-Component ContainerBase::Tab(int* selector, Components children) {
+Component ContainerBase::Tab(Components children, int* selector) {
   auto container = std::make_shared<ContainerBase>();
   container->selector_ = selector;
   container->event_handler_ = &ContainerBase::TabEvent;

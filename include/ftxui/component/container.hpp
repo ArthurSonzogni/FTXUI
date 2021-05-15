@@ -18,7 +18,7 @@ class ContainerBase : public ComponentBase {
   static Component Horizontal(Components children);
 
   static Component Tab(int* selector);
-  static Component Tab(int* selector, Components children);
+  static Component Tab(Components children, int* selector);
 
   ~ContainerBase() override = default;
 
