@@ -382,11 +382,6 @@ void ScreenInteractive::Loop(Component component) {
   // The main loop.
   while (!quit_) {
     if (!event_receiver_->HasPending()) {
-      std::cout << reset_cursor_position << ResetPosition();
-      static int i = -2;
-      if (i % 10 == 0)
-        std::cout << DeviceStatusReport(DSRMode::kCursor);
-      ++i;
       Draw(component);
       std::cout << ToString() << set_cursor_position;
       Flush();
@@ -442,14 +437,22 @@ void ScreenInteractive::Draw(Component component) {
       break;
   }
 
+  bool resized = (dimx != dimx_) || (dimy != dimy_);
+  std::cout << reset_cursor_position << ResetPosition(/*clear=*/resized);
+
   // Resize the screen if needed.
-  if (dimx != dimx_ || dimy != dimy_) {
+  if (resized) {
     dimx_ = dimx;
     dimy_ = dimy;
     pixels_ = std::vector<std::vector<Pixel>>(dimy, std::vector<Pixel>(dimx));
     cursor_.x = dimx_ - 1;
     cursor_.y = dimy_ - 1;
   }
+
+  static int i = -2;
+  if (i % 10 == 0)
+    std::cout << DeviceStatusReport(DSRMode::kCursor);
+  ++i;
 
   Render(*this, document);
 
