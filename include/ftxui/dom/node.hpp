@@ -35,9 +35,9 @@ class Node {
   // Step 3: Draw this element.
   virtual void Render(Screen& screen);
 
-  std::vector<Element> children;
 
  protected:
+  std::vector<Element> children_;
   Requirement requirement_;
   Box box_;
 };

@@ -23,7 +23,7 @@ class Size : public Node {
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
-    requirement_ = children[0]->requirement();
+    requirement_ = children_[0]->requirement();
 
     auto& value = direction_ == WIDTH ? requirement_.min_x : requirement_.min_y;
 
@@ -70,7 +70,7 @@ class Size : public Node {
           break;
       }
     }
-    children[0]->SetBox(box);
+    children_[0]->SetBox(box);
   }
 
  private:

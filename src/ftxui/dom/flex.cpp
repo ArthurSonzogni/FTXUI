@@ -73,17 +73,17 @@ class Flex : public Node {
   void ComputeRequirement() override {
     requirement_.min_x = 0;
     requirement_.min_y = 0;
-    if (!children.empty()) {
-      children[0]->ComputeRequirement();
-      requirement_ = children[0]->requirement();
+    if (!children_.empty()) {
+      children_[0]->ComputeRequirement();
+      requirement_ = children_[0]->requirement();
     }
     f_(requirement_);
   }
 
   void SetBox(Box box) override {
-    if (children.empty())
+    if (children_.empty())
       return;
-    children[0]->SetBox(box);
+    children_[0]->SetBox(box);
   }
 
   FlexFunction f_;

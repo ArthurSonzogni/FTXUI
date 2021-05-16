@@ -49,8 +49,8 @@ RadioboxBase* RadioboxBase::From(Component component) {
 }
 
 RadioboxBase::RadioboxBase(const std::vector<std::wstring>* entries,
-                           int* selected_)
-    : entries_(entries), selected_(selected_) {}
+                           int* selected)
+    : entries_(entries), selected_(selected) {}
 
 Element RadioboxBase::Render() {
   std::vector<Element> elements;

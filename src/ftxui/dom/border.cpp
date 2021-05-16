@@ -29,12 +29,12 @@ class Border : public Node {
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
-    requirement_ = children[0]->requirement();
+    requirement_ = children_[0]->requirement();
     requirement_.min_x += 2;
     requirement_.min_y += 2;
-    if (children.size() == 2) {
+    if (children_.size() == 2) {
       requirement_.min_x =
-          std::max(requirement_.min_x, children[1]->requirement().min_x + 2);
+          std::max(requirement_.min_x, children_[1]->requirement().min_x + 2);
     }
     requirement_.selected_box.x_min++;
     requirement_.selected_box.x_max++;
@@ -44,24 +44,24 @@ class Border : public Node {
 
   void SetBox(Box box) override {
     Node::SetBox(box);
-    if (children.size() == 2) {
+    if (children_.size() == 2) {
       Box title_box;
       title_box.x_min = box.x_min + 1;
       title_box.x_max = box.x_max - 1;
       title_box.y_min = box.y_min;
       title_box.y_max = box.y_min;
-      children[1]->SetBox(title_box);
+      children_[1]->SetBox(title_box);
     }
     box.x_min++;
     box.x_max--;
     box.y_min++;
     box.y_max--;
-    children[0]->SetBox(box);
+    children_[0]->SetBox(box);
   }
 
   void Render(Screen& screen) override {
     // Draw content.
-    children[0]->Render(screen);
+    children_[0]->Render(screen);
 
     // Draw the border.
     if (box_.x_min >= box_.x_max || box_.y_min >= box_.y_max)
@@ -88,8 +88,8 @@ class Border : public Node {
     }
 
     // Draw title.
-    if (children.size() == 2)
-      children[1]->Render(screen);
+    if (children_.size() == 2)
+      children_[1]->Render(screen);
   }
 
   void RenderChar(Screen& screen) {
