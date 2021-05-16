@@ -63,7 +63,7 @@ class Screen {
   int dimy() { return dimy_; }
 
   // Move the terminal cursor n-lines up with n = dimy().
-  std::string ResetPosition();
+  std::string ResetPosition(bool clear = false);
 
   // Fill with space.
   void Clear();
