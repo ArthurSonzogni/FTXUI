@@ -360,7 +360,7 @@ void ScreenInteractive::Loop(Component component) {
 
   // On exit, reset cursor one line after the current drawing.
   on_exit_functions.push(
-      [=] { std::cout << reset_cursor_position << std::endl; });
+      [this] { std::cout << reset_cursor_position << std::endl; });
 
   disable({
       DECMode::kCursor,
