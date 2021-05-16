@@ -109,7 +109,7 @@ bool MenuBase::OnEvent(Event event) {
 bool MenuBase::OnMouseEvent(Event event) {
   if (!CaptureMouse(event))
     return false;
-  for (int i = 0; i < boxes_.size(); ++i) {
+  for (int i = 0; i < int(boxes_.size()); ++i) {
     if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
       continue;
 
