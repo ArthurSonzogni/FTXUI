@@ -36,7 +36,6 @@ static const wchar_t* INVERTED_RESET = L"\x1B[27m";
 
 static const char* MOVE_LEFT = "\r";
 static const char* MOVE_UP = "\x1B[1A";
-static const char* CLEAR_LINE = "\x1B[2K";
 
 bool In(const Box& stencil, int x, int y) {
   return stencil.x_min <= x && x <= stencil.x_max &&  //
@@ -222,9 +221,9 @@ Pixel& Screen::PixelAt(int x, int y) {
 ///         beginning.
 std::string Screen::ResetPosition() {
   std::stringstream ss;
-  ss << MOVE_LEFT << CLEAR_LINE;
+  ss << MOVE_LEFT;
   for (int y = 1; y < dimy_; ++y) {
-    ss << MOVE_UP << CLEAR_LINE;
+    ss << MOVE_UP;
   }
   return ss.str();
 }
