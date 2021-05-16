@@ -29,15 +29,9 @@ class Separator : public Node {
     else
       c = U'│';
 
-    Pixel p;
-    p.character = c;
-    RenderWithPixel(screen, p);
-  }
-
-  void RenderWithPixel(Screen& screen, Pixel pixel) {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y) = pixel;
+        screen.PixelAt(x, y).character = c;
       }
     }
   }
@@ -47,7 +41,13 @@ class SeparatorWithPixel : public Separator {
  public:
   SeparatorWithPixel(Pixel pixel) : pixel_(pixel) {}
   ~SeparatorWithPixel() override {}
-  void Render(Screen& screen) override { RenderWithPixel(screen, pixel_); }
+  void Render(Screen& screen) override {
+    for (int y = box_.y_min; y <= box_.y_max; ++y) {
+      for (int x = box_.x_min; x <= box_.x_max; ++x) {
+        screen.PixelAt(x, y) = pixel_;
+      }
+    }
+  }
 
  private:
   Pixel pixel_;
