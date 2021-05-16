@@ -27,7 +27,7 @@ enable_testing()
 
 find_package(Threads)
 
-add_library(screen
+add_library(screen STATIC
   src/ftxui/screen/box.cpp
   src/ftxui/screen/color.cpp
   src/ftxui/screen/color_info.cpp
@@ -42,7 +42,7 @@ add_library(screen
   include/ftxui/screen/string.hpp
 )
 
-add_library(dom
+add_library(dom STATIC
   include/ftxui/dom/elements.hpp
   include/ftxui/dom/node.hpp
   include/ftxui/dom/requirement.hpp
@@ -75,7 +75,7 @@ add_library(dom
   src/ftxui/dom/vbox.cpp
 )
 
-add_library(component
+add_library(component STATIC
   include/ftxui/component/button.hpp
   include/ftxui/component/captured_mouse.hpp
   include/ftxui/component/checkbox.hpp
