@@ -45,10 +45,12 @@ class Separator : public Node {
 
 class SeparatorWithPixel : public Separator {
  public:
-  SeparatorWithPixel(Pixel p) : p(p) {}
+  SeparatorWithPixel(Pixel pixel) : pixel_(pixel) {}
   ~SeparatorWithPixel() override {}
-  void Render(Screen& screen) override { RenderWithPixel(screen, p); }
-  Pixel p;
+  void Render(Screen& screen) override { RenderWithPixel(screen, pixel_); }
+
+ private:
+  Pixel pixel_;
 };
 
 Element separator() {

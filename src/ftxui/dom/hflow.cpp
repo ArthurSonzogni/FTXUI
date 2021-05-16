@@ -22,7 +22,7 @@ class HFlow : public Node {
     requirement_.flex_grow_y = 1;
     requirement_.flex_shrink_x = 0;
     requirement_.flex_shrink_y = 0;
-    for (auto& child : children)
+    for (auto& child : children_)
       child->ComputeRequirement();
   }
 
@@ -34,7 +34,7 @@ class HFlow : public Node {
     int y = box.y_min;
     int y_next = y;  // The position of next row of elements.
 
-    for (auto& child : children) {
+    for (auto& child : children_) {
       Requirement requirement = child->requirement();
 
       // Does it fit the end of the row?

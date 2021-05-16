@@ -22,7 +22,7 @@ class HBox : public Node {
     requirement_.flex_grow_y = 0;
     requirement_.flex_shrink_x = 0;
     requirement_.flex_shrink_y = 0;
-    for (auto& child : children) {
+    for (auto& child : children_) {
       child->ComputeRequirement();
       if (requirement_.selection < child->requirement().selection) {
         requirement_.selection = child->requirement().selection;
@@ -46,7 +46,7 @@ class HBox : public Node {
     int flex_grow_sum = 0;
     int flex_shrink_sum = 0;
     int flex_shrink_size = 0;
-    for (auto& child : children) {
+    for (auto& child : children_) {
       const Requirement& r = child->requirement();
       flex_grow_sum += r.flex_grow_x;
       flex_shrink_sum += r.min_x * r.flex_shrink_x;
@@ -67,7 +67,7 @@ class HBox : public Node {
 
   void SetBoxGrow(Box box, int extra_space, int flex_grow_sum) {
     int x = box.x_min;
-    for (auto& child : children) {
+    for (auto& child : children_) {
       Box child_box = box;
       const Requirement& r = child->requirement();
 
@@ -86,7 +86,7 @@ class HBox : public Node {
 
   void SetBoxShrinkEasy(Box box, int extra_space, int flex_shrink_sum) {
     int x = box.x_min;
-    for (auto& child : children) {
+    for (auto& child : children_) {
       Box child_box = box;
       const Requirement& r = child->requirement();
 
@@ -105,7 +105,7 @@ class HBox : public Node {
 
   void SetBoxShrinkHard(Box box, int extra_space, int size) {
     int x = box.x_min;
-    for (auto& child : children) {
+    for (auto& child : children_) {
       Box child_box = box;
       const Requirement& r = child->requirement();
 

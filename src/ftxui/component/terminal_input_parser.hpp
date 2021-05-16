@@ -44,7 +44,7 @@ class TerminalInputParser {
       CursorReporting cursor;
     };
 
-    Output(Type type) : type(type) {}
+    Output(Type t) : type(t) {}
   };
 
   void Send(Output type);

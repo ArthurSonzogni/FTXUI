@@ -21,7 +21,7 @@ class Select : public Node {
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
-    requirement_ = children[0]->requirement();
+    requirement_ = children_[0]->requirement();
     auto& selected_box = requirement_.selected_box;
     selected_box.x_min = 0;
     selected_box.y_min = 0;
@@ -32,7 +32,7 @@ class Select : public Node {
 
   void SetBox(Box box) override {
     box_ = box;
-    children[0]->SetBox(box);
+    children_[0]->SetBox(box);
   }
 };
 
@@ -70,7 +70,7 @@ class Frame : public Node {
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
-    requirement_ = children[0]->requirement();
+    requirement_ = children_[0]->requirement();
   }
 
   void SetBox(Box box) override {
@@ -98,13 +98,13 @@ class Frame : public Node {
       children_box.y_max = box.y_min + internal_dimy - dy;
     }
 
-    children[0]->SetBox(children_box);
+    children_[0]->SetBox(children_box);
   }
 
   void Render(Screen& screen) override {
     AutoReset<Box> stencil(&screen.stencil,
                            Box::Intersection(box_, screen.stencil));
-    children[0]->Render(screen);
+    children_[0]->Render(screen);
   }
 
  private:

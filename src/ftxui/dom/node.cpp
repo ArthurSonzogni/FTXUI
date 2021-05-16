@@ -8,13 +8,13 @@ namespace ftxui {
 using ftxui::Screen;
 
 Node::Node() {}
-Node::Node(Elements children) : children(std::move(children)) {}
+Node::Node(Elements children) : children_(std::move(children)) {}
 Node::~Node() {}
 
 /// @brief Compute how much space an elements needs.
 /// @ingroup dom
 void Node::ComputeRequirement() {
-  for (auto& child : children)
+  for (auto& child : children_)
     child->ComputeRequirement();
 }
 
@@ -27,7 +27,7 @@ void Node::SetBox(Box box) {
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Node::Render(Screen& screen) {
-  for (auto& child : children)
+  for (auto& child : children_)
     child->Render(screen);
 }
 

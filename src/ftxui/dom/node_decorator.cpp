@@ -9,12 +9,12 @@ namespace ftxui {
 
 void NodeDecorator::ComputeRequirement() {
   Node::ComputeRequirement();
-  requirement_ = children[0]->requirement();
+  requirement_ = children_[0]->requirement();
 }
 
 void NodeDecorator::SetBox(Box box) {
   Node::SetBox(box);
-  children[0]->SetBox(box);
+  children_[0]->SetBox(box);
 }
 
 }  // namespace ftxui
