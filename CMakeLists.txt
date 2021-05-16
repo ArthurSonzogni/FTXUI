@@ -158,7 +158,7 @@ foreach(lib screen dom component)
     target_compile_options(${lib} PRIVATE "-Werror")
     target_compile_options(${lib} PRIVATE "-Wmissing-declarations")
     target_compile_options(${lib} PRIVATE "-Wdeprecated")
-    target_compile_options(${lib} PRIVATE "-Wshadow-all")
+    target_compile_options(${lib} PRIVATE "-Wshadow")
   endif()
 
 endforeach()
