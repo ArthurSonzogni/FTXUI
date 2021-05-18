@@ -12,7 +12,9 @@ std::wstring to_wstring(T s) {
   return to_wstring(std::to_string(s));
 }
 
+int wchar_width(char32_t);
 int wchar_width(wchar_t);
+int wchar_width_cjk(char32_t);
 int wchar_width_cjk(wchar_t);
 int wstring_width(const std::wstring&);
 int wstring_width_cjk(const std::wstring&);
