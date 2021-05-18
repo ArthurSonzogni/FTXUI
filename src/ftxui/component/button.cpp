@@ -31,8 +31,10 @@ namespace ftxui {
 /// │Click to quit│
 /// └─────────────┘
 /// ```
-Component Button(ConstStringRef label, std::function<void()> on_click) {
-  return Make<ButtonBase>(label, on_click);
+Component Button(ConstStringRef label,
+                 std::function<void()> on_click,
+                 bool border) {
+  return Make<ButtonBase>(label, on_click, border);
 }
 
 // static
@@ -40,12 +42,15 @@ ButtonBase* ButtonBase::From(Component component) {
   return static_cast<ButtonBase*>(component.get());
 }
 
-ButtonBase::ButtonBase(ConstStringRef label, std::function<void()> on_click)
-    : label_(label), on_click_(on_click) {}
+ButtonBase::ButtonBase(ConstStringRef label,
+                       std::function<void()> on_click,
+                       bool border)
+    : label_(label), on_click_(on_click), border_(border) {}
 
 Element ButtonBase::Render() {
   auto style = Focused() ? inverted : nothing;
-  return text(*label_) | border | style | reflect(box_);
+  auto my_border = border_ ? border : nothing;
+  return text(*label_) | my_border | style | reflect(box_);
 }
 
 bool ButtonBase::OnEvent(Event event) {

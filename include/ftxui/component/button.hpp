@@ -21,7 +21,7 @@ class ButtonBase : public ComponentBase {
   static ButtonBase* From(Component);
 
   // Constructor.
-  ButtonBase(ConstStringRef label, std::function<void()> on_click);
+  ButtonBase(ConstStringRef label, std::function<void()> on_click, bool border);
   ~ButtonBase() override = default;
 
   // Component implementation.
@@ -31,6 +31,7 @@ class ButtonBase : public ComponentBase {
  private:
   ConstStringRef label_;
   std::function<void()> on_click_;
+  bool border_;
   Box box_;
 };
 

@@ -22,7 +22,9 @@ std::shared_ptr<T> Make(Args&&... args) {
   return std::make_shared<T>(args...);
 }
 
-Component Button(ConstStringRef label, std::function<void()> on_click);
+Component Button(ConstStringRef label,
+                 std::function<void()> on_click,
+                 bool border = true);
 Component Checkbox(ConstStringRef label, bool* checked);
 Component Input(StringRef content, ConstStringRef placeholder);
 Component Menu(const std::vector<std::wstring>* entries, int* selected_);
