@@ -2,19 +2,19 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 
-#include <stddef.h>                                // for size_t
-#include <algorithm>                               // for max
-#include <ftxui/component/component.hpp>           // for Make
-#include <ftxui/component/screen_interactive.hpp>  // for ScreenInteractive
-#include <string>  // for allocator, operator+, wstring, char_traits, to_wstring, string
+#include <stddef.h>   // for size_t
+#include <algorithm>  // for max
+#include <memory>     // for shared_ptr
+#include <string>  // for allocator, char_traits, operator+, wstring, basic_string, to_wstring, string
 #include <utility>  // for move
 #include <vector>   // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component.hpp"       // for CatchEvent, Renderer
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::None, Mouse::Pressed, Mouse::Released, Mouse::Right, Mouse::WheelDown, Mouse::WheelUp
-#include "ftxui/dom/elements.hpp"  // for text, vbox, window, Elements, Element
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for text, vbox, window, Element, Elements
 
 using namespace ftxui;
 
@@ -72,28 +72,22 @@ std::wstring Stringify(Event event) {
   return out;
 }
 
-class DrawKey : public ComponentBase {
- public:
-  ~DrawKey() override = default;
-
-  Element Render() override {
-    Elements children;
-    for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
-      children.push_back(text(Stringify(keys[i])));
-    }
-    return window(text(L"keys"), vbox(std::move(children)));
-  }
-
-  bool OnEvent(Event event) override {
-    keys.push_back(event);
-    return true;
-  }
-
- private:
-  std::vector<Event> keys;
-};
-
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-  screen.Loop(Make<DrawKey>());
+
+  std::vector<Event> keys;
+
+  auto component = Renderer([&] {
+    Elements children;
+    for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i)
+      children.push_back(text(Stringify(keys[i])));
+    return window(text(L"keys"), vbox(std::move(children)));
+  });
+
+  component = CatchEvent(component, [&](Event event) {
+    keys.push_back(event);
+    return true;
+  });
+
+  screen.Loop(component);
 }

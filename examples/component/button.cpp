@@ -14,8 +14,10 @@ int main(int argc, const char* argv[]) {
 
   // The tree of components. This defines how to navigate using the keyboard.
   auto buttons = Container::Horizontal({
-      Button("Decrease", [&] { value--; }),
-      Button("Increase", [&] { value++; }),
+      Button(
+          "[Decrease]", [&] { value--; }, false),
+      Button(
+          "[Increase]", [&] { value++; }, false),
   });
 
   // Modify the way to render them on screen:
