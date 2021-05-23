@@ -13,6 +13,7 @@
 namespace ftxui {
 
 class ComponentBase;
+struct Event;
 
 using Component = std::shared_ptr<ComponentBase>;
 using Components = std::vector<Component>;
@@ -30,10 +31,11 @@ Component Input(StringRef content, ConstStringRef placeholder);
 Component Menu(const std::vector<std::wstring>* entries, int* selected_);
 Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
 Component Toggle(const std::vector<std::wstring>* entries, int* selected);
-Component Renderer(Component child, std::function<Element()>);
-Component Renderer(std::function<Element()>);
 template <class T>  // T = {int, float}
 Component Slider(StringRef label, T* value, T min, T max, T increment);
+Component Renderer(Component child, std::function<Element()>);
+Component Renderer(std::function<Element()>);
+Component CatchEvent(Component child, std::function<bool(Event)>);
 
 namespace Container {
 Component Vertical(Components children);
