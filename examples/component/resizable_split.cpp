@@ -18,10 +18,10 @@ int main(int argc, const char* argv[]) {
   int bottom_size = 10;
 
   auto container = middle;
-  container = ResizableSplit::Left(left, container, &left_size);
-  container = ResizableSplit::Right(right, container, &right_size);
-  container = ResizableSplit::Top(top, container, &top_size);
-  container = ResizableSplit::Bottom(bottom, container, &bottom_size);
+  container = ResizableSplitLeft(left, container, &left_size);
+  container = ResizableSplitRight(right, container, &right_size);
+  container = ResizableSplitTop(top, container, &top_size);
+  container = ResizableSplitBottom(bottom, container, &bottom_size);
 
   auto renderer =
       Renderer(container, [&] { return container->Render() | border; });

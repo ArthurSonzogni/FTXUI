@@ -459,6 +459,12 @@ Produced by: ftxui::Renderer() from \ref "ftxui/component/component.hpp". This
 component decorate another one by using a different function to render an
 interface.
 
+## CatchEvent 
+
+Produced by: ftxui::CatchEvent() from \ref "ftxui/component/component.hpp". This
+component decorate another one and catch the events before the underlying
+component.
+
 ## Container::Horizontal 
 
 Produced by: ftxui::Container::Horizontal() from
@@ -476,3 +482,21 @@ and handles keyboard/mouse navigation.
 Produced by: ftxui::Container::Tab() from
 "ftxui/component/component.hpp". It take a list of component and display only
 one of them. This is useful for implementing a tab bar.
+
+## ResizableSplit::{Left, Right, Top, Bottom} 
+
+Produced by:
+- ftxui::ResizableSplitLeft()
+- ftxui::ResizableSplitRight()
+- ftxui::ResizableSplitTop()
+- ftxui::ResizableSplitBottom()
+
+from "ftxui/component/component.hpp"
+
+It defines an horizontal or vertical separation in between two chilren
+component. The position of the split is variable and controlable using the
+mouse.
+
+@htmlonly
+<script id="asciicast-tprMH2EdkUoMb7D2YxgMGgpzx" src="https://asciinema.org/a/tprMH2EdkUoMb7D2YxgMGgpzx.js" async></script>
+@endhtmlonly
