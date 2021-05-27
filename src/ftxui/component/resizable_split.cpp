@@ -7,9 +7,9 @@
 namespace ftxui {
 namespace {
 
-class ResizableSplitLeft : public ComponentBase {
+class ResizableSplitLeftBase : public ComponentBase {
  public:
-  ResizableSplitLeft(Component main, Component child, int* main_size)
+  ResizableSplitLeftBase(Component main, Component child, int* main_size)
       : main_(main), child_(child), main_size_(main_size) {
     Add(Container::Horizontal({
         main,
@@ -63,9 +63,9 @@ class ResizableSplitLeft : public ComponentBase {
   Box global_box_;
 };
 
-class ResizableSplitRight: public ComponentBase {
+class ResizableSplitRightBase: public ComponentBase {
  public:
-  ResizableSplitRight(Component main, Component child, int* main_size)
+  ResizableSplitRightBase(Component main, Component child, int* main_size)
       : main_(main), child_(child), main_size_(main_size) {
     Add(Container::Horizontal({
         child,
@@ -119,9 +119,9 @@ class ResizableSplitRight: public ComponentBase {
   Box global_box_;
 };
 
-class ResizableSplitTop: public ComponentBase {
+class ResizableSplitTopBase: public ComponentBase {
  public:
-  ResizableSplitTop(Component main, Component child, int* main_size)
+  ResizableSplitTopBase(Component main, Component child, int* main_size)
       : main_(main), child_(child), main_size_(main_size) {
     Add(Container::Vertical({
         main,
@@ -175,9 +175,9 @@ class ResizableSplitTop: public ComponentBase {
   Box global_box_;
 };
 
-class ResizableSplitBottom: public ComponentBase {
+class ResizableSplitBottomBase: public ComponentBase {
  public:
-  ResizableSplitBottom(Component main, Component child, int* main_size)
+  ResizableSplitBottomBase(Component main, Component child, int* main_size)
       : main_(main), child_(child), main_size_(main_size) {
     Add(Container::Vertical({
         child,
@@ -233,25 +233,120 @@ class ResizableSplitBottom: public ComponentBase {
 
 }  // namespace
 
-namespace ResizableSplit {
-Component Left(Component main, Component back, int* main_size) {
-  return Make<ResizableSplitLeft>(std::move(main), std::move(back), main_size);
+/// @brief An horizontal split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the left.
+/// @param back The back component taking the remaining size, on the right.
+/// @param main_size The size of the |main| component.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::Fullscreen();
+/// int left_size = 10;
+/// auto left = Renderer([] { return text(L"Left") | center;});
+/// auto right = Renderer([] { return text(L"right") | center;});
+/// auto split = ResizableSplitLeft(left, right, &left_size);
+/// screen.Loop(split);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+///           │           
+///    left   │   right   
+///           │           
+/// ```
+Component ResizableSplitLeft(Component main, Component back, int* main_size) {
+  return Make<ResizableSplitLeftBase>(std::move(main), std::move(back), main_size);
 }
-Component Right(Component main, Component back, int* main_size) {
-  return Make<ResizableSplitRight>(std::move(main), std::move(back), main_size);
+
+/// @brief An horizontal split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the right.
+/// @param back The back component taking the remaining size, on the left.
+/// @param main_size The size of the |main| component.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::Fullscreen();
+/// int right_size = 10;
+/// auto left = Renderer([] { return text(L"Left") | center;});
+/// auto right = Renderer([] { return text(L"right") | center;});
+/// auto split = ResizableSplitRight(right, left, &right_size);
+/// screen.Loop(split);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+///           │
+///    left   │   right
+///           │
+/// ```
+Component ResizableSplitRight(Component main, Component back, int* main_size) {
+  return Make<ResizableSplitRightBase>(std::move(main), std::move(back),
+                                       main_size);
 }
-Component Top(Component main, Component back, int* main_size) {
-  return Make<ResizableSplitTop>(std::move(main), std::move(back), main_size);
+
+/// @brief An vertical split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the top.
+/// @param back The back component taking the remaining size, on the bottom.
+/// @param main_size The size of the |main| component.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::Fullscreen();
+/// int top_size = 1;
+/// auto top = Renderer([] { return text(L"Top") | center;});
+/// auto bottom = Renderer([] { return text(L"Bottom") | center;});
+/// auto split = ResizableSplitTop(top, bottom, &top_size);
+/// screen.Loop(split);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+///    top
+/// ────────────
+///    bottom
+/// ```
+Component ResizableSplitTop(Component main, Component back, int* main_size) {
+  return Make<ResizableSplitTopBase>(std::move(main), std::move(back), main_size);
 }
-Component Bottom(Component main, Component back, int* main_size) {
-  return Make<ResizableSplitBottom>(std::move(main), std::move(back), main_size);
+
+/// @brief An vertical split in between two components, configurable using the
+/// mouse.
+/// @param main The main component of size |main_size|, on the bottom.
+/// @param back The back component taking the remaining size, on the top.
+/// @param main_size The size of the |main| component.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::Fullscreen();
+/// int bottom_size = 1;
+/// auto top = Renderer([] { return text(L"Top") | center;});
+/// auto bottom = Renderer([] { return text(L"Bottom") | center;});
+/// auto split = ResizableSplit::Bottom(bottom, top, &bottom_size);
+/// screen.Loop(split);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+///    top
+/// ────────────
+///    bottom
+/// ```
+Component ResizableSplitBottom(Component main, Component back, int* main_size) {
+  return Make<ResizableSplitBottomBase>(std::move(main), std::move(back), main_size);
 }
-//Component Top(Component main, Component back, int main_size) {
-  //return Make<ResizableSplitTop>(std::move(main), std::move(back), main_size);
-//}
-//Component Bottom(Component main, Component back, int main_size) {
-  //return Make<ResizableSplitBottom>(std::move(main), std::move(back),
-                                    //main_size);
-//}
-}  // namespace ResizableSplit
 }  // namespace ftxui

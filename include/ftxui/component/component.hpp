@@ -44,12 +44,10 @@ Component Tab(Components children, int* selector);
 
 }  // namespace Container
 
-namespace ResizableSplit {
-Component Left(Component main, Component back, int* main_size);
-Component Right(Component main, Component back, int* main_size);
-Component Top(Component main, Component back, int* main_size);
-Component Bottom(Component main, Component back, int* main_size);
-}  // namespace ResizableSplit
+Component ResizableSplitLeft(Component main, Component back, int* main_size);
+Component ResizableSplitRight(Component main, Component back, int* main_size);
+Component ResizableSplitTop(Component main, Component back, int* main_size);
+Component ResizableSplitBottom(Component main, Component back, int* main_size);
 
 }  // namespace ftxui
 
