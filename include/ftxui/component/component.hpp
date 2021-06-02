@@ -31,7 +31,7 @@ Component Input(StringRef content, ConstStringRef placeholder);
 Component Menu(const std::vector<std::wstring>* entries, int* selected_);
 Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
 Component Toggle(const std::vector<std::wstring>* entries, int* selected);
-template <class T>  // T = {int, float}
+template <class T>  // T = {int, float, long}
 Component Slider(StringRef label, T* value, T min, T max, T increment);
 Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);

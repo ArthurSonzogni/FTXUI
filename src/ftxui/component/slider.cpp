@@ -134,6 +134,12 @@ template Component Slider(StringRef label,
                           float max,
                           float increment);
 
+template Component Slider(StringRef label,
+                          long* value,
+                          long min,
+                          long max,
+                          long increment);
+
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
