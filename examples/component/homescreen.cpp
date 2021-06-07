@@ -203,7 +203,7 @@ int main(int argc, const char* argv[]) {
     }
     // Executable
     if (!executable_content_.empty()) {
-      line.push_back(text(L" -O ") | bold);
+      line.push_back(text(L" -o ") | bold);
       line.push_back(text(executable_content_) | color(Color::BlueLight) |
                      bold);
     }
