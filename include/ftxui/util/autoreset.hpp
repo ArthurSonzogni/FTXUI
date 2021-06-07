@@ -1,6 +1,8 @@
 #ifndef FTXUI_UTIL_AUTORESET_HPP
 #define FTXUI_UTIL_AUTORESET_HPP
 
+#include <utility>
+
 namespace ftxui {
 
 /// Assign a value to a variable, reset its old value when going out of scope.
