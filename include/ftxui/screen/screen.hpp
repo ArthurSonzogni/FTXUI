@@ -18,14 +18,21 @@ using Element = std::shared_ptr<Node>;
 /// @brief A unicode character and its associated style.
 /// @ingroup screen
 struct Pixel {
-  wchar_t character = U' ';
-  bool blink = false;
-  bool bold = false;
-  bool dim = false;
-  bool inverted = false;
-  bool underlined = false;
   Color background_color = Color::Default;
   Color foreground_color = Color::Default;
+  wchar_t character = U' ';
+  bool blink : 1;
+  bool bold : 1;
+  bool dim : 1;
+  bool inverted : 1;
+  bool underlined : 1;
+
+  Pixel()
+      : blink(false),
+        bold(false),
+        dim(false),
+        inverted(false),
+        underlined(false) {}
 };
 
 /// @brief Define how the Screen's dimensions should look like.
