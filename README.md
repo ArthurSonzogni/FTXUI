@@ -96,3 +96,12 @@ Feel free to add your projects here:
 ## Hosted on:
  * [github](https://github.com/ArthurSonzogni/ftxui)
  * [gitlab](https://gitlab.com/ArthurSonzogni/ftxui)
+
+## External install.
+
+It is **highly** recommanded to use cmake FetchContent to depends on FTXUI. This
+way you can specify uppon which commit hash you would like to depend on.
+
+Alternatively, the following packages have been created.
+- vcpkg ([soon](https://github.com/ArthurSonzogni/FTXUI/issues/112))
+- [Arch Linux PKGBUILD](https://aur.archlinux.org/packages/ftxui-git/).
