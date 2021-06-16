@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 find_package(Git QUIET)
-if (Git_FOUND)
+if (Git_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
   message("git found")
   execute_process(
     COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
