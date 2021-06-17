@@ -93,14 +93,78 @@ TerminalInputParser::Output TerminalInputParser::Parse() {
   return ParseUTF8();
 }
 
+// Code point <-> UTF-8 conversion
+//
+// ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┓
+// ┃Byte 1  ┃Byte 2  ┃Byte 3  ┃Byte 4  ┃
+// ┡━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━┩
+// │0xxxxxxx│        │        │        │
+// ├────────┼────────┼────────┼────────┤
+// │110xxxxx│10xxxxxx│        │        │
+// ├────────┼────────┼────────┼────────┤
+// │1110xxxx│10xxxxxx│10xxxxxx│        │
+// ├────────┼────────┼────────┼────────┤
+// │11110xxx│10xxxxxx│10xxxxxx│10xxxxxx│
+// └────────┴────────┴────────┴────────┘
+//
+// Then some sequences are illegal if it exist a shorter representation of the
+// same codepoint.
 TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   unsigned char head = static_cast<unsigned char>(Current());
-  for (int i = 0; i < 3; ++i, head <<= 1) {
-    if ((head & 0b11000000) != 0b11000000)
-      break;
+  unsigned char selector = 0b1000'0000;
+
+  // The non code-point part of the first byte.
+  unsigned char mask = selector;
+
+  // Find the first zero in the first byte.
+  int first_zero = 8;
+  for(int i = 0; i<8; ++i) {
+    mask |= selector;
+    if (head & selector) {
+      selector >>= 1;
+      continue;
+    }
+    first_zero = i;
+    break;
+  }
+
+  // Accumulate the value of the first byte.
+  wchar_t value = head & ~mask;
+
+  // Invalid UTF8, with more than 5 bytes.
+  if (first_zero == 1 || first_zero >= 5)
+    return DROP;
+
+  // Multi byte UTF-8.
+  for (int i = 2; i <= first_zero; ++i) {
     if (!Eat())
       return UNCOMPLETED;
+
+    // Invalid continuation byte.
+    head = static_cast<unsigned char>(Current());
+    if ((head & 0b1100'0000) != 0b1000'0000)
+      return DROP;
+    value <<= 6;
+    value += head & 0b0011'1111;
   }
+
+  // Check for overlong UTF8 encoding.
+  int extra_byte;
+  if (value <= 0b000'0000'0111'1111) {
+    extra_byte = 0;
+  } else if (value <= 0b000'0111'1111'1111) {
+    extra_byte = 1;
+  } else if (value <= 0b1111'1111'1111'1111) {
+    extra_byte = 2;
+  } else if (value <= 0b1'0000'1111'1111'1111'1111) {
+    extra_byte = 3;
+  } else {
+    return DROP;
+  }
+
+  if (extra_byte != position_)
+    return DROP;
+
   return CHARACTER;
 }
 
