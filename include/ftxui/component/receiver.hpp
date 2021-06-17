@@ -70,6 +70,7 @@ class ReceiverImpl {
     senders_++;
     return std::unique_ptr<SenderImpl<T>>(new SenderImpl<T>(this));
   }
+  ReceiverImpl() { senders_ = 0; }
 
   bool Receive(T* t) {
     while (senders_ || !queue_.empty()) {
@@ -109,7 +110,7 @@ class ReceiverImpl {
   std::mutex mutex_;
   std::queue<T> queue_;
   std::condition_variable notifier_;
-  std::atomic<int> senders_ = 0;
+  std::atomic<int> senders_;
 };
 
 template <class T>
