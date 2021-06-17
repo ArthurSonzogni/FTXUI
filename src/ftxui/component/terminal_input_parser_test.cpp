@@ -149,6 +149,88 @@ TEST(Event, MouseRightClick) {
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
+TEST(Event, UTF8) {
+  struct {
+    std::vector<unsigned char> input;
+    bool valid;
+  } kTestCase[] = {
+      // Basic characters.
+      {{'a'}, true},
+      {{'z'}, true},
+      {{'A'}, true},
+      {{'Z'}, true},
+      {{'0'}, true},
+      {{'9'}, true},
+
+      // UTF-8 of various size:
+      {{0b0100'0001}, true},
+      {{0b1100'0010, 0b1000'0000}, true},
+      {{0b1110'0010, 0b1000'0000, 0b1000'0000}, true},
+      {{0b1111'0010, 0b1000'0000, 0b1000'0000, 0b1000'0000}, true},
+
+      // Overlong UTF-8 encoding:
+      {{0b1100'0000, 0b1000'0000}, false},
+      {{0b1110'0000, 0b1000'0000, 0b1000'0000}, false},
+      {{0b1111'0000, 0b1000'0000, 0b1000'0000, 0b1000'0000}, false},
+
+      // Test limits in between the various legal regions 
+      // https://unicode.org/versions/corrigendum1.html
+      // Limit in between the valid and ina
+      // {{0x7F}, true}, => Special sequence.
+      {{0x80}, false},
+      // ---
+      {{0xC1, 0x80}, false},
+      {{0xC2, 0x7F}, false},
+      {{0xC2, 0x80}, true},
+      // ---
+      {{0xDF, 0xBF}, true},
+      {{0xDF, 0xC0}, false},
+      // ---
+      {{0xE0, 0x9F, 0x80}, false},
+      {{0xE0, 0xA0, 0x7F}, false},
+      {{0xE0, 0xA0, 0x80}, true},
+      // ---
+      {{0xE0, 0xBF, 0xBF}, true},
+      // ---
+      {{0xE1, 0x7F, 0x80}, false},
+      {{0xE1, 0x80, 0x7f}, false},
+      {{0xE1, 0x80, 0x80}, true},
+      // -- 
+      {{0xEF, 0xBF, 0xBF}, true},
+      {{0xEF, 0xC0, 0xBF}, false},
+      {{0xEF, 0xBF, 0xC0}, false},
+      // -- 
+      {{0xF0, 0x90, 0x80}, false},
+      {{0xF0, 0x8F, 0x80, 0x80}, false},
+      {{0xF0, 0x90, 0x80, 0x7F}, false},
+      {{0xF0, 0x90, 0x80, 0x80}, true},
+      // -- 
+      {{0xF1, 0x80, 0x80, 0x80}, true},
+      // -- 
+      {{0xF1, 0xBF, 0xBF, 0xBF}, true},
+      // -- 
+      {{0xF2, 0x80, 0x80, 0x80}, true},
+      // -- 
+      {{0xF4, 0x8F, 0xBF, 0xBF}, true},
+      {{0xF4, 0x90, 0xBF, 0xBF}, false},
+
+  };
+  for (auto test : kTestCase) {
+    auto event_receiver = MakeReceiver<Event>();
+    {
+      auto parser = TerminalInputParser(event_receiver->MakeSender());
+      for (auto input : test.input)
+        parser.Add(input);
+    }
+    Event received;
+    if (test.valid) {
+      EXPECT_TRUE(event_receiver->Receive(&received));
+      EXPECT_TRUE(received.is_character());
+    }
+    EXPECT_FALSE(event_receiver->Receive(&received));
+  }
+}
+
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
