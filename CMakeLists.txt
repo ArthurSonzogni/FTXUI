@@ -18,12 +18,11 @@ project(ftxui
   VERSION 0.6.${git_version}
 )
 
-option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
-option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
-option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 option(FTXUI_BUILD_DOCS "Set to ON to build tests" ON)
-
-enable_testing()
+option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
+option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
+option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
+option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 
 find_package(Threads)
 
@@ -209,6 +208,7 @@ export(TARGETS screen dom component NAMESPACE ftxui::
 
 
 if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
+  enable_testing()
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
   set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
@@ -254,6 +254,26 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
   )
 
   set_property(TARGET tests PROPERTY CXX_STANDARD 17)
+
+  if (FTXUI_BUILD_TESTS_FUZZER)
+    set(CMAKE_C_COMPILER clang)
+    set(CMAKE_CXX_COMPILER clang++)
+    add_executable(terminal_input_parser_test_fuzz
+      src/ftxui/component/terminal_input_parser_test_fuzz.cpp
+    )
+    target_include_directories(terminal_input_parser_test_fuzz
+      PRIVATE src
+    )
+    target_link_libraries(terminal_input_parser_test_fuzz
+      PRIVATE component
+    )
+    target_compile_options(terminal_input_parser_test_fuzz
+      PRIVATE -fsanitize=fuzzer,address
+    )
+    target_link_libraries(terminal_input_parser_test_fuzz
+      PRIVATE -fsanitize=fuzzer,address
+    )
+  endif()
 endif()
 
 if(FTXUI_BUILD_EXAMPLES)
