@@ -205,9 +205,7 @@ void OnExit(int signal) {
     on_exit_functions.top()();
     on_exit_functions.pop();
   }
-
-  if (signal == SIGINT)
-    std::exit(SIGINT);
+  std::raise(signal);
 }
 
 auto install_signal_handler = [](int sig, SignalHandler handler) {
@@ -278,6 +276,8 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 }
 
 void ScreenInteractive::Loop(Component component) {
+  on_exit_functions.push([this] { ExitLoopClosure()(); });
+
   // Install a SIGINT handler and restore the old handler on exit.
   auto old_sigint_handler = std::signal(SIGINT, OnExit);
   on_exit_functions.push(
