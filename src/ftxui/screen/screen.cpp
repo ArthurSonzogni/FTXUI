@@ -164,17 +164,14 @@ std::string Screen::ToString() {
     }
     for (int x = 0; x < dimx_;) {
       auto& pixel = pixels_[y][x];
-      wchar_t c = pixel.character;
       UpdatePixelStyle(ss, previous_pixel, pixel);
 
-      auto width = wchar_width(c);
-      if (width <= 0) {
-        // Avoid an infinite loop for non-printable characters
-        c = L' ';
-        width = 1;
+      int x_inc = 0;
+      for (auto& c : pixel.character) {
+        ss << c;
+        x_inc += wchar_width(c);
       }
-      ss << c;
-      x += width;
+      x += std::max(x_inc, 1);
     }
   }
 
@@ -191,7 +188,7 @@ void Screen::Print() {
 /// @param x The character position along the x-axis.
 /// @param y The character position along the y-axis.
 wchar_t& Screen::at(int x, int y) {
-  return PixelAt(x, y).character;
+  return PixelAt(x, y).character[0];
 }
 
 /// @brief Access a Pixel at a given position.
