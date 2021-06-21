@@ -231,6 +231,7 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
   endif()
 
   add_executable(tests
+    src/ftxui/component/component_test.cpp
     src/ftxui/component/container_test.cpp
     src/ftxui/component/input_test.cpp
     src/ftxui/component/radiobox_test.cpp
@@ -252,6 +253,8 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
   target_include_directories(tests
     PRIVATE src
   )
+  target_compile_options(tests PRIVATE -fsanitize=address)
+  target_link_libraries(tests PRIVATE -fsanitize=address)
 
   set_property(TARGET tests PROPERTY CXX_STANDARD 17)
 
