@@ -1,9 +1,8 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
+#include <gtest/gtest.h>  // for Test, SuiteApiResolver, TestInfo (ptr only), TEST, TestFactoryImpl
+#include <memory>  // for shared_ptr, allocator, make_shared, __shared_ptr_access
 
-#include "ftxui/component/component_base.hpp"
-#include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 
 using namespace ftxui;
 
