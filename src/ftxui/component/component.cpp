@@ -19,7 +19,8 @@ class CaptureMouseImpl : public CapturedMouseInterface {
 }  // namespace
 
 ComponentBase::~ComponentBase() {
-  Detach();
+  while (children_.size() != 0)
+    children_.back()->Detach();
 }
 
 /// @brief Return the parent ComponentBase, or nul if any.
@@ -142,6 +143,7 @@ void ComponentBase::Detach() {
                            return this == that.get();
                          });
   parent_->children_.erase(it);
+  parent_ = nullptr;
 }
 
 }  // namespace ftxui
