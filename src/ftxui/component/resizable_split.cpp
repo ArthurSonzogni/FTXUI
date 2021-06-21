@@ -1,8 +1,13 @@
+#include <memory>   // for __shared_ptr_access
+#include <utility>  // for move
+
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/component_base.hpp"
-#include "ftxui/component/event.hpp"
-#include "ftxui/dom/elements.hpp"
+#include "ftxui/component/component.hpp"  // for Component, Make, Horizontal, Vertical, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
+#include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element, separator, size, EQUAL, xflex, yflex, hbox, vbox, HEIGHT, WIDTH
+#include "ftxui/screen/box.hpp"    // for Box
 
 namespace ftxui {
 namespace {
@@ -63,7 +68,7 @@ class ResizableSplitLeftBase : public ComponentBase {
   Box global_box_;
 };
 
-class ResizableSplitRightBase: public ComponentBase {
+class ResizableSplitRightBase : public ComponentBase {
  public:
   ResizableSplitRightBase(Component main, Component child, int* main_size)
       : main_(main), child_(child), main_size_(main_size) {
@@ -119,7 +124,7 @@ class ResizableSplitRightBase: public ComponentBase {
   Box global_box_;
 };
 
-class ResizableSplitTopBase: public ComponentBase {
+class ResizableSplitTopBase : public ComponentBase {
  public:
   ResizableSplitTopBase(Component main, Component child, int* main_size)
       : main_(main), child_(child), main_size_(main_size) {
@@ -175,7 +180,7 @@ class ResizableSplitTopBase: public ComponentBase {
   Box global_box_;
 };
 
-class ResizableSplitBottomBase: public ComponentBase {
+class ResizableSplitBottomBase : public ComponentBase {
  public:
   ResizableSplitBottomBase(Component main, Component child, int* main_size)
       : main_(main), child_(child), main_size_(main_size) {
@@ -254,12 +259,13 @@ class ResizableSplitBottomBase: public ComponentBase {
 /// ### Output
 ///
 /// ```bash
-///           │           
-///    left   │   right   
-///           │           
+///           │
+///    left   │   right
+///           │
 /// ```
 Component ResizableSplitLeft(Component main, Component back, int* main_size) {
-  return Make<ResizableSplitLeftBase>(std::move(main), std::move(back), main_size);
+  return Make<ResizableSplitLeftBase>(std::move(main), std::move(back),
+                                      main_size);
 }
 
 /// @brief An horizontal split in between two components, configurable using the
@@ -318,7 +324,8 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 ///    bottom
 /// ```
 Component ResizableSplitTop(Component main, Component back, int* main_size) {
-  return Make<ResizableSplitTopBase>(std::move(main), std::move(back), main_size);
+  return Make<ResizableSplitTopBase>(std::move(main), std::move(back),
+                                     main_size);
 }
 
 /// @brief An vertical split in between two components, configurable using the
@@ -347,6 +354,11 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 ///    bottom
 /// ```
 Component ResizableSplitBottom(Component main, Component back, int* main_size) {
-  return Make<ResizableSplitBottomBase>(std::move(main), std::move(back), main_size);
+  return Make<ResizableSplitBottomBase>(std::move(main), std::move(back),
+                                        main_size);
 }
 }  // namespace ftxui
+
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
