@@ -206,7 +206,7 @@ void OnExit(int signal) {
     on_exit_functions.pop();
   }
   if (signal)
-     std::raise(signal);
+    std::raise(signal);
 }
 
 auto install_signal_handler = [](int sig, SignalHandler handler) {
