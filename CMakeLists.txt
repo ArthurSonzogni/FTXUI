@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.11)
 
 find_package(Git QUIET)
 if (Git_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
@@ -218,17 +218,7 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
     GIT_REPOSITORY "https://github.com/google/googletest"
     GIT_TAG        23ef29555ef4789f555f1ba8c51b4c52975f0907
   )
-
-  FetchContent_GetProperties(googletest)
-  if(NOT googletest_POPULATED)
-    message(STATUS "Fetching googletest...")
-    FetchContent_Populate(googletest)
-    message(STATUS "... done")
-    add_subdirectory(
-      ${googletest_SOURCE_DIR}
-      ${googletest_BINARY_DIR}
-      EXCLUDE_FROM_ALL)
-  endif()
+  FetchContent_MakeAvailable(googletest)
 
   add_executable(tests
     src/ftxui/component/component_test.cpp
@@ -255,8 +245,28 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
   )
   target_compile_options(tests PRIVATE -fsanitize=address)
   target_link_libraries(tests PRIVATE -fsanitize=address)
-
   set_property(TARGET tests PROPERTY CXX_STANDARD 17)
+
+  if (NOT MSVC)
+    FetchContent_Declare(googlebenchmark
+      GIT_REPOSITORY "https://github.com/google/benchmark"
+      GIT_TAG 62937f91b5c763a8e119d0c20c67b87bde8eff1c 
+    )
+    FetchContent_MakeAvailable(googlebenchmark)
+
+    add_executable(ftxui_benchmark
+      src/ftxui/dom/benchmark_test.cpp
+    )
+    target_link_libraries(ftxui_benchmark
+      PRIVATE dom
+      PRIVATE benchmark::benchmark
+      PRIVATE benchmark::benchmark_main
+    )
+    target_include_directories(ftxui_benchmark
+      PRIVATE src
+    )
+    set_property(TARGET ftxui_benchmark PROPERTY CXX_STANDARD 17)
+  endif()
 
   if (FTXUI_BUILD_TESTS_FUZZER)
     set(CMAKE_C_COMPILER clang)
