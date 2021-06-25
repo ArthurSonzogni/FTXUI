@@ -1,7 +1,8 @@
 #include <stdio.h>    // for fileno, stdin
 #include <algorithm>  // for copy, max, min
-#include <csignal>    // for signal, SIGINT, SIGWINCH
-#include <cstdlib>    // for exit, NULL
+#include <csignal>  // for signal, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGWINCH
+#include <cstdlib>           // for NULL
+#include <initializer_list>  // for initializer_list
 #include <iostream>  // for cout, ostream, basic_ostream, operator<<, endl, flush
 #include <stack>     // for stack
 #include <thread>    // for thread
@@ -12,7 +13,7 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"           // for Mouse
-#include "ftxui/component/receiver.hpp"  // for ReceiverImpl, SenderImpl, MakeReceiver
+#include "ftxui/component/receiver.hpp"  // for ReceiverImpl, MakeReceiver, Sender, SenderImpl, Receiver
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
@@ -31,8 +32,8 @@
 #endif
 #else
 #include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set
-#include <termios.h>     // for tcsetattr, tcgetattr, cc_t
-#include <unistd.h>      // for STDIN_FILENO, read
+#include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
+#include <unistd.h>  // for STDIN_FILENO, read
 #endif
 
 // Quick exit is missing in standard CLang headers
@@ -201,12 +202,11 @@ const std::string DeviceStatusReport(DSRMode ps) {
 using SignalHandler = void(int);
 std::stack<std::function<void()>> on_exit_functions;
 void OnExit(int signal) {
+  (void)signal;
   while (!on_exit_functions.empty()) {
     on_exit_functions.top()();
     on_exit_functions.pop();
   }
-  if (signal)
-    std::raise(signal);
 }
 
 auto install_signal_handler = [](int sig, SignalHandler handler) {
@@ -279,12 +279,12 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 void ScreenInteractive::Loop(Component component) {
   on_exit_functions.push([this] { ExitLoopClosure()(); });
 
-  // Install a SIGINT handler and restore the old handler on exit.
-  auto old_sigint_handler = std::signal(SIGINT, OnExit);
-  on_exit_functions.push(
-      [old_sigint_handler]() { std::signal(SIGINT, old_sigint_handler); });
+  // Install signal handlers to restore the terminal state on exit. The default
+  // signal handlers are restored on exit.
+  for (int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE})
+    install_signal_handler(signal, OnExit);
 
-  // Save the old terminal configuration and restore it on exit.
+    // Save the old terminal configuration and restore it on exit.
 #if defined(_WIN32)
   // Enable VT processing on stdout and stdin
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
