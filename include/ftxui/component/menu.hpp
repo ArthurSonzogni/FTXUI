@@ -15,13 +15,14 @@ struct Event;
 
 /// @brief A list of items. The user can navigate through them.
 /// @ingroup component
+template <class T = std::vector<std::wstring>*>
 class MenuBase : public ComponentBase {
  public:
   // Access this interface from a Component
-  static MenuBase* From(Component component);
+  static MenuBase<T>* From(Component component);
 
   // Constructor.
-  MenuBase(const std::vector<std::wstring>* entries, int* selected_);
+  MenuBase(T entries, int* selected_);
   ~MenuBase() override = default;
 
   // State.
@@ -41,7 +42,7 @@ class MenuBase : public ComponentBase {
   bool OnEvent(Event) override;
 
  protected:
-  const std::vector<std::wstring>* const entries_;
+  T const entries_;
   int* selected_ = 0;
 
   bool OnMouseEvent(Event);

@@ -28,7 +28,8 @@ Component Button(ConstStringRef label,
                  bool border = true);
 Component Checkbox(ConstStringRef label, bool* checked);
 Component Input(StringRef content, ConstStringRef placeholder);
-Component Menu(const std::vector<std::wstring>* entries, int* selected_);
+template <class T>  // T = {std::vector<std::wstring>*, ftxui::Components}
+Component Menu(T entries, int* selected_);
 Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
 Component Toggle(const std::vector<std::wstring>* entries, int* selected);
 template <class T>  // T = {int, float, long}
