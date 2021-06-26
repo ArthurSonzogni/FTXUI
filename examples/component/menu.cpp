@@ -20,7 +20,8 @@ int main(int argc, const char* argv[]) {
   int selected = 0;
 
   auto menu = Menu(&entries, &selected);
-  MenuBase::From(menu)->on_enter = screen.ExitLoopClosure();
+  MenuBase<std::vector<std::wstring>*>::From(menu)->on_enter =
+      screen.ExitLoopClosure();
 
   screen.Loop(menu);
 

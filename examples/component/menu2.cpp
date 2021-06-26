@@ -69,8 +69,10 @@ int main(int argc, const char* argv[]) {
   });
 
   auto screen = ScreenInteractive::TerminalOutput();
-  MenuBase::From(left_menu_)->on_enter = screen.ExitLoopClosure();
-  MenuBase::From(right_menu_)->on_enter = screen.ExitLoopClosure();
+  MenuBase<std::vector<std::wstring>*>::From(left_menu_)->on_enter =
+      screen.ExitLoopClosure();
+  MenuBase<std::vector<std::wstring>*>::From(right_menu_)->on_enter =
+      screen.ExitLoopClosure();
   screen.Loop(renderer);
 }
 
