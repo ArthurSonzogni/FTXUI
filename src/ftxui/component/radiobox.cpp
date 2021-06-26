@@ -59,9 +59,8 @@ Element RadioboxBase::Render() {
   for (size_t i = 0; i < entries_->size(); ++i) {
     auto style =
         (focused == int(i) && is_focused) ? focused_style : unfocused_style;
-    auto focus_management = (focused != int(i)) ? nothing
-                            : is_focused        ? focus
-                                                : select;
+    auto focus_management =
+        (focused != int(i)) ? nothing : is_focused ? focus : select;
 
     const std::wstring& symbol = *selected_ == int(i) ? checked : unchecked;
     elements.push_back(hbox(text(symbol), text(entries_->at(i)) | style) |

@@ -37,9 +37,8 @@ Element ToggleBase::Render() {
     auto style = is_selected
                      ? (is_focused ? selected_focused_style : selected_style)
                      : (is_focused ? focused_style : normal_style);
-    auto focus_management = !is_selected        ? nothing
-                            : is_toggle_focused ? focus
-                                                : select;
+    auto focus_management =
+        !is_selected ? nothing : is_toggle_focused ? focus : select;
     children.push_back(text(entries_->at(i)) | style | focus_management |
                        reflect(boxes_[i]));
   }
