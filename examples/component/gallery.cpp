@@ -28,7 +28,7 @@ int main(int argc, const char* argv[]) {
 
   // -- Menu
   // ----------------------------------------------------------------------
-  std::vector<std::wstring> menu_entries = {
+  const std::vector<std::wstring> menu_entries = {
       L"Menu 1",
       L"Menu 2",
       L"Menu 3",

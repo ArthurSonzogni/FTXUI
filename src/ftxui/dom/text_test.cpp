@@ -1,8 +1,8 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include <memory>                   // for allocator
+#include <string>                   // for allocator, wstring
 
-#include "ftxui/dom/elements.hpp"   // for text, Element, operator|, border
+#include "ftxui/dom/elements.hpp"   // for text, operator|, border, Element
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/box.hpp"     // for ftxui
 #include "ftxui/screen/screen.hpp"  // for Screen

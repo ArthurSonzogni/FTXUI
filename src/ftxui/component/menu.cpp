@@ -38,47 +38,19 @@ namespace ftxui {
 ///   entry 2
 ///   entry 3
 /// ```
-template <class T = std::vector<std::wstring>*>
-Component Menu(T entries, int* selected) {
-  return Make<MenuBase<T>>(entries, selected);
-}
-
-template <>
-Component Menu<std::vector<std::wstring>*>(std::vector<std::wstring>* entries,
-                                           int* selected) {
-  return Make<MenuBase<std::vector<std::wstring>*>>(entries, selected);
-}
-
-template <>
-Component Menu<Components>(Components entries, int* selected) {
-  return Make<MenuBase<Components>>(entries, selected);
+Component Menu(const std::vector<std::wstring>* entries, int* selected) {
+  return Make<MenuBase>(entries, selected);
 }
 
 // static
-template <class T>
-MenuBase<T>* MenuBase<T>::From(Component component) {
-  return static_cast<MenuBase<T>*>(component.get());
+MenuBase* MenuBase::From(Component component) {
+  return static_cast<MenuBase*>(component.get());
 }
 
-template MenuBase<std::vector<std::wstring>*>*
-MenuBase<std::vector<std::wstring>*>::From(Component component);
-
-template MenuBase<Components>* MenuBase<Components>::From(Component component);
-
-template <class T>
-MenuBase<T>::MenuBase(T entries, int* selected)
+MenuBase::MenuBase(const std::vector<std::wstring>* entries, int* selected)
     : entries_(entries), selected_(selected) {}
 
-template <>
-MenuBase<Components>::MenuBase(Components entries, int* selected)
-    : entries_(entries), selected_(selected) {
-  auto cont = Container::Tab(entries, selected);
-  cont->Add(Container::Vertical(entries));
-  Add(std::move(cont));
-}
-
-template <>
-Element MenuBase<std::vector<std::wstring>*>::Render() {
+Element MenuBase::Render() {
   Elements elements;
   bool is_menu_focused = Focused();
   boxes_.resize(entries_->size());
@@ -89,8 +61,9 @@ Element MenuBase<std::vector<std::wstring>*>::Render() {
     auto style = is_selected
                      ? (is_focused ? selected_focused_style : selected_style)
                      : (is_focused ? focused_style : normal_style);
-    auto focus_management =
-        !is_selected ? nothing : is_menu_focused ? focus : select;
+    auto focus_management = !is_selected      ? nothing
+                            : is_menu_focused ? focus
+                                              : select;
     auto icon = is_selected ? L"> " : L"  ";
     elements.push_back(text(icon + entries_->at(i)) | style | focus_management |
                        reflect(boxes_[i]));
@@ -98,32 +71,7 @@ Element MenuBase<std::vector<std::wstring>*>::Render() {
   return vbox(std::move(elements));
 }
 
-template <>
-Element MenuBase<Components>::Render() {
-  Elements elements;
-  boxes_.resize(entries_.size());
-  bool is_menu_focused = Focused();
-  for (size_t i = 0; i < entries_.size(); ++i) {
-    if (entries_.at(i)->Active()) {
-      *selected_ = i;
-    }
-    bool is_focused = (*selected_ == int(i)) && is_menu_focused;
-    bool is_selected = (*selected_ == int(i)) && entries_.at(i)->Focused();
-
-    auto style = is_selected
-                     ? (is_focused ? selected_focused_style : selected_style)
-                     : (is_focused ? focused_style : normal_style);
-    auto focus_management =
-        !is_selected ? nothing : is_menu_focused ? focus : select;
-    auto icon = is_selected ? L"> " : L"  ";
-    elements.push_back(window(text(icon), entries_.at(i)->Render()) | style |
-                       focus_management | reflect(boxes_[i]));
-  }
-  return vbox(std::move(elements));
-}
-
-template <>
-bool MenuBase<std::vector<std::wstring>*>::OnEvent(Event event) {
+bool MenuBase::OnEvent(Event event) {
   if (!CaptureMouse(event))
     return false;
   if (event.is_mouse())
@@ -158,13 +106,7 @@ bool MenuBase<std::vector<std::wstring>*>::OnEvent(Event event) {
   return false;
 }
 
-template <>
-bool MenuBase<Components>::OnEvent(Event event) {
-  return ComponentBase::OnEvent(event);
-}
-
-template <class T>
-bool MenuBase<T>::OnMouseEvent(Event event) {
+bool MenuBase::OnMouseEvent(Event event) {
   if (!CaptureMouse(event))
     return false;
   for (int i = 0; i < int(boxes_.size()); ++i) {

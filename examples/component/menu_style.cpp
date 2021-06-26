@@ -53,47 +53,29 @@ int main(int argc, const char* argv[]) {
   // clang-format on
   auto screen = ScreenInteractive::TerminalOutput();
   for (Component menu : {menu_1_, menu_2_, menu_3_, menu_4_, menu_5_, menu_6_})
-    MenuBase<std::vector<std::wstring>*>::From(menu)->on_enter =
-        screen.ExitLoopClosure();
+    MenuBase::From(menu)->on_enter = screen.ExitLoopClosure();
 
-  MenuBase<std::vector<std::wstring>*>::From(menu_2_)->focused_style =
-      bold | color(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_2_)->selected_style =
-      color(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_2_)->selected_focused_style =
-      bold | color(Color::Blue);
+  MenuBase::From(menu_2_)->focused_style = bold | color(Color::Blue);
+  MenuBase::From(menu_2_)->selected_style = color(Color::Blue);
+  MenuBase::From(menu_2_)->selected_focused_style = bold | color(Color::Blue);
 
-  MenuBase<std::vector<std::wstring>*>::From(menu_3_)->selected_style =
-      color(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_3_)->focused_style =
-      bgcolor(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_3_)->selected_focused_style =
-      bgcolor(Color::Blue);
+  MenuBase::From(menu_3_)->selected_style = color(Color::Blue);
+  MenuBase::From(menu_3_)->focused_style = bgcolor(Color::Blue);
+  MenuBase::From(menu_3_)->selected_focused_style = bgcolor(Color::Blue);
 
-  MenuBase<std::vector<std::wstring>*>::From(menu_4_)->selected_style =
-      bgcolor(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_4_)->focused_style =
-      bgcolor(Color::BlueLight);
-  MenuBase<std::vector<std::wstring>*>::From(menu_4_)->selected_focused_style =
-      bgcolor(Color::BlueLight);
+  MenuBase::From(menu_4_)->selected_style = bgcolor(Color::Blue);
+  MenuBase::From(menu_4_)->focused_style = bgcolor(Color::BlueLight);
+  MenuBase::From(menu_4_)->selected_focused_style = bgcolor(Color::BlueLight);
 
-  MenuBase<std::vector<std::wstring>*>::From(menu_5_)->normal_style =
-      bgcolor(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_5_)->selected_style =
-      bgcolor(Color::Yellow);
-  MenuBase<std::vector<std::wstring>*>::From(menu_5_)->focused_style =
-      bgcolor(Color::Red);
-  MenuBase<std::vector<std::wstring>*>::From(menu_5_)->selected_focused_style =
-      bgcolor(Color::Red);
+  MenuBase::From(menu_5_)->normal_style = bgcolor(Color::Blue);
+  MenuBase::From(menu_5_)->selected_style = bgcolor(Color::Yellow);
+  MenuBase::From(menu_5_)->focused_style = bgcolor(Color::Red);
+  MenuBase::From(menu_5_)->selected_focused_style = bgcolor(Color::Red);
 
-  MenuBase<std::vector<std::wstring>*>::From(menu_6_)->normal_style =
-      dim | color(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_6_)->selected_style =
-      color(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_6_)->focused_style =
-      bold | color(Color::Blue);
-  MenuBase<std::vector<std::wstring>*>::From(menu_6_)->selected_focused_style =
-      bold | color(Color::Blue);
+  MenuBase::From(menu_6_)->normal_style = dim | color(Color::Blue);
+  MenuBase::From(menu_6_)->selected_style = color(Color::Blue);
+  MenuBase::From(menu_6_)->focused_style = bold | color(Color::Blue);
+  MenuBase::From(menu_6_)->selected_focused_style = bold | color(Color::Blue);
 
   screen.Loop(renderer);
 }

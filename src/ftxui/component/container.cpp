@@ -1,4 +1,5 @@
-#include <stddef.h>   // for size_t
+#include <stddef.h>  // for size_t
+
 #include <algorithm>  // for max, min
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator, __shared_ptr_access<>::element_type, allocator_traits<>::value_type
 #include <utility>  // for move
@@ -30,6 +31,28 @@ Component Vertical(Components children) {
   return ContainerBase::Vertical(std::move(children));
 }
 
+/// @brief A list of components, drawn one by one vertically and navigated
+/// vertically using up/down arrow key or 'j'/'k' keys.
+/// This is useful for implementing a Menu for instance.
+/// @param children the list of components.
+/// @param selector An integer storing the selected children.
+/// @ingroup component
+/// @see ContainerBase
+///
+/// ### Example
+///
+/// ```cpp
+/// auto container = Container::Vertical({
+///   children_1,
+///   children_2,
+///   children_3,
+///   children_4,
+/// });
+/// ```
+Component Vertical(Components children, int* selector) {
+  return ContainerBase::Vertical(std::move(children), selector);
+}
+
 /// @brief A list of components, drawn one by one horizontally and navigated
 /// horizontally using left/right arrow key or 'h'/'l' keys.
 /// @param children the list of components.
@@ -39,15 +62,37 @@ Component Vertical(Components children) {
 /// ### Example
 ///
 /// ```cpp
+/// int selected_children = 2;
 /// auto container = Container::Horizontal({
 ///   children_1,
 ///   children_2,
 ///   children_3,
 ///   children_4,
-/// });
+/// }, &selected_children);
 /// ```
 Component Horizontal(Components children) {
   return ContainerBase::Horizontal(std::move(children));
+}
+
+/// @brief A list of components, drawn one by one horizontally and navigated
+/// horizontally using left/right arrow key or 'h'/'l' keys.
+/// @param children the list of components.
+/// @ingroup component
+/// @see ContainerBase
+///
+/// ### Example
+///
+/// ```cpp
+/// int selected_children = 2;
+/// auto container = Container::Horizontal({
+///   children_1,
+///   children_2,
+///   children_3,
+///   children_4,
+/// }, selected_children);
+/// ```
+Component Horizontal(Components children, int* selector) {
+  return ContainerBase::Horizontal(std::move(children), selector);
 }
 
 /// @brief A list of components, where only one is drawn and interacted with at
@@ -82,9 +127,15 @@ Component ContainerBase::Vertical() {
 
 // static
 Component ContainerBase::Vertical(Components children) {
+  return Vertical(std::move(children), /*selector=*/nullptr);
+}
+
+// static
+Component ContainerBase::Vertical(Components children, int* selector) {
   auto container = std::make_shared<ContainerBase>();
   container->event_handler_ = &ContainerBase::VerticalEvent;
   container->render_handler_ = &ContainerBase::VerticalRender;
+  container->selector_ = selector ? selector : &container->selected_;
   for (Component& child : children)
     container->Add(std::move(child));
   return container;
@@ -97,9 +148,14 @@ Component ContainerBase::Horizontal() {
 
 // static
 Component ContainerBase::Horizontal(Components children) {
+  return Horizontal(std::move(children), /*selector=*/nullptr);
+}
+
+Component ContainerBase::Horizontal(Components children, int* selector) {
   auto container = std::make_shared<ContainerBase>();
   container->event_handler_ = &ContainerBase::HorizontalEvent;
   container->render_handler_ = &ContainerBase::HorizontalRender;
+  container->selector_ = selector ? selector : &container->selected_;
   for (Component& child : children)
     container->Add(std::move(child));
   return container;
@@ -113,9 +169,10 @@ Component ContainerBase::Tab(int* selector) {
 // static
 Component ContainerBase::Tab(Components children, int* selector) {
   auto container = std::make_shared<ContainerBase>();
-  container->selector_ = selector;
+  container->selector_ = selector ? selector : &container->selected_;
   container->event_handler_ = &ContainerBase::TabEvent;
   container->render_handler_ = &ContainerBase::TabRender;
+  container->is_tab_ = true;
   for (Component& child : children)
     container->Add(std::move(child));
   return container;
@@ -138,47 +195,46 @@ Component ContainerBase::ActiveChild() {
   if (children_.size() == 0)
     return nullptr;
 
-  int selected = selector_ ? *selector_ : selected_;
-  return children_[selected % children_.size()];
+  return children_[*selector_ % children_.size()];
 }
 
 void ContainerBase::SetActiveChild(ComponentBase* child) {
   for (size_t i = 0; i < children_.size(); ++i) {
     if (children_[i].get() == child) {
-      (selector_ ? *selector_ : selected_) = i;
+      *selector_ = i;
       return;
     }
   }
 }
 
 bool ContainerBase::VerticalEvent(Event event) {
-  int old_selected = selected_;
+  int old_selected = *selector_;
   if (event == Event::ArrowUp || event == Event::Character('k'))
-    selected_--;
+    (*selector_)--;
   if (event == Event::ArrowDown || event == Event::Character('j'))
-    selected_++;
+    (*selector_)++;
   if (event == Event::Tab && children_.size())
-    selected_ = (selected_ + 1) % children_.size();
+    *selector_ = (*selector_ + 1) % children_.size();
   if (event == Event::TabReverse && children_.size())
-    selected_ = (selected_ + children_.size() - 1) % children_.size();
+    *selector_ = (*selector_ + children_.size() - 1) % children_.size();
 
-  selected_ = std::max(0, std::min(int(children_.size()) - 1, selected_));
-  return old_selected != selected_;
+  *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+  return old_selected != *selector_;
 }
 
 bool ContainerBase::HorizontalEvent(Event event) {
-  int old_selected = selected_;
+  int old_selected = *selector_;
   if (event == Event::ArrowLeft || event == Event::Character('h'))
-    selected_--;
+    (*selector_)--;
   if (event == Event::ArrowRight || event == Event::Character('l'))
-    selected_++;
+    (*selector_)++;
   if (event == Event::Tab && children_.size())
-    selected_ = (selected_ + 1) % children_.size();
+    *selector_ = (*selector_ + 1) % children_.size();
   if (event == Event::TabReverse && children_.size())
-    selected_ = (selected_ + children_.size() - 1) % children_.size();
+    *selector_ = (*selector_ + children_.size() - 1) % children_.size();
 
-  selected_ = std::max(0, std::min(int(children_.size()) - 1, selected_));
-  return old_selected != selected_;
+  *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+  return old_selected != *selector_;
 }
 
 Element ContainerBase::Render() {
@@ -211,7 +267,7 @@ Element ContainerBase::TabRender() {
 }
 
 bool ContainerBase::OnMouseEvent(Event event) {
-  if (selector_)
+  if (is_tab_)
     return ActiveChild()->OnEvent(event);
 
   for (Component& child : children_) {
