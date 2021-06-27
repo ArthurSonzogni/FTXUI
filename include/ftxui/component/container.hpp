@@ -13,9 +13,11 @@ class ContainerBase : public ComponentBase {
  public:
   static Component Vertical();
   static Component Vertical(Components children);
+  static Component Vertical(Components children, int* selector);
 
   static Component Horizontal();
   static Component Horizontal(Components children);
+  static Component Horizontal(Components children, int* selector);
 
   static Component Tab(int* selector);
   static Component Tab(Components children, int* selector);
@@ -44,6 +46,7 @@ class ContainerBase : public ComponentBase {
 
   int selected_ = 0;
   int* selector_ = nullptr;
+  bool is_tab_ = false;
 
  private:
   bool OnMouseEvent(Event event);

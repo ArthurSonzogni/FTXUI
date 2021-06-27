@@ -39,7 +39,9 @@ Component CatchEvent(Component child, std::function<bool(Event)>);
 
 namespace Container {
 Component Vertical(Components children);
+Component Vertical(Components children, int* selector);
 Component Horizontal(Components children);
+Component Horizontal(Components children, int* selector);
 Component Tab(Components children, int* selector);
 
 }  // namespace Container
