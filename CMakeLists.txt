@@ -13,6 +13,17 @@ option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 
+set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
+terminal used will be one of Microsoft and use a set of reasonnable fallback \
+to counteract its implementations problems.")
+if (WIN32)
+  option(FTXUI_MICROSOFT_TERMINAL_FALLBACK
+    ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} ON)
+else()
+  option(FTXUI_MICROSOFT_TERMINAL_FALLBACK
+    ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} OFF)
+endif()
+
 add_library(screen STATIC
   src/ftxui/screen/box.cpp
   src/ftxui/screen/color.cpp

@@ -27,13 +27,8 @@ class RadioboxBase : public ComponentBase {
 
   int focused = 0;
 
-#if defined(_WIN32)
-  std::wstring checked = L"(*) ";
-  std::wstring unchecked = L"( ) ";
-#else
   std::wstring checked = L"◉ ";
   std::wstring unchecked = L"○ ";
-#endif
 
   Decorator focused_style = inverted;
   Decorator unfocused_style = nothing;
