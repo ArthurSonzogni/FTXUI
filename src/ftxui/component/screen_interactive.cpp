@@ -450,10 +450,25 @@ void ScreenInteractive::Draw(Component component) {
     cursor_.y = dimy_ - 1;
   }
 
-  static int i = -2;
-  if (i % 10 == 0)
-    std::cout << DeviceStatusReport(DSRMode::kCursor);
+  // Periodically request the terminal emulator the frame position relative to
+  // the screen. This is useful for converting mouse position reported in
+  // screen's coordinates to frame's coordinates.
+  static constexpr int cursor_refresh_rate =
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+      // Microsoft's terminal suffers from a [bug]. When reporting the cursor
+      // position, several output sequences are mixed together into garbage.
+      // This causes FTXUI user to see some "1;1;R" sequences into the Input
+      // component. See [issue]. Solution is to request cursor position less
+      // often. [bug]: https://github.com/microsoft/terminal/pull/7583 [issue]:
+      // https://github.com/ArthurSonzogni/FTXUI/issues/136
+      150;
+#else
+      20;
+#endif
+  static int i = -3;
   ++i;
+  if (!use_alternative_screen_ && (i % cursor_refresh_rate == 0))
+    std::cout << DeviceStatusReport(DSRMode::kCursor);
 
   Render(*this, document);
 

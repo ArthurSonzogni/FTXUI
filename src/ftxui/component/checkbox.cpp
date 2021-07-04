@@ -40,7 +40,16 @@ CheckboxBase* CheckboxBase::From(Component component) {
 }
 
 CheckboxBase::CheckboxBase(ConstStringRef label, bool* state)
-    : label_(label), state_(state) {}
+    : label_(label), state_(state) {
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+  // Microsoft terminal do not use fonts able to render properly the default
+  // radiobox glyph.
+  if (checked == L"▣ ")
+    checked = L"[X]";
+  if (unchecked == L"☐ ")
+    unchecked = L"[ ]";
+#endif
+}
 
 Element CheckboxBase::Render() {
   bool is_focused = Focused();

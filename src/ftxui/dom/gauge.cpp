@@ -8,7 +8,13 @@
 
 namespace ftxui {
 
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+// Microsoft's terminals often use fonts not handling the 8 unicode characters
+// for representing the whole gauge. Fallback with less.
+static wchar_t charset[] = L"    ▌▌▌███";
+#else
 static wchar_t charset[] = L"  ▏▎▍▌▋▊▉█";
+#endif
 
 class Gauge : public Node {
  public:

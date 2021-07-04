@@ -25,13 +25,8 @@ class CheckboxBase : public ComponentBase {
   CheckboxBase(ConstStringRef label, bool* state);
   ~CheckboxBase() override = default;
 
-#if defined(_WIN32)
-  std::wstring checked = L"[X] ";    /// Prefix for  a "checked" state.
-  std::wstring unchecked = L"[ ] ";  /// Prefix for  an "unchecked" state.
-#else
   std::wstring checked = L"▣ ";    /// Prefix for  a "checked" state.
   std::wstring unchecked = L"☐ ";  /// Prefix for  a "unchecked" state.
-#endif
 
   Decorator focused_style = inverted;   /// Decorator used when focused.
   Decorator unfocused_style = nothing;  /// Decorator used when unfocused.

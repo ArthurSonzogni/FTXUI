@@ -36,6 +36,11 @@ function(ftxui_set_options library)
     target_compile_options(${library} PRIVATE "-Wdeprecated")
     target_compile_options(${library} PRIVATE "-Wshadow")
   endif()
+
+  if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+    target_compile_definitions(${library}
+      PRIVATE "FTXUI_MICROSOFT_TERMINAL_FALLBACK")
+  endif()
 endfunction()
 
 if (EMSCRIPTEN)
@@ -44,3 +49,4 @@ if (EMSCRIPTEN)
   string(APPEND CMAKE_CXX_FLAGS " -s USE_PTHREADS")
   string(APPEND CMAKE_CXX_FLAGS " -s PROXY_TO_PTHREAD")
 endif()
+
