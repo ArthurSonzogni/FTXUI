@@ -1,4 +1,7 @@
 function(ftxui_set_options library)
+  set_target_properties(${library} PROPERTIES PREFIX "ftxui-")
+
+
   target_include_directories(${library}
     PUBLIC
       $<INSTALL_INTERFACE:include>
