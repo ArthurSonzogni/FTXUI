@@ -22,7 +22,7 @@ class RadioboxBase : public ComponentBase {
   static RadioboxBase* From(Component component);
 
   // Constructor.
-  RadioboxBase(const std::vector<std::wstring>* entries, int* selected);
+  RadioboxBase(const std::vector<std::wstring>* entries, int* selected,std::function<void()> on_change);
   ~RadioboxBase() override = default;
 
   int focused = 0;
@@ -38,8 +38,7 @@ class RadioboxBase : public ComponentBase {
   Decorator focused_style = inverted;
   Decorator unfocused_style = nothing;
 
-  // State update callback.
-  std::function<void()> on_change = []() {};
+
 
   // Component implementation.
   Element Render() override;
@@ -48,7 +47,8 @@ class RadioboxBase : public ComponentBase {
  private:
   const std::vector<std::wstring>* const entries_;
   int* const selected_;
-
+  // State update callback.
+  std::function<void()> on_change_;
   bool OnMouseEvent(Event event);
   int cursor_position = 0;
   std::vector<Box> boxes_;

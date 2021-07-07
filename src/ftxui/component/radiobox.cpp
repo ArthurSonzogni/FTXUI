@@ -15,6 +15,7 @@ namespace ftxui {
 /// @brief A list of element, where only one can be selected.
 /// @param entries The list of entries in the list.
 /// @param selected The index of the currently selected element.
+/// @param on_change The function to execute on changing the radiobox
 /// @ingroup component
 /// @see RadioboxBase
 ///
@@ -39,8 +40,8 @@ namespace ftxui {
 /// ○ entry 2
 /// ○ entry 3
 /// ```
-Component Radiobox(const std::vector<std::wstring>* entries, int* selected) {
-  return Make<RadioboxBase>(entries, selected);
+Component Radiobox(const std::vector<std::wstring>* entries, int* selected,std::function<void()> on_change) {
+  return Make<RadioboxBase>(entries, selected,on_change);
 }
 
 // static
@@ -49,8 +50,8 @@ RadioboxBase* RadioboxBase::From(Component component) {
 }
 
 RadioboxBase::RadioboxBase(const std::vector<std::wstring>* entries,
-                           int* selected)
-    : entries_(entries), selected_(selected) {}
+                           int* selected,std::function<void()> on_change)
+    : entries_(entries), selected_(selected) ,on_change_(on_change){}
 
 Element RadioboxBase::Render() {
   std::vector<Element> elements;
@@ -98,7 +99,7 @@ bool RadioboxBase::OnEvent(Event event) {
 
   if (event == Event::Character(' ') || event == Event::Return) {
     *selected_ = focused;
-    on_change();
+    on_change_();
   }
 
   return false;
@@ -120,7 +121,7 @@ bool RadioboxBase::OnMouseEvent(Event event) {
       TakeFocus();
       if (*selected_ != i) {
         *selected_ = i;
-        on_change();
+        on_change_();
       }
       return true;
     }

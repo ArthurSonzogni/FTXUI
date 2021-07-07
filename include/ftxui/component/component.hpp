@@ -29,7 +29,7 @@ Component Button(ConstStringRef label,
 Component Checkbox(ConstStringRef label, bool* checked);
 Component Input(StringRef content, ConstStringRef placeholder);
 Component Menu(const std::vector<std::wstring>* entries, int* selected_);
-Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
+Component Radiobox(const std::vector<std::wstring>* entries, int* selected_,std::function<void()> on_click);
 Component Toggle(const std::vector<std::wstring>* entries, int* selected);
 template <class T>  // T = {int, float, long}
 Component Slider(StringRef label, T* value, T min, T max, T increment);
