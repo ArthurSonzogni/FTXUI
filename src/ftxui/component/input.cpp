@@ -31,8 +31,10 @@ namespace ftxui {
 /// ```bash
 /// placeholder
 /// ```
-Component Input(StringRef content, ConstStringRef placeholder) {
-  return Make<InputBase>(content, placeholder);
+Component Input(StringRef content,
+                ConstStringRef placeholder,
+                ConstRef<InputOption> option) {
+  return Make<InputBase>(content, placeholder, std::move(option));
 }
 
 // static
@@ -40,8 +42,10 @@ InputBase* InputBase::From(Component component) {
   return static_cast<InputBase*>(component.get());
 }
 
-InputBase::InputBase(StringRef content, ConstStringRef placeholder)
-    : content_(content), placeholder_(placeholder) {}
+InputBase::InputBase(StringRef content,
+                     ConstStringRef placeholder,
+                     ConstRef<InputOption> option)
+    : content_(content), placeholder_(placeholder), option_(option) {}
 
 // Component implementation.
 Element InputBase::Render() {
@@ -97,7 +101,7 @@ bool InputBase::OnEvent(Event event) {
       return false;
     content_->erase(cursor_position - 1, 1);
     cursor_position--;
-    on_change();
+    option_->on_change();
     return true;
   }
 
@@ -106,13 +110,13 @@ bool InputBase::OnEvent(Event event) {
     if (cursor_position == int(content_->size()))
       return false;
     content_->erase(cursor_position, 1);
-    on_change();
+    option_->on_change();
     return true;
   }
 
   // Enter.
   if (event == Event::Return) {
-    on_enter();
+    option_->on_enter();
     return true;
   }
 
@@ -144,7 +148,7 @@ bool InputBase::OnEvent(Event event) {
   if (event.is_character()) {
     content_->insert(cursor_position, 1, event.character());
     cursor_position++;
-    on_change();
+    option_->on_change();
     return true;
   }
   return false;
@@ -166,7 +170,7 @@ bool InputBase::OnMouseEvent(Event event) {
         std::max(0, std::min<int>(content_->size(), new_cursor_position));
     if (cursor_position != new_cursor_position) {
       cursor_position = new_cursor_position;
-      on_change();
+      option_->on_change();
     }
   }
   return true;

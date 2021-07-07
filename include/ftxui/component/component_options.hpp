@@ -31,6 +31,11 @@ struct CheckboxOption {
   std::function<void()> on_change = []() {};
 };
 
+struct InputOption {
+  std::function<void()> on_change = [] {};
+  std::function<void()> on_enter = [] {};
+};
+
 };  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP */

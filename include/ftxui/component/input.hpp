@@ -21,15 +21,13 @@ class InputBase : public ComponentBase {
   static InputBase* From(Component component);
 
   // Constructor.
-  InputBase(StringRef content, ConstStringRef placeholder);
+  InputBase(StringRef content,
+            ConstStringRef placeholder,
+            ConstRef<InputOption> option = {});
   ~InputBase() override = default;
 
   // State.
   int cursor_position = 0;
-
-  // State update callback.
-  std::function<void()> on_change = [] {};
-  std::function<void()> on_enter = [] {};
 
   // Component implementation.
   Element Render() override;
@@ -42,6 +40,7 @@ class InputBase : public ComponentBase {
   bool OnMouseEvent(Event);
   Box input_box_;
   Box cursor_box_;
+  ConstRef<InputOption> option_;
 };
 
 }  // namespace ftxui

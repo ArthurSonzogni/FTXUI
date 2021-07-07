@@ -30,7 +30,9 @@ Component Button(ConstStringRef label,
 Component Checkbox(ConstStringRef label,
                    bool* checked,
                    ConstRef<CheckboxOption> option = {});
-Component Input(StringRef content, ConstStringRef placeholder);
+Component Input(StringRef content,
+                ConstStringRef placeholder,
+                ConstRef<InputOption> option = {});
 Component Menu(const std::vector<std::wstring>* entries,
                int* selected_,
                ConstRef<MenuOption> = {});
