@@ -51,11 +51,9 @@ RadioboxBase* RadioboxBase::From(Component component) {
 
 RadioboxBase::RadioboxBase(const std::vector<std::wstring>* entries,
                            int* selected,std::function<void()> on_change)
-    : entries_(entries), selected_(selected) ,on_change_(on_change){}
-
-                           int* selected)
-    : entries_(entries), selected_(selected) {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+    : entries_(entries), selected_(selected) ,on_change_(on_change){
+                    
+   #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
   // Microsoft terminal do not use fonts able to render properly the default
   // radiobox glyph.
   if (checked == L"◉ ")
