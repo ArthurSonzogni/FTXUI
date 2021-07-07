@@ -22,17 +22,10 @@ class CheckboxBase : public ComponentBase {
   static CheckboxBase* From(Component component);
 
   // Constructor.
-  CheckboxBase(ConstStringRef label, bool* state);
+  CheckboxBase(ConstStringRef label,
+               bool* state,
+               ConstRef<CheckboxOption> option = {});
   ~CheckboxBase() override = default;
-
-  std::wstring checked = L"▣ ";    /// Prefix for  a "checked" state.
-  std::wstring unchecked = L"☐ ";  /// Prefix for  a "unchecked" state.
-
-  Decorator focused_style = inverted;   /// Decorator used when focused.
-  Decorator unfocused_style = nothing;  /// Decorator used when unfocused.
-
-  /// Called when the user change the state of the CheckboxBase.
-  std::function<void()> on_change = []() {};
 
   // Component implementation.
   Element Render() override;
@@ -43,8 +36,8 @@ class CheckboxBase : public ComponentBase {
 
   ConstStringRef label_;
   bool* const state_;
-  int cursor_position = 0;
   Box box_;
+  ConstRef<CheckboxOption> option_;
 };
 
 }  // namespace ftxui

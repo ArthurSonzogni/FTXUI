@@ -30,8 +30,10 @@ namespace ftxui {
 /// ```bash
 /// ☐ Make a sandwitch
 /// ```
-Component Checkbox(ConstStringRef label, bool* checked) {
-  return Make<CheckboxBase>(label, checked);
+Component Checkbox(ConstStringRef label,
+                   bool* checked,
+                   ConstRef<CheckboxOption> option) {
+  return Make<CheckboxBase>(label, checked, std::move(option));
 }
 
 // static
@@ -39,23 +41,25 @@ CheckboxBase* CheckboxBase::From(Component component) {
   return static_cast<CheckboxBase*>(component.get());
 }
 
-CheckboxBase::CheckboxBase(ConstStringRef label, bool* state)
-    : label_(label), state_(state) {
+CheckboxBase::CheckboxBase(ConstStringRef label,
+                           bool* state,
+                           ConstRef<CheckboxOption> option)
+    : label_(label), state_(state), option_(std::move(option)) {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
   // Microsoft terminal do not use fonts able to render properly the default
   // radiobox glyph.
-  if (checked == L"▣ ")
-    checked = L"[X]";
-  if (unchecked == L"☐ ")
-    unchecked = L"[ ]";
+  if (option->checked == L"▣ ")
+    option->checked = L"[X]";
+  if (option->unchecked == L"☐ ")
+    option->unchecked = L"[ ]";
 #endif
 }
 
 Element CheckboxBase::Render() {
   bool is_focused = Focused();
-  auto style = is_focused ? focused_style : unfocused_style;
+  auto style = is_focused ? option_->focused_style : option_->unfocused_style;
   auto focus_management = is_focused ? focus : *state_ ? select : nothing;
-  return hbox(text(*state_ ? checked : unchecked),
+  return hbox(text(*state_ ? option_->checked : option_->unchecked),
               text(*label_) | style | focus_management) |
          reflect(box_);
 }
@@ -66,7 +70,7 @@ bool CheckboxBase::OnEvent(Event event) {
 
   if (event == Event::Character(' ') || event == Event::Return) {
     *state_ = !*state_;
-    on_change();
+    option_->on_change();
     return true;
   }
   return false;
@@ -83,7 +87,7 @@ bool CheckboxBase::OnMouseEvent(Event event) {
   if (event.mouse().button == Mouse::Left &&
       event.mouse().motion == Mouse::Pressed) {
     *state_ = !*state_;
-    on_change();
+    option_->on_change();
     return true;
   }
 
