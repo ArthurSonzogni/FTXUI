@@ -21,7 +21,9 @@ class ButtonBase : public ComponentBase {
   static ButtonBase* From(Component);
 
   // Constructor.
-  ButtonBase(ConstStringRef label, std::function<void()> on_click, bool border);
+  ButtonBase(ConstStringRef label,
+             std::function<void()> on_click,
+             ConstRef<ButtonOption> option);
   ~ButtonBase() override = default;
 
   // Component implementation.
@@ -31,8 +33,8 @@ class ButtonBase : public ComponentBase {
  private:
   ConstStringRef label_;
   std::function<void()> on_click_;
-  bool border_;
   Box box_;
+  ConstRef<ButtonOption> option_;
 };
 
 }  // namespace ftxui

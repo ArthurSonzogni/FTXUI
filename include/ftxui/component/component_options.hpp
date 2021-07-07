@@ -14,6 +14,10 @@ struct MenuOption {
   std::function<void()> on_enter = []() {};
 };
 
-};     // namespace ftxui
+struct ButtonOption {
+  bool border = true;
+};
+
+};  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP */
