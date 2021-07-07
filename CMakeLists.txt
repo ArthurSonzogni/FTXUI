@@ -1,17 +1,6 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.11)
 
-find_package(Git QUIET)
-if (Git_FOUND AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.git")
-  message("git found")
-  execute_process(
-    COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    OUTPUT_VARIABLE git_version
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-else()
-  set(git_version 0)
-endif()
+include(cmake/ftxui_git_version.cmake)
 
 project(ftxui
   LANGUAGES CXX
@@ -24,7 +13,16 @@ option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 
-find_package(Threads)
+set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
+terminal used will be one of Microsoft and use a set of reasonnable fallback \
+to counteract its implementations problems.")
+if (WIN32)
+  option(FTXUI_MICROSOFT_TERMINAL_FALLBACK
+    ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} ON)
+else()
+  option(FTXUI_MICROSOFT_TERMINAL_FALLBACK
+    ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} OFF)
+endif()
 
 add_library(screen STATIC
   src/ftxui/screen/box.cpp
@@ -108,175 +106,27 @@ add_library(component STATIC
   src/ftxui/component/toggle.cpp
 )
 
-add_library(ftxui::screen ALIAS screen)
-add_library(ftxui::dom ALIAS dom)
-add_library(ftxui::component ALIAS component)
+target_link_libraries(dom
+  PUBLIC screen
+)
 
-target_link_libraries(dom PUBLIC screen)
-target_link_libraries(component PUBLIC dom Threads::Threads)
-  find_program(iwyu_path NAMES include-what-you-use iwyu)
-  if(iwyu_path)
-    set_property(TARGET ${lib}
-      PROPERTY ${iwyu_path} -Xiwyu
-        --mapping_file ${CMAKE_CURRENT_SOURCE_DIR}/iwyu.impl
-    )
-  endif()
+find_package(Threads)
+target_link_libraries(component
+  PUBLIC dom
+  PRIVATE Threads::Threads
+)
 
+include(cmake/ftxui_set_options.cmake)
+ftxui_set_options(screen)
+ftxui_set_options(dom)
+ftxui_set_options(component)
 
-foreach(lib screen dom component)
-  target_include_directories(${lib}
-    PUBLIC
-      $<INSTALL_INTERFACE:include>
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    PRIVATE
-      src
-  )
-
-  # C++17 is used. We requires fold expression at least.
-  set_property(TARGET ${lib} PROPERTY CXX_STANDARD 17)
-
-  # Force Microsoft Visual Studio to decode sources files in UTF-8. This applies
-  # to the library and the library users.
-  if (MSVC)
-    target_compile_options(${lib} PUBLIC "/utf-8")
-  endif()
-
-  # Add as many warning as possible:
-  if (WIN32)
-    if (MSVC)
-      target_compile_options(${lib} PRIVATE "/W3")
-      target_compile_options(${lib} PRIVATE "/WX")
-      target_compile_options(${lib} PRIVATE "/wd4244")
-      target_compile_options(${lib} PRIVATE "/wd4267")
-      target_compile_options(${lib} PRIVATE "/D_CRT_SECURE_NO_WARNINGS")
-    endif()
-    # Force Win32 to UNICODE
-    target_compile_definitions(${lib} PRIVATE UNICODE _UNICODE)
-  else()
-    target_compile_options(${lib} PRIVATE "-Wall")
-    target_compile_options(${lib} PRIVATE "-Wextra")
-    target_compile_options(${lib} PRIVATE "-pedantic")
-    target_compile_options(${lib} PRIVATE "-Werror")
-    target_compile_options(${lib} PRIVATE "-Wmissing-declarations")
-    target_compile_options(${lib} PRIVATE "-Wdeprecated")
-    target_compile_options(${lib} PRIVATE "-Wshadow")
-  endif()
-
-endforeach()
-
-if (EMSCRIPTEN)
-  #string(APPEND CMAKE_CXX_FLAGS " -s ASSERTIONS=1")
-  string(APPEND CMAKE_CXX_FLAGS " -s ASYNCIFY")
-  string(APPEND CMAKE_CXX_FLAGS " -s USE_PTHREADS")
-  string(APPEND CMAKE_CXX_FLAGS " -s PROXY_TO_PTHREAD")
+if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
+  include(cmake/ftxui_test.cmake)
 endif()
 
 if(FTXUI_ENABLE_INSTALL)
-  include(GNUInstallDirs)
-  install(TARGETS screen dom component
-      EXPORT ftxui-export
-      LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/
-      ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/
-  )
-
-  install(DIRECTORY include/ftxui DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-
-  include(CMakePackageConfigHelpers)
-  configure_package_config_file(ftxui-config.cmake.in
-    ${CMAKE_CURRENT_BINARY_DIR}/ftxui-config.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/cmake
-    PATH_VARS CMAKE_INSTALL_INCLUDEDIR
-  )
-  write_basic_package_version_file(
-    ftxui-config-version.cmake
-    VERSION ${PACKAGE_VERSION}
-    COMPATIBILITY AnyNewerVersion
-  )
-
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ftxui-config.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
-  )
-  install(EXPORT ftxui-export
-    FILE ftxui-config-version.cmake
-    NAMESPACE ftxui::
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
-  )
-endif()
-
-export(TARGETS screen dom component NAMESPACE ftxui::
-  FILE ${PROJECT_BINARY_DIR}/ftxui-targets.cmake)
-
-
-if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
-  enable_testing()
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-  set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
-  include(FetchContent)
-
-  FetchContent_Declare( googletest
-    GIT_REPOSITORY "https://github.com/google/googletest"
-    GIT_TAG        23ef29555ef4789f555f1ba8c51b4c52975f0907
-  )
-
-  FetchContent_GetProperties(googletest)
-  if(NOT googletest_POPULATED)
-    message(STATUS "Fetching googletest...")
-    FetchContent_Populate(googletest)
-    message(STATUS "... done")
-    add_subdirectory(
-      ${googletest_SOURCE_DIR}
-      ${googletest_BINARY_DIR}
-      EXCLUDE_FROM_ALL)
-  endif()
-
-  add_executable(tests
-    src/ftxui/component/component_test.cpp
-    src/ftxui/component/container_test.cpp
-    src/ftxui/component/input_test.cpp
-    src/ftxui/component/radiobox_test.cpp
-    src/ftxui/component/receiver_test.cpp
-    src/ftxui/component/terminal_input_parser_test.cpp
-    src/ftxui/component/toggle_test.cpp
-    src/ftxui/dom/gauge_test.cpp
-    src/ftxui/dom/hbox_test.cpp
-    src/ftxui/dom/text_test.cpp
-    src/ftxui/dom/vbox_test.cpp
-  )
-
-  target_link_libraries(tests
-    PRIVATE component
-    PRIVATE gtest
-    PRIVATE gmock
-    PRIVATE gtest_main
-  )
-  target_include_directories(tests
-    PRIVATE src
-  )
-  target_compile_options(tests PRIVATE -fsanitize=address)
-  target_link_libraries(tests PRIVATE -fsanitize=address)
-
-  set_property(TARGET tests PROPERTY CXX_STANDARD 17)
-
-  if (FTXUI_BUILD_TESTS_FUZZER)
-    set(CMAKE_C_COMPILER clang)
-    set(CMAKE_CXX_COMPILER clang++)
-    add_executable(terminal_input_parser_test_fuzz
-      src/ftxui/component/terminal_input_parser_test_fuzz.cpp
-    )
-    target_include_directories(terminal_input_parser_test_fuzz
-      PRIVATE src
-    )
-    target_link_libraries(terminal_input_parser_test_fuzz
-      PRIVATE component
-    )
-    target_compile_options(terminal_input_parser_test_fuzz
-      PRIVATE -fsanitize=fuzzer,address
-    )
-    target_link_libraries(terminal_input_parser_test_fuzz
-      PRIVATE -fsanitize=fuzzer,address
-    )
-  endif()
+  include(cmake/ftxui_install.cmake)
 endif()
 
 if(FTXUI_BUILD_EXAMPLES)
@@ -286,3 +136,6 @@ endif()
 if(FTXUI_BUILD_DOCS)
   add_subdirectory(doc)
 endif()
+
+include(cmake/iwyu.cmake)
+include(cmake/ftxui_export.cmake)

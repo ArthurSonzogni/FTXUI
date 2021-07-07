@@ -23,12 +23,15 @@ Terminal::Dimensions Terminal::Size() {
   return Dimensions{140, 43};
 #elif defined(_WIN32)
   CONSOLE_SCREEN_BUFFER_INFO csbi;
-  int columns, rows;
 
-  GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
-  columns = csbi.srWindow.Right - csbi.srWindow.Left + 1;
-  rows = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
-  return Dimensions{columns, rows};
+  if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
+    return Dimensions{csbi.srWindow.Right - csbi.srWindow.Left + 1,
+                      csbi.srWindow.Bottom - csbi.srWindow.Top + 1};
+  }
+
+  // The Microsoft default "cmd" returns errors above.
+  return Dimensions{80, 80};
+
 #else
   winsize w;
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
@@ -60,6 +63,15 @@ Terminal::Color ComputeColorSupport() {
   std::string TERM = Safe(std::getenv("TERM"));
   if (Contains(COLORTERM, "256") || Contains(TERM, "256"))
     return Terminal::Color::Palette256;
+
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+  // Microsoft terminals do not properly declare themselve supporting true
+  // colors: https://github.com/microsoft/terminal/issues/1040
+  // As a fallback, assume microsoft terminal are the ones not setting those
+  // variables, and enable true colors.
+  if (TERM == "" && COLORTERM == "")
+    return Terminal::Color::TrueColor;
+#endif
 
   return Terminal::Color::Palette16;
 }

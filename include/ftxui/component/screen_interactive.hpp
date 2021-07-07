@@ -56,8 +56,8 @@ class ScreenInteractive : public Screen {
 
   std::atomic<bool> quit_ = false;
 
-  int cursor_x_ = 0;
-  int cursor_y_ = 0;
+  int cursor_x_ = 1;
+  int cursor_y_ = 1;
 
   bool mouse_captured = false;
 };

@@ -10,7 +10,13 @@
 
 namespace ftxui {
 
+// Microsoft's terminals often use fonts not handling the 8 unicode characters
+// for representing the whole gauge. Fallback with less.
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+const wchar_t charset[] = L"  █ █████";
+#else
 const wchar_t charset[] = L" ▗▐▖▄▟▌▙█";
+#endif
 
 class Graph : public Node {
  public:

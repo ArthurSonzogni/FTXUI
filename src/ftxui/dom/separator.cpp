@@ -1,4 +1,5 @@
 #include <memory>  // for make_shared
+#include <string>  // for wstring
 
 #include "ftxui/dom/elements.hpp"     // for Element, separator
 #include "ftxui/dom/node.hpp"         // for Node

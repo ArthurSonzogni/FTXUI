@@ -173,7 +173,7 @@ TEST(Event, UTF8) {
       {{0b1110'0000, 0b1000'0000, 0b1000'0000}, false},
       {{0b1111'0000, 0b1000'0000, 0b1000'0000, 0b1000'0000}, false},
 
-      // Test limits in between the various legal regions 
+      // Test limits in between the various legal regions
       // https://unicode.org/versions/corrigendum1.html
       // Limit in between the valid and ina
       // {{0x7F}, true}, => Special sequence.
@@ -195,22 +195,22 @@ TEST(Event, UTF8) {
       {{0xE1, 0x7F, 0x80}, false},
       {{0xE1, 0x80, 0x7f}, false},
       {{0xE1, 0x80, 0x80}, true},
-      // -- 
+      // --
       {{0xEF, 0xBF, 0xBF}, true},
       {{0xEF, 0xC0, 0xBF}, false},
       {{0xEF, 0xBF, 0xC0}, false},
-      // -- 
+      // --
       {{0xF0, 0x90, 0x80}, false},
       {{0xF0, 0x8F, 0x80, 0x80}, false},
       {{0xF0, 0x90, 0x80, 0x7F}, false},
       {{0xF0, 0x90, 0x80, 0x80}, true},
-      // -- 
+      // --
       {{0xF1, 0x80, 0x80, 0x80}, true},
-      // -- 
+      // --
       {{0xF1, 0xBF, 0xBF, 0xBF}, true},
-      // -- 
+      // --
       {{0xF2, 0x80, 0x80, 0x80}, true},
-      // -- 
+      // --
       {{0xF4, 0x8F, 0xBF, 0xBF}, true},
       {{0xF4, 0x90, 0xBF, 0xBF}, false},
 

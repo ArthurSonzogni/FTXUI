@@ -29,10 +29,15 @@ class Text : public Node {
     if (y > box_.y_max)
       return;
     for (wchar_t c : text_) {
-      if (x > box_.x_max)
-        return;
-      screen.at(x, y) = c;
-      x += wchar_width(c);
+      const int width = wchar_width(c);
+      if (width >= 1) {
+        if (x > box_.x_max)
+          return;
+        screen.PixelAt(x, y).character = c;
+      } else {
+        screen.PixelAt(x - 1, y).character += c;
+      }
+      x += std::max(width, 0);
     }
   }
 

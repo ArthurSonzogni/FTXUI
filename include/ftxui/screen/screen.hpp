@@ -18,9 +18,16 @@ using Element = std::shared_ptr<Node>;
 /// @brief A unicode character and its associated style.
 /// @ingroup screen
 struct Pixel {
+  // The graphemes stored into the pixel. To support combining characters,
+  // like: a⃦, this can potentially contains multiple codepoitns.
+  // Required: character.size() >= 1;
+  std::wstring character = L" ";
+
+  // Colors:
   Color background_color = Color::Default;
   Color foreground_color = Color::Default;
-  wchar_t character = U' ';
+
+  // A bit field representing the style:
   bool blink : 1;
   bool bold : 1;
   bool dim : 1;

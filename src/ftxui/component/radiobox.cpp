@@ -53,6 +53,18 @@ RadioboxBase::RadioboxBase(const std::vector<std::wstring>* entries,
                            int* selected,std::function<void()> on_change)
     : entries_(entries), selected_(selected) ,on_change_(on_change){}
 
+                           int* selected)
+    : entries_(entries), selected_(selected) {
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+  // Microsoft terminal do not use fonts able to render properly the default
+  // radiobox glyph.
+  if (checked == L"◉ ")
+    checked = L"(*)";
+  if (unchecked == L"○ ") 
+    unchecked = L"( )";
+#endif
+}
+
 Element RadioboxBase::Render() {
   std::vector<Element> elements;
   bool is_focused = Focused();
