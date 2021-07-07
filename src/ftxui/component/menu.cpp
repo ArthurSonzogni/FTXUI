@@ -38,8 +38,10 @@ namespace ftxui {
 ///   entry 2
 ///   entry 3
 /// ```
-Component Menu(const std::vector<std::wstring>* entries, int* selected) {
-  return Make<MenuBase>(entries, selected);
+Component Menu(const std::vector<std::wstring>* entries,
+               int* selected,
+               ConstRef<MenuOption> option) {
+  return Make<MenuBase>(entries, selected, std::move(option));
 }
 
 // static
@@ -47,8 +49,10 @@ MenuBase* MenuBase::From(Component component) {
   return static_cast<MenuBase*>(component.get());
 }
 
-MenuBase::MenuBase(const std::vector<std::wstring>* entries, int* selected)
-    : entries_(entries), selected_(selected) {}
+MenuBase::MenuBase(const std::vector<std::wstring>* entries,
+                   int* selected,
+                   ConstRef<MenuOption> option)
+    : entries_(entries), selected_(selected), option_(option) {}
 
 Element MenuBase::Render() {
   Elements elements;
@@ -58,9 +62,10 @@ Element MenuBase::Render() {
     bool is_focused = (focused == int(i)) && is_menu_focused;
     bool is_selected = (*selected_ == int(i));
 
-    auto style = is_selected
-                     ? (is_focused ? selected_focused_style : selected_style)
-                     : (is_focused ? focused_style : normal_style);
+    auto style = is_selected ? (is_focused ? option_->selected_focused_style
+                                           : option_->selected_style)
+                             : (is_focused ? option_->focused_style
+                                           : option_->normal_style);
     auto focus_management = !is_selected      ? nothing
                             : is_menu_focused ? focus
                                               : select;
@@ -94,12 +99,12 @@ bool MenuBase::OnEvent(Event event) {
 
   if (*selected_ != old_selected) {
     focused = *selected_;
-    on_change();
+    option_->on_change();
     return true;
   }
 
   if (event == Event::Return) {
-    on_enter();
+    option_->on_enter();
     return true;
   }
 
@@ -119,7 +124,7 @@ bool MenuBase::OnMouseEvent(Event event) {
         event.mouse().motion == Mouse::Released) {
       if (*selected_ != i) {
         *selected_ = i;
-        on_change();
+        option_->on_change();
       }
       return true;
     }

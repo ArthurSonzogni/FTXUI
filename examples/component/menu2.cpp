@@ -13,6 +13,7 @@
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
+  auto screen = ScreenInteractive::TerminalOutput();
 
   std::vector<std::wstring> left_menu_entries = {
       L"0%",  L"10%", L"20%", L"30%", L"40%",
@@ -22,10 +23,16 @@ int main(int argc, const char* argv[]) {
       L"0%", L"1%", L"2%", L"3%", L"4%",  L"5%",
       L"6%", L"7%", L"8%", L"9%", L"10%",
   };
+
+  auto menu_option = MenuOption();
+  menu_option.on_enter = screen.ExitLoopClosure();
+
   int left_menu_selected = 0;
   int right_menu_selected = 0;
-  Component left_menu_ = Menu(&left_menu_entries, &left_menu_selected);
-  Component right_menu_ = Menu(&right_menu_entries, &right_menu_selected);
+  Component left_menu_ =
+      Menu(&left_menu_entries, &left_menu_selected, &menu_option);
+  Component right_menu_ =
+      Menu(&right_menu_entries, &right_menu_selected, &menu_option);
 
   Component container = Container::Horizontal({
       left_menu_,
@@ -68,9 +75,6 @@ int main(int argc, const char* argv[]) {
            border;
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
-  MenuBase::From(left_menu_)->on_enter = screen.ExitLoopClosure();
-  MenuBase::From(right_menu_)->on_enter = screen.ExitLoopClosure();
   screen.Loop(renderer);
 }
 

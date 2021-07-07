@@ -5,8 +5,9 @@
 #include <string>      // for wstring
 #include <vector>      // for vector
 
-#include "ftxui/component/component.hpp"       // for Component
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component.hpp"          // for Component
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for Element, Decorator, operator|, bold, inverted, nothing
 #include "ftxui/screen/box.hpp"  // for Box
 
@@ -21,20 +22,13 @@ class MenuBase : public ComponentBase {
   static MenuBase* From(Component component);
 
   // Constructor.
-  MenuBase(const std::vector<std::wstring>* entries, int* selected_);
+  MenuBase(const std::vector<std::wstring>* entries,
+           int* selected_,
+           ConstRef<MenuOption> option = {});
   ~MenuBase() override = default;
 
   // State.
   int focused = 0;
-
-  Decorator normal_style = nothing;
-  Decorator focused_style = inverted;
-  Decorator selected_style = bold;
-  Decorator selected_focused_style = focused_style | selected_style;
-
-  // State update callback.
-  std::function<void()> on_change = []() {};
-  std::function<void()> on_enter = []() {};
 
   // Component implementation.
   Element Render() override;
@@ -43,6 +37,7 @@ class MenuBase : public ComponentBase {
  protected:
   const std::vector<std::wstring>* const entries_;
   int* selected_ = 0;
+  ConstRef<MenuOption> option_;
 
   bool OnMouseEvent(Event);
 
