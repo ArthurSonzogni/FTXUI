@@ -19,8 +19,9 @@ int main(int argc, const char* argv[]) {
   };
   int selected = 0;
 
-  auto menu = Menu(&entries, &selected);
-  MenuBase::From(menu)->on_enter = screen.ExitLoopClosure();
+  MenuOption option;
+  option.on_enter = screen.ExitLoopClosure();
+  auto menu = Menu(&entries, &selected, &option);
 
   screen.Loop(menu);
 

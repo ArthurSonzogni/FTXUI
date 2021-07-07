@@ -7,8 +7,9 @@
 #include <vector>      // for vector
 
 #include "ftxui/component/component_base.hpp"
+#include "ftxui/component/component_options.hpp"
 #include "ftxui/dom/elements.hpp"   // for Element
-#include "ftxui/screen/string.hpp"  // for ConstStringRef, StringRef
+#include "ftxui/util/ref.hpp"       // for ConstStringRef, StringRef
 
 namespace ftxui {
 
@@ -28,7 +29,9 @@ Component Button(ConstStringRef label,
                  bool border = true);
 Component Checkbox(ConstStringRef label, bool* checked);
 Component Input(StringRef content, ConstStringRef placeholder);
-Component Menu(const std::vector<std::wstring>* entries, int* selected_);
+Component Menu(const std::vector<std::wstring>* entries,
+               int* selected_,
+               ConstRef<MenuOption> = {});
 Component Radiobox(const std::vector<std::wstring>* entries, int* selected_);
 Component Toggle(const std::vector<std::wstring>* entries, int* selected);
 template <class T>  // T = {int, float, long}
