@@ -156,12 +156,18 @@ int main(int argc, const char* argv[]) {
       false,
       false,
   };
-  std::wstring input_add_content;
-  Component input_add = Input(&input_add_content, "input files");
 
   std::vector<std::wstring> input_entries;
   int input_selected = 0;
   Component input = Menu(&input_entries, &input_selected);
+
+  auto input_option = InputOption();
+  std::wstring input_add_content;
+  input_option.on_enter = [&] {
+    input_entries.push_back(input_add_content);
+    input_add_content = L"";
+  };
+  Component input_add = Input(&input_add_content, "input files", input_option);
 
   std::wstring executable_content_ = L"";
   Component executable_ = Input(&executable_content_, "executable");
@@ -184,11 +190,6 @@ int main(int argc, const char* argv[]) {
           }),
       }),
   });
-
-  InputBase::From(input_add)->on_enter = [&] {
-    input_entries.push_back(input_add_content);
-    input_add_content = L"";
-  };
 
   auto render_command = [&] {
     Elements line;
