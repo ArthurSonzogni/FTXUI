@@ -76,7 +76,6 @@ add_library(component STATIC
   include/ftxui/component/captured_mouse.hpp
   include/ftxui/component/component.hpp
   include/ftxui/component/component_base.hpp
-  include/ftxui/component/container.hpp
   include/ftxui/component/event.hpp
   include/ftxui/component/menu.hpp
   include/ftxui/component/mouse.hpp
