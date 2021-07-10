@@ -11,7 +11,6 @@
 
 namespace ftxui {
 
-/// @brief A component where focus and events are automatically handled for you.
 class ContainerBase : public ComponentBase {
  public:
   static Component Vertical() { return Vertical({}); }
@@ -195,7 +194,7 @@ Component Vertical(Components children) {
 /// vertically using up/down arrow key or 'j'/'k' keys.
 /// This is useful for implementing a Menu for instance.
 /// @param children the list of components.
-/// @param selector An integer storing the selected children.
+/// @param selector A reference to the index of the selected children.
 /// @ingroup component
 /// @see ContainerBase
 ///
@@ -237,6 +236,7 @@ Component Horizontal(Components children) {
 /// @brief A list of components, drawn one by one horizontally and navigated
 /// horizontally using left/right arrow key or 'h'/'l' keys.
 /// @param children the list of components.
+/// @param selector A reference to the index of the selected children.
 /// @ingroup component
 /// @see ContainerBase
 ///
@@ -259,7 +259,7 @@ Component Horizontal(Components children, int* selector) {
 /// a time. The |selector| gives the index of the selected component. This is
 /// useful to implement tabs.
 /// @param selector The index of the drawn children.
-/// @param children the list of components.
+/// @param children The list of components.
 /// @ingroup component
 /// @see ContainerBase
 ///

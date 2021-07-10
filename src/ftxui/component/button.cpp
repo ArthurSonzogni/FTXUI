@@ -16,8 +16,6 @@
 namespace ftxui {
 
 namespace {
-/// @brief A button. An action is associated to the click event.
-/// @ingroup dom
 class ButtonBase : public ComponentBase {
  public:
   ButtonBase(ConstStringRef label,
@@ -69,6 +67,7 @@ class ButtonBase : public ComponentBase {
 /// @brief Draw a button. Execute a function when clicked.
 /// @param label The label of the button.
 /// @param on_click The action to execute when clicked.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see ButtonBase
 ///

@@ -6,7 +6,7 @@
 namespace ftxui {
 
 /// @brief Center an element horizontally.
-/// @param The input element.
+/// @param child The decorated element.
 /// @return The centered element.
 /// @ingroup dom
 Element hcenter(Element child) {
@@ -14,7 +14,7 @@ Element hcenter(Element child) {
 }
 
 /// @brief Center an element vertically.
-/// @param The input element.
+/// @param child The decorated element.
 /// @return The centered element.
 /// @ingroup dom
 Element vcenter(Element child) {
@@ -22,7 +22,7 @@ Element vcenter(Element child) {
 }
 
 /// @brief Center an element horizontally and vertically.
-/// @param The input element.
+/// @param child The decorated element.
 /// @return The centered element.
 /// @ingroup dom
 Element center(Element child) {
@@ -30,7 +30,7 @@ Element center(Element child) {
 }
 
 /// @brief Align an element on the right side.
-/// @param The input element.
+/// @param child The decorated element.
 /// @return The right aligned element.
 /// @ingroup dom
 Element align_right(Element child) {

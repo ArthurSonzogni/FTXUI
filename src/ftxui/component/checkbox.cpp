@@ -15,9 +15,6 @@
 namespace ftxui {
 
 namespace {
-/// @brief A Checkbox. It can be checked or unchecked.Display an element on a
-/// ftxui::Screen.
-/// @ingroup dom
 class CheckboxBase : public ComponentBase {
  public:
   CheckboxBase(ConstStringRef label, bool* state, Ref<CheckboxOption> option)
@@ -25,10 +22,10 @@ class CheckboxBase : public ComponentBase {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft terminal do not use fonts able to render properly the default
     // radiobox glyph.
-    if (option->checked == L"▣ ")
-      option->checked = L"[X]";
-    if (option->unchecked == L"☐ ")
-      option->unchecked = L"[ ]";
+    if (option_->style_checked == L"▣ ")
+      option_->style_checked = L"[X]";
+    if (option_->style_unchecked == L"☐ ")
+      option_->style_unchecked = L"[ ]";
 #endif
   }
 
@@ -86,6 +83,7 @@ class CheckboxBase : public ComponentBase {
 /// @brief Draw checkable element.
 /// @param label The label of the checkbox.
 /// @param checked Whether the checkbox is checked or not.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see CheckboxBase
 ///

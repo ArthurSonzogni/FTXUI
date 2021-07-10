@@ -17,8 +17,7 @@
 
 namespace ftxui {
 
-/// @brief An input box. The user can type text into it.
-/// @ingroup component.
+// An input box. The user can type text into it.
 class InputBase : public ComponentBase {
  public:
   InputBase(StringRef content,
@@ -171,6 +170,7 @@ class InputBase : public ComponentBase {
 /// @brief An input box for editing text.
 /// @param content The editable content.
 /// @param placeholder The text displayed when content is still empty.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see InputBase
 ///

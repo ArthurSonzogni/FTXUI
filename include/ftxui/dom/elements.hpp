@@ -102,14 +102,10 @@ Element nothing(Element element);
 // combinaison with dbox.
 Element clear_under(Element element);
 
-// Make container able to take any number of children as input.
-#include "take_any_args.hpp"
-TAKE_ANY_ARGS(vbox)
-TAKE_ANY_ARGS(hbox)
-TAKE_ANY_ARGS(dbox)
-TAKE_ANY_ARGS(hflow)
-
 }  // namespace ftxui
+
+// Make container able to take any number of children as input.
+#include "ftxui/dom/take_any_args.hpp"
 
 #endif /* end of include guard: FTXUI_DOM_ELEMENTS_HPP */
 

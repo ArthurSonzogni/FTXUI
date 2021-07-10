@@ -50,6 +50,10 @@ Component Toggle(const std::vector<std::wstring>* entries,
                  Ref<ToggleOption> option = {});
 template <class T>  // T = {int, float, long}
 Component Slider(StringRef label, T* value, T min, T max, T increment);
+Component ResizableSplitLeft(Component main, Component back, int* main_size);
+Component ResizableSplitRight(Component main, Component back, int* main_size);
+Component ResizableSplitTop(Component main, Component back, int* main_size);
+Component ResizableSplitBottom(Component main, Component back, int* main_size);
 Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);
 Component CatchEvent(Component child, std::function<bool(Event)>);
@@ -62,11 +66,6 @@ Component Horizontal(Components children, int* selector);
 Component Tab(Components children, int* selector);
 
 }  // namespace Container
-
-Component ResizableSplitLeft(Component main, Component back, int* main_size);
-Component ResizableSplitRight(Component main, Component back, int* main_size);
-Component ResizableSplitTop(Component main, Component back, int* main_size);
-Component ResizableSplitBottom(Component main, Component back, int* main_size);
 
 }  // namespace ftxui
 
