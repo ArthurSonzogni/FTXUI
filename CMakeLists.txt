@@ -80,7 +80,6 @@ add_library(component STATIC
   include/ftxui/component/mouse.hpp
   include/ftxui/component/receiver.hpp
   include/ftxui/component/screen_interactive.hpp
-  include/ftxui/component/toggle.hpp
   src/ftxui/component/button.cpp
   src/ftxui/component/catch_event.cpp
   src/ftxui/component/checkbox.cpp
