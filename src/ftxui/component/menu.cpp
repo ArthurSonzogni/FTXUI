@@ -62,10 +62,10 @@ Element MenuBase::Render() {
     bool is_focused = (focused == int(i)) && is_menu_focused;
     bool is_selected = (*selected_ == int(i));
 
-    auto style = is_selected ? (is_focused ? option_->selected_focused_style
-                                           : option_->selected_style)
-                             : (is_focused ? option_->focused_style
-                                           : option_->normal_style);
+    auto style = is_selected ? (is_focused ? option_->style_selected_focused
+                                           : option_->style_selected)
+                             : (is_focused ? option_->style_focused
+                                           : option_->style_normal);
     auto focus_management = !is_selected      ? nothing
                             : is_menu_focused ? focus
                                               : select;

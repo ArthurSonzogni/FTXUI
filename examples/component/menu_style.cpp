@@ -27,46 +27,46 @@ int main(int argc, const char* argv[]) {
   int menu_6_selected_ = 0;
 
   MenuOption option_1;
-  option_1.focused_style = bold | color(Color::Blue);
-  option_1.selected_style = color(Color::Blue);
-  option_1.selected_focused_style = bold | color(Color::Blue);
+  option_1.style_focused = bold | color(Color::Blue);
+  option_1.style_selected = color(Color::Blue);
+  option_1.style_selected_focused = bold | color(Color::Blue);
   option_1.on_enter = screen.ExitLoopClosure();
   auto menu_1_ = Menu(&entries, &menu_1_selected_, &option_1);
 
   MenuOption option_2;
-  option_2.focused_style = bold | color(Color::Blue);
-  option_2.selected_style = color(Color::Blue);
-  option_2.selected_focused_style = bold | color(Color::Blue);
+  option_2.style_focused = bold | color(Color::Blue);
+  option_2.style_selected = color(Color::Blue);
+  option_2.style_selected_focused = bold | color(Color::Blue);
   option_2.on_enter = screen.ExitLoopClosure();
   auto menu_2_ = Menu(&entries, &menu_2_selected_, &option_2);
 
   MenuOption option_3;
-  option_3.selected_style = color(Color::Blue);
-  option_3.focused_style = bgcolor(Color::Blue);
-  option_3.selected_focused_style = bgcolor(Color::Blue);
+  option_3.style_selected = color(Color::Blue);
+  option_3.style_focused = bgcolor(Color::Blue);
+  option_3.style_selected_focused = bgcolor(Color::Blue);
   option_3.on_enter = screen.ExitLoopClosure();
   auto menu_3_ = Menu(&entries, &menu_3_selected_, &option_3);
 
   MenuOption option_4;
-  option_4.selected_style = bgcolor(Color::Blue);
-  option_4.focused_style = bgcolor(Color::BlueLight);
-  option_4.selected_focused_style = bgcolor(Color::BlueLight);
+  option_4.style_selected = bgcolor(Color::Blue);
+  option_4.style_focused = bgcolor(Color::BlueLight);
+  option_4.style_selected_focused = bgcolor(Color::BlueLight);
   option_4.on_enter = screen.ExitLoopClosure();
   auto menu_4_ = Menu(&entries, &menu_4_selected_, &option_4);
 
   MenuOption option_5;
-  option_5.normal_style = bgcolor(Color::Blue);
-  option_5.selected_style = bgcolor(Color::Yellow);
-  option_5.focused_style = bgcolor(Color::Red);
-  option_5.selected_focused_style = bgcolor(Color::Red);
+  option_5.style_normal = bgcolor(Color::Blue);
+  option_5.style_selected = bgcolor(Color::Yellow);
+  option_5.style_focused = bgcolor(Color::Red);
+  option_5.style_selected_focused = bgcolor(Color::Red);
   option_5.on_enter = screen.ExitLoopClosure();
   auto menu_5_ = Menu(&entries, &menu_5_selected_, &option_5);
 
   MenuOption option_6;
-  option_6.normal_style = dim | color(Color::Blue);
-  option_6.selected_style = color(Color::Blue);
-  option_6.focused_style = bold | color(Color::Blue);
-  option_6.selected_focused_style = bold | color(Color::Blue);
+  option_6.style_normal = dim | color(Color::Blue);
+  option_6.style_selected = color(Color::Blue);
+  option_6.style_focused = bold | color(Color::Blue);
+  option_6.style_selected_focused = bold | color(Color::Blue);
   option_6.on_enter = screen.ExitLoopClosure();
   auto menu_6_ = Menu(&entries, &menu_6_selected_, &option_6);
 
