@@ -21,20 +21,13 @@ class ToggleBase : public ComponentBase {
   static ToggleBase* From(Component component);
 
   // Constructor.
-  ToggleBase(const std::vector<std::wstring>* entries, int* selected);
+  ToggleBase(const std::vector<std::wstring>* entries,
+             int* selected,
+             ConstRef<ToggleOption> option = {});
   ~ToggleBase() override = default;
 
   // State.
   int focused = 0;
-
-  Decorator normal_style = dim;
-  Decorator focused_style = inverted;
-  Decorator selected_style = bold;
-  Decorator selected_focused_style = focused_style | selected_style;
-
-  // Callback.
-  std::function<void()> on_change = []() {};
-  std::function<void()> on_enter = []() {};
 
   // Component implementation.
   Element Render() override;
@@ -46,6 +39,7 @@ class ToggleBase : public ComponentBase {
 
   bool OnMouseEvent(Event event);
   std::vector<Box> boxes_;
+  ConstRef<ToggleOption> option_;
 };
 
 }  // namespace ftxui

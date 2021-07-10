@@ -24,7 +24,7 @@ class RadioboxBase : public ComponentBase {
   // Constructor.
   RadioboxBase(const std::vector<std::wstring>* entries,
                int* selected,
-               ConstRef<RadioboxOption> option);
+               ConstRef<RadioboxOption> option = {});
   ~RadioboxBase() override = default;
 
   int focused = 0;

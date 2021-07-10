@@ -83,10 +83,11 @@ TEST(ToggleTest, Tab) {
 TEST(ToggleTest, OnChange) {
   std::vector<std::wstring> entries = {L"1", L"2", L"3"};
   int selected = 0;
-  auto toggle = Toggle(&entries, &selected);
-
   int counter = 0;
-  ToggleBase::From(toggle)->on_change = [&] { counter++; };
+  auto option = ToggleOption();
+  option.on_change = [&] { counter++; };
+
+  auto toggle = Toggle(&entries, &selected, &option);
 
   EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 0);
@@ -111,10 +112,11 @@ TEST(ToggleTest, OnChange) {
 TEST(ToggleTest, OnEnter) {
   std::vector<std::wstring> entries = {L"1", L"2", L"3"};
   int selected = 0;
-  auto toggle = Toggle(&entries, &selected);
-
   int counter = 0;
-  ToggleBase::From(toggle)->on_enter = [&] { counter++; };
+
+  auto option = ToggleOption();
+  option.on_enter = [&] { counter++; };
+  auto toggle = Toggle(&entries, &selected, &option);
 
   EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));

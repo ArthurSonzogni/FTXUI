@@ -39,7 +39,9 @@ Component Menu(const std::vector<std::wstring>* entries,
 Component Radiobox(const std::vector<std::wstring>* entries,
                    int* selected_,
                    ConstRef<RadioboxOption> option = {});
-Component Toggle(const std::vector<std::wstring>* entries, int* selected);
+Component Toggle(const std::vector<std::wstring>* entries,
+                 int* selected,
+                 ConstRef<ToggleOption> option = {});
 template <class T>  // T = {int, float, long}
 Component Slider(StringRef label, T* value, T min, T max, T increment);
 Component Renderer(Component child, std::function<Element()>);

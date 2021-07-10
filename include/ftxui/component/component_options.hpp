@@ -46,6 +46,17 @@ struct RadioboxOption {
   std::function<void()> on_change = []() {};
 };
 
+struct ToggleOption {
+  Decorator normal_style = dim;
+  Decorator focused_style = inverted;
+  Decorator selected_style = bold;
+  Decorator selected_focused_style = focused_style | selected_style;
+
+  // Callback.
+  std::function<void()> on_change = []() {};
+  std::function<void()> on_enter = []() {};
+};
+
 };  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP */
