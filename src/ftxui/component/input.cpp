@@ -1,14 +1,19 @@
-#include <algorithm>  // for max, min
-#include <memory>     // for shared_ptr
-#include <string>     // for wstring, allocator, basic_string
+#include <algorithm>   // for max, min
+#include <functional>  // for function
+#include <memory>      // for shared_ptr, allocator
+#include <string>      // for wstring, basic_string
+#include <utility>     // for move
 
-#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/component.hpp"       // for Component
-#include "ftxui/component/component_base.hpp"  // for Component
+#include "ftxui/component/captured_mouse.hpp"     // for CapturedMouse
+#include "ftxui/component/component.hpp"          // for Make, Input
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for InputOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::Home, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/util/ref.hpp"                      // for Component
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, text, reflect, dim, flex, focus, inverted, hbox, size, frame, select, underlined, Decorator, EQUAL, HEIGHT
+#include "ftxui/screen/box.hpp"    // for Box
+#include "ftxui/util/ref.hpp"      // for StringRef, Ref, ConstStringRef
 
 namespace ftxui {
 

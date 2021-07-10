@@ -3,8 +3,9 @@
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
-#include "ftxui/component/event.hpp"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
+#include "ftxui/component/component.hpp"       // for Horizontal, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"  // for Event, Event::Tab, Event::TabReverse, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
 
 using namespace ftxui;

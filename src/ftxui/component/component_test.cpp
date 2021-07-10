@@ -1,8 +1,8 @@
+#include <gtest/gtest.h>  // for Test, SuiteApiResolver, TestInfo (ptr only), TEST, TestFactoryImpl
 #include <memory>  // for shared_ptr, allocator, make_shared, __shared_ptr_access
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
-#include "gtest/gtest_pred_impl.h"  // for Test, SuiteApiResolver, TEST, TestFactoryImpl
 
 using namespace ftxui;
 

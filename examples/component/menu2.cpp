@@ -1,11 +1,12 @@
 #include <functional>  // for function
 #include <memory>      // for allocator, __shared_ptr_access
-#include <string>      // for wstring, operator+, to_string, basic_string
+#include <string>      // for wstring, basic_string, operator+, to_string
 #include <vector>      // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Menu, Horizontal, Renderer
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, separator, bold, hcenter, vbox, hbox, gauge, Element, operator|, border
 #include "ftxui/screen/string.hpp"  // for to_wstring

@@ -1,12 +1,20 @@
-#include <stddef.h>   // for size_t
-#include <algorithm>  // for max, min
-#include <memory>     // for shared_ptr, allocator_traits<>::value_type
-#include <utility>    // for move
+#include <stddef.h>    // for size_t
+#include <algorithm>   // for max, min
+#include <functional>  // for function
+#include <memory>      // for shared_ptr, allocator_traits<>::value_type
+#include <string>      // for wstring
+#include <utility>     // for move
+#include <vector>      // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/component.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
+#include "ftxui/component/captured_mouse.hpp"     // for CapturedMouse
+#include "ftxui/component/component.hpp"          // for Make, Component, Toggle
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for ToggleOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, Elements, hbox, reflect, separator, text, focus, nothing, select
+#include "ftxui/screen/box.hpp"    // for Box
+#include "ftxui/util/ref.hpp"      // for Ref
 
 namespace ftxui {
 
@@ -49,7 +57,7 @@ class ToggleBase : public ComponentBase {
     return hbox(std::move(children));
   }
 
-  bool OnEvent(Event event) override{
+  bool OnEvent(Event event) override {
     if (event.is_mouse())
       return OnMouseEvent(event);
 
