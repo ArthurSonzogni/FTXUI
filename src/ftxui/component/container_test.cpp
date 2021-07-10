@@ -3,13 +3,14 @@
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/container.hpp"
+#include "ftxui/component/component.hpp"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
+#include "ftxui/component/event.hpp"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
 
 using namespace ftxui;
 
 TEST(ContainerTest, HorizontalEvent) {
-  auto container = ContainerBase::Horizontal();
+  auto container = Container::Horizontal({});
   auto c0 = Container::Horizontal({});
   auto c1 = Container::Horizontal({});
   auto c2 = Container::Horizontal({});
@@ -82,7 +83,7 @@ TEST(ContainerTest, HorizontalEvent) {
 }
 
 TEST(ContainerTest, VerticalEvent) {
-  auto container = ContainerBase::Vertical();
+  auto container = Container::Vertical({});
   auto c0 = Container::Horizontal({});
   auto c1 = Container::Horizontal({});
   auto c2 = Container::Horizontal({});
@@ -155,7 +156,7 @@ TEST(ContainerTest, VerticalEvent) {
 }
 
 TEST(ContainerTest, SetActiveChild) {
-  auto container = ContainerBase::Horizontal();
+  auto container = Container::Horizontal({});
   auto c0 = Container::Horizontal({});
   auto c1 = Container::Horizontal({});
   auto c2 = Container::Horizontal({});
@@ -209,16 +210,16 @@ TEST(ContainerTest, SetActiveChild) {
 }
 
 TEST(ContainerTest, TakeFocus) {
-  auto c = ContainerBase::Horizontal();
-  auto c1 = ContainerBase::Vertical();
-  auto c2 = ContainerBase::Vertical();
-  auto c3 = ContainerBase::Vertical();
-  auto c11 = ContainerBase::Horizontal();
-  auto c12 = ContainerBase::Horizontal();
-  auto c13 = ContainerBase::Horizontal();
-  auto c21 = ContainerBase::Horizontal();
-  auto c22 = ContainerBase::Horizontal();
-  auto c23 = ContainerBase::Horizontal();
+  auto c = Container::Horizontal({});
+  auto c1 = Container::Vertical({});
+  auto c2 = Container::Vertical({});
+  auto c3 = Container::Vertical({});
+  auto c11 = Container::Horizontal({});
+  auto c12 = Container::Horizontal({});
+  auto c13 = Container::Horizontal({});
+  auto c21 = Container::Horizontal({});
+  auto c22 = Container::Horizontal({});
+  auto c23 = Container::Horizontal({});
 
   c->Add(c1);
   c->Add(c2);

@@ -4,6 +4,7 @@
 #include <utility>    // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/component.hpp"       // for CapturedMouse
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/menu.hpp"
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released
