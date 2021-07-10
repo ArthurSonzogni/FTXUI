@@ -2,10 +2,10 @@
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
 #include <memory>                   // for __shared_ptr_access, shared_ptr
 
+#include "ftxui/component/component.hpp"
 #include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowUp, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for ftxui
-#include "ftxui/component/radiobox.hpp"
-#include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, TEST
+#include "gtest/gtest_pred_impl.h"    // for EXPECT_EQ, Test, TEST
 
 using namespace ftxui;
 

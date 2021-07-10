@@ -58,6 +58,8 @@ struct RadioboxOption {
 
   /// Called when the selected entry changes.
   std::function<void()> on_change = []() {};
+
+  Ref<int> focused_entry = 0;
 };
 
 /// @brief Option for the Toggle component.
