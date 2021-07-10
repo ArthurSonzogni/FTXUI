@@ -22,19 +22,12 @@ class RadioboxBase : public ComponentBase {
   static RadioboxBase* From(Component component);
 
   // Constructor.
-  RadioboxBase(const std::vector<std::wstring>* entries, int* selected);
+  RadioboxBase(const std::vector<std::wstring>* entries,
+               int* selected,
+               ConstRef<RadioboxOption> option);
   ~RadioboxBase() override = default;
 
   int focused = 0;
-
-  std::wstring checked = L"◉ ";
-  std::wstring unchecked = L"○ ";
-
-  Decorator focused_style = inverted;
-  Decorator unfocused_style = nothing;
-
-  // State update callback.
-  std::function<void()> on_change = []() {};
 
   // Component implementation.
   Element Render() override;
@@ -47,6 +40,7 @@ class RadioboxBase : public ComponentBase {
   bool OnMouseEvent(Event event);
   int cursor_position = 0;
   std::vector<Box> boxes_;
+  ConstRef<RadioboxOption> option_;
 };
 
 }  // namespace ftxui

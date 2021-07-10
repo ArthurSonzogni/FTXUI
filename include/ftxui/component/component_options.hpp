@@ -36,6 +36,16 @@ struct InputOption {
   std::function<void()> on_enter = [] {};
 };
 
+struct RadioboxOption {
+  std::wstring checked = L"◉ ";
+  std::wstring unchecked = L"○ ";
+
+  Decorator focused_style = inverted;
+  Decorator unfocused_style = nothing;
+
+  std::function<void()> on_change = []() {};
+};
+
 };  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP */
