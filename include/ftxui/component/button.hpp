@@ -23,7 +23,7 @@ class ButtonBase : public ComponentBase {
   // Constructor.
   ButtonBase(ConstStringRef label,
              std::function<void()> on_click,
-             ConstRef<ButtonOption> option);
+             ConstRef<ButtonOption> option = {});
   ~ButtonBase() override = default;
 
   // Component implementation.

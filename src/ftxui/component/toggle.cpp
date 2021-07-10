@@ -10,8 +10,10 @@
 
 namespace ftxui {
 
-Component Toggle(const std::vector<std::wstring>* entries, int* selected) {
-  return Make<ToggleBase>(entries, selected);
+Component Toggle(const std::vector<std::wstring>* entries,
+                 int* selected,
+                 ConstRef<ToggleOption> option) {
+  return Make<ToggleBase>(entries, selected, std::move(option));
 }
 
 // static
@@ -19,8 +21,10 @@ ToggleBase* ToggleBase::From(Component component) {
   return static_cast<ToggleBase*>(component.get());
 }
 
-ToggleBase::ToggleBase(const std::vector<std::wstring>* entries, int* selected)
-    : entries_(entries), selected_(selected) {}
+ToggleBase::ToggleBase(const std::vector<std::wstring>* entries,
+                       int* selected,
+                       ConstRef<ToggleOption> option)
+    : entries_(entries), selected_(selected), option_(std::move(option)) {}
 
 Element ToggleBase::Render() {
   Elements children;
@@ -34,9 +38,10 @@ Element ToggleBase::Render() {
     bool is_focused = (focused == int(i)) && is_toggle_focused;
     bool is_selected = (*selected_ == int(i));
 
-    auto style = is_selected
-                     ? (is_focused ? selected_focused_style : selected_style)
-                     : (is_focused ? focused_style : normal_style);
+    auto style = is_selected ? (is_focused ? option_->selected_focused_style
+                                           : option_->selected_style)
+                             : (is_focused ? option_->focused_style
+                                           : option_->normal_style);
     auto focus_management = !is_selected        ? nothing
                             : is_toggle_focused ? focus
                                                 : select;
@@ -64,12 +69,12 @@ bool ToggleBase::OnEvent(Event event) {
 
   if (old_selected != *selected_) {
     focused = *selected_;
-    on_change();
+    option_->on_change();
     return true;
   }
 
   if (event == Event::Return) {
-    on_enter();
+    option_->on_enter();
     return true;
   }
 
@@ -90,7 +95,7 @@ bool ToggleBase::OnMouseEvent(Event event) {
       TakeFocus();
       if (*selected_ != i) {
         *selected_ = i;
-        on_change();
+        option_->on_change();
       }
       return true;
     }
