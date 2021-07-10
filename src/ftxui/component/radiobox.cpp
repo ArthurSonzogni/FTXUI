@@ -39,8 +39,10 @@ namespace ftxui {
 /// ○ entry 2
 /// ○ entry 3
 /// ```
-Component Radiobox(const std::vector<std::wstring>* entries, int* selected) {
-  return Make<RadioboxBase>(entries, selected);
+Component Radiobox(const std::vector<std::wstring>* entries,
+                   int* selected,
+                   ConstRef<RadioboxOption> option) {
+  return Make<RadioboxBase>(entries, selected, std::move(option));
 }
 
 // static
@@ -49,15 +51,16 @@ RadioboxBase* RadioboxBase::From(Component component) {
 }
 
 RadioboxBase::RadioboxBase(const std::vector<std::wstring>* entries,
-                           int* selected)
-    : entries_(entries), selected_(selected) {
+                           int* selected,
+                           ConstRef<RadioboxOption> option)
+    : entries_(entries), selected_(selected), option_(std::move(option)) {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
   // Microsoft terminal do not use fonts able to render properly the default
   // radiobox glyph.
-  if (checked == L"◉ ")
-    checked = L"(*)";
-  if (unchecked == L"○ ")
-    unchecked = L"( )";
+  if (option_->checked == L"◉ ")
+    option_->checked = L"(*)";
+  if (option_->unchecked == L"○ ")
+    option_->unchecked = L"( )";
 #endif
 }
 
@@ -66,13 +69,14 @@ Element RadioboxBase::Render() {
   bool is_focused = Focused();
   boxes_.resize(entries_->size());
   for (size_t i = 0; i < entries_->size(); ++i) {
-    auto style =
-        (focused == int(i) && is_focused) ? focused_style : unfocused_style;
+    auto style = (focused == int(i) && is_focused) ? option_->focused_style
+                                                   : option_->unfocused_style;
     auto focus_management = (focused != int(i)) ? nothing
                             : is_focused        ? focus
                                                 : select;
 
-    const std::wstring& symbol = *selected_ == int(i) ? checked : unchecked;
+    const std::wstring& symbol =
+        *selected_ == int(i) ? option_->checked : option_->unchecked;
     elements.push_back(hbox(text(symbol), text(entries_->at(i)) | style) |
                        focus_management | reflect(boxes_[i]));
   }
@@ -107,7 +111,7 @@ bool RadioboxBase::OnEvent(Event event) {
 
   if (event == Event::Character(' ') || event == Event::Return) {
     *selected_ = focused;
-    on_change();
+    option_->on_change();
   }
 
   return false;
@@ -129,7 +133,7 @@ bool RadioboxBase::OnMouseEvent(Event event) {
       TakeFocus();
       if (*selected_ != i) {
         *selected_ = i;
-        on_change();
+        option_->on_change();
       }
       return true;
     }
