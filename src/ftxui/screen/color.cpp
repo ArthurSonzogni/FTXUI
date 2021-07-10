@@ -117,9 +117,9 @@ Color Color::RGB(uint8_t red, uint8_t green, uint8_t blue) {
 /// @brief Build a Color from its HSV representation.
 /// https://en.wikipedia.org/wiki/HSL_and_HSV
 ///
-/// @param hue The hue of the color [0,255]
-/// @param saturation The "colorfulness" [0,255].
-/// @param value The "Lightness" [0,255]
+/// @param h The hue of the color [0,255]
+/// @param s The "colorfulness" [0,255].
+/// @param v The "Lightness" [0,255]
 /// @ingroup screen
 // static
 Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {

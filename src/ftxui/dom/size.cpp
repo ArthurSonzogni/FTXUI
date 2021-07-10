@@ -82,8 +82,8 @@ class Size : public Node {
 /// @brief Apply a constraint on the size of an element.
 /// @param direction Whether the WIDTH of the HEIGHT of the element must be
 ///                  constrained.
-/// @param constrain The type of constaint.
-/// @param value the value.
+/// @param constraint The type of constaint.
+/// @param value The value.
 /// @ingroup dom
 Decorator size(Direction direction, Constraint constraint, int value) {
   return [=](Element e) {

@@ -119,6 +119,7 @@ class MenuBase : public ComponentBase {
 /// @brief A list of text. The focused element is selected.
 /// @param entries The list of entries in the menu.
 /// @param selected The index of the currently selected element.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see MenuBase
 ///

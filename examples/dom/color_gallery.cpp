@@ -1,16 +1,16 @@
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/color_info.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/terminal.hpp>
-#include <memory>
-#include <utility>
-#include <vector>
+#include <ftxui/screen/color_info.hpp>  // for ColorInfo
+#include <ftxui/screen/screen.hpp>      // for Dimension, Screen
+#include <ftxui/screen/terminal.hpp>  // for Terminal, Terminal::Color, Terminal::Palette16, Terminal::Palette256, Terminal::TrueColor
+#include <memory>                     // for allocator, shared_ptr
+#include <utility>                    // for move
+#include <vector>                     // for vector
 
 using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // ColorInfoSorted2D.
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
+#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
+#include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, hbox, separator, operator|, Elements, Element, border
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/box.hpp"    // for ftxui
+#include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256
 
 int main(int argc, const char* argv[]) {
   // clang-format off

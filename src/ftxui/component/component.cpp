@@ -96,12 +96,12 @@ bool ComponentBase::Focused() {
 }
 
 /// @brief Make the |child| to be the "active" one.
-/// @argument child the child to become active.
+/// @param child the child to become active.
 /// @ingroup component
 void ComponentBase::SetActiveChild(ComponentBase*) {}
 
 /// @brief Make the |child| to be the "active" one.
-/// @argument child the child to become active.
+/// @param child the child to become active.
 /// @ingroup component
 void ComponentBase::SetActiveChild(Component child) {
   SetActiveChild(child.get());
@@ -121,7 +121,7 @@ void ComponentBase::TakeFocus() {
 
 /// @brief Take the CapturedMouse if available. There is only one component of
 /// them. It represents a component taking priority over others.
-/// @argument event
+/// @param event
 /// @ingroup component
 CapturedMouse ComponentBase::CaptureMouse(const Event& event) {
   if (!event.screen_)

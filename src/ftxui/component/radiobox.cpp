@@ -32,10 +32,10 @@ class RadioboxBase : public ComponentBase {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft terminal do not use fonts able to render properly the default
     // radiobox glyph.
-    if (option_->checked == L"◉ ")
-      option_->checked = L"(*)";
-    if (option_->unchecked == L"○ ")
-      option_->unchecked = L"( )";
+    if (option_->style_checked == L"◉ ")
+      option_->style_checked = L"(*)";
+    if (option_->style_unchecked == L"○ ")
+      option_->style_unchecked = L"( )";
 #endif
   }
   ~RadioboxBase() override = default;
@@ -135,6 +135,7 @@ class RadioboxBase : public ComponentBase {
 /// @brief A list of element, where only one can be selected.
 /// @param entries The list of entries in the list.
 /// @param selected The index of the currently selected element.
+/// @param option Additional optional parameters.
 /// @ingroup component
 /// @see RadioboxBase
 ///

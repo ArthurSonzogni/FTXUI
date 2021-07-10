@@ -8,8 +8,6 @@
 
 namespace ftxui {
 
-/// @brief A component executing a provided function for catching events.
-/// @ingroup component.
 class CatchEventBase : public ComponentBase {
  public:
   // Constructor.
@@ -31,6 +29,7 @@ class CatchEventBase : public ComponentBase {
 
 /// @brief Return a component, using |on_event| to catch events. This function
 /// must returns true when the event has been handled, false otherwise.
+/// @param child The wrapped component.
 /// @param on_event The function drawing the interface.
 /// @ingroup component
 ///

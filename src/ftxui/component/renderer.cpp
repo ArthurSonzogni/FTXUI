@@ -8,8 +8,7 @@
 
 namespace ftxui {
 
-/// @brief A component rendering Element from a function.
-/// @ingroup component.
+// @brief A component rendering Element from a function.
 class RendererBase : public ComponentBase {
  public:
   // Access this interface from a Component

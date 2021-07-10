@@ -7,6 +7,7 @@
 namespace ftxui {
 
 /// @brief Option for the Menu component.
+/// @ingroup component
 struct MenuOption {
   Decorator style_normal = nothing;    /// style.
   Decorator style_focused = inverted;  /// Style when focused.
@@ -23,12 +24,14 @@ struct MenuOption {
 };
 
 /// @brief Option for the Button component.
+/// @ingroup component
 struct ButtonOption {
   /// Whether to show a border around the button.
   bool border = true;
 };
 
 /// @brief Option for the Checkbox component.
+/// @ingroup component
 struct CheckboxOption {
   std::wstring style_checked = L"▣ ";    /// Prefix for a "checked" state.
   std::wstring style_unchecked = L"☐ ";  /// Prefix for a "unchecked" state.
@@ -40,6 +43,7 @@ struct CheckboxOption {
 };
 
 /// @brief Option for the Input component.
+/// @ingroup component
 struct InputOption {
   /// Called when the content changes.
   std::function<void()> on_change = [] {};
@@ -50,6 +54,7 @@ struct InputOption {
 };
 
 /// @brief Option for the Radiobox component.
+/// @ingroup component
 struct RadioboxOption {
   std::wstring style_checked = L"◉ ";    /// Prefix for a "checked" state.
   std::wstring style_unchecked = L"○ ";  /// Prefix for a "unchecked" state.
@@ -63,6 +68,7 @@ struct RadioboxOption {
 };
 
 /// @brief Option for the Toggle component.
+/// @ingroup component
 struct ToggleOption {
   Decorator style_normal = nothing;    /// style.
   Decorator style_focused = inverted;  /// Style when focused.
@@ -78,7 +84,7 @@ struct ToggleOption {
   Ref<int> focused_entry = 0;
 };
 
-};  // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP */
 

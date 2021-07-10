@@ -121,6 +121,9 @@ class ToggleBase : public ComponentBase {
 }  // namespace
 
 /// @brief An horizontal list of elements. The user can navigate through them.
+/// @param entries The list of selectable entries to display.
+/// @param selected Reference the selected entry.
+/// @param option Additional optional parameters.
 /// @ingroup component
 Component Toggle(const std::vector<std::wstring>* entries,
                  int* selected,
