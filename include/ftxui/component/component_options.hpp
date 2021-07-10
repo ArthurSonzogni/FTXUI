@@ -74,6 +74,8 @@ struct ToggleOption {
   std::function<void()> on_change = [] {};
   /// Called when the user presses enter.
   std::function<void()> on_enter = [] {};
+
+  Ref<int> focused_entry = 0;
 };
 
 };  // namespace ftxui
