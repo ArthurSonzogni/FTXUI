@@ -5,7 +5,6 @@
 
 #include "ftxui/component/captured_mouse.hpp"      // for ftxui
 #include "ftxui/component/component.hpp"           // for Menu
-#include "ftxui/component/menu.hpp"                // for MenuBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 int main(int argc, const char* argv[]) {
