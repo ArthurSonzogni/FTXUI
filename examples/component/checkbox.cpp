@@ -1,4 +1,3 @@
-#include "ftxui/component/checkbox.hpp"
 #include "ftxui/component/captured_mouse.hpp"      // for ftxui
 #include "ftxui/component/component.hpp"           // for Checkbox, Vertical
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive

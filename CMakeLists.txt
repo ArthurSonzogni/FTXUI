@@ -74,7 +74,6 @@ add_library(dom STATIC
 
 add_library(component STATIC
   include/ftxui/component/captured_mouse.hpp
-  include/ftxui/component/checkbox.hpp
   include/ftxui/component/component.hpp
   include/ftxui/component/component_base.hpp
   include/ftxui/component/container.hpp
