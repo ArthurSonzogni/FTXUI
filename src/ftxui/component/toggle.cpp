@@ -12,7 +12,7 @@ namespace ftxui {
 
 Component Toggle(const std::vector<std::wstring>* entries,
                  int* selected,
-                 ConstRef<ToggleOption> option) {
+                 Ref<ToggleOption> option) {
   return Make<ToggleBase>(entries, selected, std::move(option));
 }
 
@@ -23,7 +23,7 @@ ToggleBase* ToggleBase::From(Component component) {
 
 ToggleBase::ToggleBase(const std::vector<std::wstring>* entries,
                        int* selected,
-                       ConstRef<ToggleOption> option)
+                       Ref<ToggleOption> option)
     : entries_(entries), selected_(selected), option_(std::move(option)) {}
 
 Element ToggleBase::Render() {

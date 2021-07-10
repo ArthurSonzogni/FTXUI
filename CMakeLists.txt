@@ -78,7 +78,6 @@ add_library(component STATIC
   include/ftxui/component/component_base.hpp
   include/ftxui/component/container.hpp
   include/ftxui/component/event.hpp
-  include/ftxui/component/input.hpp
   include/ftxui/component/menu.hpp
   include/ftxui/component/mouse.hpp
   include/ftxui/component/radiobox.hpp

@@ -24,7 +24,7 @@ class RadioboxBase : public ComponentBase {
   // Constructor.
   RadioboxBase(const std::vector<std::wstring>* entries,
                int* selected,
-               ConstRef<RadioboxOption> option = {});
+               Ref<RadioboxOption> option = {});
   ~RadioboxBase() override = default;
 
   int focused = 0;
@@ -40,7 +40,7 @@ class RadioboxBase : public ComponentBase {
   bool OnMouseEvent(Event event);
   int cursor_position = 0;
   std::vector<Box> boxes_;
-  ConstRef<RadioboxOption> option_;
+  Ref<RadioboxOption> option_;
 };
 
 }  // namespace ftxui

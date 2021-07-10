@@ -2,6 +2,7 @@
 #define FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP
 
 #include <ftxui/dom/elements.hpp>
+#include <ftxui/util/ref.hpp>
 
 namespace ftxui {
 
@@ -42,6 +43,8 @@ struct InputOption {
   std::function<void()> on_change = [] {};
   /// Called when the user presses enter.
   std::function<void()> on_enter = [] {};
+
+  Ref<int> cursor_position = 0;
 };
 
 /// @brief Option for the Radiobox component.

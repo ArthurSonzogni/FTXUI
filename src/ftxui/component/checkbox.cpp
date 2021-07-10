@@ -25,7 +25,7 @@ class CheckboxBase : public ComponentBase {
  public:
   CheckboxBase(ConstStringRef label,
                bool* state,
-               ConstRef<CheckboxOption> option)
+               Ref<CheckboxOption> option)
       : label_(label), state_(state), option_(std::move(option)) {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft terminal do not use fonts able to render properly the default
@@ -84,7 +84,7 @@ class CheckboxBase : public ComponentBase {
   ConstStringRef label_;
   bool* const state_;
   Box box_;
-  ConstRef<CheckboxOption> option_;
+  Ref<CheckboxOption> option_;
 };
 }  // namespace
 
@@ -111,7 +111,7 @@ class CheckboxBase : public ComponentBase {
 /// ```
 Component Checkbox(ConstStringRef label,
                    bool* checked,
-                   ConstRef<CheckboxOption> option) {
+                   Ref<CheckboxOption> option) {
   return Make<CheckboxBase>(label, checked, std::move(option));
 }
 
