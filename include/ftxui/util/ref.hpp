@@ -6,12 +6,12 @@
 
 namespace ftxui {
 
-// An adapter for a const object referenced or owned.
+/// @brief An adapter. Own or reference a constant object.
 template <typename T>
 class ConstRef {
  public:
   ConstRef() {}
-  ConstRef(T t): owned_(t) {}
+  ConstRef(T t) : owned_(t) {}
   ConstRef(const T* t) : address_(t) {}
   const T& operator*() { return address_ ? *address_ : owned_; }
   const T* operator->() { return address_ ? address_ : &owned_; }
@@ -21,8 +21,8 @@ class ConstRef {
   const T* address_ = nullptr;
 };
 
-/// @brief For convenience, this class convert multiple mutable string
-/// references toward a shared representation.
+/// @brief An adapter. Own or reference a constant string. For convenience, this
+/// class convert multiple mutable string toward a shared representation.
 class StringRef {
  public:
   StringRef(std::wstring* ref) : address_(ref) {}
@@ -37,8 +37,8 @@ class StringRef {
   std::wstring* address_ = nullptr;
 };
 
-/// @brief For convenience, this class convert multiple immutable string
-/// references toward  shared representation.
+/// @brief An adapter. Own or reference a constant string. For convenience, this
+/// class convert multiple immutable string toward a shared representation.
 class ConstStringRef {
  public:
   ConstStringRef(const std::wstring* ref) : address_(ref) {}

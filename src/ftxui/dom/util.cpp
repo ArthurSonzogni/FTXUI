@@ -6,13 +6,11 @@
 
 namespace ftxui {
 
-namespace {
 Decorator compose(Decorator a, Decorator b) {
   return [a = std::move(a), b = std::move(b)](Element element) {
     return b(a(std::move(element)));
   };
 }
-}  // namespace
 
 /// @brief A decoration doing absolutely nothing.
 /// @ingroup dom

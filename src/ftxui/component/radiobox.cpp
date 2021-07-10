@@ -69,14 +69,15 @@ Element RadioboxBase::Render() {
   bool is_focused = Focused();
   boxes_.resize(entries_->size());
   for (size_t i = 0; i < entries_->size(); ++i) {
-    auto style = (focused == int(i) && is_focused) ? option_->focused_style
-                                                   : option_->unfocused_style;
+    auto style = (focused == int(i) && is_focused) ? option_->style_focused
+                                                   : option_->style_unfocused;
     auto focus_management = (focused != int(i)) ? nothing
                             : is_focused        ? focus
                                                 : select;
 
-    const std::wstring& symbol =
-        *selected_ == int(i) ? option_->checked : option_->unchecked;
+    const std::wstring& symbol = *selected_ == int(i)
+                                     ? option_->style_checked
+                                     : option_->style_unchecked;
     elements.push_back(hbox(text(symbol), text(entries_->at(i)) | style) |
                        focus_management | reflect(boxes_[i]));
   }

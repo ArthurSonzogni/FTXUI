@@ -57,9 +57,9 @@ CheckboxBase::CheckboxBase(ConstStringRef label,
 
 Element CheckboxBase::Render() {
   bool is_focused = Focused();
-  auto style = is_focused ? option_->focused_style : option_->unfocused_style;
+  auto style = is_focused ? option_->style_focused : option_->style_unfocused;
   auto focus_management = is_focused ? focus : *state_ ? select : nothing;
-  return hbox(text(*state_ ? option_->checked : option_->unchecked),
+  return hbox(text(*state_ ? option_->style_checked : option_->style_unchecked),
               text(*label_) | style | focus_management) |
          reflect(box_);
 }
