@@ -1,19 +1,16 @@
 #include <functional>  // for function
 #include <memory>      // for shared_ptr
+#include <utility>     // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/event.hpp"  // for Event, Event::Return
-#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-
-#include <functional>  // for function
-#include <string>      // for allocator, wstring
-
-#include "ftxui/component/component.hpp"       // for Component
+#include "ftxui/component/component.hpp"       // for Make, Component, Checkbox
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/dom/elements.hpp"   // for Element, Decorator, inverted, nothing
-#include "ftxui/screen/box.hpp"     // for Box
-#include "ftxui/screen/string.hpp"  // for ConstStringRef
+#include "ftxui/component/component_options.hpp"  // for CheckboxOption
+#include "ftxui/component/event.hpp"              // for Event, Event::Return
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
+#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, hbox, reflect, focus, nothing, select
+#include "ftxui/screen/box.hpp"  // for Box
+#include "ftxui/util/ref.hpp"    // for Ref, ConstStringRef
 
 namespace ftxui {
 
@@ -23,9 +20,7 @@ namespace {
 /// @ingroup dom
 class CheckboxBase : public ComponentBase {
  public:
-  CheckboxBase(ConstStringRef label,
-               bool* state,
-               Ref<CheckboxOption> option)
+  CheckboxBase(ConstStringRef label, bool* state, Ref<CheckboxOption> option)
       : label_(label), state_(state), option_(std::move(option)) {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft terminal do not use fonts able to render properly the default

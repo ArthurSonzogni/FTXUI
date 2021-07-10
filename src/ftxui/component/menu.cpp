@@ -1,14 +1,21 @@
-#include <stddef.h>   // for size_t
-#include <algorithm>  // for max, min
-#include <memory>     // for shared_ptr, allocator_traits<>::value_type
-#include <utility>    // for move
+#include <stddef.h>    // for size_t
+#include <algorithm>   // for max, min
+#include <functional>  // for function
+#include <memory>      // for shared_ptr, allocator_traits<>::value_type
+#include <string>      // for operator+, wstring
+#include <utility>     // for move
+#include <vector>      // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/component.hpp"       // for CapturedMouse
-#include "ftxui/component/component.hpp"       // for Component
+#include "ftxui/component/captured_mouse.hpp"     // for CapturedMouse
+#include "ftxui/component/component.hpp"          // for Make, Menu
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released
 #include "ftxui/component/screen_interactive.hpp"  // for Component
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, vbox, Elements, focus, nothing, select
+#include "ftxui/screen/box.hpp"  // for Box
+#include "ftxui/util/ref.hpp"    // for Ref
 
 namespace ftxui {
 

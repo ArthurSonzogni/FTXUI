@@ -2,7 +2,6 @@
 
 #include <codecvt>  // for codecvt_utf8_utf16
 #include <locale>   // for wstring_convert
-#include <utility>  // for move
 
 namespace ftxui {
 #ifdef _MSC_VER

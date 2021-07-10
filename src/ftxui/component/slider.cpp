@@ -7,10 +7,10 @@
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for Element, text, color, operator|, xflex, gauge, dim, hbox, reflect, underlined, vcenter
+#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, reflect, xflex, gauge, hbox, underlined, color, dim, vcenter
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::GrayLight
-#include "ftxui/screen/string.hpp"  // for StringRef
+#include "ftxui/util/ref.hpp"      // for StringRef
 
 namespace ftxui {
 

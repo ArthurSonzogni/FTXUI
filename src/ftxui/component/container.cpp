@@ -1,12 +1,13 @@
-#include <stddef.h>  // for size_t
-
+#include <stddef.h>   // for size_t
 #include <algorithm>  // for max, min
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator, __shared_ptr_access<>::element_type, allocator_traits<>::value_type
 #include <utility>  // for move
 #include <vector>   // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/event.hpp"
+#include "ftxui/component/component.hpp"  // for Component, Components, Horizontal, Vertical, Tab
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"  // for Event, Event::Tab, Event::TabReverse, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
+#include "ftxui/dom/elements.hpp"     // for text, Elements, Element, hbox, vbox
 
 namespace ftxui {
 

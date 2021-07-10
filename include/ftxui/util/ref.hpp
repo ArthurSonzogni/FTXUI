@@ -24,7 +24,7 @@ class ConstRef {
 
 /// @brief An adapter. Own or reference an mutable object.
 template <typename T>
-class Ref{
+class Ref {
  public:
   Ref() {}
   Ref(T t) : owned_(t) {}

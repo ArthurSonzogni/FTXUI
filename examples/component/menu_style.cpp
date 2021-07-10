@@ -1,14 +1,14 @@
-#include <functional>        // for function
-#include <initializer_list>  // for initializer_list
-#include <memory>            // for __shared_ptr_access, shared_ptr, allocator
-#include <string>            // for wstring, basic_string
-#include <vector>            // for vector
+#include <functional>  // for function
+#include <memory>      // for shared_ptr, __shared_ptr_access, allocator
+#include <string>      // for wstring, basic_string
+#include <vector>      // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Menu, Horizontal, Renderer
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, separator, bgcolor, color, flex, Decorator, bold, hbox, border, dim
+#include "ftxui/component/component_options.hpp"   // for MenuOption
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for operator|, color, separator, Decorator, bgcolor, flex, Element, bold, hbox, border, dim
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::BlueLight, Color::Red, Color::Yellow
 
 int main(int argc, const char* argv[]) {

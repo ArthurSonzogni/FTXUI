@@ -1,10 +1,15 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <memory>                   // for __shared_ptr_access, shared_ptr
+#include <functional>               // for function
+#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
+#include <string>  // for wstring, basic_string
+#include <vector>  // for vector
 
-#include "ftxui/component/component.hpp"
+#include "ftxui/component/captured_mouse.hpp"     // for ftxui
+#include "ftxui/component/component.hpp"          // for Toggle
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for ToggleOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
-#include "ftxui/component/mouse.hpp"  // for ftxui
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, Test, EXPECT_TRUE, EXPECT_FALSE, TEST
 
 using namespace ftxui;
