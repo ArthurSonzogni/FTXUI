@@ -40,7 +40,7 @@ namespace ftxui {
 /// ```
 Component Menu(const std::vector<std::wstring>* entries,
                int* selected,
-               ConstRef<MenuOption> option) {
+               Ref<MenuOption> option) {
   return Make<MenuBase>(entries, selected, std::move(option));
 }
 
@@ -51,7 +51,7 @@ MenuBase* MenuBase::From(Component component) {
 
 MenuBase::MenuBase(const std::vector<std::wstring>* entries,
                    int* selected,
-                   ConstRef<MenuOption> option)
+                   Ref<MenuOption> option)
     : entries_(entries), selected_(selected), option_(option) {}
 
 Element MenuBase::Render() {

@@ -23,7 +23,7 @@ class ToggleBase : public ComponentBase {
   // Constructor.
   ToggleBase(const std::vector<std::wstring>* entries,
              int* selected,
-             ConstRef<ToggleOption> option = {});
+             Ref<ToggleOption> option = {});
   ~ToggleBase() override = default;
 
   // State.
@@ -39,7 +39,7 @@ class ToggleBase : public ComponentBase {
 
   bool OnMouseEvent(Event event);
   std::vector<Box> boxes_;
-  ConstRef<ToggleOption> option_;
+  Ref<ToggleOption> option_;
 };
 
 }  // namespace ftxui

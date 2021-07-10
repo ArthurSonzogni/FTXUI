@@ -26,22 +26,22 @@ std::shared_ptr<T> Make(Args&&... args) {
 
 Component Button(ConstStringRef label,
                  std::function<void()> on_click,
-                 ConstRef<ButtonOption> = {});
+                 Ref<ButtonOption> = {});
 Component Checkbox(ConstStringRef label,
                    bool* checked,
-                   ConstRef<CheckboxOption> option = {});
+                   Ref<CheckboxOption> option = {});
 Component Input(StringRef content,
                 ConstStringRef placeholder,
-                ConstRef<InputOption> option = {});
+                Ref<InputOption> option = {});
 Component Menu(const std::vector<std::wstring>* entries,
                int* selected_,
-               ConstRef<MenuOption> = {});
+               Ref<MenuOption> = {});
 Component Radiobox(const std::vector<std::wstring>* entries,
                    int* selected_,
-                   ConstRef<RadioboxOption> option = {});
+                   Ref<RadioboxOption> option = {});
 Component Toggle(const std::vector<std::wstring>* entries,
                  int* selected,
-                 ConstRef<ToggleOption> option = {});
+                 Ref<ToggleOption> option = {});
 template <class T>  // T = {int, float, long}
 Component Slider(StringRef label, T* value, T min, T max, T increment);
 Component Renderer(Component child, std::function<Element()>);

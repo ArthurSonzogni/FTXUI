@@ -6,7 +6,7 @@
 
 namespace ftxui {
 
-/// @brief An adapter. Own or reference a constant object.
+/// @brief An adapter. Own or reference an immutable object.
 template <typename T>
 class ConstRef {
  public:
@@ -14,11 +14,28 @@ class ConstRef {
   ConstRef(T t) : owned_(t) {}
   ConstRef(const T* t) : address_(t) {}
   const T& operator*() { return address_ ? *address_ : owned_; }
+  const T& operator()() { return address_ ? *address_ : owned_; }
   const T* operator->() { return address_ ? address_ : &owned_; }
 
  private:
   T owned_;
   const T* address_ = nullptr;
+};
+
+/// @brief An adapter. Own or reference an mutable object.
+template <typename T>
+class Ref{
+ public:
+  Ref() {}
+  Ref(T t) : owned_(t) {}
+  Ref(T* t) : address_(t) {}
+  T& operator*() { return address_ ? *address_ : owned_; }
+  T& operator()() { return address_ ? *address_ : owned_; }
+  T* operator->() { return address_ ? address_ : &owned_; }
+
+ private:
+  T owned_;
+  T* address_ = nullptr;
 };
 
 /// @brief An adapter. Own or reference a constant string. For convenience, this

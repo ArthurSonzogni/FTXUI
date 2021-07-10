@@ -16,7 +16,7 @@ class ButtonBase : public ComponentBase {
  public:
   ButtonBase(ConstStringRef label,
              std::function<void()> on_click,
-             ConstRef<ButtonOption> option)
+             Ref<ButtonOption> option)
       : label_(label), on_click_(on_click), option_(std::move(option)) {}
 
   ~ButtonBase() override = default;
@@ -55,7 +55,7 @@ class ButtonBase : public ComponentBase {
   ConstStringRef label_;
   std::function<void()> on_click_;
   Box box_;
-  ConstRef<ButtonOption> option_;
+  Ref<ButtonOption> option_;
 };
 
 }  // namespace
@@ -84,7 +84,7 @@ class ButtonBase : public ComponentBase {
 /// ```
 Component Button(ConstStringRef label,
                  std::function<void()> on_click,
-                 ConstRef<ButtonOption> option) {
+                 Ref<ButtonOption> option) {
   return Make<ButtonBase>(label, std::move(on_click), std::move(option));
 }
 

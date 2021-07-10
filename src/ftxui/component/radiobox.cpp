@@ -41,7 +41,7 @@ namespace ftxui {
 /// ```
 Component Radiobox(const std::vector<std::wstring>* entries,
                    int* selected,
-                   ConstRef<RadioboxOption> option) {
+                   Ref<RadioboxOption> option) {
   return Make<RadioboxBase>(entries, selected, std::move(option));
 }
 
@@ -52,7 +52,7 @@ RadioboxBase* RadioboxBase::From(Component component) {
 
 RadioboxBase::RadioboxBase(const std::vector<std::wstring>* entries,
                            int* selected,
-                           ConstRef<RadioboxOption> option)
+                           Ref<RadioboxOption> option)
     : entries_(entries), selected_(selected), option_(std::move(option)) {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
   // Microsoft terminal do not use fonts able to render properly the default

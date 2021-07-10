@@ -24,7 +24,7 @@ class MenuBase : public ComponentBase {
   // Constructor.
   MenuBase(const std::vector<std::wstring>* entries,
            int* selected_,
-           ConstRef<MenuOption> option = {});
+           Ref<MenuOption> option = {});
   ~MenuBase() override = default;
 
   // State.
@@ -37,7 +37,7 @@ class MenuBase : public ComponentBase {
  protected:
   const std::vector<std::wstring>* const entries_;
   int* selected_ = 0;
-  ConstRef<MenuOption> option_;
+  Ref<MenuOption> option_;
 
   bool OnMouseEvent(Event);
 
