@@ -4,7 +4,7 @@ include(cmake/ftxui_git_version.cmake)
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.6.${git_version}
+  VERSION 0.7.${git_version}
 )
 
 option(FTXUI_BUILD_DOCS "Set to ON to build tests" ON)
