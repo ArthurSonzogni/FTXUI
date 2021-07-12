@@ -493,11 +493,11 @@ resize, etc..., the `ftxui::ScreenInteractive::Loop()` is responsible for
 drawing a new frame.
 
 You might want to react to arbitrary events that are unknown to FTXUI. This can
-be achieve by posting events via `PostEvent`, via a thread. You can post the
-event`Event::Custom`.
+be achieve by posting events via `ftxui::ScreenInteractive::PostEvent`, via a
+thread. You can post the event`ftxui::Event::Custom`.
 
 ```cpp
-screen->PostEvent(ftxui::Event::Custom);
+screen->PostEvent(Event::Custom);
 ```
 
 `ftxui::ScreenInteractive::PostEvent` is thread safe.
