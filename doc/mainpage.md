@@ -149,6 +149,21 @@ The screen can be printed as a string using ftxui::Screen::ToString().
   }
 ~~~
 
+# Refreshing / invalidating the screen to cause a redraw
+If you are building your screen from variables like:
+
+```cpp
+vbox({
+  text(L"Counter:" + std::to_wstring(theCounter)))
+})
+```
+
+It is helpful to be able to initiate a screen refresh when these variables change. This can be by posting an 'Event::Custom' to the screen like:
+
+```cpp
+screen.PostEvent(Event::Custom);
+```
+
 # dom
 
 This module defines a hierachical set of Element. An element manages layout and can be responsive to the terminal dimensions.
