@@ -29,7 +29,7 @@ class ComponentBase {
   // ComponentBase hierarchy.
   ComponentBase* Parent();
   void Add(Component children);
-
+  void Remove(std::size_t idx);
   // Renders the component.
   virtual Element Render();
 

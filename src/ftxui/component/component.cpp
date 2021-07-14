@@ -41,6 +41,13 @@ void ComponentBase::Add(Component child) {
   children_.push_back(std::move(child));
 }
 
+/// @brief Remove a child.
+/// @@param idx The child index to be removed.
+/// @ingroup component
+void ComponentBase::Remove(std::size_t idx) {
+  children_.erase(children_.begin()+idx);
+}
+
 /// @brief Draw the component.
 /// Build a ftxui::Element to be drawn on the ftxi::Screen representing this
 /// ftxui::ComponentBase.
