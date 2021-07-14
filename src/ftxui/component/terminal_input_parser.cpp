@@ -1,8 +1,9 @@
 #include "ftxui/component/terminal_input_parser.hpp"
 
 #include <algorithm>  // for max
-#include <memory>     // for unique_ptr
-#include <utility>    // for move
+#include <cstdint>
+#include <memory>   // for unique_ptr
+#include <utility>  // for move
 
 #include "ftxui/component/event.hpp"  // for Event
 
@@ -129,7 +130,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   }
 
   // Accumulate the value of the first byte.
-  wchar_t value = head & ~mask;
+  uint32_t value = head & ~mask;
 
   // Invalid UTF8, with more than 5 bytes.
   if (first_zero == 1 || first_zero >= 5)
