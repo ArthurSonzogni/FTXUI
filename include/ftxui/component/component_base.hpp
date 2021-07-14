@@ -30,6 +30,7 @@ class ComponentBase {
   ComponentBase* Parent();
   void Add(Component children);
   void Remove(Components::iterator child);
+  void Clear();
   // Renders the component.
   virtual Element Render();
 

@@ -48,6 +48,12 @@ void ComponentBase::Remove(Components::iterator child) {
   children_.erase(child);
 }
 
+/// @brief Remove all children.
+/// @ingroup component
+void ComponentBase::Clear() {
+  children_.clear();
+}
+
 /// @brief Obtain an iterator to the first child
 /// @ingroup component
 Components::iterator ComponentBase::begin() {
