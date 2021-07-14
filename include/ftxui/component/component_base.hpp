@@ -29,9 +29,13 @@ class ComponentBase {
   // ComponentBase hierarchy.
   ComponentBase* Parent();
   void Add(Component children);
-  void Remove(std::size_t idx);
+  void Remove(Components::iterator child);
   // Renders the component.
   virtual Element Render();
+
+  // Iterate over component children
+  Components::iterator begin();
+  Components::iterator end();
 
   // Handles an event.
   // By default, reduce on children with a lazy OR.

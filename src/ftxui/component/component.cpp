@@ -44,9 +44,23 @@ void ComponentBase::Add(Component child) {
 /// @brief Remove a child.
 /// @@param idx The child index to be removed.
 /// @ingroup component
-void ComponentBase::Remove(std::size_t idx) {
-  children_.erase(children_.begin()+idx);
+void ComponentBase::Remove(Components::iterator child) {
+  children_.erase(child);
 }
+
+/// @brief Obtain an iterator to the first child
+/// @ingroup component
+Components::iterator ComponentBase::begin() {
+  return children_.begin();
+}
+
+/// @brief Obtain an iterator to one after the last child
+/// @ingroup component
+Components::iterator ComponentBase::end() {
+  return children_.end();
+}
+
+
 
 /// @brief Draw the component.
 /// Build a ftxui::Element to be drawn on the ftxi::Screen representing this
