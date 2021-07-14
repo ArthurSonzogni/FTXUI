@@ -40,6 +40,7 @@
 @example ./examples/component/menu.cpp
 @example ./examples/component/menu_style.cpp
 @example ./examples/component/radiobox_in_frame.cpp
+@example ./examples/component/composition.cpp
 @example ./examples/component/button.cpp
 @example ./examples/component/toggle.cpp
 @example ./examples/component/modal_dialog.cpp
