@@ -1,4 +1,6 @@
+#include <stddef.h>   // for size_t
 #include <algorithm>  // for find_if, max
+#include <cassert>    // for assert
 #include <iterator>   // for begin, end
 #include <utility>    // for move
 
@@ -24,12 +26,24 @@ ComponentBase::~ComponentBase() {
 }
 
 /// @brief Return the parent ComponentBase, or nul if any.
-/// @see Attach
 /// @see Detach
 /// @see Parent
 /// @ingroup component
 ComponentBase* ComponentBase::Parent() {
   return parent_;
+}
+
+/// @brief Access the child at index `i`.
+/// @ingroup component
+Component& ComponentBase::ChildAt(size_t i) {
+  assert(i < ChildCount());
+  return children_[i];
+}
+
+/// @brief Returns the number of child.
+/// @ingroup component
+size_t ComponentBase::ChildCount() const {
+  return children_.size();
 }
 
 /// @brief Add a children.
@@ -41,32 +55,28 @@ void ComponentBase::Add(Component child) {
   children_.push_back(std::move(child));
 }
 
-/// @brief Remove a child.
-/// @@param idx The child index to be removed.
+/// @brief Detach this children from its parent.
+/// @see Detach
+/// @see Parent
 /// @ingroup component
-void ComponentBase::Remove(Components::iterator child) {
-  children_.erase(child);
+void ComponentBase::Detach() {
+  if (!parent_)
+    return;
+  auto it = std::find_if(std::begin(parent_->children_),  //
+                         std::end(parent_->children_),    //
+                         [this](const Component& that) {  //
+                           return this == that.get();
+                         });
+  parent_->children_.erase(it);
+  parent_ = nullptr;
 }
 
 /// @brief Remove all children.
 /// @ingroup component
-void ComponentBase::Clear() {
-  children_.clear();
+void ComponentBase::DetachAllChild() {
+  while (!children_.empty())
+    children_[0]->Detach();
 }
-
-/// @brief Obtain an iterator to the first child
-/// @ingroup component
-Components::iterator ComponentBase::begin() {
-  return children_.begin();
-}
-
-/// @brief Obtain an iterator to one after the last child
-/// @ingroup component
-Components::iterator ComponentBase::end() {
-  return children_.end();
-}
-
-
 
 /// @brief Draw the component.
 /// Build a ftxui::Element to be drawn on the ftxi::Screen representing this
@@ -154,23 +164,6 @@ CapturedMouse ComponentBase::CaptureMouse(const Event& event) {
   if (!event.screen_)
     return std::make_unique<CaptureMouseImpl>();
   return event.screen_->CaptureMouse();
-}
-
-/// @brief Detach this children from its parent.
-/// @see Attach
-/// @see Detach
-/// @see Parent
-/// @ingroup component
-void ComponentBase::Detach() {
-  if (!parent_)
-    return;
-  auto it = std::find_if(std::begin(parent_->children_),  //
-                         std::end(parent_->children_),    //
-                         [this](const Component& that) {  //
-                           return this == that.get();
-                         });
-  parent_->children_.erase(it);
-  parent_ = nullptr;
 }
 
 }  // namespace ftxui

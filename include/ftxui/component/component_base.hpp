@@ -26,17 +26,16 @@ class ComponentBase {
   ComponentBase() = default;
   virtual ~ComponentBase();
 
-  // ComponentBase hierarchy.
+  // Component hierarchy:
   ComponentBase* Parent();
+  Component& ChildAt(size_t i);
+  size_t ChildCount() const;
   void Add(Component children);
-  void Remove(Components::iterator child);
-  void Clear();
+  void Detach();
+  void DetachAllChild();
+
   // Renders the component.
   virtual Element Render();
-
-  // Iterate over component children
-  Components::iterator begin();
-  Components::iterator end();
 
   // Handles an event.
   // By default, reduce on children with a lazy OR.
@@ -72,7 +71,6 @@ class ComponentBase {
 
  private:
   ComponentBase* parent_ = nullptr;
-  void Detach();
 };
 
 using Component = std::shared_ptr<ComponentBase>;
