@@ -40,13 +40,13 @@ Component& ComponentBase::ChildAt(size_t i) {
   return children_[i];
 }
 
-/// @brief Returns the number of child.
+/// @brief Returns the number of children.
 /// @ingroup component
 size_t ComponentBase::ChildCount() const {
   return children_.size();
 }
 
-/// @brief Add a children.
+/// @brief Add a child.
 /// @@param child The child to be attached.
 /// @ingroup component
 void ComponentBase::Add(Component child) {
@@ -55,7 +55,7 @@ void ComponentBase::Add(Component child) {
   children_.push_back(std::move(child));
 }
 
-/// @brief Detach this children from its parent.
+/// @brief Detach this child from its parent.
 /// @see Detach
 /// @see Parent
 /// @ingroup component
@@ -73,7 +73,7 @@ void ComponentBase::Detach() {
 
 /// @brief Remove all children.
 /// @ingroup component
-void ComponentBase::DetachAllChild() {
+void ComponentBase::DetachAllChildren() {
   while (!children_.empty())
     children_[0]->Detach();
 }

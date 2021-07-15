@@ -32,7 +32,7 @@ class ComponentBase {
   size_t ChildCount() const;
   void Add(Component children);
   void Detach();
-  void DetachAllChild();
+  void DetachAllChildren();
 
   // Renders the component.
   virtual Element Render();
