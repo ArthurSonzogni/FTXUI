@@ -26,9 +26,13 @@ class ComponentBase {
   ComponentBase() = default;
   virtual ~ComponentBase();
 
-  // ComponentBase hierarchy.
+  // Component hierarchy:
   ComponentBase* Parent();
+  Component& ChildAt(size_t i);
+  size_t ChildCount() const;
   void Add(Component children);
+  void Detach();
+  void DetachAllChildren();
 
   // Renders the component.
   virtual Element Render();
@@ -67,7 +71,6 @@ class ComponentBase {
 
  private:
   ComponentBase* parent_ = nullptr;
-  void Detach();
 };
 
 using Component = std::shared_ptr<ComponentBase>;
