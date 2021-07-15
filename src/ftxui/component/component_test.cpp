@@ -75,7 +75,7 @@ TEST(ContainerTest, Detach) {
   EXPECT_EQ(child_3->Parent(), nullptr);
 }
 
-TEST(ContainerTest, DetachAllChild) {
+TEST(ContainerTest, DetachAllChildren) {
   auto parent = Make();
   auto child_1 = Make();
   auto child_2 = Make();
@@ -89,7 +89,7 @@ TEST(ContainerTest, DetachAllChild) {
   EXPECT_EQ(child_2->Parent(), parent.get());
   EXPECT_EQ(child_3->Parent(), parent.get());
 
-  parent->DetachAllChild();
+  parent->DetachAllChildren();
 
   EXPECT_EQ(parent->ChildCount(), 0u);
   EXPECT_EQ(child_1->Parent(), nullptr);
