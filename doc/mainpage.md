@@ -83,9 +83,6 @@ target_link_libraries(ftxui-starter
   PRIVATE ftxui::component # Not needed for this example.
 )
 
-# C++17 is used. We requires fold expressions at least.
-set_target_properties(ftxui-starter PROPERTIES CXX_STANDARD 17)
-
 ~~~
 
 Build

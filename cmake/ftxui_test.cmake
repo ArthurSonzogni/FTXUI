@@ -36,7 +36,6 @@ target_include_directories(tests
 )
 target_compile_options(tests PRIVATE -fsanitize=address)
 target_link_libraries(tests PRIVATE -fsanitize=address)
-set_property(TARGET tests PROPERTY CXX_STANDARD 17)
 
 if (NOT MSVC)
   include(cmake/ftxui_benchmark.cmake)
