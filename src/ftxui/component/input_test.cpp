@@ -35,6 +35,34 @@ TEST(InputTest, Type) {
   input->OnEvent(Event::Character('b'));
   EXPECT_EQ(content, L"ab");
   EXPECT_EQ(option.cursor_position(), 2u);
+
+  auto document = input->Render();
+  auto screen = Screen::Create(Dimension::Fit(document));
+  Render(screen, document);
+  EXPECT_EQ(screen.PixelAt(0, 0).character, L"a");
+  EXPECT_EQ(screen.PixelAt(1, 0).character, L"b");
+}
+
+TEST(InputTest, TypePassword) {
+  std::wstring content;
+  std::wstring placeholder;
+  auto option = InputOption();
+  option.password = true;
+  Component input = Input(&content, &placeholder, &option);
+
+  input->OnEvent(Event::Character('a'));
+  EXPECT_EQ(content, L"a");
+  EXPECT_EQ(option.cursor_position(), 1u);
+
+  input->OnEvent(Event::Character('b'));
+  EXPECT_EQ(content, L"ab");
+  EXPECT_EQ(option.cursor_position(), 2u);
+
+  auto document = input->Render();
+  auto screen = Screen::Create(Dimension::Fit(document));
+  Render(screen, document);
+  EXPECT_EQ(screen.PixelAt(0, 0).character, L"•");
+  EXPECT_EQ(screen.PixelAt(1, 0).character, L"•");
 }
 
 TEST(InputTest, Arrow) {

@@ -10,23 +10,31 @@
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
 
-  std::wstring first_name_;
-  std::wstring last_name_;
+  std::wstring first_name;
+  std::wstring last_name;
+  std::wstring password;
 
-  Component input_first_name_ = Input(&first_name_, "first name");
-  Component input_last_name_ = Input(&last_name_, "last name");
+
+  Component input_first_name = Input(&first_name, "first name");
+  Component input_last_name = Input(&last_name, "last name");
+
+  InputOption password_option;
+  password_option.password = true;
+  Component input_password = Input(&password, "password", password_option);
 
   auto component = Container::Vertical({
-      input_first_name_,
-      input_last_name_,
+      input_first_name,
+      input_last_name,
+      input_password,
   });
 
   auto renderer = Renderer(component, [&] {
     return vbox({
-               text(L"Hello " + first_name_ + L" " + last_name_),
+               text(L"Hello " + first_name + L" " + last_name),
                separator(),
-               hbox({text(L" First name  : "), input_first_name_->Render()}),
-               hbox({text(L" Last name   : "), input_last_name_->Render()}),
+               hbox(text(L" First name : "), input_first_name->Render()),
+               hbox(text(L" Last name  : "), input_last_name->Render()),
+               hbox(text(L" Password   : "), input_password->Render()),
            }) |
            border;
   });
