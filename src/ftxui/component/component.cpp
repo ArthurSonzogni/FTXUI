@@ -14,8 +14,7 @@
 namespace ftxui {
 
 namespace {
-class CaptureMouseImpl : public CapturedMouseInterface {
-};
+class CaptureMouseImpl : public CapturedMouseInterface {};
 }  // namespace
 
 ComponentBase::~ComponentBase() {

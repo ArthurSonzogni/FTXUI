@@ -8,8 +8,8 @@
 
 #include "ftxui/component/component_base.hpp"     // for Component, Components
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption, InputOption, MenuOption, RadioboxOption, ToggleOption
-#include "ftxui/dom/elements.hpp"  // for Element
-#include "ftxui/util/ref.hpp"      // for Ref, ConstStringRef, StringRef
+#include "ftxui/dom/elements.hpp"                 // for Element
+#include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef, StringRef
 
 namespace ftxui {
 

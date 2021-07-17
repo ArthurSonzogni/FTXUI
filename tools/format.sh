@@ -20,7 +20,7 @@ done
 
 exampleList="./doc/example_list.md"
 echo "# Examples" > $exampleList
-files=$(find ./examples/ -iname "*.cpp")
+files=$(find ./examples -iname "*.cpp" | sort)
 for f in $files
 do
   echo "@example $f" >> $exampleList
