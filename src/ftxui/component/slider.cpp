@@ -27,7 +27,8 @@ class SliderBase : public ComponentBase {
   Element Render() {
     auto gauge_color =
         Focused() ? color(Color::GrayLight) : color(Color::GrayDark);
-    float percent = float(*value_ - min_) / float(max_ - min_);
+    float percent =
+        (max_ == min_) ? 0.5f : float(*value_ - min_) / float(max_ - min_);
     return hbox({
                text(*label_) | dim | vcenter,
                hbox({
@@ -76,9 +77,11 @@ class SliderBase : public ComponentBase {
     }
 
     if (captured_mouse_) {
-      *value_ = min_ + (event.mouse().x - gauge_box_.x_min) * (max_ - min_) /
-                           (gauge_box_.x_max - gauge_box_.x_min);
-      *value_ = std::max(min_, std::min(max_, *value_));
+      if (gauge_box_.x_max != gauge_box_.x_min) {
+        *value_ = min_ + (event.mouse().x - gauge_box_.x_min) * (max_ - min_) /
+                             (gauge_box_.x_max - gauge_box_.x_min);
+        *value_ = std::max(min_, std::min(max_, *value_));
+      }
       return true;
     }
     return false;

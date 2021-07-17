@@ -49,7 +49,7 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
   if (depth <= 0)
     return Button(GeneratorString(data, size), [] {});
 
-  switch (value % 16) {
+  switch ((value % 20)) {
     case 1:
       return Checkbox(GeneratorString(data, size), &g_bool);
     case 2:
