@@ -22,10 +22,10 @@ class CheckboxBase : public ComponentBase {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft terminal do not use fonts able to render properly the default
     // radiobox glyph.
-    if (option_->style_checked == L"▣ ")
-      option_->style_checked = L"[X]";
-    if (option_->style_unchecked == L"☐ ")
-      option_->style_unchecked = L"[ ]";
+    if (option_->style_checked == "▣ ")
+      option_->style_checked = "[X]";
+    if (option_->style_unchecked == "☐ ")
+      option_->style_unchecked = "[ ]";
 #endif
   }
 
@@ -91,7 +91,7 @@ class CheckboxBase : public ComponentBase {
 ///
 /// ```cpp
 /// auto screen = ScreenInteractive::FitComponent();
-/// std::wstring label = L"Make a sandwidth";
+/// std::string label = "Make a sandwidth";
 /// bool checked = false;
 /// Component checkbox = Checkbox(&label, &checked);
 /// screen.Loop(checkbox)

@@ -1,4 +1,5 @@
-#include <memory>  // for make_shared
+#include <memory>  // for allocator, make_shared
+#include <string>  // for string
 
 #include "ftxui/dom/elements.hpp"     // for Element, gauge
 #include "ftxui/dom/node.hpp"         // for Node
@@ -8,12 +9,13 @@
 
 namespace ftxui {
 
+static std::string charset[] =
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-// Microsoft's terminals often use fonts not handling the 8 unicode characters
-// for representing the whole gauge. Fallback with less.
-static wchar_t charset[] = L"    ▌▌▌███";
+    // Microsoft's terminals often use fonts not handling the 8 unicode
+    // characters for representing the whole gauge. Fallback with less.
+    {" ", " ", " ", " ", "▌", "▌", "▌", "█", "█", "█"};
 #else
-static wchar_t charset[] = L"  ▏▎▍▌▋▊▉█";
+    {" ", " ", "▏", "▎", "▍", "▌", "▋", "▊", "▉", "█"};
 #endif
 
 class Gauge : public Node {

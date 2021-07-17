@@ -4,9 +4,9 @@
 #include <string>  // for wstring
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Input
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for InputOption
+#include "ftxui/component/deprecated.hpp"         // for Input
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Delete, Event::End, Event::Home
 #include "ftxui/dom/elements.hpp"     // for Fit
 #include "ftxui/dom/node.hpp"         // for Render
@@ -42,8 +42,8 @@ TEST(InputTest, Type) {
   auto document = input->Render();
   auto screen = Screen::Create(Dimension::Fit(document));
   Render(screen, document);
-  EXPECT_EQ(screen.PixelAt(0, 0).character, L"a");
-  EXPECT_EQ(screen.PixelAt(1, 0).character, L"b");
+  EXPECT_EQ(screen.PixelAt(0, 0).character, "a");
+  EXPECT_EQ(screen.PixelAt(1, 0).character, "b");
 }
 
 TEST(InputTest, TypePassword) {
@@ -64,8 +64,8 @@ TEST(InputTest, TypePassword) {
   auto document = input->Render();
   auto screen = Screen::Create(Dimension::Fit(document));
   Render(screen, document);
-  EXPECT_EQ(screen.PixelAt(0, 0).character, L"•");
-  EXPECT_EQ(screen.PixelAt(1, 0).character, L"•");
+  EXPECT_EQ(screen.PixelAt(0, 0).character, "•");
+  EXPECT_EQ(screen.PixelAt(1, 0).character, "•");
 }
 
 TEST(InputTest, Arrow) {

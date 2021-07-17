@@ -2,7 +2,7 @@
 #define FTXUI_SCREEN_SCREEN
 
 #include <memory>
-#include <string>  // for allocator, wstring, string, basic_string
+#include <string>  // for string, allocator, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/screen/box.hpp"       // for Box
@@ -16,8 +16,7 @@ namespace ftxui {
 struct Pixel {
   // The graphemes stored into the pixel. To support combining characters,
   // like: a⃦, this can potentially contains multiple codepoitns.
-  // Required: character.size() >= 1;
-  std::wstring character = L" ";
+  std::string character = " ";
 
   // Colors:
   Color background_color = Color::Default;
@@ -55,7 +54,7 @@ class Screen {
   static Screen Create(Dimensions width, Dimensions height);
 
   // Node write into the screen using Screen::at.
-  wchar_t& at(int x, int y);
+  std::string& at(int x, int y);
   Pixel& PixelAt(int x, int y);
 
   // Convert the screen into a printable string in the terminal.

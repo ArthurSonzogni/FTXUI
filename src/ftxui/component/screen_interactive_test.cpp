@@ -1,11 +1,12 @@
-#include <gtest/gtest-message.h>    // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult
-#include <csignal>
+#include <gtest/gtest-message.h>  // for Message
+#include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
+#include <csignal>  // for raise, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM
 
-#include "ftxui/component/component.hpp"
+#include "ftxui/component/component.hpp"  // for Renderer
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/dom/elements.hpp"
-#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/elements.hpp"    // for Element
+#include "gtest/gtest_pred_impl.h"   // for Test, TEST, EXPECT_EQ
 
 using namespace ftxui;
 

@@ -75,7 +75,7 @@ class ButtonBase : public ComponentBase {
 ///
 /// ```cpp
 /// auto screen = ScreenInteractive::FitComponent();
-/// std::wstring label = L"Click to quit";
+/// std::string label = "Click to quit";
 /// Component button = Button(&label, screen.ExitLoopClosure());
 /// screen.Loop(button)
 /// ```

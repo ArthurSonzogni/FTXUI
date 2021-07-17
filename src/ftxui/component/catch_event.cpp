@@ -37,7 +37,7 @@ class CatchEventBase : public ComponentBase {
 /// ```cpp
 /// auto screen = ScreenInteractive::TerminalOutput();
 /// auto renderer = Renderer([] {
-///   return text(L"My interface");
+///   return text("My interface");
 /// });
 /// screen.Loop(renderer);
 /// ```

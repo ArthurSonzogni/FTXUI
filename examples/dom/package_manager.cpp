@@ -1,18 +1,19 @@
-#include <chrono>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/string.hpp>
-#include <iostream>
-#include <list>
-#include <memory>
-#include <string>
-#include <thread>
-#include <utility>
-#include <vector>
+#include <chrono>                  // for operator""s, chrono_literals
+#include <ftxui/dom/elements.hpp>  // for operator|, Element, hbox, bold, color, filler, separator, vbox, window, gauge, size, dim, EQUAL, WIDTH
+#include <ftxui/screen/screen.hpp>  // for Screen, Dimension
+#include <ftxui/screen/string.hpp>  // for to_wstring
+#include <iostream>                 // for cout, endl, ostream
+#include <list>  // for list, operator!=, _List_iterator, _List_iterator<>::_Self
+#include <memory>   // for allocator, shared_ptr, allocator_traits<>::value_type
+#include <string>   // for wstring, operator<<, string
+#include <thread>   // for sleep_for
+#include <utility>  // for move
+#include <vector>   // for vector
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/screen/color.hpp"  // for Color, Color::Green, Color::Red, Color::RedLight
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

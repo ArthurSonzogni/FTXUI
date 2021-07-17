@@ -26,8 +26,8 @@ Elements operator|(Elements, Decorator);
 Decorator operator|(Decorator, Decorator);
 
 // --- Widget ---
-Element text(std::wstring text);
-Element vtext(std::wstring text);
+Element text(std::string text);
+Element vtext(std::string text);
 Element separator(void);
 Element separator(Pixel);
 Element gauge(float ratio);
@@ -35,7 +35,7 @@ Element border(Element);
 Decorator borderWith(Pixel);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
-Elements paragraph(std::wstring text);  // Use inside hflow(). Split by space.
+Elements paragraph(std::string text);  // Use inside hflow(). Split by space.
 Element graph(GraphFunction);
 
 // -- Decorator ---
@@ -112,6 +112,8 @@ Dimensions Fit(Element&);
 // Make container able to take any number of children as input.
 #include "ftxui/dom/take_any_args.hpp"
 
+// Include old definitions using wstring.
+#include "ftxui/dom/deprecated.hpp"
 #endif /* end of include guard: FTXUI_DOM_ELEMENTS_HPP */
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

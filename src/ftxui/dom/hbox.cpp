@@ -136,8 +136,8 @@ class HBox : public Node {
 ///
 /// ```cpp
 /// hbox({
-///   text(L"Left"),
-///   text(L"Right"),
+///   text("Left"),
+///   text("Right"),
 /// });
 /// ```
 Element hbox(Elements children) {

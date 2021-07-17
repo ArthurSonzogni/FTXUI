@@ -3,6 +3,7 @@
 #include <cassert>    // for assert
 #include <iterator>   // for begin, end
 #include <utility>    // for move
+#include <vector>     // for vector, __alloc_traits<>::value_type
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component.hpp"
@@ -82,7 +83,7 @@ Element ComponentBase::Render() {
   if (children_.size() == 1)
     return children_.front()->Render();
 
-  return text(L"Not implemented component");
+  return text("Not implemented component");
 }
 
 /// @brief Called in response to an event.

@@ -1,11 +1,12 @@
-#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
-#include <string>  // for operator+, to_wstring, char_traits
+#include <memory>  // for allocator, shared_ptr, __shared_ptr_access
+#include <string>  // for char_traits, operator+, to_wstring
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for separator, Element, operator|, size, text, vbox, xflex, bgcolor, hbox, GREATER_THAN, WIDTH, border, HEIGHT, LESS_THAN
+#include "ftxui/dom/deprecated.hpp"                // for text
+#include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, size, vbox, xflex, bgcolor, hbox, GREATER_THAN, WIDTH, border, HEIGHT, LESS_THAN
 #include "ftxui/screen/color.hpp"  // for Color
 
 using namespace ftxui;

@@ -33,10 +33,10 @@ struct ButtonOption {
 /// @brief Option for the Checkbox component.
 /// @ingroup component
 struct CheckboxOption {
-  std::wstring style_checked = L"▣ ";    ///< Prefix for a "checked" state.
-  std::wstring style_unchecked = L"☐ ";  ///< Prefix for a "unchecked" state.
-  Decorator style_focused = inverted;    ///< Decorator used when focused.
-  Decorator style_unfocused = nothing;   ///< Decorator used when unfocused.
+  std::string style_checked = "▣ ";     ///< Prefix for a "checked" state.
+  std::string style_unchecked = "☐ ";   ///< Prefix for a "unchecked" state.
+  Decorator style_focused = inverted;   ///< Decorator used when focused.
+  Decorator style_unfocused = nothing;  ///< Decorator used when unfocused.
 
   /// Called when the user change the state.
   std::function<void()> on_change = []() {};
@@ -59,10 +59,10 @@ struct InputOption {
 /// @brief Option for the Radiobox component.
 /// @ingroup component
 struct RadioboxOption {
-  std::wstring style_checked = L"◉ ";    ///< Prefix for a "checked" state.
-  std::wstring style_unchecked = L"○ ";  ///< Prefix for a "unchecked" state.
-  Decorator style_focused = inverted;    ///< Decorator used when focused.
-  Decorator style_unfocused = nothing;   ///< Decorator used when unfocused.
+  std::string style_checked = "◉ ";     ///< Prefix for a "checked" state.
+  std::string style_unchecked = "○ ";   ///< Prefix for a "unchecked" state.
+  Decorator style_focused = inverted;   ///< Decorator used when focused.
+  Decorator style_unfocused = nothing;  ///< Decorator used when unfocused.
 
   /// Called when the selected entry changes.
   std::function<void()> on_change = []() {};

@@ -2,19 +2,18 @@
 #include <algorithm>   // for max, min
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator_traits<>::value_type
-#include <string>      // for wstring
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "ftxui/component/captured_mouse.hpp"     // for CapturedMouse
-#include "ftxui/component/component.hpp"          // for Make, Component, Toggle
-#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/component.hpp"       // for Make, Toggle
+#include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/component_options.hpp"  // for ToggleOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, Elements, hbox, reflect, separator, text, focus, nothing, select
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/util/ref.hpp"      // for Ref
+#include "ftxui/util/ref.hpp"      // for ConstStringListRef, Ref
 
 namespace ftxui {
 
@@ -24,7 +23,7 @@ namespace {
 /// @ingroup component
 class ToggleBase : public ComponentBase {
  public:
-  ToggleBase(const std::vector<std::wstring>* entries,
+  ToggleBase(ConstStringListRef entries,
              int* selected,
              Ref<ToggleOption> option)
       : entries_(entries), selected_(selected), option_(std::move(option)) {}
@@ -33,8 +32,8 @@ class ToggleBase : public ComponentBase {
   Element Render() override {
     Elements children;
     bool is_toggle_focused = Focused();
-    boxes_.resize(entries_->size());
-    for (size_t i = 0; i < entries_->size(); ++i) {
+    boxes_.resize(entries_.size());
+    for (size_t i = 0; i < entries_.size(); ++i) {
       // Separator.
       if (i != 0)
         children.push_back(separator());
@@ -49,7 +48,7 @@ class ToggleBase : public ComponentBase {
       auto focus_management = !is_selected        ? nothing
                               : is_toggle_focused ? focus
                                                   : select;
-      children.push_back(text(entries_->at(i)) | style | focus_management |
+      children.push_back(text(entries_[i]) | style | focus_management |
                          reflect(boxes_[i]));
     }
     return hbox(std::move(children));
@@ -64,12 +63,12 @@ class ToggleBase : public ComponentBase {
       (*selected_)--;
     if (event == Event::ArrowRight || event == Event::Character('l'))
       (*selected_)++;
-    if (event == Event::Tab && entries_->size())
-      *selected_ = (*selected_ + 1) % entries_->size();
-    if (event == Event::TabReverse && entries_->size())
-      *selected_ = (*selected_ + entries_->size() - 1) % entries_->size();
+    if (event == Event::Tab && entries_.size())
+      *selected_ = (*selected_ + 1) % entries_.size();
+    if (event == Event::TabReverse && entries_.size())
+      *selected_ = (*selected_ + entries_.size() - 1) % entries_.size();
 
-    *selected_ = std::max(0, std::min(int(entries_->size()) - 1, *selected_));
+    *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
 
     if (old_selected != *selected_) {
       focused_entry() = *selected_;
@@ -107,11 +106,10 @@ class ToggleBase : public ComponentBase {
     return false;
   }
 
-  bool Focusable() const final { return entries_->size(); }
-
+  bool Focusable() const final { return entries_.size(); }
   int& focused_entry() { return option_->focused_entry(); }
 
-  const std::vector<std::wstring>* const entries_;
+  ConstStringListRef entries_;
   int* selected_ = 0;
 
   std::vector<Box> boxes_;
@@ -125,7 +123,7 @@ class ToggleBase : public ComponentBase {
 /// @param selected Reference the selected entry.
 /// @param option Additional optional parameters.
 /// @ingroup component
-Component Toggle(const std::vector<std::wstring>* entries,
+Component Toggle(ConstStringListRef entries,
                  int* selected,
                  Ref<ToggleOption> option) {
   return Make<ToggleBase>(entries, selected, std::move(option));

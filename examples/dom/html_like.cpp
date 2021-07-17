@@ -5,7 +5,8 @@
 #include <string>                   // for operator<<, string
 #include <thread>                   // for sleep_for
 
-#include "ftxui/dom/elements.hpp"  // for paragraph, text, operator|, Element, border, color, hflow, spinner, vbox, bold, dim, underlined
+#include "ftxui/dom/deprecated.hpp"  // for paragraph, text
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, border, color, hflow, spinner, vbox, bold, dim, underlined
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/box.hpp"    // for ftxui
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red

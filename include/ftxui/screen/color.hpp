@@ -303,7 +303,7 @@ class Color {
   bool operator==(const Color& rhs) const;
   bool operator!=(const Color& rhs) const;
 
-  std::wstring Print(bool is_background_color) const;
+  std::string Print(bool is_background_color) const;
 
  private:
   enum class ColorType : uint8_t {

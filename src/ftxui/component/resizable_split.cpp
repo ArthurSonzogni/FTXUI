@@ -250,8 +250,8 @@ class ResizableSplitBottomBase : public ComponentBase {
 /// ```cpp
 /// auto screen = ScreenInteractive::Fullscreen();
 /// int left_size = 10;
-/// auto left = Renderer([] { return text(L"Left") | center;});
-/// auto right = Renderer([] { return text(L"right") | center;});
+/// auto left = Renderer([] { return text("Left") | center;});
+/// auto right = Renderer([] { return text("right") | center;});
 /// auto split = ResizableSplitLeft(left, right, &left_size);
 /// screen.Loop(split);
 /// ```
@@ -280,8 +280,8 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// ```cpp
 /// auto screen = ScreenInteractive::Fullscreen();
 /// int right_size = 10;
-/// auto left = Renderer([] { return text(L"Left") | center;});
-/// auto right = Renderer([] { return text(L"right") | center;});
+/// auto left = Renderer([] { return text("Left") | center;});
+/// auto right = Renderer([] { return text("right") | center;});
 /// auto split = ResizableSplitRight(right, left, &right_size);
 /// screen.Loop(split);
 /// ```
@@ -310,8 +310,8 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// ```cpp
 /// auto screen = ScreenInteractive::Fullscreen();
 /// int top_size = 1;
-/// auto top = Renderer([] { return text(L"Top") | center;});
-/// auto bottom = Renderer([] { return text(L"Bottom") | center;});
+/// auto top = Renderer([] { return text("Top") | center;});
+/// auto bottom = Renderer([] { return text("Bottom") | center;});
 /// auto split = ResizableSplitTop(top, bottom, &top_size);
 /// screen.Loop(split);
 /// ```
@@ -340,8 +340,8 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// ```cpp
 /// auto screen = ScreenInteractive::Fullscreen();
 /// int bottom_size = 1;
-/// auto top = Renderer([] { return text(L"Top") | center;});
-/// auto bottom = Renderer([] { return text(L"Bottom") | center;});
+/// auto top = Renderer([] { return text("Top") | center;});
+/// auto bottom = Renderer([] { return text("Bottom") | center;});
 /// auto split = ResizableSplit::Bottom(bottom, top, &bottom_size);
 /// screen.Loop(split);
 /// ```

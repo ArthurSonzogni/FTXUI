@@ -23,6 +23,7 @@ add_executable(tests
   src/ftxui/dom/hbox_test.cpp
   src/ftxui/dom/text_test.cpp
   src/ftxui/dom/vbox_test.cpp
+  src/ftxui/screen/string_test.cpp
 )
 
 target_link_libraries(tests

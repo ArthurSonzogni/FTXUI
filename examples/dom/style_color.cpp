@@ -1,9 +1,10 @@
 #include <ftxui/screen/screen.hpp>  // for Dimension, Screen
 #include <memory>                   // for allocator
 
-#include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, filler, hbox
-#include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/box.hpp"    // for ftxui
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/elements.hpp"    // for bgcolor, color, vbox, filler, hbox
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight
 
 int main(int argc, const char* argv[]) {

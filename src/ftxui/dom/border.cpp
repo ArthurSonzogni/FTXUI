@@ -1,6 +1,7 @@
 #include <algorithm>  // for max
 #include <iterator>   // for begin, end
-#include <memory>     // for make_shared, __shared_ptr_access
+#include <memory>     // for allocator, make_shared, __shared_ptr_access
+#include <string>     // for basic_string, string
 #include <utility>    // for move
 #include <vector>     // for vector, __alloc_traits<>::value_type
 
@@ -12,10 +13,11 @@
 
 namespace ftxui {
 
-static wchar_t simple_border_charset[] = L"╭╮╰╯─│┬┴┤├";
+static std::string simple_border_charset[] = {"╭", "╮", "╰", "╯", "─",
+                                              "│", "┬", "┴", "┤", "├"};
 
 // For reference, here is the charset for normal border:
-// L"┌┐└┘─│┬┴┤├";
+// {"┌", "┐", "└", "┘", "─", "│", "┬", "┴", "┤", "├"};
 // TODO(arthursonzogni): Consider adding options to choose the kind of borders
 // to use.
 
@@ -29,7 +31,7 @@ class Border : public Node {
       : Node(std::move(children)), charset_pixel(10, pixel) {}
 
   std::vector<Pixel> charset_pixel;
-  std::vector<wchar_t> charset;
+  std::vector<std::string> charset;
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -120,10 +122,10 @@ class Border : public Node {
 ///
 /// ```cpp
 /// // Use 'border' as a function...
-/// Element document = border(text(L"The element"));
+/// Element document = border(text("The element"));
 ///
 /// // ...Or as a 'pipe'.
-/// Element document = text(L"The element") | border;
+/// Element document = text("The element") | border;
 /// ```
 ///
 /// ### Output
@@ -146,8 +148,8 @@ Element border(Element child) {
 /// ### Example
 ///
 /// ```cpp
-/// Element document = window(text(L"Title"),
-///                           text(L"content")
+/// Element document = window(text("Title"),
+///                           text("content")
 ///                    );
 /// ```
 ///

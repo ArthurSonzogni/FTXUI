@@ -8,21 +8,24 @@
 #include "ftxui/component/component.hpp"          // for Make, Input
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
+#include "ftxui/component/deprecated.hpp"         // for Input
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::Home, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, text, reflect, dim, flex, focus, inverted, hbox, size, frame, select, underlined, Decorator, EQUAL, HEIGHT
+#include "ftxui/dom/deprecated.hpp"                // for text
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, dim, flex, focus, inverted, hbox, size, frame, select, underlined, Decorator, EQUAL, HEIGHT
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/util/ref.hpp"      // for StringRef, Ref, ConstStringRef
+#include "ftxui/screen/string.hpp"  // for to_wstring, to_string
+#include "ftxui/util/ref.hpp"  // for WideStringRef, Ref, ConstStringRef, StringRef
 
 namespace ftxui {
 
 // An input box. The user can type text into it.
-class InputBase : public ComponentBase {
+class WideInputBase : public ComponentBase {
  public:
-  InputBase(StringRef content,
-            ConstStringRef placeholder,
-            Ref<InputOption> option)
+  WideInputBase(WideStringRef content,
+                ConstStringRef placeholder,
+                Ref<InputOption> option)
       : content_(content), placeholder_(placeholder), option_(option) {}
 
   int& cursor_position() { return *(option_->cursor_position); }
@@ -132,7 +135,7 @@ class InputBase : public ComponentBase {
 
     // Content
     if (event.is_character()) {
-      content_->insert(cursor_position(), 1, event.character());
+      content_->insert(cursor_position(), 1, to_wstring(event.character())[0]);
       cursor_position()++;
       option_->on_change();
       return true;
@@ -165,12 +168,49 @@ class InputBase : public ComponentBase {
 
   bool Focusable() const final { return true; }
 
-  StringRef content_;
+  WideStringRef content_;
   ConstStringRef placeholder_;
 
   Box input_box_;
   Box cursor_box_;
   Ref<InputOption> option_;
+};
+
+// An input box. The user can type text into it.
+// For convenience, the std::string version of Input simply wrap a
+// WideInputBase.
+// TODO(arthursonzogni): Provide an implementation handling std::string natively
+// and adds better support for combining characters.
+class InputBase : public ComponentBase {
+ public:
+  InputBase(StringRef content,
+            ConstStringRef placeholder,
+            Ref<InputOption> option)
+      : content_(std::move(content)),
+        wrapped_content_(to_wstring(*content_)),
+        wrapped_input_(&wrapped_content_,
+                       std::move(placeholder),
+                       std::move(option)) {}
+
+  Element Render() override {
+    wrapped_content_ = to_wstring(*content_);
+    return wrapped_input_.Render();
+  }
+
+  bool OnEvent(Event event) override {
+    wrapped_content_ = to_wstring(*content_);
+    if (wrapped_input_.OnEvent(event)) {
+      content_ = to_string(wrapped_content_);
+      return true;
+    }
+    return false;
+  }
+
+  bool Focusable() const final { return true; }
+
+  StringRef content_;
+  std::wstring wrapped_content_;
+  WideInputBase wrapped_input_;
 };
 
 /// @brief An input box for editing text.
@@ -184,8 +224,8 @@ class InputBase : public ComponentBase {
 ///
 /// ```cpp
 /// auto screen = ScreenInteractive::FitComponent();
-/// std::wstring content= L"";
-/// std::wstring placeholder = L"placeholder";
+/// std::string content= "";
+/// std::string placeholder = "placeholder";
 /// Component input = Input(&content, &placeholder);
 /// screen.Loop(input);
 /// ```
@@ -199,6 +239,34 @@ Component Input(StringRef content,
                 ConstStringRef placeholder,
                 Ref<InputOption> option) {
   return Make<InputBase>(content, placeholder, std::move(option));
+}
+
+/// @brief . An input box for editing text.
+/// @param content The editable content.
+/// @param placeholder The text displayed when content is still empty.
+/// @param option Additional optional parameters.
+/// @ingroup component
+/// @see InputBase
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::FitComponent();
+/// std::string content= "";
+/// std::string placeholder = "placeholder";
+/// Component input = Input(&content, &placeholder);
+/// screen.Loop(input);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// placeholder
+/// ```
+Component Input(WideStringRef content,
+                ConstStringRef placeholder,
+                Ref<InputOption> option) {
+  return Make<WideInputBase>(content, placeholder, std::move(option));
 }
 
 }  // namespace ftxui

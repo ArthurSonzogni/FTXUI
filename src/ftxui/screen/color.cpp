@@ -1,19 +1,16 @@
 #include "ftxui/screen/color.hpp"
-#include "ftxui/screen/color_info.hpp"
-#include "ftxui/screen/string.hpp"
-#include "ftxui/screen/terminal.hpp"
+
+#include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
+#include "ftxui/screen/terminal.hpp"  // for Terminal, Terminal::Color, Terminal::Palette256, Terminal::TrueColor
 
 namespace ftxui {
 
 namespace {
-const wchar_t* palette16code[16][2] = {
-    {L"30", L"40"},  {L"31", L"41"},  {L"32", L"42"},  {L"33", L"43"},
-    {L"34", L"44"},
-
-    {L"35", L"45"},  {L"36", L"46"},  {L"37", L"47"},
-
-    {L"90", L"100"}, {L"91", L"101"}, {L"92", L"102"}, {L"93", L"103"},
-    {L"94", L"104"}, {L"95", L"105"}, {L"96", L"106"}, {L"97", L"107"},
+const char* palette16code[16][2] = {
+    {"30", "40"},  {"31", "41"},  {"32", "42"},  {"33", "43"},
+    {"34", "44"},  {"35", "45"},  {"36", "46"},  {"37", "47"},
+    {"90", "100"}, {"91", "101"}, {"92", "102"}, {"93", "103"},
+    {"94", "104"}, {"95", "105"}, {"96", "106"}, {"97", "107"},
 };
 }
 
@@ -26,24 +23,24 @@ bool Color::operator!=(const Color& rhs) const {
   return !operator==(rhs);
 }
 
-std::wstring Color::Print(bool is_background_color) const {
+std::string Color::Print(bool is_background_color) const {
   switch (type_) {
     case ColorType::Palette1:
-      return is_background_color ? L"49" : L"39";
+      return is_background_color ? "49" : "39";
 
     case ColorType::Palette16:
       return palette16code[index_][is_background_color];
 
     case ColorType::Palette256:
-      return (is_background_color ? L"48;5;" : L"38;5;") + to_wstring(index_);
+      return (is_background_color ? "48;5;" : "38;5;") + std::to_string(index_);
 
     case ColorType::TrueColor:
-      return (is_background_color ? L"48;2;" : L"38;2;")  //
-             + to_wstring(red_) + L";"                    //
-             + to_wstring(green_) + L";"                  //
-             + to_wstring(blue_);                         //
+      return (is_background_color ? "48;2;" : "38;2;")  //
+             + std::to_string(red_) + ";"               //
+             + std::to_string(green_) + ";"             //
+             + std::to_string(blue_);                   //
   }
-  return L"";
+  return "";
 }
 
 /// @brief Build a transparent color.

@@ -1,12 +1,13 @@
-#include <chrono>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <iostream>
-#include <string>
-#include <thread>
+#include <chrono>                   // for operator""s, chrono_literals
+#include <ftxui/dom/elements.hpp>   // for gauge, operator|, flex, hbox, Element
+#include <ftxui/screen/screen.hpp>  // for Screen
+#include <iostream>                 // for cout, endl, ostream
+#include <string>  // for allocator, operator+, char_traits, operator<<, to_wstring, basic_string, string, wstring
+#include <thread>  // for sleep_for
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

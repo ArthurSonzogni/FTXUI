@@ -2,7 +2,7 @@
 #include <algorithm>   // for max, min
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator_traits<>::value_type
-#include <string>      // for wstring
+#include <string>      // for string
 #include <utility>     // for move
 #include <vector>      // for vector
 
@@ -25,26 +25,26 @@ namespace {
 /// @ingroup component
 class RadioboxBase : public ComponentBase {
  public:
-  RadioboxBase(const std::vector<std::wstring>* entries,
+  RadioboxBase(ConstStringListRef entries,
                int* selected,
                Ref<RadioboxOption> option)
       : entries_(entries), selected_(selected), option_(std::move(option)) {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft terminal do not use fonts able to render properly the default
     // radiobox glyph.
-    if (option_->style_checked == L"◉ ")
-      option_->style_checked = L"(*)";
-    if (option_->style_unchecked == L"○ ")
-      option_->style_unchecked = L"( )";
+    if (option_->style_checked == "◉ ")
+      option_->style_checked = "(*)";
+    if (option_->style_unchecked == "○ ")
+      option_->style_unchecked = "( )";
 #endif
   }
 
  private:
   Element Render() override {
-    std::vector<Element> elements;
+    Elements elements;
     bool is_focused = Focused();
-    boxes_.resize(entries_->size());
-    for (size_t i = 0; i < entries_->size(); ++i) {
+    boxes_.resize(entries_.size());
+    for (size_t i = 0; i < entries_.size(); ++i) {
       auto style = (focused_entry() == int(i) && is_focused)
                        ? option_->style_focused
                        : option_->style_unfocused;
@@ -52,10 +52,10 @@ class RadioboxBase : public ComponentBase {
                               : is_focused                ? focus
                                                           : select;
 
-      const std::wstring& symbol = *selected_ == int(i)
-                                       ? option_->style_checked
-                                       : option_->style_unchecked;
-      elements.push_back(hbox(text(symbol), text(entries_->at(i)) | style) |
+      const std::string& symbol = *selected_ == int(i)
+                                      ? option_->style_checked
+                                      : option_->style_unchecked;
+      elements.push_back(hbox(text(symbol), text(entries_[i]) | style) |
                          focus_management | reflect(boxes_[i]));
     }
     return vbox(std::move(elements));
@@ -75,12 +75,12 @@ class RadioboxBase : public ComponentBase {
       new_focused--;
     if (event == Event::ArrowDown || event == Event::Character('j'))
       new_focused++;
-    if (event == Event::Tab && entries_->size())
-      new_focused = (new_focused + 1) % entries_->size();
-    if (event == Event::TabReverse && entries_->size())
-      new_focused = (new_focused + entries_->size() - 1) % entries_->size();
+    if (event == Event::Tab && entries_.size())
+      new_focused = (new_focused + 1) % entries_.size();
+    if (event == Event::TabReverse && entries_.size())
+      new_focused = (new_focused + entries_.size() - 1) % entries_.size();
 
-    new_focused = std::max(0, std::min(int(entries_->size()) - 1, new_focused));
+    new_focused = std::max(0, std::min(int(entries_.size()) - 1, new_focused));
 
     if (focused_entry() != new_focused) {
       focused_entry() = new_focused;
@@ -119,11 +119,10 @@ class RadioboxBase : public ComponentBase {
     return false;
   }
 
-  bool Focusable() const final { return entries_->size(); }
-
+  bool Focusable() const final { return entries_.size(); }
   int& focused_entry() { return option_->focused_entry(); }
 
-  const std::vector<std::wstring>* const entries_;
+  ConstStringListRef entries_;
   int* const selected_;
 
   int cursor_position = 0;
@@ -144,10 +143,10 @@ class RadioboxBase : public ComponentBase {
 ///
 /// ```cpp
 /// auto screen = ScreenInteractive::TerminalOutput();
-/// std::vector<std::wstring> entries = {
-///     L"entry 1",
-///     L"entry 2",
-///     L"entry 3",
+/// std::vector<std::string> entries = {
+///     "entry 1",
+///     "entry 2",
+///     "entry 3",
 /// };
 /// int selected = 0;
 /// auto menu = Radiobox(&entries, &selected);
@@ -161,7 +160,7 @@ class RadioboxBase : public ComponentBase {
 /// ○ entry 2
 /// ○ entry 3
 /// ```
-Component Radiobox(const std::vector<std::wstring>* entries,
+Component Radiobox(ConstStringListRef entries,
                    int* selected,
                    Ref<RadioboxOption> option) {
   return Make<RadioboxBase>(entries, selected, std::move(option));
