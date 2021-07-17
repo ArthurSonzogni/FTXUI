@@ -2,7 +2,7 @@
 #define FTXUI_COMPONENT_HPP
 
 #include <functional>  // for function
-#include <memory>      // for shared_ptr, make_shared
+#include <memory>      // for make_shared, shared_ptr
 #include <string>      // for wstring
 #include <vector>      // for vector
 
@@ -12,6 +12,13 @@
 #include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef, StringRef
 
 namespace ftxui {
+struct ButtonOption;
+struct CheckboxOption;
+struct Event;
+struct InputOption;
+struct MenuOption;
+struct RadioboxOption;
+struct ToggleOption;
 
 template <class T, class... Args>
 std::shared_ptr<T> Make(Args&&... args) {

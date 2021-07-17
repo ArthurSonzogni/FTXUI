@@ -13,6 +13,7 @@
 
 namespace ftxui {
 class ComponentBase;
+struct Event;
 
 using Component = std::shared_ptr<ComponentBase>;
 

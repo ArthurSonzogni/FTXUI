@@ -11,6 +11,8 @@
 namespace ftxui {
 
 class Node;
+class Screen;
+
 using Element = std::shared_ptr<Node>;
 using Elements = std::vector<Element>;
 

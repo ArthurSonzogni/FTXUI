@@ -6,8 +6,8 @@
 @example ./examples/component/gallery.cpp
 @example ./examples/component/homescreen.cpp
 @example ./examples/component/input.cpp
-@example ./examples/component/menu.cpp
 @example ./examples/component/menu2.cpp
+@example ./examples/component/menu.cpp
 @example ./examples/component/menu_multiple.cpp
 @example ./examples/component/menu_style.cpp
 @example ./examples/component/modal_dialog.cpp
