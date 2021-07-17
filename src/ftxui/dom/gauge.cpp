@@ -19,7 +19,6 @@ static wchar_t charset[] = L"  ▏▎▍▌▋▊▉█";
 class Gauge : public Node {
  public:
   Gauge(float progress) : progress_(progress) {}
-  ~Gauge() override {}
 
   void ComputeRequirement() override {
     requirement_.flex_grow_x = 1;

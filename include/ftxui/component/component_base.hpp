@@ -22,8 +22,7 @@ using Components = std::vector<Component>;
 /// @ingroup component
 class ComponentBase {
  public:
-  // Constructor/Destructor.
-  ComponentBase() = default;
+  // virtual Destructor.
   virtual ~ComponentBase();
 
   // Component hierarchy:
@@ -72,8 +71,6 @@ class ComponentBase {
  private:
   ComponentBase* parent_ = nullptr;
 };
-
-using Component = std::shared_ptr<ComponentBase>;
 
 }  // namespace ftxui
 

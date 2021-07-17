@@ -24,7 +24,6 @@ class InputBase : public ComponentBase {
             ConstStringRef placeholder,
             Ref<InputOption> option)
       : content_(content), placeholder_(placeholder), option_(option) {}
-  ~InputBase() override = default;
 
   int& cursor_position() { return *(option_->cursor_position); }
 

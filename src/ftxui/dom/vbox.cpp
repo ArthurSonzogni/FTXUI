@@ -13,7 +13,6 @@ namespace ftxui {
 class VBox : public Node {
  public:
   VBox(Elements children) : Node(std::move(children)) {}
-  ~VBox() {}
 
   void ComputeRequirement() override {
     requirement_.min_x = 0;

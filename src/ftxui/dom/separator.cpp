@@ -13,8 +13,6 @@ using ftxui::Screen;
 
 class Separator : public Node {
  public:
-  Separator() {}
-  ~Separator() override {}
   void ComputeRequirement() override {
     requirement_.min_x = 1;
     requirement_.min_y = 1;
@@ -41,7 +39,6 @@ class Separator : public Node {
 class SeparatorWithPixel : public Separator {
  public:
   SeparatorWithPixel(Pixel pixel) : pixel_(pixel) {}
-  ~SeparatorWithPixel() override {}
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {

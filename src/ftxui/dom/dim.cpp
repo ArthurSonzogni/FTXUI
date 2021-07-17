@@ -9,12 +9,9 @@
 
 namespace ftxui {
 
-using ftxui::Screen;
-
 class Dim : public NodeDecorator {
  public:
-  Dim(Elements children) : NodeDecorator(std::move(children)) {}
-  ~Dim() override {}
+  using NodeDecorator::NodeDecorator;
 
   void Render(Screen& screen) override {
     Node::Render(screen);

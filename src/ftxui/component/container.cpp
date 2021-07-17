@@ -53,8 +53,6 @@ class ContainerBase : public ComponentBase {
     return container;
   }
 
-  ~ContainerBase() override = default;
-
   // Component override.
   bool OnEvent(Event event) override {
     if (event.is_mouse())

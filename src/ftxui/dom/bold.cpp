@@ -11,8 +11,7 @@ namespace ftxui {
 
 class Bold : public NodeDecorator {
  public:
-  Bold(Elements children) : NodeDecorator(std::move(children)) {}
-  ~Bold() override {}
+  using NodeDecorator::NodeDecorator;
 
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {

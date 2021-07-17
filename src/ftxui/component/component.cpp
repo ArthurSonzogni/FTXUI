@@ -14,10 +14,7 @@
 namespace ftxui {
 
 namespace {
-class CaptureMouseImpl : public CapturedMouseInterface {
- public:
-  ~CaptureMouseImpl() override {}
-};
+class CaptureMouseImpl : public CapturedMouseInterface {};
 }  // namespace
 
 ComponentBase::~ComponentBase() {
@@ -161,9 +158,9 @@ void ComponentBase::TakeFocus() {
 /// @param event
 /// @ingroup component
 CapturedMouse ComponentBase::CaptureMouse(const Event& event) {
-  if (!event.screen_)
-    return std::make_unique<CaptureMouseImpl>();
-  return event.screen_->CaptureMouse();
+  if (event.screen_)
+    return event.screen_->CaptureMouse();
+  return std::make_unique<CaptureMouseImpl>();
 }
 
 }  // namespace ftxui

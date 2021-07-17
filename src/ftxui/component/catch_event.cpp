@@ -13,7 +13,6 @@ class CatchEventBase : public ComponentBase {
   // Constructor.
   CatchEventBase(std::function<bool(Event)> on_event)
       : on_event_(std::move(on_event)) {}
-  ~CatchEventBase() override = default;
 
   // Component implementation.
   bool OnEvent(Event event) override {

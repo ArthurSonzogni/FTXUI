@@ -13,8 +13,7 @@ using ftxui::Screen;
 
 class ClearUnder : public NodeDecorator {
  public:
-  ClearUnder(Elements children) : NodeDecorator(std::move(children)) {}
-  ~ClearUnder() override {}
+  using NodeDecorator::NodeDecorator;
 
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {

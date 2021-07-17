@@ -2,28 +2,23 @@
 #define FTXUI_COMPONENT_HPP
 
 #include <functional>  // for function
-#include <memory>      // for shared_ptr, make_shared
+#include <memory>      // for make_shared, shared_ptr
 #include <string>      // for wstring
 #include <vector>      // for vector
 
-#include "ftxui/component/component_base.hpp"
-#include "ftxui/component/component_options.hpp"
-#include "ftxui/dom/elements.hpp"  // for Element
-#include "ftxui/util/ref.hpp"      // for Ref, ConstStringRef, StringRef
+#include "ftxui/component/component_base.hpp"     // for Component, Components
+#include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption, InputOption, MenuOption, RadioboxOption, ToggleOption
+#include "ftxui/dom/elements.hpp"                 // for Element
+#include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef, StringRef
 
 namespace ftxui {
-
-class ComponentBase;
-struct Event;
 struct ButtonOption;
 struct CheckboxOption;
+struct Event;
 struct InputOption;
 struct MenuOption;
 struct RadioboxOption;
 struct ToggleOption;
-
-using Component = std::shared_ptr<ComponentBase>;
-using Components = std::vector<Component>;
 
 template <class T, class... Args>
 std::shared_ptr<T> Make(Args&&... args) {

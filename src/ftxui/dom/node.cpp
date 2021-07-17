@@ -5,8 +5,6 @@
 
 namespace ftxui {
 
-using ftxui::Screen;
-
 Node::Node() {}
 Node::Node(Elements children) : children_(std::move(children)) {}
 Node::~Node() {}

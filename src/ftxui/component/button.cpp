@@ -23,8 +23,6 @@ class ButtonBase : public ComponentBase {
              Ref<ButtonOption> option)
       : label_(label), on_click_(on_click), option_(std::move(option)) {}
 
-  ~ButtonBase() override = default;
-
   // Component implementation:
   Element Render() override {
     auto style = Focused() ? inverted : nothing;

@@ -12,7 +12,6 @@ struct Box;
 class NodeDecorator : public Node {
  public:
   NodeDecorator(Elements children) : Node(std::move(children)) {}
-  ~NodeDecorator() override {}
   void ComputeRequirement() override;
   void SetBox(Box box) override;
 };

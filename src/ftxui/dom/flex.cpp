@@ -67,9 +67,8 @@ void function_not_flex(Requirement& r) {
 
 class Flex : public Node {
  public:
-  Flex(FlexFunction f) { f_ = f; }
+  Flex(FlexFunction f) : f_(f) {}
   Flex(FlexFunction f, Element child) : Node(unpack(std::move(child))), f_(f) {}
-  ~Flex() override {}
   void ComputeRequirement() override {
     requirement_.min_x = 0;
     requirement_.min_y = 0;

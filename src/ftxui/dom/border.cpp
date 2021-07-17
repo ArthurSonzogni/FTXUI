@@ -22,7 +22,6 @@ class Border : public Node {
                 std::end(simple_border_charset)) {}
   Border(Elements children, Pixel pixel)
       : Node(std::move(children)), charset_pixel(10, pixel) {}
-  ~Border() override {}
 
   std::vector<Pixel> charset_pixel;
   std::vector<wchar_t> charset;

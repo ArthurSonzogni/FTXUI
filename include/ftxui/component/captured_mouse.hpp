@@ -6,7 +6,7 @@
 namespace ftxui {
 class CapturedMouseInterface {
  public:
-  virtual ~CapturedMouseInterface() {}
+  virtual ~CapturedMouseInterface() = default;
 };
 using CapturedMouse = std::unique_ptr<CapturedMouseInterface>;
 }  // namespace ftxui

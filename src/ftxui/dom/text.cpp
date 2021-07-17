@@ -15,8 +15,7 @@ using ftxui::Screen;
 
 class Text : public Node {
  public:
-  Text(std::wstring text) : Node(), text_(text) {}
-  ~Text() {}
+  Text(std::wstring text) : text_(text) {}
 
   void ComputeRequirement() override {
     requirement_.min_x = wstring_width(text_);
@@ -47,11 +46,10 @@ class Text : public Node {
 
 class VText : public Node {
  public:
-  VText(std::wstring text) : Node(), text_(text) {
+  VText(std::wstring text) : text_(text) {
     for (auto& c : text_)
       width_ = std::max(width_, wchar_width(c));
   }
-  ~VText() {}
 
   void ComputeRequirement() override {
     requirement_.min_x = width_;

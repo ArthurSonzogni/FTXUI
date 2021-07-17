@@ -10,9 +10,6 @@
 
 namespace ftxui {
 class Node;
-}
-
-namespace ftxui {
 using Element = std::shared_ptr<Node>;
 
 /// @brief A unicode character and its associated style.

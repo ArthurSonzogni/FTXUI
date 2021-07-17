@@ -9,12 +9,9 @@
 
 namespace ftxui {
 
-using ftxui::Screen;
-
 class Underlined : public NodeDecorator {
  public:
-  Underlined(Elements children) : NodeDecorator(std::move(children)) {}
-  ~Underlined() override {}
+  using NodeDecorator::NodeDecorator;
 
   void Render(Screen& screen) override {
     Node::Render(screen);
