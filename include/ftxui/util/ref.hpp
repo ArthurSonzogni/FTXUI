@@ -46,6 +46,7 @@ class StringRef {
   StringRef(std::wstring ref) : owned_(std::move(ref)) {}
   StringRef(const wchar_t* ref) : StringRef(std::wstring(ref)) {}
   StringRef(const char* ref) : StringRef(to_wstring(std::string(ref))) {}
+  StringRef(std::string ref) : StringRef(to_wstring(std::move(ref))) {}
   std::wstring& operator*() { return address_ ? *address_ : owned_; }
   std::wstring* operator->() { return address_ ? address_ : &owned_; }
 
@@ -63,6 +64,8 @@ class ConstStringRef {
   ConstStringRef(const wchar_t* ref) : ConstStringRef(std::wstring(ref)) {}
   ConstStringRef(const char* ref)
       : ConstStringRef(to_wstring(std::string(ref))) {}
+  ConstStringRef(std::string ref)
+      : ConstStringRef(to_wstring(std::move(ref))) {}
   const std::wstring& operator*() { return address_ ? *address_ : owned_; }
   const std::wstring* operator->() { return address_ ? address_ : &owned_; }
 
