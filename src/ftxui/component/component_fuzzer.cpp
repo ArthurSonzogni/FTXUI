@@ -1,0 +1,147 @@
+//#include "ftxui/component/event.hpp"
+//#include "ftxui/component/receiver.hpp"
+#include <vector>
+#include "ftxui/component/component.hpp"
+#include "ftxui/component/terminal_input_parser.hpp"
+
+using namespace ftxui;
+namespace {
+
+bool GeneratorBool(const char*& data, size_t& size) {
+  if (size == 0)
+    return false;
+
+  auto out = bool(data[0] % 2);
+  data++;
+  size--;
+  return out;
+}
+
+std::wstring GeneratorString(const char*& data, size_t& size) {
+  int index = 0;
+  while (index < size && data[index])
+    ++index;
+
+  auto out = std::wstring(data, data + index);
+  data += index;
+  size -= index;
+  return std::move(out);
+}
+
+int GeneratorInt(const char* data, size_t size) {
+  if (size == 0)
+    return 0;
+  auto out = int(data[0]);
+  data++;
+  size--;
+  return out;
+}
+
+bool g_bool;
+int g_int;
+std::vector<std::wstring> g_list;
+
+Components GeneratorComponents(const char*& data, size_t& size, int depth);
+
+Component GeneratorComponent(const char*& data, size_t& size, int depth) {
+  depth--;
+  int value = GeneratorInt(data, size);
+  if (depth <= 0)
+    return Button(GeneratorString(data, size), [] {});
+
+  switch (value % 16) {
+    case 1:
+      return Checkbox(GeneratorString(data, size), &g_bool);
+    case 2:
+      return Input(GeneratorString(data, size), GeneratorString(data, size));
+    case 3:
+      return Menu(&g_list, &g_int);
+    case 4:
+      return Radiobox(&g_list, &g_int);
+    case 5:
+      return Toggle(&g_list, &g_int);
+    case 6:
+      return Slider(GeneratorString(data, size), &g_int,
+                    GeneratorInt(data, size), GeneratorInt(data, size),
+                    GeneratorInt(data, size));
+    case 7:
+      return ResizableSplitLeft(GeneratorComponent(data, size, depth - 1),
+                                GeneratorComponent(data, size, depth - 1),
+                                &g_int);
+    case 8:
+      return ResizableSplitRight(GeneratorComponent(data, size, depth - 1),
+                                 GeneratorComponent(data, size, depth - 1),
+                                 &g_int);
+    case 9:
+      return ResizableSplitTop(GeneratorComponent(data, size, depth - 1),
+                               GeneratorComponent(data, size, depth - 1),
+                               &g_int);
+    case 10:
+      return ResizableSplitBottom(GeneratorComponent(data, size, depth - 1),
+                                  GeneratorComponent(data, size, depth - 1),
+                                  &g_int);
+    case 11:
+      return Container::Vertical(GeneratorComponents(data, size, depth - 1));
+
+    case 12:
+      return Container::Vertical(GeneratorComponents(data, size, depth - 1),
+                                 &g_int);
+
+    case 13:
+      return Container::Horizontal(GeneratorComponents(data, size, depth - 1));
+    case 14:
+      return Container::Horizontal(GeneratorComponents(data, size, depth - 1),
+                                   &g_int);
+    case 15:
+      return Container::Tab(GeneratorComponents(data, size, depth - 1), &g_int);
+    default:
+      return Button(GeneratorString(data, size), [] {});
+  }
+}
+
+Components GeneratorComponents(const char*& data, size_t& size, int depth) {
+  Components out;
+  if (depth > 0) {
+    while (size && GeneratorInt(data, size) % 2) {
+      out.push_back(GeneratorComponent(data, size, depth - 1));
+    }
+  }
+  return std::move(out);
+}
+
+}  // namespace
+extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
+  g_bool = GeneratorBool(data, size);
+  g_int = GeneratorInt(data, size);
+  g_list = {
+      L"test_1", L"test_2", L"test_3", L"test_4", L"test_5",
+  };
+
+  int depth = 10;
+  auto component = GeneratorComponent(data, size, depth);
+
+  int width = GeneratorInt(data, size);
+  int height = GeneratorInt(data, size);
+
+  auto screen =
+      Screen::Create(Dimension::Fixed(width), Dimension::Fixed(height));
+
+  auto event_receiver = MakeReceiver<Event>();
+  {
+    auto parser = TerminalInputParser(event_receiver->MakeSender());
+    for (size_t i = 0; i < size; ++i)
+      parser.Add(data[i]);
+  }
+
+  Event event;
+  while (event_receiver->Receive(&event)) {
+    component->OnEvent(event);
+    auto document = component->Render();
+    Render(screen, document);
+  }
+  return 0;  // Non-zero return values are reserved for future use.
+}
+
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
