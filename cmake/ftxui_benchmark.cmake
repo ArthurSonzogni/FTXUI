@@ -16,5 +16,4 @@ if (NOT WIN32)
   target_include_directories(ftxui_benchmark
     PRIVATE src
   )
-  set_property(TARGET ftxui_benchmark PROPERTY CXX_STANDARD 17)
 endif()

@@ -10,8 +10,8 @@ function(ftxui_set_options library)
       src
   )
 
-  # C++17 is used. We requires fold expression at least.
-  set_property(TARGET ${library} PROPERTY CXX_STANDARD 17)
+  # C++17 is used. We require fold expression at least.
+  target_compile_features(${library} PUBLIC cxx_std_17)
 
   # Force Microsoft Visual Studio to decode sources files in UTF-8. This applies
   # to the library and the library users.
