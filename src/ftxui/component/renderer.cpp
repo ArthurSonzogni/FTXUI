@@ -18,7 +18,6 @@ class RendererBase : public ComponentBase {
 
   // Constructor.
   RendererBase(std::function<Element()> render) : render_(std::move(render)) {}
-  ~RendererBase() override = default;
 
   // Component implementation.
   Element Render() override { return render_(); }

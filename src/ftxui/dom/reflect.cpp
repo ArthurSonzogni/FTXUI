@@ -14,7 +14,6 @@ class Reflect : public Node {
  public:
   Reflect(Element child, Box& box)
       : Node(unpack(std::move(child))), reflected_box_(box) {}
-  ~Reflect() override {}
 
   void ComputeRequirement() final {
     Node::ComputeRequirement();

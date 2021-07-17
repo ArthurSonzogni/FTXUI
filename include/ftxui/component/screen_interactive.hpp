@@ -8,14 +8,13 @@
 #include <string>                        // for string
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/event.hpp"
+#include "ftxui/component/event.hpp" // for Event
 #include "ftxui/screen/screen.hpp"  // for Screen
 
 namespace ftxui {
 class ComponentBase;
 
 using Component = std::shared_ptr<ComponentBase>;
-struct Event;
 
 class ScreenInteractive : public Screen {
  public:

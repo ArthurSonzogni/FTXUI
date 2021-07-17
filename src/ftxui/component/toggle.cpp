@@ -29,8 +29,6 @@ class ToggleBase : public ComponentBase {
              Ref<ToggleOption> option)
       : entries_(entries), selected_(selected), option_(std::move(option)) {}
 
-  ~ToggleBase() override = default;
-
  private:
   Element Render() override {
     Elements children;

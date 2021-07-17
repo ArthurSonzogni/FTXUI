@@ -13,7 +13,6 @@ namespace ftxui {
 class HFlow : public Node {
  public:
   HFlow(Elements children) : Node(std::move(children)) {}
-  ~HFlow() {}
 
   void ComputeRequirement() override {
     requirement_.min_x = 1;

@@ -38,7 +38,6 @@ class RadioboxBase : public ComponentBase {
       option_->style_unchecked = L"( )";
 #endif
   }
-  ~RadioboxBase() override = default;
 
  private:
   Element Render() override {

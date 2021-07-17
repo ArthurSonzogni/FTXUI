@@ -21,7 +21,6 @@ const wchar_t charset[] = L" ▗▐▖▄▟▌▙█";
 class Graph : public Node {
  public:
   Graph(GraphFunction graph_function) : graph_function_(graph_function) {}
-  ~Graph() override {}
 
   void ComputeRequirement() override {
     requirement_.flex_grow_x = 1;

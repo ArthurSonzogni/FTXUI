@@ -9,12 +9,9 @@
 
 namespace ftxui {
 
-using ftxui::Screen;
-
 class Inverted : public NodeDecorator {
  public:
-  Inverted(Elements children) : NodeDecorator(std::move(children)) {}
-  ~Inverted() override {}
+  using NodeDecorator::NodeDecorator;
 
   void Render(Screen& screen) override {
     Node::Render(screen);

@@ -30,7 +30,6 @@ class FgColor : public NodeDecorator {
  public:
   FgColor(Elements children, Color color)
       : NodeDecorator(std::move(children)), color_(color) {}
-  ~FgColor() override {}
 
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {

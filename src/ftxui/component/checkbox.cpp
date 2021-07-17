@@ -29,8 +29,6 @@ class CheckboxBase : public ComponentBase {
 #endif
   }
 
-  ~CheckboxBase() override = default;
-
  private:
   // Component implementation.
   Element Render() override {

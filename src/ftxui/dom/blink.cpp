@@ -11,8 +11,7 @@ namespace ftxui {
 
 class Blink : public NodeDecorator {
  public:
-  Blink(Elements children) : NodeDecorator(std::move(children)) {}
-  ~Blink() override {}
+  using NodeDecorator::NodeDecorator;
 
   void Render(Screen& screen) override {
     Node::Render(screen);

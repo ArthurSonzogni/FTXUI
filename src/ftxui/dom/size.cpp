@@ -19,8 +19,6 @@ class Size : public Node {
         constraint_(constraint),
         value_(value) {}
 
-  ~Size() override {}
-
   void ComputeRequirement() override {
     Node::ComputeRequirement();
     requirement_ = children_[0]->requirement();
