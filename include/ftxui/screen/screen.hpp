@@ -45,9 +45,7 @@ struct Pixel {
 /// @brief Define how the Screen's dimensions should look like.
 /// @ingroup screen
 struct Dimension {
-  /// coucou
   static Dimension Fixed(int);
-  /// @brief coucou
   static Dimension Fit(Element&);
   static Dimension Full();
 

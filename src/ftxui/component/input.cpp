@@ -30,13 +30,18 @@ class InputBase : public ComponentBase {
 
   // Component implementation:
   Element Render() override {
+    std::wstring password_content;
+    if (option_->password)
+      password_content = std::wstring(content_->size(), U'•');
+    std::wstring& content = option_->password ? password_content : *content_;
+
     cursor_position() =
-        std::max(0, std::min<int>(content_->size(), cursor_position()));
+        std::max(0, std::min<int>(content.size(), cursor_position()));
     auto main_decorator = flex | size(HEIGHT, EQUAL, 1);
     bool is_focused = Focused();
 
     // placeholder.
-    if (content_->size() == 0) {
+    if (content.size() == 0) {
       if (is_focused)
         return text(*placeholder_) | focus | dim | inverted | main_decorator |
                reflect(input_box_);
@@ -46,15 +51,15 @@ class InputBase : public ComponentBase {
 
     // Not focused.
     if (!is_focused)
-      return text(*content_) | main_decorator | reflect(input_box_);
+      return text(content) | main_decorator | reflect(input_box_);
 
-    std::wstring part_before_cursor = content_->substr(0, cursor_position());
-    std::wstring part_at_cursor = cursor_position() < (int)content_->size()
-                                      ? content_->substr(cursor_position(), 1)
+    std::wstring part_before_cursor = content.substr(0, cursor_position());
+    std::wstring part_at_cursor = cursor_position() < (int)content.size()
+                                      ? content.substr(cursor_position(), 1)
                                       : L" ";
     std::wstring part_after_cursor =
-        cursor_position() < (int)content_->size() - 1
-            ? content_->substr(cursor_position() + 1)
+        cursor_position() < (int)content.size() - 1
+            ? content.substr(cursor_position() + 1)
             : L"";
     auto focused = is_focused ? focus : select;
 

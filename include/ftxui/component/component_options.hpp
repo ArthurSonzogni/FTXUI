@@ -50,6 +50,9 @@ struct InputOption {
   /// Called when the user presses enter.
   std::function<void()> on_enter = [] {};
 
+  /// Obscure the input content using '*'.
+  bool password = false;
+
   Ref<int> cursor_position = 0;
 };
 
