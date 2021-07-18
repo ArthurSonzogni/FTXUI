@@ -1,7 +1,7 @@
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"  // for Element, unpack, Decorator, Elements, bgcolor, color
+#include "ftxui/dom/elements.hpp"  // for Element, Decorator, bgcolor, color
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
 #include "ftxui/screen/color.hpp"        // for Color
@@ -11,8 +11,8 @@ namespace ftxui {
 
 class BgColor : public NodeDecorator {
  public:
-  BgColor(Elements children, Color color)
-      : NodeDecorator(std::move(children)), color_(color) {}
+  BgColor(Element child, Color color)
+      : NodeDecorator(std::move(child)), color_(color) {}
 
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
@@ -28,8 +28,8 @@ class BgColor : public NodeDecorator {
 
 class FgColor : public NodeDecorator {
  public:
-  FgColor(Elements children, Color color)
-      : NodeDecorator(std::move(children)), color_(color) {}
+  FgColor(Element child, Color color)
+      : NodeDecorator(std::move(child)), color_(color) {}
 
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
@@ -55,7 +55,7 @@ class FgColor : public NodeDecorator {
 /// Element document = color(Color::Green, text(L"Success")),
 /// ```
 Element color(Color color, Element child) {
-  return std::make_shared<FgColor>(unpack(std::move(child)), color);
+  return std::make_shared<FgColor>(std::move(child), color);
 }
 
 /// @brief Set the background color of an element.
@@ -70,7 +70,7 @@ Element color(Color color, Element child) {
 /// Element document = bgcolor(Color::Green, text(L"Success")),
 /// ```
 Element bgcolor(Color color, Element child) {
-  return std::make_shared<BgColor>(unpack(std::move(child)), color);
+  return std::make_shared<BgColor>(std::move(child), color);
 }
 
 /// @brief Decorate using a foreground color.

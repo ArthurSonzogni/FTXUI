@@ -1,7 +1,7 @@
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"        // for Element, unpack, Elements, dim
+#include "ftxui/dom/elements.hpp"        // for Element, dim
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
@@ -26,7 +26,7 @@ class Dim : public NodeDecorator {
 /// @brief Use a light font, for elements with less emphasis.
 /// @ingroup dom
 Element dim(Element child) {
-  return std::make_shared<Dim>(unpack(std::move(child)));
+  return std::make_shared<Dim>(std::move(child));
 }
 
 }  // namespace ftxui

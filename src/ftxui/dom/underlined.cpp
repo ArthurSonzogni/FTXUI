@@ -1,7 +1,7 @@
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"  // for Element, unpack, Elements, underlined
+#include "ftxui/dom/elements.hpp"  // for Element, underlined
 #include "ftxui/dom/node.hpp"      // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
@@ -26,7 +26,7 @@ class Underlined : public NodeDecorator {
 /// @brief Make the underlined element to be underlined.
 /// @ingroup dom
 Element underlined(Element child) {
-  return std::make_shared<Underlined>(unpack(std::move(child)));
+  return std::make_shared<Underlined>(std::move(child));
 }
 
 }  // namespace ftxui
