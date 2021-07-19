@@ -13,44 +13,10 @@ namespace ftxui {
 
 class ContainerBase : public ComponentBase {
  public:
-  static Component Vertical() { return Vertical({}); }
-  static Component Vertical(Components children) {
-    return Vertical(std::move(children), /*selector=*/nullptr);
-  }
-  static Component Vertical(Components children, int* selector) {
-    auto container = std::make_shared<ContainerBase>();
-    container->event_handler_ = &ContainerBase::VerticalEvent;
-    container->render_handler_ = &ContainerBase::VerticalRender;
-    container->selector_ = selector ? selector : &container->selected_;
+  ContainerBase(Components children, int* selector)
+      : selector_(selector ? selector : &selected_) {
     for (Component& child : children)
-      container->Add(std::move(child));
-    return container;
-  }
-
-  static Component Horizontal() { return Horizontal({}); }
-  static Component Horizontal(Components children) {
-    return Horizontal(std::move(children), /*selector=*/nullptr);
-  }
-  static Component Horizontal(Components children, int* selector) {
-    auto container = std::make_shared<ContainerBase>();
-    container->event_handler_ = &ContainerBase::HorizontalEvent;
-    container->render_handler_ = &ContainerBase::HorizontalRender;
-    container->selector_ = selector ? selector : &container->selected_;
-    for (Component& child : children)
-      container->Add(std::move(child));
-    return container;
-  }
-
-  static Component Tab(int* selector) { return Tab({}, selector); }
-  static Component Tab(Components children, int* selector) {
-    auto container = std::make_shared<ContainerBase>();
-    container->selector_ = selector ? selector : &container->selected_;
-    container->event_handler_ = &ContainerBase::TabEvent;
-    container->render_handler_ = &ContainerBase::TabRender;
-    container->is_tab_ = true;
-    for (Component& child : children)
-      container->Add(std::move(child));
-    return container;
+      Add(std::move(child));
   }
 
   // Component override.
@@ -64,7 +30,7 @@ class ContainerBase : public ComponentBase {
     if (ActiveChild() && ActiveChild()->OnEvent(event))
       return true;
 
-    return (this->*event_handler_)(event);
+    return EventHandler(event);
   }
 
   Component ActiveChild() override {
@@ -83,10 +49,36 @@ class ContainerBase : public ComponentBase {
     }
   }
 
- private:
+ protected:
   // Handlers
+  virtual bool EventHandler(Event) { return false; }
 
-  bool VerticalEvent(Event event) {
+  virtual bool OnMouseEvent(Event event) {
+    for (Component& child : children_) {
+      if (child->OnEvent(event))
+        return true;
+    }
+    return false;
+  }
+
+  int selected_ = 0;
+  int* selector_ = nullptr;
+};
+
+class VerticalContainer : public ContainerBase {
+ public:
+  using ContainerBase::ContainerBase;
+
+  Element Render() override {
+    Elements elements;
+    for (auto& it : children_)
+      elements.push_back(it->Render());
+    if (elements.size() == 0)
+      return text(L"Empty container");
+    return vbox(std::move(elements));
+  }
+
+  bool EventHandler(Event event) override {
     int old_selected = *selector_;
     if (event == Event::ArrowUp || event == Event::Character('k'))
       (*selector_)--;
@@ -100,8 +92,22 @@ class ContainerBase : public ComponentBase {
     *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
     return old_selected != *selector_;
   }
+};
 
-  bool HorizontalEvent(Event event) {
+class HorizontalContainer : public ContainerBase {
+ public:
+  using ContainerBase::ContainerBase;
+
+  Element Render() override {
+    Elements elements;
+    for (auto& it : children_)
+      elements.push_back(it->Render());
+    if (elements.size() == 0)
+      return text(L"Empty container");
+    return hbox(std::move(elements));
+  }
+
+  bool EventHandler(Event event) override {
     int old_selected = *selector_;
     if (event == Event::ArrowLeft || event == Event::Character('h'))
       (*selector_)--;
@@ -115,55 +121,22 @@ class ContainerBase : public ComponentBase {
     *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
     return old_selected != *selector_;
   }
+};
 
-  bool TabEvent(Event) { return false; }
+class TabContainer : public ContainerBase {
+ public:
+  using ContainerBase::ContainerBase;
 
-  bool OnMouseEvent(Event event) {
-    if (is_tab_)
-      return ActiveChild()->OnEvent(event);
-
-    for (Component& child : children_) {
-      if (child->OnEvent(event))
-        return true;
-    }
-    return false;
-  }
-
-  using EventHandler = bool (ContainerBase::*)(Event);
-  using RenderHandler = Element (ContainerBase::*)();
-
-  Element Render() override { return (this->*render_handler_)(); }
-
-  Element VerticalRender() {
-    Elements elements;
-    for (auto& it : children_)
-      elements.push_back(it->Render());
-    if (elements.size() == 0)
-      return text(L"Empty container");
-    return vbox(std::move(elements));
-  }
-
-  Element HorizontalRender() {
-    Elements elements;
-    for (auto& it : children_)
-      elements.push_back(it->Render());
-    if (elements.size() == 0)
-      return text(L"Empty container");
-    return hbox(std::move(elements));
-  }
-
-  Element TabRender() {
+  Element Render() override {
     Component active_child = ActiveChild();
     if (active_child)
       return active_child->Render();
     return text(L"Empty container");
   }
 
-  EventHandler event_handler_;
-  RenderHandler render_handler_;
-  int selected_ = 0;
-  int* selector_ = nullptr;
-  bool is_tab_ = false;
+  bool OnMouseEvent(Event event) override {
+    return ActiveChild()->OnEvent(event);
+  }
 };
 
 namespace Container {
@@ -185,7 +158,7 @@ namespace Container {
 /// });
 /// ```
 Component Vertical(Components children) {
-  return ContainerBase::Vertical(std::move(children));
+  return Vertical(std::move(children), nullptr);
 }
 
 /// @brief A list of components, drawn one by one vertically and navigated
@@ -207,7 +180,7 @@ Component Vertical(Components children) {
 /// });
 /// ```
 Component Vertical(Components children, int* selector) {
-  return ContainerBase::Vertical(std::move(children), selector);
+  return std::make_shared<VerticalContainer>(std::move(children), selector);
 }
 
 /// @brief A list of components, drawn one by one horizontally and navigated
@@ -228,7 +201,7 @@ Component Vertical(Components children, int* selector) {
 /// }, &selected_children);
 /// ```
 Component Horizontal(Components children) {
-  return ContainerBase::Horizontal(std::move(children));
+  return Horizontal(std::move(children), nullptr);
 }
 
 /// @brief A list of components, drawn one by one horizontally and navigated
@@ -250,14 +223,14 @@ Component Horizontal(Components children) {
 /// }, selected_children);
 /// ```
 Component Horizontal(Components children, int* selector) {
-  return ContainerBase::Horizontal(std::move(children), selector);
+  return std::make_shared<HorizontalContainer>(std::move(children), selector);
 }
 
 /// @brief A list of components, where only one is drawn and interacted with at
 /// a time. The |selector| gives the index of the selected component. This is
 /// useful to implement tabs.
-/// @param selector The index of the drawn children.
 /// @param children The list of components.
+/// @param selector The index of the drawn children.
 /// @ingroup component
 /// @see ContainerBase
 ///
@@ -273,7 +246,7 @@ Component Horizontal(Components children, int* selector) {
 /// }, &tab_drawn);
 /// ```
 Component Tab(Components children, int* selector) {
-  return ContainerBase::Tab(std::move(children), selector);
+  return std::make_shared<TabContainer>(std::move(children), selector);
 }
 
 }  // namespace Container
