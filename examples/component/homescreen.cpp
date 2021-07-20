@@ -24,26 +24,19 @@ int main(int argc, const char* argv[]) {
 
   int shift = 0;
 
-  class Graph {
-   public:
-    Graph(int* shift) : shift_(shift) {}
-    std::vector<int> operator()(int width, int height) {
-      std::vector<int> output(width);
-      for (int i = 0; i < width; ++i) {
-        float v = 0;
-        v += 0.1f * sin((i + *shift_) * 0.1f);
-        v += 0.2f * sin((i + *shift_ + 10) * 0.15f);
-        v += 0.1f * sin((i + *shift_) * 0.03f);
-        v *= height;
-        v += 0.5f * height;
-        output[i] = (int)v;
-      }
-      return output;
+  auto my_graph = [&shift](int width, int height) {
+    std::vector<int> output(width);
+    for (int i = 0; i < width; ++i) {
+      float v = 0.5f;
+      v += 0.1f * sin((i + shift) * 0.1f);
+      v += 0.2f * sin((i + shift + 10) * 0.15f);
+      v += 0.1f * sin((i + shift) * 0.03f);
+      v *= height;
+      output[i] = (int)v;
     }
-    int* shift_;
+    return output;
   };
 
-  Graph my_graph(&shift);
   auto htop = Renderer([&] {
     auto frequency = vbox({
         text(L"Frequency [Mhz]") | hcenter,
@@ -53,7 +46,7 @@ int main(int argc, const char* argv[]) {
                 filler(),
                 text(L"1200 "),
                 filler(),
-                text(L"0% "),
+                text(L"0 "),
             }),
             graph(std::ref(my_graph)) | flex,
         }) | flex,

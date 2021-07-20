@@ -241,8 +241,6 @@ ScreenInteractive::ScreenInteractive(int dimx,
   event_sender_ = event_receiver_->MakeSender();
 }
 
-ScreenInteractive::~ScreenInteractive() {}
-
 // static
 ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
   return ScreenInteractive(dimx, dimy, Dimension::Fixed, false);

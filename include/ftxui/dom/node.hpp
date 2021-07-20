@@ -36,7 +36,7 @@ class Node {
   virtual void Render(Screen& screen);
 
  protected:
-  std::vector<Element> children_;
+  Elements children_;
   Requirement requirement_;
   Box box_;
 };

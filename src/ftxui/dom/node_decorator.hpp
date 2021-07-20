@@ -3,7 +3,8 @@
 
 #include <utility>  // for move
 
-#include "ftxui/dom/node.hpp"  // for Node, Elements
+#include "ftxui/dom/elements.hpp"  // for Element, unpack
+#include "ftxui/dom/node.hpp"  // for Node
 
 namespace ftxui {
 struct Box;
@@ -11,7 +12,7 @@ struct Box;
 // Helper class.
 class NodeDecorator : public Node {
  public:
-  NodeDecorator(Elements children) : Node(std::move(children)) {}
+  NodeDecorator(Element child) : Node(unpack(std::move(child))) {}
   void ComputeRequirement() override;
   void SetBox(Box box) override;
 };

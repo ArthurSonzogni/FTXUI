@@ -38,11 +38,6 @@ static const char* MOVE_LEFT = "\r";
 static const char* MOVE_UP = "\x1B[1A";
 static const char* CLEAR_LINE = "\x1B[2K";
 
-bool In(const Box& stencil, int x, int y) {
-  return stencil.x_min <= x && x <= stencil.x_max &&  //
-         stencil.y_min <= y && y <= stencil.y_max;
-}
-
 Pixel dev_null_pixel;
 
 #if defined(_WIN32)
@@ -195,7 +190,7 @@ wchar_t& Screen::at(int x, int y) {
 /// @param x The pixel position along the x-axis.
 /// @param y The pixel position along the y-axis.
 Pixel& Screen::PixelAt(int x, int y) {
-  return In(stencil, x, y) ? pixels_[y][x] : dev_null_pixel;
+  return stencil.Contain(x, y) ? pixels_[y][x] : dev_null_pixel;
 }
 
 /// @brief Return a string to be printed in order to reset the cursor position

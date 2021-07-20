@@ -16,8 +16,7 @@ namespace ftxui {
 
 class Select : public Node {
  public:
-  Select(std::vector<std::shared_ptr<Node>> children)
-      : Node(std::move(children)) {}
+  Select(Elements children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -31,7 +30,7 @@ class Select : public Node {
   };
 
   void SetBox(Box box) override {
-    box_ = box;
+    Node::SetBox(box);
     children_[0]->SetBox(box);
   }
 };
@@ -44,7 +43,7 @@ Element select(Element child) {
 
 class Focus : public Select {
  public:
-  Focus(std::vector<Element> children) : Select(std::move(children)) {}
+  using Select::Select;
 
   void ComputeRequirement() override {
     Select::ComputeRequirement();
@@ -85,7 +84,7 @@ Element focus(Element child) {
 
 class Frame : public Node {
  public:
-  Frame(std::vector<Element> children, bool x_frame, bool y_frame)
+  Frame(Elements children, bool x_frame, bool y_frame)
       : Node(std::move(children)), x_frame_(x_frame), y_frame_(y_frame) {}
 
   void ComputeRequirement() override {

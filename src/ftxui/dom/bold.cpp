@@ -1,7 +1,7 @@
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"        // for Element, unpack, Elements, bold
+#include "ftxui/dom/elements.hpp"        // for Element, bold
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
@@ -26,7 +26,7 @@ class Bold : public NodeDecorator {
 /// @brief Use a bold font, for elements with more emphasis.
 /// @ingroup dom
 Element bold(Element child) {
-  return std::make_shared<Bold>(unpack(std::move(child)));
+  return std::make_shared<Bold>(std::move(child));
 }
 
 }  // namespace ftxui

@@ -24,7 +24,6 @@ class ScreenInteractive : public Screen {
   static ScreenInteractive FitComponent();
   static ScreenInteractive TerminalOutput();
 
-  ~ScreenInteractive();
   void Loop(Component);
   std::function<void()> ExitLoopClosure();
 

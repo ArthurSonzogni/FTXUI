@@ -1,7 +1,7 @@
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"  // for Element, unpack, Elements, inverted
+#include "ftxui/dom/elements.hpp"  // for Element, inverted
 #include "ftxui/dom/node.hpp"      // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
@@ -27,7 +27,7 @@ class Inverted : public NodeDecorator {
 /// colors.
 /// @ingroup dom
 Element inverted(Element child) {
-  return std::make_shared<Inverted>(unpack(std::move(child)));
+  return std::make_shared<Inverted>(std::move(child));
 }
 
 }  // namespace ftxui
