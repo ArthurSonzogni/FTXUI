@@ -18,15 +18,14 @@ class CaptureMouseImpl : public CapturedMouseInterface {};
 }  // namespace
 
 ComponentBase::~ComponentBase() {
-  while (children_.size() != 0)
-    children_.back()->Detach();
+  DetachAllChildren();
 }
 
 /// @brief Return the parent ComponentBase, or nul if any.
 /// @see Detach
 /// @see Parent
 /// @ingroup component
-ComponentBase* ComponentBase::Parent() {
+ComponentBase* ComponentBase::Parent() const {
   return parent_;
 }
 
@@ -109,7 +108,7 @@ Component ComponentBase::ActiveChild() {
 
 /// @brief Returns if the element if the currently active child of its parent.
 /// @ingroup component
-bool ComponentBase::Active() {
+bool ComponentBase::Active() const {
   return !parent_ || parent_->ActiveChild().get() == this;
 }
 
@@ -117,16 +116,12 @@ bool ComponentBase::Active() {
 /// True when the ComponentBase is focused by the user. An element is Focused
 /// when it is with all its ancestors the ActiveChild() of their parents.
 /// @ingroup component
-bool ComponentBase::Focused() {
-  ComponentBase* current = this;
-  for (;;) {
-    ComponentBase* parent = current->parent_;
-    if (!parent)
-      return true;
-    if (parent->ActiveChild().get() != current)
-      return false;
-    current = parent;
+bool ComponentBase::Focused() const {
+  auto current = this;
+  while (current && current->Active()) {
+    current = current->parent_;
   }
+  return !current;
 }
 
 /// @brief Make the |child| to be the "active" one.
@@ -145,11 +140,9 @@ void ComponentBase::SetActiveChild(Component child) {
 /// @ingroup component
 void ComponentBase::TakeFocus() {
   ComponentBase* child = this;
-  ComponentBase* parent = parent_;
-  while (parent) {
+  while (ComponentBase* parent = child->parent_) {
     parent->SetActiveChild(child);
     child = parent;
-    parent = parent->parent_;
   }
 }
 

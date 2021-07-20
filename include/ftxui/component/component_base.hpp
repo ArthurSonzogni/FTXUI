@@ -26,7 +26,7 @@ class ComponentBase {
   virtual ~ComponentBase();
 
   // Component hierarchy:
-  ComponentBase* Parent();
+  ComponentBase* Parent() const;
   Component& ChildAt(size_t i);
   size_t ChildCount() const;
   void Add(Component children);
@@ -52,9 +52,9 @@ class ComponentBase {
   virtual Component ActiveChild();
 
   // Whether this is the active child of its parent.
-  bool Active();
+  bool Active() const;
   // Whether all the ancestors are active.
-  bool Focused();
+  bool Focused() const;
 
   // Make the |child| to be the "active" one.
   virtual void SetActiveChild(ComponentBase* child);
@@ -66,7 +66,7 @@ class ComponentBase {
  protected:
   CapturedMouse CaptureMouse(const Event& event);
 
-  std::vector<Component> children_;
+  Components children_;
 
  private:
   ComponentBase* parent_ = nullptr;
