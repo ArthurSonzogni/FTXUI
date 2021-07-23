@@ -38,7 +38,7 @@ PROJECT_NAME           = "FTXUI"
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = @CMAKE_PROJECT_VERSION@
+PROJECT_NUMBER         = @PROJECT_VERSION@
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -162,7 +162,8 @@ FULL_PATH_NAMES        = YES
 # will be relative from the directory where doxygen is started.
 # This tag requires that the tag FULL_PATH_NAMES is set to YES.
 
-STRIP_FROM_PATH        = ../..
+STRIP_FROM_PATH        = @PROJECT_SOURCE_DIR@ \
+                         @PROJECT_BINARY_DIR@
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
 # path mentioned in the documentation of a class, which tells the reader which
@@ -783,9 +784,10 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../include/
-INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@/../src/
+INPUT                 += @PROJECT_SOURCE_DIR@/include
+INPUT                 += @PROJECT_SOURCE_DIR@/src
 INPUT                 += @CMAKE_CURRENT_SOURCE_DIR@
+INPUT                 += @EXAMPLE_LIST@
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -902,9 +904,9 @@ EXCLUDE_SYMBOLS        =
 # that contain example code fragments that are included (see the \include
 # command).
 
-EXAMPLE_PATH           += @CMAKE_CURRENT_SOURCE_DIR@/../examples/
-EXAMPLE_PATH           += @CMAKE_CURRENT_SOURCE_DIR@/../include/
-EXAMPLE_PATH           += @CMAKE_CURRENT_SOURCE_DIR@/../src/
+EXAMPLE_PATH           += @PROJECT_SOURCE_DIR@/examples
+EXAMPLE_PATH           += @PROJECT_SOURCE_DIR@/include
+EXAMPLE_PATH           += @PROJECT_SOURCE_DIR@/src
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp and
@@ -1085,9 +1087,9 @@ CLANG_ASSISTED_PARSING = NO
 # specified with INPUT and INCLUDE_PATH.
 # This tag requires that the tag CLANG_ASSISTED_PARSING is set to YES.
 
-CLANG_OPTIONS          += --include-directory @CMAKE_CURRENT_SOURCE_DIR@/../include/
-CLANG_OPTIONS          += --include-directory @CMAKE_CURRENT_SOURCE_DIR@/../src/
-CLANG_OPTIONS          += --include-directory @CMAKE_CURRENT_SOURCE_DIR@/../examples/
+CLANG_OPTIONS          += --include-directory @PROJECT_SOURCE_DIR@/include
+CLANG_OPTIONS          += --include-directory @PROJECT_SOURCE_DIR@/src
+CLANG_OPTIONS          += --include-directory @PROJECT_SOURCE_DIR@/examples
 CLANG_OPTIONS          += -std=c++17
 
 #---------------------------------------------------------------------------

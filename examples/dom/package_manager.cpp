@@ -14,8 +14,6 @@
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
 
-/// @example examples/dom/package_manage.cpp
-
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
 

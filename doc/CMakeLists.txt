@@ -1,10 +1,15 @@
 find_package(Doxygen)
 if (DOXYGEN_FOUND)
-  configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
-    ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-    @ONLY
-    )
+  # Generate example list for documentation
+  set(EXAMPLE_LIST "${CMAKE_CURRENT_BINARY_DIR}/example_list.md")
+  file(WRITE ${EXAMPLE_LIST} "# Examples")
+  file(GLOB_RECURSE EXAMPLES RELATIVE ${PROJECT_SOURCE_DIR}
+    "${PROJECT_SOURCE_DIR}/examples/*.cpp")
+  foreach(EXAMPLE IN LISTS EXAMPLES)
+    file(APPEND ${EXAMPLE_LIST} "\n@example ${EXAMPLE}")
+  endforeach(EXAMPLE IN LISTS EXAMPLES)
+
+  configure_file(Doxyfile.in Doxyfile @ONLY)
 
   # note the option ALL which allows to build the docs together with the application
   add_custom_target(doc
