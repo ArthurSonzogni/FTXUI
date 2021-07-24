@@ -16,7 +16,7 @@ jobs:
       - uses: mymindstorm/setup-emsdk@v7
 
       - name: Install Doxygen/Graphviz
-        if: ${{ env.DOCUMENTATION }}
+        if: env.DOCUMENTATION
         run: |
           sudo apt-get update
           sudo apt-get install doxygen graphviz
@@ -27,7 +27,7 @@ jobs:
           cmake --build build
 
       - name: Build documentation
-        if: ${{ env.DOCUMENTATION }}
+        if: env.DOCUMENTATION
         run: |
           cd build
           cmake --build . --target doc
@@ -36,7 +36,7 @@ jobs:
 
       # Deploy the HTML documentation to GitHub Pages
       - name: GH Pages Deployment
-        if: ${{ env.DOCUMENTATION }}
+        if: env.DOCUMENTATION
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
