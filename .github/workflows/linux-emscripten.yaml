@@ -32,7 +32,7 @@ jobs:
           cd build
           cmake --build . --target doc
           # Copy emscripten built examples to the doxygen output directory for deployment
-          rsync -amvz --include='**/' --include='**.html' --include='**.js' --include='**.wasm' --exclude='*' examples doc/doxygen/html
+          rsync -amv --include='*/' --include='*.html' --include='*.js' --include='*.wasm' --exclude='*' examples doc/doxygen/html
 
       # Deploy the HTML documentation to GitHub Pages
       - name: GH Pages Deployment
