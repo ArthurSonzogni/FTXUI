@@ -3,10 +3,9 @@ if (DOXYGEN_FOUND)
   # Generate example list for documentation
   set(EXAMPLE_LIST "${CMAKE_CURRENT_BINARY_DIR}/example_list.md")
   file(WRITE ${EXAMPLE_LIST} "# Examples")
-  file(GLOB_RECURSE EXAMPLES RELATIVE ${PROJECT_SOURCE_DIR}
-    "${PROJECT_SOURCE_DIR}/examples/*.cpp")
+  get_property(EXAMPLES GLOBAL PROPERTY FTXUI::EXAMPLES)
   foreach(EXAMPLE IN LISTS EXAMPLES)
-    file(APPEND ${EXAMPLE_LIST} "\n@example ${EXAMPLE}")
+    file(APPEND ${EXAMPLE_LIST} "\n@example examples/${EXAMPLE}.cpp")
   endforeach(EXAMPLE IN LISTS EXAMPLES)
 
   configure_file(Doxyfile.in Doxyfile @ONLY)
