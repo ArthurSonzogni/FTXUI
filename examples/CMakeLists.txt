@@ -1,14 +1,19 @@
+set(EXAMPLES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+function(example name)
+  add_executable(${name} ${name}.cpp)
+  target_link_libraries(${name} PUBLIC ${DIRECTORY_LIB})
+  file(RELATIVE_PATH dir ${EXAMPLES_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+  set_property(GLOBAL APPEND PROPERTY FTXUI::EXAMPLES ${dir}/${name})
+endfunction(example)
+
 add_subdirectory(component)
 add_subdirectory(dom)
-add_subdirectory(util)
 
 if (EMSCRIPTEN)
+  get_property(EXAMPLES GLOBAL PROPERTY FTXUI::EXAMPLES)
   foreach(file
       "index.html"
-      "run_webassembly.sh")
-    configure_file(
-      ${CMAKE_CURRENT_SOURCE_DIR}/${file}
-      ${CMAKE_CURRENT_BINARY_DIR}/${file}
-    )
+      "run_webassembly.py")
+    configure_file(${file} ${file})
   endforeach(file)
 endif()

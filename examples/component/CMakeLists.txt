@@ -1,7 +1,4 @@
-function(example name)
-  add_executable(${name} ${name}.cpp)
-  target_link_libraries(${name} PUBLIC component)
-endfunction(example)
+set(DIRECTORY_LIB component)
 
 example(button)
 example(checkbox)
@@ -23,3 +20,4 @@ example(tab_horizontal)
 example(tab_vertical)
 example(toggle)
 example(resizable_split)
+example(print_key_press)

@@ -1,7 +1,4 @@
-function(example name)
-  add_executable(${name} ${name}.cpp)
-  target_link_libraries(${name} PUBLIC dom)
-endfunction(example)
+set(DIRECTORY_LIB dom)
 
 example(border)
 example(color_gallery)

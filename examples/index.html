@@ -23,52 +23,10 @@
     </div>
   </body>
   <script>
-    let example_list = [
-      "./component/button.js",
-      "./component/checkbox.js",
-      "./component/checkbox_in_frame.js",
-      "./component/gallery.js",
-      "./component/homescreen.js",
-      "./component/input.js",
-      "./component/menu.js",
-      "./component/menu2.js",
-      "./component/menu_style.js",
-      "./component/modal_dialog.js",
-      "./component/radiobox.js",
-      "./component/radiobox_in_frame.js",
-      "./component/slider.js",
-      "./component/tab_horizontal.js",
-      "./component/tab_vertical.js",
-      "./component/toggle.js",
-      "./dom/border.js",
-      "./dom/color_gallery.js",
-      "./dom/color_info_palette256.js",
-      "./dom/color_truecolor_HSV.js",
-      "./dom/color_truecolor_RGB.js",
-      "./dom/dbox.js",
-      "./dom/gauge.js",
-      "./dom/graph.js",
-      "./dom/hflow.js",
-      "./dom/html_like.js",
-      "./dom/package_manager.js",
-      "./dom/paragraph.js",
-      "./dom/separator.js",
-      "./dom/size.js",
-      "./dom/spinner.js",
-      "./dom/style_blink.js",
-      "./dom/style_bold.js",
-      "./dom/style_color.js",
-      "./dom/style_dim.js",
-      "./dom/style_gallery.js",
-      "./dom/style_inverted.js",
-      "./dom/style_underlined.js",
-      "./dom/vbox_hbox.js",
-      "./dom/window.js",
-      "./util/print_key_press.js",
-    ];
+    const example_list = "@EXAMPLES@".split(";");
 
     const url_search_params = new URLSearchParams(window.location.search);
-    const example = url_search_params.get("file") || "./dom/color_gallery.js"
+    const example = url_search_params.get("file") || "dom/color_gallery";
     const select = document.getElementById("selectExample"); 
 
     for(var i = 0; i < example_list.length; i++) {
@@ -113,7 +71,7 @@
       postRun: [],
       onRuntimeInitialized: () => {},
     };
-    document.querySelector("#example_script").src = example
+    document.querySelector("#example_script").src = example + '.js';
   </script>
 
   <style>
