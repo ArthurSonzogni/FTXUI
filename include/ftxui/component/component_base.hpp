@@ -51,6 +51,11 @@ class ComponentBase {
   // root component contains this object.
   virtual Component ActiveChild();
 
+  // Return true when the component contains focusable elements.
+  // The non focusable Component will be skipped when navigating using the
+  // keyboard.
+  virtual bool Focusable() const;
+
   // Whether this is the active child of its parent.
   bool Active() const;
   // Whether all the ancestors are active.

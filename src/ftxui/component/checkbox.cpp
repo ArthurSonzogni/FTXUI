@@ -71,6 +71,10 @@ class CheckboxBase : public ComponentBase {
     return false;
   }
 
+  bool Focusable() const final {
+    return true;
+  }
+
   ConstStringRef label_;
   bool* const state_;
   Box box_;

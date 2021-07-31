@@ -63,6 +63,25 @@ class ContainerBase : public ComponentBase {
 
   int selected_ = 0;
   int* selector_ = nullptr;
+
+  void MoveSelector(int dir) {
+    for (int i = *selector_ + dir; i >= 0 && i < (int)children_.size();
+         i += dir) {
+      if (children_[i]->Focusable()) {
+        *selector_ = i;
+        return;
+      }
+    }
+  }
+  void MoveSelectorWrap(int dir) {
+    for (size_t offset = 1; offset < children_.size(); ++offset) {
+      int i = (*selector_ + offset * dir + children_.size()) % children_.size();
+      if (children_[i]->Focusable()) {
+        *selector_ = i;
+        return;
+      }
+    }
+  }
 };
 
 class VerticalContainer : public ContainerBase {
@@ -81,13 +100,13 @@ class VerticalContainer : public ContainerBase {
   bool EventHandler(Event event) override {
     int old_selected = *selector_;
     if (event == Event::ArrowUp || event == Event::Character('k'))
-      (*selector_)--;
+      MoveSelector(-1);
     if (event == Event::ArrowDown || event == Event::Character('j'))
-      (*selector_)++;
+      MoveSelector(+1);
     if (event == Event::Tab && children_.size())
-      *selector_ = (*selector_ + 1) % children_.size();
+      MoveSelectorWrap(+1);
     if (event == Event::TabReverse && children_.size())
-      *selector_ = (*selector_ + children_.size() - 1) % children_.size();
+      MoveSelectorWrap(-1);
 
     *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
     return old_selected != *selector_;
@@ -110,13 +129,13 @@ class HorizontalContainer : public ContainerBase {
   bool EventHandler(Event event) override {
     int old_selected = *selector_;
     if (event == Event::ArrowLeft || event == Event::Character('h'))
-      (*selector_)--;
+      MoveSelector(-1);
     if (event == Event::ArrowRight || event == Event::Character('l'))
-      (*selector_)++;
+      MoveSelector(+1);
     if (event == Event::Tab && children_.size())
-      *selector_ = (*selector_ + 1) % children_.size();
+      MoveSelectorWrap(+1);
     if (event == Event::TabReverse && children_.size())
-      *selector_ = (*selector_ + children_.size() - 1) % children_.size();
+      MoveSelectorWrap(-1);
 
     *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
     return old_selected != *selector_;
