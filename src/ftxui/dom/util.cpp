@@ -59,6 +59,16 @@ Element operator|(Element element, Decorator decorator) {
   return decorator(std::move(element));
 }
 
+/// The minimal dimension that will fit the given element.
+/// @see Fixed
+/// @see Full
+Dimensions Dimension::Fit(Element& e) {
+  e->ComputeRequirement();
+  Dimensions size = Dimension::Full();
+  return {std::min(e->requirement().min_x, size.dimx),
+          std::min(e->requirement().min_y, size.dimy)};
+}
+
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

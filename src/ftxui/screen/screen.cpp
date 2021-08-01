@@ -2,8 +2,6 @@
 #include <iostream>  // for operator<<, basic_ostream, wstringstream, stringstream, flush, cout, ostream
 #include <sstream>   // IWYU pragma: keep
 
-#include "ftxui/dom/node.hpp"         // for Element, Node
-#include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"    // for to_string, wchar_width
 #include "ftxui/screen/terminal.hpp"  // for Terminal::Dimensions, Terminal
@@ -93,42 +91,31 @@ void UpdatePixelStyle(std::wstringstream& ss, Pixel& previous, Pixel& next) {
 /// A fixed dimension.
 /// @see Fit
 /// @see Full
-Dimension Dimension::Fixed(int v) {
-  return Dimension{v, v};
-}
-
-/// The minimal dimension that will fit the given element.
-/// @see Fixed
-/// @see Full
-Dimension Dimension::Fit(Element& e) {
-  e->ComputeRequirement();
-  Terminal::Dimensions size = Terminal::Size();
-  return Dimension{std::min(e->requirement().min_x, size.dimx),
-                   std::min(e->requirement().min_y, size.dimy)};
+Dimensions Dimension::Fixed(int v) {
+  return {v, v};
 }
 
 /// Use the terminal dimensions.
 /// @see Fixed
 /// @see Fit
-Dimension Dimension::Full() {
-  Terminal::Dimensions size = Terminal::Size();
-  return Dimension{size.dimx, size.dimy};
+Dimensions Dimension::Full() {
+  return Terminal::Size();
 }
 
 // static
 /// Create a screen with the given dimension along the x-axis and y-axis.
-Screen Screen::Create(Dimension width, Dimension height) {
+Screen Screen::Create(Dimensions width, Dimensions height) {
   return Screen(width.dimx, height.dimy);
 }
 
 // static
 /// Create a screen with the given dimension.
-Screen Screen::Create(Dimension dimension) {
+Screen Screen::Create(Dimensions dimension) {
   return Screen(dimension.dimx, dimension.dimy);
 }
 
 Screen::Screen(int dimx, int dimy)
-    : stencil({0, dimx - 1, 0, dimy - 1}),
+    : stencil{0, dimx - 1, 0, dimy - 1},
       dimx_(dimx),
       dimy_(dimy),
       pixels_(dimy, std::vector<Pixel>(dimx)) {

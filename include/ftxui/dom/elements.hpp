@@ -8,6 +8,7 @@
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/screen/terminal.hpp"
 
 namespace ftxui {
 class Node;
@@ -101,6 +102,10 @@ Element nothing(Element element);
 // Before drawing the |element| clear the pixel below. This is useful in
 // combinaison with dbox.
 Element clear_under(Element element);
+
+namespace Dimension {
+Dimensions Fit(Element&);
+}  // namespace Dimension
 
 }  // namespace ftxui
 

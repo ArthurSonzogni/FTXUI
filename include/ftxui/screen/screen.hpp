@@ -7,10 +7,9 @@
 
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
+#include "ftxui/screen/terminal.hpp"
 
 namespace ftxui {
-class Node;
-using Element = std::shared_ptr<Node>;
 
 /// @brief A unicode character and its associated style.
 /// @ingroup screen
@@ -41,14 +40,10 @@ struct Pixel {
 
 /// @brief Define how the Screen's dimensions should look like.
 /// @ingroup screen
-struct Dimension {
-  static Dimension Fixed(int);
-  static Dimension Fit(Element&);
-  static Dimension Full();
-
-  int dimx;
-  int dimy;
-};
+namespace Dimension {
+Dimensions Fixed(int);
+Dimensions Full();
+}  // namespace Dimension
 
 /// @brief A rectangular grid of Pixel.
 /// @ingroup screen
@@ -56,8 +51,8 @@ class Screen {
  public:
   // Constructors:
   Screen(int dimx, int dimy);
-  static Screen Create(Dimension dimension);
-  static Screen Create(Dimension width, Dimension height);
+  static Screen Create(Dimensions dimension);
+  static Screen Create(Dimensions width, Dimensions height);
 
   // Node write into the screen using Screen::at.
   wchar_t& at(int x, int y);
