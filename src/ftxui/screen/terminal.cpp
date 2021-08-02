@@ -18,7 +18,7 @@
 
 namespace ftxui {
 
-Terminal::Dimensions Terminal::Size() {
+Dimensions Terminal::Size() {
 #if defined(__EMSCRIPTEN__)
   return Dimensions{140, 43};
 #elif defined(_WIN32)
