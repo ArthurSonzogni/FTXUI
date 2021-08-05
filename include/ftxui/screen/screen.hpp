@@ -2,12 +2,12 @@
 #define FTXUI_SCREEN_SCREEN
 
 #include <memory>
-#include <string>
-#include <vector>
+#include <string>  // for allocator, wstring, string, basic_string
+#include <vector>  // for vector
 
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
-#include "ftxui/screen/terminal.hpp"
+#include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/color.hpp"     // for Color, Color::Default
+#include "ftxui/screen/terminal.hpp"  // for Dimensions
 
 namespace ftxui {
 

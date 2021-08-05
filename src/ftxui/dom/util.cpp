@@ -1,8 +1,14 @@
+#include <algorithm>   // for min
 #include <functional>  // for function
+#include <memory>      // for __shared_ptr_access
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "ftxui/dom/elements.hpp"  // for Decorator, Element, Elements, operator|, nothing
+#include "ftxui/dom/elements.hpp"  // for Element, Decorator, Elements, operator|, Fit, nothing
+#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/screen.hpp"    // for Full
+#include "ftxui/screen/terminal.hpp"  // for Dimensions
 
 namespace ftxui {
 

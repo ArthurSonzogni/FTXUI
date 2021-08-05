@@ -1,11 +1,12 @@
 #include <memory>  // for allocator, __shared_ptr_access
-#include <string>  // for operator+, char_traits, wstring
+#include <string>  // for char_traits, operator+, wstring, basic_string
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for InputOption
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, hbox, Element, separator, operator|, vbox, border
+#include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
@@ -13,7 +14,6 @@ int main(int argc, const char* argv[]) {
   std::wstring first_name;
   std::wstring last_name;
   std::wstring password;
-
 
   Component input_first_name = Input(&first_name, "first name");
   Component input_last_name = Input(&last_name, "last name");

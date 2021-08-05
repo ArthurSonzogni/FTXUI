@@ -1,30 +1,16 @@
 #include <functional>  // for function
-#include <memory>      // for __shared_ptr_access
+#include <memory>      // for __shared_ptr_access, shared_ptr
 #include <utility>     // for move
 
-#include "ftxui/component/component.hpp"       // for Component, Make, Renderer
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/dom/elements.hpp"              // for Element
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/component.hpp"       // for Make, Renderer
+#include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"           // for Mouse
+#include "ftxui/dom/elements.hpp"  // for Element, operator|, reflect
+#include "ftxui/screen/box.hpp"    // for Box
 
 namespace ftxui {
-
-// @brief A component rendering Element from a function.
-class RendererBase : public ComponentBase {
- public:
-  // Access this interface from a Component
-  static RendererBase* From(Component component) {
-    return static_cast<RendererBase*>(component.get());
-  }
-
-  // Constructor.
-  RendererBase(std::function<Element()> render) : render_(std::move(render)) {}
-
-  // Component implementation.
-  Element Render() override { return render_(); }
-
- protected:
-  std::function<Element()> render_;
-};
 
 /// @brief Return a component, using |render| to render its interface.
 /// @param render The function drawing the interface.
@@ -40,7 +26,14 @@ class RendererBase : public ComponentBase {
 /// screen.Loop(renderer);
 /// ```
 Component Renderer(std::function<Element()> render) {
-  return Make<RendererBase>(std::move(render));
+  class Impl : public ComponentBase {
+   public:
+    Impl(std::function<Element()> render) : render_(std::move(render)) {}
+    Element Render() override { return render_(); }
+    std::function<Element()> render_;
+  };
+
+  return Make<Impl>(std::move(render));
 }
 
 /// @brief Return a new Component, similar to |child|, but using |render| as the
@@ -67,6 +60,48 @@ Component Renderer(Component child, std::function<Element()> render) {
   Component renderer = Renderer(std::move(render));
   renderer->Add(std::move(child));
   return renderer;
+}
+
+/// @brief Return a focusable component, using |render| to render its interface.
+/// @param render The function drawing the interface, taking a boolean telling
+/// whether the component is focused or not.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto renderer = Renderer([] (bool focused) {
+///   if (focused)
+///     return text("My interface") | inverted;
+///   else
+///     return text("My interface") | inverted;
+/// });
+/// screen.Loop(renderer);
+/// ```
+Component Renderer(std::function<Element(bool)> render) {
+  class Impl : public ComponentBase {
+   public:
+    Impl(std::function<Element(bool)> render) : render_(std::move(render)) {}
+
+   private:
+    Element Render() override { return render_(Focused()) | reflect(box_); }
+    bool Focusable() const override { return true; }
+    bool OnEvent(Event event) override {
+      if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
+        if (!CaptureMouse(event))
+          return false;
+
+        TakeFocus();
+      }
+
+      return false;
+    }
+    Box box_;
+
+    std::function<Element(bool)> render_;
+  };
+  return Make<Impl>(std::move(render));
 }
 
 }  // namespace ftxui

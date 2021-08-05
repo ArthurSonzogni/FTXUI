@@ -84,9 +84,7 @@ class SliderBase : public ComponentBase {
     return false;
   }
 
-  bool Focusable() const final {
-    return true;
-  }
+  bool Focusable() const final { return true; }
 
  private:
   StringRef label_;

@@ -119,9 +119,7 @@ class RadioboxBase : public ComponentBase {
     return false;
   }
 
-  bool Focusable() const final {
-    return entries_->size();
-  }
+  bool Focusable() const final { return entries_->size(); }
 
   int& focused_entry() { return option_->focused_entry(); }
 
