@@ -53,6 +53,10 @@ class ButtonBase : public ComponentBase {
     return false;
   }
 
+  bool Focusable() const final {
+    return true;
+  }
+
  private:
   ConstStringRef label_;
   std::function<void()> on_click_;

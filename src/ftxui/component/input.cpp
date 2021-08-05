@@ -163,6 +163,11 @@ class InputBase : public ComponentBase {
     }
     return true;
   }
+
+  bool Focusable() const final {
+    return true;
+  }
+
   StringRef content_;
   ConstStringRef placeholder_;
 

@@ -107,6 +107,8 @@ class ToggleBase : public ComponentBase {
     return false;
   }
 
+  bool Focusable() const final { return entries_->size(); }
+
   int& focused_entry() { return option_->focused_entry(); }
 
   const std::vector<std::wstring>* const entries_;

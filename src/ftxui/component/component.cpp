@@ -106,6 +106,18 @@ Component ComponentBase::ActiveChild() {
   return children_.empty() ? nullptr : children_.front();
 }
 
+/// @brief Return true when the component contains focusable elements.
+/// The non focusable Components will be skipped when navigating using the
+/// keyboard.
+/// @ingroup component
+bool ComponentBase::Focusable() const {
+  for (const Component& child : children_) {
+    if (child->Focusable())
+      return true;
+  }
+  return false;
+}
+
 /// @brief Returns if the element if the currently active child of its parent.
 /// @ingroup component
 bool ComponentBase::Active() const {

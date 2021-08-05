@@ -10,14 +10,24 @@
 
 using namespace ftxui;
 
+Component Focusable() {
+  return Button(L"", [] {});
+}
+Component NonFocusable() {
+  return Container::Horizontal({});
+}
+
 TEST(ContainerTest, HorizontalEvent) {
   auto container = Container::Horizontal({});
-  auto c0 = Container::Horizontal({});
-  auto c1 = Container::Horizontal({});
-  auto c2 = Container::Horizontal({});
+  auto c0 = Focusable();
+  auto c1 = Focusable();
+  auto c2 = Focusable();
   container->Add(c0);
   container->Add(c1);
+  container->Add(NonFocusable());
+  container->Add(NonFocusable());
   container->Add(c2);
+  container->Add(NonFocusable());
 
   // With arrow key.
   EXPECT_EQ(container->ActiveChild(), c0);
@@ -85,12 +95,15 @@ TEST(ContainerTest, HorizontalEvent) {
 
 TEST(ContainerTest, VerticalEvent) {
   auto container = Container::Vertical({});
-  auto c0 = Container::Horizontal({});
-  auto c1 = Container::Horizontal({});
-  auto c2 = Container::Horizontal({});
+  auto c0 = Focusable();
+  auto c1 = Focusable();
+  auto c2 = Focusable();
   container->Add(c0);
   container->Add(c1);
+  container->Add(NonFocusable());
+  container->Add(NonFocusable());
   container->Add(c2);
+  container->Add(NonFocusable());
 
   // With arrow key.
   EXPECT_EQ(container->ActiveChild(), c0);
@@ -158,9 +171,9 @@ TEST(ContainerTest, VerticalEvent) {
 
 TEST(ContainerTest, SetActiveChild) {
   auto container = Container::Horizontal({});
-  auto c0 = Container::Horizontal({});
-  auto c1 = Container::Horizontal({});
-  auto c2 = Container::Horizontal({});
+  auto c0 = Focusable();
+  auto c1 = Focusable();
+  auto c2 = Focusable();
   container->Add(c0);
   container->Add(c1);
   container->Add(c2);
@@ -215,12 +228,12 @@ TEST(ContainerTest, TakeFocus) {
   auto c1 = Container::Vertical({});
   auto c2 = Container::Vertical({});
   auto c3 = Container::Vertical({});
-  auto c11 = Container::Horizontal({});
-  auto c12 = Container::Horizontal({});
-  auto c13 = Container::Horizontal({});
-  auto c21 = Container::Horizontal({});
-  auto c22 = Container::Horizontal({});
-  auto c23 = Container::Horizontal({});
+  auto c11 = Focusable();
+  auto c12 = Focusable();
+  auto c13 = Focusable();
+  auto c21 = Focusable();
+  auto c22 = Focusable();
+  auto c23 = Focusable();
 
   c->Add(c1);
   c->Add(c2);
