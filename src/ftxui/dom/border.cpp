@@ -12,7 +12,12 @@
 
 namespace ftxui {
 
-static wchar_t simple_border_charset[] = L"┌┐└┘─│┬┴┤├";
+static wchar_t simple_border_charset[] = L"╭╮╰╯─│┬┴┤├";
+
+// For reference, here is the charset for normal border:
+// L"┌┐└┘─│┬┴┤├";
+// TODO(arthursonzogni): Consider adding options to choose the kind of borders
+// to use.
 
 class Border : public Node {
  public:
