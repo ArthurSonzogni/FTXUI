@@ -56,10 +56,9 @@ class InputBase : public ComponentBase {
     std::wstring part_at_cursor = cursor_position() < (int)content.size()
                                       ? content.substr(cursor_position(), 1)
                                       : L" ";
-    std::wstring part_after_cursor =
-        cursor_position() < (int)content.size() - 1
-            ? content.substr(cursor_position() + 1)
-            : L"";
+    std::wstring part_after_cursor = cursor_position() < (int)content.size() - 1
+                                         ? content.substr(cursor_position() + 1)
+                                         : L"";
     auto focused = is_focused ? focus : select;
 
     // clang-format off
@@ -164,9 +163,7 @@ class InputBase : public ComponentBase {
     return true;
   }
 
-  bool Focusable() const final {
-    return true;
-  }
+  bool Focusable() const final { return true; }
 
   StringRef content_;
   ConstStringRef placeholder_;

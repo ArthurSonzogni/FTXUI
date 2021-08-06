@@ -1,10 +1,11 @@
-#include <algorithm>  // for min
+#include <algorithm>  // for max
 #include <iostream>  // for operator<<, basic_ostream, wstringstream, stringstream, flush, cout, ostream
+#include <memory>    // for allocator
 #include <sstream>   // IWYU pragma: keep
 
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"    // for to_string, wchar_width
-#include "ftxui/screen/terminal.hpp"  // for Terminal::Dimensions, Terminal
+#include "ftxui/screen/terminal.hpp"  // for Dimensions, Size
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN

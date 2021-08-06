@@ -1,8 +1,8 @@
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"  // for Element, clear_under
-#include "ftxui/dom/node.hpp"      // for Node
+#include "ftxui/dom/elements.hpp"        // for Element, clear_under
+#include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
 #include "ftxui/screen/screen.hpp"       // for Pixel, Screen

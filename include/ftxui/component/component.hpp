@@ -51,6 +51,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size);
 Component ResizableSplitBottom(Component main, Component back, int* main_size);
 Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);
+Component Renderer(std::function<Element(bool /* focused */)>);
 Component CatchEvent(Component child, std::function<bool(Event)>);
 
 namespace Container {

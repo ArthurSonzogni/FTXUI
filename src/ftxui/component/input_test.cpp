@@ -3,11 +3,14 @@
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 #include <string>  // for wstring
 
-#include "ftxui/component/captured_mouse.hpp"     // for ftxui
-#include "ftxui/component/component.hpp"          // for Input, Component
-#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Input
+#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for InputOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Delete, Event::End, Event::Home
+#include "ftxui/dom/elements.hpp"     // for Fit
+#include "ftxui/dom/node.hpp"         // for Render
+#include "ftxui/screen/screen.hpp"    // for Screen, Pixel
 #include "ftxui/util/ref.hpp"         // for Ref
 #include "gtest/gtest_pred_impl.h"    // for Test, EXPECT_EQ, TEST
 
