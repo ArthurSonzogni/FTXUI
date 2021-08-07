@@ -75,7 +75,7 @@ Component Renderer(Component child, std::function<Element()> render) {
 ///   if (focused)
 ///     return text("My interface") | inverted;
 ///   else
-///     return text("My interface") | inverted;
+///     return text("My interface");
 /// });
 /// screen.Loop(renderer);
 /// ```

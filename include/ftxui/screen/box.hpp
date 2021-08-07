@@ -4,10 +4,10 @@
 namespace ftxui {
 
 struct Box {
-  int x_min;
-  int x_max;
-  int y_min;
-  int y_max;
+  int x_min = 0;
+  int x_max = 0;
+  int y_min = 0;
+  int y_max = 0;
 
   static Box Intersection(Box a, Box b);
   bool Contain(int x, int y);
