@@ -57,9 +57,9 @@ TEST(TextTest, CJK) {
   Screen screen(6, 3);
   Render(screen, element);
   EXPECT_EQ(
-      "┌────┐\r\n"
+      "╭────╮\r\n"
       "│测试│\r\n"
-      "└────┘",
+      "╰────╯",
       screen.ToString());
 }
 
@@ -69,9 +69,9 @@ TEST(TextTest, CJK_2) {
   Screen screen(5, 3);
   Render(screen, element);
   EXPECT_EQ(
-      "┌───┐\r\n"
+      "╭───╮\r\n"
       "│测试\r\n"
-      "└───┘",
+      "╰───╯",
       screen.ToString());
 }
 
@@ -81,9 +81,9 @@ TEST(TextTest, CJK_3) {
   Screen screen(4, 3);
   Render(screen, element);
   EXPECT_EQ(
-      "┌──┐\r\n"
+      "╭──╮\r\n"
       "│测│\r\n"
-      "└──┘",
+      "╰──╯",
       screen.ToString());
 }
 
