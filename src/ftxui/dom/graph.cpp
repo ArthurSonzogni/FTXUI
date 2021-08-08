@@ -1,5 +1,6 @@
 #include <functional>  // for function
-#include <memory>      // for make_shared
+#include <memory>      // for allocator, make_shared
+#include <string>      // for string
 #include <vector>      // for vector
 
 #include "ftxui/dom/elements.hpp"     // for GraphFunction, Element, graph
@@ -10,12 +11,13 @@
 
 namespace ftxui {
 
-// Microsoft's terminals often use fonts not handling the 8 unicode characters
-// for representing the whole gauge. Fallback with less.
+static std::string charset[] =
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-const wchar_t charset[] = L"  █ █████";
+    // Microsoft's terminals often use fonts not handling the 8 unicode
+    // characters for representing the whole graph. Fallback with less.
+    {" ", " ", "█", " ", "█", "█", "█", "█", "█"};
 #else
-const wchar_t charset[] = L" ▗▐▖▄▟▌▙█";
+    {" ", "▗", "▐", "▖", "▄", "▟", "▌", "▙", "█"};
 #endif
 
 class Graph : public Node {
@@ -43,8 +45,7 @@ class Graph : public Node {
         int yy = 2 * y;
         int i_1 = yy < height_1 ? 0 : yy == height_1 ? 3 : 6;
         int i_2 = yy < height_2 ? 0 : yy == height_2 ? 1 : 2;
-        wchar_t pix = charset[i_1 + i_2];
-        screen.at(x, y) = pix;
+        screen.at(x, y) = charset[i_1 + i_2];
       }
     }
   }

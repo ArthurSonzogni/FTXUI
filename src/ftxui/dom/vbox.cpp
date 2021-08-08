@@ -137,8 +137,8 @@ class VBox : public Node {
 ///
 /// ```cpp
 /// vbox({
-///   text(L"Up"),
-///   text(L"Down"),
+///   text("Up"),
+///   text("Down"),
 /// });
 /// ```
 Element vbox(Elements children) {

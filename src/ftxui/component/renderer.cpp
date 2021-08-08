@@ -21,7 +21,7 @@ namespace ftxui {
 /// ```cpp
 /// auto screen = ScreenInteractive::TerminalOutput();
 /// auto renderer = Renderer([] {
-///   return text(L"My interface");
+///   return text("My interface");
 /// });
 /// screen.Loop(renderer);
 /// ```
@@ -46,7 +46,7 @@ Component Renderer(std::function<Element()> render) {
 ///
 /// ```cpp
 /// auto screen = ScreenInteractive::TerminalOutput();
-/// std::wstring label = "Click to quit";
+/// std::string label = "Click to quit";
 /// auto button = Button(&label, screen.ExitLoopClosure());
 /// auto renderer = Renderer(button, [&] {
 ///   return hbox({

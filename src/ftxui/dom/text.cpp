@@ -1,13 +1,14 @@
-#include <algorithm>  // for max
-#include <memory>     // for make_shared
-#include <string>     // for wstring
+#include <memory>  // for make_shared
+#include <string>  // for string
+#include <vector>  // for vector
 
+#include "ftxui/dom/deprecated.hpp"   // for text, vtext
 #include "ftxui/dom/elements.hpp"     // for Element, text, vtext
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/screen.hpp"    // for Screen
-#include "ftxui/screen/string.hpp"    // for wchar_width, wstring_width
+#include "ftxui/screen/screen.hpp"    // for Pixel, Screen
+#include "ftxui/screen/string.hpp"  // for string_width, Utf8ToGlyphs, to_string
 
 namespace ftxui {
 
@@ -15,10 +16,10 @@ using ftxui::Screen;
 
 class Text : public Node {
  public:
-  Text(std::wstring text) : text_(text) {}
+  Text(std::string text) : text_(text) {}
 
   void ComputeRequirement() override {
-    requirement_.min_x = wstring_width(text_);
+    requirement_.min_x = string_width(text_);
     requirement_.min_y = 1;
   }
 
@@ -27,33 +28,26 @@ class Text : public Node {
     int y = box_.y_min;
     if (y > box_.y_max)
       return;
-    for (wchar_t c : text_) {
-      const int width = wchar_width(c);
-      if (width >= 1) {
-        if (x > box_.x_max)
-          return;
-        screen.PixelAt(x, y).character = c;
-      } else {
-        screen.PixelAt(x - 1, y).character += c;
-      }
-      x += std::max(width, 0);
+    for (const auto& cell : Utf8ToGlyphs(text_)) {
+      if (x > box_.x_max)
+        return;
+      screen.PixelAt(x, y).character = cell;
+      ++x;
     }
   }
 
  private:
-  std::wstring text_;
+  std::string text_;
 };
 
 class VText : public Node {
  public:
-  VText(std::wstring text) : text_(text) {
-    for (auto& c : text_)
-      width_ = std::max(width_, wchar_width(c));
-  }
+  VText(std::string text)
+      : text_(text), width_{std::min(string_width(text_), 1)} {}
 
   void ComputeRequirement() override {
     requirement_.min_x = width_;
-    requirement_.min_y = text_.size();
+    requirement_.min_y = string_width(text_);
   }
 
   void Render(Screen& screen) override {
@@ -61,20 +55,39 @@ class VText : public Node {
     int y = box_.y_min;
     if (x + width_ - 1 > box_.x_max)
       return;
-    for (wchar_t c : text_) {
+    for (const auto& it : Utf8ToGlyphs(text_)) {
       if (y > box_.y_max)
         return;
-      screen.at(x, y) = c;
+      screen.PixelAt(x, y).character = it;
       y += 1;
     }
   }
 
  private:
-  std::wstring text_;
+  std::string text_;
   int width_ = 1;
 };
 
-/// @brief Display a pieve of unicode text.
+/// @brief Display a piece of UTF8 encoded unicode text.
+/// @ingroup dom
+/// @see ftxui::to_wstring
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = text("Hello world!");
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// Hello world!
+/// ```
+Element text(std::string text) {
+  return std::make_shared<Text>(text);
+}
+
+/// @brief Display a piece of UTF16 encoded unicode text.
 /// @ingroup dom
 /// @see ftxui::to_wstring
 ///
@@ -90,10 +103,40 @@ class VText : public Node {
 /// Hello world!
 /// ```
 Element text(std::wstring text) {
-  return std::make_shared<Text>(text);
+  return std::make_shared<Text>(to_string(text));
 }
 
-/// @brief Display a pieve of unicode text vertically.
+/// @brief Display a piece of unicode text vertically.
+/// @ingroup dom
+/// @see ftxui::to_wstring
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = vtext("Hello world!");
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// H
+/// e
+/// l
+/// l
+/// o
+///
+/// w
+/// o
+/// r
+/// l
+/// d
+/// !
+/// ```
+Element vtext(std::string text) {
+  return std::make_shared<VText>(text);
+}
+
+/// @brief Display a piece of UTF16 encoded unicode text vertically.
 /// @ingroup dom
 /// @see ftxui::to_wstring
 ///
@@ -120,7 +163,7 @@ Element text(std::wstring text) {
 /// !
 /// ```
 Element vtext(std::wstring text) {
-  return std::make_shared<VText>(text);
+  return std::make_shared<VText>(to_string(text));
 }
 
 }  // namespace ftxui

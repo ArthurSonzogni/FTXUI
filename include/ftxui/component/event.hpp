@@ -24,10 +24,9 @@ class ComponentBase;
 /// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 struct Event {
   // --- Constructor section ---------------------------------------------------
+  static Event Character(std::string);
   static Event Character(char);
   static Event Character(wchar_t);
-
-  static Event Character(std::string);
   static Event Special(std::string);
   static Event Mouse(std::string, Mouse mouse);
   static Event CursorReporting(std::string, int x, int y);
@@ -58,7 +57,7 @@ struct Event {
 
   //--- Method section ---------------------------------------------------------
   bool is_character() const { return type_ == Type::Character; }
-  wchar_t character() const { return character_; }
+  std::string character() const { return input_; }
 
   bool is_mouse() const { return type_ == Type::Mouse; }
   struct Mouse& mouse() {
@@ -92,7 +91,6 @@ struct Event {
   };
 
   union {
-    wchar_t character_ = U'?';
     struct Mouse mouse_;
     struct Cursor cursor_;
   };

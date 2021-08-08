@@ -56,10 +56,10 @@ Elements operator|(Elements elements, Decorator decorator) {
 ///
 /// Both of these are equivalent:
 /// ```cpp
-/// bold(text(L"Hello"));
+/// bold(text("Hello"));
 /// ```
 /// ```cpp
-/// text(L"Hello") | bold;
+/// text("Hello") | bold;
 /// ```
 Element operator|(Element element, Decorator decorator) {
   return decorator(std::move(element));

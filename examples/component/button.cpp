@@ -6,7 +6,8 @@
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/component_options.hpp"   // for ButtonOption
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for separator, gauge, text, Element, operator|, vbox, border
+#include "ftxui/dom/deprecated.hpp"                // for text
+#include "ftxui/dom/elements.hpp"  // for separator, gauge, Element, operator|, vbox, border
 
 using namespace ftxui;
 

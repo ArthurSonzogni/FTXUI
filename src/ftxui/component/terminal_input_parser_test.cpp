@@ -29,7 +29,7 @@ TEST(Event, Character) {
   for (char c : basic_char) {
     EXPECT_TRUE(event_receiver->Receive(&received));
     EXPECT_TRUE(received.is_character());
-    EXPECT_EQ(c, received.character());
+    EXPECT_EQ(c, received.character()[0]);
   }
   EXPECT_FALSE(event_receiver->Receive(&received));
 }

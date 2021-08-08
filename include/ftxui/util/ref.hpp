@@ -42,11 +42,27 @@ class Ref {
 /// class convert multiple mutable string toward a shared representation.
 class StringRef {
  public:
-  StringRef(std::wstring* ref) : address_(ref) {}
-  StringRef(std::wstring ref) : owned_(std::move(ref)) {}
-  StringRef(const wchar_t* ref) : StringRef(std::wstring(ref)) {}
-  StringRef(const char* ref) : StringRef(to_wstring(std::string(ref))) {}
-  StringRef(std::string ref) : StringRef(to_wstring(std::move(ref))) {}
+  StringRef(std::string* ref) : address_(ref) {}
+  StringRef(std::string ref) : owned_(std::move(ref)) {}
+  StringRef(const wchar_t* ref) : StringRef(to_string(std::wstring(ref))) {}
+  StringRef(const char* ref) : StringRef(std::string(ref)) {}
+  std::string& operator*() { return address_ ? *address_ : owned_; }
+  std::string* operator->() { return address_ ? address_ : &owned_; }
+
+ private:
+  std::string owned_;
+  std::string* address_ = nullptr;
+};
+
+/// @brief An adapter. Own or reference a constant string. For convenience, this
+/// class convert multiple mutable string toward a shared representation.
+class WideStringRef {
+ public:
+  WideStringRef(std::wstring* ref) : address_(ref) {}
+  WideStringRef(std::wstring ref) : owned_(std::move(ref)) {}
+  WideStringRef(const wchar_t* ref) : WideStringRef(std::wstring(ref)) {}
+  WideStringRef(const char* ref)
+      : WideStringRef(to_wstring(std::string(ref))) {}
   std::wstring& operator*() { return address_ ? *address_ : owned_; }
   std::wstring* operator->() { return address_ ? address_ : &owned_; }
 
@@ -59,19 +75,35 @@ class StringRef {
 /// class convert multiple immutable string toward a shared representation.
 class ConstStringRef {
  public:
-  ConstStringRef(const std::wstring* ref) : address_(ref) {}
-  ConstStringRef(std::wstring ref) : owned_(std::move(ref)) {}
+  ConstStringRef(const std::string* ref) : address_(ref) {}
+  ConstStringRef(const std::wstring* ref) : ConstStringRef(to_string(*ref)) {}
+  ConstStringRef(std::string ref) : owned_(std::move(ref)) {}
+  ConstStringRef(std::wstring ref) : ConstStringRef(to_string(ref)) {}
   ConstStringRef(const wchar_t* ref) : ConstStringRef(std::wstring(ref)) {}
   ConstStringRef(const char* ref)
       : ConstStringRef(to_wstring(std::string(ref))) {}
-  ConstStringRef(std::string ref)
-      : ConstStringRef(to_wstring(std::move(ref))) {}
-  const std::wstring& operator*() { return address_ ? *address_ : owned_; }
-  const std::wstring* operator->() { return address_ ? address_ : &owned_; }
+  const std::string& operator*() { return address_ ? *address_ : owned_; }
+  const std::string* operator->() { return address_ ? address_ : &owned_; }
 
  private:
-  const std::wstring owned_;
-  const std::wstring* address_ = nullptr;
+  const std::string owned_;
+  const std::string* address_ = nullptr;
+};
+
+/// @brief An adapter. Reference a list of strings.
+class ConstStringListRef {
+ public:
+  ConstStringListRef(const std::vector<std::string>* ref) : ref_(ref) {}
+  ConstStringListRef(const std::vector<std::wstring>* ref) : ref_wide_(ref) {}
+
+  size_t size() const { return ref_ ? ref_->size() : ref_wide_->size(); }
+  std::string operator[](size_t i) const {
+    return ref_ ? (*ref_)[i] : to_string((*ref_wide_)[i]);
+  }
+
+ private:
+  const std::vector<std::string>* ref_ = nullptr;
+  const std::vector<std::wstring>* ref_wide_ = nullptr;
 };
 
 }  // namespace ftxui

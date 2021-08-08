@@ -2,12 +2,13 @@
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
 #include <string>                   // for allocator, wstring
 
-#include "ftxui/dom/elements.hpp"   // for text, operator|, border, Element
-#include "ftxui/dom/node.hpp"       // for Render
-#include "ftxui/screen/box.hpp"     // for ftxui
-#include "ftxui/screen/screen.hpp"  // for Screen
-#include "ftxui/screen/string.hpp"  // for to_string
-#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/elements.hpp"    // for operator|, border, Element
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/screen/screen.hpp"   // for Screen
+#include "ftxui/screen/string.hpp"   // for to_string
+#include "gtest/gtest_pred_impl.h"   // for Test, EXPECT_EQ, TEST
 
 using namespace ftxui;
 

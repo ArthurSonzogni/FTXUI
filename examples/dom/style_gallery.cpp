@@ -1,10 +1,11 @@
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <memory>
+#include <ftxui/dom/elements.hpp>  // for operator|, Element, bgcolor, color, blink, bold, dim, inverted, underlined, hbox
+#include <ftxui/screen/screen.hpp>  // for Dimension, Screen
+#include <memory>                   // for allocator
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/screen/color.hpp"    // for Color, Color::Blue
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

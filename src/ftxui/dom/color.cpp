@@ -52,7 +52,7 @@ class FgColor : public NodeDecorator {
 /// ### Example
 ///
 /// ```cpp
-/// Element document = color(Color::Green, text(L"Success")),
+/// Element document = color(Color::Green, text("Success")),
 /// ```
 Element color(Color color, Element child) {
   return std::make_shared<FgColor>(std::move(child), color);
@@ -67,7 +67,7 @@ Element color(Color color, Element child) {
 /// ### Example
 ///
 /// ```cpp
-/// Element document = bgcolor(Color::Green, text(L"Success")),
+/// Element document = bgcolor(Color::Green, text("Success")),
 /// ```
 Element bgcolor(Color color, Element child) {
   return std::make_shared<BgColor>(std::move(child), color);
@@ -81,7 +81,7 @@ Element bgcolor(Color color, Element child) {
 /// ### Example
 ///
 /// ```cpp
-/// Element document = text(L"red") | color(Color::Red);
+/// Element document = text("red") | color(Color::Red);
 /// ```
 Decorator color(Color c) {
   return [c](Element child) { return color(c, std::move(child)); };
@@ -95,7 +95,7 @@ Decorator color(Color c) {
 /// ### Example
 ///
 /// ```cpp
-/// Element document = text(L"red") | bgcolor(Color::Red);
+/// Element document = text("red") | bgcolor(Color::Red);
 /// ```
 Decorator bgcolor(Color color) {
   return [color](Element child) { return bgcolor(color, std::move(child)); };

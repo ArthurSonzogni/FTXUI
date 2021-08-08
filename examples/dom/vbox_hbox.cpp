@@ -1,10 +1,11 @@
-#include <stdio.h>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <memory>
+#include <stdio.h>                  // for getchar
+#include <ftxui/dom/elements.hpp>   // for filler, hbox, vbox
+#include <ftxui/screen/screen.hpp>  // for Screen, Dimension
+#include <memory>                   // for allocator
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

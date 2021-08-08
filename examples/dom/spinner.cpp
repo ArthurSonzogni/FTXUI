@@ -1,15 +1,16 @@
-#include <chrono>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/string.hpp>
-#include <iostream>
-#include <string>
-#include <thread>
-#include <utility>
-#include <vector>
+#include <chrono>                  // for operator""s, chrono_literals
+#include <ftxui/dom/elements.hpp>  // for Element, operator|, separator, filler, hbox, size, spinner, vbox, bold, border, EQUAL, WIDTH
+#include <ftxui/screen/screen.hpp>  // for Screen, Dimension
+#include <ftxui/screen/string.hpp>  // for to_wstring
+#include <iostream>                 // for cout, endl, ostream
+#include <string>                   // for operator<<, string
+#include <thread>                   // for sleep_for
+#include <utility>                  // for move
+#include <vector>                   // for vector
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

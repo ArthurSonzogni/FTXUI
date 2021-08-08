@@ -1,17 +1,18 @@
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/color_info.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <string>
-#include <utility>
-#include <vector>
+#include <ftxui/dom/elements.hpp>  // for bgcolor, hbox, operator|, Elements, vbox, Element
+#include <ftxui/screen/color_info.hpp>  // for ColorInfo
+#include <ftxui/screen/screen.hpp>      // for Dimension, Screen
+#include <string>                       // for allocator, string
+#include <utility>                      // for move
+#include <vector>                       // for vector
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
-#include "ftxui/screen/string.hpp"
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/screen/color.hpp"    // for Color, Color::Palette256
+#include "ftxui/screen/string.hpp"   // for to_wstring
 
 using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // ColorInfoSorted2D.
+#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
 int main(int argc, const char* argv[]) {
   std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();

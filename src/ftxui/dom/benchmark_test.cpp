@@ -10,7 +10,7 @@ using namespace ftxui;
 static void BencharkBasic(benchmark::State& state) {
   while (state.KeepRunning()) {
     auto document = vbox({
-                        text(L"Test"),
+                        text("Test"),
                         separator(),
                         hbox({
                             gauge(0.9),
@@ -20,7 +20,7 @@ static void BencharkBasic(benchmark::State& state) {
                             gauge(0.1),
                             separator(),
                         }),
-                        text(L"Test"),
+                        text("Test"),
                     }) |
                     border;
     auto root = gauge(1.0);

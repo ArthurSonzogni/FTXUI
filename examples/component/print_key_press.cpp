@@ -4,8 +4,8 @@
 
 #include <stddef.h>   // for size_t
 #include <algorithm>  // for max
-#include <memory>     // for shared_ptr
-#include <string>  // for allocator, char_traits, operator+, wstring, basic_string, to_wstring, string
+#include <memory>     // for allocator, shared_ptr
+#include <string>  // for char_traits, operator+, string, basic_string, to_string
 #include <utility>  // for move
 #include <vector>   // for vector
 
@@ -18,56 +18,56 @@
 
 using namespace ftxui;
 
-std::wstring Stringify(Event event) {
-  std::wstring out;
+std::string Stringify(Event event) {
+  std::string out;
   for (auto& it : event.input())
-    out += L" " + std::to_wstring((unsigned int)it);
+    out += " " + std::to_string((unsigned int)it);
 
-  out = L"(" + out + L" ) -> ";
+  out = "(" + out + " ) -> ";
   if (event.is_character()) {
-    out += std::wstring(L"character(") + event.character() + L")";
+    out += "character(" + event.character() + ")";
   } else if (event.is_mouse()) {
-    out += L"mouse";
+    out += "mouse";
     switch (event.mouse().button) {
       case Mouse::Left:
-        out += L"_left";
+        out += "_left";
         break;
       case Mouse::Middle:
-        out += L"_middle";
+        out += "_middle";
         break;
       case Mouse::Right:
-        out += L"_right";
+        out += "_right";
         break;
       case Mouse::None:
-        out += L"_none";
+        out += "_none";
         break;
       case Mouse::WheelUp:
-        out += L"_wheel_up";
+        out += "_wheel_up";
         break;
       case Mouse::WheelDown:
-        out += L"_wheel_down";
+        out += "_wheel_down";
         break;
     }
     switch (event.mouse().motion) {
       case Mouse::Pressed:
-        out += L"_pressed";
+        out += "_pressed";
         break;
       case Mouse::Released:
-        out += L"_released";
+        out += "_released";
         break;
     }
     if (event.mouse().control)
-      out += L"_control";
+      out += "_control";
     if (event.mouse().shift)
-      out += L"_shift";
+      out += "_shift";
     if (event.mouse().meta)
-      out += L"_meta";
+      out += "_meta";
 
-    out += L"(" +  //
-           std::to_wstring(event.mouse().x) + L"," +
-           std::to_wstring(event.mouse().y) + L")";
+    out += "(" +  //
+           std::to_string(event.mouse().x) + "," +
+           std::to_string(event.mouse().y) + ")";
   } else {
-    out += L"(special)";
+    out += "(special)";
   }
   return out;
 }
@@ -81,7 +81,7 @@ int main(int argc, const char* argv[]) {
     Elements children;
     for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i)
       children.push_back(text(Stringify(keys[i])));
-    return window(text(L"keys"), vbox(std::move(children)));
+    return window(text("keys"), vbox(std::move(children)));
   });
 
   component = CatchEvent(component, [&](Event event) {

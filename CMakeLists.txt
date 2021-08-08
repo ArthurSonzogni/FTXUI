@@ -4,7 +4,7 @@ include(cmake/ftxui_git_version.cmake)
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.7.${git_version}
+  VERSION 0.8.${git_version}
 )
 
 option(FTXUI_BUILD_DOCS "Set to ON to build tests" ON)
@@ -31,7 +31,6 @@ add_library(screen STATIC
   src/ftxui/screen/screen.cpp
   src/ftxui/screen/string.cpp
   src/ftxui/screen/terminal.cpp
-  src/ftxui/screen/wcwidth.cpp
   include/ftxui/screen/box.hpp
   include/ftxui/screen/color.hpp
   include/ftxui/screen/color_info.hpp

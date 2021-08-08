@@ -103,9 +103,9 @@ Element filler() {
 ///
 /// ~~~cpp
 ///   hbox({
-///     text(L"left") | border ,
-///     text(L"middle") | border | flex,
-///     text(L"right") | border,
+///     text("left") | border ,
+///     text("middle") | border | flex,
+///     text("right") | border,
 ///   });
 /// ~~~
 ///

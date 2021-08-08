@@ -9,7 +9,7 @@
 #include "ftxui/component/component_base.hpp"     // for Component, Components
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption, InputOption, MenuOption, RadioboxOption, ToggleOption
 #include "ftxui/dom/elements.hpp"                 // for Element
-#include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef, StringRef
+#include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef, ConstStringListRef, StringRef
 
 namespace ftxui {
 struct ButtonOption;
@@ -34,17 +34,17 @@ Component Checkbox(ConstStringRef label,
 Component Input(StringRef content,
                 ConstStringRef placeholder,
                 Ref<InputOption> option = {});
-Component Menu(const std::vector<std::wstring>* entries,
+Component Menu(ConstStringListRef entries,
                int* selected_,
                Ref<MenuOption> = {});
-Component Radiobox(const std::vector<std::wstring>* entries,
+Component Radiobox(ConstStringListRef entries,
                    int* selected_,
                    Ref<RadioboxOption> option = {});
-Component Toggle(const std::vector<std::wstring>* entries,
+Component Toggle(ConstStringListRef entries,
                  int* selected,
                  Ref<ToggleOption> option = {});
 template <class T>  // T = {int, float, long}
-Component Slider(StringRef label, T* value, T min, T max, T increment);
+Component Slider(ConstStringRef label, T* value, T min, T max, T increment);
 Component ResizableSplitLeft(Component main, Component back, int* main_size);
 Component ResizableSplitRight(Component main, Component back, int* main_size);
 Component ResizableSplitTop(Component main, Component back, int* main_size);
@@ -64,6 +64,9 @@ Component Tab(Components children, int* selector);
 }  // namespace Container
 
 }  // namespace ftxui
+
+// Include component using the old deprecated wstring.
+#include "ftxui/component/deprecated.hpp"
 
 #endif /* end of include guard: FTXUI_COMPONENT_HPP */
 

@@ -1,12 +1,13 @@
-#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
-#include <string>  // for wstring, operator+, basic_string, char_traits
+#include <memory>  // for allocator, shared_ptr, __shared_ptr_access
+#include <string>  // for wstring, basic_string, char_traits, operator+
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Renderer, Horizontal, Tab
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for Element, operator|, filler, text, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
+#include "ftxui/dom/deprecated.hpp"                // for text
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, filler, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

@@ -93,7 +93,7 @@ class VerticalContainer : public ContainerBase {
     for (auto& it : children_)
       elements.push_back(it->Render());
     if (elements.size() == 0)
-      return text(L"Empty container");
+      return text("Empty container");
     return vbox(std::move(elements));
   }
 
@@ -122,7 +122,7 @@ class HorizontalContainer : public ContainerBase {
     for (auto& it : children_)
       elements.push_back(it->Render());
     if (elements.size() == 0)
-      return text(L"Empty container");
+      return text("Empty container");
     return hbox(std::move(elements));
   }
 
@@ -150,7 +150,7 @@ class TabContainer : public ContainerBase {
     Component active_child = ActiveChild();
     if (active_child)
       return active_child->Render();
-    return text(L"Empty container");
+    return text("Empty container");
   }
 
   bool OnMouseEvent(Event event) override {

@@ -4,7 +4,8 @@
 #include "ftxui/component/component.hpp"       // for Renderer, Button, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, text, bold, border, center, color
+#include "ftxui/dom/deprecated.hpp"                // for text
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, bold, border, center, color
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
 
 int main(int argc, const char* argv[]) {

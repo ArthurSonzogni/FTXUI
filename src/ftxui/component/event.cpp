@@ -9,7 +9,6 @@ namespace ftxui {
 // static
 Event Event::Character(std::string input) {
   Event event;
-  event.character_ = to_wstring(input)[0];
   event.input_ = std::move(input);
   event.type_ = Type::Character;
   return event;
@@ -17,16 +16,12 @@ Event Event::Character(std::string input) {
 
 // static
 Event Event::Character(char c) {
-  return Character(wchar_t(c));
+  return Event::Character(std::string{c});
 }
 
 // static
 Event Event::Character(wchar_t c) {
-  Event event;
-  event.input_ = {(char)c};
-  event.type_ = Type::Character;
-  event.character_ = c;
-  return event;
+  return Event::Character(to_string(std::wstring{c}));
 }
 
 // static

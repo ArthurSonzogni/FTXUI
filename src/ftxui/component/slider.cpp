@@ -17,7 +17,7 @@ namespace ftxui {
 template <class T>
 class SliderBase : public ComponentBase {
  public:
-  SliderBase(StringRef label, T* value, T min, T max, T increment)
+  SliderBase(ConstStringRef label, T* value, T min, T max, T increment)
       : label_(label),
         value_(value),
         min_(min),
@@ -31,9 +31,9 @@ class SliderBase : public ComponentBase {
     return hbox({
                text(*label_) | dim | vcenter,
                hbox({
-                   text(L"["),
+                   text("["),
                    gauge(percent) | underlined | xflex | reflect(gauge_box_),
-                   text(L"]"),
+                   text("]"),
                }) | xflex,
            }) |
            gauge_color | xflex | reflect(box_);
@@ -87,7 +87,7 @@ class SliderBase : public ComponentBase {
   bool Focusable() const final { return true; }
 
  private:
-  StringRef label_;
+  ConstStringRef label_;
   T* value_;
   T min_;
   T max_;
@@ -110,7 +110,7 @@ class SliderBase : public ComponentBase {
 /// ```cpp
 /// auto screen = ScreenInteractive::TerminalOutput();
 /// int value = 50;
-/// auto slider = Slider(L"Value:", &value, 0, 100, 1);
+/// auto slider = Slider("Value:", &value, 0, 100, 1);
 /// screen.Loop(slider);
 /// ```
 ///
@@ -120,23 +120,23 @@ class SliderBase : public ComponentBase {
 /// Value:[██████████████████████████                          ]
 /// ```
 template <class T>
-Component Slider(StringRef label, T* value, T min, T max, T increment) {
+Component Slider(ConstStringRef label, T* value, T min, T max, T increment) {
   return Make<SliderBase<T>>(std::move(label), value, min, max, increment);
 }
 
-template Component Slider(StringRef label,
+template Component Slider(ConstStringRef label,
                           int* value,
                           int min,
                           int max,
                           int increment);
 
-template Component Slider(StringRef label,
+template Component Slider(ConstStringRef label,
                           float* value,
                           float min,
                           float max,
                           float increment);
 
-template Component Slider(StringRef label,
+template Component Slider(ConstStringRef label,
                           long* value,
                           long min,
                           long max,

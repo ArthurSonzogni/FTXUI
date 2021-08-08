@@ -1,12 +1,13 @@
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <ftxui/screen/string.hpp>
-#include <memory>
-#include <string>
-#include <utility>
+#include <ftxui/dom/elements.hpp>  // for operator|, Element, hcenter, hbox, size, window, Elements, bold, dim, EQUAL, WIDTH
+#include <ftxui/screen/screen.hpp>  // for Screen, Dimension
+#include <ftxui/screen/string.hpp>  // for to_wstring
+#include <memory>                   // for allocator, shared_ptr
+#include <string>                   // for wstring
+#include <utility>                  // for move
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
+#include "ftxui/dom/deprecated.hpp"  // for text
+#include "ftxui/dom/node.hpp"        // for Render
+#include "ftxui/screen/box.hpp"      // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
