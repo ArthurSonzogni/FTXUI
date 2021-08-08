@@ -102,8 +102,8 @@ class ConstStringListRef {
   }
 
  private:
-  const std::vector<std::string>* const ref_ = nullptr;
-  const std::vector<std::wstring>* const ref_wide_ = nullptr;
+  const std::vector<std::string>* ref_ = nullptr;
+  const std::vector<std::wstring>* ref_wide_ = nullptr;
 };
 
 }  // namespace ftxui

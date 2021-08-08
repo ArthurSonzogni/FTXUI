@@ -28,7 +28,7 @@ class Text : public Node {
     int y = box_.y_min;
     if (y > box_.y_max)
       return;
-    for (auto cell : Utf8ToGlyphs(text_)) {
+    for (const auto& cell : Utf8ToGlyphs(text_)) {
       if (x > box_.x_max)
         return;
       screen.PixelAt(x, y).character = cell;
@@ -43,7 +43,7 @@ class Text : public Node {
 class VText : public Node {
  public:
   VText(std::string text) : text_(text) {
-    width_ = string_width(text_) ? 1 : 0;
+    width_{std::min(string_width(text_), 1)}
   }
 
   void ComputeRequirement() override {

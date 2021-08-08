@@ -16,9 +16,7 @@ Event Event::Character(std::string input) {
 
 // static
 Event Event::Character(char c) {
-  std::string input;
-  input += c;
-  return Event::Character(input);
+  return Event::Character(std::string{c});
 }
 
 // static
