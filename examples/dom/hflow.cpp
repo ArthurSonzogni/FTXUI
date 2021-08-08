@@ -1,20 +1,18 @@
 #include <stddef.h>                // for size_t
-#include <ftxui/dom/elements.hpp>  // for operator|, size, Element, hcenter, Decorator, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN
-#include <ftxui/screen/screen.hpp>  // for Dimension, Screen
-#include <ftxui/screen/string.hpp>  // for to_wstring
+#include <ftxui/dom/elements.hpp>  // for operator|, size, Element, text, hcenter, Decorator, Fit, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator, shared_ptr
-#include <string>                   // for operator+, char_traits, wstring
+#include <string>  // for operator+, to_string, char_traits, string
 
-#include "ftxui/dom/deprecated.hpp"  // for text
-#include "ftxui/dom/node.hpp"        // for Render
-#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/dom/node.hpp"    // for Render
+#include "ftxui/screen/box.hpp"  // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
   auto make_box = [](size_t dimx, size_t dimy) {
-    std::wstring title = to_wstring(dimx) + L"x" + to_wstring(dimy);
+    std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
     return window(text(title) | hcenter | bold,
-                  text(L"content") | hcenter | dim) |
+                  text("content") | hcenter | dim) |
            size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy);
   };
 

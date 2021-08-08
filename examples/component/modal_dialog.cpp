@@ -1,13 +1,12 @@
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
-#include <string>  // for wstring, basic_string, char_traits, operator+
+#include <string>  // for string, basic_string, char_traits, operator+
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Renderer, Horizontal, Tab
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/deprecated.hpp"                // for text
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, filler, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, filler, text, hbox, separator, center, vbox, bold, border, clear_under, dbox, size, GREATER_THAN, HEIGHT
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
@@ -17,7 +16,7 @@ int main(int argc, const char* argv[]) {
   int depth = 0;
 
   // The current rating of FTXUI.
-  std::wstring rating = L"3/5 stars";
+  std::string rating = "3/5 stars";
 
   // At depth=0, two buttons. One for rating FTXUI and one for quitting.
   auto button_rate_ftxui = Button("Rate FTXUI", [&] { depth = 1; });
@@ -29,9 +28,9 @@ int main(int argc, const char* argv[]) {
   });
   auto depth_0_renderer = Renderer(depth_0_container, [&] {
     return vbox({
-               text(L"Modal dialog example"),
+               text("Modal dialog example"),
                separator(),
-               text(L"☆☆☆ FTXUI:" + rating + L" ☆☆☆") | bold,
+               text("☆☆☆ FTXUI:" + rating + " ☆☆☆") | bold,
                filler(),
                hbox({
                    button_rate_ftxui->Render(),
@@ -43,10 +42,10 @@ int main(int argc, const char* argv[]) {
   });
 
   // At depth=1, The "modal" window.
-  std::vector<std::wstring> rating_labels = {
-      L"1/5 stars", L"2/5 stars", L"3/5 stars", L"4/5 stars", L"5/5 stars",
+  std::vector<std::string> rating_labels = {
+      "1/5 stars", "2/5 stars", "3/5 stars", "4/5 stars", "5/5 stars",
   };
-  auto on_rating = [&](std::wstring new_rating) {
+  auto on_rating = [&](std::string new_rating) {
     rating = new_rating;
     depth = 0;
   };
@@ -60,7 +59,7 @@ int main(int argc, const char* argv[]) {
 
   auto depth_1_renderer = Renderer(depth_1_container, [&] {
     return vbox({
-               text(L"Do you like FTXUI?"),
+               text("Do you like FTXUI?"),
                separator(),
                hbox(depth_1_container->Render()),
            }) |

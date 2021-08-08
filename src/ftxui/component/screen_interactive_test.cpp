@@ -4,9 +4,8 @@
 
 #include "ftxui/component/component.hpp"  // for Renderer
 #include "ftxui/component/screen_interactive.hpp"
-#include "ftxui/dom/deprecated.hpp"  // for text
-#include "ftxui/dom/elements.hpp"    // for Element
-#include "gtest/gtest_pred_impl.h"   // for Test, TEST, EXPECT_EQ
+#include "ftxui/dom/elements.hpp"   // for text, Element
+#include "gtest/gtest_pred_impl.h"  // for Test, TEST, EXPECT_EQ
 
 using namespace ftxui;
 
@@ -18,7 +17,7 @@ bool TestSignal(int signal) {
     called++;
     std::raise(signal);
     called++;
-    return text(L"");
+    return text("");
   });
 
   auto screen = ScreenInteractive::FitComponent();

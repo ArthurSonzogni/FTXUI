@@ -1,33 +1,32 @@
 #include <memory>  // for allocator, __shared_ptr_access
-#include <string>  // for wstring, basic_string
+#include <string>  // for string, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Toggle, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/deprecated.hpp"                // for text
-#include "ftxui/dom/elements.hpp"                  // for hbox, vbox, Element
+#include "ftxui/dom/elements.hpp"  // for text, hbox, vbox, Element
 
 using namespace ftxui;
 
 int main(int argc, const char* argv[]) {
-  std::vector<std::wstring> toggle_1_entries = {
-      L"On",
-      L"Off",
+  std::vector<std::string> toggle_1_entries = {
+      "On",
+      "Off",
   };
-  std::vector<std::wstring> toggle_2_entries = {
-      L"Enabled",
-      L"Disabled",
+  std::vector<std::string> toggle_2_entries = {
+      "Enabled",
+      "Disabled",
   };
-  std::vector<std::wstring> toggle_3_entries = {
-      L"10€",
-      L"0€",
+  std::vector<std::string> toggle_3_entries = {
+      "10€",
+      "0€",
   };
-  std::vector<std::wstring> toggle_4_entries = {
-      L"Nothing",
-      L"One element",
-      L"Several elements",
+  std::vector<std::string> toggle_4_entries = {
+      "Nothing",
+      "One element",
+      "Several elements",
   };
 
   int toggle_1_selected = 0;
@@ -48,12 +47,12 @@ int main(int argc, const char* argv[]) {
 
   auto renderer = Renderer(container, [&] {
     return vbox({
-        text(L"Choose your options:"),
-        text(L""),
-        hbox(text(L" * Poweroff on startup      : "), toggle_1->Render()),
-        hbox(text(L" * Out of process           : "), toggle_2->Render()),
-        hbox(text(L" * Price of the information : "), toggle_3->Render()),
-        hbox(text(L" * Number of elements       : "), toggle_4->Render()),
+        text("Choose your options:"),
+        text(""),
+        hbox(text(" * Poweroff on startup      : "), toggle_1->Render()),
+        hbox(text(" * Out of process           : "), toggle_2->Render()),
+        hbox(text(" * Price of the information : "), toggle_3->Render()),
+        hbox(text(" * Number of elements       : "), toggle_4->Render()),
     });
   });
 

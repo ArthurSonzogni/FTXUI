@@ -1,14 +1,13 @@
 #include <ftxui/screen/color_info.hpp>  // for ColorInfo
-#include <ftxui/screen/screen.hpp>      // for Dimension, Screen
-#include <ftxui/screen/terminal.hpp>  // for Terminal, Terminal::Color, Terminal::Palette16, Terminal::Palette256, Terminal::TrueColor
+#include <ftxui/screen/screen.hpp>      // for Full, Screen
+#include <ftxui/screen/terminal.hpp>  // for ColorSupport, Color, Palette16, Palette256, TrueColor
 #include <memory>                     // for allocator, shared_ptr
 #include <utility>                    // for move
 #include <vector>                     // for vector
 
 using namespace ftxui;
 #include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
-#include "ftxui/dom/deprecated.hpp"    // for text
-#include "ftxui/dom/elements.hpp"  // for bgcolor, color, vbox, hbox, separator, operator|, Elements, Element, border
+#include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, hbox, separator, operator|, Elements, Element, Fit, border
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
 
@@ -16,52 +15,52 @@ int main(int argc, const char* argv[]) {
   // clang-format off
   auto basic_color_display =
     vbox(
-      text(L"16 color palette:"),
+      text("16 color palette:"),
       separator(),
       hbox(
         vbox(
-          color(Color::Default, text(L"Default")),
-          color(Color::Black, text(L"Black")),
-          color(Color::GrayDark, text(L"GrayDark")),
-          color(Color::GrayLight, text(L"GrayLight")),
-          color(Color::White, text(L"White")),
-          color(Color::Blue, text(L"Blue")),
-          color(Color::BlueLight, text(L"BlueLight")),
-          color(Color::Cyan, text(L"Cyan")),
-          color(Color::CyanLight, text(L"CyanLight")),
-          color(Color::Green, text(L"Green")),
-          color(Color::GreenLight, text(L"GreenLight")),
-          color(Color::Magenta, text(L"Magenta")),
-          color(Color::MagentaLight, text(L"MagentaLight")),
-          color(Color::Red, text(L"Red")),
-          color(Color::RedLight, text(L"RedLight")),
-          color(Color::Yellow, text(L"Yellow")),
-          color(Color::YellowLight, text(L"YellowLight"))
+          color(Color::Default, text("Default")),
+          color(Color::Black, text("Black")),
+          color(Color::GrayDark, text("GrayDark")),
+          color(Color::GrayLight, text("GrayLight")),
+          color(Color::White, text("White")),
+          color(Color::Blue, text("Blue")),
+          color(Color::BlueLight, text("BlueLight")),
+          color(Color::Cyan, text("Cyan")),
+          color(Color::CyanLight, text("CyanLight")),
+          color(Color::Green, text("Green")),
+          color(Color::GreenLight, text("GreenLight")),
+          color(Color::Magenta, text("Magenta")),
+          color(Color::MagentaLight, text("MagentaLight")),
+          color(Color::Red, text("Red")),
+          color(Color::RedLight, text("RedLight")),
+          color(Color::Yellow, text("Yellow")),
+          color(Color::YellowLight, text("YellowLight"))
         ),
         vbox(
-          bgcolor(Color::Default, text(L"Default")),
-          bgcolor(Color::Black, text(L"Black")),
-          bgcolor(Color::GrayDark, text(L"GrayDark")),
-          bgcolor(Color::GrayLight, text(L"GrayLight")),
-          bgcolor(Color::White, text(L"White")),
-          bgcolor(Color::Blue, text(L"Blue")),
-          bgcolor(Color::BlueLight, text(L"BlueLight")),
-          bgcolor(Color::Cyan, text(L"Cyan")),
-          bgcolor(Color::CyanLight, text(L"CyanLight")),
-          bgcolor(Color::Green, text(L"Green")),
-          bgcolor(Color::GreenLight, text(L"GreenLight")),
-          bgcolor(Color::Magenta, text(L"Magenta")),
-          bgcolor(Color::MagentaLight, text(L"MagentaLight")),
-          bgcolor(Color::Red, text(L"Red")),
-          bgcolor(Color::RedLight, text(L"RedLight")),
-          bgcolor(Color::Yellow, text(L"Yellow")),
-          bgcolor(Color::YellowLight, text(L"YellowLight"))
+          bgcolor(Color::Default, text("Default")),
+          bgcolor(Color::Black, text("Black")),
+          bgcolor(Color::GrayDark, text("GrayDark")),
+          bgcolor(Color::GrayLight, text("GrayLight")),
+          bgcolor(Color::White, text("White")),
+          bgcolor(Color::Blue, text("Blue")),
+          bgcolor(Color::BlueLight, text("BlueLight")),
+          bgcolor(Color::Cyan, text("Cyan")),
+          bgcolor(Color::CyanLight, text("CyanLight")),
+          bgcolor(Color::Green, text("Green")),
+          bgcolor(Color::GreenLight, text("GreenLight")),
+          bgcolor(Color::Magenta, text("Magenta")),
+          bgcolor(Color::MagentaLight, text("MagentaLight")),
+          bgcolor(Color::Red, text("Red")),
+          bgcolor(Color::RedLight, text("RedLight")),
+          bgcolor(Color::Yellow, text("Yellow")),
+          bgcolor(Color::YellowLight, text("YellowLight"))
         )
       )
     );
 
   // clang-format on
-  auto palette_256_color_display = text(L"256 colors palette:");
+  auto palette_256_color_display = text("256 colors palette:");
   {
     std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
     Elements columns;
@@ -69,7 +68,7 @@ int main(int argc, const char* argv[]) {
       Elements column_elements;
       for (auto& it : column) {
         column_elements.push_back(
-            text(L"   ") | bgcolor(Color(Color::Palette256(it.index_256))));
+            text("   ") | bgcolor(Color(Color::Palette256(it.index_256))));
       }
       columns.push_back(hbox(std::move(column_elements)));
     }
@@ -81,14 +80,14 @@ int main(int argc, const char* argv[]) {
   }
 
   // True color display.
-  auto true_color_display = text(L"TrueColors: 24bits:");
+  auto true_color_display = text("TrueColors: 24bits:");
   {
     int saturation = 255;
     Elements array;
     for (int value = 0; value < 255; value += 16) {
       Elements line;
       for (int hue = 0; hue < 255; hue += 6) {
-        line.push_back(text(L"▀")                                   //
+        line.push_back(text("▀")                                    //
                        | color(Color::HSV(hue, saturation, value))  //
                        | bgcolor(Color::HSV(hue, saturation, value + 8)));
       }
@@ -104,22 +103,22 @@ int main(int argc, const char* argv[]) {
   auto terminal_info =
       vbox({
           Terminal::ColorSupport() >= Terminal::Color::Palette16
-              ? text(L" 16 color palette support : Yes")
-              : text(L" 16 color palette support : No"),
+              ? text(" 16 color palette support : Yes")
+              : text(" 16 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::Palette256
-              ? text(L"256 color palette support : Yes")
-              : text(L"256 color palette support : No"),
+              ? text("256 color palette support : Yes")
+              : text("256 color palette support : No"),
           Terminal::ColorSupport() >= Terminal::Color::TrueColor
-              ? text(L"       True color support : Yes")
-              : text(L"       True color support : No"),
+              ? text("       True color support : Yes")
+              : text("       True color support : No"),
       }) |
       border;
 
   auto document = vbox({hbox({
                             basic_color_display,
-                            text(L" "),
+                            text(" "),
                             palette_256_color_display,
-                            text(L" "),
+                            text(" "),
                             true_color_display,
                         }),
                         terminal_info});

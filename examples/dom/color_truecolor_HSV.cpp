@@ -1,12 +1,11 @@
-#include <ftxui/dom/elements.hpp>  // for operator|, Elements, bgcolor, color, hbox, vbox, Element
-#include <ftxui/screen/screen.hpp>  // for Dimension, Screen
+#include <ftxui/dom/elements.hpp>  // for operator|, Elements, Fit, bgcolor, color, hbox, text, vbox, Element
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
 #include <utility>                  // for move
 
-#include "ftxui/dom/deprecated.hpp"  // for text
-#include "ftxui/dom/node.hpp"        // for Render
-#include "ftxui/screen/box.hpp"      // for ftxui
-#include "ftxui/screen/color.hpp"    // for Color
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/box.hpp"    // for ftxui
+#include "ftxui/screen/color.hpp"  // for Color
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
@@ -16,7 +15,7 @@ int main(int argc, const char* argv[]) {
   for (int value = 0; value < 255; value += 20) {
     Elements line;
     for (int hue = 0; hue < 255; hue += 2) {
-      line.push_back(text(L"▀")                                   //
+      line.push_back(text("▀")                                    //
                      | color(Color::HSV(hue, saturation, value))  //
                      | bgcolor(Color::HSV(hue, saturation, value + 10)));
     }

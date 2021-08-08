@@ -20,7 +20,7 @@ using GraphFunction = std::function<std::vector<int>(int, int)>;
 // Pipe elements into decorator togethers.
 // For instance the next lines are equivalents:
 // -> text("ftxui") | bold | underlined
-// -> underlined(bold(text(L"FTXUI")))
+// -> underlined(bold(text("FTXUI")))
 Element operator|(Element, Decorator);
 Elements operator|(Elements, Decorator);
 Decorator operator|(Decorator, Decorator);

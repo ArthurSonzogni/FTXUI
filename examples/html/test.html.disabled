@@ -33,33 +33,33 @@
       using namespace ftxui;
       auto document =
         hbox(
-          window(text(L" main frame ") | hcenter,
+          window(text(" main frame ") | hcenter,
             vbox(
-              text(L"Line 1"),
-              text(L"Line 2"),
-              text(L"Line 3"),
+              text("Line 1"),
+              text("Line 2"),
+              text("Line 3"),
               vbox(
-                text(L"Line 4"),
-                text(L"Line 5"),
-                text(L"Line 6")
+                text("Line 4"),
+                text("Line 5"),
+                text("Line 6")
               ) | border,
               hbox(
-                window(text(L"frame 2"),
+                window(text("frame 2"),
                   vbox(
-                    text(L"Line 4"),
+                    text("Line 4"),
                     gauge(0.5) | border,
-                    text(L"Line 6")
+                    text("Line 6")
                   )
                 ),
-                window(text(L"frame 3"),
+                window(text("frame 3"),
                   vbox(
-                    text(L"Line 7"),
-                    text(L"Line 8"),
-                    text(L"Line 9")
+                    text("Line 7"),
+                    text("Line 8"),
+                    text("Line 9")
                   )
                 )
               ),
-              text(L"footer footer footer footer footer")
+              text("footer footer footer footer footer")
             )
           ),
           filler()

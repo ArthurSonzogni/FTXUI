@@ -1,7 +1,7 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for wstring, basic_string
+#include <string>  // for string, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
@@ -14,7 +14,7 @@ using namespace ftxui;
 
 TEST(RadioboxTest, Navigation) {
   int selected = 0;
-  std::vector<std::wstring> entries = {L"1", L"2", L"3"};
+  std::vector<std::string> entries = {"1", "2", "3"};
   auto radiobox = Radiobox(&entries, &selected);
 
   // With arrow key.
@@ -60,7 +60,7 @@ TEST(RadioboxTest, Navigation) {
   EXPECT_EQ(selected, 0);
 
   // With more entries
-  entries = {L"1", L"2", L"3"};
+  entries = {"1", "2", "3"};
   EXPECT_EQ(selected, 0);
   radiobox->OnEvent(Event::ArrowDown);
   radiobox->OnEvent(Event::Return);

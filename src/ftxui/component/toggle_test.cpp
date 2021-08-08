@@ -2,7 +2,7 @@
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
 #include <functional>               // for function
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for wstring, basic_string
+#include <string>  // for string, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"     // for ftxui
@@ -15,7 +15,7 @@
 using namespace ftxui;
 
 TEST(ToggleTest, leftRightArrow) {
-  std::vector<std::wstring> entries = {L"On", L"Off"};
+  std::vector<std::string> entries = {"On", "Off"};
   int selected = 0;
   auto toggle = Toggle(&entries, &selected);
 
@@ -42,7 +42,7 @@ TEST(ToggleTest, leftRightArrow) {
   EXPECT_EQ(selected, 0);
 
   // With more entries
-  entries = {L"1", L"2", L"3"};
+  entries = {"1", "2", "3"};
   EXPECT_EQ(selected, 0);
   toggle->OnEvent(Event::ArrowRight);
   EXPECT_EQ(selected, 1);
@@ -59,7 +59,7 @@ TEST(ToggleTest, leftRightArrow) {
 }
 
 TEST(ToggleTest, Tab) {
-  std::vector<std::wstring> entries = {L"1", L"2", L"3"};
+  std::vector<std::string> entries = {"1", "2", "3"};
   int selected = 0;
   auto toggle = Toggle(&entries, &selected);
 
@@ -86,7 +86,7 @@ TEST(ToggleTest, Tab) {
 }
 
 TEST(ToggleTest, OnChange) {
-  std::vector<std::wstring> entries = {L"1", L"2", L"3"};
+  std::vector<std::string> entries = {"1", "2", "3"};
   int selected = 0;
   int counter = 0;
   auto option = ToggleOption();
@@ -115,7 +115,7 @@ TEST(ToggleTest, OnChange) {
 }
 
 TEST(ToggleTest, OnEnter) {
-  std::vector<std::wstring> entries = {L"1", L"2", L"3"};
+  std::vector<std::string> entries = {"1", "2", "3"};
   int selected = 0;
   int counter = 0;
 

@@ -1,5 +1,5 @@
 #include <memory>  // for allocator, __shared_ptr_access, shared_ptr
-#include <string>  // for wstring, basic_string
+#include <string>  // for string, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
@@ -11,33 +11,33 @@
 using namespace ftxui;
 
 int main(int argc, const char* argv[]) {
-  std::vector<std::wstring> tab_values{
-      L"tab_1",
-      L"tab_2",
-      L"tab_3",
+  std::vector<std::string> tab_values{
+      "tab_1",
+      "tab_2",
+      "tab_3",
   };
   int tab_selected = 0;
   auto tab_toggle = Toggle(&tab_values, &tab_selected);
 
-  std::vector<std::wstring> tab_1_entries{
-      L"Forest",
-      L"Water",
-      L"I don't know",
+  std::vector<std::string> tab_1_entries{
+      "Forest",
+      "Water",
+      "I don't know",
   };
   int tab_1_selected = 0;
 
-  std::vector<std::wstring> tab_2_entries{
-      L"Hello",
-      L"Hi",
-      L"Hay",
+  std::vector<std::string> tab_2_entries{
+      "Hello",
+      "Hi",
+      "Hay",
   };
   int tab_2_selected = 0;
 
-  std::vector<std::wstring> tab_3_entries{
-      L"Table",
-      L"Nothing",
-      L"Is",
-      L"Empty",
+  std::vector<std::string> tab_3_entries{
+      "Table",
+      "Nothing",
+      "Is",
+      "Empty",
   };
   int tab_3_selected = 0;
   auto tab_container = Container::Tab(

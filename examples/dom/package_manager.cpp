@@ -1,43 +1,41 @@
 #include <chrono>                  // for operator""s, chrono_literals
-#include <ftxui/dom/elements.hpp>  // for operator|, Element, hbox, bold, color, filler, separator, vbox, window, gauge, size, dim, EQUAL, WIDTH
-#include <ftxui/screen/screen.hpp>  // for Screen, Dimension
-#include <ftxui/screen/string.hpp>  // for to_wstring
+#include <ftxui/dom/elements.hpp>  // for operator|, text, Element, hbox, bold, color, filler, separator, vbox, window, gauge, Fit, size, dim, EQUAL, WIDTH
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <iostream>                 // for cout, endl, ostream
 #include <list>  // for list, operator!=, _List_iterator, _List_iterator<>::_Self
 #include <memory>   // for allocator, shared_ptr, allocator_traits<>::value_type
-#include <string>   // for wstring, operator<<, string
+#include <string>   // for string, operator<<, to_string
 #include <thread>   // for sleep_for
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "ftxui/dom/deprecated.hpp"  // for text
-#include "ftxui/dom/node.hpp"        // for Render
-#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/dom/node.hpp"    // for Render
+#include "ftxui/screen/box.hpp"  // for ftxui
 #include "ftxui/screen/color.hpp"  // for Color, Color::Green, Color::Red, Color::RedLight
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
 
   struct Task {
-    std::wstring name;
+    std::string name;
     int number_of_threads;
     int downloaded;
     int size;
   };
 
   std::list<Task> remaining_tasks = {
-      {L"contact server       ", 10, 0, 6 * 25},
-      {L"download index.html  ", 10, 0, 9 * 25},
-      {L"download script.js   ", 1, 0, 3 * 25},
-      {L"download style.js    ", 1, 0, 4 * 25},
-      {L"download image.png   ", 1, 0, 5 * 25},
-      {L"download big_1.png   ", 1, 0, 30 * 25},
-      {L"download icon_1.png  ", 1, 0, 7 * 25},
-      {L"download icon_2.png  ", 1, 0, 8 * 25},
-      {L"download big_2.png   ", 1, 0, 30 * 25},
-      {L"download small_1.png ", 1, 0, 10 * 25},
-      {L"download small_2.png ", 1, 0, 11 * 25},
-      {L"download small_3.png ", 1, 0, 12 * 25},
+      {"contact server       ", 10, 0, 6 * 25},
+      {"download index.html  ", 10, 0, 9 * 25},
+      {"download script.js   ", 1, 0, 3 * 25},
+      {"download style.js    ", 1, 0, 4 * 25},
+      {"download image.png   ", 1, 0, 5 * 25},
+      {"download big_1.png   ", 1, 0, 30 * 25},
+      {"download icon_1.png  ", 1, 0, 7 * 25},
+      {"download icon_2.png  ", 1, 0, 8 * 25},
+      {"download big_2.png   ", 1, 0, 30 * 25},
+      {"download small_1.png ", 1, 0, 10 * 25},
+      {"download small_2.png ", 1, 0, 11 * 25},
+      {"download small_3.png ", 1, 0, 12 * 25},
   };
 
   std::list<Task> displayed_task;
@@ -49,7 +47,7 @@ int main(int argc, const char* argv[]) {
   int nb_done = 0;
 
   auto to_text = [](int number) {
-    return text(to_wstring(number)) | size(WIDTH, EQUAL, 3);
+    return text(std::to_string(number)) | size(WIDTH, EQUAL, 3);
   };
 
   auto renderTask = [&](const Task& task) {
@@ -58,7 +56,7 @@ int main(int argc, const char* argv[]) {
         text(task.name) | style,
         separator(),
         to_text(task.downloaded),
-        text(L"/"),
+        text("/"),
         to_text(task.size),
         separator(),
         gauge(task.downloaded / float(task.size)),
@@ -68,20 +66,20 @@ int main(int argc, const char* argv[]) {
   auto renderSummary = [&]() {
     auto summary = vbox({
         hbox({
-            text(L"- done:   "),
+            text("- done:   "),
             to_text(nb_done) | bold,
         }) | color(Color::Green),
         hbox({
-            text(L"- active: "),
+            text("- active: "),
             to_text(nb_active) | bold,
         }) | color(Color::RedLight),
         hbox({
-            text(L"- queue:  "),
+            text("- queue:  "),
             to_text(nb_queued) | bold,
         }) | color(Color::Red),
     });
 
-    return window(text(L" Summary "), summary);
+    return window(text(" Summary "), summary);
   };
 
   auto render = [&]() {
@@ -91,7 +89,7 @@ int main(int argc, const char* argv[]) {
 
     return vbox({
         // List of tasks.
-        window(text(L" Task "), vbox(std::move(entries))),
+        window(text(" Task "), vbox(std::move(entries))),
 
         // Summary.
         hbox({

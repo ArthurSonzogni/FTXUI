@@ -6,7 +6,6 @@
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/component_options.hpp"   // for ButtonOption
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/deprecated.hpp"                // for text
 #include "ftxui/dom/elements.hpp"  // for separator, gauge, Element, operator|, vbox, border
 
 using namespace ftxui;
@@ -27,7 +26,7 @@ int main(int argc, const char* argv[]) {
   // Modify the way to render them on screen:
   auto component = Renderer(buttons, [&] {
     return vbox({
-               text(L"value = " + std::to_wstring(value)),
+               text("value = " + std::to_string(value)),
                separator(),
                gauge(value * 0.01f),
                separator(),

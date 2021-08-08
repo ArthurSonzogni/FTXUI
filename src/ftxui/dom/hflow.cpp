@@ -68,8 +68,8 @@ class HFlow : public Node {
 ///
 /// ```cpp
 /// hbox({
-///   text(L"Left"),
-///   text(L"Right"),
+///   text("Left"),
+///   text("Right"),
 /// });
 /// ```
 Element hflow(Elements children) {
