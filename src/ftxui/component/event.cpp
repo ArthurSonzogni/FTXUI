@@ -20,10 +20,8 @@ Event Event::Character(char c) {
 }
 
 // static
-Event Character(wchar_t c) {
-  std::wstring input;
-  input += c;
-  return Event::Character(to_string(input));
+Event Event::Character(wchar_t c) {
+  return Event::Character(to_string(std::wstring{c}));
 }
 
 // static

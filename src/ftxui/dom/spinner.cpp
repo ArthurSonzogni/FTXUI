@@ -229,7 +229,7 @@ static const std::vector<std::vector<std::vector<std::string>>> elements = {
          "    /\\/ ",
          "   /\\   ",
          "  /  \\  ",
-         "LOL  LO",
+         "LOL  LOL ",
      },
      {
          "    _O  ",

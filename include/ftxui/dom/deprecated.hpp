@@ -7,7 +7,7 @@ namespace ftxui {
 Element text(std::wstring text);
 Element vtext(std::wstring text);
 Elements paragraph(std::wstring text);
-};  // namespace ftxui
+}  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_DOM_DEPRECRATED_HPP */
 

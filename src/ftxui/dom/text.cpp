@@ -42,9 +42,8 @@ class Text : public Node {
 
 class VText : public Node {
  public:
-  VText(std::string text) : text_(text) {
-    width_{std::min(string_width(text_), 1)}
-  }
+  VText(std::string text)
+      : text_(text), width_{std::min(string_width(text_), 1)} {}
 
   void ComputeRequirement() override {
     requirement_.min_x = width_;
@@ -88,14 +87,14 @@ Element text(std::string text) {
   return std::make_shared<Text>(text);
 }
 
-/// @brief Display a piece of UTF8 encoded unicode text.
+/// @brief Display a piece of UTF16 encoded unicode text.
 /// @ingroup dom
 /// @see ftxui::to_wstring
 ///
 /// ### Example
 ///
 /// ```cpp
-/// Element document = text("Hello world!");
+/// Element document = text(L"Hello world!");
 /// ```
 ///
 /// ### Output
@@ -137,14 +136,14 @@ Element vtext(std::string text) {
   return std::make_shared<VText>(text);
 }
 
-/// @brief Display a piece of UTF8 encoded unicode text vertically.
+/// @brief Display a piece of UTF16 encoded unicode text vertically.
 /// @ingroup dom
 /// @see ftxui::to_wstring
 ///
 /// ### Example
 ///
 /// ```cpp
-/// Element document = vtext("Hello world!");
+/// Element document = vtext(L"Hello world!");
 /// ```
 ///
 /// ### Output
