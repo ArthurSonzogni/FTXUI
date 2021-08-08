@@ -1,13 +1,12 @@
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
-#include <string>  // for operator+, to_wstring
+#include <string>  // for operator+, to_string
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/component_options.hpp"   // for ButtonOption
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/deprecated.hpp"                // for text
-#include "ftxui/dom/elements.hpp"  // for separator, Element, operator|, vbox, border
+#include "ftxui/dom/elements.hpp"  // for text, separator, Element, operator|, vbox, border
 
 using namespace ftxui;
 
@@ -38,9 +37,9 @@ int main(int argc, const char* argv[]) {
   // children reacts to events is maintained.
   auto leftpane = Renderer(left_buttons, [&] {
     return vbox({
-               text(L"This is the left control"),
+               text("This is the left control"),
                separator(),
-               text(L"Left button count: " + std::to_wstring(left_count)),
+               text("Left button count: " + std::to_string(left_count)),
                left_buttons->Render(),
            }) |
            border;
@@ -48,9 +47,9 @@ int main(int argc, const char* argv[]) {
 
   auto rightpane = Renderer(right_buttons, [&] {
     return vbox({
-               text(L"This is the right control"),
+               text("This is the right control"),
                separator(),
-               text(L"Right button count: " + std::to_wstring(right_count)),
+               text("Right button count: " + std::to_string(right_count)),
                right_buttons->Render(),
            }) |
            border;

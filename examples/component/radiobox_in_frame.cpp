@@ -1,22 +1,21 @@
-#include <memory>  // for __shared_ptr_access, shared_ptr
-#include <string>  // for wstring, operator+
+#include <memory>  // for shared_ptr, __shared_ptr_access
+#include <string>  // for string, basic_string, operator+, to_string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"      // for ftxui
 #include "ftxui/component/component.hpp"           // for Radiobox, Renderer
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for Element, operator|, size, border, frame, HEIGHT, LESS_THAN
-#include "ftxui/screen/string.hpp"  // for to_wstring
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, size, border, frame, HEIGHT, LESS_THAN
 
 using namespace ftxui;
 
 int main(int argc, const char* argv[]) {
-  std::vector<std::wstring> entries;
+  std::vector<std::string> entries;
   int selected = 0;
 
   for (int i = 0; i < 30; ++i)
-    entries.push_back(L"RadioBox " + to_wstring(i));
+    entries.push_back("RadioBox " + std::to_string(i));
   auto radiobox = Radiobox(&entries, &selected);
   auto renderer = Renderer(radiobox, [&] {
     return radiobox->Render() | frame | size(HEIGHT, LESS_THAN, 10) | border;

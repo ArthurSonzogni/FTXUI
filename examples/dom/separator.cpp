@@ -1,23 +1,22 @@
-#include <ftxui/dom/elements.hpp>  // for center, separator, operator|, flex, Element, vbox, hbox, border
-#include <ftxui/screen/screen.hpp>  // for Dimension, Screen
+#include <ftxui/dom/elements.hpp>  // for text, center, separator, operator|, flex, Element, vbox, Fit, hbox, border
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
 
-#include "ftxui/dom/deprecated.hpp"  // for text
-#include "ftxui/dom/node.hpp"        // for Render
-#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/dom/node.hpp"    // for Render
+#include "ftxui/screen/box.hpp"  // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
   auto document = hbox({
-                      text(L"left-column"),
+                      text("left-column"),
                       separator(),
                       vbox({
-                          center(text(L"right-top")) | flex,
+                          center(text("right-top")) | flex,
                           separator(),
-                          center(text(L"bottom-bottom")),
+                          center(text("bottom-bottom")),
                       }) | flex,
                       separator(),
-                      text(L"right-column"),
+                      text("right-column"),
                   }) |
                   border;
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));

@@ -4,8 +4,7 @@
 #include <string>                   // for allocator, basic_string, string
 #include <vector>                   // for vector
 
-#include "ftxui/dom/deprecated.hpp"  // for vtext
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, flex_grow, flex_shrink, vbox
+#include "ftxui/dom/elements.hpp"  // for vtext, operator|, Element, flex_grow, flex_shrink, vbox
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/box.hpp"     // for ftxui
 #include "ftxui/screen/screen.hpp"  // for Screen
@@ -22,9 +21,9 @@ std::string rotate(std::string str) {
 
 TEST(VBoxText, NoFlex_NoFlex_NoFlex) {
   auto root = vbox({
-      vtext(L"012"),
-      vtext(L"abc"),
-      vtext(L"ABC"),
+      vtext("012"),
+      vtext("abc"),
+      vtext("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -50,9 +49,9 @@ TEST(VBoxText, NoFlex_NoFlex_NoFlex) {
 
 TEST(VBoxText, FlexGrow_NoFlex_NoFlex) {
   auto root = vbox({
-      vtext(L"012") | flex_grow,
-      vtext(L"abc"),
-      vtext(L"ABC"),
+      vtext("012") | flex_grow,
+      vtext("abc"),
+      vtext("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -78,9 +77,9 @@ TEST(VBoxText, FlexGrow_NoFlex_NoFlex) {
 
 TEST(VBoxText, NoFlex_FlexGrow_NoFlex) {
   auto root = vbox({
-      vtext(L"012"),
-      vtext(L"abc") | flex_grow,
-      vtext(L"ABC"),
+      vtext("012"),
+      vtext("abc") | flex_grow,
+      vtext("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -106,9 +105,9 @@ TEST(VBoxText, NoFlex_FlexGrow_NoFlex) {
 
 TEST(VBoxText, NoFlex_NoFlex_FlexGrow) {
   auto root = vbox({
-      vtext(L"012"),
-      vtext(L"abc"),
-      vtext(L"ABC") | flex_grow,
+      vtext("012"),
+      vtext("abc"),
+      vtext("ABC") | flex_grow,
   });
 
   std::vector<std::string> expectations = {
@@ -134,9 +133,9 @@ TEST(VBoxText, NoFlex_NoFlex_FlexGrow) {
 
 TEST(VBoxText, FlexGrow_NoFlex_FlexGrow) {
   auto root = vbox({
-      vtext(L"012") | flex_grow,
-      vtext(L"abc"),
-      vtext(L"ABC") | flex_grow,
+      vtext("012") | flex_grow,
+      vtext("abc"),
+      vtext("ABC") | flex_grow,
   });
 
   std::vector<std::string> expectations = {
@@ -164,9 +163,9 @@ TEST(VBoxText, FlexGrow_NoFlex_FlexGrow) {
 
 TEST(VBoxText, FlexGrow_FlexGrow_FlexGrow) {
   auto root = vbox({
-      vtext(L"012") | flex_grow,
-      vtext(L"abc") | flex_grow,
-      vtext(L"ABC") | flex_grow,
+      vtext("012") | flex_grow,
+      vtext("abc") | flex_grow,
+      vtext("ABC") | flex_grow,
   });
 
   std::vector<std::string> expectations = {
@@ -198,9 +197,9 @@ TEST(VBoxText, FlexGrow_FlexGrow_FlexGrow) {
 
 TEST(VBoxText, FlexShrink_NoFlex_NoFlex) {
   auto root = vbox({
-      vtext(L"012") | flex_shrink,
-      vtext(L"abc"),
-      vtext(L"ABC"),
+      vtext("012") | flex_shrink,
+      vtext("abc"),
+      vtext("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -226,9 +225,9 @@ TEST(VBoxText, FlexShrink_NoFlex_NoFlex) {
 
 TEST(VBoxText, NoFlex_FlexShrink_NoFlex) {
   auto root = vbox({
-      vtext(L"012"),
-      vtext(L"abc") | flex_shrink,
-      vtext(L"ABC"),
+      vtext("012"),
+      vtext("abc") | flex_shrink,
+      vtext("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -254,9 +253,9 @@ TEST(VBoxText, NoFlex_FlexShrink_NoFlex) {
 
 TEST(VBoxText, NoFlex_NoFlex_FlexShrink) {
   auto root = vbox({
-      vtext(L"012"),
-      vtext(L"abc"),
-      vtext(L"ABC") | flex_shrink,
+      vtext("012"),
+      vtext("abc"),
+      vtext("ABC") | flex_shrink,
   });
 
   std::vector<std::string> expectations = {
@@ -282,9 +281,9 @@ TEST(VBoxText, NoFlex_NoFlex_FlexShrink) {
 
 TEST(VBoxText, FlexShrink_NoFlex_FlexShrink) {
   auto root = vbox({
-      vtext(L"012") | flex_shrink,
-      vtext(L"abc"),
-      vtext(L"ABC") | flex_shrink,
+      vtext("012") | flex_shrink,
+      vtext("abc"),
+      vtext("ABC") | flex_shrink,
   });
 
   std::vector<std::string> expectations = {
@@ -309,9 +308,9 @@ TEST(VBoxText, FlexShrink_NoFlex_FlexShrink) {
 
 TEST(VBoxText, FlexShrink_FlexShrink_FlexShrink) {
   auto root = vbox({
-      vtext(L"012") | flex_shrink,
-      vtext(L"abc") | flex_shrink,
-      vtext(L"ABC") | flex_shrink,
+      vtext("012") | flex_shrink,
+      vtext("abc") | flex_shrink,
+      vtext("ABC") | flex_shrink,
   });
 
   std::vector<std::string> expectations = {
@@ -338,9 +337,9 @@ TEST(VBoxText, FlexShrink_FlexShrink_FlexShrink) {
 
 TEST(VBoxText, FlexGrow_NoFlex_FlewShrink) {
   auto root = vbox({
-      vtext(L"012") | flex_grow,
-      vtext(L"abc"),
-      vtext(L"ABC") | flex_shrink,
+      vtext("012") | flex_grow,
+      vtext("abc"),
+      vtext("ABC") | flex_shrink,
   });
 
   std::vector<std::string> expectations = {

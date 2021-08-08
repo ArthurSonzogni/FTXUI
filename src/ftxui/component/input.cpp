@@ -200,7 +200,7 @@ class InputBase : public ComponentBase {
   bool OnEvent(Event event) override {
     wrapped_content_ = to_wstring(*content_);
     if (wrapped_input_.OnEvent(event)) {
-      content_ = to_string(wrapped_content_);
+      *content_ = to_string(wrapped_content_);
       return true;
     }
     return false;

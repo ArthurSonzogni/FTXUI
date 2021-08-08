@@ -1,32 +1,31 @@
 #include <stdio.h>                  // for getchar
-#include <ftxui/dom/elements.hpp>   // for filler, hbox, vbox
-#include <ftxui/screen/screen.hpp>  // for Screen, Dimension
+#include <ftxui/dom/elements.hpp>   // for filler, text, hbox, vbox
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
 
-#include "ftxui/dom/deprecated.hpp"  // for text
-#include "ftxui/dom/node.hpp"        // for Render
-#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/dom/node.hpp"    // for Render
+#include "ftxui/screen/box.hpp"  // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
   auto document =  //
       vbox({
           hbox({
-              text(L"north-west"),
+              text("north-west"),
               filler(),
-              text(L"north-east"),
+              text("north-east"),
           }),
           filler(),
           hbox({
               filler(),
-              text(L"center"),
+              text("center"),
               filler(),
           }),
           filler(),
           hbox({
-              text(L"south-west"),
+              text("south-west"),
               filler(),
-              text(L"south-east"),
+              text("south-east"),
           }),
       });
   auto screen = Screen::Create(Dimension::Full());

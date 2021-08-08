@@ -3,7 +3,7 @@
 #include <cmath>       // for sin
 #include <functional>  // for ref, reference_wrapper, function
 #include <memory>      // for allocator, shared_ptr, __shared_ptr_access
-#include <string>  // for wstring, basic_string, operator+, char_traits, to_wstring
+#include <string>  // for string, basic_string, operator+, char_traits, to_string
 #include <thread>   // for sleep_for, thread
 #include <utility>  // for move
 #include <vector>   // for vector
@@ -12,10 +12,8 @@
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Menu, Radiobox, Tab, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
-#include "ftxui/component/deprecated.hpp"         // for Input
 #include "ftxui/component/event.hpp"              // for Event, Event::Custom
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/deprecated.hpp"                // for text
 #include "ftxui/dom/elements.hpp"  // for operator|, color, bgcolor, filler, Element, size, vbox, flex, hbox, graph, separator, EQUAL, WIDTH, hcenter, bold, border, window, HEIGHT, Elements, hflow, flex_grow, frame, gauge, LESS_THAN, spinner, dim, GREATER_THAN
 #include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::Black, Color::Blue, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default
 
@@ -41,42 +39,42 @@ int main(int argc, const char* argv[]) {
 
   auto htop = Renderer([&] {
     auto frequency = vbox({
-        text(L"Frequency [Mhz]") | hcenter,
+        text("Frequency [Mhz]") | hcenter,
         hbox({
             vbox({
-                text(L"2400 "),
+                text("2400 "),
                 filler(),
-                text(L"1200 "),
+                text("1200 "),
                 filler(),
-                text(L"0 "),
+                text("0 "),
             }),
             graph(std::ref(my_graph)) | flex,
         }) | flex,
     });
 
     auto utilization = vbox({
-        text(L"Utilization [%]") | hcenter,
+        text("Utilization [%]") | hcenter,
         hbox({
             vbox({
-                text(L"100 "),
+                text("100 "),
                 filler(),
-                text(L"50 "),
+                text("50 "),
                 filler(),
-                text(L"0 "),
+                text("0 "),
             }),
             graph(std::ref(my_graph)) | color(Color::RedLight),
         }) | flex,
     });
 
     auto ram = vbox({
-        text(L"Ram [Mo]") | hcenter,
+        text("Ram [Mo]") | hcenter,
         hbox({
             vbox({
-                text(L"8192"),
+                text("8192"),
                 filler(),
-                text(L"4096 "),
+                text("4096 "),
                 filler(),
-                text(L"0 "),
+                text("0 "),
             }),
             graph(std::ref(my_graph)) | color(Color::BlueLight),
         }) | flex,
@@ -94,56 +92,56 @@ int main(int argc, const char* argv[]) {
            flex | border;
   });
 
-  const std::vector<std::wstring> compiler_entries = {
-      L"gcc",
-      L"clang",
-      L"emcc",
-      L"game_maker",
-      L"Ada compilers",
-      L"ALGOL 60 compilers",
-      L"ALGOL 68 compilers",
-      L"Assemblers (Intel *86)",
-      L"Assemblers (Motorola 68*)",
-      L"Assemblers (Zilog Z80)",
-      L"Assemblers (other)",
-      L"BASIC Compilers",
-      L"BASIC interpreters",
-      L"Batch compilers",
-      L"C compilers",
-      L"Source-to-source compilers",
-      L"C++ compilers",
-      L"C# compilers",
-      L"COBOL compilers",
-      L"Common Lisp compilers",
-      L"D compilers",
-      L"DIBOL/DBL compilers",
-      L"ECMAScript interpreters",
-      L"Eiffel compilers",
-      L"Fortran compilers",
-      L"Go compilers",
-      L"Haskell compilers",
-      L"Java compilers",
-      L"Pascal compilers",
-      L"Perl Interpreters",
-      L"PHP compilers",
-      L"PL/I compilers",
-      L"Python compilers",
-      L"Scheme compilers and interpreters",
-      L"Smalltalk compilers",
-      L"Tcl Interpreters",
-      L"VMS Interpreters",
-      L"Rexx Interpreters",
-      L"CLI compilers",
+  const std::vector<std::string> compiler_entries = {
+      "gcc",
+      "clang",
+      "emcc",
+      "game_maker",
+      "Ada compilers",
+      "ALGOL 60 compilers",
+      "ALGOL 68 compilers",
+      "Assemblers (Intel *86)",
+      "Assemblers (Motorola 68*)",
+      "Assemblers (Zilog Z80)",
+      "Assemblers (other)",
+      "BASIC Compilers",
+      "BASIC interpreters",
+      "Batch compilers",
+      "C compilers",
+      "Source-to-source compilers",
+      "C++ compilers",
+      "C# compilers",
+      "COBOL compilers",
+      "Common Lisp compilers",
+      "D compilers",
+      "DIBOL/DBL compilers",
+      "ECMAScript interpreters",
+      "Eiffel compilers",
+      "Fortran compilers",
+      "Go compilers",
+      "Haskell compilers",
+      "Java compilers",
+      "Pascal compilers",
+      "Perl Interpreters",
+      "PHP compilers",
+      "PL/I compilers",
+      "Python compilers",
+      "Scheme compilers and interpreters",
+      "Smalltalk compilers",
+      "Tcl Interpreters",
+      "VMS Interpreters",
+      "Rexx Interpreters",
+      "CLI compilers",
   };
 
   int compiler_selected = 0;
   Component compiler = Radiobox(&compiler_entries, &compiler_selected);
 
-  std::array<std::wstring, 4> options_label = {
-      L"-Wall",
-      L"-Werror",
-      L"-lpthread",
-      L"-O3",
+  std::array<std::string, 4> options_label = {
+      "-Wall",
+      "-Werror",
+      "-lpthread",
+      "-O3",
   };
   std::array<bool, 4> options_state = {
       false,
@@ -152,19 +150,19 @@ int main(int argc, const char* argv[]) {
       false,
   };
 
-  std::vector<std::wstring> input_entries;
+  std::vector<std::string> input_entries;
   int input_selected = 0;
   Component input = Menu(&input_entries, &input_selected);
 
   auto input_option = InputOption();
-  std::wstring input_add_content;
+  std::string input_add_content;
   input_option.on_enter = [&] {
     input_entries.push_back(input_add_content);
-    input_add_content = L"";
+    input_add_content = "";
   };
   Component input_add = Input(&input_add_content, "input files", input_option);
 
-  std::wstring executable_content_ = L"";
+  std::string executable_content_ = "";
   Component executable_ = Input(&executable_content_, "executable");
 
   Component flags = Container::Vertical({
@@ -193,33 +191,33 @@ int main(int argc, const char* argv[]) {
     // flags
     for (int i = 0; i < 4; ++i) {
       if (options_state[i]) {
-        line.push_back(text(L" "));
+        line.push_back(text(" "));
         line.push_back(text(options_label[i]) | dim);
       }
     }
     // Executable
     if (!executable_content_.empty()) {
-      line.push_back(text(L" -o ") | bold);
+      line.push_back(text(" -o ") | bold);
       line.push_back(text(executable_content_) | color(Color::BlueLight) |
                      bold);
     }
     // Input
     for (auto& it : input_entries) {
-      line.push_back(text(L" " + it) | color(Color::RedLight));
+      line.push_back(text(" " + it) | color(Color::RedLight));
     }
     return line;
   };
 
   auto compiler_renderer = Renderer(compiler_component, [&] {
-    auto compiler_win = window(text(L"Compiler"), compiler->Render() | frame);
-    auto flags_win = window(text(L"Flags"), flags->Render());
-    auto executable_win = window(text(L"Executable:"), executable_->Render());
+    auto compiler_win = window(text("Compiler"), compiler->Render() | frame);
+    auto flags_win = window(text("Flags"), flags->Render());
+    auto executable_win = window(text("Executable:"), executable_->Render());
     auto input_win =
-        window(text(L"Input"),
+        window(text("Input"),
                hbox({
                    vbox({
                        hbox({
-                           text(L"Add: "),
+                           text("Add: "),
                            input_add->Render(),
                        }) | size(WIDTH, EQUAL, 20) |
                            size(HEIGHT, EQUAL, 1),
@@ -255,42 +253,42 @@ int main(int argc, const char* argv[]) {
   auto color_tab_renderer = Renderer([] {
     return hbox({
                vbox({
-                   color(Color::Default, text(L"Default")),
-                   color(Color::Black, text(L"Black")),
-                   color(Color::GrayDark, text(L"GrayDark")),
-                   color(Color::GrayLight, text(L"GrayLight")),
-                   color(Color::White, text(L"White")),
-                   color(Color::Blue, text(L"Blue")),
-                   color(Color::BlueLight, text(L"BlueLight")),
-                   color(Color::Cyan, text(L"Cyan")),
-                   color(Color::CyanLight, text(L"CyanLight")),
-                   color(Color::Green, text(L"Green")),
-                   color(Color::GreenLight, text(L"GreenLight")),
-                   color(Color::Magenta, text(L"Magenta")),
-                   color(Color::MagentaLight, text(L"MagentaLight")),
-                   color(Color::Red, text(L"Red")),
-                   color(Color::RedLight, text(L"RedLight")),
-                   color(Color::Yellow, text(L"Yellow")),
-                   color(Color::YellowLight, text(L"YellowLight")),
+                   color(Color::Default, text("Default")),
+                   color(Color::Black, text("Black")),
+                   color(Color::GrayDark, text("GrayDark")),
+                   color(Color::GrayLight, text("GrayLight")),
+                   color(Color::White, text("White")),
+                   color(Color::Blue, text("Blue")),
+                   color(Color::BlueLight, text("BlueLight")),
+                   color(Color::Cyan, text("Cyan")),
+                   color(Color::CyanLight, text("CyanLight")),
+                   color(Color::Green, text("Green")),
+                   color(Color::GreenLight, text("GreenLight")),
+                   color(Color::Magenta, text("Magenta")),
+                   color(Color::MagentaLight, text("MagentaLight")),
+                   color(Color::Red, text("Red")),
+                   color(Color::RedLight, text("RedLight")),
+                   color(Color::Yellow, text("Yellow")),
+                   color(Color::YellowLight, text("YellowLight")),
                }),
                vbox({
-                   bgcolor(Color::Default, text(L"Default")),
-                   bgcolor(Color::Black, text(L"Black")),
-                   bgcolor(Color::GrayDark, text(L"GrayDark")),
-                   bgcolor(Color::GrayLight, text(L"GrayLight")),
-                   bgcolor(Color::White, text(L"White")),
-                   bgcolor(Color::Blue, text(L"Blue")),
-                   bgcolor(Color::BlueLight, text(L"BlueLight")),
-                   bgcolor(Color::Cyan, text(L"Cyan")),
-                   bgcolor(Color::CyanLight, text(L"CyanLight")),
-                   bgcolor(Color::Green, text(L"Green")),
-                   bgcolor(Color::GreenLight, text(L"GreenLight")),
-                   bgcolor(Color::Magenta, text(L"Magenta")),
-                   bgcolor(Color::MagentaLight, text(L"MagentaLight")),
-                   bgcolor(Color::Red, text(L"Red")),
-                   bgcolor(Color::RedLight, text(L"RedLight")),
-                   bgcolor(Color::Yellow, text(L"Yellow")),
-                   bgcolor(Color::YellowLight, text(L"YellowLight")),
+                   bgcolor(Color::Default, text("Default")),
+                   bgcolor(Color::Black, text("Black")),
+                   bgcolor(Color::GrayDark, text("GrayDark")),
+                   bgcolor(Color::GrayLight, text("GrayLight")),
+                   bgcolor(Color::White, text("White")),
+                   bgcolor(Color::Blue, text("Blue")),
+                   bgcolor(Color::BlueLight, text("BlueLight")),
+                   bgcolor(Color::Cyan, text("Cyan")),
+                   bgcolor(Color::CyanLight, text("CyanLight")),
+                   bgcolor(Color::Green, text("Green")),
+                   bgcolor(Color::GreenLight, text("GreenLight")),
+                   bgcolor(Color::Magenta, text("Magenta")),
+                   bgcolor(Color::MagentaLight, text("MagentaLight")),
+                   bgcolor(Color::Red, text("Red")),
+                   bgcolor(Color::RedLight, text("RedLight")),
+                   bgcolor(Color::Yellow, text("Yellow")),
+                   bgcolor(Color::YellowLight, text("YellowLight")),
                }),
            }) |
            hcenter | border;
@@ -299,7 +297,7 @@ int main(int argc, const char* argv[]) {
   auto render_gauge = [&shift](int delta) {
     float progress = (shift + delta) % 1000 / 1000.f;
     return hbox({
-        text(std::to_wstring(int(progress * 100)) + L"% ") |
+        text(std::to_string(int(progress * 100)) + "% ") |
             size(WIDTH, EQUAL, 5),
         gauge(progress),
     });
@@ -329,8 +327,8 @@ int main(int argc, const char* argv[]) {
   });
 
   int tab_index = 0;
-  std::vector<std::wstring> tab_entries = {
-      L"htop", L"color", L"spinner", L"gauge", L"compiler",
+  std::vector<std::string> tab_entries = {
+      "htop", "color", "spinner", "gauge", "compiler",
   };
   auto tab_selection = Toggle(&tab_entries, &tab_index);
   auto tab_content = Container::Tab(
@@ -350,7 +348,7 @@ int main(int argc, const char* argv[]) {
 
   auto main_renderer = Renderer(main_container, [&] {
     return vbox({
-        text(L"FTXUI Demo") | bold | hcenter,
+        text("FTXUI Demo") | bold | hcenter,
         tab_selection->Render() | hcenter,
         tab_content->Render() | flex,
     });

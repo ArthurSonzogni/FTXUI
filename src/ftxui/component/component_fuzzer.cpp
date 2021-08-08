@@ -1,3 +1,4 @@
+#include <iostream>
 //#include "ftxui/component/event.hpp"
 //#include "ftxui/component/receiver.hpp"
 #include <vector>
@@ -17,15 +18,21 @@ bool GeneratorBool(const char*& data, size_t& size) {
   return out;
 }
 
-std::wstring GeneratorString(const char*& data, size_t& size) {
+std::string GeneratorString(const char*& data, size_t& size) {
   int index = 0;
   while (index < size && data[index])
     ++index;
 
-  auto out = std::wstring(data, data + index);
-  data += index;
-  size -= index;
-  return std::move(out);
+  try {
+    auto out = std::string(data, data + index);
+    auto w_out = to_wstring(out);
+    data += index;
+    size -= index;
+    return std::move(out);
+  } catch (...) {
+    // The input component do not support invalid UTF8 yet.
+    return "0";
+  }
 }
 
 int GeneratorInt(const char* data, size_t size) {
@@ -39,7 +46,7 @@ int GeneratorInt(const char* data, size_t size) {
 
 bool g_bool;
 int g_int;
-std::vector<std::wstring> g_list;
+std::vector<std::string> g_list;
 
 Components GeneratorComponents(const char*& data, size_t& size, int depth);
 
@@ -114,7 +121,7 @@ extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
   g_bool = GeneratorBool(data, size);
   g_int = GeneratorInt(data, size);
   g_list = {
-      L"test_1", L"test_2", L"test_3", L"test_4", L"test_5",
+      "test_1", "test_2", "test_3", "test_4", "test_5",
   };
 
   int depth = 10;
@@ -122,6 +129,12 @@ extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
 
   int width = GeneratorInt(data, size);
   int height = GeneratorInt(data, size);
+
+  width %= 500;
+  width += 500;
+
+  height %= 500;
+  height += 500;
 
   auto screen =
       Screen::Create(Dimension::Fixed(width), Dimension::Fixed(height));

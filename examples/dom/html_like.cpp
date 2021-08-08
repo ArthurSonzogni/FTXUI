@@ -1,12 +1,11 @@
 #include <chrono>                   // for operator""s, chrono_literals
-#include <ftxui/screen/screen.hpp>  // for Screen, Dimension
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <iostream>                 // for cout, ostream
 #include <memory>                   // for allocator, shared_ptr
 #include <string>                   // for operator<<, string
 #include <thread>                   // for sleep_for
 
-#include "ftxui/dom/deprecated.hpp"  // for paragraph, text
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, border, color, hflow, spinner, vbox, bold, dim, underlined
+#include "ftxui/dom/elements.hpp"  // for paragraph, text, operator|, Element, border, color, hflow, spinner, vbox, bold, dim, underlined
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/box.hpp"    // for ftxui
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
@@ -15,34 +14,34 @@ int main(int argc, const char* argv[]) {
   using namespace ftxui;
   using namespace std::chrono_literals;
 
-  auto img1 = []() { return text(L"img") | border; };
-  auto img2 = []() { return vbox({text(L"big"), text(L"image")}) | border; };
+  auto img1 = []() { return text("img") | border; };
+  auto img2 = []() { return vbox({text("big"), text("image")}) | border; };
 
   std::string reset_position;
   for (int i = 0;; ++i) {
     auto document =  //
         hflow(
-            paragraph(L"Hello world! Here is an image:"), img1(),
-            paragraph(L" Here is a text "), text(L"underlined ") | underlined,
-            paragraph(L" Here is a text "), text(L"bold ") | bold,
-            paragraph(L"Hello world! Here is an image:"), img2(),
+            paragraph("Hello world! Here is an image:"), img1(),
+            paragraph(" Here is a text "), text("underlined ") | underlined,
+            paragraph(" Here is a text "), text("bold ") | bold,
+            paragraph("Hello world! Here is an image:"), img2(),
             paragraph(
-                L"Le Lorem Ipsum est simplement du faux texte employé dans la "
-                L"composition et la mise en page avant impression. Le Lorem "
-                L"Ipsum est le faux texte standard de l'imprimerie depuis les "
-                L"années 1500, quand un imprimeur anonyme assembla ensemble "
-                L"des morceaux de texte pour réaliser un livre spécimen de "
-                L"polices de texte. Il n'a pas fait que survivre cinq siècles, "
-                L"mais s'est aussi adapté à la bureautique informatique, sans "
-                L"que son contenu n'en soit modifié. Il a été popularisé dans "
-                L"les années 1960 grâce à la vente de feuilles Letraset "
-                L"contenant des passages du Lorem Ipsum, et, plus récemment, "
-                L"par son inclusion dans des applications de mise en page de "
-                L"texte, comme Aldus PageMaker."),
-            paragraph(L" Here is a text "), text(L"dim ") | dim,
-            paragraph(L"Hello world! Here is an image:"), img1(),
-            paragraph(L" Here is a text "), text(L"red ") | color(Color::Red),
-            paragraph(L" A spinner "), spinner(6, i / 10)) |
+                "Le Lorem Ipsum est simplement du faux texte employé dans la "
+                "composition et la mise en page avant impression. Le Lorem "
+                "Ipsum est le faux texte standard de l'imprimerie depuis les "
+                "années 1500, quand un imprimeur anonyme assembla ensemble "
+                "des morceaux de texte pour réaliser un livre spécimen de "
+                "polices de texte. Il n'a pas fait que survivre cinq siècles, "
+                "mais s'est aussi adapté à la bureautique informatique, sans "
+                "que son contenu n'en soit modifié. Il a été popularisé dans "
+                "les années 1960 grâce à la vente de feuilles Letraset "
+                "contenant des passages du Lorem Ipsum, et, plus récemment, "
+                "par son inclusion dans des applications de mise en page de "
+                "texte, comme Aldus PageMaker."),
+            paragraph(" Here is a text "), text("dim ") | dim,
+            paragraph("Hello world! Here is an image:"), img1(),
+            paragraph(" Here is a text "), text("red ") | color(Color::Red),
+            paragraph(" A spinner "), spinner(6, i / 10)) |
         border;
 
     auto screen = Screen::Create(Dimension::Full());

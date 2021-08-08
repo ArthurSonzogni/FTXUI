@@ -1,12 +1,12 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for wstring
+#include <string>  // for string
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Input
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for InputOption
-#include "ftxui/component/deprecated.hpp"         // for Input
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Delete, Event::End, Event::Home
 #include "ftxui/dom/elements.hpp"     // for Fit
 #include "ftxui/dom/node.hpp"         // for Render
@@ -17,8 +17,8 @@
 using namespace ftxui;
 
 TEST(InputTest, Init) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   auto option = InputOption();
   Component input = Input(&content, &placeholder, &option);
 
@@ -26,17 +26,17 @@ TEST(InputTest, Init) {
 }
 
 TEST(InputTest, Type) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   auto option = InputOption();
   Component input = Input(&content, &placeholder, &option);
 
-  input->OnEvent(Event::Character('a'));
-  EXPECT_EQ(content, L"a");
+  input->OnEvent(Event::Character("a"));
+  EXPECT_EQ(content, "a");
   EXPECT_EQ(option.cursor_position(), 1u);
 
   input->OnEvent(Event::Character('b'));
-  EXPECT_EQ(content, L"ab");
+  EXPECT_EQ(content, "ab");
   EXPECT_EQ(option.cursor_position(), 2u);
 
   auto document = input->Render();
@@ -47,18 +47,18 @@ TEST(InputTest, Type) {
 }
 
 TEST(InputTest, TypePassword) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   auto option = InputOption();
   option.password = true;
   Component input = Input(&content, &placeholder, &option);
 
   input->OnEvent(Event::Character('a'));
-  EXPECT_EQ(content, L"a");
+  EXPECT_EQ(content, "a");
   EXPECT_EQ(option.cursor_position(), 1u);
 
   input->OnEvent(Event::Character('b'));
-  EXPECT_EQ(content, L"ab");
+  EXPECT_EQ(content, "ab");
   EXPECT_EQ(option.cursor_position(), 2u);
 
   auto document = input->Render();
@@ -69,8 +69,8 @@ TEST(InputTest, TypePassword) {
 }
 
 TEST(InputTest, Arrow) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   auto option = InputOption();
   auto input = Input(&content, &placeholder, &option);
 
@@ -106,53 +106,53 @@ TEST(InputTest, Arrow) {
 }
 
 TEST(InputTest, Insert) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   Component input = Input(&content, &placeholder);
 
   input->OnEvent(Event::Character('a'));
   input->OnEvent(Event::Character('b'));
   input->OnEvent(Event::Character('c'));
-  EXPECT_EQ(content, L"abc");
+  EXPECT_EQ(content, "abc");
 
   input->OnEvent(Event::ArrowLeft);
   input->OnEvent(Event::ArrowLeft);
   input->OnEvent(Event::Character('-'));
-  EXPECT_EQ(content, L"a-bc");
+  EXPECT_EQ(content, "a-bc");
 
   input->OnEvent(Event::ArrowLeft);
   input->OnEvent(Event::Character('-'));
-  EXPECT_EQ(content, L"a--bc");
+  EXPECT_EQ(content, "a--bc");
 
   input->OnEvent(Event::ArrowLeft);
   input->OnEvent(Event::ArrowLeft);
   input->OnEvent(Event::ArrowLeft);
   input->OnEvent(Event::Character('-'));
-  EXPECT_EQ(content, L"-a--bc");
+  EXPECT_EQ(content, "-a--bc");
 }
 
 TEST(InputTest, Home) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   auto option = InputOption();
   auto input = Input(&content, &placeholder, &option);
 
   input->OnEvent(Event::Character('a'));
   input->OnEvent(Event::Character('b'));
   input->OnEvent(Event::Character('c'));
-  EXPECT_EQ(content, L"abc");
+  EXPECT_EQ(content, "abc");
 
   EXPECT_EQ(option.cursor_position(), 3u);
   input->OnEvent(Event::Home);
   EXPECT_EQ(option.cursor_position(), 0u);
 
   input->OnEvent(Event::Character('-'));
-  EXPECT_EQ(content, L"-abc");
+  EXPECT_EQ(content, "-abc");
 }
 
 TEST(InputTest, End) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   auto option = InputOption();
   auto input = Input(&content, &placeholder, &option);
 
@@ -169,8 +169,8 @@ TEST(InputTest, End) {
 }
 
 TEST(InputTest, Delete) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   auto option = InputOption();
   auto input = Input(&content, &placeholder, &option);
 
@@ -179,21 +179,21 @@ TEST(InputTest, Delete) {
   input->OnEvent(Event::Character('c'));
   input->OnEvent(Event::ArrowLeft);
 
-  EXPECT_EQ(content, L"abc");
+  EXPECT_EQ(content, "abc");
   EXPECT_EQ(option.cursor_position(), 2u);
 
   input->OnEvent(Event::Delete);
-  EXPECT_EQ(content, L"ab");
+  EXPECT_EQ(content, "ab");
   EXPECT_EQ(option.cursor_position(), 2u);
 
   input->OnEvent(Event::Delete);
-  EXPECT_EQ(content, L"ab");
+  EXPECT_EQ(content, "ab");
   EXPECT_EQ(option.cursor_position(), 2u);
 }
 
 TEST(InputTest, Backspace) {
-  std::wstring content;
-  std::wstring placeholder;
+  std::string content;
+  std::string placeholder;
   auto option = InputOption();
   auto input = Input(&content, &placeholder, &option);
 
@@ -202,19 +202,19 @@ TEST(InputTest, Backspace) {
   input->OnEvent(Event::Character('c'));
   input->OnEvent(Event::ArrowLeft);
 
-  EXPECT_EQ(content, L"abc");
+  EXPECT_EQ(content, "abc");
   EXPECT_EQ(option.cursor_position(), 2u);
 
   input->OnEvent(Event::Backspace);
-  EXPECT_EQ(content, L"ac");
+  EXPECT_EQ(content, "ac");
   EXPECT_EQ(option.cursor_position(), 1u);
 
   input->OnEvent(Event::Backspace);
-  EXPECT_EQ(content, L"c");
+  EXPECT_EQ(content, "c");
   EXPECT_EQ(option.cursor_position(), 0u);
 
   input->OnEvent(Event::Backspace);
-  EXPECT_EQ(content, L"c");
+  EXPECT_EQ(content, "c");
   EXPECT_EQ(option.cursor_position(), 0u);
 }
 

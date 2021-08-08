@@ -7,7 +7,7 @@ using namespace ftxui;
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
   int value = 50;
-  auto slider = Slider(L"Value:", &value, 0, 100, 1);
+  auto slider = Slider("Value:", &value, 0, 100, 1);
   screen.Loop(slider);
 }
 

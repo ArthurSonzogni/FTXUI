@@ -9,14 +9,17 @@
 
 namespace ftxui {
 
-static std::string charset[] =
+static std::string charset[] = {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft's terminals often use fonts not handling the 8 unicode
     // characters for representing the whole gauge. Fallback with less.
-    {" ", " ", " ", " ", "▌", "▌", "▌", "█", "█", "█"};
+    " ", " ", " ", " ", "▌", "▌", "▌", "█", "█", "█",
 #else
-    {" ", " ", "▏", "▎", "▍", "▌", "▋", "▊", "▉", "█"};
+    " ", " ", "▏", "▎", "▍", "▌", "▋", "▊", "▉", "█",
 #endif
+    // An extra character in case when the fuzzer manage to have:
+    // int(9 * (limit - limit_int) = 9
+    "█"};
 
 class Gauge : public Node {
  public:

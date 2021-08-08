@@ -5,17 +5,15 @@
 #include "ftxui/component/component.hpp"          // for Renderer, Vertical
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
-#include "ftxui/component/deprecated.hpp"         // for Input
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/deprecated.hpp"                // for text
 #include "ftxui/dom/elements.hpp"  // for hbox, separator, Element, operator|, vbox, border
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
 
-  std::wstring first_name;
-  std::wstring last_name;
-  std::wstring password;
+  std::string first_name;
+  std::string last_name;
+  std::string password;
 
   Component input_first_name = Input(&first_name, "first name");
   Component input_last_name = Input(&last_name, "last name");
@@ -32,11 +30,11 @@ int main(int argc, const char* argv[]) {
 
   auto renderer = Renderer(component, [&] {
     return vbox({
-               text(L"Hello " + first_name + L" " + last_name),
+               text("Hello " + first_name + " " + last_name),
                separator(),
-               hbox(text(L" First name : "), input_first_name->Render()),
-               hbox(text(L" Last name  : "), input_last_name->Render()),
-               hbox(text(L" Password   : "), input_password->Render()),
+               hbox(text(" First name : "), input_first_name->Render()),
+               hbox(text(" Last name  : "), input_last_name->Render()),
+               hbox(text(" Password   : "), input_password->Render()),
            }) |
            border;
   });

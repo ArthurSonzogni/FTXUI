@@ -1,6 +1,6 @@
 #include <functional>  // for function
 #include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
-#include <string>    // for wstring, basic_string, allocator
+#include <string>    // for string, basic_string, allocator
 #include <vector>    // for vector
 
 #include "ftxui/component/captured_mouse.hpp"      // for ftxui
@@ -12,10 +12,10 @@ int main(int argc, const char* argv[]) {
   using namespace ftxui;
   auto screen = ScreenInteractive::TerminalOutput();
 
-  std::vector<std::wstring> entries = {
-      L"entry 1",
-      L"entry 2",
-      L"entry 3",
+  std::vector<std::string> entries = {
+      "entry 1",
+      "entry 2",
+      "entry 3",
   };
   int selected = 0;
 

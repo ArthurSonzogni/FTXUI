@@ -4,19 +4,18 @@
 #include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/deprecated.hpp"                // for text
-#include "ftxui/dom/elements.hpp"  // for Element, operator|, center, border
+#include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
 
 using namespace ftxui;
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::Fullscreen();
 
-  auto middle = Renderer([] { return text(L"middle") | center; });
-  auto left = Renderer([] { return text(L"Left") | center; });
-  auto right = Renderer([] { return text(L"right") | center; });
-  auto top = Renderer([] { return text(L"top") | center; });
-  auto bottom = Renderer([] { return text(L"bottom") | center; });
+  auto middle = Renderer([] { return text("middle") | center; });
+  auto left = Renderer([] { return text("Left") | center; });
+  auto right = Renderer([] { return text("right") | center; });
+  auto top = Renderer([] { return text("top") | center; });
+  auto bottom = Renderer([] { return text("bottom") | center; });
 
   int left_size = 20;
   int right_size = 20;

@@ -3,8 +3,7 @@
 #include <string>                   // for allocator, basic_string, string
 #include <vector>                   // for vector
 
-#include "ftxui/dom/deprecated.hpp"  // for text
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, flex_grow, flex_shrink, hbox
+#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex_grow, flex_shrink, hbox
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/box.hpp"     // for ftxui
 #include "ftxui/screen/screen.hpp"  // for Screen
@@ -15,9 +14,9 @@ using namespace ftxui;
 
 TEST(HBoxTest, NoFlex_NoFlex_NoFlex) {
   auto root = hbox({
-      text(L"012"),
-      text(L"abc"),
-      text(L"ABC"),
+      text("012"),
+      text("abc"),
+      text("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -43,9 +42,9 @@ TEST(HBoxTest, NoFlex_NoFlex_NoFlex) {
 
 TEST(HBoxTest, FlexGrow_NoFlex_NoFlex) {
   auto root = hbox({
-      text(L"012") | flex_grow,
-      text(L"abc"),
-      text(L"ABC"),
+      text("012") | flex_grow,
+      text("abc"),
+      text("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -71,9 +70,9 @@ TEST(HBoxTest, FlexGrow_NoFlex_NoFlex) {
 
 TEST(HBoxTest, NoFlex_FlexGrow_NoFlex) {
   auto root = hbox({
-      text(L"012"),
-      text(L"abc") | flex_grow,
-      text(L"ABC"),
+      text("012"),
+      text("abc") | flex_grow,
+      text("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -99,9 +98,9 @@ TEST(HBoxTest, NoFlex_FlexGrow_NoFlex) {
 
 TEST(HBoxTest, NoFlex_NoFlex_FlexGrow) {
   auto root = hbox({
-      text(L"012"),
-      text(L"abc"),
-      text(L"ABC") | flex_grow,
+      text("012"),
+      text("abc"),
+      text("ABC") | flex_grow,
   });
 
   std::vector<std::string> expectations = {
@@ -127,9 +126,9 @@ TEST(HBoxTest, NoFlex_NoFlex_FlexGrow) {
 
 TEST(HBoxTest, FlexGrow_NoFlex_FlexGrow) {
   auto root = hbox({
-      text(L"012") | flex_grow,
-      text(L"abc"),
-      text(L"ABC") | flex_grow,
+      text("012") | flex_grow,
+      text("abc"),
+      text("ABC") | flex_grow,
   });
 
   std::vector<std::string> expectations = {
@@ -157,9 +156,9 @@ TEST(HBoxTest, FlexGrow_NoFlex_FlexGrow) {
 
 TEST(HBoxTest, FlexGrow_FlexGrow_FlexGrow) {
   auto root = hbox({
-      text(L"012") | flex_grow,
-      text(L"abc") | flex_grow,
-      text(L"ABC") | flex_grow,
+      text("012") | flex_grow,
+      text("abc") | flex_grow,
+      text("ABC") | flex_grow,
   });
 
   std::vector<std::string> expectations = {
@@ -191,9 +190,9 @@ TEST(HBoxTest, FlexGrow_FlexGrow_FlexGrow) {
 
 TEST(HBoxTest, FlexShrink_NoFlex_NoFlex) {
   auto root = hbox({
-      text(L"012") | flex_shrink,
-      text(L"abc"),
-      text(L"ABC"),
+      text("012") | flex_shrink,
+      text("abc"),
+      text("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -219,9 +218,9 @@ TEST(HBoxTest, FlexShrink_NoFlex_NoFlex) {
 
 TEST(HBoxTest, NoFlex_FlexShrink_NoFlex) {
   auto root = hbox({
-      text(L"012"),
-      text(L"abc") | flex_shrink,
-      text(L"ABC"),
+      text("012"),
+      text("abc") | flex_shrink,
+      text("ABC"),
   });
 
   std::vector<std::string> expectations = {
@@ -247,9 +246,9 @@ TEST(HBoxTest, NoFlex_FlexShrink_NoFlex) {
 
 TEST(HBoxTest, NoFlex_NoFlex_FlexShrink) {
   auto root = hbox({
-      text(L"012"),
-      text(L"abc"),
-      text(L"ABC") | flex_shrink,
+      text("012"),
+      text("abc"),
+      text("ABC") | flex_shrink,
   });
 
   std::vector<std::string> expectations = {
@@ -275,9 +274,9 @@ TEST(HBoxTest, NoFlex_NoFlex_FlexShrink) {
 
 TEST(HBoxTest, FlexShrink_NoFlex_FlexShrink) {
   auto root = hbox({
-      text(L"012") | flex_shrink,
-      text(L"abc"),
-      text(L"ABC") | flex_shrink,
+      text("012") | flex_shrink,
+      text("abc"),
+      text("ABC") | flex_shrink,
   });
 
   std::vector<std::string> expectations = {
@@ -302,9 +301,9 @@ TEST(HBoxTest, FlexShrink_NoFlex_FlexShrink) {
 
 TEST(HBoxTest, FlexShrink_FlexShrink_FlexShrink) {
   auto root = hbox({
-      text(L"012") | flex_shrink,
-      text(L"abc") | flex_shrink,
-      text(L"ABC") | flex_shrink,
+      text("012") | flex_shrink,
+      text("abc") | flex_shrink,
+      text("ABC") | flex_shrink,
   });
 
   std::vector<std::string> expectations = {
@@ -331,9 +330,9 @@ TEST(HBoxTest, FlexShrink_FlexShrink_FlexShrink) {
 
 TEST(HBoxTest, FlexGrow_NoFlex_FlewShrink) {
   auto root = hbox({
-      text(L"012") | flex_grow,
-      text(L"abc"),
-      text(L"ABC") | flex_shrink,
+      text("012") | flex_grow,
+      text("abc"),
+      text("ABC") | flex_shrink,
   });
 
   std::vector<std::string> expectations = {

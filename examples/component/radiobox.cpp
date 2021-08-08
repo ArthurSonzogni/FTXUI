@@ -1,4 +1,4 @@
-#include <string>  // for wstring, allocator, basic_string
+#include <string>  // for string, allocator, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"      // for ftxui
@@ -8,11 +8,11 @@
 using namespace ftxui;
 
 int main(int argc, const char* argv[]) {
-  std::vector<std::wstring> radiobox_list = {
-      L"Use gcc",
-      L"Use clang",
-      L"Use emscripten",
-      L"Use tcc",
+  std::vector<std::string> radiobox_list = {
+      "Use gcc",
+      "Use clang",
+      "Use emscripten",
+      "Use tcc",
   };
   int selected = 0;
 

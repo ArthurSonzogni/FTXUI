@@ -1,19 +1,17 @@
 #include <stdlib.h>  // for EXIT_SUCCESS
 #include <memory>    // for allocator, __shared_ptr_access
-#include <string>    // for wstring, operator+, basic_string, char_traits
-#include <vector>    // for vector, __alloc_traits<>::value_type
+#include <string>  // for string, operator+, basic_string, to_string, char_traits
+#include <vector>  // for vector, __alloc_traits<>::value_type
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Menu, Renderer, Horizontal, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/deprecated.hpp"                // for text
-#include "ftxui/dom/elements.hpp"  // for Element, operator|, window, flex, vbox
-#include "ftxui/screen/string.hpp"  // for to_wstring
+#include "ftxui/dom/elements.hpp"  // for text, Element, operator|, window, flex, vbox
 
 using namespace ftxui;
 
-Component Window(std::wstring title, Component component) {
+Component Window(std::string title, Component component) {
   return Renderer(component, [component, title] {  //
     return window(text(title), component->Render()) | flex;
   });
@@ -21,46 +19,46 @@ Component Window(std::wstring title, Component component) {
 
 int main(int argc, const char* argv[]) {
   int menu_selected[] = {0, 0, 0};
-  std::vector<std::vector<std::wstring>> menu_entries = {
+  std::vector<std::vector<std::string>> menu_entries = {
       {
-          L"Ananas",
-          L"Raspberry",
-          L"Citrus",
+          "Ananas",
+          "Raspberry",
+          "Citrus",
       },
       {
-          L"Potatoes",
-          L"Weat",
-          L"Rise",
+          "Potatoes",
+          "Weat",
+          "Rise",
       },
       {
-          L"Carrot",
-          L"Lettuce",
-          L"Tomato",
+          "Carrot",
+          "Lettuce",
+          "Tomato",
       },
   };
 
   int menu_selected_global = 0;
   auto menu_global = Container::Vertical(
       {
-          Window(L"Menu 1", Menu(&menu_entries[0], &menu_selected[0])),
-          Window(L"Menu 2", Menu(&menu_entries[1], &menu_selected[1])),
-          Window(L"Menu 3", Menu(&menu_entries[2], &menu_selected[2])),
+          Window("Menu 1", Menu(&menu_entries[0], &menu_selected[0])),
+          Window("Menu 2", Menu(&menu_entries[1], &menu_selected[1])),
+          Window("Menu 3", Menu(&menu_entries[2], &menu_selected[2])),
       },
       &menu_selected_global);
 
   auto info = Renderer([&] {
     int g = menu_selected_global;
-    std::wstring value = menu_entries[g][menu_selected[g]];
-    return window(text(L"Content"),  //
+    std::string value = menu_entries[g][menu_selected[g]];
+    return window(text("Content"),  //
                   vbox({
-                      text(L"menu_selected_global = " + to_wstring(g)),
-                      text(L"menu_selected[0]     = " +
-                           to_wstring(menu_selected[0])),
-                      text(L"menu_selected[1]     = " +
-                           to_wstring(menu_selected[1])),
-                      text(L"menu_selected[2]     = " +
-                           to_wstring(menu_selected[2])),
-                      text(L"Value                = " + value),
+                      text("menu_selected_global = " + std::to_string(g)),
+                      text("menu_selected[0]     = " +
+                           std::to_string(menu_selected[0])),
+                      text("menu_selected[1]     = " +
+                           std::to_string(menu_selected[1])),
+                      text("menu_selected[2]     = " +
+                           std::to_string(menu_selected[2])),
+                      text("Value                = " + value),
                   })) |
            flex;
   });

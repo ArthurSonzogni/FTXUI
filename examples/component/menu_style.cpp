@@ -1,6 +1,6 @@
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, __shared_ptr_access, allocator
-#include <string>      // for wstring, basic_string
+#include <string>      // for string, basic_string
 #include <vector>      // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
@@ -15,8 +15,8 @@ int main(int argc, const char* argv[]) {
   using namespace ftxui;
   auto screen = ScreenInteractive::TerminalOutput();
 
-  std::vector<std::wstring> entries = {
-      L"Monkey", L"Dog", L"Cat", L"Bird", L"Elephant",
+  std::vector<std::string> entries = {
+      "Monkey", "Dog", "Cat", "Bird", "Elephant",
   };
   int menu_1_selected_ = 0;
   int menu_2_selected_ = 0;

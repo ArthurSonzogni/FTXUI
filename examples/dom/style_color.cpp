@@ -1,10 +1,9 @@
-#include <ftxui/screen/screen.hpp>  // for Dimension, Screen
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
 
-#include "ftxui/dom/deprecated.hpp"  // for text
-#include "ftxui/dom/elements.hpp"    // for bgcolor, color, vbox, filler, hbox
-#include "ftxui/dom/node.hpp"        // for Render
-#include "ftxui/screen/box.hpp"      // for ftxui
+#include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, Fit, filler, hbox
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/box.hpp"    // for ftxui
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight
 
 int main(int argc, const char* argv[]) {
@@ -13,42 +12,42 @@ int main(int argc, const char* argv[]) {
   auto document =
     hbox(
       vbox(
-        color(Color::Default, text(L"Default")),
-        color(Color::Black, text(L"Black")),
-        color(Color::GrayDark, text(L"GrayDark")),
-        color(Color::GrayLight, text(L"GrayLight")),
-        color(Color::White, text(L"White")),
-        color(Color::Blue, text(L"Blue")),
-        color(Color::BlueLight, text(L"BlueLight")),
-        color(Color::Cyan, text(L"Cyan")),
-        color(Color::CyanLight, text(L"CyanLight")),
-        color(Color::Green, text(L"Green")),
-        color(Color::GreenLight, text(L"GreenLight")),
-        color(Color::Magenta, text(L"Magenta")),
-        color(Color::MagentaLight, text(L"MagentaLight")),
-        color(Color::Red, text(L"Red")),
-        color(Color::RedLight, text(L"RedLight")),
-        color(Color::Yellow, text(L"Yellow")),
-        color(Color::YellowLight, text(L"YellowLight"))
+        color(Color::Default, text("Default")),
+        color(Color::Black, text("Black")),
+        color(Color::GrayDark, text("GrayDark")),
+        color(Color::GrayLight, text("GrayLight")),
+        color(Color::White, text("White")),
+        color(Color::Blue, text("Blue")),
+        color(Color::BlueLight, text("BlueLight")),
+        color(Color::Cyan, text("Cyan")),
+        color(Color::CyanLight, text("CyanLight")),
+        color(Color::Green, text("Green")),
+        color(Color::GreenLight, text("GreenLight")),
+        color(Color::Magenta, text("Magenta")),
+        color(Color::MagentaLight, text("MagentaLight")),
+        color(Color::Red, text("Red")),
+        color(Color::RedLight, text("RedLight")),
+        color(Color::Yellow, text("Yellow")),
+        color(Color::YellowLight, text("YellowLight"))
       ),
       vbox(
-        bgcolor(Color::Default, text(L"Default")),
-        bgcolor(Color::Black, text(L"Black")),
-        bgcolor(Color::GrayDark, text(L"GrayDark")),
-        bgcolor(Color::GrayLight, text(L"GrayLight")),
-        bgcolor(Color::White, text(L"White")),
-        bgcolor(Color::Blue, text(L"Blue")),
-        bgcolor(Color::BlueLight, text(L"BlueLight")),
-        bgcolor(Color::Cyan, text(L"Cyan")),
-        bgcolor(Color::CyanLight, text(L"CyanLight")),
-        bgcolor(Color::Green, text(L"Green")),
-        bgcolor(Color::GreenLight, text(L"GreenLight")),
-        bgcolor(Color::Magenta, text(L"Magenta")),
-        bgcolor(Color::MagentaLight, text(L"MagentaLight")),
-        bgcolor(Color::Red, text(L"Red")),
-        bgcolor(Color::RedLight, text(L"RedLight")),
-        bgcolor(Color::Yellow, text(L"Yellow")),
-        bgcolor(Color::YellowLight, text(L"YellowLight"))
+        bgcolor(Color::Default, text("Default")),
+        bgcolor(Color::Black, text("Black")),
+        bgcolor(Color::GrayDark, text("GrayDark")),
+        bgcolor(Color::GrayLight, text("GrayLight")),
+        bgcolor(Color::White, text("White")),
+        bgcolor(Color::Blue, text("Blue")),
+        bgcolor(Color::BlueLight, text("BlueLight")),
+        bgcolor(Color::Cyan, text("Cyan")),
+        bgcolor(Color::CyanLight, text("CyanLight")),
+        bgcolor(Color::Green, text("Green")),
+        bgcolor(Color::GreenLight, text("GreenLight")),
+        bgcolor(Color::Magenta, text("Magenta")),
+        bgcolor(Color::MagentaLight, text("MagentaLight")),
+        bgcolor(Color::Red, text("Red")),
+        bgcolor(Color::RedLight, text("RedLight")),
+        bgcolor(Color::Yellow, text("Yellow")),
+        bgcolor(Color::YellowLight, text("YellowLight"))
       ),
       filler()
     );

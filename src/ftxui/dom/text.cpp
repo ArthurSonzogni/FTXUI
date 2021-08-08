@@ -1,6 +1,7 @@
-#include <memory>  // for make_shared
-#include <string>  // for string
-#include <vector>  // for vector
+#include <algorithm>  // for min
+#include <memory>     // for make_shared
+#include <string>     // for string, wstring
+#include <vector>     // for vector
 
 #include "ftxui/dom/deprecated.hpp"   // for text, vtext
 #include "ftxui/dom/elements.hpp"     // for Element, text, vtext
@@ -87,7 +88,7 @@ Element text(std::string text) {
   return std::make_shared<Text>(text);
 }
 
-/// @brief Display a piece of UTF16 encoded unicode text.
+/// @brief Display a piece of unicode text.
 /// @ingroup dom
 /// @see ftxui::to_wstring
 ///
@@ -136,7 +137,7 @@ Element vtext(std::string text) {
   return std::make_shared<VText>(text);
 }
 
-/// @brief Display a piece of UTF16 encoded unicode text vertically.
+/// @brief Display a piece unicode text vertically.
 /// @ingroup dom
 /// @see ftxui::to_wstring
 ///

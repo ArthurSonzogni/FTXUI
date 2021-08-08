@@ -11,7 +11,7 @@
 using namespace ftxui;
 
 Component Focusable() {
-  return Button(L"", [] {});
+  return Button("", [] {});
 }
 Component NonFocusable() {
   return Container::Horizontal({});
