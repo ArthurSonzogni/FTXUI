@@ -52,9 +52,9 @@ A simple C++ library for terminal based user interface.
 ~~~cpp
   vbox({
     hbox({
-      text(L"left") | border,
-      text(L"middle") | border | flex,
-      text(L"right") | border,
+      text("left") | border,
+      text("middle") | border | flex,
+      text("right") | border,
     }),
     gauge(0.5) | border,
   });
