@@ -21,9 +21,9 @@ int main(void) {
   // Define the document
   Element document =
     hbox({
-      text(L"left")   | border,
-      text(L"middle") | border | flex,
-      text(L"right")  | border,
+      text("left")   | border,
+      text("middle") | border | flex,
+      text("right")  | border,
     });
 
   auto screen = Screen::Create(
@@ -141,9 +141,9 @@ can be responsive to the terminal dimensions.
 ```cpp
 // Define the document
 Element document = vbox({
-    text(L"The window") | bold | color(Color::Blue),
+    text("The window") | bold | color(Color::Blue),
     gauge(0.5)
-    text(L"The footer")
+    text("The footer")
   });
 
 // Add a border.
@@ -160,7 +160,7 @@ You only need one header: ftxui/dom/elements.hpp
 
 The most simple widget. It displays a text.
 ~~~cpp
-text(L"I am a piece of text");
+text("I am a piece of text");
 ~~~
 ~~~bash
 I am a piece of text.
@@ -170,7 +170,7 @@ I am a piece of text.
 
 Add a border around an element
 ~~~cpp
-border(text(L"The element"))
+border(text("The element"))
 ~~~
 
 ~~~bash
@@ -184,7 +184,7 @@ border(text(L"The element"))
 A `ftxui::window` is a `ftxui::border`, but with some text on top of the border.
 Add a border around an element
 ~~~cpp
-window(L"The window", text(L"The element"))
+window("The window", text("The element"))
 ~~~
 
 ~~~bash
@@ -201,9 +201,9 @@ container in two.
 ~~~cpp
 border(
   hbox({
-    text(L"Left"), 
+    text("Left"), 
     separator(),
-    text(L"Right")
+    text("Right")
   })
 )
 ~~~
@@ -272,9 +272,9 @@ On most terminal the following colors are supported:
 
 Example:
 ```cpp
-text(L"Blue foreground") | color(Color::Blue);
-text(L"Blue background") | bgcolor(Color::Blue);
-text(L"Black on white") | color(Color::Black) | bgcolor(Color::White);
+text("Blue foreground") | color(Color::Blue);
+text("Blue background") | bgcolor(Color::Blue);
+text("Black on white") | color(Color::Black) | bgcolor(Color::White);
 ```
 
 ### Palette256
@@ -285,7 +285,7 @@ On terminal supporting 256 colors.
 @endhtmlonly
 
 ```cpp
-text(L"HotPink") | color(Color::HotPink);
+text("HotPink") | color(Color::HotPink);
 ```
 
 ### TrueColor
@@ -320,12 +320,12 @@ Decorator bgcolor(Color);
 
 Example:
 ~~~cpp
-underlined(bold(text(L"This text is bold and underlined")))
+underlined(bold(text("This text is bold and underlined")))
 ~~~
 
 Tips: The pipe operator can be used to chain Decorator:
 ~~~cpp
-text(L"This text is bold")) | bold | underlined
+text("This text is bold")) | bold | underlined
 ~~~
 
 ## Layout
@@ -348,10 +348,10 @@ An horizontal flow layout is implemented by:
 **Examples**
 ~~~cpp
   hbox({
-    text(L"left") | border ,
-    text(L"middle") | border | flex,
-    text(L"right") | border,
-    });
+    text("left") | border ,
+    text("middle") | border | flex,
+    text("right") | border,
+  });
 ~~~
 ~~~bash
 ┌────┐┌─────────────────────────────────────────────────────────────────┐┌─────┐
@@ -361,10 +361,10 @@ An horizontal flow layout is implemented by:
 
 ~~~cpp
   hbox({
-    text(L"left") | border ,
-    text(L"middle") | border | flex,
-    text(L"right") | border | flex,
-    });
+    text("left") | border ,
+    text("middle") | border | flex,
+    text("right") | border | flex,
+  });
 ~~~
 ~~~bash
 ┌────┐┌───────────────────────────────────┐┌───────────────────────────────────┐
