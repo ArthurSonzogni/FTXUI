@@ -3,7 +3,6 @@
 #include <utility>    // for move
 #include <vector>     // for vector
 
-#include "ftxui/dom/box_helper.hpp"   // for Box
 #include "ftxui/dom/elements.hpp"     // for Element, Elements, hbox
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
@@ -39,23 +38,92 @@ class HBox : public Node {
   void SetBox(Box box) override {
     Node::SetBox(box);
 
-    std::vector<box_helper::Element> elements(children_.size());
-    for (size_t i = 0; i < children_.size(); ++i) {
-      auto& element = elements[i];
-      const auto& requirement = children_[i]->requirement();
-      element.min_size = requirement.min_x;
-      element.flex_grow = requirement.flex_grow_x;
-      element.flex_shrink = requirement.flex_shrink_x;
-    }
-    int target_size = box.x_max - box.x_min + 1;
-    box_helper::Compute(&elements, target_size);
+    int space = box.x_max - box.x_min + 1;
+    int extra_space = space - requirement_.min_x;
 
+    int size = 0;
+    int flex_grow_sum = 0;
+    int flex_shrink_sum = 0;
+    int flex_shrink_size = 0;
+    for (auto& child : children_) {
+      const Requirement& r = child->requirement();
+      flex_grow_sum += r.flex_grow_x;
+      flex_shrink_sum += r.min_x * r.flex_shrink_x;
+      if (r.flex_shrink_x) {
+        flex_shrink_size += r.min_x;
+      }
+      size += r.min_x;
+    }
+
+    if (extra_space >= 0)
+      SetBoxGrow(box, extra_space, flex_grow_sum);
+    else if (flex_shrink_size + extra_space >= 0)
+      SetBoxShrinkEasy(box, extra_space, flex_shrink_sum);
+    else
+      SetBoxShrinkHard(box, extra_space + flex_shrink_size,
+                       size - flex_shrink_size);
+  }
+
+  void SetBoxGrow(Box box, int extra_space, int flex_grow_sum) {
     int x = box.x_min;
-    for (size_t i = 0; i < children_.size(); ++i) {
-      box.x_min = x;
-      box.x_max = x + elements[i].size - 1;
-      children_[i]->SetBox(box);
-      x = box.x_max + 1;
+    for (auto& child : children_) {
+      Box child_box = box;
+      const Requirement& r = child->requirement();
+
+      int added_space =
+          extra_space * r.flex_grow_x / std::max(flex_grow_sum, 1);
+      extra_space -= added_space;
+      flex_grow_sum -= r.flex_grow_x;
+
+      child_box.x_min = x;
+      child_box.x_max = x + r.min_x + added_space - 1;
+
+      child->SetBox(child_box);
+      x = child_box.x_max + 1;
+    }
+  }
+
+  void SetBoxShrinkEasy(Box box, int extra_space, int flex_shrink_sum) {
+    int x = box.x_min;
+    for (auto& child : children_) {
+      Box child_box = box;
+      const Requirement& r = child->requirement();
+
+      int added_space = extra_space * r.min_x * r.flex_shrink_x /
+                        std::max(flex_shrink_sum, 1);
+      extra_space -= added_space;
+      flex_shrink_sum -= r.flex_shrink_x * r.min_x;
+
+      child_box.x_min = x;
+      child_box.x_max = x + r.min_x + added_space - 1;
+
+      child->SetBox(child_box);
+      x = child_box.x_max + 1;
+    }
+  }
+
+  void SetBoxShrinkHard(Box box, int extra_space, int size) {
+    int x = box.x_min;
+    for (auto& child : children_) {
+      Box child_box = box;
+      const Requirement& r = child->requirement();
+
+      if (r.flex_shrink_x) {
+        child_box.x_min = x;
+        child_box.x_max = x - 1;
+        child->SetBox(child_box);
+        continue;
+      }
+
+      int added_space = extra_space * r.min_x / std::max(1, size);
+      extra_space -= added_space;
+      size -= r.min_x;
+
+      child_box.x_min = x;
+      child_box.x_max = x + r.min_x + added_space - 1;
+
+      child->SetBox(child_box);
+      x = child_box.x_max + 1;
     }
   }
 };
