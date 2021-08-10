@@ -181,36 +181,33 @@ class WideInputBase : public ComponentBase {
 // WideInputBase.
 // TODO(arthursonzogni): Provide an implementation handling std::string natively
 // and adds better support for combining characters.
-class InputBase : public ComponentBase {
+class InputBase : public WideInputBase {
  public:
   InputBase(StringRef content,
             ConstStringRef placeholder,
             Ref<InputOption> option)
-      : content_(std::move(content)),
-        wrapped_content_(to_wstring(*content_)),
-        wrapped_input_(&wrapped_content_,
-                       std::move(placeholder),
-                       std::move(option)) {}
+      : WideInputBase(&wrapped_content_,
+                      std::move(placeholder),
+                      std::move(option)),
+        content_(std::move(content)),
+        wrapped_content_(to_wstring(*content_)) {}
 
   Element Render() override {
     wrapped_content_ = to_wstring(*content_);
-    return wrapped_input_.Render();
+    return WideInputBase::Render();
   }
 
   bool OnEvent(Event event) override {
     wrapped_content_ = to_wstring(*content_);
-    if (wrapped_input_.OnEvent(event)) {
+    if (WideInputBase::OnEvent(event)) {
       *content_ = to_string(wrapped_content_);
       return true;
     }
     return false;
   }
 
-  bool Focusable() const final { return true; }
-
   StringRef content_;
   std::wstring wrapped_content_;
-  WideInputBase wrapped_input_;
 };
 
 /// @brief An input box for editing text.
