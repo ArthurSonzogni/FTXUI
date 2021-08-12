@@ -227,21 +227,28 @@ void Screen::ApplyShader() {
   // Merge box characters togethers.
   for (int y = 1; y < dimy_; ++y) {
     for (int x = 1; x < dimx_; ++x) {
-      std::string& left = at(x - 1, y);
-      std::string& top = at(x, y - 1);
-      std::string& cur = at(x, y);
+      // Box drawing character uses exactly 3 byte.
+      std::string& cur = pixels_[y][x].character;
+      if (cur.size() != 3u)
+        continue;
 
-      // Left vs current
-      if (cur == "│" && left == "─") cur = "┤";
-      if (cur == "─" && left == "│") left = "├";
-      if (cur == "├" && left == "─") cur = "┼";
-      if (cur == "─" && left == "┤") left = "┼";
+      // Left vs current.
+      std::string& left = pixels_[y][x-1].character;
+      if (left.size() == 3u) {
+        if (cur == "│" && left == "─") cur = "┤";
+        if (cur == "├" && left == "─") cur = "┼";
+        if (cur == "─" && left == "│") left = "├";
+        if (cur == "─" && left == "┤") left = "┼";
+      }
 
-      // Top vs current
-      if (cur == "─" && top == "│") cur = "┴";
-      if (cur == "│" && top == "─") top = "┬";
-      if (cur == "┬" && top == "│") cur = "┼";
-      if (cur == "│" && top == "┴") top = "┼";
+      // Top vs current.
+      std::string& top = pixels_[y-1][x].character;
+      if (top.size() == 3u) {
+        if (cur == "─" && top == "│") cur = "┴";
+        if (cur == "┬" && top == "│") cur = "┼";
+        if (cur == "│" && top == "─") top = "┬";
+        if (cur == "│" && top == "┴") top = "┼";
+      }
     }
   }
 }
