@@ -124,17 +124,31 @@ class GridBox : public Node {
   std::vector<Elements> lines_;
 };
 
-/// @brief A container displaying elements horizontally one by one.
-/// @param children The elements in the container
+/// @brief A container displaying a grid of elements.
+/// @param lines A list of lines, each line being a list of elements.
 /// @return The container.
 ///
 /// #### Example
 ///
 /// ```cpp
-/// hbox({
-///   text("Left"),
-///   text("Right"),
+/// auto cell = [](const char* t) { return text(t) | border; };
+/// auto document = gridbox({
+///   {cell("north-west") , cell("north")  , cell("north-east")} ,
+///   {cell("west")       , cell("center") , cell("east")}       ,
+///   {cell("south-west") , cell("south")  , cell("south-east")} ,
 /// });
+/// ```
+/// Output:
+/// ```
+///╭──────────╮╭──────╮╭──────────╮
+///│north-west││north ││north-east│
+///╰──────────╯╰──────╯╰──────────╯
+///╭──────────╮╭──────╮╭──────────╮
+///│west      ││center││east      │
+///╰──────────╯╰──────╯╰──────────╯
+///╭──────────╮╭──────╮╭──────────╮
+///│south-west││south ││south-east│
+///╰──────────╯╰──────╯╰──────────╯
 /// ```
 Element gridbox(std::vector<Elements> lines) {
   return std::make_shared<GridBox>(std::move(lines));
