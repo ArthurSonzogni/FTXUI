@@ -54,6 +54,7 @@ Element bgcolor(Color, Element);
 Element hbox(Elements);
 Element vbox(Elements);
 Element dbox(Elements);
+Element gridbox(std::vector<Elements> lines);
 Element hflow(Elements);
 
 // -- Flexibility ---
