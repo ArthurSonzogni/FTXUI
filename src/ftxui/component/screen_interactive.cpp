@@ -211,7 +211,10 @@ void OnExit(int signal) {
 
 auto install_signal_handler = [](int sig, SignalHandler handler) {
   auto old_signal_handler = std::signal(sig, handler);
-  on_exit_functions.push([&]() { std::signal(sig, old_signal_handler); });
+  if(old_signal_handler != SIG_ERR)
+  {
+    on_exit_functions.push([=]() { old_signal_handler(sig); });
+  }
 };
 
 std::function<void()> on_resize = [] {};
