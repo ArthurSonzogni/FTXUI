@@ -20,6 +20,7 @@ TEST(InputTest, Init) {
   std::string content;
   std::string placeholder;
   auto option = InputOption();
+  option.cursor_position = 0;
   Component input = Input(&content, &placeholder, &option);
 
   EXPECT_EQ(option.cursor_position(), 0);
@@ -29,6 +30,7 @@ TEST(InputTest, Type) {
   std::string content;
   std::string placeholder;
   auto option = InputOption();
+  option.cursor_position = 0;
   Component input = Input(&content, &placeholder, &option);
 
   input->OnEvent(Event::Character("a"));
@@ -50,6 +52,7 @@ TEST(InputTest, TypePassword) {
   std::string content;
   std::string placeholder;
   auto option = InputOption();
+  option.cursor_position = 0;
   option.password = true;
   Component input = Input(&content, &placeholder, &option);
 
@@ -72,6 +75,7 @@ TEST(InputTest, Arrow) {
   std::string content;
   std::string placeholder;
   auto option = InputOption();
+  option.cursor_position = 0;
   auto input = Input(&content, &placeholder, &option);
 
   input->OnEvent(Event::Character('a'));
@@ -135,6 +139,7 @@ TEST(InputTest, Home) {
   std::string content;
   std::string placeholder;
   auto option = InputOption();
+  option.cursor_position = 0;
   auto input = Input(&content, &placeholder, &option);
 
   input->OnEvent(Event::Character('a'));
@@ -154,6 +159,7 @@ TEST(InputTest, End) {
   std::string content;
   std::string placeholder;
   auto option = InputOption();
+  option.cursor_position = 0;
   auto input = Input(&content, &placeholder, &option);
 
   input->OnEvent(Event::Character('a'));
@@ -172,6 +178,7 @@ TEST(InputTest, Delete) {
   std::string content;
   std::string placeholder;
   auto option = InputOption();
+  option.cursor_position = 0;
   auto input = Input(&content, &placeholder, &option);
 
   input->OnEvent(Event::Character('a'));
@@ -195,6 +202,7 @@ TEST(InputTest, Backspace) {
   std::string content;
   std::string placeholder;
   auto option = InputOption();
+  option.cursor_position = 0;
   auto input = Input(&content, &placeholder, &option);
 
   input->OnEvent(Event::Character('a'));
