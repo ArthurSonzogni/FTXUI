@@ -28,14 +28,20 @@ class WideInputBase : public ComponentBase {
                 Ref<InputOption> option)
       : content_(content), placeholder_(placeholder), option_(option) {}
 
-  int& cursor_position() { return *(option_->cursor_position); }
+  int cursor_position_internal_ = 0;
+  int& cursor_position() {
+    int& opt = option_->cursor_position();
+    if (opt != -1)
+      return opt;
+    return cursor_position_internal_;
+  }
 
   // Component implementation:
   Element Render() override {
     std::wstring password_content;
-    if (option_->password)
+    if (option_->password())
       password_content = std::wstring(content_->size(), U'•');
-    std::wstring& content = option_->password ? password_content : *content_;
+    std::wstring& content = option_->password() ? password_content : *content_;
 
     cursor_position() =
         std::max(0, std::min<int>(content.size(), cursor_position()));

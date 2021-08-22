@@ -51,9 +51,11 @@ struct InputOption {
   std::function<void()> on_enter = [] {};
 
   /// Obscure the input content using '*'.
-  bool password = false;
+  Ref<bool> password = false;
 
-  Ref<int> cursor_position = 0;
+  /// When set different from -1, this attributes is used to store the cursor
+  /// position.
+  Ref<int> cursor_position = -1;
 };
 
 /// @brief Option for the Radiobox component.
