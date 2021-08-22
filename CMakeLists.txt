@@ -58,6 +58,7 @@ add_library(dom STATIC
   src/ftxui/dom/gauge.cpp
   src/ftxui/dom/graph.cpp
   src/ftxui/dom/hbox.cpp
+  src/ftxui/dom/gridbox.cpp
   src/ftxui/dom/hflow.cpp
   src/ftxui/dom/inverted.cpp
   src/ftxui/dom/node.cpp

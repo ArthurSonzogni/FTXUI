@@ -20,6 +20,7 @@ add_executable(tests
   src/ftxui/component/terminal_input_parser_test.cpp
   src/ftxui/component/toggle_test.cpp
   src/ftxui/dom/gauge_test.cpp
+  src/ftxui/dom/gridbox_test.cpp
   src/ftxui/dom/hbox_test.cpp
   src/ftxui/dom/text_test.cpp
   src/ftxui/dom/vbox_test.cpp

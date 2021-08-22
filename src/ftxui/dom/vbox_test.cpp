@@ -11,7 +11,6 @@
 #include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
 using namespace ftxui;
-using namespace ftxui;
 
 std::string rotate(std::string str) {
   str.erase(std::remove(str.begin(), str.end(), '\r'), str.end());
