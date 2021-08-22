@@ -275,6 +275,43 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 }
 
 void ScreenInteractive::Loop(Component component) {
+  static ScreenInteractive* g_active_screen = nullptr;
+
+  // Suspend previously active screen:
+  if (g_active_screen) {
+    std::swap(suspended_screen_, g_active_screen);
+    std::cout << suspended_screen_->reset_cursor_position
+              << suspended_screen_->ResetPosition(/*clear=*/true);
+    suspended_screen_->dimx_ = 0;
+    suspended_screen_->dimy_ = 0;
+    suspended_screen_->Uninstall();
+  }
+
+  // This screen is now active:
+  g_active_screen = this;
+  g_active_screen->Install();
+  g_active_screen->Main(component);
+  g_active_screen->Uninstall();
+  g_active_screen = nullptr;
+
+  // Put cursor position at the end of the drawing.
+  std::cout << reset_cursor_position;
+
+  // Restore suspended screen.
+  if (suspended_screen_) {
+    std::cout << ResetPosition(/*clear=*/true);
+    dimx_ = 0;
+    dimy_ = 0;
+    std::swap(g_active_screen, suspended_screen_);
+    g_active_screen->Install();
+  } else {
+    // On final exit, keep the current drawing and reset cursor position one
+    // line after it.
+    std::cout << std::endl;
+  }
+}
+
+void ScreenInteractive::Install() {
   on_exit_functions.push([this] { ExitLoopClosure()(); });
 
   // Install signal handlers to restore the terminal state on exit. The default
@@ -349,17 +386,11 @@ void ScreenInteractive::Loop(Component component) {
     on_exit_functions.push([=] { std::cout << Set(parameters); });
   };
 
-  flush();
-
   if (use_alternative_screen_) {
     enable({
         DECMode::kAlternateScreen,
     });
   }
-
-  // On exit, reset cursor one line after the current drawing.
-  on_exit_functions.push(
-      [this] { std::cout << reset_cursor_position << std::endl; });
 
   disable({
       DECMode::kCursor,
@@ -375,10 +406,19 @@ void ScreenInteractive::Loop(Component component) {
 
   flush();
 
-  auto event_listener =
+  quit_ = false;
+  event_listener_ =
       std::thread(&EventListener, &quit_, event_receiver_->MakeSender());
+}
 
-  // The main loop.
+void ScreenInteractive::Uninstall() {
+  ExitLoopClosure()();
+  event_listener_.join();
+
+  OnExit(0);
+}
+
+void ScreenInteractive::Main(Component component) {
   while (!quit_) {
     if (!event_receiver_->HasPending()) {
       Draw(component);
@@ -405,9 +445,6 @@ void ScreenInteractive::Loop(Component component) {
     event.screen_ = this;
     component->OnEvent(event);
   }
-
-  event_listener.join();
-  OnExit(0);
 }
 
 void ScreenInteractive::Draw(Component component) {

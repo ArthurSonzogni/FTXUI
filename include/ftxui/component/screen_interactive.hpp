@@ -6,6 +6,7 @@
 #include <functional>                    // for function
 #include <memory>                        // for shared_ptr
 #include <string>                        // for string
+#include <thread>
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"           // for Event
@@ -31,6 +32,11 @@ class ScreenInteractive : public Screen {
   CapturedMouse CaptureMouse();
 
  private:
+  void Install();
+  void Uninstall();
+  void Main(Component component);
+  ScreenInteractive* suspended_screen_ = nullptr;
+
   void Draw(Component component);
   void EventLoop(Component component);
 
@@ -54,6 +60,7 @@ class ScreenInteractive : public Screen {
   std::string reset_cursor_position;
 
   std::atomic<bool> quit_ = false;
+  std::thread event_listener_;
 
   int cursor_x_ = 1;
   int cursor_y_ = 1;
