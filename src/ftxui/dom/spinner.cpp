@@ -225,11 +225,11 @@ static const std::vector<std::vector<std::vector<std::string>>> elements = {
          "   ",
      }},
     {{
-         "   /\\O  ",
-         "    /\\/ ",
-         "   /\\   ",
-         "  /  \\  ",
-         "LOL  LOL ",
+         "   /\\O ",
+         "    /\\/",
+         "   /\\  ",
+         "  /  \\ ",
+         "LOL  LOL",
      },
      {
          "    _O  ",
