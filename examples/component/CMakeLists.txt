@@ -2,6 +2,7 @@ set(DIRECTORY_LIB component)
 
 example(button)
 example(checkbox)
+example(nested_screen)
 example(checkbox_in_frame)
 example(composition)
 example(gallery)
