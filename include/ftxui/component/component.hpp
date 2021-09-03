@@ -37,6 +37,7 @@ Component Input(StringRef content,
 Component Menu(ConstStringListRef entries,
                int* selected_,
                Ref<MenuOption> = {});
+Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> = {});
 Component Radiobox(ConstStringListRef entries,
                    int* selected_,
                    Ref<RadioboxOption> option = {});
