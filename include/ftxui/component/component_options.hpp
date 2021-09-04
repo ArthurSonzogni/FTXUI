@@ -45,8 +45,11 @@ struct ButtonOption {
 struct CheckboxOption {
   std::string style_checked = "▣ ";     ///< Prefix for a "checked" state.
   std::string style_unchecked = "☐ ";   ///< Prefix for a "unchecked" state.
-  Decorator style_focused = inverted;   ///< Decorator used when focused.
-  Decorator style_unfocused = nothing;  ///< Decorator used when unfocused.
+  Decorator style_normal = nothing;     ///< style.
+  Decorator style_focused = inverted;   ///< Style when focused.
+  Decorator style_selected = bold;      ///< Style when selected.
+  Decorator style_selected_focused =
+      Decorator(inverted) | bold;  ///< Style when selected and focused.
 
   /// Called when the user change the state.
   std::function<void()> on_change = []() {};
@@ -73,8 +76,11 @@ struct InputOption {
 struct RadioboxOption {
   std::string style_checked = "◉ ";     ///< Prefix for a "checked" state.
   std::string style_unchecked = "○ ";   ///< Prefix for a "unchecked" state.
-  Decorator style_focused = inverted;   ///< Decorator used when focused.
-  Decorator style_unfocused = nothing;  ///< Decorator used when unfocused.
+  Decorator style_normal = nothing;    ///< style.
+  Decorator style_focused = inverted;  ///< Style when focused.
+  Decorator style_selected = bold;     ///< Style when selected.
+  Decorator style_selected_focused =
+      Decorator(inverted) | bold;  ///< Style when selected and focused.
 
   /// Called when the selected entry changes.
   std::function<void()> on_change = []() {};

@@ -22,8 +22,13 @@ class Reflect : public Node {
 
   void SetBox(Box box) final {
     reflected_box_ = box;
-    Node::SetBox(reflected_box_);
-    children_[0]->SetBox(reflected_box_);
+    Node::SetBox(box);
+    children_[0]->SetBox(box);
+  }
+
+  void Render(Screen& screen) final {
+    reflected_box_ = Box::Intersection(screen.stencil, reflected_box_);
+    return Node::Render(screen);
   }
 
  private:

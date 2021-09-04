@@ -52,14 +52,14 @@ class WideInputBase : public ComponentBase {
     if (content.size() == 0) {
       if (is_focused)
         return text(*placeholder_) | focus | dim | inverted | main_decorator |
-               reflect(input_box_);
+               reflect(box_);
       else
-        return text(*placeholder_) | dim | main_decorator | reflect(input_box_);
+        return text(*placeholder_) | dim | main_decorator | reflect(box_);
     }
 
     // Not focused.
     if (!is_focused)
-      return text(content) | main_decorator | reflect(input_box_);
+      return text(content) | main_decorator | reflect(box_);
 
     std::wstring part_before_cursor = content.substr(0, cursor_position());
     std::wstring part_at_cursor = cursor_position() < (int)content.size()
@@ -76,7 +76,7 @@ class WideInputBase : public ComponentBase {
       text(part_before_cursor),
       text(part_at_cursor) | underlined | focused | reflect(cursor_box_),
       text(part_after_cursor)
-    ) | flex | inverted | frame | main_decorator | reflect(input_box_);
+    ) | flex | inverted | frame | main_decorator | reflect(box_);
     // clang-format on
   }
 
@@ -153,7 +153,7 @@ class WideInputBase : public ComponentBase {
   bool OnMouseEvent(Event event) {
     if (!CaptureMouse(event))
       return false;
-    if (!input_box_.Contain(event.mouse().x, event.mouse().y))
+    if (!box_.Contain(event.mouse().x, event.mouse().y))
       return false;
 
     TakeFocus();
@@ -177,7 +177,7 @@ class WideInputBase : public ComponentBase {
   WideStringRef content_;
   ConstStringRef placeholder_;
 
-  Box input_box_;
+  Box box_;
   Box cursor_box_;
   Ref<InputOption> option_;
 };

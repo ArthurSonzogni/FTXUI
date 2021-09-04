@@ -54,11 +54,7 @@ class ContainerBase : public ComponentBase {
   virtual bool EventHandler(Event) { return false; }
 
   virtual bool OnMouseEvent(Event event) {
-    for (Component& child : children_) {
-      if (child->OnEvent(event))
-        return true;
-    }
-    return false;
+    return ComponentBase::OnEvent(event);
   }
 
   int selected_ = 0;
@@ -110,6 +106,27 @@ class VerticalContainer : public ContainerBase {
 
     *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
     return old_selected != *selector_;
+  }
+
+  bool OnMouseEvent(Event event) override {
+    if (ContainerBase::OnMouseEvent(event))
+      return true;
+
+    if (event.mouse().button != Mouse::WheelUp &&
+        event.mouse().button != Mouse::WheelDown) {
+      return false;
+    }
+
+    if (!Focusable())
+      return false;
+
+    if (event.mouse().button == Mouse::WheelUp)
+      MoveSelector(-1);
+    if (event.mouse().button == Mouse::WheelDown)
+      MoveSelector(+1);
+    *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+
+    return true;
   }
 };
 
