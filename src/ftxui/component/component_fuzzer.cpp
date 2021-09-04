@@ -23,16 +23,17 @@ std::string GeneratorString(const char*& data, size_t& size) {
   while (index < size && data[index])
     ++index;
 
+  auto out = std::string(data, data + index);
+  data += index;
+  size -= index;
+
+  // The input component do not support invalid UTF8 yet.
   try {
-    auto out = std::string(data, data + index);
-    auto w_out = to_wstring(out);
-    data += index;
-    size -= index;
-    return std::move(out);
+    to_wstring(out);
   } catch (...) {
-    // The input component do not support invalid UTF8 yet.
     return "0";
   }
+  return std::move(out);
 }
 
 int GeneratorInt(const char* data, size_t size) {
