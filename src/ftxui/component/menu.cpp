@@ -149,6 +149,51 @@ Component Menu(ConstStringListRef entries,
   return Make<MenuBase>(entries, selected, std::move(option));
 }
 
+Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
+  class Impl : public ComponentBase {
+   public:
+    Impl(ConstStringRef label, Ref<MenuEntryOption> option)
+        : label_(std::move(label)), option_(std::move(option)) {}
+
+   private:
+    Element Render() override {
+      bool focused = Focused();
+      auto style =
+          hovered_ ? (focused ? option_->style_selected_focused
+                              : option_->style_selected)
+                   : (focused ? option_->style_focused : option_->style_normal);
+      auto focus_management = focused ? select : nothing;
+      auto label = focused ? "> " + (*label_)  //
+                           : "  " + (*label_);
+      return text(label) | style | focus_management | reflect(box_);
+    }
+    bool Focusable() const override { return true; }
+    bool OnEvent(Event event) override {
+      if (!event.is_mouse())
+        return false;
+
+      hovered_ = box_.Contain(event.mouse().x, event.mouse().y);
+
+      if (!hovered_)
+        return false;
+
+      if (event.mouse().button == Mouse::Left &&
+          event.mouse().motion == Mouse::Released) {
+        TakeFocus();
+        return true;
+      }
+
+      return false;
+    }
+    ConstStringRef label_;
+    Ref<MenuEntryOption> option_;
+    Box box_;
+    bool hovered_ = false;
+  };
+
+  return Make<Impl>(std::move(label), std::move(option));
+}
+
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

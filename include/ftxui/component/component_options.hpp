@@ -23,6 +23,16 @@ struct MenuOption {
   Ref<int> focused_entry = 0;
 };
 
+/// @brief Option for the MenuEntry component.
+/// @ingroup component
+struct MenuEntryOption {
+  Decorator style_normal = nothing;    ///< style.
+  Decorator style_focused = inverted;  ///< Style when focused.
+  Decorator style_selected = bold;     ///< Style when selected.
+  Decorator style_selected_focused =
+      Decorator(inverted) | bold;  ///< Style when selected and focused.
+};
+
 /// @brief Option for the Button component.
 /// @ingroup component
 struct ButtonOption {
