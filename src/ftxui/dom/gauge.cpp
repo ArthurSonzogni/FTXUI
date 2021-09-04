@@ -1,3 +1,4 @@
+#include <cmath>
 #include <memory>  // for allocator, make_shared
 #include <string>  // for string
 
@@ -9,7 +10,7 @@
 
 namespace ftxui {
 
-static std::string charset[] = {
+static std::string charset[11] = {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft's terminals often use fonts not handling the 8 unicode
     // characters for representing the whole gauge. Fallback with less.
@@ -23,7 +24,7 @@ static std::string charset[] = {
 
 class Gauge : public Node {
  public:
-  Gauge(float progress) : progress_(progress) {}
+  Gauge(float progress) : progress_(std::min(std::max(progress, 0.f), 1.f)) {}
 
   void ComputeRequirement() override {
     requirement_.flex_grow_x = 1;
@@ -35,7 +36,10 @@ class Gauge : public Node {
   }
 
   void Render(Screen& screen) override {
-    float y = box_.y_min;
+    int y = box_.y_min;
+    if (y > box_.y_max)
+      return;
+
     float limit = box_.x_min + progress_ * (box_.x_max - box_.x_min + 1);
     int limit_int = limit;
     int x = box_.x_min;
