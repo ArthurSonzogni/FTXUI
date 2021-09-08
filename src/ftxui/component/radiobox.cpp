@@ -37,20 +37,25 @@ class RadioboxBase : public ComponentBase {
     if (option_->style_unchecked == "○ ")
       option_->style_unchecked = "( )";
 #endif
+    hovered_ = *selected_;
   }
 
  private:
   Element Render() override {
     Elements elements;
-    bool is_focused = Focused();
+    bool is_menu_focused = Focused();
     boxes_.resize(entries_.size());
     for (size_t i = 0; i < entries_.size(); ++i) {
-      auto style = (focused_entry() == int(i) && is_focused)
-                       ? option_->style_focused
-                       : option_->style_unfocused;
-      auto focus_management = (focused_entry() != int(i)) ? nothing
-                              : is_focused                ? focus
-                                                          : select;
+      bool is_focused = (focused_entry() == int(i)) && is_menu_focused;
+      bool is_selected = (hovered_ == int(i));
+
+      auto style = is_selected ? (is_focused ? option_->style_selected_focused
+                                             : option_->style_selected)
+                               : (is_focused ? option_->style_focused
+                                             : option_->style_normal);
+      auto focus_management = !is_selected      ? nothing
+                              : is_menu_focused ? focus
+                                                : select;
 
       const std::string& symbol = *selected_ == int(i)
                                       ? option_->style_checked
@@ -58,37 +63,39 @@ class RadioboxBase : public ComponentBase {
       elements.push_back(hbox(text(symbol), text(entries_[i]) | style) |
                          focus_management | reflect(boxes_[i]));
     }
-    return vbox(std::move(elements));
+    return vbox(std::move(elements)) | reflect(box_);
   }
 
   bool OnEvent(Event event) override {
     if (!CaptureMouse(event))
       return false;
+
     if (event.is_mouse())
       return OnMouseEvent(event);
 
-    if (!Focused())
-      return false;
+    if (Focused()) {
+      int old_hovered = hovered_;
+      if (event == Event::ArrowUp || event == Event::Character('k'))
+        (hovered_)--;
+      if (event == Event::ArrowDown || event == Event::Character('j'))
+        (hovered_)++;
+      if (event == Event::Tab && entries_.size())
+        hovered_ = (hovered_ + 1) % entries_.size();
+      if (event == Event::TabReverse && entries_.size())
+        hovered_ = (hovered_ + entries_.size() - 1) % entries_.size();
 
-    int new_focused = focused_entry();
-    if (event == Event::ArrowUp || event == Event::Character('k'))
-      new_focused--;
-    if (event == Event::ArrowDown || event == Event::Character('j'))
-      new_focused++;
-    if (event == Event::Tab && entries_.size())
-      new_focused = (new_focused + 1) % entries_.size();
-    if (event == Event::TabReverse && entries_.size())
-      new_focused = (new_focused + entries_.size() - 1) % entries_.size();
+      hovered_ = std::max(0, std::min(int(entries_.size()) - 1, hovered_));
 
-    new_focused = std::max(0, std::min(int(entries_.size()) - 1, new_focused));
-
-    if (focused_entry() != new_focused) {
-      focused_entry() = new_focused;
-      return true;
+      if (hovered_ != old_hovered) {
+        focused_entry() = hovered_;
+        option_->on_change();
+        return true;
+      }
     }
 
     if (event == Event::Character(' ') || event == Event::Return) {
-      *selected_ = focused_entry();
+      *selected_ = hovered_;
+      //*selected_ = focused_entry();
       option_->on_change();
     }
 
@@ -98,35 +105,58 @@ class RadioboxBase : public ComponentBase {
   bool OnMouseEvent(Event event) {
     if (!CaptureMouse(event))
       return false;
+
+    if (event.mouse().button == Mouse::WheelDown ||
+        event.mouse().button == Mouse::WheelUp) {
+      return OnMouseWheel(event);
+    }
+
     for (int i = 0; i < int(boxes_.size()); ++i) {
       if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
         continue;
 
-      focused_entry() = i;
       TakeFocus();
-
+      focused_entry() = i;
       if (event.mouse().button == Mouse::Left &&
-          event.mouse().motion == Mouse::Pressed) {
-        cursor_position = i;
-        TakeFocus();
+          event.mouse().motion == Mouse::Released) {
         if (*selected_ != i) {
           *selected_ = i;
           option_->on_change();
         }
+
         return true;
       }
     }
     return false;
   }
 
+  bool OnMouseWheel(Event event) {
+    if (!box_.Contain(event.mouse().x, event.mouse().y))
+      return false;
+
+    int old_hovered = hovered_;
+
+    if (event.mouse().button == Mouse::WheelUp)
+      (hovered_)--;
+    if (event.mouse().button == Mouse::WheelDown)
+      (hovered_)++;
+
+    hovered_ = std::max(0, std::min(int(entries_.size()) - 1, hovered_));
+
+    if (hovered_ != old_hovered)
+      option_->on_change();
+
+    return true;
+  }
+
   bool Focusable() const final { return entries_.size(); }
   int& focused_entry() { return option_->focused_entry(); }
 
   ConstStringListRef entries_;
-  int* const selected_;
-
-  int cursor_position = 0;
+  int* selected_;
+  int hovered_;
   std::vector<Box> boxes_;
+  Box box_;
   Ref<RadioboxOption> option_;
 };
 

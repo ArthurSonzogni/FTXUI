@@ -137,17 +137,18 @@ int main(int argc, const char* argv[]) {
   int compiler_selected = 0;
   Component compiler = Radiobox(&compiler_entries, &compiler_selected);
 
-  std::array<std::string, 4> options_label = {
+  std::array<std::string, 8> options_label = {
       "-Wall",
       "-Werror",
       "-lpthread",
       "-O3",
+      "-Wabi-tag",
+      "-Wno-class-conversion",
+      "-Wcomma-subscript",
+      "-Wno-conversion-null",
   };
-  std::array<bool, 4> options_state = {
-      false,
-      false,
-      false,
-      false,
+  std::array<bool, 8> options_state = {
+      false, false, false, false, false, false, false, false,
   };
 
   std::vector<std::string> input_entries;
@@ -170,6 +171,10 @@ int main(int argc, const char* argv[]) {
       Checkbox(&options_label[1], &options_state[1]),
       Checkbox(&options_label[2], &options_state[2]),
       Checkbox(&options_label[3], &options_state[3]),
+      Checkbox(&options_label[4], &options_state[4]),
+      Checkbox(&options_label[5], &options_state[5]),
+      Checkbox(&options_label[6], &options_state[6]),
+      Checkbox(&options_label[7], &options_state[7]),
   });
 
   auto compiler_component = Container::Horizontal({
@@ -189,7 +194,7 @@ int main(int argc, const char* argv[]) {
     // Compiler
     line.push_back(text(compiler_entries[compiler_selected]) | bold);
     // flags
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 8; ++i) {
       if (options_state[i]) {
         line.push_back(text(" "));
         line.push_back(text(options_label[i]) | dim);
@@ -210,7 +215,7 @@ int main(int argc, const char* argv[]) {
 
   auto compiler_renderer = Renderer(compiler_component, [&] {
     auto compiler_win = window(text("Compiler"), compiler->Render() | frame);
-    auto flags_win = window(text("Flags"), flags->Render());
+    auto flags_win = window(text("Flags"), flags->Render() | frame);
     auto executable_win = window(text("Executable:"), executable_->Render());
     auto input_win =
         window(text("Input"),
@@ -228,14 +233,14 @@ int main(int argc, const char* argv[]) {
                }));
     return vbox({
                hbox({
-                   compiler_win | size(HEIGHT, LESS_THAN, 6),
+                   compiler_win,
                    flags_win,
                    vbox({
                        executable_win | size(WIDTH, EQUAL, 20),
                        input_win | size(WIDTH, EQUAL, 60),
                    }),
                    filler(),
-               }),
+               }) | size(HEIGHT, LESS_THAN, 6),
                hflow(render_command()) | flex_grow,
            }) |
            flex_grow | border;

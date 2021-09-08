@@ -43,7 +43,7 @@ class ResizableSplitLeftBase : public ComponentBase {
     }
 
     if (captured_mouse_) {
-      *main_size_ = event.mouse().x - global_box_.x_min;
+      *main_size_ = event.mouse().x - box_.x_min;
       return true;
     }
 
@@ -56,7 +56,7 @@ class ResizableSplitLeftBase : public ComponentBase {
                separator() | reflect(separator_box_),
                child_->Render() | xflex,
            }) |
-           reflect(global_box_);
+           reflect(box_);
   };
 
  private:
@@ -65,7 +65,7 @@ class ResizableSplitLeftBase : public ComponentBase {
   int* const main_size_;
   CapturedMouse captured_mouse_;
   Box separator_box_;
-  Box global_box_;
+  Box box_;
 };
 
 class ResizableSplitRightBase : public ComponentBase {
@@ -99,7 +99,7 @@ class ResizableSplitRightBase : public ComponentBase {
     }
 
     if (captured_mouse_) {
-      *main_size_ = global_box_.x_max - event.mouse().x;
+      *main_size_ = box_.x_max - event.mouse().x;
       return true;
     }
 
@@ -112,7 +112,7 @@ class ResizableSplitRightBase : public ComponentBase {
                separator() | reflect(separator_box_),
                main_->Render() | size(WIDTH, EQUAL, *main_size_),
            }) |
-           reflect(global_box_);
+           reflect(box_);
   };
 
  private:
@@ -121,7 +121,7 @@ class ResizableSplitRightBase : public ComponentBase {
   int* const main_size_;
   CapturedMouse captured_mouse_;
   Box separator_box_;
-  Box global_box_;
+  Box box_;
 };
 
 class ResizableSplitTopBase : public ComponentBase {
@@ -155,7 +155,7 @@ class ResizableSplitTopBase : public ComponentBase {
     }
 
     if (captured_mouse_) {
-      *main_size_ = event.mouse().y - global_box_.y_min;
+      *main_size_ = event.mouse().y - box_.y_min;
       return true;
     }
 
@@ -168,7 +168,7 @@ class ResizableSplitTopBase : public ComponentBase {
                separator() | reflect(separator_box_),
                child_->Render() | yflex,
            }) |
-           reflect(global_box_);
+           reflect(box_);
   };
 
  private:
@@ -177,7 +177,7 @@ class ResizableSplitTopBase : public ComponentBase {
   int* const main_size_;
   CapturedMouse captured_mouse_;
   Box separator_box_;
-  Box global_box_;
+  Box box_;
 };
 
 class ResizableSplitBottomBase : public ComponentBase {
@@ -211,7 +211,7 @@ class ResizableSplitBottomBase : public ComponentBase {
     }
 
     if (captured_mouse_) {
-      *main_size_ = global_box_.y_max - event.mouse().y;
+      *main_size_ = box_.y_max - event.mouse().y;
       return true;
     }
 
@@ -224,7 +224,7 @@ class ResizableSplitBottomBase : public ComponentBase {
                separator() | reflect(separator_box_),
                main_->Render() | size(HEIGHT, EQUAL, *main_size_),
            }) |
-           reflect(global_box_);
+           reflect(box_);
   };
 
  private:
@@ -233,7 +233,7 @@ class ResizableSplitBottomBase : public ComponentBase {
   int* const main_size_;
   CapturedMouse captured_mouse_;
   Box separator_box_;
-  Box global_box_;
+  Box box_;
 };
 
 }  // namespace

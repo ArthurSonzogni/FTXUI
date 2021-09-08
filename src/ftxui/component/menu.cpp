@@ -26,7 +26,7 @@ class MenuBase : public ComponentBase {
   MenuBase(ConstStringListRef entries, int* selected, Ref<MenuOption> option)
       : entries_(entries), selected_(selected), option_(option) {}
 
-  Element Render() {
+  Element Render() override {
     Elements elements;
     bool is_menu_focused = Focused();
     boxes_.resize(entries_.size());
@@ -45,34 +45,34 @@ class MenuBase : public ComponentBase {
       elements.push_back(text(icon + entries_[i]) | style | focus_management |
                          reflect(boxes_[i]));
     }
-    return vbox(std::move(elements));
+    return vbox(std::move(elements)) | reflect(box_);
   }
 
-  bool OnEvent(Event event) {
+  bool OnEvent(Event event) override {
     if (!CaptureMouse(event))
       return false;
+
     if (event.is_mouse())
       return OnMouseEvent(event);
 
-    if (!Focused())
-      return false;
+    if (Focused()) {
+      int old_selected = *selected_;
+      if (event == Event::ArrowUp || event == Event::Character('k'))
+        (*selected_)--;
+      if (event == Event::ArrowDown || event == Event::Character('j'))
+        (*selected_)++;
+      if (event == Event::Tab && entries_.size())
+        *selected_ = (*selected_ + 1) % entries_.size();
+      if (event == Event::TabReverse && entries_.size())
+        *selected_ = (*selected_ + entries_.size() - 1) % entries_.size();
 
-    int old_selected = *selected_;
-    if (event == Event::ArrowUp || event == Event::Character('k'))
-      (*selected_)--;
-    if (event == Event::ArrowDown || event == Event::Character('j'))
-      (*selected_)++;
-    if (event == Event::Tab && entries_.size())
-      *selected_ = (*selected_ + 1) % entries_.size();
-    if (event == Event::TabReverse && entries_.size())
-      *selected_ = (*selected_ + entries_.size() - 1) % entries_.size();
+      *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
 
-    *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
-
-    if (*selected_ != old_selected) {
-      focused_entry() = *selected_;
-      option_->on_change();
-      return true;
+      if (*selected_ != old_selected) {
+        focused_entry() = *selected_;
+        option_->on_change();
+        return true;
+      }
     }
 
     if (event == Event::Return) {
@@ -84,6 +84,15 @@ class MenuBase : public ComponentBase {
   }
 
   bool OnMouseEvent(Event event) {
+    if (event.mouse().button == Mouse::WheelDown ||
+        event.mouse().button == Mouse::WheelUp) {
+      return OnMouseWheel(event);
+    }
+
+    if (event.mouse().button != Mouse::None &&
+        event.mouse().button != Mouse::Left) {
+      return false;
+    }
     if (!CaptureMouse(event))
       return false;
     for (int i = 0; i < int(boxes_.size()); ++i) {
@@ -104,6 +113,23 @@ class MenuBase : public ComponentBase {
     return false;
   }
 
+  bool OnMouseWheel(Event event) {
+    if (!box_.Contain(event.mouse().x, event.mouse().y))
+      return false;
+    int old_selected = *selected_;
+
+    if (event.mouse().button == Mouse::WheelUp)
+      (*selected_)--;
+    if (event.mouse().button == Mouse::WheelDown)
+      (*selected_)++;
+
+    *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
+
+    if (*selected_ != old_selected)
+      option_->on_change();
+    return true;
+  }
+
   bool Focusable() const final { return entries_.size(); }
   int& focused_entry() { return option_->focused_entry(); }
 
@@ -113,6 +139,7 @@ class MenuBase : public ComponentBase {
   Ref<MenuOption> option_;
 
   std::vector<Box> boxes_;
+  Box box_;
 };
 
 /// @brief A list of text. The focused element is selected.
@@ -158,10 +185,10 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
    private:
     Element Render() override {
       bool focused = Focused();
-      auto style =
-          hovered_ ? (focused ? option_->style_selected_focused
-                              : option_->style_selected)
-                   : (focused ? option_->style_focused : option_->style_normal);
+      auto style = hovered_ ? (focused ? option_->style_selected_focused
+                                        : option_->style_selected)
+                            : (focused ? option_->style_focused
+                                        : option_->style_normal);
       auto focus_management = focused ? select : nothing;
       auto label = focused ? "> " + (*label_)  //
                            : "  " + (*label_);

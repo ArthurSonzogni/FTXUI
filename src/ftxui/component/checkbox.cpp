@@ -33,8 +33,12 @@ class CheckboxBase : public ComponentBase {
   // Component implementation.
   Element Render() override {
     bool is_focused = Focused();
-    auto style = is_focused ? option_->style_focused : option_->style_unfocused;
-    auto focus_management = is_focused ? focus : *state_ ? select : nothing;
+    bool is_active = Active();
+    auto style = is_focused ? (hovered_ ? option_->style_selected_focused
+                                        : option_->style_selected)
+                            : (hovered_ ? option_->style_focused
+                                        : option_->style_normal);
+    auto focus_management = is_focused ? focus : is_active ? select : nothing;
     return hbox(text(*state_ ? option_->style_checked
                              : option_->style_unchecked),
                 text(*label_) | style | focus_management) |
@@ -45,6 +49,7 @@ class CheckboxBase : public ComponentBase {
     if (event.is_mouse())
       return OnMouseEvent(event);
 
+    hovered_ = false;
     if (event == Event::Character(' ') || event == Event::Return) {
       *state_ = !*state_;
       option_->on_change();
@@ -54,12 +59,13 @@ class CheckboxBase : public ComponentBase {
   }
 
   bool OnMouseEvent(Event event) {
+    hovered_ = box_.Contain(event.mouse().x, event.mouse().y);
+
     if (!CaptureMouse(event))
       return false;
-    if (!box_.Contain(event.mouse().x, event.mouse().y))
-      return false;
 
-    TakeFocus();
+    if (!hovered_)
+      return false;
 
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
@@ -75,8 +81,9 @@ class CheckboxBase : public ComponentBase {
 
   ConstStringRef label_;
   bool* const state_;
-  Box box_;
+  bool hovered_ = false;
   Ref<CheckboxOption> option_;
+  Box box_;
 };
 }  // namespace
 

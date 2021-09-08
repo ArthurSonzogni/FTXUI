@@ -15,22 +15,20 @@ struct CheckboxState {
 };
 
 int main(int argc, const char* argv[]) {
-  int size = 30;
-  std::vector<CheckboxState> states(size);
+  std::vector<CheckboxState> states(30);
   auto container = Container::Vertical({});
-  for (int i = 0; i < size; ++i) {
+  for (int i = 0; i < 30; ++i) {
     states[i].checked = false;
     container->Add(
         Checkbox("Checkbox" + std::to_string(i), &states[i].checked));
   }
 
-  auto component = Renderer(container, [&] {
-    return container->Render() | frame | ftxui::size(HEIGHT, LESS_THAN, 10) |
-           border;
+  auto renderer = Renderer(container, [&] {
+    return container->Render() | frame | size(HEIGHT, LESS_THAN, 10) | border;
   });
 
   auto screen = ScreenInteractive::FitComponent();
-  screen.Loop(component);
+  screen.Loop(renderer);
 
   return 0;
 }
