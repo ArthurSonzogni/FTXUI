@@ -74,6 +74,7 @@ struct Event {
   bool operator!=(const Event& other) const { return !operator==(other); }
 
   //--- State section ----------------------------------------------------------
+  ScreenInteractive* screen_ = nullptr;
  private:
   friend ComponentBase;
   friend ScreenInteractive;
@@ -95,8 +96,6 @@ struct Event {
     struct Cursor cursor_;
   };
   std::string input_;
-
-  ScreenInteractive* screen_ = nullptr;
 };
 
 }  // namespace ftxui

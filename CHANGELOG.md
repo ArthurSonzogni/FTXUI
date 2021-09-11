@@ -1,5 +1,14 @@
 # Changelog
 
+## Current
+
+### Dom
+ - `vscroll_indicator`. Show a scrollback indicator on the right.
+
+### Component
+ - `Maybe`: Display an component conditionnally based on a boolean.
+ - `Dropdown`: A dropdown select list.
+
 ## 0.9 (2021-09-26)
 
 The initial release where changelog where written.
