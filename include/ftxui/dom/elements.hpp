@@ -17,6 +17,8 @@ using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
 using GraphFunction = std::function<std::vector<int>(int, int)>;
 
+enum BorderStyle { LIGHT, HEAVY, DOUBLE, ROUNDED };
+
 // Pipe elements into decorator togethers.
 // For instance the next lines are equivalents:
 // -> text("ftxui") | bold | underlined
@@ -29,9 +31,18 @@ Decorator operator|(Decorator, Decorator);
 Element text(std::string text);
 Element vtext(std::string text);
 Element separator(void);
+Element separatorLight();
+Element separatorHeavy();
+Element separatorDouble();
+Element separatorStyled(BorderStyle);
 Element separator(Pixel);
 Element gauge(float ratio);
 Element border(Element);
+Element borderLight(Element);
+Element borderHeavy(Element);
+Element borderDouble(Element);
+Element borderRounded(Element);
+Decorator borderStyled(BorderStyle);
 Decorator borderWith(Pixel);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);

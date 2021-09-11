@@ -11,9 +11,9 @@ int main(int argc, const char* argv[]) {
                       text("left-column"),
                       separator(),
                       vbox({
-                          center(text("right-top")) | flex,
+                          center(text("top")) | flex,
                           separator(),
-                          center(text("bottom-bottom")),
+                          center(text("bottom")),
                       }) | flex,
                       separator(),
                       text("right-column"),
