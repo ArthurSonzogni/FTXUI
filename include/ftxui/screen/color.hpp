@@ -1,9 +1,8 @@
 #ifndef FTXUI_SCREEN_COLOR
 #define FTXUI_SCREEN_COLOR
 
-#include <cassert>
 #include <stdint.h>  // for uint8_t
-#include <string>    // for wstring
+#include <string>  // for wstring
 
 #ifdef RGB
 // Workaround for wingdi.h (via Windows.h) defining macros that break things.
@@ -325,17 +324,11 @@ class Color {
 
 inline namespace literals {
 
-/// @brief Creates a color from a combined hex RGB representation, e.g. 0x808000_rgb
-inline Color operator""_rgb(unsigned long long int combined)
-{
-    assert(combined <= 0xffffffU);
-    auto const red = static_cast<uint8_t>(combined >> 16);
-    auto const green = static_cast<uint8_t>(combined >> 8);
-    auto const blue = static_cast<uint8_t>(combined);
-    return Color(red, green, blue);
-}
+/// @brief Creates a color from a combined hex RGB representation, 
+/// e.g. 0x808000_rgb
+Color operator""_rgb(unsigned long long int combined);
 
-}
+}  // namespace literals
 
 }  // namespace ftxui
 
