@@ -28,7 +28,8 @@ int main(int argc, const char* argv[]) {
         color(Color::Red, text("Red")),
         color(Color::RedLight, text("RedLight")),
         color(Color::Yellow, text("Yellow")),
-        color(Color::YellowLight, text("YellowLight"))
+        color(Color::YellowLight, text("YellowLight")),
+        color(0x66ff66_rgb, text("Phosphor"))
       ),
       vbox(
         bgcolor(Color::Default, text("Default")),
@@ -47,7 +48,8 @@ int main(int argc, const char* argv[]) {
         bgcolor(Color::Red, text("Red")),
         bgcolor(Color::RedLight, text("RedLight")),
         bgcolor(Color::Yellow, text("Yellow")),
-        bgcolor(Color::YellowLight, text("YellowLight"))
+        bgcolor(Color::YellowLight, text("YellowLight")),
+        bgcolor(0x66ff66_rgb, text("Phosphor"))
       ),
       filler()
     );

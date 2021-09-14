@@ -1,5 +1,7 @@
 #include "ftxui/screen/color.hpp"
 
+#include <cassert>
+
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
 #include "ftxui/screen/terminal.hpp"  // for Terminal, Terminal::Color, Terminal::Palette256, Terminal::TrueColor
 
@@ -142,6 +144,18 @@ Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
 
   return Color(0, 0, 0);
 }
+
+inline namespace literals {
+
+Color operator""_rgb(unsigned long long int combined) {
+  assert(combined <= 0xffffffU);
+  auto const red = static_cast<uint8_t>(combined >> 16);
+  auto const green = static_cast<uint8_t>(combined >> 8);
+  auto const blue = static_cast<uint8_t>(combined);
+  return Color(red, green, blue);
+}
+
+}  // namespace literals
 
 }  // namespace ftxui
 
