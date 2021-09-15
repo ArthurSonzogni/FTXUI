@@ -50,10 +50,14 @@ int main(int argc, const char* argv[]) {
   // -- Checkbox ---------------------------------------------------------------
   bool checkbox_1_selected = false;
   bool checkbox_2_selected = false;
+  bool checkbox_3_selected = false;
+  bool checkbox_4_selected = false;
 
   auto checkboxes = Container::Vertical({
       Checkbox("checkbox1", &checkbox_1_selected),
       Checkbox("checkbox2", &checkbox_2_selected),
+      Checkbox("checkbox3", &checkbox_3_selected),
+      Checkbox("checkbox4", &checkbox_4_selected),
   });
   checkboxes = Wrap("Checkbox", checkboxes);
 

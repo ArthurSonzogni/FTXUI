@@ -89,8 +89,8 @@ class VerticalContainer : public ContainerBase {
     for (auto& it : children_)
       elements.push_back(it->Render());
     if (elements.size() == 0)
-      return text("Empty container");
-    return vbox(std::move(elements));
+      return text("Empty container") | reflect(box_);
+    return vbox(std::move(elements)) | reflect(box_);
   }
 
   bool EventHandler(Event event) override {
@@ -117,7 +117,7 @@ class VerticalContainer : public ContainerBase {
       return false;
     }
 
-    if (!Focusable())
+    if (!box_.Contain(event.mouse().x, event.mouse().y))
       return false;
 
     if (event.mouse().button == Mouse::WheelUp)
@@ -128,6 +128,8 @@ class VerticalContainer : public ContainerBase {
 
     return true;
   }
+
+  Box box_;
 };
 
 class HorizontalContainer : public ContainerBase {
