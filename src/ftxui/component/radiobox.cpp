@@ -103,9 +103,6 @@ class RadioboxBase : public ComponentBase {
   }
 
   bool OnMouseEvent(Event event) {
-    if (!CaptureMouse(event))
-      return false;
-
     if (event.mouse().button == Mouse::WheelDown ||
         event.mouse().button == Mouse::WheelUp) {
       return OnMouseWheel(event);

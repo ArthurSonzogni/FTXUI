@@ -34,18 +34,22 @@ class CheckboxBase : public ComponentBase {
   Element Render() override {
     bool is_focused = Focused();
     bool is_active = Active();
-    auto style = is_focused ? (hovered_ ? option_->style_selected_focused
-                                        : option_->style_selected)
-                            : (hovered_ ? option_->style_focused
-                                        : option_->style_normal);
+    auto style = (is_focused || hovered_) ? option_->style_selected_focused
+                 : is_active              ? option_->style_selected
+                                          : option_->style_normal;
     auto focus_management = is_focused ? focus : is_active ? select : nothing;
-    return hbox(text(*state_ ? option_->style_checked
-                             : option_->style_unchecked),
-                text(*label_) | style | focus_management) |
+    return hbox({
+               text(*state_ ? option_->style_checked
+                            : option_->style_unchecked),
+               text(*label_) | style | focus_management,
+           }) |
            reflect(box_);
   }
 
   bool OnEvent(Event event) override {
+    if (!CaptureMouse(event))
+      return false;
+
     if (event.is_mouse())
       return OnMouseEvent(event);
 
@@ -53,6 +57,7 @@ class CheckboxBase : public ComponentBase {
     if (event == Event::Character(' ') || event == Event::Return) {
       *state_ = !*state_;
       option_->on_change();
+      TakeFocus();
       return true;
     }
     return false;
