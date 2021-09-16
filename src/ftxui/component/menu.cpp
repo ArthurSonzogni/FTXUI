@@ -185,10 +185,10 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
    private:
     Element Render() override {
       bool focused = Focused();
-      auto style = hovered_ ? (focused ? option_->style_selected_focused
-                                        : option_->style_selected)
-                            : (focused ? option_->style_focused
-                                        : option_->style_normal);
+      auto style =
+          hovered_ ? (focused ? option_->style_selected_focused
+                              : option_->style_selected)
+                   : (focused ? option_->style_focused : option_->style_normal);
       auto focus_management = focused ? select : nothing;
       auto label = focused ? "> " + (*label_)  //
                            : "  " + (*label_);

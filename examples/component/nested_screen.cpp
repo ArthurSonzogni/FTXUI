@@ -1,12 +1,11 @@
-#include <memory>  // for shared_ptr, __shared_ptr_access
-#include <string>  // for operator+, to_wstring
+#include <memory>  // for allocator, shared_ptr, __shared_ptr_access
+#include <string>  // for operator+, string, char_traits, basic_string
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/component_options.hpp"   // for ButtonOption
+#include "ftxui/component/component.hpp"       // for Button, Vertical, Renderer
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for separator, gauge, Element, operator|, vbox, border
+#include "ftxui/dom/elements.hpp"  // for separator, text, Element, operator|, vbox, border
 
 using namespace ftxui;
 
@@ -24,13 +23,14 @@ void Nested(std::string path) {
   });
   auto renderer = Renderer(layout, [&] {
     return vbox({
-        text("path: " + path),
-        separator(),
-        back_button->Render(),
-        goto_1->Render(),
-        goto_2->Render(),
-        goto_3->Render(),
-    }) | border;
+               text("path: " + path),
+               separator(),
+               back_button->Render(),
+               goto_1->Render(),
+               goto_2->Render(),
+               goto_3->Render(),
+           }) |
+           border;
   });
   screen.Loop(renderer);
 }
@@ -40,8 +40,8 @@ int main(int argc, const char* argv[]) {
   auto button_quit = Button("Quit", screen.ExitLoopClosure());
   auto button_nested = Button("Nested", [] { Nested(""); });
   screen.Loop(Container::Vertical({
-    button_quit,
-    button_nested,
+      button_quit,
+      button_nested,
   }));
   return 0;
 }

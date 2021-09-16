@@ -6,7 +6,7 @@
 #include <functional>                    // for function
 #include <memory>                        // for shared_ptr
 #include <string>                        // for string
-#include <thread>
+#include <thread>                        // for thread
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"           // for Event

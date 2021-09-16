@@ -1,5 +1,7 @@
 #include "ftxui/dom/box_helper.hpp"
 
+#include <algorithm>  // for max
+
 namespace ftxui {
 namespace box_helper {
 
@@ -83,3 +85,7 @@ void Compute(std::vector<Element>* elements, int target_size) {
 
 }  // namespace box_helper
 }  // namespace ftxui
+
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

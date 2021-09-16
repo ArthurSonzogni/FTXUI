@@ -1,4 +1,5 @@
 [
+  { symbol: [ "char_traits", private, "<string>", public ] },
   { symbol: [ "ECHO", private, "<termios.h>", public ] },
   { symbol: [ "ICANON", private, "<termios.h>", public ] },
   { symbol: [ "TCSANOW", private, "<termios.h>", public ] },

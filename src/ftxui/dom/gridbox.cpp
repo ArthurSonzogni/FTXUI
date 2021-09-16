@@ -1,16 +1,17 @@
-#include <iostream>
-#include <algorithm>  // for max
-#include <memory>     // for __shared_ptr_access, shared_ptr, make_shared
-#include <utility>    // for move
-#include <vector>     // for vector
+#include <stddef.h>   // for size_t
+#include <algorithm>  // for max, min
+#include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
+#include <utility>  // for move
+#include <vector>   // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/dom/box_helper.hpp"   // for Requirement
-#include "ftxui/dom/elements.hpp"     // for Element, Elements, hbox
+#include "ftxui/dom/box_helper.hpp"   // for Element, Compute
+#include "ftxui/dom/elements.hpp"     // for Elements, filler, Element, gridbox
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
 
 namespace ftxui {
+class Screen;
 
 class GridBox : public Node {
  public:
@@ -19,9 +20,9 @@ class GridBox : public Node {
     for (const auto& line : lines_)
       x_size = std::max(x_size, (int)line.size());
     for (auto& line : lines_) {
-        while (line.size() < (size_t)y_size) {
-          line.push_back(filler());
-        }
+      while (line.size() < (size_t)y_size) {
+        line.push_back(filler());
+      }
     }
   }
 
@@ -33,8 +34,8 @@ class GridBox : public Node {
     requirement_.flex_shrink_x = 0;
     requirement_.flex_shrink_y = 0;
 
-    for(auto& line : lines_) {
-      for(auto& cell : line) {
+    for (auto& line : lines_) {
+      for (auto& cell : line) {
         cell->ComputeRequirement();
 
         // Determine focus based on the focused child.
