@@ -1,7 +1,9 @@
+#include <stdint.h>  // for uint16_t
 #include <iostream>  // for operator<<, stringstream, basic_ostream, flush, cout, ostream
-#include <map>
-#include <memory>   // for allocator
+#include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
+#include <memory>   // for allocator, allocator_traits<>::value_type
 #include <sstream>  // IWYU pragma: keep
+#include <utility>  // for pair
 
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"    // for string_width

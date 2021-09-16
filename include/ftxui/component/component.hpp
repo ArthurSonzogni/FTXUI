@@ -19,6 +19,7 @@ struct InputOption;
 struct MenuOption;
 struct RadioboxOption;
 struct ToggleOption;
+struct MenuEntryOption;
 
 template <class T, class... Args>
 std::shared_ptr<T> Make(Args&&... args) {

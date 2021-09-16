@@ -1,12 +1,15 @@
-#include <functional>  // for function
 #include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
-#include <string>    // for string, basic_string, allocator
-#include <vector>    // for vector
+#include <memory>    // for shared_ptr, __shared_ptr_access
+#include <string>    // for to_string, allocator
 
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Menu
-#include "ftxui/component/component_options.hpp"   // for MenuOption
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for MenuEntry, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"      // for ComponentBase
+#include "ftxui/component/component_options.hpp"   // for MenuEntryOption
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for operator|, separator, Element, Decorator, color, text, hbox, size, bold, frame, inverted, vbox, HEIGHT, LESS_THAN, border
+#include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::Green, Color::Red, Color::Yellow
+
 using namespace ftxui;
 
 // Define a special style for some menu entry.
@@ -21,23 +24,6 @@ MenuEntryOption Colored(ftxui::Color c) {
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
-
-    //Black        = 0,
-    //Red          = 1,
-    //Green        = 2,
-    //Yellow       = 3,
-    //Blue         = 4,
-    //Magenta      = 5,
-    //Cyan         = 6,
-    //GrayLight    = 7,
-    //GrayDark     = 8,
-    //RedLight     = 9,
-    //GreenLight   = 10,
-    //YellowLight  = 11,
-    //BlueLight    = 12,
-    //MagentaLight = 13,
-    //CyanLight    = 14,
-    //White        = 15,
 
   int selected = 0;
   auto menu = Container::Vertical(

@@ -43,11 +43,11 @@ struct ButtonOption {
 /// @brief Option for the Checkbox component.
 /// @ingroup component
 struct CheckboxOption {
-  std::string style_checked = "▣ ";     ///< Prefix for a "checked" state.
-  std::string style_unchecked = "☐ ";   ///< Prefix for a "unchecked" state.
-  Decorator style_normal = nothing;     ///< style.
-  Decorator style_focused = inverted;   ///< Style when focused.
-  Decorator style_selected = bold;      ///< Style when selected.
+  std::string style_checked = "▣ ";    ///< Prefix for a "checked" state.
+  std::string style_unchecked = "☐ ";  ///< Prefix for a "unchecked" state.
+  Decorator style_normal = nothing;    ///< style.
+  Decorator style_focused = inverted;  ///< Style when focused.
+  Decorator style_selected = bold;     ///< Style when selected.
   Decorator style_selected_focused =
       Decorator(inverted) | bold;  ///< Style when selected and focused.
 
@@ -74,8 +74,8 @@ struct InputOption {
 /// @brief Option for the Radiobox component.
 /// @ingroup component
 struct RadioboxOption {
-  std::string style_checked = "◉ ";     ///< Prefix for a "checked" state.
-  std::string style_unchecked = "○ ";   ///< Prefix for a "unchecked" state.
+  std::string style_checked = "◉ ";    ///< Prefix for a "checked" state.
+  std::string style_unchecked = "○ ";  ///< Prefix for a "unchecked" state.
   Decorator style_normal = nothing;    ///< style.
   Decorator style_focused = inverted;  ///< Style when focused.
   Decorator style_selected = bold;     ///< Style when selected.

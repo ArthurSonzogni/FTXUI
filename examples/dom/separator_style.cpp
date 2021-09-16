@@ -1,10 +1,10 @@
-#include <ftxui/dom/elements.hpp>  // for text, operator|, vbox, border, Element, Fit, hbox
-#include <ftxui/screen/screen.hpp>  // for Full, Screen
-#include <iostream>
-#include <memory>  // for allocator
+#include <ftxui/screen/screen.hpp>  // for Screen
+#include <iostream>                 // for endl, cout, ostream
+#include <memory>                   // for allocator
 
-#include "ftxui/dom/node.hpp"    // for Render
-#include "ftxui/screen/box.hpp"  // for ftxui
+#include "ftxui/dom/elements.hpp"  // for text, hbox, separatorDouble, separatorHeavy, separatorLight, vbox, operator|, Element, Fit, borderDouble, borderHeavy, borderLight
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/box.hpp"    // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

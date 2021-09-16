@@ -149,7 +149,6 @@ Element border(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), ROUNDED);
 }
 
-
 /// @brief Same as border but with a constant Pixel around the element.
 /// @ingroup dom
 /// @see border

@@ -1,11 +1,12 @@
+#include <stddef.h>   // for size_t
 #include <algorithm>  // for max
-#include <memory>     // for __shared_ptr_access, shared_ptr, make_shared
-#include <utility>    // for move
-#include <vector>     // for vector
+#include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
+#include <utility>  // for move
+#include <vector>   // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/dom/box_helper.hpp"  // for Box
+#include "ftxui/dom/box_helper.hpp"   // for Element, Compute
 #include "ftxui/dom/elements.hpp"     // for Element, Elements, vbox
-#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/node.hpp"         // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
 
