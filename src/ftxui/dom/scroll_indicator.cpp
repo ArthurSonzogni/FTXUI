@@ -13,6 +13,19 @@ Element vscroll_indicator(Element child) {
   class Impl : public NodeDecorator {
     using NodeDecorator::NodeDecorator;
 
+    void ComputeRequirement() override {
+      Node::ComputeRequirement();
+      requirement_ = children_[0]->requirement();
+      requirement_.min_x++;
+    }
+
+    void SetBox(Box box) override {
+      Node::SetBox(box);
+      if (box_.x_min > box_.x_max)
+        box_.x_max--;
+      children_[0]->SetBox(box);
+    }
+
     void Render(Screen& screen) final {
       Node::Render(screen);
 
@@ -30,20 +43,9 @@ Element vscroll_indicator(Element child) {
         bool up = (2 * y + -1 >= 2 * start_y) && (2 * y + -1 <= 2 * end_y);
         bool down = (2 * y + 0 >= 2 * start_y) && (2 * y + 0 <= 2 * end_y);
 
-        if (up) {
-          if (down) {
-            screen.PixelAt(x, y).character = "┃";
-          } else {
-            screen.PixelAt(x, y).character = "╹";
-          }
-        } else {
-          if (down) {
-            screen.PixelAt(x, y).character = "╻";
-          } else {
-            screen.PixelAt(x, y).character = " ";
-          }
-        }
-        screen.PixelAt(x,y).inverted = true;
+        const char* c = up ? (down ? "┃" : "╹") : (down ? "╻" : " ");
+        screen.PixelAt(x, y).character = c;
+        screen.PixelAt(x, y).inverted = true;
       }
     };
   };
