@@ -98,16 +98,21 @@ struct TileEncoding {
   unsigned int down : 2;
   unsigned int round : 1;
 
+  // clang-format off
   bool operator<(const TileEncoding& other) const {
-    union Converter {
-      TileEncoding input;
-      uint16_t output = 0;
-    };
-    Converter a, b;
-    a.input = *this;
-    b.input = other;
-    return a.output < b.output;
+    if (left < other.left) return true;
+    if (left > other.left) return false;
+    if (top < other.top) return true;
+    if (top > other.top) return false;
+    if (right < other.right) return true;
+    if (right > other.right) return false;
+    if (down < other.down) return true;
+    if (down > other.down) return false;
+    if (round < other.round) return true;
+    if (round > other.round) return false;
+      return false;
   }
+  // clang-format on
 };
 
 // clang-format off
