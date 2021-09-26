@@ -1,25 +1,28 @@
-# FTXUI
+<p align="center">
+  <img src="./examples/component/homescreen.gif" alt="Demo image"></img>
+  <br/>
+  <a href="#"><img src="https://img.shields.io/badge/c++-%2300599C.svg?style=flat&logo=c%2B%2B&logoColor=white"></img></a>
+  <a href="http://opensource.org/licenses/MIT"><img src="https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black"></img></a>
+  <a href="#"><img src="https://img.shields.io/github/stars/ArthurSonzogni/FTXUI"></img></a>
+  <a href="#"><img src="https://img.shields.io/github/forks/ArthurSonzogni/FTXUI"></img></a>
+  <a href="#"><img src="https://img.shields.io/github/repo-size/ArthurSonzogni/FTXUI"></img></a>
+  <a href="https://github.com/ArthurSonzogni/FTXUI/issues"><img src="https://img.shields.io/github/issues/ArthurSonzogni/FTXUI"></img></a>
+  <a href="https://github.com/ArthurSonzogni/FTXUI/graphs/contributors"><img src="https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue"></img></a>
+  
+  <br/>
+  <a href="https://github.com/ArthurSonzogni/FTXUI/wiki">Documentation</a> ·
+  <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Report Bug</a> ·
+  <a href="https://arthursonzogni.github.io/FTXUI/examples.html">Examples</a> .
+  <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Request Feature</a> ·
+  <a href="https://github.com/ArthurSonzogni/FTXUI/pulls">Send a Pull Request</a>
 
-![C++][badge.cpp]
-[![issues][badge.issues]][issues]
-[![license][badge.license]][license]
-[![contributors][badge.contributors]][contributors]
+</p>
 
-[badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI
-[badge.license]: https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black
-[badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue
-[badge.cpp]: https://img.shields.io/badge/c++-%2300599C.svg?style=flat&logo=c%2B%2B&logoColor=white
+## FTXUI
 
-[issues]: https://github.com/ArthurSonzogni/FTXUI/issues
-[license]: http://opensource.org/licenses/MIT
-[contributors]: https://github.com/ArthurSonzogni/FTXUI/graphs/contributors
-
-**Functional Terminal (X) User interface**
+<i>Functional Terminal (X) User interface</i>
 
 A simple C++ library for terminal based user interface.
-
-## Demo:
-![Demo image](./examples/component/homescreen.gif)
 
 ## Feature
  * Functional style. Inspired by
@@ -50,7 +53,7 @@ A simple C++ library for terminal based user interface.
 [link.windows-msvc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/windows-msvc.yaml
 [link.mac-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/mac-clang.yaml
 
-## Example:
+## Example
 ~~~cpp
   vbox({
     hbox({
@@ -71,7 +74,7 @@ A simple C++ library for terminal based user interface.
 └────────────────────────────────────────────────────────────────────────────┘
 ~~~
 
-# Documentation:
+# Documentation
 
 - [Starter example project](https://github.com/ArthurSonzogni/ftxui-starter)
 - [Documentation](https://arthursonzogni.github.io/FTXUI/)
@@ -96,11 +99,11 @@ Feel free to add your projects here:
 - [todoman](https://github.com/aaleino/todoman)
 - [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
 
-## Hosted on:
+## Hosted on
  * [github](https://github.com/ArthurSonzogni/ftxui)
  * [gitlab](https://gitlab.com/ArthurSonzogni/ftxui)
 
-## External package:
+## External package
 
 It is **highly** recommanded to use cmake FetchContent to depends on FTXUI. This
 way you can specify which commit you would like to depends on.
