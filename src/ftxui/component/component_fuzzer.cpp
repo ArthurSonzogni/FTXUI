@@ -57,7 +57,7 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
   if (depth <= 0)
     return Button(GeneratorString(data, size), [] {});
 
-  switch (value % 16) {
+  switch (value % 18) {
     case 1:
       return Checkbox(GeneratorString(data, size), &g_bool);
     case 2:
@@ -102,6 +102,10 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
                                    &g_int);
     case 15:
       return Container::Tab(GeneratorComponents(data, size, depth - 1), &g_int);
+    case 16:
+      return Maybe(GeneratorComponent(data, size, depth - 1), &g_bool);
+    case 17:
+      return Dropdown(&g_list, &g_int);
     default:
       return Button(GeneratorString(data, size), [] {});
   }
