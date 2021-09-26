@@ -24,7 +24,8 @@ int main(int argc, const char* argv[]) {
   }
 
   auto renderer = Renderer(container, [&] {
-    return container->Render() | frame | size(HEIGHT, LESS_THAN, 10) | border;
+    return container->Render() | vscroll_indicator | frame |
+           size(HEIGHT, LESS_THAN, 10) | border;
   });
 
   auto screen = ScreenInteractive::FitComponent();

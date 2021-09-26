@@ -214,23 +214,25 @@ int main(int argc, const char* argv[]) {
   };
 
   auto compiler_renderer = Renderer(compiler_component, [&] {
-    auto compiler_win = window(text("Compiler"), compiler->Render() | frame);
-    auto flags_win = window(text("Flags"), flags->Render() | frame);
+    auto compiler_win = window(text("Compiler"),
+                               compiler->Render() | vscroll_indicator | frame);
+    auto flags_win =
+        window(text("Flags"), flags->Render() | vscroll_indicator | frame);
     auto executable_win = window(text("Executable:"), executable_->Render());
     auto input_win =
-        window(text("Input"),
-               hbox({
-                   vbox({
-                       hbox({
-                           text("Add: "),
-                           input_add->Render(),
-                       }) | size(WIDTH, EQUAL, 20) |
-                           size(HEIGHT, EQUAL, 1),
-                       filler(),
-                   }),
-                   separator(),
-                   input->Render() | frame | size(HEIGHT, EQUAL, 3) | flex,
-               }));
+        window(text("Input"), hbox({
+                                  vbox({
+                                      hbox({
+                                          text("Add: "),
+                                          input_add->Render(),
+                                      }) | size(WIDTH, EQUAL, 20) |
+                                          size(HEIGHT, EQUAL, 1),
+                                      filler(),
+                                  }),
+                                  separator(),
+                                  input->Render() | vscroll_indicator | frame |
+                                      size(HEIGHT, EQUAL, 3) | flex,
+                              }));
     return vbox({
                hbox({
                    compiler_win,
@@ -240,7 +242,7 @@ int main(int argc, const char* argv[]) {
                        input_win | size(WIDTH, EQUAL, 60),
                    }),
                    filler(),
-               }) | size(HEIGHT, LESS_THAN, 6),
+               }) | size(HEIGHT, LESS_THAN, 8),
                hflow(render_command()) | flex_grow,
            }) |
            flex_grow | border;
