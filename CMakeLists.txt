@@ -57,14 +57,15 @@ add_library(dom STATIC
   src/ftxui/dom/frame.cpp
   src/ftxui/dom/gauge.cpp
   src/ftxui/dom/graph.cpp
-  src/ftxui/dom/hbox.cpp
   src/ftxui/dom/gridbox.cpp
+  src/ftxui/dom/hbox.cpp
   src/ftxui/dom/hflow.cpp
   src/ftxui/dom/inverted.cpp
   src/ftxui/dom/node.cpp
   src/ftxui/dom/node_decorator.cpp
   src/ftxui/dom/paragraph.cpp
   src/ftxui/dom/reflect.cpp
+  src/ftxui/dom/scroll_indicator.cpp
   src/ftxui/dom/separator.cpp
   src/ftxui/dom/size.cpp
   src/ftxui/dom/spinner.cpp
@@ -87,8 +88,10 @@ add_library(component STATIC
   src/ftxui/component/checkbox.cpp
   src/ftxui/component/component.cpp
   src/ftxui/component/container.cpp
+  src/ftxui/component/dropdown.cpp
   src/ftxui/component/event.cpp
   src/ftxui/component/input.cpp
+  src/ftxui/component/maybe.cpp
   src/ftxui/component/menu.cpp
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/radiobox.cpp

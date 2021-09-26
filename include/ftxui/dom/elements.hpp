@@ -104,6 +104,8 @@ Element yframe(Element);
 Element focus(Element);
 Element select(Element);
 
+Element vscroll_indicator(Element);
+
 // --- Util --------------------------------------------------------------------
 Element hcenter(Element);
 Element vcenter(Element);
