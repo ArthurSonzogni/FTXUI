@@ -18,7 +18,8 @@ int main(int argc, const char* argv[]) {
     entries.push_back("Entry " + std::to_string(i));
   auto radiobox = Menu(&entries, &selected);
   auto renderer = Renderer(radiobox, [&] {
-    return radiobox->Render() | frame | size(HEIGHT, LESS_THAN, 10) | border;
+    return radiobox->Render() | vscroll_indicator | frame |
+           size(HEIGHT, LESS_THAN, 10) | border;
   });
 
   auto screen = ScreenInteractive::FitComponent();
