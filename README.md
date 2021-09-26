@@ -1,5 +1,6 @@
 # FTXUI
 
+![C++][badge.cpp]
 [![issues][badge.issues]][issues]
 [![license][badge.license]][license]
 [![contributors][badge.contributors]][contributors]
@@ -7,6 +8,7 @@
 [badge.issues]: https://img.shields.io/github/issues-raw/arthursonzogni/FTXUI
 [badge.license]: https://img.shields.io/github/license/arthursonzogni/FTXUI?color=black
 [badge.contributors]: https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue
+[badge.cpp]: https://img.shields.io/badge/c++-%2300599C.svg?style=flat&logo=c%2B%2B&logoColor=white
 
 [issues]: https://github.com/ArthurSonzogni/FTXUI/issues
 [license]: http://opensource.org/licenses/MIT
