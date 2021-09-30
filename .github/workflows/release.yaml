@@ -21,12 +21,12 @@ jobs:
           mkdir build;
           cd build;
           cmake ..
-            -DCMAKE_CXX_COMPILER=clang++
-            -DFTXUI_BUILD_DOCS=OFF
-            -DFTXUI_BUILD_EXAMPLES=OFF
-            -DFTXUI_BUILD_TESTS=OFF
-            -DFTXUI_BUILD_TESTS_FUZZER=OFF
-            -DFTXUI_ENABLE_INSTALL=ON;
+          -DCMAKE_CXX_COMPILER=clang++
+          -DFTXUI_BUILD_DOCS=OFF
+          -DFTXUI_BUILD_EXAMPLES=OFF
+          -DFTXUI_BUILD_TESTS=OFF
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=ON;
           cmake --build . --config Release;
           make package;
 
