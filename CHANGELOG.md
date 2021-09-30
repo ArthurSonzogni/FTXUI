@@ -2,8 +2,13 @@
 
 ## Current
 
+## 0.10 (2021-09-30)
+
+## Bug
+- Fix the automated merge of borders.
+
 ### Dom
- - `vscroll_indicator`. Show a scrollback indicator on the right.
+ - `vscroll_indicator`. Show a scrollbar indicator on the right.
 
 ### Component
  - `Maybe`: Display an component conditionnally based on a boolean.

@@ -4,7 +4,7 @@ include(cmake/ftxui_git_version.cmake)
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.9.${git_version}
+  VERSION 0.10.${git_version}
 )
 
 option(FTXUI_BUILD_DOCS "Set to ON to build tests" ON)
@@ -123,10 +123,6 @@ if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
   include(cmake/ftxui_test.cmake)
 endif()
 
-if(FTXUI_ENABLE_INSTALL)
-  include(cmake/ftxui_install.cmake)
-endif()
-
 if(FTXUI_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
@@ -137,3 +133,9 @@ endif()
 
 include(cmake/iwyu.cmake)
 include(cmake/ftxui_export.cmake)
+
+if(FTXUI_ENABLE_INSTALL)
+  include(cmake/ftxui_install.cmake)
+  include(cmake/ftxui_package.cmake)
+endif()
+

@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  create:
+    tags:
+      -v*
+
+jobs:
+  build:
+    name: Release 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Build
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+            -DCMAKE_CXX_COMPILER=clang++
+            -DFTXUI_BUILD_DOCS=OFF
+            -DFTXUI_BUILD_EXAMPLES=OFF
+            -DFTXUI_BUILD_TESTS=OFF
+            -DFTXUI_BUILD_TESTS_FUZZER=OFF
+            -DFTXUI_ENABLE_INSTALL=ON;
+          cmake --build . --config Release;
+          make package;
+
+      - name: Upload 
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/ftxui-*
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
