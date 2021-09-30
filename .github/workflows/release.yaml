@@ -34,6 +34,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: build/ftxui-*
-          draft: false
+          draft: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
