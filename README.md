@@ -10,7 +10,7 @@
   <a href="https://github.com/ArthurSonzogni/FTXUI/graphs/contributors"><img src="https://img.shields.io/github/contributors/arthursonzogni/FTXUI?color=blue"></img></a>
   
   <br/>
-  <a href="https://github.com/ArthurSonzogni/FTXUI/wiki">Documentation</a> ·
+  <a href="https://arthursonzogni.github.io/FTXUI/">Documentation</a> ·
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Report Bug</a> ·
   <a href="https://arthursonzogni.github.io/FTXUI/examples.html">Examples</a> .
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Request Feature</a> ·
