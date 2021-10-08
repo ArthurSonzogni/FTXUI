@@ -56,20 +56,26 @@ class MenuBase : public ComponentBase {
       return OnMouseEvent(event);
 
     if (Focused()) {
-      int old_selected = *selected_;
+      const int old_focused = focused_entry();
+      int new_focused{old_focused};
       if (event == Event::ArrowUp || event == Event::Character('k'))
-        (*selected_)--;
+        --new_focused;
       if (event == Event::ArrowDown || event == Event::Character('j'))
-        (*selected_)++;
+        ++new_focused;
       if (event == Event::Tab && entries_.size())
-        *selected_ = (*selected_ + 1) % entries_.size();
+        new_focused = (new_focused + 1) % entries_.size();
       if (event == Event::TabReverse && entries_.size())
-        *selected_ = (*selected_ + entries_.size() - 1) % entries_.size();
+        new_focused = (new_focused + entries_.size() - 1) % entries_.size();
 
-      *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
+      new_focused = std::clamp(new_focused, 0, int(entries_.size() - 1));
 
-      if (*selected_ != old_selected) {
-        focused_entry() = *selected_;
+      if (old_focused != new_focused) {
+        focused_entry() = new_focused;
+        return true;
+      }
+
+      if (event == Event::Character(' ')) {
+        *selected_ = new_focused;
         option_->on_change();
         return true;
       }
