@@ -1,4 +1,3 @@
-#include <stdint.h>  // for uint16_t
 #include <iostream>  // for operator<<, stringstream, basic_ostream, flush, cout, ostream
 #include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
 #include <memory>   // for allocator, allocator_traits<>::value_type

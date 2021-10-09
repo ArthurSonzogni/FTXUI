@@ -19,11 +19,15 @@ Added:
 - Fix the automated merge of borders.
 
 ### Dom
- - `vscroll_indicator`. Show a scrollbar indicator on the right.
+- `Table()` class to build stylised table.
+   See https://github.com/ArthurSonzogni/FTXUI/discussions/228
+- `vscroll_indicator`. Show a scrollbar indicator on the right.
+- `separatorEmpty`. A separator drawing nothing.
+- `separatorFixed`. A separator drawing the provided character.
 
 ### Component
- - `Maybe`: Display an component conditionnally based on a boolean.
- - `Dropdown`: A dropdown select list.
+- `Maybe`: Display an component conditionnally based on a boolean.
+- `Dropdown`: A dropdown select list.
 
 0.9 (2021-09-26)
 ----------------

@@ -75,6 +75,7 @@ struct Event {
 
   //--- State section ----------------------------------------------------------
   ScreenInteractive* screen_ = nullptr;
+
  private:
   friend ComponentBase;
   friend ScreenInteractive;

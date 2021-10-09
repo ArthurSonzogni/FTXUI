@@ -14,10 +14,11 @@
 namespace ftxui {
 
 static std::string simple_border_charset[6][6] = {
-    {"┌", "┐", "└", "┘", "─", "│"},
-    {"┏", "┓", "┗", "┛", "━", "┃"},
-    {"╔", "╗", "╚", "╝", "═", "║"},
-    {"╭", "╮", "╰", "╯", "─", "│"},
+    {"┌", "┐", "└", "┘", "─", "│"},  //
+    {"┏", "┓", "┗", "┛", "━", "┃"},  //
+    {"╔", "╗", "╚", "╝", "═", "║"},  //
+    {"╭", "╮", "╰", "╯", "─", "│"},  //
+    {" ", " ", " ", " ", " ", " "},  //
 };
 
 // For reference, here is the charset for normal border:
@@ -124,6 +125,7 @@ class Border : public Node {
 /// @see borderLight
 /// @see borderDouble
 /// @see borderHeavy
+/// @see borderEmpty
 /// @see borderRounded
 ///
 /// Add a border around an element
@@ -174,6 +176,7 @@ Decorator borderStyled(BorderStyle style) {
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded
+/// @see borderEmpty
 /// @see borderStyled
 /// @see borderWith
 ///
@@ -192,9 +195,9 @@ Decorator borderStyled(BorderStyle style) {
 /// ### Output
 ///
 /// ```bash
-///  ┌──────────────┐
-///  │The element   │
-///  └──────────────┘
+/// ┌──────────────┐
+/// │The element   │
+/// └──────────────┘
 /// ```
 Element borderLight(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), LIGHT);
@@ -207,6 +210,7 @@ Element borderLight(Element child) {
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded
+/// @see borderEmpty
 /// @see borderStyled
 /// @see borderWith
 ///
@@ -225,9 +229,9 @@ Element borderLight(Element child) {
 /// ### Output
 ///
 /// ```bash
-///  ┏━━━━━━━━━━━━━━┓
-///  ┃The element   ┃
-///  ┗━━━━━━━━━━━━━━┛
+/// ┏━━━━━━━━━━━━━━┓
+/// ┃The element   ┃
+/// ┗━━━━━━━━━━━━━━┛
 /// ```
 Element borderHeavy(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), HEAVY);
@@ -240,6 +244,7 @@ Element borderHeavy(Element child) {
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded
+/// @see borderEmpty
 /// @see borderStyled
 /// @see borderWith
 ///
@@ -258,9 +263,9 @@ Element borderHeavy(Element child) {
 /// ### Output
 ///
 /// ```bash
-///  ╔══════════════╗
-///  ║The element   ║
-///  ╚══════════════╝
+/// ╔══════════════╗
+/// ║The element   ║
+/// ╚══════════════╝
 /// ```
 Element borderDouble(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), DOUBLE);
@@ -273,6 +278,7 @@ Element borderDouble(Element child) {
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded
+/// @see borderEmpty
 /// @see borderStyled
 /// @see borderWith
 ///
@@ -291,12 +297,46 @@ Element borderDouble(Element child) {
 /// ### Output
 ///
 /// ```bash
-///  ╭──────────────╮
-///  │The element   │
-///  ╰──────────────╯
+/// ╭──────────────╮
+/// │The element   │
+/// ╰──────────────╯
 /// ```
 Element borderRounded(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), ROUNDED);
+}
+
+/// @brief Draw an empty border around the element.
+/// @ingroup dom
+/// @see border
+/// @see borderLight
+/// @see borderDouble
+/// @see borderHeavy
+/// @see borderRounded
+/// @see borderEmpty
+/// @see borderStyled
+/// @see borderWith
+///
+/// Add a border around an element
+///
+/// ### Example
+///
+/// ```cpp
+/// // Use 'borderRounded' as a function...
+/// Element document = borderRounded(text("The element"));
+///
+/// // ...Or as a 'pipe'.
+/// Element document = text("The element") | borderRounded;
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+///
+///  The element
+///
+/// ```
+Element borderEmpty(Element child) {
+  return std::make_shared<Border>(unpack(std::move(child)), EMPTY);
 }
 
 /// @brief Draw window with a title and a border around the element.

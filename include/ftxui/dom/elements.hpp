@@ -17,7 +17,7 @@ using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
 using GraphFunction = std::function<std::vector<int>(int, int)>;
 
-enum BorderStyle { LIGHT, HEAVY, DOUBLE, ROUNDED };
+enum BorderStyle { LIGHT, HEAVY, DOUBLE, ROUNDED, EMPTY };
 
 // Pipe elements into decorator togethers.
 // For instance the next lines are equivalents:
@@ -34,20 +34,24 @@ Element separator(void);
 Element separatorLight();
 Element separatorHeavy();
 Element separatorDouble();
+Element separatorEmpty();
 Element separatorStyled(BorderStyle);
 Element separator(Pixel);
+Element separatorCharacter(std::string);
 Element gauge(float ratio);
 Element border(Element);
 Element borderLight(Element);
 Element borderHeavy(Element);
 Element borderDouble(Element);
 Element borderRounded(Element);
+Element borderEmpty(Element);
 Decorator borderStyled(BorderStyle);
 Decorator borderWith(Pixel);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
 Elements paragraph(std::string text);  // Use inside hflow(). Split by space.
 Element graph(GraphFunction);
+Element emptyElement();
 
 // -- Decorator ---
 Element bold(Element);

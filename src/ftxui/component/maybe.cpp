@@ -1,13 +1,18 @@
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/component_base.hpp"
-#include "ftxui/component/event.hpp"
+#include <memory>  // for make_unique, __shared_ptr_access, __shared_ptr_access<>::element_type, shared_ptr
+#include <utility>  // for move
+
+#include "ftxui/component/component.hpp"       // for Make, Maybe
+#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/dom/elements.hpp"              // for Element
+#include "ftxui/dom/node.hpp"                  // for Node
 
 namespace ftxui {
 
 Component Maybe(Component child, bool* show) {
   class Impl : public ComponentBase {
    public:
-    Impl(bool* show): show_(show) {}
+    Impl(bool* show) : show_(show) {}
 
    private:
     Element Render() override {
@@ -22,10 +27,14 @@ Component Maybe(Component child, bool* show) {
 
     bool* show_;
   };
-  
+
   auto maybe = Make<Impl>(show);
   maybe->Add(std::move(child));
   return maybe;
 }
 
 }  // namespace ftxui
+
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

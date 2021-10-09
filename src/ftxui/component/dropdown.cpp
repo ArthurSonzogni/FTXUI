@@ -1,6 +1,12 @@
-#include "ftxui/component/component.hpp"
-#include "ftxui/component/component_base.hpp"
-#include "ftxui/component/event.hpp"
+#include <memory>   // for __shared_ptr_access
+#include <string>   // for string
+#include <utility>  // for move
+
+#include "ftxui/component/component.hpp"  // for Maybe, Checkbox, Make, Radiobox, Vertical, Dropdown
+#include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
+#include "ftxui/component/component_options.hpp"  // for CheckboxOption
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, border, filler, separator, size, vbox, frame, vscroll_indicator, HEIGHT, LESS_THAN
+#include "ftxui/util/ref.hpp"      // for ConstStringListRef
 
 namespace ftxui {
 
@@ -52,3 +58,7 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
 }
 
 }  // namespace ftxui
+
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
