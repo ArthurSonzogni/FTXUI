@@ -24,7 +24,7 @@ else()
     ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} OFF)
 endif()
 
-add_library(screen STATIC
+add_library(screen
   src/ftxui/screen/box.cpp
   src/ftxui/screen/color.cpp
   src/ftxui/screen/color_info.cpp
@@ -38,7 +38,7 @@ add_library(screen STATIC
   include/ftxui/screen/string.hpp
 )
 
-add_library(dom STATIC
+add_library(dom
   include/ftxui/dom/elements.hpp
   include/ftxui/dom/node.hpp
   include/ftxui/dom/requirement.hpp
@@ -75,7 +75,7 @@ add_library(dom STATIC
   src/ftxui/dom/vbox.cpp
 )
 
-add_library(component STATIC
+add_library(component
   include/ftxui/component/captured_mouse.hpp
   include/ftxui/component/component.hpp
   include/ftxui/component/component_base.hpp
@@ -111,8 +111,12 @@ target_link_libraries(dom
 find_package(Threads)
 target_link_libraries(component
   PUBLIC dom
-  PRIVATE Threads::Threads
+  PUBLIC Threads::Threads
 )
+
+set_target_properties(screen PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(dom PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(component PROPERTIES VERSION ${PROJECT_VERSION})
 
 include(cmake/ftxui_set_options.cmake)
 ftxui_set_options(screen)
@@ -138,4 +142,3 @@ if(FTXUI_ENABLE_INSTALL)
   include(cmake/ftxui_install.cmake)
   include(cmake/ftxui_package.cmake)
 endif()
-
