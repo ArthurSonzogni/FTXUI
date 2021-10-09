@@ -33,8 +33,11 @@ Dimensions Terminal::Size() {
   return Dimensions{80, 80};
 
 #else
-  winsize w;
+  winsize w{};
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+  if (w.ws_col == 0 || w.ws_row == 0) {
+    return Dimensions{80, 25};
+  }
   return Dimensions{w.ws_col, w.ws_row};
 #endif
 }
