@@ -2,6 +2,9 @@
 
 ## Current
 
+## Bug
+- On Unix system, fallback to {80,25} screen dimension on failure.
+
 ## 0.10 (2021-09-30)
 
 ## Bug
