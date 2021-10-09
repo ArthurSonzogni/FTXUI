@@ -18,9 +18,18 @@
 
 namespace ftxui {
 
+#if defined(__EMSCRIPTEN__)
+static Dimensions fallback_size{140, 43};
+#elif defined(_WIN32)
+// The Microsoft default "cmd" returns errors above.
+static Dimensions fallback_size{80, 80};
+#else
+static Dimensions fallback_size{80, 25};
+#endif
+
 Dimensions Terminal::Size() {
 #if defined(__EMSCRIPTEN__)
-  return Dimensions{140, 43};
+  return fallback_size;
 #elif defined(_WIN32)
   CONSOLE_SCREEN_BUFFER_INFO csbi;
 
@@ -29,17 +38,22 @@ Dimensions Terminal::Size() {
                       csbi.srWindow.Bottom - csbi.srWindow.Top + 1};
   }
 
-  // The Microsoft default "cmd" returns errors above.
-  return Dimensions{80, 80};
+  return fallback_size;
 
 #else
   winsize w{};
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   if (w.ws_col == 0 || w.ws_row == 0) {
-    return Dimensions{80, 25};
+    return fallback_size;
   }
   return Dimensions{w.ws_col, w.ws_row};
 #endif
+}
+
+/// @brief Override terminal size in case auto-detection fails
+/// @param fallbackSize Terminal dimensions to fallback to
+void Terminal::SetFallbackSize(const Dimensions& fallbackSize) {
+  fallback_size = fallbackSize;
 }
 
 namespace {

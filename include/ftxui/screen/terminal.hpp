@@ -9,6 +9,7 @@ struct Dimensions {
 
 namespace Terminal {
 Dimensions Size();
+void SetFallbackSize(const Dimensions& fallbackSize);
 
 enum Color {
   Palette1,
