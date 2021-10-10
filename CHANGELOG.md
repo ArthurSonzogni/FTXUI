@@ -1,11 +1,19 @@
-# Changelog
+Changelog
+=========
 
-## Current
+Unreleased (development) 
+------------------------
 
 ## Bug
 - On Unix system, fallback to {80,25} screen dimension on failure.
 
-## 0.10 (2021-09-30)
+## CMake
+Added:
+- Support for shared library, via `BUILD_SHARED_LIBS` option.
+- Add library version and symlinks.
+
+0.10 (2021-09-30)
+--------------------
 
 ## Bug
 - Fix the automated merge of borders.
@@ -17,7 +25,8 @@
  - `Maybe`: Display an component conditionnally based on a boolean.
  - `Dropdown`: A dropdown select list.
 
-## 0.9 (2021-09-26)
+0.9 (2021-09-26)
+----------------
 
 The initial release where changelog where written.
 
