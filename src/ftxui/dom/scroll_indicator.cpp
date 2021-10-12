@@ -1,3 +1,5 @@
+#include <algorithm> // For std::max
+
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/dom/node.hpp"
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
