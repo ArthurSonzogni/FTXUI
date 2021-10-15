@@ -1,10 +1,15 @@
-#include <algorithm> // For std::max
+#include <algorithm>  // for max
+#include <memory>     // for make_shared, __shared_ptr_access
+#include <string>     // for string
+#include <utility>    // for move
+#include <vector>     // for __alloc_traits<>::value_type
 
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/dom/node.hpp"
+#include "ftxui/dom/elements.hpp"        // for Element, vscroll_indicator
+#include "ftxui/dom/node.hpp"            // for Node, Elements
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/screen.hpp"
+#include "ftxui/dom/requirement.hpp"     // for Requirement
+#include "ftxui/screen/box.hpp"          // for Box
+#include "ftxui/screen/screen.hpp"       // for Screen, Pixel
 
 namespace ftxui {
 
@@ -58,3 +63,7 @@ Element vscroll_indicator(Element child) {
 }
 
 }  // namespace ftxui
+
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

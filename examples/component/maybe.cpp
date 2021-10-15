@@ -1,12 +1,12 @@
-#include <functional>  // for function
-#include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
-#include <string>    // for string, basic_string, allocator
-#include <vector>    // for vector
+#include <memory>  // for shared_ptr, __shared_ptr_access
+#include <string>  // for string, basic_string, allocator
+#include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Menu
-#include "ftxui/component/component_options.hpp"   // for MenuOption
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Checkbox, Maybe, Radiobox, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for Element, operator|, border
 
 using namespace ftxui;
 Component Border(Component child) {
@@ -14,7 +14,6 @@ Component Border(Component child) {
 }
 
 int main(int argc, const char* argv[]) {
-
   std::vector<std::string> entries = {
       "entry 1",
       "entry 2",

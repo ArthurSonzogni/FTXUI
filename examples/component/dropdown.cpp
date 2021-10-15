@@ -1,26 +1,23 @@
-#include <functional>  // for function
-#include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
-#include <string>    // for string, basic_string, allocator
-#include <vector>    // for vector
+#include <string>  // for basic_string, string, allocator
+#include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Menu
-#include "ftxui/component/component_options.hpp"   // for MenuOption
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"  // for Dropdown, Horizontal, Vertical
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
 
   std::vector<std::string> entries = {
-      "tribute",     "clearance", "ally",     "bend",  "electronics",
-      "module",      "era",       "cultural", "sniff", "nationalism",
-      "negotiation", "deliver",   "figure",   "east",
-      "tribute",     "clearance", "ally",     "bend",  "electronics",
-      "module",      "era",       "cultural", "sniff", "nationalism",
-      "negotiation", "deliver",   "figure",   "east",
-      "tribute",     "clearance", "ally",     "bend",  "electronics",
-      "module",      "era",       "cultural", "sniff", "nationalism",
-      "negotiation", "deliver",   "figure",   "east",
+      "tribute",     "clearance", "ally",        "bend",        "electronics",
+      "module",      "era",       "cultural",    "sniff",       "nationalism",
+      "negotiation", "deliver",   "figure",      "east",        "tribute",
+      "clearance",   "ally",      "bend",        "electronics", "module",
+      "era",         "cultural",  "sniff",       "nationalism", "negotiation",
+      "deliver",     "figure",    "east",        "tribute",     "clearance",
+      "ally",        "bend",      "electronics", "module",      "era",
+      "cultural",    "sniff",     "nationalism", "negotiation", "deliver",
+      "figure",      "east",
   };
 
   int selected_1 = 0;

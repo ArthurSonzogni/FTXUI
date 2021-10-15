@@ -75,6 +75,18 @@ Dimensions Dimension::Fit(Element& e) {
           std::min(e->requirement().min_y, size.dimy)};
 }
 
+/// An element of size 0x0 drawing nothing.
+/// @ingroup dom
+Element emptyElement() {
+  class Impl : public Node {
+    void ComputeRequirement() override {
+      requirement_.min_x = 0;
+      requirement_.min_x = 0;
+    }
+  };
+  return std::make_unique<Impl>();
+}
+
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

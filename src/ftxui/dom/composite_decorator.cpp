@@ -10,7 +10,7 @@ namespace ftxui {
 /// @return The centered element.
 /// @ingroup dom
 Element hcenter(Element child) {
-  return hbox(filler(), std::move(child), filler()) | xflex_grow;
+  return hbox(filler(), std::move(child), filler());
 }
 
 /// @brief Center an element vertically.
@@ -18,7 +18,7 @@ Element hcenter(Element child) {
 /// @return The centered element.
 /// @ingroup dom
 Element vcenter(Element child) {
-  return vbox(filler(), std::move(child), filler()) | yflex_grow;
+  return vbox(filler(), std::move(child), filler());
 }
 
 /// @brief Center an element horizontally and vertically.
@@ -26,7 +26,7 @@ Element vcenter(Element child) {
 /// @return The centered element.
 /// @ingroup dom
 Element center(Element child) {
-  return hcenter(vcenter(std::move(child))) | flex_grow;
+  return hcenter(vcenter(std::move(child)));
 }
 
 /// @brief Align an element on the right side.
@@ -34,7 +34,7 @@ Element center(Element child) {
 /// @return The right aligned element.
 /// @ingroup dom
 Element align_right(Element child) {
-  return hbox(filler(), std::move(child)) | flex_grow;
+  return hbox(filler(), std::move(child));
 }
 
 }  // namespace ftxui
