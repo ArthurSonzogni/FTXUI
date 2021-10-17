@@ -119,10 +119,7 @@ jobs:
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path:
-            - build/ftxui-*-Darwin.*
-            - build/ftxui-*-Linux.*
-            - build/ftxui-*-Win64.*
+          asset_path: build/ftxui-*-[Darwin,Linux,Win64].*
           overwrite: true
   
   documentation:
