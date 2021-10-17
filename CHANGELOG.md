@@ -1,8 +1,11 @@
 Changelog
 =========
 
-Unreleased (development) 
+released (development) 
 ------------------------
+
+0.11
+----
 
 ## github workflow
 - Add Windows ad MacOS artefacts.
