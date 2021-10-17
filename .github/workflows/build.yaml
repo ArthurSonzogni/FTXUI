@@ -35,7 +35,7 @@ jobs:
           - name: Windows MSVC
             os: windows-latest
             compiler: cl
-            test: true
+            test: false
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -66,7 +66,7 @@ jobs:
         if: matrix.test
         run: >
           cd build;
-          ${{ matrix.test }}
+          ./tests
 
   # Create a release on new v* tags
   release:
@@ -92,10 +92,13 @@ jobs:
     needs: release
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
+        include:
+          - os: ubuntu-latest
+            prefix: ftxui-Linux
+          - os: macos-latest
+            prefix: ftxui-Darwin
+          - os: windows-latest
+            prefix: ftxui-Win64
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
@@ -119,7 +122,7 @@ jobs:
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: build/ftxui-*-[Darwin,Linux,Win64].*
+          asset_path: build/${{ matrix.prefix }}*
           overwrite: true
   
   documentation:
