@@ -1,0 +1,161 @@
+name: Build
+
+on:
+  create:
+    tags:
+      -v*
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: "Tests"
+    strategy:
+      matrix:
+        include:
+          - name: Linux GCC
+            os: ubuntu-latest
+            compiler: g++-9
+            test: true
+
+          - name: Linux Clang
+            os: ubuntu-latest
+            compiler: clang++
+            test: true
+
+          - name: MacOS clang
+            os: macos-latest
+            compiler: clang++
+            test: true
+
+          - name: Windows MSVC
+            os: windows-latest
+            compiler: cl
+            test: false
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
+      - name: "Enable MSVC command prompt"
+        if: matrix.os == 'windows-latest'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: "Install cmake"
+        uses: lukka/get-cmake@latest
+
+      - name: "Build debug mode"
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
+          -DFTXUI_BUILD_DOCS=OFF
+          -DFTXUI_BUILD_EXAMPLES=ON
+          -DFTXUI_BUILD_TESTS=ON
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=ON ;
+          cmake --build . --config Debug;
+
+      - name: "Run tests"
+        if: matrix.test
+        run: >
+          cd build;
+          ./tests
+
+  # Create a release on new v* tags
+  release:
+    needs: test
+    if: ${{ github.event_name == 'create' && startsWith(github.ref, 'refs/tags/v') }}
+    name: "Create release"
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: "Create release"
+        uses: softprops/action-gh-release@v1
+        id: create_release
+        with:
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Build artifact for the release
+  package:
+    name: "Build packages"
+    needs: release
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_path: build/ftxui*Linux*
+          - os: macos-latest
+            asset_path: build/ftxui*Darwin*
+          - os: windows-latest
+            asset_path: build/ftxui*Win64*
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
+      - name: "Install cmake"
+        uses: lukka/get-cmake@latest
+
+      - name: "Build packages"
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+          -DCMAKE_BUILD_TYPE=Release
+          -DFTXUI_BUILD_DOCS=OFF
+          -DFTXUI_BUILD_EXAMPLES=OFF
+          -DFTXUI_BUILD_TESTS=OFF
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=ON;
+          cmake --build . --target package;
+      - uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: ${{ matrix.asset_path }}
+          overwrite: true
+  
+  documentation:
+    needs: package
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v2
+
+      - name: "Install cmake"
+        uses: lukka/get-cmake@latest
+
+      - name: "Install emsdk"
+        uses: mymindstorm/setup-emsdk@v7
+
+      - name: "Install Doxygen/Graphviz"
+        run: >
+          sudo apt-get update;
+          sudo apt-get install doxygen graphviz;
+
+      - name: "Build documentation"
+        run: >
+          mkdir build;
+          cd build;
+          emcmake cmake ..;
+          cmake --build . --target doc;
+          rsync -amv --include='*/' --include='*.html' --include='*.js' --include='*.wasm' --exclude='*' examples doc/doxygen/html;
+
+      - name: "Deploy"
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/doc/doxygen/html/
+          enable_jekyll: false
+          allow_empty_commit: false
+          force_orphan: true
+          publish_branch: gh-pages

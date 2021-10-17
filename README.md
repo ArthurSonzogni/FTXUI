@@ -35,23 +35,11 @@ A simple C++ library for terminal based user interface.
  * Keyboard & mouse navigation.
 
 ## Operating systems
-- [![linux-emscripten][badge.linux-emscripten]][link.linux-emscripten]
-- [![linux-gcc][badge.linux-gcc]][link.linux-gcc]
-[![linux-clang][badge.linux-clang]][link.linux-clang]
-- [![windows-msvc][badge.windows-msvc]][link.windows-msvc]
-- [![mac-clang][badge.mac-clang]][link.mac-clang]
 
-[badge.linux-gcc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-gcc.yaml/badge.svg?branch=master
-[badge.linux-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-clang.yaml/badge.svg?branch=master
-[badge.linux-emscripten]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-emscripten.yaml/badge.svg?branch=master
-[badge.windows-msvc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/windows-msvc.yaml/badge.svg?branch=master
-[badge.mac-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/mac-clang.yaml/badge.svg?branch=master
-
-[link.linux-gcc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-gcc.yaml
-[link.linux-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-clang.yaml
-[link.linux-emscripten]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/linux-emscripten.yaml
-[link.windows-msvc]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/windows-msvc.yaml
-[link.mac-clang]: https://github.com/ArthurSonzogni/FTXUI/actions/workflows/mac-clang.yaml
+- Webassembly
+- Linux
+- MacOS
+- Windows
 
 ## Example
 ~~~cpp
