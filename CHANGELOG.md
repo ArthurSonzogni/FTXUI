@@ -4,11 +4,14 @@ Changelog
 Unreleased (development) 
 ------------------------
 
+## github workflow
+- Add Windows ad MacOS artefacts.
+- Merge all the workflows.
+
 ## Bug
 - On Unix system, fallback to {80,25} screen dimension on failure.
 
 ## CMake
-Added:
 - Support for shared library, via `BUILD_SHARED_LIBS` option.
 - Add library version and symlinks.
 
