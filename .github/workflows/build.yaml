@@ -119,7 +119,10 @@ jobs:
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: build/ftxui-*
+          asset_path:
+            - build/ftxui-*-Darwin.*
+            - build/ftxui-*-Linux.*
+            - build/ftxui-*-Win64.*
           overwrite: true
   
   documentation:
@@ -147,13 +150,8 @@ jobs:
           cd build;
           emcmake cmake ..;
           cmake --build . --target doc;
-          rsync -amv
-            --include='*/'
-            --include='*.html'
-            --include='*.js'
-            --include='*.wasm'
-            --exclude='*'
-            examples doc/doxygen/html;
+          rsync -amv --include='*/' --include='*.html' --include='*.js' --include='*.wasm' --exclude='*' examples doc/doxygen/html;
+
 
       - name: "Deploy"
         uses: peaceiris/actions-gh-pages@v3
