@@ -79,6 +79,14 @@ class RadioboxBase : public ComponentBase {
         (hovered_)--;
       if (event == Event::ArrowDown || event == Event::Character('j'))
         (hovered_)++;
+      if (event == Event::PageUp)
+        (hovered_) -= box_.y_max - box_.y_min;
+      if (event == Event::PageDown)
+        (hovered_) += box_.y_max - box_.y_min;
+      if (event == Event::Home)
+        (hovered_) = 0;
+      if (event == Event::End)
+        (hovered_) = entries_.size() - 1;
       if (event == Event::Tab && entries_.size())
         hovered_ = (hovered_ + 1) % entries_.size();
       if (event == Event::TabReverse && entries_.size())
