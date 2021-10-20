@@ -61,6 +61,14 @@ class MenuBase : public ComponentBase {
         (*selected_)--;
       if (event == Event::ArrowDown || event == Event::Character('j'))
         (*selected_)++;
+      if (event == Event::PageUp)
+        (*selected_) -= box_.y_max - box_.y_min;
+      if (event == Event::PageDown)
+        (*selected_) += box_.y_max - box_.y_min;
+      if (event == Event::Home)
+        (*selected_) = 0;
+      if (event == Event::End)
+        (*selected_) = entries_.size() - 1;
       if (event == Event::Tab && entries_.size())
         *selected_ = (*selected_ + 1) % entries_.size();
       if (event == Event::TabReverse && entries_.size())

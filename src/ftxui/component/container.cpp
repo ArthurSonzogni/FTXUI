@@ -101,6 +101,22 @@ class VerticalContainer : public ContainerBase {
       MoveSelector(-1);
     if (event == Event::ArrowDown || event == Event::Character('j'))
       MoveSelector(+1);
+    if (event == Event::PageUp) {
+      for(int i = 0; i<box_.y_max - box_.y_min; ++i)
+        MoveSelector(-1);
+    }
+    if (event == Event::PageDown) {
+      for(int i = 0; i<box_.y_max - box_.y_min; ++i)
+        MoveSelector(1);
+    }
+    if (event == Event::Home) {
+      for (size_t i = 0; i < children_.size(); ++i)
+        MoveSelector(-1);
+    }
+    if (event == Event::End) {
+      for (size_t i = 0; i < children_.size(); ++i)
+        MoveSelector(1);
+    }
     if (event == Event::Tab && children_.size())
       MoveSelectorWrap(+1);
     if (event == Event::TabReverse && children_.size())
