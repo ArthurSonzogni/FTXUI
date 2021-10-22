@@ -1,3 +1,4 @@
+#include <cmath>
 #include <memory>   // for __shared_ptr_access
 #include <string>   // for string
 #include <utility>  // for move
@@ -28,6 +29,7 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
     }
 
     Element Render() override {
+      *selected_ = std::min((int)entries_.size() - 1, std::max(0, *selected_));
       title_ = entries_[*selected_];
       if (show_) {
         return vbox({

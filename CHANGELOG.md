@@ -1,8 +1,12 @@
 Changelog
 =========
 
-released (development) 
+unreleased (development) 
 ------------------------
+
+# Bug:
+- Check the selected element are within bounds for Dropdown.
+
 
 0.11
 ----
