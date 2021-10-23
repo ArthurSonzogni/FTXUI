@@ -4,9 +4,15 @@ Changelog
 unreleased (development) 
 ------------------------
 
-# Bug:
-- Check the selected element are within bounds for Dropdown.
+0.11.1
+------
 
+# Component
+- Feature: Support for PageUp/PageDown/Home/End buttons.
+- Bugfix: Check the selected element are within bounds for Dropdown.
+
+# Build
+- Bugfix: Package library using the "Release config". Not debug.
 
 0.11
 ----
