@@ -4,6 +4,9 @@ Changelog
 unreleased (development) 
 ------------------------
 
+# Component:
+- Bugfix: Input shouldn't take focus when hovered by the mouse.
+
 0.11.1
 ------
 

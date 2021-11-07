@@ -50,16 +50,22 @@ class WideInputBase : public ComponentBase {
 
     // placeholder.
     if (content.size() == 0) {
+      bool hovered = hovered_;
+      Decorator decorator = dim | main_decorator;
       if (is_focused)
-        return text(*placeholder_) | focus | dim | inverted | main_decorator |
-               reflect(box_);
-      else
-        return text(*placeholder_) | dim | main_decorator | reflect(box_);
+        decorator = decorator | focus | bold;
+      if (hovered || is_focused)
+        decorator = decorator | inverted;
+      return text(*placeholder_) | decorator | reflect(box_);
     }
 
     // Not focused.
-    if (!is_focused)
-      return text(content) | main_decorator | reflect(box_);
+    if (!is_focused) {
+      if (hovered_)
+        return text(content) | main_decorator | inverted | reflect(box_);
+      else
+        return text(content) | main_decorator | reflect(box_);
+    }
 
     std::wstring part_before_cursor = content.substr(0, cursor_position());
     std::wstring part_at_cursor = cursor_position() < (int)content.size()
@@ -68,15 +74,14 @@ class WideInputBase : public ComponentBase {
     std::wstring part_after_cursor = cursor_position() < (int)content.size() - 1
                                          ? content.substr(cursor_position() + 1)
                                          : L"";
-    auto focused = is_focused ? focus : select;
-
+    auto focused = (is_focused || hovered_) ? focus : select;
     // clang-format off
   return
     hbox(
       text(part_before_cursor),
       text(part_at_cursor) | underlined | focused | reflect(cursor_box_),
       text(part_after_cursor)
-    ) | flex | inverted | frame | main_decorator | reflect(box_);
+    ) | flex | inverted | frame | bold |main_decorator | reflect(box_);
     // clang-format on
   }
 
@@ -151,29 +156,31 @@ class WideInputBase : public ComponentBase {
 
  private:
   bool OnMouseEvent(Event event) {
-    if (!CaptureMouse(event))
+    hovered_ =
+        box_.Contain(event.mouse().x, event.mouse().y) && CaptureMouse(event);
+    if (!hovered_)
       return false;
-    if (!box_.Contain(event.mouse().x, event.mouse().y))
+
+    if (event.mouse().button != Mouse::Left ||
+        event.mouse().motion != Mouse::Pressed) {
       return false;
+    }
 
     TakeFocus();
-
-    if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed) {
-      int new_cursor_position =
-          cursor_position() + event.mouse().x - cursor_box_.x_min;
-      new_cursor_position =
-          std::max(0, std::min<int>(content_->size(), new_cursor_position));
-      if (cursor_position() != new_cursor_position) {
-        cursor_position() = new_cursor_position;
-        option_->on_change();
-      }
+    int new_cursor_position =
+        cursor_position() + event.mouse().x - cursor_box_.x_min;
+    new_cursor_position =
+        std::max(0, std::min<int>(content_->size(), new_cursor_position));
+    if (cursor_position() != new_cursor_position) {
+      cursor_position() = new_cursor_position;
+      option_->on_change();
     }
     return true;
   }
 
   bool Focusable() const final { return true; }
 
+  bool hovered_ = false;
   WideStringRef content_;
   ConstStringRef placeholder_;
 

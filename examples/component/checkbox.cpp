@@ -1,25 +1,21 @@
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Checkbox, Vertical
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-
-using namespace ftxui;
+#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/dom/elements.hpp"
+#include "ftxui/component/component.hpp"
 
 int main(int argc, const char* argv[]) {
-  bool build_examples_state = false;
-  bool build_tests_state = false;
-  bool use_webassembly_state = true;
+  using namespace ftxui;
 
-  auto component = Container::Vertical({
-      Checkbox("Build examples", &build_examples_state),
-      Checkbox("Build tests", &build_tests_state),
-      Checkbox("Use WebAssembly", &use_webassembly_state),
+  Component input_list = Container::Vertical({});
+  std::vector<std::string> items(100, "");
+  for (int i = 0; i < items.size(); ++i) {
+    input_list->Add(Input(&(items[i]), "placeholder " + std::to_string(i)));
+  }
+
+  auto renderer = Renderer(input_list, [&] {
+    return input_list->Render() | vscroll_indicator | frame | border |
+           size(HEIGHT, LESS_THAN, 10);
   });
 
   auto screen = ScreenInteractive::TerminalOutput();
-  screen.Loop(component);
-  return 0;
+  screen.Loop(renderer);
 }
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
