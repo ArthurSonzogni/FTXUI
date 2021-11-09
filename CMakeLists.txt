@@ -5,7 +5,7 @@ project(ftxui
   VERSION 0.11.1
 )
 
-option(FTXUI_BUILD_DOCS "Set to ON to build tests" ON)
+option(FTXUI_BUILD_DOCS "Set to ON to build docs" ON)
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
 option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
