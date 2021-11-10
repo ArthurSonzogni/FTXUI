@@ -86,6 +86,7 @@ Feel free to add your projects here:
 - [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
 - [todoman](https://github.com/aaleino/todoman)
 - [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
+- [vantage](https://github.com/gokulmaxi/vantage)
 
 ## Hosted on
  * [github](https://github.com/ArthurSonzogni/ftxui)
