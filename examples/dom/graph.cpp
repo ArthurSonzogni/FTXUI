@@ -1,16 +1,16 @@
-#include <chrono>
-#include <cmath>
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <functional>
-#include <iostream>
-#include <string>
-#include <thread>
-#include <vector>
+#include <chrono>                  // for operator""s, chrono_literals
+#include <cmath>                   // for sin
+#include <ftxui/dom/elements.hpp>  // for operator|, graph, separator, color, Element, vbox, flex, inverted, Fit, hbox, size, border, GREATER_THAN, HEIGHT
+#include <ftxui/screen/screen.hpp>  // for Full, Screen
+#include <functional>               // for ref, reference_wrapper
+#include <iostream>                 // for cout, ostream
+#include <string>                   // for operator<<, string
+#include <thread>                   // for sleep_for
+#include <vector>                   // for vector
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
+#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
+#include "ftxui/dom/node.hpp"            // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::YellowLight
 
 class Graph {
  public:

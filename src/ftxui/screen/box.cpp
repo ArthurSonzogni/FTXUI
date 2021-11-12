@@ -24,6 +24,19 @@ bool Box::Contain(int x, int y) {
          y_max >= y;
 }
 
+/// @return whether |other| is the same as |this|
+/// @ingroup screen
+bool Box::operator==(const Box& other) const {
+  return (x_min == other.x_min) && (x_max == other.x_max) &&
+         (y_min == other.y_min) && (y_max == other.y_max);
+}
+
+/// @return whether |other| and |this| are different.
+/// @ingroup screen
+bool Box::operator!=(const Box& other) const {
+  return !operator==(other);
+}
+
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

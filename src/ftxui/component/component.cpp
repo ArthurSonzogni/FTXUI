@@ -1,5 +1,5 @@
 #include <stddef.h>   // for size_t
-#include <algorithm>  // for find_if, max
+#include <algorithm>  // for find_if
 #include <cassert>    // for assert
 #include <iterator>   // for begin, end
 #include <utility>    // for move
@@ -7,7 +7,7 @@
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component.hpp"
-#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
+#include "ftxui/component/component_base.hpp"  // for ComponentBase, Components
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"                  // for text, Element

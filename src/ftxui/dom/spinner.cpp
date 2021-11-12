@@ -1,6 +1,6 @@
 #include <stddef.h>  // for size_t
 #include <memory>    // for allocator, allocator_traits<>::value_type
-#include <string>    // for string
+#include <string>    // for basic_string, string
 #include <utility>   // for move
 #include <vector>    // for vector, __alloc_traits<>::value_type
 

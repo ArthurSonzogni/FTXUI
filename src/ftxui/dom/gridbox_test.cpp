@@ -5,10 +5,10 @@
 #include <vector>                   // for vector
 
 #include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, flex_grow, Elements, flex_shrink, vtext, gridbox, vbox, border
-#include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/box.hpp"    // for ftxui
-#include "ftxui/screen/screen.hpp"  // for Screen
-#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
+#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
+#include "ftxui/dom/node.hpp"            // for Render
+#include "ftxui/screen/screen.hpp"       // for Screen
+#include "gtest/gtest_pred_impl.h"       // for Test, TEST, EXPECT_EQ
 
 using namespace ftxui;
 
@@ -23,6 +23,14 @@ Element cell(const char* t) {
   return text(t) | border;
 }
 }  // namespace
+
+TEST(GridboxTest, UnfilledRectangular) {
+  auto root = gridbox({
+      {text("1"), text("2"), text("3"), text("4")},
+      {},
+      {},
+  });
+}
 
 TEST(GridboxTest, DifferentSize) {
   auto root = gridbox({

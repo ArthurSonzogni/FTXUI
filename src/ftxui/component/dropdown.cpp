@@ -1,7 +1,7 @@
-#include <cmath>
-#include <memory>   // for __shared_ptr_access
-#include <string>   // for string
-#include <utility>  // for move
+#include <algorithm>  // for max, min
+#include <memory>     // for __shared_ptr_access
+#include <string>     // for string
+#include <utility>    // for move
 
 #include "ftxui/component/component.hpp"  // for Maybe, Checkbox, Make, Radiobox, Vertical, Dropdown
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase

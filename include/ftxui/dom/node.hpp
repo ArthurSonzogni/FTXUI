@@ -35,6 +35,15 @@ class Node {
   // Step 3: Draw this element.
   virtual void Render(Screen& screen);
 
+  // Layout may not resolve within a single iteration for some elements. This
+  // allows them to request additionnal iterations. This signal must be
+  // forwarded to children at least once.
+  struct Status {
+    int iteration = 0;
+    bool need_iteration = false;
+  };
+  virtual void Check(Status* status);
+
  protected:
   Elements children_;
   Requirement requirement_;

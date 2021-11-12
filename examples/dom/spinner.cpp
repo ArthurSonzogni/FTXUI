@@ -7,8 +7,8 @@
 #include <utility>                  // for move
 #include <vector>                   // for vector
 
-#include "ftxui/dom/node.hpp"    // for Render
-#include "ftxui/screen/box.hpp"  // for ftxui
+#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
+#include "ftxui/dom/node.hpp"            // for Render
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

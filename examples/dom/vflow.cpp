@@ -1,6 +1,6 @@
 #include <stddef.h>                // for size_t
 #include <stdio.h>                 // for getchar
-#include <ftxui/dom/elements.hpp>  // for operator|, size, Element, text, hcenter, Decorator, Fit, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN
+#include <ftxui/dom/elements.hpp>  // for operator|, Element, size, text, hcenter, Fit, vflow, window, EQUAL, bold, border, dim, HEIGHT, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator, shared_ptr
 #include <string>  // for operator+, to_string, char_traits, string
@@ -17,10 +17,7 @@ int main(int argc, const char* argv[]) {
            size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy);
   };
 
-  auto style = size(WIDTH, GREATER_THAN, 20) | border |
-               size(HEIGHT, GREATER_THAN, 30) | size(WIDTH, LESS_THAN, 50);
-
-  auto document = hflow({
+  auto document = vflow({
                       make_box(7, 7),
                       make_box(7, 5),
                       make_box(5, 7),
@@ -40,7 +37,7 @@ int main(int argc, const char* argv[]) {
                       make_box(13, 3),
                       make_box(10, 3),
                   }) |
-                  style;
+                  border;
 
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);

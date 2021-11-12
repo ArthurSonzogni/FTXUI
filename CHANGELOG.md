@@ -4,8 +4,24 @@ Changelog
 unreleased (development) 
 ------------------------
 
-# Component:
-- Bugfix: Input shouldn't take focus when hovered by the mouse.
+### Features:
+- Support `flexbox` dom elements. This is build symmetrically to the HTML one.
+  All the following attributes are supported: direction, wrap, justify-content,
+  align-items, align-content, gap
+- Add the dom elements helper based on `flexbox`:
+  - `paragraph`
+  - `paragraphAlignLeft`
+  - `paragraphAlignCenter`
+  - `paragraphAlignRight`
+  - `paragraphAlignJustify`
+- Add the helper elements based on `flexbox`: `hflow()`, `vflow()`.
+
+### Breaking changes:
+- The behavior of `paragraph` has been modified. It now returns en Element,
+    instead of a list of elements.
+
+### Bug
+- Input shouldn't take focus when hovered by the mouse.
 
 0.11.1
 ------

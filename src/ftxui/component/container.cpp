@@ -6,7 +6,7 @@
 
 #include "ftxui/component/component.hpp"  // for Horizontal, Vertical, Tab
 #include "ftxui/component/component_base.hpp"  // for Components, Component, ComponentBase
-#include "ftxui/component/event.hpp"  // for Event, Event::Tab, Event::TabReverse, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
+#include "ftxui/component/event.hpp"  // for Event, Event::Tab, Event::TabReverse, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::WheelDown, Mouse::WheelUp
 #include "ftxui/dom/elements.hpp"  // for text, Elements, operator|, reflect, Element, hbox, vbox
 #include "ftxui/screen/box.hpp"  // for Box
@@ -102,11 +102,11 @@ class VerticalContainer : public ContainerBase {
     if (event == Event::ArrowDown || event == Event::Character('j'))
       MoveSelector(+1);
     if (event == Event::PageUp) {
-      for(int i = 0; i<box_.y_max - box_.y_min; ++i)
+      for (int i = 0; i < box_.y_max - box_.y_min; ++i)
         MoveSelector(-1);
     }
     if (event == Event::PageDown) {
-      for(int i = 0; i<box_.y_max - box_.y_min; ++i)
+      for (int i = 0; i < box_.y_max - box_.y_min; ++i)
         MoveSelector(1);
     }
     if (event == Event::Home) {

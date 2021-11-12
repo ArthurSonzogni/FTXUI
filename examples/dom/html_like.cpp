@@ -44,7 +44,7 @@ int main(int argc, const char* argv[]) {
             paragraph(" A spinner "), spinner(6, i / 10)) |
         border;
 
-    auto screen = Screen::Create(Dimension::Full());
+    auto screen = Screen::Create(Dimension::Fit(document));
     Render(screen, document);
     std::cout << reset_position;
     screen.Print();

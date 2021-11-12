@@ -1,12 +1,13 @@
 #include <algorithm>   // for min
 #include <functional>  // for function
-#include <memory>      // for __shared_ptr_access
+#include <memory>      // for __shared_ptr_access, make_unique
 #include <utility>     // for move
 #include <vector>      // for vector
 
-#include "ftxui/dom/elements.hpp"  // for Element, Decorator, Elements, operator|, Fit, nothing
-#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/elements.hpp"  // for Element, Decorator, Elements, operator|, Fit, emptyElement, nothing
+#include "ftxui/dom/node.hpp"         // for Node, Node::Status
 #include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"    // for Full
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
 
@@ -69,10 +70,39 @@ Element operator|(Element element, Decorator decorator) {
 /// @see Fixed
 /// @see Full
 Dimensions Dimension::Fit(Element& e) {
-  e->ComputeRequirement();
-  Dimensions size = Dimension::Full();
-  return {std::min(e->requirement().min_x, size.dimx),
-          std::min(e->requirement().min_y, size.dimy)};
+  Dimensions fullsize = Dimension::Full();
+  Box box;
+  box.x_min = 0;
+  box.y_min = 0;
+  box.x_max = fullsize.dimx;
+  box.y_max = fullsize.dimy;
+
+  Node::Status status;
+  e->Check(&status);
+  while (status.need_iteration && status.iteration < 20) {
+    e->ComputeRequirement();
+
+    // Don't give the element more space than it needs:
+    box.x_max = std::min(box.x_max, e->requirement().min_x);
+    box.y_max = std::min(box.y_max, e->requirement().min_y);
+
+    e->SetBox(box);
+    status.need_iteration = false;
+    status.iteration++;
+    e->Check(&status);
+
+    if (!status.need_iteration)
+      break;
+    // Increase the size of the box until it fits, but not more than the with of
+    // the terminal emulator:
+    box.x_max = std::min(e->requirement().min_x, fullsize.dimx);
+    box.y_max = std::min(e->requirement().min_y, fullsize.dimy);
+  }
+
+  return {
+      box.x_max,
+      box.y_max,
+  };
 }
 
 /// An element of size 0x0 drawing nothing.

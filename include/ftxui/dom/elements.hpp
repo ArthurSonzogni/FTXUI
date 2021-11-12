@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 
+#include "ftxui/dom/flexbox_config.hpp"
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
@@ -49,7 +50,11 @@ Decorator borderStyled(BorderStyle);
 Decorator borderWith(Pixel);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
-Elements paragraph(std::string text);  // Use inside hflow(). Split by space.
+Element paragraph(std::string text);
+Element paragraphAlignLeft(std::string text);
+Element paragraphAlignRight(std::string text);
+Element paragraphAlignCenter(std::string text);
+Element paragraphAlignJustify(std::string text);
 Element graph(GraphFunction);
 Element emptyElement();
 
@@ -69,8 +74,11 @@ Element bgcolor(Color, Element);
 Element hbox(Elements);
 Element vbox(Elements);
 Element dbox(Elements);
+Element flexbox(Elements, FlexboxConfig config = FlexboxConfig());
 Element gridbox(std::vector<Elements> lines);
-Element hflow(Elements);
+
+Element hflow(Elements);  // Helper: default flexbox with row direction.
+Element vflow(Elements);  // Helper: default flexbox with column direction.
 
 // -- Flexibility ---
 // Define how to share the remaining space when not all of it is used inside a
