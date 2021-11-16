@@ -569,6 +569,25 @@ TEST(GridboxTest, Horizontal_FlexGrow_NoFlex_FlewShrink) {
   }
 }
 
+// Regression test for https://github.com/ArthurSonzogni/FTXUI/issues/259
+TEST(GridboxTest, MissingCells) {
+  auto root = gridbox({
+      {cell("1"), cell("2"), cell("3")},
+      {cell("4"), cell("5")},
+  });
+
+  Screen screen(20, 7);
+  Render(screen, root);
+  EXPECT_EQ(screen.ToString(),
+            "╭─╮╭─╮╭─╮           \r\n"
+            "│1││2││3│           \r\n"
+            "╰─╯╰─╯╰─╯           \r\n"
+            "╭─╮╭─╮              \r\n"
+            "│4││5│              \r\n"
+            "╰─╯╰─╯              \r\n"
+            "                    ");
+}
+
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
