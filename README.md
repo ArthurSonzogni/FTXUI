@@ -87,6 +87,7 @@ Feel free to add your projects here:
 - [todoman](https://github.com/aaleino/todoman)
 - [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
 - [vantage](https://github.com/gokulmaxi/vantage)
+- [tabdeeli](https://github.com/typon/tabdeeli)
 
 ## Hosted on
  * [github](https://github.com/ArthurSonzogni/ftxui)
