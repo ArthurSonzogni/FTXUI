@@ -9,8 +9,8 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
-#include "ftxui/dom/node.hpp"    // for Render
-#include "ftxui/screen/box.hpp"  // for ftxui
+#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
+#include "ftxui/dom/node.hpp"            // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Green, Color::Red, Color::RedLight
 
 int main(int argc, const char* argv[]) {

@@ -1,10 +1,10 @@
-#include <ftxui/dom/elements.hpp>
-#include <ftxui/screen/screen.hpp>
-#include <vector>
+#include <ftxui/dom/elements.hpp>  // for operator|, color, Element, bgcolor, graph, border
+#include <ftxui/screen/screen.hpp>  // for Fixed, Screen
+#include <vector>                   // for vector
 
-#include "ftxui/dom/node.hpp"
-#include "ftxui/screen/box.hpp"
-#include "ftxui/screen/color.hpp"
+#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
+#include "ftxui/dom/node.hpp"            // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::DarkBlue, Color::Green, Color::Red
 
 int main(void) {
   using namespace ftxui;

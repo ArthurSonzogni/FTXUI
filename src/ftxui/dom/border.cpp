@@ -1,12 +1,12 @@
 #include <algorithm>  // for max
 #include <iterator>   // for begin, end
 #include <memory>     // for allocator, make_shared, __shared_ptr_access
-#include <string>     // for basic_string, string
+#include <string>     // for string, basic_string
 #include <utility>    // for move
 #include <vector>     // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, Elements, border, borderWith, window
-#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, BorderStyle, ROUNDED, Elements, DOUBLE, EMPTY, HEAVY, LIGHT, border, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, borderStyled, borderWith, window
+#include "ftxui/dom/node.hpp"      // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"    // for Pixel, Screen

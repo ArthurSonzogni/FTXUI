@@ -11,6 +11,8 @@ struct Box {
 
   static Box Intersection(Box a, Box b);
   bool Contain(int x, int y);
+  bool operator==(const Box& other) const;
+  bool operator!=(const Box& other) const;
 };
 
 }  // namespace ftxui

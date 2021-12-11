@@ -1,10 +1,10 @@
 #include <algorithm>  // for max, min
-#include <memory>     // for make_shared, shared_ptr, __shared_ptr_access
+#include <memory>     // for make_shared, __shared_ptr_access
 #include <utility>    // for move
-#include <vector>     // for vector, __alloc_traits<>::value_type
+#include <vector>     // for __alloc_traits<>::value_type
 
-#include "ftxui/dom/elements.hpp"  // for Element, unpack, focus, frame, select, xframe, yframe
-#include "ftxui/dom/node.hpp"  // for Node
+#include "ftxui/dom/elements.hpp"  // for Element, unpack, Elements, focus, frame, select, xframe, yframe
+#include "ftxui/dom/node.hpp"  // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement, Requirement::FOCUSED, Requirement::SELECTED
 #include "ftxui/screen/box.hpp"      // for Box
 #include "ftxui/screen/screen.hpp"   // for Screen, Screen::Cursor

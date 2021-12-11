@@ -5,8 +5,8 @@
 #include <string>                   // for basic_string, allocator, string
 #include <vector>                   // for vector
 
-#include "ftxui/dom/node.hpp"    // for Render
-#include "ftxui/screen/box.hpp"  // for ftxui
+#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
+#include "ftxui/dom/node.hpp"            // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::White
 
 int main(int argc, const char* argv[]) {

@@ -19,10 +19,12 @@ add_executable(tests
   src/ftxui/component/screen_interactive_test.cpp
   src/ftxui/component/terminal_input_parser_test.cpp
   src/ftxui/component/toggle_test.cpp
+  src/ftxui/dom/flexbox_helper_test.cpp
+  src/ftxui/dom/flexbox_test.cpp
   src/ftxui/dom/gauge_test.cpp
-  src/ftxui/dom/table_test.cpp
   src/ftxui/dom/gridbox_test.cpp
   src/ftxui/dom/hbox_test.cpp
+  src/ftxui/dom/table_test.cpp
   src/ftxui/dom/text_test.cpp
   src/ftxui/dom/vbox_test.cpp
   src/ftxui/screen/string_test.cpp

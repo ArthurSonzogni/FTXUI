@@ -6,7 +6,7 @@
 #include <iostream>  // for cout, ostream, basic_ostream, operator<<, endl, flush
 #include <stack>     // for stack
 #include <thread>    // for thread
-#include <utility>   // for move
+#include <utility>   // for swap, move
 #include <vector>    // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
@@ -18,7 +18,7 @@
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
 #include "ftxui/dom/requirement.hpp"                  // for Requirement
-#include "ftxui/screen/terminal.hpp"  // for Terminal::Dimensions, Terminal
+#include "ftxui/screen/terminal.hpp"                  // for Size, Dimensions
 
 #if defined(_WIN32)
 #define DEFINE_CONSOLEV2_PROPERTIES
@@ -32,8 +32,8 @@
 #endif
 #else
 #include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set
-#include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
-#include <unistd.h>  // for STDIN_FILENO, read
+#include <termios.h>     // for tcsetattr, tcgetattr, cc_t
+#include <unistd.h>      // for STDIN_FILENO, read
 #endif
 
 // Quick exit is missing in standard CLang headers

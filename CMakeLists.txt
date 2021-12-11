@@ -38,6 +38,7 @@ add_library(screen
 
 add_library(dom
   include/ftxui/dom/elements.hpp
+  include/ftxui/dom/flexbox_config.hpp
   include/ftxui/dom/node.hpp
   include/ftxui/dom/requirement.hpp
   include/ftxui/dom/take_any_args.hpp
@@ -52,12 +53,15 @@ add_library(dom
   src/ftxui/dom/dbox.cpp
   src/ftxui/dom/dim.cpp
   src/ftxui/dom/flex.cpp
+  src/ftxui/dom/flexbox.cpp
+  src/ftxui/dom/flexbox_config.cpp
+  src/ftxui/dom/flexbox_helper.cpp
+  src/ftxui/dom/flexbox_helper.hpp
   src/ftxui/dom/frame.cpp
   src/ftxui/dom/gauge.cpp
   src/ftxui/dom/graph.cpp
   src/ftxui/dom/gridbox.cpp
   src/ftxui/dom/hbox.cpp
-  src/ftxui/dom/hflow.cpp
   src/ftxui/dom/inverted.cpp
   src/ftxui/dom/node.cpp
   src/ftxui/dom/node_decorator.cpp

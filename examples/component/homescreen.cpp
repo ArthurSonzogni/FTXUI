@@ -1,26 +1,32 @@
+#include <stddef.h>    // for size_t
 #include <array>       // for array
 #include <chrono>      // for operator""s, chrono_literals
 #include <cmath>       // for sin
 #include <functional>  // for ref, reference_wrapper, function
 #include <memory>      // for allocator, shared_ptr, __shared_ptr_access
-#include <string>  // for string, basic_string, operator+, char_traits, to_string
+#include <string>  // for string, basic_string, operator+, to_string, char_traits
 #include <thread>   // for sleep_for, thread
 #include <utility>  // for move
 #include <vector>   // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Menu, Radiobox, Tab, Toggle
+#include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, ResizableSplitLeft, Tab, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
 #include "ftxui/component/event.hpp"              // for Event, Event::Custom
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for operator|, color, bgcolor, filler, Element, size, vbox, flex, hbox, graph, separator, EQUAL, WIDTH, hcenter, bold, border, window, HEIGHT, Elements, hflow, flex_grow, frame, gauge, LESS_THAN, spinner, dim, GREATER_THAN
-#include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::Black, Color::Blue, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default
+#include "ftxui/dom/elements.hpp"  // for text, operator|, color, bgcolor, filler, Element, size, vbox, flex, hbox, separator, graph, EQUAL, paragraph, hcenter, WIDTH, bold, window, border, vscroll_indicator, Elements, HEIGHT, hflow, frame, flex_grow, flexbox, gauge, paragraphAlignCenter, paragraphAlignJustify, paragraphAlignLeft, paragraphAlignRight, dim, spinner, Decorator, LESS_THAN, center, yflex, GREATER_THAN
+#include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::BlueLight, Color::RedLight, Color::Black, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default
+#include "ftxui/screen/terminal.hpp"  // for Size, Dimensions
 
 using namespace ftxui;
 
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::Fullscreen();
+
+  // ---------------------------------------------------------------------------
+  // HTOP
+  // ---------------------------------------------------------------------------
 
   int shift = 0;
 
@@ -91,6 +97,10 @@ int main(int argc, const char* argv[]) {
            }) |
            flex | border;
   });
+
+  // ---------------------------------------------------------------------------
+  // Compiler
+  // ---------------------------------------------------------------------------
 
   const std::vector<std::string> compiler_entries = {
       "gcc",
@@ -248,6 +258,9 @@ int main(int argc, const char* argv[]) {
            flex_grow | border;
   });
 
+  // ---------------------------------------------------------------------------
+  // Spiner
+  // ---------------------------------------------------------------------------
   auto spinner_tab_renderer = Renderer([&] {
     Elements entries;
     for (int i = 0; i < 22; ++i) {
@@ -257,6 +270,9 @@ int main(int argc, const char* argv[]) {
     return hflow(std::move(entries)) | border;
   });
 
+  // ---------------------------------------------------------------------------
+  // Colors
+  // ---------------------------------------------------------------------------
   auto color_tab_renderer = Renderer([] {
     return hbox({
                vbox({
@@ -301,6 +317,9 @@ int main(int argc, const char* argv[]) {
            hcenter | border;
   });
 
+  // ---------------------------------------------------------------------------
+  // Gauges
+  // ---------------------------------------------------------------------------
   auto render_gauge = [&shift](int delta) {
     float progress = (shift + delta) % 1000 / 1000.f;
     return hbox({
@@ -333,9 +352,84 @@ int main(int argc, const char* argv[]) {
            border;
   });
 
+  // ---------------------------------------------------------------------------
+  // Paragraph
+  // ---------------------------------------------------------------------------
+  auto make_box = [](size_t dimx, size_t dimy) {
+    std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
+    return window(text(title) | hcenter | bold,
+                  text("content") | hcenter | dim) |
+           size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy);
+  };
+
+  auto paragraph_renderer_left = Renderer([&] {
+    auto title_style = bold | bgcolor(Color::Blue) | color(Color::Black);
+    std::string str =
+        "Lorem Ipsum is simply dummy text of the printing and typesetting "
+        "industry. Lorem Ipsum has been the industry's standard dummy text "
+        "ever since the 1500s, when an unknown printer took a galley of type "
+        "and scrambled it to make a type specimen book.";
+    return vbox({
+               // [ Left ]
+               text("Align left:") | title_style,
+               paragraphAlignLeft(str),
+               // [ Center ]
+               text("Align center:") | title_style,
+               paragraphAlignCenter(str),
+               // [ Right ]
+               text("Align right:") | title_style,
+               paragraphAlignRight(str),
+               // [ Justify]
+               text("Align justify:") | title_style,
+               paragraphAlignJustify(str),
+               // [ Side by side ]
+               text("Side by side:") | title_style,
+               hbox({
+                   paragraph(str),
+                   separator() | color(Color::Blue),
+                   paragraph(str),
+               }),
+               // [ Misc ]
+               text("Elements with different size:") | title_style,
+               flexbox({
+                   make_box(10, 5),
+                   make_box(9, 4),
+                   make_box(8, 4),
+                   make_box(6, 3),
+                   make_box(10, 5),
+                   make_box(9, 4),
+                   make_box(8, 4),
+                   make_box(6, 3),
+                   make_box(10, 5),
+                   make_box(9, 4),
+                   make_box(8, 4),
+                   make_box(6, 3),
+               }),
+           }) |
+           // vscroll_indicator | yflex;
+           yflex | vscroll_indicator;
+  });
+
+  auto paragraph_renderer_right = Renderer([] {
+    return paragraph("<--- This vertical bar is resizable using the  mouse") |
+           center;
+  });
+
+  int paragraph_renderer_split_position = Terminal::Size().dimx / 2;
+  auto paragraph_renderer_group =
+      ResizableSplitLeft(paragraph_renderer_left, paragraph_renderer_right,
+                         &paragraph_renderer_split_position);
+  auto paragraph_renderer_group_renderer =
+      Renderer(paragraph_renderer_group,
+               [&] { return paragraph_renderer_group->Render() | border; });
+
+  // ---------------------------------------------------------------------------
+  // Tabs
+  // ---------------------------------------------------------------------------
+
   int tab_index = 0;
   std::vector<std::string> tab_entries = {
-      "htop", "color", "spinner", "gauge", "compiler",
+      "htop", "color", "spinner", "gauge", "compiler", "paragraph",
   };
   auto tab_selection = Toggle(&tab_entries, &tab_index);
   auto tab_content = Container::Tab(
@@ -345,6 +439,7 @@ int main(int argc, const char* argv[]) {
           spinner_tab_renderer,
           gauge_component,
           compiler_renderer,
+          paragraph_renderer_group_renderer,
       },
       &tab_index);
 

@@ -1,7 +1,7 @@
-#include <utility>
+#include <utility>  // for move
 
 #include "ftxui/dom/node.hpp"
-#include "ftxui/screen/screen.hpp"
+#include "ftxui/screen/screen.hpp"  // for Screen
 
 namespace ftxui {
 
@@ -29,6 +29,12 @@ void Node::Render(Screen& screen) {
     child->Render(screen);
 }
 
+void Node::Check(Status* status) {
+  for (auto& child : children_)
+    child->Check(status);
+  status->need_iteration |= (status->iteration == 0);
+}
+
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, const Element& element) {
@@ -38,20 +44,29 @@ void Render(Screen& screen, const Element& element) {
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, Node* node) {
-  // Step 1: Find what dimension this elements wants to be.
-  node->ComputeRequirement();
-
   Box box;
   box.x_min = 0;
   box.y_min = 0;
   box.x_max = screen.dimx() - 1;
   box.y_max = screen.dimy() - 1;
 
-  // Step 2: Assign a dimension to the element.
-  node->SetBox(box);
-  screen.stencil = box;
+  Node::Status status;
+  node->Check(&status);
+  while (status.need_iteration && status.iteration < 20) {
+    // Step 1: Find what dimension this elements wants to be.
+    node->ComputeRequirement();
+
+    // Step 2: Assign a dimension to the element.
+    node->SetBox(box);
+
+    // Check if the element needs another iteration of the layout algorithm.
+    status.need_iteration = false;
+    status.iteration++;
+    node->Check(&status);
+  }
 
   // Step 3: Draw the element.
+  screen.stencil = box;
   node->Render(screen);
 
   // Step 4: Apply shaders
