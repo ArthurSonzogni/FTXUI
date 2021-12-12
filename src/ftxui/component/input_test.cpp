@@ -226,6 +226,151 @@ TEST(InputTest, Backspace) {
   EXPECT_EQ(option.cursor_position(), 0u);
 }
 
+TEST(InputTest, MouseClick) {
+  std::string content;
+  std::string placeholder;
+  auto option = InputOption();
+  option.cursor_position = 0;
+  auto input = Input(&content, &placeholder, &option);
+
+  input->OnEvent(Event::Character("a"));
+  input->OnEvent(Event::Character("b"));
+  input->OnEvent(Event::Character("c"));
+  input->OnEvent(Event::Character("d"));
+
+  EXPECT_EQ(option.cursor_position(), 4u);
+
+  auto render = [&] {
+    auto document = input->Render();
+    auto screen = Screen::Create(Dimension::Fixed(10), Dimension::Fixed(1));
+    Render(screen, document);
+  };
+  render();
+
+  Mouse mouse;
+  mouse.button = Mouse::Button::Left;
+  mouse.motion = Mouse::Motion::Pressed;
+  mouse.y = 0;
+  mouse.shift = false;
+  mouse.meta = false;
+  mouse.control = false;
+
+  mouse.x = 0;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 0u);
+
+  mouse.x = 2;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 2u);
+
+  mouse.x = 2;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 2u);
+
+  mouse.x = 1;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 1u);
+
+  mouse.x = 3;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 3u);
+
+  mouse.x = 4;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 4u);
+
+  mouse.x = 5;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 4u);
+}
+
+TEST(InputTest, MouseClickComplex) {
+  std::string content;
+  std::string placeholder;
+  auto option = InputOption();
+  option.cursor_position = 0;
+  auto input = Input(&content, &placeholder, &option);
+
+  input->OnEvent(Event::Character("测"));
+  input->OnEvent(Event::Character("试"));
+  input->OnEvent(Event::Character("a⃒"));
+  input->OnEvent(Event::Character("ā"));
+
+  EXPECT_EQ(option.cursor_position(), 4u);
+
+  auto render = [&] {
+    auto document = input->Render();
+    auto screen = Screen::Create(Dimension::Fixed(10), Dimension::Fixed(1));
+    Render(screen, document);
+  };
+  render();
+
+  Mouse mouse;
+  mouse.button = Mouse::Button::Left;
+  mouse.motion = Mouse::Motion::Pressed;
+  mouse.y = 0;
+  mouse.shift = false;
+  mouse.meta = false;
+  mouse.control = false;
+
+  mouse.x = 0;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 0u);
+
+  mouse.x = 0;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 0u);
+
+  mouse.x = 1;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 0u);
+
+  mouse.x = 1;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 0u);
+
+  mouse.x = 2;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 1u);
+
+  mouse.x = 2;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 1u);
+
+  mouse.x = 1;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 0u);
+
+  mouse.x = 4;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 2u);
+
+  mouse.x = 5;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 3u);
+
+  mouse.x = 6;
+  input->OnEvent(Event::Mouse("", mouse));
+  render();
+  EXPECT_EQ(option.cursor_position(), 4u);
+}
+
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.

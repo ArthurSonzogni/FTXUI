@@ -288,6 +288,98 @@ std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
   return out;
 }
 
+int GlyphPosition(const std::string& input, size_t glyph_to_skip, size_t start) {
+  if (glyph_to_skip <= 0)
+    return 0;
+  size_t end = 0;
+  while (start < input.size()) {
+    uint32_t codepoint;
+    bool eaten = EatCodePoint(input, start, &end, &codepoint);
+
+    // Ignore invalid, control characters and combining characters.
+    if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
+      start = end;
+      continue;
+    }
+
+    // We eat the beginning of the next glyph. If we are eating the one
+    // requested, return its start position immediately.
+    if (glyph_to_skip == 0)
+      return start;
+
+    // Otherwise, skip this glyph and iterate:
+    glyph_to_skip--;
+    start = end;
+  }
+  return input.size();
+}
+
+std::vector<int> CellToGlyphIndex(const std::string& input) {
+  int x = -1;
+  std::vector<int> out;
+  out.reserve(input.size());
+  size_t start = 0;
+  size_t end = 0;
+  while (start < input.size()) {
+    uint32_t codepoint;
+    bool eaten = EatCodePoint(input, start, &end, &codepoint);
+    start = end;
+
+    // Ignore invalid / control characters.
+    if (!eaten || IsControl(codepoint))
+      continue;
+
+    // Combining characters are put with the previous glyph they are modifying.
+    if (IsCombining(codepoint)) {
+      if (x == -1) {
+        ++x;
+        out.push_back(x);
+      }
+      continue;
+    }
+
+    // Fullwidth characters take two cells. The second is made of the empty
+    // string to reserve the space the first is taking.
+    if (IsFullWidth(codepoint)) {
+      ++x;
+      out.push_back(x);
+      out.push_back(x);
+      continue;
+    }
+
+    // Normal characters:
+    ++x;
+    out.push_back(x);
+  }
+  return out;
+}
+
+int GlyphCount(const std::string& input) {
+  int size = 0;
+  size_t start = 0;
+  size_t end = 0;
+  while (start < input.size()) {
+    uint32_t codepoint;
+    bool eaten = EatCodePoint(input, start, &end, &codepoint);
+    start = end;
+
+    // Ignore invalid characters:
+    if (!eaten || IsControl(codepoint))
+      continue;
+
+    // Ignore combining characters, except when they don't have a preceding to
+    // combine with.
+    if (IsCombining(codepoint)) {
+      if (size == 0)
+        size++;
+      continue;
+    }
+
+    size++;
+  }
+  return size;
+}
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable : 4996)  // codecvt_utf8_utf16 is deprecated

@@ -20,12 +20,22 @@
 
 namespace ftxui {
 
+namespace {
+
+std::string PasswordField(int size) {
+  std::string out;
+  out.reserve(2 * size);
+  while (size--)
+    out += "•";
+  return out;
+}
+
 // An input box. The user can type text into it.
-class WideInputBase : public ComponentBase {
+class InputBase : public ComponentBase {
  public:
-  WideInputBase(WideStringRef content,
-                ConstStringRef placeholder,
-                Ref<InputOption> option)
+  InputBase(StringRef content,
+            ConstStringRef placeholder,
+            Ref<InputOption> option)
       : content_(content), placeholder_(placeholder), option_(option) {}
 
   int cursor_position_internal_ = 0;
@@ -38,22 +48,23 @@ class WideInputBase : public ComponentBase {
 
   // Component implementation:
   Element Render() override {
-    std::wstring password_content;
+    std::string password_content;
     if (option_->password())
-      password_content = std::wstring(content_->size(), U'•');
-    std::wstring& content = option_->password() ? password_content : *content_;
+      password_content = PasswordField(content_->size());
+    std::string& content = option_->password() ? password_content : *content_;
 
-    cursor_position() =
-        std::max(0, std::min<int>(content.size(), cursor_position()));
-    auto main_decorator = flex | size(HEIGHT, EQUAL, 1);
+    int size = GlyphCount(content);
+
+    cursor_position() = std::max(0, std::min<int>(size, cursor_position()));
+    auto main_decorator = flex | ftxui::size(HEIGHT, EQUAL, 1);
     bool is_focused = Focused();
 
     // placeholder.
-    if (content.size() == 0) {
+    if (size == 0) {
       bool hovered = hovered_;
       Decorator decorator = dim | main_decorator;
       if (is_focused)
-        decorator = decorator | focus | bold;
+        decorator = decorator | focus | inverted;
       if (hovered || is_focused)
         decorator = decorator | inverted;
       return text(*placeholder_) | decorator | reflect(box_);
@@ -67,22 +78,22 @@ class WideInputBase : public ComponentBase {
         return text(content) | main_decorator | reflect(box_);
     }
 
-    std::wstring part_before_cursor = content.substr(0, cursor_position());
-    std::wstring part_at_cursor = cursor_position() < (int)content.size()
-                                      ? content.substr(cursor_position(), 1)
-                                      : L" ";
-    std::wstring part_after_cursor = cursor_position() < (int)content.size() - 1
-                                         ? content.substr(cursor_position() + 1)
-                                         : L"";
+    int index_before_cursor = GlyphPosition(content, cursor_position());
+    int index_after_cursor = GlyphPosition(content, 1, index_before_cursor);
+    std::string part_before_cursor = content.substr(0, index_before_cursor);
+    std::string part_at_cursor = " ";
+    if (cursor_position() < size) {
+      part_at_cursor = content.substr(index_before_cursor,
+                                      index_after_cursor - index_before_cursor);
+    }
+    std::string part_after_cursor = content.substr(index_after_cursor);
     auto focused = (is_focused || hovered_) ? focus : select;
-    // clang-format off
-  return
-    hbox(
-      text(part_before_cursor),
-      text(part_at_cursor) | underlined | focused | reflect(cursor_box_),
-      text(part_after_cursor)
-    ) | flex | inverted | frame | bold |main_decorator | reflect(box_);
-    // clang-format on
+    return hbox({
+               text(part_before_cursor),
+               text(part_at_cursor) | focused | inverted | reflect(cursor_box_),
+               text(part_after_cursor),
+           }) |
+           flex | frame | bold | main_decorator | reflect(box_);
   }
 
   bool OnEvent(Event event) override {
@@ -92,13 +103,15 @@ class WideInputBase : public ComponentBase {
     if (event.is_mouse())
       return OnMouseEvent(event);
 
-    std::wstring c;
+    std::string c;
 
     // Backspace.
     if (event == Event::Backspace) {
       if (cursor_position() == 0)
         return false;
-      content_->erase(cursor_position() - 1, 1);
+      size_t start = GlyphPosition(*content_, cursor_position() - 1);
+      size_t end = GlyphPosition(*content_, cursor_position());
+      content_->erase(start, end - start);
       cursor_position()--;
       option_->on_change();
       return true;
@@ -108,7 +121,9 @@ class WideInputBase : public ComponentBase {
     if (event == Event::Delete) {
       if (cursor_position() == int(content_->size()))
         return false;
-      content_->erase(cursor_position(), 1);
+      size_t start = GlyphPosition(*content_, cursor_position());
+      size_t end = GlyphPosition(*content_, cursor_position() + 1);
+      content_->erase(start, end - start);
       option_->on_change();
       return true;
     }
@@ -140,13 +155,14 @@ class WideInputBase : public ComponentBase {
     }
 
     if (event == Event::End) {
-      cursor_position() = (int)content_->size();
+      cursor_position() = GlyphCount(*content_);
       return true;
     }
 
     // Content
     if (event.is_character()) {
-      content_->insert(cursor_position(), 1, to_wstring(event.character())[0]);
+      size_t start = GlyphPosition(*content_, cursor_position());
+      content_->insert(start, event.character());
       cursor_position()++;
       option_->on_change();
       return true;
@@ -167,12 +183,27 @@ class WideInputBase : public ComponentBase {
     }
 
     TakeFocus();
-    int new_cursor_position =
-        cursor_position() + event.mouse().x - cursor_box_.x_min;
-    new_cursor_position =
-        std::max(0, std::min<int>(content_->size(), new_cursor_position));
-    if (cursor_position() != new_cursor_position) {
-      cursor_position() = new_cursor_position;
+    if (content_->size() == 0)
+      return true;
+
+    auto mapping = CellToGlyphIndex(*content_);
+    int original_glyph = cursor_position();
+    original_glyph = std::clamp(original_glyph, 0, int(mapping.size()));
+    int original_cell = 0;
+    for (size_t i = 0; i < mapping.size(); i++) {
+      if (mapping[i] == original_glyph) {
+        original_cell = i;
+        break;
+      }
+    }
+    if (mapping[original_cell] != original_glyph)
+      original_cell = mapping.size();
+    int target_cell = original_cell + event.mouse().x - cursor_box_.x_min;
+    int target_glyph = target_cell < (int)mapping.size() ? mapping[target_cell]
+                                                         : (int)mapping.size();
+    target_glyph = std::clamp(target_glyph, 0, GlyphCount(*content_));
+    if (cursor_position() != target_glyph) {
+      cursor_position() = target_glyph;
       option_->on_change();
     }
     return true;
@@ -181,7 +212,7 @@ class WideInputBase : public ComponentBase {
   bool Focusable() const final { return true; }
 
   bool hovered_ = false;
-  WideStringRef content_;
+  StringRef content_;
   ConstStringRef placeholder_;
 
   Box box_;
@@ -190,38 +221,36 @@ class WideInputBase : public ComponentBase {
 };
 
 // An input box. The user can type text into it.
-// For convenience, the std::string version of Input simply wrap a
-// WideInputBase.
-// TODO(arthursonzogni): Provide an implementation handling std::string natively
-// and adds better support for combining characters.
-class InputBase : public WideInputBase {
+// For convenience, the std::wstring version of Input simply wrap a
+// InputBase.
+class WideInputBase : public InputBase {
  public:
-  InputBase(StringRef content,
-            ConstStringRef placeholder,
-            Ref<InputOption> option)
-      : WideInputBase(&wrapped_content_,
-                      std::move(placeholder),
-                      std::move(option)),
+  WideInputBase(WideStringRef content,
+                ConstStringRef placeholder,
+                Ref<InputOption> option)
+      : InputBase(&wrapped_content_, std::move(placeholder), std::move(option)),
         content_(std::move(content)),
-        wrapped_content_(to_wstring(*content_)) {}
+        wrapped_content_(to_string(*content_)) {}
 
   Element Render() override {
-    wrapped_content_ = to_wstring(*content_);
-    return WideInputBase::Render();
+    wrapped_content_ = to_string(*content_);
+    return InputBase::Render();
   }
 
   bool OnEvent(Event event) override {
-    wrapped_content_ = to_wstring(*content_);
-    if (WideInputBase::OnEvent(event)) {
-      *content_ = to_string(wrapped_content_);
+    wrapped_content_ = to_string(*content_);
+    if (InputBase::OnEvent(event)) {
+      *content_ = to_wstring(wrapped_content_);
       return true;
     }
     return false;
   }
 
-  StringRef content_;
-  std::wstring wrapped_content_;
+  WideStringRef content_;
+  std::string wrapped_content_;
 };
+
+}  // namespace
 
 /// @brief An input box for editing text.
 /// @param content The editable content.
