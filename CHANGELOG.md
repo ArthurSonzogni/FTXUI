@@ -5,6 +5,8 @@ unreleased (development)
 ------------------------
 
 ### Features:
+
+#### DOM:
 - Support `flexbox` dom elements. This is build symmetrically to the HTML one.
   All the following attributes are supported: direction, wrap, justify-content,
   align-items, align-content, gap
@@ -16,12 +18,15 @@ unreleased (development)
   - `paragraphAlignJustify`
 - Add the helper elements based on `flexbox`: `hflow()`, `vflow()`.
 
+### Bug
+
+#### Component 
+- `Input` shouldn't take focus when hovered by the mouse.
+- Modifying `Input`'s during on_enter/on_change event is now working correctly.
+
 ### Breaking changes:
 - The behavior of `paragraph` has been modified. It now returns en Element,
-    instead of a list of elements.
-
-### Bug
-- Input shouldn't take focus when hovered by the mouse.
+  instead of a list of elements.
 
 0.11.1
 ------
