@@ -17,6 +17,13 @@ unreleased (development)
   - `paragraphAlignRight`
   - `paragraphAlignJustify`
 - Add the helper elements based on `flexbox`: `hflow()`, `vflow()`.
+- Add: `focusPositionRelative` and `focusPosition`
+
+### Bug
+
+#### Component 
+- `Input` shouldn't take focus when hovered by the mouse.
+- Modifying `Input`'s during on_enter/on_change event is now working correctly.
 
 ### Bug
 

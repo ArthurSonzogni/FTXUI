@@ -68,6 +68,8 @@ Decorator color(Color);
 Decorator bgcolor(Color);
 Element color(Color, Element);
 Element bgcolor(Color, Element);
+Decorator focusPosition(int x, int y);
+Decorator focusPositionRelative(float x, float y);
 
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.

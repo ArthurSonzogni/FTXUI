@@ -57,6 +57,7 @@ add_library(dom
   src/ftxui/dom/flexbox_config.cpp
   src/ftxui/dom/flexbox_helper.cpp
   src/ftxui/dom/flexbox_helper.hpp
+  src/ftxui/dom/focus.cpp
   src/ftxui/dom/frame.cpp
   src/ftxui/dom/gauge.cpp
   src/ftxui/dom/graph.cpp
