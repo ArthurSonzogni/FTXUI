@@ -4,12 +4,14 @@
 #include <functional>
 #include <memory>
 
+#include "ftxui/dom/canvas.hpp"
 #include "ftxui/dom/flexbox_config.hpp"
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/terminal.hpp"
+#include "ftxui/util/ref.hpp"
 
 namespace ftxui {
 class Node;
@@ -57,6 +59,7 @@ Element paragraphAlignCenter(std::string text);
 Element paragraphAlignJustify(std::string text);
 Element graph(GraphFunction);
 Element emptyElement();
+Element ElementFrom(ConstRef<Canvas>);
 
 // -- Decorator ---
 Element bold(Element);

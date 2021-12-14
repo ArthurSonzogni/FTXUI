@@ -37,8 +37,8 @@ int main(int argc, const char* argv[]) {
   float focus_x = 0.0f;
   float focus_y = 0.0f;
 
-  auto slider_x = Slider("x", &focus_x, 0.f, 1.f, 0.05f);
-  auto slider_y = Slider("y", &focus_y, 0.f, 1.f, 0.05f);
+  auto slider_x = Slider("x", &focus_x, 0.f, 1.f, 0.01f);
+  auto slider_y = Slider("y", &focus_y, 0.f, 1.f, 0.01f);
 
   auto renderer = Renderer(
       Container::Vertical({

@@ -7,6 +7,8 @@ unreleased (development)
 ### Features:
 
 #### DOM:
+- Add the `Canvas` class and `ElementFrom('canvas')` function. Together users of
+  the library can draw using braille and block characters.
 - Support `flexbox` dom elements. This is build symmetrically to the HTML one.
   All the following attributes are supported: direction, wrap, justify-content,
   align-items, align-content, gap
