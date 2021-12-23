@@ -71,7 +71,10 @@
       postRun: [],
       onRuntimeInitialized: () => {},
     };
-    document.querySelector("#example_script").src = example + '.js';
+
+    const words = example.split('/')
+    words[1] = "ftxui_example_" + words[1] + ".js"
+    document.querySelector("#example_script").src = words.join('/');
   </script>
 
   <style>

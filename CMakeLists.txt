@@ -37,6 +37,7 @@ add_library(screen
 )
 
 add_library(dom
+  include/ftxui/dom/canvas.hpp
   include/ftxui/dom/elements.hpp
   include/ftxui/dom/flexbox_config.hpp
   include/ftxui/dom/node.hpp
@@ -47,6 +48,7 @@ add_library(dom
   src/ftxui/dom/border.cpp
   src/ftxui/dom/box_helper.cpp
   src/ftxui/dom/box_helper.hpp
+  src/ftxui/dom/canvas.cpp
   src/ftxui/dom/clear_under.cpp
   src/ftxui/dom/color.cpp
   src/ftxui/dom/composite_decorator.cpp

@@ -406,8 +406,7 @@ int main(int argc, const char* argv[]) {
                    make_box(6, 3),
                }),
            }) |
-           // vscroll_indicator | yflex;
-           yflex | vscroll_indicator;
+           vscroll_indicator | yframe | flex;
   });
 
   auto paragraph_renderer_right = Renderer([] {
