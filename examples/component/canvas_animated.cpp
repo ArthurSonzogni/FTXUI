@@ -22,7 +22,7 @@ int main(int argc, const char* argv[]) {
     c.DrawPointLine(mouse_x, mouse_y, 80, 10, Color::Red);
     c.DrawPointLine(80, 10, 80, 40, Color::Blue);
     c.DrawPointLine(80, 40, mouse_x, mouse_y, Color::Green);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // A triangle following the mouse, using block characters.
@@ -32,7 +32,7 @@ int main(int argc, const char* argv[]) {
     c.DrawBlockLine(mouse_x, mouse_y, 80, 10, Color::Red);
     c.DrawBlockLine(80, 10, 80, 40, Color::Blue);
     c.DrawBlockLine(80, 40, mouse_x, mouse_y, Color::Green);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // A circle following the mouse, using braille characters.
@@ -40,7 +40,7 @@ int main(int argc, const char* argv[]) {
     auto c = Canvas(100, 100);
     c.DrawText(0,0, "A circle (braille)");
     c.DrawPointCircle(mouse_x, mouse_y, 30);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // A circle following the mouse, using block characters.
@@ -48,7 +48,7 @@ int main(int argc, const char* argv[]) {
     auto c = Canvas(100, 100);
     c.DrawText(0,0, "A circle (block)");
     c.DrawBlockCircle(mouse_x, mouse_y, 30);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // A filled circle following the mouse, using braille characters.
@@ -56,7 +56,7 @@ int main(int argc, const char* argv[]) {
     auto c = Canvas(100, 100);
     c.DrawText(0,0, "A circle filled (braille)");
     c.DrawPointCircleFilled(mouse_x, mouse_y, 30);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // A filled circle following the mouse, using block characters.
@@ -64,7 +64,7 @@ int main(int argc, const char* argv[]) {
     auto c = Canvas(100, 100);
     c.DrawText(0,0, "A circle filled (block)");
     c.DrawBlockCircleFilled(mouse_x, mouse_y, 30);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // An ellipse following the mouse, using braille characters.
@@ -72,7 +72,7 @@ int main(int argc, const char* argv[]) {
     auto c = Canvas(100, 100);
     c.DrawText(0,0, "An ellipse (braille)");
     c.DrawPointEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // An ellipse following the mouse, using block characters.
@@ -80,7 +80,7 @@ int main(int argc, const char* argv[]) {
     auto c = Canvas(100, 100);
     c.DrawText(0,0, "An ellipse (block)");
     c.DrawBlockEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // An ellipse following the mouse filled, using braille characters.
@@ -89,7 +89,7 @@ int main(int argc, const char* argv[]) {
     c.DrawText(0,0, "A filled ellipse (braille)");
     c.DrawPointEllipseFilled(mouse_x / 2, mouse_y / 2, mouse_x / 2,
                               mouse_y / 2);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // An ellipse following the mouse filled, using block characters.
@@ -99,7 +99,7 @@ int main(int argc, const char* argv[]) {
     c.DrawBlockEllipseFilled(mouse_x / 2, mouse_y / 2, mouse_x / 2,
                               mouse_y / 2);
     c.DrawBlockEllipse(mouse_x / 2, mouse_y / 2, mouse_x / 2, mouse_y / 2);
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   // A text following the mouse
@@ -112,7 +112,7 @@ int main(int argc, const char* argv[]) {
                  p.underlined = true;
                  p.bold = true;
                });
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   auto renderer_plot_1 = Renderer([&] {
@@ -128,7 +128,7 @@ int main(int argc, const char* argv[]) {
     for (int x = 1; x < 99; x++)
       c.DrawPointLine(x, ys[x], x + 1, ys[x + 1]);
 
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   auto renderer_plot_2 = Renderer([&] {
@@ -145,7 +145,7 @@ int main(int argc, const char* argv[]) {
       c.DrawPointLine(x, 50+ys[x], x, 50-ys[x], Color::Red);
     }
 
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
   auto renderer_plot_3 = Renderer([&] {
@@ -180,7 +180,7 @@ int main(int argc, const char* argv[]) {
       }
     }
 
-    return ElementFrom(std::move(c));
+    return canvas(std::move(c));
   });
 
 
