@@ -59,7 +59,9 @@ Element paragraphAlignCenter(std::string text);
 Element paragraphAlignJustify(std::string text);
 Element graph(GraphFunction);
 Element emptyElement();
-Element ElementFrom(ConstRef<Canvas>);
+Element canvas(ConstRef<Canvas>);
+Element canvas(int width, int height, std::function<void(Canvas&)>);
+Element canvas(std::function<void(Canvas&)>);
 
 // -- Decorator ---
 Element bold(Element);

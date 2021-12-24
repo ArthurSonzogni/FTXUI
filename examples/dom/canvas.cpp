@@ -12,30 +12,30 @@
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
 
-  auto canvas = Canvas(100, 100);
+  auto c = Canvas(100, 100);
 
-  canvas.DrawText(0, 0, "This is a canvas", [](Pixel& p) -> void {
+  c.DrawText(0, 0, "This is a canvas", [](Pixel& p) {
     p.foreground_color = Color::Red;
     p.underlined = true;
   });
 
   // Triangle:
-  canvas.DrawPointLine(10, 10, 80, 10, Color::Red);
-  canvas.DrawPointLine(80, 10, 80, 40, Color::Blue);
-  canvas.DrawPointLine(80, 40, 10, 10, Color::Green);
+  c.DrawPointLine(10, 10, 80, 10, Color::Red);
+  c.DrawPointLine(80, 10, 80, 40, Color::Blue);
+  c.DrawPointLine(80, 40, 10, 10, Color::Green);
 
   // Circle, not filled and filled:
-  canvas.DrawPointCircle(30, 50, 20);
-  canvas.DrawPointCircleFilled(40, 40, 10);
+  c.DrawPointCircle(30, 50, 20);
+  c.DrawPointCircleFilled(40, 40, 10);
 
   // Plot a function:
   std::vector<int> ys(100);
   for (int x = 0; x < 100; x++)
     ys[x] = 80 + 20 * cos(x * 0.2);
   for (int x = 0; x < 99; x++) 
-    canvas.DrawPointLine(x, ys[x], x + 1, ys[x + 1], Color::Red);
+    c.DrawPointLine(x, ys[x], x + 1, ys[x + 1], Color::Red);
 
-  auto document = ElementFrom(&canvas) | border;
+  auto document = canvas(&c) | border;
 
   auto screen = Screen::Create(Dimension::Fit(document));
   Render(screen, document);

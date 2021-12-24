@@ -85,7 +85,7 @@ void Canvas::DrawPoint(int x, int y, bool value, const Stylizer& style) {
 }
 
 void Canvas::DrawPointOn(int x, int y) {
-  if (!IsIn(x,y))
+  if (!IsIn(x, y))
     return;
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
@@ -98,7 +98,7 @@ void Canvas::DrawPointOn(int x, int y) {
 }
 
 void Canvas::DrawPointOff(int x, int y) {
-  if (!IsIn(x,y))
+  if (!IsIn(x, y))
     return;
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
@@ -111,7 +111,7 @@ void Canvas::DrawPointOff(int x, int y) {
 }
 
 void Canvas::DrawPointToggle(int x, int y) {
-  if (!IsIn(x,y))
+  if (!IsIn(x, y))
     return;
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
@@ -203,19 +203,19 @@ void Canvas::DrawPointEllipse(int x1, int y1, int r1, int r2) {
 }
 
 void Canvas::DrawPointEllipse(int x1,
-                               int y1,
-                               int r1,
-                               int r2,
-                               const Color& color) {
+                              int y1,
+                              int r1,
+                              int r2,
+                              const Color& color) {
   DrawPointEllipse(x1, y1, r1, r2,
-                    [color](Pixel& p) { p.foreground_color = color; });
+                   [color](Pixel& p) { p.foreground_color = color; });
 }
 
 void Canvas::DrawPointEllipse(int x1,
-                               int y1,
-                               int r1,
-                               int r2,
-                               const Stylizer& s) {
+                              int y1,
+                              int r1,
+                              int r2,
+                              const Stylizer& s) {
   int x = -r1;
   int y = 0;
   int e2 = r2;
@@ -250,19 +250,19 @@ void Canvas::DrawPointEllipseFilled(int x1, int y1, int r1, int r2) {
 }
 
 void Canvas::DrawPointEllipseFilled(int x1,
-                                     int y1,
-                                     int r1,
-                                     int r2,
-                                     const Color& color) {
+                                    int y1,
+                                    int r1,
+                                    int r2,
+                                    const Color& color) {
   DrawPointEllipseFilled(x1, y1, r1, r2,
-                          [color](Pixel& p) { p.foreground_color = color; });
+                         [color](Pixel& p) { p.foreground_color = color; });
 }
 
 void Canvas::DrawPointEllipseFilled(int x1,
-                                     int y1,
-                                     int r1,
-                                     int r2,
-                                     const Stylizer& s) {
+                                    int y1,
+                                    int r1,
+                                    int r2,
+                                    const Stylizer& s) {
   int x = -r1;
   int y = 0;
   int e2 = r2;
@@ -310,7 +310,7 @@ void Canvas::DrawBlock(int x, int y, bool value, const Stylizer& style) {
 }
 
 void Canvas::DrawBlockOn(int x, int y) {
-  if (!IsIn(x,y))
+  if (!IsIn(x, y))
     return;
   y /= 2;
   Cell& cell = storage_[XY{x / 2, y / 2}];
@@ -326,7 +326,7 @@ void Canvas::DrawBlockOn(int x, int y) {
 }
 
 void Canvas::DrawBlockOff(int x, int y) {
-  if (!IsIn(x,y))
+  if (!IsIn(x, y))
     return;
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
@@ -342,7 +342,7 @@ void Canvas::DrawBlockOff(int x, int y) {
 }
 
 void Canvas::DrawBlockToggle(int x, int y) {
-  if (!IsIn(x,y))
+  if (!IsIn(x, y))
     return;
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
@@ -440,19 +440,19 @@ void Canvas::DrawBlockEllipse(int x1, int y1, int r1, int r2) {
 }
 
 void Canvas::DrawBlockEllipse(int x1,
-                               int y1,
-                               int r1,
-                               int r2,
-                               const Color& color) {
+                              int y1,
+                              int r1,
+                              int r2,
+                              const Color& color) {
   DrawBlockEllipse(x1, y1, r1, r2,
-                    [color](Pixel& p) { p.foreground_color = color; });
+                   [color](Pixel& p) { p.foreground_color = color; });
 }
 
 void Canvas::DrawBlockEllipse(int x1,
-                               int y1,
-                               int r1,
-                               int r2,
-                               const Stylizer& s) {
+                              int y1,
+                              int r1,
+                              int r2,
+                              const Stylizer& s) {
   y1 /= 2;
   r2 /= 2;
   int x = -r1;
@@ -489,19 +489,19 @@ void Canvas::DrawBlockEllipseFilled(int x1, int y1, int r1, int r2) {
 }
 
 void Canvas::DrawBlockEllipseFilled(int x1,
-                                     int y1,
-                                     int r1,
-                                     int r2,
-                                     const Color& color) {
+                                    int y1,
+                                    int r1,
+                                    int r2,
+                                    const Color& color) {
   DrawBlockEllipseFilled(x1, y1, r1, r2,
-                          [color](Pixel& p) { p.foreground_color = color; });
+                         [color](Pixel& p) { p.foreground_color = color; });
 }
 
 void Canvas::DrawBlockEllipseFilled(int x1,
-                                     int y1,
-                                     int r1,
-                                     int r2,
-                                     const Stylizer& s) {
+                                    int y1,
+                                    int r1,
+                                    int r2,
+                                    const Stylizer& s) {
   y1 /= 2;
   r2 /= 2;
   int x = -r1;
@@ -512,7 +512,7 @@ void Canvas::DrawBlockEllipseFilled(int x1,
   int err = dx + dy;
 
   do {
-    for(int xx = x1+x; xx <= x1-x; ++xx) {
+    for (int xx = x1 + x; xx <= x1 - x; ++xx) {
       DrawBlock(xx, 2 * (y1 + y), true, s);
       DrawBlock(xx, 2 * (y1 - y), true, s);
     }
@@ -528,7 +528,7 @@ void Canvas::DrawBlockEllipseFilled(int x1,
   } while (x <= 0);
 
   while (y++ < r2) {
-    for(int yy = y1+y; yy <= y1-y; ++yy) {
+    for (int yy = y1 + y; yy <= y1 - y; ++yy) {
       DrawBlock(x1, 2 * yy, true, s);
     }
   }
@@ -567,29 +567,71 @@ void Canvas::Style(int x, int y, const Stylizer& style) {
     style(storage_[XY{x / 2, y / 4}].content);
 }
 
-Element ElementFrom(ConstRef<Canvas> canvas) {
-  class Impl : public Node {
+namespace {
+
+class CanvasNodeBase : public Node {
+ public:
+  CanvasNodeBase() {}
+
+  void Render(Screen& screen) override {
+    const Canvas& c = canvas();
+    int y_max = std::min(c.width() * 2, box_.y_max - box_.y_min + 1);
+    int x_max = std::min(c.height() * 4, box_.x_max - box_.x_min + 1);
+    for (int y = 0; y < y_max; ++y) {
+      for (int x = 0; x < x_max; ++x) {
+        screen.PixelAt(box_.x_min + x, box_.y_min + y) = c.GetPixel(x * 2, y * 4);
+      }
+    }
+  }
+
+  virtual const Canvas& canvas() = 0;
+};
+
+}  // namespace
+
+Element canvas(ConstRef<Canvas> canvas) {
+  class Impl : public CanvasNodeBase {
    public:
     Impl(ConstRef<Canvas> canvas) : canvas_(canvas) {
       requirement_.min_x = (canvas_->width() + 1) / 2;
       requirement_.min_y = (canvas_->height() + 3) / 4;
     }
-
-    void Render(Screen& screen) override {
-      int y_max = std::min(requirement_.min_y, box_.y_max - box_.y_min + 1);
-      int x_max = std::min(requirement_.min_x, box_.x_max - box_.x_min + 1);
-      for (int y = 0; y < y_max; ++y) {
-        for (int x = 0; x < x_max; ++x) {
-          screen.PixelAt(box_.x_min + x, box_.y_min + y) =
-              canvas_->GetPixel(x * 2, y * 4);
-        }
-      }
-    }
-
-   private:
+    const Canvas& canvas() final { return *canvas_; }
     ConstRef<Canvas> canvas_;
   };
   return std::make_shared<Impl>(std::move(canvas));
+}
+
+Element canvas(int width, int height, std::function<void(Canvas&)> fn) {
+  class Impl : public CanvasNodeBase {
+   public:
+    Impl(int width, int height, std::function<void(Canvas&)> fn)
+        : width_(width), height_(height), fn_(std::move(fn)) {}
+
+    void ComputeRequirement() final {
+      requirement_.min_x = (width_ + 1) / 2;
+      requirement_.min_y = (height_ + 3) / 4;
+    }
+
+    void Render(Screen& screen) final {
+      int width = (box_.y_max - box_.y_min + 1) * 2;
+      int height = (box_.x_max - box_.x_min + 1) * 4;
+      canvas_ = Canvas(width, height);
+      fn_(canvas_);
+      CanvasNodeBase::Render(screen);
+    }
+
+    const Canvas& canvas() final { return canvas_; }
+    Canvas canvas_;
+    int width_;
+    int height_;
+    std::function<void(Canvas&)> fn_;
+  };
+  return std::make_shared<Impl>(width, height, std::move(fn));
+}
+
+Element canvas(std::function<void(Canvas&)> fn) {
+  return canvas(12, 12, std::move(fn));
 }
 
 }  // namespace ftxui
