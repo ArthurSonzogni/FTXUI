@@ -60,22 +60,42 @@ const std::map<std::string, uint8_t> g_map_block_inversed = {
 
 }  // namespace
 
+/// @brief Constructor.
+/// @param width the width of the canvas. A cell is a 2x8 braille dot.
+/// @param height the height of the canvas. A cell is a 2x8 braille dot.
 Canvas::Canvas(int width, int height)
     : width_(width), height_(height), storage_(width_ * height_ / 8) {}
 
+/// @brief Get the content of a cell.
+/// @param x the x coordinate of the cell.
+/// @param y the y coordinate of the cell.
 Pixel Canvas::GetPixel(int x, int y) const {
-  auto it = storage_.find(XY{x / 2, y / 4});
+  auto it = storage_.find(XY{x, y});
   return (it == storage_.end()) ? Pixel{} : it->second.content;
 }
 
+/// @brief Draw a braille dot.
+/// @param x the x coordinate of the dot.
+/// @param y the y coordinate of the dot.
+/// @param value whether the dot is filled or not.
 void Canvas::DrawPoint(int x, int y, bool value) {
   DrawPoint(x, y, value, [](Pixel&) {});
 }
 
+/// @brief Draw a braille dot.
+/// @param x the x coordinate of the dot.
+/// @param y the y coordinate of the dot.
+/// @param value whether the dot is filled or not.
+/// @param color the color of the dot.
 void Canvas::DrawPoint(int x, int y, bool value, const Color& color) {
   DrawPoint(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw a braille dot.
+/// @param x the x coordinate of the dot.
+/// @param y the y coordinate of the dot.
+/// @param value whether the dot is filled or not.
+/// @param style the style of the cell.
 void Canvas::DrawPoint(int x, int y, bool value, const Stylizer& style) {
   Style(x, y, style);
   if (value)
@@ -84,6 +104,9 @@ void Canvas::DrawPoint(int x, int y, bool value, const Stylizer& style) {
     DrawPointOff(x, y);
 }
 
+/// @brief Draw a braille dot.
+/// @param x the x coordinate of the dot.
+/// @param y the y coordinate of the dot.
 void Canvas::DrawPointOn(int x, int y) {
   if (!IsIn(x, y))
     return;
@@ -97,6 +120,9 @@ void Canvas::DrawPointOn(int x, int y) {
   cell.content.character[2] |= g_map_braille[x % 2][y % 4][1];
 }
 
+/// @brief Erase a braille dot.
+/// @param x the x coordinate of the dot.
+/// @param y the y coordinate of the dot.
 void Canvas::DrawPointOff(int x, int y) {
   if (!IsIn(x, y))
     return;
@@ -110,6 +136,10 @@ void Canvas::DrawPointOff(int x, int y) {
   cell.content.character[2] &= ~(g_map_braille[x % 2][y % 4][1]);
 }
 
+/// @brief Toggle a braille dot. A filled one will be erased, and the other will
+/// be drawn.
+/// @param x the x coordinate of the dot.
+/// @param y the y coordinate of the dot.
 void Canvas::DrawPointToggle(int x, int y) {
   if (!IsIn(x, y))
     return;
@@ -123,15 +153,32 @@ void Canvas::DrawPointToggle(int x, int y) {
   cell.content.character[2] ^= g_map_braille[x % 2][y % 4][1];
 }
 
+/// @brief Draw a line made of braille dots.
+/// @param x1 the x coordinate of the first dot.
+/// @param y1 the y coordinate of the first dot.
+/// @param x2 the x coordinate of the second dot.
+/// @param y2 the y coordinate of the second dot.
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2) {
   DrawPointLine(x1, y1, x2, y2, [](Pixel&) {});
 }
 
+/// @brief Draw a line made of braille dots.
+/// @param x1 the x coordinate of the first dot.
+/// @param y1 the y coordinate of the first dot.
+/// @param x2 the x coordinate of the second dot.
+/// @param y2 the y coordinate of the second dot.
+/// @param color the color of the line.
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2, const Color& color) {
   DrawPointLine(x1, y1, x2, y2,
                 [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw a line made of braille dots.
+/// @param x1 the x coordinate of the first dot.
+/// @param y1 the y coordinate of the first dot.o
+/// @param x2 the x coordinate of the second dot.
+/// @param y2 the y coordinate of the second dot.
+/// @param style the style of the line.
 void Canvas::DrawPointLine(int x1,
                            int y1,
                            int x2,
@@ -163,54 +210,99 @@ void Canvas::DrawPointLine(int x1,
   DrawPoint(x2, y2, true, style);
 }
 
-void Canvas::DrawPointCircle(int x1, int y1, int radius) {
-  DrawPointCircle(x1, y1, radius, [](Pixel&) {});
+/// @brief Draw a circle made of braille dots.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+void Canvas::DrawPointCircle(int x, int y, int radius) {
+  DrawPointCircle(x, y, radius, [](Pixel&) {});
 }
 
-void Canvas::DrawPointCircle(int x1, int y1, int radius, const Color& color) {
-  DrawPointCircle(x1, y1, radius,
+/// @brief Draw a circle made of braille dots.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+/// @param color the color of the circle.
+void Canvas::DrawPointCircle(int x, int y, int radius, const Color& color) {
+  DrawPointCircle(x, y, radius,
                   [color](Pixel& p) { p.foreground_color = color; });
 }
 
-void Canvas::DrawPointCircle(int x1,
-                             int y1,
+/// @brief Draw a circle made of braille dots.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+/// @param style the style of the circle.
+void Canvas::DrawPointCircle(int x,
+                             int y,
                              int radius,
                              const Stylizer& style) {
-  DrawPointEllipse(x1, y1, radius, radius, style);
+  DrawPointEllipse(x, y, radius, radius, style);
 }
 
-void Canvas::DrawPointCircleFilled(int x1, int y1, int radius) {
-  DrawPointCircleFilled(x1, y1, radius, [](Pixel&) {});
+/// @brief Draw a filled circle made of braille dots.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+void Canvas::DrawPointCircleFilled(int x, int y, int radius) {
+  DrawPointCircleFilled(x, y, radius, [](Pixel&) {});
 }
 
-void Canvas::DrawPointCircleFilled(int x1,
-                                   int y1,
+/// @brief Draw a filled circle made of braille dots.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+/// @param color the color of the circle.
+void Canvas::DrawPointCircleFilled(int x,
+                                   int y,
                                    int radius,
                                    const Color& color) {
-  DrawPointCircleFilled(x1, y1, radius,
+  DrawPointCircleFilled(x, y, radius,
                         [color](Pixel& p) { p.foreground_color = color; });
 }
 
-void Canvas::DrawPointCircleFilled(int x1,
-                                   int y1,
+/// @brief Draw a filled circle made of braille dots.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+/// @param style the style of the circle.
+void Canvas::DrawPointCircleFilled(int x,
+                                   int y,
                                    int radius,
                                    const Stylizer& style) {
-  DrawPointEllipseFilled(x1, y1, radius, radius, style);
+  DrawPointEllipseFilled(x, y, radius, radius, style);
 }
 
-void Canvas::DrawPointEllipse(int x1, int y1, int r1, int r2) {
-  DrawPointEllipse(x1, y1, r1, r2, [](Pixel&) {});
+/// @brief Draw an ellipse made of braille dots.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+void Canvas::DrawPointEllipse(int x, int y, int r1, int r2) {
+  DrawPointEllipse(x, y, r1, r2, [](Pixel&) {});
 }
 
-void Canvas::DrawPointEllipse(int x1,
-                              int y1,
+/// @brief Draw an ellipse made of braille dots.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+/// @param color the color of the ellipse.
+void Canvas::DrawPointEllipse(int x,
+                              int y,
                               int r1,
                               int r2,
                               const Color& color) {
-  DrawPointEllipse(x1, y1, r1, r2,
+  DrawPointEllipse(x, y, r1, r2,
                    [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw an ellipse made of braille dots.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+/// @param style the style of the ellipse.
 void Canvas::DrawPointEllipse(int x1,
                               int y1,
                               int r1,
@@ -245,10 +337,21 @@ void Canvas::DrawPointEllipse(int x1,
   }
 }
 
+/// @brief Draw a filled ellipse made of braille dots.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
 void Canvas::DrawPointEllipseFilled(int x1, int y1, int r1, int r2) {
   DrawPointEllipseFilled(x1, y1, r1, r2, [](Pixel&) {});
 }
 
+/// @brief Draw a filled ellipse made of braille dots.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+/// @param color the color of the ellipse.
 void Canvas::DrawPointEllipseFilled(int x1,
                                     int y1,
                                     int r1,
@@ -258,6 +361,12 @@ void Canvas::DrawPointEllipseFilled(int x1,
                          [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw a filled ellipse made of braille dots.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+/// @param style the style of the ellipse.
 void Canvas::DrawPointEllipseFilled(int x1,
                                     int y1,
                                     int r1,
@@ -293,14 +402,28 @@ void Canvas::DrawPointEllipseFilled(int x1,
   }
 }
 
+/// @brief Draw a block.
+/// @param x the x coordinate of the block.
+/// @param y the y coordinate of the block.
+/// @param value whether the block is filled or not.
 void Canvas::DrawBlock(int x, int y, bool value) {
   DrawBlock(x, y, value, [](Pixel&) {});
 }
 
+/// @brief Draw a block.
+/// @param x the x coordinate of the block.
+/// @param y the y coordinate of the block.
+/// @param value whether the block is filled or not.
+/// @param color the color of the block.
 void Canvas::DrawBlock(int x, int y, bool value, const Color& color) {
   DrawBlock(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw a block.
+/// @param x the x coordinate of the block.
+/// @param y the y coordinate of the block.
+/// @param value whether the block is filled or not.
+/// @param style the style of the block.
 void Canvas::DrawBlock(int x, int y, bool value, const Stylizer& style) {
   Style(x, y, style);
   if (value)
@@ -309,6 +432,9 @@ void Canvas::DrawBlock(int x, int y, bool value, const Stylizer& style) {
     DrawBlockOff(x, y);
 }
 
+/// @brief Draw a block.
+/// @param x the x coordinate of the block.
+/// @param y the y coordinate of the block.
 void Canvas::DrawBlockOn(int x, int y) {
   if (!IsIn(x, y))
     return;
@@ -325,6 +451,9 @@ void Canvas::DrawBlockOn(int x, int y) {
   cell.content.character = g_map_block[value];
 }
 
+/// @brief Erase a block.
+/// @param x the x coordinate of the block.
+/// @param y the y coordinate of the block.
 void Canvas::DrawBlockOff(int x, int y) {
   if (!IsIn(x, y))
     return;
@@ -341,6 +470,10 @@ void Canvas::DrawBlockOff(int x, int y) {
   cell.content.character = g_map_block[value];
 }
 
+/// @brief Toggle a block. If it is filled, it will be erased. If it is empty,
+/// it will be filled.
+/// @param x the x coordinate of the block.
+/// @param y the y coordinate of the block.
 void Canvas::DrawBlockToggle(int x, int y) {
   if (!IsIn(x, y))
     return;
@@ -357,15 +490,32 @@ void Canvas::DrawBlockToggle(int x, int y) {
   cell.content.character = g_map_block[value];
 }
 
+/// @brief Draw a line made of block characters.
+/// @param x1 the x coordinate of the first point of the line.
+/// @param y1 the y coordinate of the first point of the line.
+/// @param x2 the x coordinate of the second point of the line.
+/// @param y2 the y coordinate of the second point of the line.
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2) {
   DrawBlockLine(x1, y1, x2, y2, [](Pixel&) {});
 }
 
+/// @brief Draw a line made of block characters.
+/// @param x1 the x coordinate of the first point of the line.
+/// @param y1 the y coordinate of the first point of the line.
+/// @param x2 the x coordinate of the second point of the line.
+/// @param y2 the y coordinate of the second point of the line.
+/// @param color the color of the line.
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2, const Color& color) {
   DrawBlockLine(x1, y1, x2, y2,
                 [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw a line made of block characters.
+/// @param x1 the x coordinate of the first point of the line.
+/// @param y1 the y coordinate of the first point of the line.
+/// @param x2 the x coordinate of the second point of the line.
+/// @param y2 the y coordinate of the second point of the line.
+/// @param style the style of the line.
 void Canvas::DrawBlockLine(int x1,
                            int y1,
                            int x2,
@@ -400,54 +550,99 @@ void Canvas::DrawBlockLine(int x1,
   DrawBlock(x2, y2 * 2, true, style);
 }
 
-void Canvas::DrawBlockCircle(int x1, int y1, int radius) {
-  DrawBlockCircle(x1, y1, radius, [](Pixel&) {});
+/// @brief Draw a circle made of block characters.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+void Canvas::DrawBlockCircle(int x, int y, int radius) {
+  DrawBlockCircle(x, y, radius, [](Pixel&) {});
 }
 
-void Canvas::DrawBlockCircle(int x1, int y1, int radius, const Color& color) {
-  DrawBlockCircle(x1, y1, radius,
+/// @brief Draw a circle made of block characters.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+/// @param color the color of the circle.
+void Canvas::DrawBlockCircle(int x, int y, int radius, const Color& color) {
+  DrawBlockCircle(x, y, radius,
                   [color](Pixel& p) { p.foreground_color = color; });
 }
 
-void Canvas::DrawBlockCircle(int x1,
-                             int y1,
+/// @brief Draw a circle made of block characters.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+/// @param style the style of the circle.
+void Canvas::DrawBlockCircle(int x,
+                             int y,
                              int radius,
                              const Stylizer& style) {
-  DrawBlockEllipse(x1, y1, radius, radius, style);
+  DrawBlockEllipse(x, y, radius, radius, style);
 }
 
-void Canvas::DrawBlockCircleFilled(int x1, int y1, int radius) {
-  DrawBlockCircleFilled(x1, y1, radius, [](Pixel&) {});
+/// @brief Draw a filled circle made of block characters.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+void Canvas::DrawBlockCircleFilled(int x, int y, int radius) {
+  DrawBlockCircleFilled(x, y, radius, [](Pixel&) {});
 }
 
-void Canvas::DrawBlockCircleFilled(int x1,
-                                   int y1,
+/// @brief Draw a filled circle made of block characters.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+/// @param color the color of the circle.
+void Canvas::DrawBlockCircleFilled(int x,
+                                   int y,
                                    int radius,
                                    const Color& color) {
-  DrawBlockCircleFilled(x1, y1, radius,
+  DrawBlockCircleFilled(x, y, radius,
                         [color](Pixel& p) { p.foreground_color = color; });
 }
 
-void Canvas::DrawBlockCircleFilled(int x1,
-                                   int y1,
+/// @brief Draw a filled circle made of block characters.
+/// @param x the x coordinate of the center of the circle.
+/// @param y the y coordinate of the center of the circle.
+/// @param radius the radius of the circle.
+/// @param style the style of the circle.
+void Canvas::DrawBlockCircleFilled(int x,
+                                   int y,
                                    int radius,
                                    const Stylizer& s) {
-  DrawBlockEllipseFilled(x1, y1, radius, radius, s);
+  DrawBlockEllipseFilled(x, y, radius, radius, s);
 }
 
-void Canvas::DrawBlockEllipse(int x1, int y1, int r1, int r2) {
-  DrawBlockEllipse(x1, y1, r1, r2, [](Pixel&) {});
+/// @brief Draw an ellipse made of block characters.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+void Canvas::DrawBlockEllipse(int x, int y, int r1, int r2) {
+  DrawBlockEllipse(x, y, r1, r2, [](Pixel&) {});
 }
 
-void Canvas::DrawBlockEllipse(int x1,
-                              int y1,
+/// @brief Draw an ellipse made of block characters.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+/// @param color the color of the ellipse.
+void Canvas::DrawBlockEllipse(int x,
+                              int y,
                               int r1,
                               int r2,
                               const Color& color) {
-  DrawBlockEllipse(x1, y1, r1, r2,
+  DrawBlockEllipse(x, y, r1, r2,
                    [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw an ellipse made of block characters.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+/// @param style the style of the ellipse.
 void Canvas::DrawBlockEllipse(int x1,
                               int y1,
                               int r1,
@@ -484,19 +679,36 @@ void Canvas::DrawBlockEllipse(int x1,
   }
 }
 
-void Canvas::DrawBlockEllipseFilled(int x1, int y1, int r1, int r2) {
-  DrawBlockEllipseFilled(x1, y1, r1, r2, [](Pixel&) {});
+/// @brief Draw a filled ellipse made of block characters.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+void Canvas::DrawBlockEllipseFilled(int x, int y, int r1, int r2) {
+  DrawBlockEllipseFilled(x, y, r1, r2, [](Pixel&) {});
 }
 
-void Canvas::DrawBlockEllipseFilled(int x1,
-                                    int y1,
+/// @brief Draw a filled ellipse made of block characters.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+/// @param color the color of the ellipse.
+void Canvas::DrawBlockEllipseFilled(int x,
+                                    int y,
                                     int r1,
                                     int r2,
                                     const Color& color) {
-  DrawBlockEllipseFilled(x1, y1, r1, r2,
+  DrawBlockEllipseFilled(x, y, r1, r2,
                          [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw a filled ellipse made of block characters.
+/// @param x the x coordinate of the center of the ellipse.
+/// @param y the y coordinate of the center of the ellipse.
+/// @param r1 the radius of the ellipse along the x axis.
+/// @param r2 the radius of the ellipse along the y axis.
+/// @param style the style of the ellipse.
 void Canvas::DrawBlockEllipseFilled(int x1,
                                     int y1,
                                     int r1,
@@ -534,10 +746,19 @@ void Canvas::DrawBlockEllipseFilled(int x1,
   }
 }
 
+/// @brief Draw a piece of text.
+/// @param x the x coordinate of the text.
+/// @param y the y coordinate of the text.
+/// @param value the text to draw.
 void Canvas::DrawText(int x, int y, const std::string& value) {
   DrawText(x, y, value, [](Pixel&) {});
 }
 
+/// @brief Draw a piece of text.
+/// @param x the x coordinate of the text.
+/// @param y the y coordinate of the text.
+/// @param value the text to draw.
+/// @param color the color of the text.
 void Canvas::DrawText(int x,
                       int y,
                       const std::string& value,
@@ -545,23 +766,28 @@ void Canvas::DrawText(int x,
   DrawText(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
 }
 
+/// @brief Draw a piece of text.
+/// @param x the x coordinate of the text.
+/// @param y the y coordinate of the text.
+/// @param value the text to draw.
+/// @param style the style of the text.
 void Canvas::DrawText(int x,
                       int y,
                       const std::string& value,
                       const Stylizer& style) {
-  x /= 2;
-  y /= 4;
   for (const auto& it : Utf8ToGlyphs(value)) {
     if (!IsIn(x, y))
       continue;
-    Cell& cell = storage_[XY{x, y}];
+    Cell& cell = storage_[XY{x / 2, y / 4}];
     cell.type = CellType::kText;
     cell.content.character = it;
     style(cell.content);
-    x++;
+    x+=2;
   }
 }
 
+/// @brief Modify a pixel at a given location.
+/// @param style a function that modifies the pixel.
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y))
     style(storage_[XY{x / 2, y / 4}].content);
@@ -575,11 +801,11 @@ class CanvasNodeBase : public Node {
 
   void Render(Screen& screen) override {
     const Canvas& c = canvas();
-    int y_max = std::min(c.width() * 2, box_.y_max - box_.y_min + 1);
-    int x_max = std::min(c.height() * 4, box_.x_max - box_.x_min + 1);
+    int y_max = std::min(c.height() / 4, box_.y_max - box_.y_min + 1);
+    int x_max = std::min(c.width() / 2, box_.x_max - box_.x_min + 1);
     for (int y = 0; y < y_max; ++y) {
       for (int x = 0; x < x_max; ++x) {
-        screen.PixelAt(box_.x_min + x, box_.y_min + y) = c.GetPixel(x * 2, y * 4);
+        screen.PixelAt(box_.x_min + x, box_.y_min + y) = c.GetPixel(x, y);
       }
     }
   }
@@ -589,6 +815,7 @@ class CanvasNodeBase : public Node {
 
 }  // namespace
 
+/// @brief Produce an element from a Canvas, or a reference to a Canvas.
 Element canvas(ConstRef<Canvas> canvas) {
   class Impl : public CanvasNodeBase {
    public:
@@ -602,6 +829,10 @@ Element canvas(ConstRef<Canvas> canvas) {
   return std::make_shared<Impl>(std::move(canvas));
 }
 
+/// @brief Produce an element drawing a canvas of requested size.
+/// @param width the width of the canvas.
+/// @param height the height of the canvas.
+/// @param fn a function drawing the canvas.
 Element canvas(int width, int height, std::function<void(Canvas&)> fn) {
   class Impl : public CanvasNodeBase {
    public:
@@ -630,6 +861,8 @@ Element canvas(int width, int height, std::function<void(Canvas&)> fn) {
   return std::make_shared<Impl>(width, height, std::move(fn));
 }
 
+/// @brief Produce an element drawing a canvas.
+/// @param fn a function drawing the canvas.
 Element canvas(std::function<void(Canvas&)> fn) {
   return canvas(12, 12, std::move(fn));
 }
