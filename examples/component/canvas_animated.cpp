@@ -184,7 +184,7 @@ int main(int argc, const char* argv[]) {
   });
 
 
-  int selected_tab = 0;
+  int selected_tab = 12;
   auto tab = Container::Tab({
       renderer_line_braille,
       renderer_line_block,
