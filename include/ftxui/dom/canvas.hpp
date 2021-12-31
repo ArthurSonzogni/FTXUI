@@ -124,7 +124,7 @@ struct Canvas {
   };
 
   struct XYHash {
-    size_t operator()(const XY& xy) const { return xy.x * 1024 + xy.y; }
+    size_t operator()(const XY& xy) const { return static_cast<size_t>(xy.x * 1024 + xy.y); }
   };
 
   int width_ = 0;
