@@ -19,18 +19,22 @@
 namespace ftxui {
 
 #if defined(__EMSCRIPTEN__)
-static Dimensions fallback_size{140, 43};
-#elif defined(_WIN32)
-// The Microsoft default "cmd" returns errors above.
-static Dimensions fallback_size{80, 80};
-#else
-static Dimensions fallback_size{80, 25};
-#endif
-
+// This dimension was chosen arbitrarily to be able to display:
+// https://arthursonzogni.com/FTXUI/examples
+// This will have to be improved when someone has time to implement and need
+// it.
+static Dimensions fallback_size {140, 43};
 Dimensions Terminal::Size() {
-#if defined(__EMSCRIPTEN__)
   return fallback_size;
+}
+
 #elif defined(_WIN32)
+
+// The terminal size in VT100 was 80x24. It is still used nowadays by
+// default in many terminal emulator. That's a good choice for a fallback
+// value.
+static Dimensions fallback_size {80, 24};
+Dimensions Terminal::Size() {
   CONSOLE_SCREEN_BUFFER_INFO csbi;
 
   if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
@@ -39,16 +43,25 @@ Dimensions Terminal::Size() {
   }
 
   return fallback_size;
+}
 
 #else
+// The terminal size in VT100 was 80x24. It is still used nowadays by
+// default in many terminal emulator. That's a good choice for a fallback
+// value.
+static Dimensions fallback_size {80, 24};
+Dimensions Terminal::Size() {
   winsize w{};
-  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-  if (w.ws_col == 0 || w.ws_row == 0) {
+  const int status = ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+  // The ioctl return value result should be checked. Some operating systems
+  // don't support TIOCGWINSZ.
+  if (w.ws_col == 0 || w.ws_row == 0 || status < 0) {
     return fallback_size;
   }
   return Dimensions{w.ws_col, w.ws_row};
-#endif
 }
+
+#endif
 
 /// @brief Override terminal size in case auto-detection fails
 /// @param fallbackSize Terminal dimensions to fallback to
