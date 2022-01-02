@@ -54,6 +54,7 @@ Element vscroll_indicator(Element child) {
         bool down = (2 * y - 0 >= start_y) && (2 * y - 0 <= start_y + size);
 
         const char* c = up ? (down ? "┃" : "╹") : (down ? "╻" : " ");
+        screen.PixelAt(x, y) = Pixel();
         screen.PixelAt(x, y).character = c;
         screen.PixelAt(x, y).inverted = true;
       }
