@@ -9,10 +9,10 @@
 
 namespace ftxui {
 
-Component Maybe(Component child, bool* show) {
+Component Maybe(Component child, const bool* show) {
   class Impl : public ComponentBase {
    public:
-    Impl(bool* show) : show_(show) {}
+    Impl(const bool* show) : show_(show) {}
 
    private:
     Element Render() override {
@@ -25,7 +25,7 @@ Component Maybe(Component child, bool* show) {
       return *show_ && ComponentBase::OnEvent(event);
     }
 
-    bool* show_;
+    const bool* show_;
   };
 
   auto maybe = Make<Impl>(show);
