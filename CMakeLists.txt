@@ -92,6 +92,7 @@ add_library(component
   src/ftxui/component/button.cpp
   src/ftxui/component/catch_event.cpp
   src/ftxui/component/checkbox.cpp
+  src/ftxui/component/collapsible.cpp
   src/ftxui/component/component.cpp
   src/ftxui/component/container.cpp
   src/ftxui/component/dropdown.cpp

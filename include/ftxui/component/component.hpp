@@ -26,6 +26,15 @@ std::shared_ptr<T> Make(Args&&... args) {
   return std::make_shared<T>(args...);
 }
 
+namespace Container {
+Component Vertical(Components children);
+Component Vertical(Components children, int* selector);
+Component Horizontal(Components children);
+Component Horizontal(Components children, int* selector);
+Component Tab(Components children, int* selector);
+
+}  // namespace Container
+
 Component Button(ConstStringRef label,
                  std::function<void()> on_click,
                  Ref<ButtonOption> = {});
@@ -56,16 +65,10 @@ Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);
 Component Renderer(std::function<Element(bool /* focused */)>);
 Component CatchEvent(Component child, std::function<bool(Event)>);
-Component Maybe(Component, bool* show);
-
-namespace Container {
-Component Vertical(Components children);
-Component Vertical(Components children, int* selector);
-Component Horizontal(Components children);
-Component Horizontal(Components children, int* selector);
-Component Tab(Components children, int* selector);
-
-}  // namespace Container
+Component Maybe(Component, const bool* show);
+Component Collapsible(ConstStringRef label,
+                      Component child,
+                      Ref<bool> show = false);
 
 }  // namespace ftxui
 
