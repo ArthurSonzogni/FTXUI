@@ -1,21 +1,20 @@
-#include <stddef.h>    // for size_t
-#include <algorithm>   // for max, min
+#include <algorithm>   // for clamp, max
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator_traits<>::value_type
 #include <string>      // for operator+, string
 #include <utility>     // for move
-#include <vector>      // for vector, __alloc_traits<>::value_type
+#include <vector>      // for vector
 
-#include "ftxui/component/captured_mouse.hpp"     // for CapturedMouse
-#include "ftxui/component/component.hpp"          // for Make, Menu
-#include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::Return, Event::Tab, Event::TabReverse
-#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/component.hpp"       // for Make, Menu, MenuEntry
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released, Mouse::WheelDown, Mouse::WheelUp, Mouse::None
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, vbox, Elements, focus, nothing, select
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, nothing, select, vbox, Elements, focus
 #include "ftxui/screen/box.hpp"  // for Box
-#include "ftxui/util/ref.hpp"    // for Ref
+#include "ftxui/util/ref.hpp"    // for Ref, ConstStringListRef, ConstStringRef
 
 namespace ftxui {
 
@@ -27,12 +26,12 @@ class MenuBase : public ComponentBase {
       : entries_(entries), selected_(selected), option_(option) {}
 
   Element Render() override {
+    Clamp();
     Elements elements;
     bool is_menu_focused = Focused();
-    boxes_.resize(entries_.size());
-    for (size_t i = 0; i < entries_.size(); ++i) {
-      bool is_focused = (focused_entry() == int(i)) && is_menu_focused;
-      bool is_selected = (*selected_ == int(i));
+    for (int i = 0; i < size(); ++i) {
+      bool is_focused = (focused_entry() == i) && is_menu_focused;
+      bool is_selected = (*selected_ == i);
 
       auto style = is_selected ? (is_focused ? option_->style_selected_focused
                                              : option_->style_selected)
@@ -49,6 +48,7 @@ class MenuBase : public ComponentBase {
   }
 
   bool OnEvent(Event event) override {
+    Clamp();
     if (!CaptureMouse(event))
       return false;
 
@@ -68,13 +68,13 @@ class MenuBase : public ComponentBase {
       if (event == Event::Home)
         (*selected_) = 0;
       if (event == Event::End)
-        (*selected_) = entries_.size() - 1;
-      if (event == Event::Tab && entries_.size())
-        *selected_ = (*selected_ + 1) % entries_.size();
-      if (event == Event::TabReverse && entries_.size())
-        *selected_ = (*selected_ + entries_.size() - 1) % entries_.size();
+        (*selected_) = size() - 1;
+      if (event == Event::Tab && size())
+        *selected_ = (*selected_ + 1) % size();
+      if (event == Event::TabReverse && size())
+        *selected_ = (*selected_ + size() - 1) % size();
 
-      *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
+      *selected_ = std::clamp(*selected_, 0, size() - 1);
 
       if (*selected_ != old_selected) {
         focused_entry() = *selected_;
@@ -103,7 +103,7 @@ class MenuBase : public ComponentBase {
     }
     if (!CaptureMouse(event))
       return false;
-    for (int i = 0; i < int(boxes_.size()); ++i) {
+    for (int i = 0; i < size(); ++i) {
       if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
         continue;
 
@@ -131,15 +131,22 @@ class MenuBase : public ComponentBase {
     if (event.mouse().button == Mouse::WheelDown)
       (*selected_)++;
 
-    *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
+    *selected_ = std::clamp(*selected_, 0, size() - 1);
 
     if (*selected_ != old_selected)
       option_->on_change();
     return true;
   }
 
+  void Clamp() {
+    boxes_.resize(size());
+    *selected_ = std::clamp(*selected_, 0, size() - 1);
+    focused_entry() = std::clamp(focused_entry(), 0, size() - 1);
+  }
+
   bool Focusable() const final { return entries_.size(); }
   int& focused_entry() { return option_->focused_entry(); }
+  int size() const { return entries_.size(); }
 
  protected:
   ConstStringListRef entries_;

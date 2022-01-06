@@ -10,6 +10,7 @@
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for ToggleOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
+#include "ftxui/util/ref.hpp"         // for Ref
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, Test, EXPECT_TRUE, EXPECT_FALSE, TEST
 
 using namespace ftxui;
@@ -148,6 +149,34 @@ TEST(ToggleTest, OnEnter) {
   EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
   EXPECT_EQ(counter, 7);
+}
+
+TEST(ToggleTest, RemoveEntries) {
+  int focused_entry = 0;
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  ToggleOption option;
+  option.focused_entry = &focused_entry;
+  auto toggle = Toggle(&entries, &selected, option);
+
+  EXPECT_EQ(selected, 0);
+  EXPECT_EQ(focused_entry, 0);
+
+  toggle->OnEvent(Event::ArrowRight);
+  toggle->OnEvent(Event::ArrowRight);
+
+  EXPECT_EQ(selected, 2);
+  EXPECT_EQ(focused_entry, 2);
+
+  entries.resize(2);
+
+  EXPECT_EQ(selected, 2);
+  EXPECT_EQ(focused_entry, 2);
+
+  (void)toggle->Render();
+
+  EXPECT_EQ(selected, 1);
+  EXPECT_EQ(focused_entry, 1);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
