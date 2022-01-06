@@ -30,19 +30,16 @@ class ToggleBase : public ComponentBase {
 
  private:
   Element Render() override {
+    Clamp();
     Elements children;
     bool is_toggle_focused = Focused();
-    auto ents_size = entries_.size();
-    if (*selected_ > (int)ents_size) *selected_ = ents_size - 1;
-      focused_entry() = *selected_;
-    boxes_.resize(ents_size);
-    for (size_t i = 0; i < ents_size; ++i) {
+    for (int i = 0; i < size(); ++i) {
       // Separator.
       if (i != 0)
         children.push_back(separator());
 
-      bool is_focused = (focused_entry() == int(i)) && is_toggle_focused;
-      bool is_selected = (*selected_ == int(i));
+      bool is_focused = (focused_entry() == i) && is_toggle_focused;
+      bool is_selected = (*selected_ == i);
 
       auto style = is_selected ? (is_focused ? option_->style_selected_focused
                                              : option_->style_selected)
@@ -58,6 +55,7 @@ class ToggleBase : public ComponentBase {
   }
 
   bool OnEvent(Event event) override {
+    Clamp();
     if (event.is_mouse())
       return OnMouseEvent(event);
 
@@ -66,12 +64,12 @@ class ToggleBase : public ComponentBase {
       (*selected_)--;
     if (event == Event::ArrowRight || event == Event::Character('l'))
       (*selected_)++;
-    if (event == Event::Tab && entries_.size())
-      *selected_ = (*selected_ + 1) % entries_.size();
-    if (event == Event::TabReverse && entries_.size())
-      *selected_ = (*selected_ + entries_.size() - 1) % entries_.size();
+    if (event == Event::Tab && size())
+      *selected_ = (*selected_ + 1) % size();
+    if (event == Event::TabReverse && size())
+      *selected_ = (*selected_ + size() - 1) % size();
 
-    *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
+    *selected_ = std::clamp(*selected_, 0, size() - 1);
 
     if (old_selected != *selected_) {
       focused_entry() = *selected_;
@@ -90,7 +88,7 @@ class ToggleBase : public ComponentBase {
   bool OnMouseEvent(Event event) {
     if (!CaptureMouse(event))
       return false;
-    for (int i = 0; i < int(boxes_.size()); ++i) {
+    for (int i = 0; i < size(); ++i) {
       if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
         continue;
 
@@ -109,8 +107,15 @@ class ToggleBase : public ComponentBase {
     return false;
   }
 
-  bool Focusable() const final { return entries_.size(); }
+  void Clamp() {
+    boxes_.resize(size() - 1);
+    *selected_ = std::clamp(0, *selected_, size() - 1);
+    focused_entry() = std::clamp(0, focused_entry(), size() - 1);
+  }
+
+  bool Focusable() const final { return size(); }
   int& focused_entry() { return option_->focused_entry(); }
+  int size() const { return entries_.size(); }
 
   ConstStringListRef entries_;
   int* selected_ = 0;
