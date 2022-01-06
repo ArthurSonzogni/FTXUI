@@ -4,10 +4,12 @@
 #include <string>  // for string, basic_string
 #include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Radiobox
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/captured_mouse.hpp"     // for ftxui
+#include "ftxui/component/component.hpp"          // for Radiobox
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for RadioboxOption
 #include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowUp, Event::Tab, Event::TabReverse
+#include "ftxui/util/ref.hpp"         // for Ref
 #include "gtest/gtest_pred_impl.h"    // for EXPECT_EQ, Test, TEST
 
 using namespace ftxui;

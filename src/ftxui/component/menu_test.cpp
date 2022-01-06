@@ -1,14 +1,16 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
+#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
 #include <string>  // for string, basic_string
 #include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Menu
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowUp, Event::Tab, Event::TabReverse
-#include "gtest/gtest_pred_impl.h"    // for EXPECT_EQ, Test, TEST
+#include "ftxui/component/captured_mouse.hpp"     // for ftxui
+#include "ftxui/component/component.hpp"          // for Menu
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::Return
+#include "ftxui/util/ref.hpp"         // for Ref
+#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
 using namespace ftxui;
 
@@ -41,6 +43,6 @@ TEST(MenuTest, RemoveEntries) {
   EXPECT_EQ(focused_entry, 1);
 }
 
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.

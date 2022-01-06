@@ -1,5 +1,4 @@
-#include <stddef.h>    // for size_t
-#include <algorithm>   // for max, min
+#include <algorithm>   // for clamp, max
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator_traits<>::value_type
 #include <utility>     // for move
@@ -13,7 +12,7 @@
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, Elements, hbox, reflect, separator, text, focus, nothing, select
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/util/ref.hpp"      // for ConstStringListRef, Ref
+#include "ftxui/util/ref.hpp"      // for Ref, ConstStringListRef
 
 namespace ftxui {
 

@@ -10,6 +10,7 @@
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for ToggleOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
+#include "ftxui/util/ref.hpp"         // for Ref
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, Test, EXPECT_TRUE, EXPECT_FALSE, TEST
 
 using namespace ftxui;

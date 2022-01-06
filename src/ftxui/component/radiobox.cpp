@@ -1,5 +1,4 @@
-#include <stddef.h>    // for size_t
-#include <algorithm>   // for max, min
+#include <algorithm>   // for clamp, max
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator_traits<>::value_type
 #include <string>      // for string
@@ -10,12 +9,12 @@
 #include "ftxui/component/component.hpp"          // for Make, Radiobox
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for RadioboxOption
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::Return, Event::Tab, Event::TabReverse
-#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::WheelDown, Mouse::WheelUp, Mouse::Left, Mouse::Released
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for Element, operator|, text, hbox, reflect, vbox, focus, nothing, select
-#include "ftxui/screen/box.hpp"  // for Box
-#include "ftxui/util/ref.hpp"    // for Ref
+#include "ftxui/dom/elements.hpp"  // for operator|, reflect, text, Element, hbox, vbox, Elements, focus, nothing, select
+#include "ftxui/screen/box.hpp"    // for Box
+#include "ftxui/util/ref.hpp"      // for Ref, ConstStringListRef
 
 namespace ftxui {
 
@@ -57,9 +56,8 @@ class RadioboxBase : public ComponentBase {
                               : is_menu_focused ? focus
                                                 : select;
 
-      const std::string& symbol = *selected_ == i
-                                      ? option_->style_checked
-                                      : option_->style_unchecked;
+      const std::string& symbol =
+          *selected_ == i ? option_->style_checked : option_->style_unchecked;
       elements.push_back(hbox(text(symbol), text(entries_[i]) | style) |
                          focus_management | reflect(boxes_[i]));
     }

@@ -1,21 +1,20 @@
-#include <stddef.h>    // for size_t
-#include <algorithm>   // for max, min, clamp
+#include <algorithm>   // for clamp, max
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator_traits<>::value_type
 #include <string>      // for operator+, string
 #include <utility>     // for move
-#include <vector>      // for vector, __alloc_traits<>::value_type
+#include <vector>      // for vector
 
-#include "ftxui/component/captured_mouse.hpp"     // for CapturedMouse
-#include "ftxui/component/component.hpp"          // for Make, Menu
-#include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::Return, Event::Tab, Event::TabReverse
-#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/component.hpp"       // for Make, Menu, MenuEntry
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released, Mouse::WheelDown, Mouse::WheelUp, Mouse::None
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, vbox, Elements, focus, nothing, select
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, nothing, select, vbox, Elements, focus
 #include "ftxui/screen/box.hpp"  // for Box
-#include "ftxui/util/ref.hpp"    // for Ref
+#include "ftxui/util/ref.hpp"    // for Ref, ConstStringListRef, ConstStringRef
 
 namespace ftxui {
 
