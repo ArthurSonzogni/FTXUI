@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_style_blink.dir/style_blink.cpp.o -o ftxui_example_style_blink  ../../ftxui-dom.a ../../ftxui-screen.a 

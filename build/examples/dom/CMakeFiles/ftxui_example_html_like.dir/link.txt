@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_html_like.dir/html_like.cpp.o -o ftxui_example_html_like  ../../ftxui-dom.a ../../ftxui-screen.a 

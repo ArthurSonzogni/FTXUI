@@ -1,0 +1,2 @@
+/usr/bin/ar qc ftxui-screen.a CMakeFiles/screen.dir/src/ftxui/screen/box.cpp.o CMakeFiles/screen.dir/src/ftxui/screen/color.cpp.o CMakeFiles/screen.dir/src/ftxui/screen/color_info.cpp.o CMakeFiles/screen.dir/src/ftxui/screen/screen.cpp.o CMakeFiles/screen.dir/src/ftxui/screen/string.cpp.o CMakeFiles/screen.dir/src/ftxui/screen/terminal.cpp.o
+/usr/bin/ranlib ftxui-screen.a
