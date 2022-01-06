@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ftxui_example_dbox.dir/dbox.cpp.o -o ftxui_example_dbox  ../../ftxui-dom.a ../../ftxui-screen.a 

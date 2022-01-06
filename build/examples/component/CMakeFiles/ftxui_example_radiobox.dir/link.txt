@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ftxui_example_radiobox.dir/radiobox.cpp.o -o ftxui_example_radiobox  ../../ftxui-component.a ../../ftxui-dom.a ../../ftxui-screen.a -lpthread 
