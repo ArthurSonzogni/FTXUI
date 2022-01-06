@@ -32,6 +32,7 @@ class MenuBase : public ComponentBase {
     auto ents_size = entries_.size();
     if (*selected_ > (int)ents_size) *selected_ = ents_size - 1;
       focused_entry() = *selected_;
+
     boxes_.resize(ents_size);
     for (size_t i = 0; i < ents_size; ++i) {
       bool is_focused = (focused_entry() == int(i)) && is_menu_focused;
