@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_composition.dir/composition.cpp.o -o ftxui_example_composition  ../../ftxui-component.a ../../ftxui-dom.a ../../ftxui-screen.a -lpthread 

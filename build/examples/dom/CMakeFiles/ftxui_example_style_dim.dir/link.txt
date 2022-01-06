@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_style_dim.dir/style_dim.cpp.o -o ftxui_example_style_dim  ../../ftxui-dom.a ../../ftxui-screen.a 

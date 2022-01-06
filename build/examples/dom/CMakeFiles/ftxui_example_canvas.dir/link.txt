@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_canvas.dir/canvas.cpp.o -o ftxui_example_canvas  ../../ftxui-dom.a ../../ftxui-screen.a 

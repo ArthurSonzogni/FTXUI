@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_menu_multiple.dir/menu_multiple.cpp.o -o ftxui_example_menu_multiple  ../../ftxui-component.a ../../ftxui-dom.a ../../ftxui-screen.a -lpthread 

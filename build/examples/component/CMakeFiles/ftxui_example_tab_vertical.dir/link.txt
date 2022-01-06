@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_tab_vertical.dir/tab_vertical.cpp.o -o ftxui_example_tab_vertical  ../../ftxui-component.a ../../ftxui-dom.a ../../ftxui-screen.a -lpthread 

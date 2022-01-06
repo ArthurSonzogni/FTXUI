@@ -1,0 +1,60 @@
+Performing C++ SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /mnt/develop/projects/cpp/ftxui/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_95671/fast && /usr/bin/make  -f CMakeFiles/cmTC_95671.dir/build.make CMakeFiles/cmTC_95671.dir/build
+make[1]: Entering directory '/mnt/develop/projects/cpp/ftxui/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_95671.dir/src.cxx.o
+/usr/bin/c++ -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_95671.dir/src.cxx.o -c /mnt/develop/projects/cpp/ftxui/build/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_95671
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_95671.dir/link.txt --verbose=1
+/usr/bin/c++ CMakeFiles/cmTC_95671.dir/src.cxx.o -o cmTC_95671 
+/usr/bin/ld: CMakeFiles/cmTC_95671.dir/src.cxx.o: in function `main':
+src.cxx:(.text+0x3e): undefined reference to `pthread_create'
+/usr/bin/ld: src.cxx:(.text+0x4a): undefined reference to `pthread_detach'
+/usr/bin/ld: src.cxx:(.text+0x56): undefined reference to `pthread_cancel'
+/usr/bin/ld: src.cxx:(.text+0x67): undefined reference to `pthread_join'
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_95671.dir/build.make:99: cmTC_95671] Error 1
+make[1]: Leaving directory '/mnt/develop/projects/cpp/ftxui/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:127: cmTC_95671/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /mnt/develop/projects/cpp/ftxui/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_141a7/fast && /usr/bin/make  -f CMakeFiles/cmTC_141a7.dir/build.make CMakeFiles/cmTC_141a7.dir/build
+make[1]: Entering directory '/mnt/develop/projects/cpp/ftxui/build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_141a7.dir/CheckFunctionExists.cxx.o
+/usr/bin/c++   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_141a7.dir/CheckFunctionExists.cxx.o -c /mnt/develop/projects/cpp/ftxui/build/CMakeFiles/CheckLibraryExists/CheckFunctionExists.cxx
+Linking CXX executable cmTC_141a7
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_141a7.dir/link.txt --verbose=1
+/usr/bin/c++  -DCHECK_FUNCTION_EXISTS=pthread_create CMakeFiles/cmTC_141a7.dir/CheckFunctionExists.cxx.o -o cmTC_141a7  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+make[1]: *** [CMakeFiles/cmTC_141a7.dir/build.make:99: cmTC_141a7] Error 1
+make[1]: Leaving directory '/mnt/develop/projects/cpp/ftxui/build/CMakeFiles/CMakeTmp'
+make: *** [Makefile:127: cmTC_141a7/fast] Error 2
+
+
+

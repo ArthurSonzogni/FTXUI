@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_color_truecolor_RGB.dir/color_truecolor_RGB.cpp.o -o ftxui_example_color_truecolor_RGB  ../../ftxui-dom.a ../../ftxui-screen.a 

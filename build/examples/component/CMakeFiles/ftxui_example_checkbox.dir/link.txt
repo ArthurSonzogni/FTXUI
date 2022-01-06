@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_checkbox.dir/checkbox.cpp.o -o ftxui_example_checkbox  ../../ftxui-component.a ../../ftxui-dom.a ../../ftxui-screen.a -lpthread 

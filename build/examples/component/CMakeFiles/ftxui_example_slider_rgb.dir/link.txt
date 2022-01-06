@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/ftxui_example_slider_rgb.dir/slider_rgb.cpp.o -o ftxui_example_slider_rgb  ../../ftxui-component.a ../../ftxui-dom.a ../../ftxui-screen.a -lpthread 
