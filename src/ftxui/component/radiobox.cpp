@@ -44,6 +44,7 @@ class RadioboxBase : public ComponentBase {
   Element Render() override {
     Elements elements;
     bool is_menu_focused = Focused();
+    hovered_ = std::max(0, std::min(int(entries_.size()) - 1, hovered_));
     boxes_.resize(entries_.size());
     for (size_t i = 0; i < entries_.size(); ++i) {
       bool is_focused = (focused_entry() == int(i)) && is_menu_focused;
