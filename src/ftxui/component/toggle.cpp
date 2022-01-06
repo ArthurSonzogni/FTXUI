@@ -32,9 +32,11 @@ class ToggleBase : public ComponentBase {
   Element Render() override {
     Elements children;
     bool is_toggle_focused = Focused();
-    *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
-    boxes_.resize(entries_.size());
-    for (size_t i = 0; i < entries_.size(); ++i) {
+    auto ents_size = entries_.size();
+    if (*selected_ > (int)ents_size) *selected_ = ents_size - 1;
+      focused_entry() = *selected_;
+    boxes_.resize(ents_size);
+    for (size_t i = 0; i < ents_size; ++i) {
       // Separator.
       if (i != 0)
         children.push_back(separator());

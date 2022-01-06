@@ -29,9 +29,11 @@ class MenuBase : public ComponentBase {
   Element Render() override {
     Elements elements;
     bool is_menu_focused = Focused();
-    *selected_ = std::max(0, std::min(int(entries_.size()) - 1, *selected_));
-    boxes_.resize(entries_.size());
-    for (size_t i = 0; i < entries_.size(); ++i) {
+    auto ents_size = entries_.size();
+    if (*selected_ > (int)ents_size) *selected_ = ents_size - 1;
+      focused_entry() = *selected_;
+    boxes_.resize(ents_size);
+    for (size_t i = 0; i < ents_size; ++i) {
       bool is_focused = (focused_entry() == int(i)) && is_menu_focused;
       bool is_selected = (*selected_ == int(i));
 
