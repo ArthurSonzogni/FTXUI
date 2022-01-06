@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ftxui_example_style_color.dir/style_color.cpp.o -o ftxui_example_style_color  ../../ftxui-dom.a ../../ftxui-screen.a 

@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ftxui_example_print_key_press.dir/print_key_press.cpp.o -o ftxui_example_print_key_press  ../../ftxui-component.a ../../ftxui-dom.a ../../ftxui-screen.a -lpthread 

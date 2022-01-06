@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ftxui_example_package_manager.dir/package_manager.cpp.o -o ftxui_example_package_manager  ../../ftxui-dom.a ../../ftxui-screen.a 

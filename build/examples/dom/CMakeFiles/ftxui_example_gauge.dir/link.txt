@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/ftxui_example_gauge.dir/gauge.cpp.o -o ftxui_example_gauge  ../../ftxui-dom.a ../../ftxui-screen.a 
