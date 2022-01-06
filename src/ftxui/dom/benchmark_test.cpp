@@ -1,9 +1,9 @@
 #include <benchmark/benchmark.h>
 
 #include "ftxui/dom/elements.hpp"  // for separator, gauge, operator|, text, Element, blink, inverted, hbox, vbox, border
-#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
-#include "ftxui/dom/node.hpp"            // for Render
-#include "ftxui/screen/screen.hpp"       // for Screen
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
+#include "ftxui/screen/screen.hpp"  // for Screen
 
 using namespace ftxui;
 

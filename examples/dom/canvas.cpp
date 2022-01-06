@@ -1,14 +1,13 @@
-#include <stddef.h>                // for size_t
 #include <stdio.h>                 // for getchar
-#include <ftxui/dom/elements.hpp>  // for operator|, size, Element, text, hcenter, Decorator, Fit, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN
-#include <ftxui/screen/screen.hpp>  // for Full, Screen
-#include <memory>                   // for allocator, shared_ptr
-#include <string>  // for operator+, to_string, char_traits, string
+#include <cmath>                   // for cos
+#include <ftxui/dom/elements.hpp>  // for Fit, canvas, operator|, border, Element
+#include <ftxui/screen/screen.hpp>  // for Pixel, Screen
+#include <vector>                   // for vector, allocator
 
-#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
-#include "ftxui/dom/node.hpp"            // for Render
+#include "ftxui/dom/canvas.hpp"  // for Canvas
+#include "ftxui/dom/node.hpp"    // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
 
-#include <cmath>
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
 
@@ -32,7 +31,7 @@ int main(int argc, const char* argv[]) {
   std::vector<int> ys(100);
   for (int x = 0; x < 100; x++)
     ys[x] = 80 + 20 * cos(x * 0.2);
-  for (int x = 0; x < 99; x++) 
+  for (int x = 0; x < 99; x++)
     c.DrawPointLine(x, ys[x], x + 1, ys[x + 1], Color::Red);
 
   auto document = canvas(&c) | border;

@@ -4,11 +4,11 @@
 #include <string>                   // for allocator, basic_string, string
 #include <vector>                   // for vector
 
-#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, flex_grow, Elements, flex_shrink, vtext, gridbox, vbox, border
-#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
-#include "ftxui/dom/node.hpp"            // for Render
-#include "ftxui/screen/screen.hpp"       // for Screen
-#include "gtest/gtest_pred_impl.h"       // for Test, TEST, EXPECT_EQ
+#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, Elements, flex_grow, flex_shrink, vtext, gridbox, vbox, border
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
+#include "ftxui/screen/screen.hpp"  // for Screen
+#include "gtest/gtest_pred_impl.h"  // for Test, TEST, EXPECT_EQ
 
 using namespace ftxui;
 

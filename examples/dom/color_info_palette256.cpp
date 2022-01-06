@@ -4,9 +4,8 @@
 #include <utility>                      // for move
 #include <vector>                       // for vector, allocator
 
-#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
-#include "ftxui/dom/node.hpp"            // for Render
-#include "ftxui/screen/color.hpp"        // for Color, Color::Palette256
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::Palette256, ftxui
 
 using namespace ftxui;
 #include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D

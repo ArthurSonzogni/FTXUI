@@ -1,22 +1,17 @@
 #include <memory>   // for make_shared
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"        // for Element, bold
-#include "ftxui/dom/node.hpp"            // for Node
+#include "ftxui/dom/elements.hpp"  // for Decorator, Element, focusPosition, focusPositionRelative
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
-#include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/dom/requirement.hpp"  // for Requirement, Requirement::NORMAL, Requirement::Selection
+#include "ftxui/screen/box.hpp"  // for Box
 
 namespace ftxui {
-
-namespace {
-
-}  // namespace
 
 /// @brief Used inside a `frame`, this force the view to be scrolled toward a
 /// a given position. The position is expressed in proportion of the requested
 /// size.
-/// 
+///
 /// For instance:
 /// - (0, 0) means that the view is scrolled toward the upper left.
 /// - (1, 0) means that the view is scrolled toward the upper right.
@@ -59,7 +54,7 @@ Decorator focusPositionRelative(float x, float y) {
 
 /// @brief Used inside a `frame`, this force the view to be scrolled toward a
 /// a given position. The position is expressed in the numbers of cells.
-/// 
+///
 /// @ingroup dom
 ///
 /// ### Example

@@ -1,8 +1,10 @@
-#include <algorithm>   // for max, min
+#include <stddef.h>    // for size_t
+#include <algorithm>   // for clamp, max, min
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator
-#include <string>      // for wstring, basic_string
+#include <string>      // for string, wstring
 #include <utility>     // for move
+#include <vector>      // for vector
 
 #include "ftxui/component/captured_mouse.hpp"     // for CapturedMouse
 #include "ftxui/component/component.hpp"          // for Make, Input
@@ -12,11 +14,10 @@
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::Home, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/deprecated.hpp"                // for text
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, dim, flex, focus, inverted, hbox, size, frame, select, underlined, Decorator, EQUAL, HEIGHT
+#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, reflect, inverted, Decorator, flex, focus, hbox, size, bold, dim, frame, select, EQUAL, HEIGHT
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/screen/string.hpp"  // for to_wstring, to_string
-#include "ftxui/util/ref.hpp"  // for WideStringRef, Ref, ConstStringRef, StringRef
+#include "ftxui/screen/string.hpp"  // for GlyphPosition, GlyphCount, to_string, CellToGlyphIndex, to_wstring
+#include "ftxui/util/ref.hpp"  // for StringRef, Ref, WideStringRef, ConstStringRef
 
 namespace ftxui {
 

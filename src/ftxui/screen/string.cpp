@@ -288,7 +288,9 @@ std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
   return out;
 }
 
-int GlyphPosition(const std::string& input, size_t glyph_to_skip, size_t start) {
+int GlyphPosition(const std::string& input,
+                  size_t glyph_to_skip,
+                  size_t start) {
   if (glyph_to_skip <= 0)
     return 0;
   size_t end = 0;
