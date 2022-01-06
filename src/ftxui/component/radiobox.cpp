@@ -156,10 +156,10 @@ class RadioboxBase : public ComponentBase {
   }
 
   void Clamp() {
-    boxes_.resize(size() - 1);
-    *selected_ = std::clamp(0, *selected_, size() - 1);
-    focused_entry() = std::clamp(0, focused_entry(), size() - 1);
-    hovered_ = std::clamp(0, hovered_, size() - 1);
+    boxes_.resize(size());
+    *selected_ = std::clamp(*selected_, 0, size() - 1);
+    focused_entry() = std::clamp(focused_entry(), 0, size() - 1);
+    hovered_ = std::clamp(hovered_, 0, size() - 1);
   }
 
   bool Focusable() const final { return entries_.size(); }

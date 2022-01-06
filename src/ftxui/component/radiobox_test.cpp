@@ -114,6 +114,35 @@ TEST(RadioboxTest, Navigation) {
   radiobox->OnEvent(Event::Return);
 }
 
+TEST(RadioboxTest, RemoveEntries) {
+  int focused_entry = 0;
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  RadioboxOption option;
+  option.focused_entry = &focused_entry;
+  auto radiobox = Radiobox(&entries, &selected, option);
+
+  EXPECT_EQ(selected, 0);
+  EXPECT_EQ(focused_entry, 0);
+
+  radiobox->OnEvent(Event::ArrowDown);
+  radiobox->OnEvent(Event::ArrowDown);
+  radiobox->OnEvent(Event::Return);
+
+  EXPECT_EQ(selected, 2);
+  EXPECT_EQ(focused_entry, 2);
+
+  entries.resize(2);
+
+  EXPECT_EQ(selected, 2);
+  EXPECT_EQ(focused_entry, 2);
+
+  (void)radiobox->Render();
+
+  EXPECT_EQ(selected, 1);
+  EXPECT_EQ(focused_entry, 1);
+}
+
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.

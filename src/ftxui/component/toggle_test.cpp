@@ -150,6 +150,34 @@ TEST(ToggleTest, OnEnter) {
   EXPECT_EQ(counter, 7);
 }
 
+TEST(ToggleTest, RemoveEntries) {
+  int focused_entry = 0;
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  ToggleOption option;
+  option.focused_entry = &focused_entry;
+  auto toggle = Toggle(&entries, &selected, option);
+
+  EXPECT_EQ(selected, 0);
+  EXPECT_EQ(focused_entry, 0);
+
+  toggle->OnEvent(Event::ArrowRight);
+  toggle->OnEvent(Event::ArrowRight);
+
+  EXPECT_EQ(selected, 2);
+  EXPECT_EQ(focused_entry, 2);
+
+  entries.resize(2);
+
+  EXPECT_EQ(selected, 2);
+  EXPECT_EQ(focused_entry, 2);
+
+  (void)toggle->Render();
+
+  EXPECT_EQ(selected, 1);
+  EXPECT_EQ(focused_entry, 1);
+}
+
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
