@@ -8,11 +8,12 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for InputOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Delete, Event::End, Event::Home
-#include "ftxui/dom/elements.hpp"     // for Fit
-#include "ftxui/dom/node.hpp"         // for Render
-#include "ftxui/screen/screen.hpp"    // for Screen, Pixel
-#include "ftxui/util/ref.hpp"         // for Ref
-#include "gtest/gtest_pred_impl.h"    // for Test, EXPECT_EQ, TEST
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Button, Mouse::Left, Mouse::Motion, Mouse::Pressed
+#include "ftxui/dom/elements.hpp"   // for Fit
+#include "ftxui/dom/node.hpp"       // for Render
+#include "ftxui/screen/screen.hpp"  // for Fixed, Screen, Pixel
+#include "ftxui/util/ref.hpp"       // for Ref
+#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
 using namespace ftxui;
 

@@ -3,9 +3,9 @@
 #include <memory>                   // for allocator
 
 #include "ftxui/dom/elements.hpp"  // for LIGHT, flex, center, EMPTY, DOUBLE
-#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
-#include "ftxui/dom/node.hpp"            // for Render
+#include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/dom/table.hpp"
+#include "ftxui/screen/color.hpp"   // for ftxui
 #include "ftxui/screen/screen.hpp"  // for Screen
 #include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 

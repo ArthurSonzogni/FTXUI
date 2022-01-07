@@ -1,10 +1,13 @@
 #ifndef FTXUI_DOM_CANVAS_HPP
 #define FTXUI_DOM_CANVAS_HPP
 
-#include "ftxui/screen/color.hpp"
-#include "ftxui/screen/screen.hpp"
-#include <unordered_map>
-#include <functional>
+#include <stddef.h>       // for size_t
+#include <functional>     // for function
+#include <string>         // for string
+#include <unordered_map>  // for unordered_map
+
+#include "ftxui/screen/color.hpp"   // for Color
+#include "ftxui/screen/screen.hpp"  // for Pixel
 
 namespace ftxui {
 
@@ -34,25 +37,14 @@ struct Canvas {
   void DrawPointCircle(int x, int y, int radius, const Stylizer& s);
   void DrawPointCircle(int x, int y, int radius, const Color& color);
   void DrawPointCircleFilled(int x, int y, int radius);
-  void DrawPointCircleFilled(int x,
-                             int y,
-                             int radius,
-                             const Stylizer& s);
+  void DrawPointCircleFilled(int x, int y, int radius, const Stylizer& s);
   void DrawPointCircleFilled(int x, int y, int radius, const Color& color);
   void DrawPointEllipse(int x, int y, int r1, int r2);
   void DrawPointEllipse(int x, int y, int r1, int r2, const Color& color);
   void DrawPointEllipse(int x, int y, int r1, int r2, const Stylizer& s);
   void DrawPointEllipseFilled(int x, int y, int r1, int r2);
-  void DrawPointEllipseFilled(int x,
-                               int y,
-                               int r1,
-                               int r2,
-                               const Color& color);
-  void DrawPointEllipseFilled(int x,
-                               int y,
-                               int r1,
-                               int r2,
-                               const Stylizer& s);
+  void DrawPointEllipseFilled(int x, int y, int r1, int r2, const Color& color);
+  void DrawPointEllipseFilled(int x, int y, int r1, int r2, const Stylizer& s);
 
   // Draw using box characters -------------------------------------------------
   // Block are of size 1x2. y is considered to be a multiple of 2.
@@ -76,15 +68,15 @@ struct Canvas {
   void DrawBlockEllipse(int x1, int y1, int r1, int r2, const Color& color);
   void DrawBlockEllipseFilled(int x1, int y1, int r1, int r2);
   void DrawBlockEllipseFilled(int x1,
-                               int y1,
-                               int r1,
-                               int r2,
-                               const Stylizer& s);
+                              int y1,
+                              int r1,
+                              int r2,
+                              const Stylizer& s);
   void DrawBlockEllipseFilled(int x1,
-                               int y1,
-                               int r1,
-                               int r2,
-                               const Color& color);
+                              int y1,
+                              int r1,
+                              int r2,
+                              const Color& color);
 
   // Draw using normal characters ----------------------------------------------
   // Draw using character of size 2x4 at position (x,y)
@@ -92,10 +84,7 @@ struct Canvas {
   // y is considered to be a multiple of 4.
   void DrawText(int x, int y, const std::string& value);
   void DrawText(int x, int y, const std::string& value, const Color& color);
-  void DrawText(int x,
-                int y,
-                const std::string& value,
-                const Stylizer& style);
+  void DrawText(int x, int y, const std::string& value, const Stylizer& style);
 
   // Decorator:
   // x is considered to be a multiple of 2.
@@ -124,7 +113,9 @@ struct Canvas {
   };
 
   struct XYHash {
-    size_t operator()(const XY& xy) const { return static_cast<size_t>(xy.x * 1024 + xy.y); }
+    size_t operator()(const XY& xy) const {
+      return static_cast<size_t>(xy.x * 1024 + xy.y);
+    }
   };
 
   int width_ = 0;
@@ -134,4 +125,8 @@ struct Canvas {
 
 }  // namespace ftxui
 
-#endif // FTXUI_DOM_CANVAS_HPP
+#endif  // FTXUI_DOM_CANVAS_HPP
+
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
