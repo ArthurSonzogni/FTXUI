@@ -2,9 +2,8 @@
 #include <ftxui/screen/screen.hpp>  // for Fixed, Screen
 #include <vector>                   // for vector
 
-#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
-#include "ftxui/dom/node.hpp"            // for Render
-#include "ftxui/screen/color.hpp"  // for Color, Color::DarkBlue, Color::Green, Color::Red
+#include "ftxui/dom/node.hpp"  // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::DarkBlue, Color::Green, Color::Red, ftxui
 
 int main(void) {
   using namespace ftxui;

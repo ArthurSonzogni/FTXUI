@@ -23,7 +23,7 @@ namespace ftxui {
 // https://arthursonzogni.com/FTXUI/examples
 // This will have to be improved when someone has time to implement and need
 // it.
-static Dimensions fallback_size {140, 43};
+static Dimensions fallback_size{140, 43};
 Dimensions Terminal::Size() {
   return fallback_size;
 }
@@ -33,7 +33,7 @@ Dimensions Terminal::Size() {
 // The terminal size in VT100 was 80x24. It is still used nowadays by
 // default in many terminal emulator. That's a good choice for a fallback
 // value.
-static Dimensions fallback_size {80, 24};
+static Dimensions fallback_size{80, 24};
 Dimensions Terminal::Size() {
   CONSOLE_SCREEN_BUFFER_INFO csbi;
 
@@ -49,7 +49,7 @@ Dimensions Terminal::Size() {
 // The terminal size in VT100 was 80x24. It is still used nowadays by
 // default in many terminal emulator. That's a good choice for a fallback
 // value.
-static Dimensions fallback_size {80, 24};
+static Dimensions fallback_size{80, 24};
 Dimensions Terminal::Size() {
   winsize w{};
   const int status = ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);

@@ -2,9 +2,8 @@
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
 
-#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
-#include "ftxui/dom/node.hpp"            // for Render
-#include "ftxui/screen/color.hpp"        // for Color, Color::Blue
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::Blue, ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

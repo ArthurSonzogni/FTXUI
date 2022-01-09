@@ -3,8 +3,8 @@
 #include <ftxui/screen/screen.hpp>  // for Screen
 #include <memory>                   // for allocator, shared_ptr
 
-#include "ftxui/dom/flexbox_config.hpp"  // for ftxui
-#include "ftxui/dom/node.hpp"            // for Render
+#include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

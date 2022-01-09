@@ -1,15 +1,13 @@
-#include <stddef.h>  // for size_t
-#include <memory>    // for shared_ptr, __shared_ptr_access, allocator
-#include <string>  // for string, basic_string, to_string, operator+, char_traits
+#include <memory>  // for allocator, shared_ptr, __shared_ptr_access
+#include <string>  // for operator+, char_traits, to_string, string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"  // for Radiobox, Vertical, Checkbox, Horizontal, Renderer, ResizableSplitBottom, ResizableSplitRight
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
+#include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, window, operator|, vbox, hbox, Element, flexbox, bgcolor, filler, flex, size, border, hcenter, color, EQUAL, bold, dim, notflex, xflex_grow, yflex_grow, HEIGHT, WIDTH
-#include "ftxui/dom/flexbox_config.hpp"  // for FlexboxConfig, FlexboxConfig::AlignContent, FlexboxConfig::JustifyContent, FlexboxConfig::AlignContent::Center, FlexboxConfig::AlignItems, FlexboxConfig::Direction, FlexboxConfig::JustifyContent::Center, FlexboxConfig::Wrap
-#include "ftxui/screen/color.hpp"        // for Color, Color::Black
+#include "ftxui/dom/elements.hpp"  // for Elements, Element, operator|, separator, text, focusPositionRelative, size, border, flex, frame, bgcolor, gridbox, vbox, EQUAL, center, HEIGHT, WIDTH
+#include "ftxui/screen/color.hpp"  // for Color
 
 using namespace ftxui;
 

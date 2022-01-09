@@ -59,7 +59,6 @@ TEST(StringTest, GlyphCount) {
   EXPECT_EQ(GlyphCount("a\1a"), 2);
 }
 
-
 TEST(StringTest, GlyphPosition) {
   // Basic:
   EXPECT_EQ(GlyphPosition("", -1), 0);
