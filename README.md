@@ -297,6 +297,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 ## Project using FTXUI
 
 Feel free to add your projects here:
+- [json-tui](https://github.com/ArthurSonzogni/json-tui)
 - [git-tui](https://github.com/ArthurSonzogni/git-tui)
 - [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
 - [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier)
