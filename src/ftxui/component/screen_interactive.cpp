@@ -200,7 +200,7 @@ const std::string DeviceStatusReport(DSRMode ps) {
 }
 
 using SignalHandler = void(int);
-std::stack<std::function<void()>> on_exit_functions;
+std::stack<ScreenInteractive::Callback> on_exit_functions;
 void OnExit(int signal) {
   (void)signal;
   while (!on_exit_functions.empty()) {
@@ -211,10 +211,10 @@ void OnExit(int signal) {
 
 auto install_signal_handler = [](int sig, SignalHandler handler) {
   auto old_signal_handler = std::signal(sig, handler);
-  on_exit_functions.push([&]() { std::signal(sig, old_signal_handler); });
+  on_exit_functions.push([&] { std::signal(sig, old_signal_handler); });
 };
 
-std::function<void()> on_resize = [] {};
+ScreenInteractive::Callback on_resize = [] {};
 void OnResize(int /* signal */) {
   on_resize();
 }
@@ -229,6 +229,8 @@ class CapturedMouseImpl : public CapturedMouseInterface {
 };
 
 }  // namespace
+
+ScreenInteractive* g_active_screen = nullptr;
 
 ScreenInteractive::ScreenInteractive(int dimx,
                                      int dimy,
@@ -275,7 +277,6 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 }
 
 void ScreenInteractive::Loop(Component component) {
-  static ScreenInteractive* g_active_screen = nullptr;
 
   // Suspend previously active screen:
   if (g_active_screen) {
@@ -309,6 +310,17 @@ void ScreenInteractive::Loop(Component component) {
     // line after it.
     std::cout << std::endl;
   }
+}
+
+/// @brief Decorate a function. It executes the same way, but with the currently
+/// active screen terminal hooks temporarilly uninstalled during its execution.
+/// @param fn The function to decorate.
+ScreenInteractive::Callback ScreenInteractive::WithRestoredIO(Callback fn) {
+  return [this, fn] {
+    Uninstall();
+    fn();
+    Install();
+  };
 }
 
 void ScreenInteractive::Install() {
@@ -526,8 +538,8 @@ void ScreenInteractive::Draw(Component component) {
   }
 }
 
-std::function<void()> ScreenInteractive::ExitLoopClosure() {
-  return [this]() {
+ScreenInteractive::Callback ScreenInteractive::ExitLoopClosure() {
+  return [this] {
     quit_ = true;
     event_sender_.reset();
   };

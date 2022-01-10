@@ -24,6 +24,9 @@ unreleased (development)
 
 #### Component 
 - Add the `collapsible` component.
+- Add the `ScreenInteractive::WithRestoredIO`. This decorates a callback. This
+  runs it with the terminal hooks temporarilly uninstalled. This is useful if
+  you want to execute command using directly stdin/stdout/sterr.
 
 ### Bug
 
