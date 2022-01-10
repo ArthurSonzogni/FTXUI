@@ -141,8 +141,8 @@ TEST(RadioboxTest, RemoveEntries) {
 
   (void)radiobox->Render();
 
-  EXPECT_EQ(selected, 1);
-  EXPECT_EQ(focused_entry, 1);
+  EXPECT_EQ(selected, 0);
+  EXPECT_EQ(focused_entry, 0);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
