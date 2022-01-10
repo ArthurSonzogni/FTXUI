@@ -66,6 +66,7 @@ class ScreenInteractive : public Screen {
   int cursor_y_ = 1;
 
   bool mouse_captured = false;
+  bool previous_frame_resized_ = false;
 };
 
 }  // namespace ftxui
