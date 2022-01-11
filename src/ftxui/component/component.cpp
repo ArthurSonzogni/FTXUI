@@ -64,8 +64,9 @@ void ComponentBase::Detach() {
                          [this](const Component& that) {  //
                            return this == that.get();
                          });
-  parent_->children_.erase(it);
+  ComponentBase* parent = parent_;
   parent_ = nullptr;
+  parent->children_.erase(it);  // Might delete |this|.
 }
 
 /// @brief Remove all children.
