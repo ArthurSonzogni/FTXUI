@@ -12,7 +12,8 @@
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, Elements, hbox, reflect, separator, text, focus, nothing, select
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/util/ref.hpp"      // for Ref, ConstStringListRef
+#include "ftxui/screen/util.hpp"
+#include "ftxui/util/ref.hpp"  // for Ref, ConstStringListRef
 
 namespace ftxui {
 
@@ -68,7 +69,7 @@ class ToggleBase : public ComponentBase {
     if (event == Event::TabReverse && size())
       *selected_ = (*selected_ + size() - 1) % size();
 
-    *selected_ = std::clamp(*selected_, 0, size() - 1);
+    *selected_ = util::clamp(*selected_, 0, size() - 1);
 
     if (old_selected != *selected_) {
       focused_entry() = *selected_;
@@ -108,8 +109,8 @@ class ToggleBase : public ComponentBase {
 
   void Clamp() {
     boxes_.resize(size());
-    *selected_ = std::clamp(*selected_, 0, size() - 1);
-    focused_entry() = std::clamp(focused_entry(), 0, size() - 1);
+    *selected_ = util::clamp(*selected_, 0, size() - 1);
+    focused_entry() = util::clamp(focused_entry(), 0, size() - 1);
   }
 
   bool Focusable() const final { return size(); }
