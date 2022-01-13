@@ -14,7 +14,8 @@
 #include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, reflect, text, Element, hbox, vbox, Elements, focus, nothing, select
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/util/ref.hpp"      // for Ref, ConstStringListRef
+#include "ftxui/screen/util.hpp"
+#include "ftxui/util/ref.hpp"  // for Ref, ConstStringListRef
 
 namespace ftxui {
 
@@ -91,7 +92,7 @@ class RadioboxBase : public ComponentBase {
       if (event == Event::TabReverse && size())
         hovered_ = (hovered_ + size() - 1) % size();
 
-      hovered_ = std::clamp(hovered_, 0, size() - 1);
+      hovered_ = util::clamp(hovered_, 0, size() - 1);
 
       if (hovered_ != old_hovered) {
         focused_entry() = hovered_;
@@ -145,7 +146,7 @@ class RadioboxBase : public ComponentBase {
     if (event.mouse().button == Mouse::WheelDown)
       (hovered_)++;
 
-    hovered_ = std::clamp(hovered_, 0, size() - 1);
+    hovered_ = util::clamp(hovered_, 0, size() - 1);
 
     if (hovered_ != old_hovered)
       option_->on_change();

@@ -14,7 +14,8 @@
 #include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, nothing, select, vbox, Elements, focus
 #include "ftxui/screen/box.hpp"  // for Box
-#include "ftxui/util/ref.hpp"    // for Ref, ConstStringListRef, ConstStringRef
+#include "ftxui/screen/util.hpp"
+#include "ftxui/util/ref.hpp"  // for Ref, ConstStringListRef, ConstStringRef
 
 namespace ftxui {
 
@@ -74,7 +75,7 @@ class MenuBase : public ComponentBase {
       if (event == Event::TabReverse && size())
         *selected_ = (*selected_ + size() - 1) % size();
 
-      *selected_ = std::clamp(*selected_, 0, size() - 1);
+      *selected_ = util::clamp(*selected_, 0, size() - 1);
 
       if (*selected_ != old_selected) {
         focused_entry() = *selected_;
@@ -131,7 +132,7 @@ class MenuBase : public ComponentBase {
     if (event.mouse().button == Mouse::WheelDown)
       (*selected_)++;
 
-    *selected_ = std::clamp(*selected_, 0, size() - 1);
+    *selected_ = util::clamp(*selected_, 0, size() - 1);
 
     if (*selected_ != old_selected)
       option_->on_change();
