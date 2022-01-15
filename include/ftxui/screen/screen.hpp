@@ -62,8 +62,8 @@ class Screen {
   void Print();
 
   // Get screen dimensions.
-  int dimx() { return dimx_; }
-  int dimy() { return dimy_; }
+  int dimx() const { return dimx_; }
+  int dimy() const { return dimy_; }
 
   // Move the terminal cursor n-lines up with n = dimy().
   std::string ResetPosition(bool clear = false);
