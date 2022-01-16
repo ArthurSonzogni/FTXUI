@@ -33,7 +33,9 @@ class TableSelection;
 
 class Table {
  public:
+  Table();
   Table(std::vector<std::vector<std::string>>);
+  Table(std::vector<std::vector<Element>>);
   TableSelection SelectAll();
   TableSelection SelectCell(int column, int row);
   TableSelection SelectRow(int row_index);
@@ -47,6 +49,7 @@ class Table {
   Element Render();
 
  private:
+  void Initialize(std::vector<std::vector<Element>>);
   friend TableSelection;
   std::vector<std::vector<Element>> elements_;
   int input_dim_x_;

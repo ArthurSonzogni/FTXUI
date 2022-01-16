@@ -35,7 +35,27 @@ void Order(int& a, int& b) {
 
 }  // namespace
 
+Table::Table() {
+  Initialize({});
+}
+
 Table::Table(std::vector<std::vector<std::string>> input) {
+  std::vector<std::vector<Element>> output;
+  for(auto& row : input) {
+    output.push_back({});
+    auto& output_row = output.back();
+    for(auto& cell : row) {
+      output_row.push_back(text(cell));
+    }
+  }
+  Initialize(std::move(output));
+}
+
+Table::Table(std::vector<std::vector<Element>> input) {
+  Initialize(std::move(input));
+}
+
+void Table::Initialize(std::vector<std::vector<Element>> input) {
   input_dim_y_ = input.size();
   input_dim_x_ = 0;
   for (auto& row : input)
@@ -55,7 +75,7 @@ Table::Table(std::vector<std::vector<std::string>> input) {
     for (auto& row : input) {
       int x = 1;
       for (auto& cell : row) {
-        elements_[y][x] = text(cell);
+        elements_[y][x] = std::move(cell);
         x += 2;
       }
       y += 2;
