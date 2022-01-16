@@ -12,7 +12,7 @@
 using namespace ftxui;
 
 TEST(TableTest, Empty) {
-  auto table = Table({});
+  auto table = Table();
   Screen screen(5, 5);
   Render(screen, table.Render());
   EXPECT_EQ(

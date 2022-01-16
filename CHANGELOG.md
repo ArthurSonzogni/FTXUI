@@ -20,6 +20,7 @@ unreleased (development)
   - `paragraphAlignJustify`
 - Add the helper elements based on `flexbox`: `hflow()`, `vflow()`.
 - Add: `focusPositionRelative` and `focusPosition`
+- Add `Table` constructor from 2D vector of Element, instead of string.
 
 #### Component 
 - Add the `collapsible` component.
