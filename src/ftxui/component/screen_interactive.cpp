@@ -324,6 +324,10 @@ ScreenInteractive::Callback ScreenInteractive::WithRestoredIO(Callback fn) {
 }
 
 void ScreenInteractive::Install() {
+  // After uninstalling the new configuration, flush it to the terminal to
+  // ensure it is fully applied:
+  on_exit_functions.push([] { Flush(); });
+
   on_exit_functions.push([this] { ExitLoopClosure()(); });
 
   // Install signal handlers to restore the terminal state on exit. The default
@@ -382,12 +386,6 @@ void ScreenInteractive::Install() {
   install_signal_handler(SIGWINCH, OnResize);
 #endif
 
-  // Commit state:
-  auto flush = [&] {
-    Flush();
-    on_exit_functions.push([] { Flush(); });
-  };
-
   auto enable = [&](std::vector<DECMode> parameters) {
     std::cout << Set(parameters);
     on_exit_functions.push([=] { std::cout << Reset(parameters); });
@@ -416,7 +414,9 @@ void ScreenInteractive::Install() {
       DECMode::kMouseSgrExtMode,
   });
 
-  flush();
+  // After installing the new configuration, flush it to the terminal to ensure
+  // it is fully applied:
+  Flush();
 
   quit_ = false;
   event_listener_ =
