@@ -272,7 +272,7 @@ void TableSelection::SeparatorVertical(BorderStyle style) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (x % 2 == 0) {
-        table_->elements_[y][x] = text(charset[style][5]);
+        table_->elements_[y][x] = separatorCharacter(charset[style][5]);
       }
     }
   }
@@ -282,7 +282,7 @@ void TableSelection::SeparatorHorizontal(BorderStyle style) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0) {
-        table_->elements_[y][x] = text(charset[style][4]);
+        table_->elements_[y][x] = separatorCharacter(charset[style][4]);
       }
     }
   }
