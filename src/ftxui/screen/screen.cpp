@@ -317,6 +317,10 @@ void UpgradeTopDown(std::string& top, std::string& down) {
   }
 }
 
+bool ShouldAttemptAutoMerge(Pixel& pixel) {
+  return pixel.automerge && pixel.character.size() == 3;
+}
+
 }  // namespace
 
 /// A fixed dimension.
@@ -457,19 +461,17 @@ void Screen::ApplyShader() {
   for (int y = 1; y < dimy_; ++y) {
     for (int x = 1; x < dimx_; ++x) {
       // Box drawing character uses exactly 3 byte.
-      std::string& cur = pixels_[y][x].character;
-      if (cur.size() != 3u)
+      Pixel& cur = pixels_[y][x];
+      if (!ShouldAttemptAutoMerge(cur))
         continue;
 
-      // Left vs current.
-      std::string& left = pixels_[y][x-1].character;
-      if (left.size() == 3u)
-        UpgradeLeftRight(left, cur);
+      Pixel& left = pixels_[y][x-1];
+      Pixel& top = pixels_[y-1][x];
 
-      // Top vs current.
-      std::string& top = pixels_[y-1][x].character;
-      if (top.size() == 3u)
-        UpgradeTopDown(top, cur);
+      if (ShouldAttemptAutoMerge(left))
+        UpgradeLeftRight(left.character, cur.character);
+      if (ShouldAttemptAutoMerge(top))
+        UpgradeTopDown(top.character, cur.character);
     }
   }
 }

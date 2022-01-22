@@ -28,13 +28,15 @@ struct Pixel {
   bool dim : 1;
   bool inverted : 1;
   bool underlined : 1;
+  bool automerge : 1;
 
   Pixel()
       : blink(false),
         bold(false),
         dim(false),
         inverted(false),
-        underlined(false) {}
+        underlined(false),
+        automerge(false) {}
 };
 
 /// @brief Define how the Screen's dimensions should look like.
