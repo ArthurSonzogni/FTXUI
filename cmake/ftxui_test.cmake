@@ -4,11 +4,15 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 include(FetchContent)
 
-FetchContent_Declare( googletest
+FetchContent_Declare(googletest
   GIT_REPOSITORY "https://github.com/google/googletest"
   GIT_TAG        23ef29555ef4789f555f1ba8c51b4c52975f0907
 )
-FetchContent_MakeAvailable(googletest)
+FetchContent_GetProperties(googletest)
+if(NOT googletest_POPULATED)
+  FetchContent_Populate(googletest)
+  add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
 
 add_executable(tests
   src/ftxui/component/component_test.cpp

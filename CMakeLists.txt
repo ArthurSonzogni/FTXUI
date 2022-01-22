@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 0.11.1
+  VERSION 2.0.0
 )
 
 option(FTXUI_BUILD_DOCS "Set to ON to build docs" ON)
