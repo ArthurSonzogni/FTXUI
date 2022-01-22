@@ -6,6 +6,10 @@ unreleased (development)
 
 ### Features:
 
+#### Screen
+- Add the `automerge` to the Pixel bit field. This now controls which pixels are
+  automatically merged.
+
 #### DOM:
 - Add the `Canvas` class and `ElementFrom('canvas')` function. Together users of
   the library can draw using braille and block characters.
@@ -29,6 +33,9 @@ unreleased (development)
   you want to execute command using directly stdin/stdout/sterr.
 
 ### Bug
+
+#### Table
+- The `table` horizontal and vertical separator are now correctly expanded.
 
 #### Component 
 - `Input` shouldn't take focus when hovered by the mouse.

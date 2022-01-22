@@ -31,7 +31,9 @@ class Separator : public Node {
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).character = value_;
+        Pixel& pixel = screen.PixelAt(x, y);
+        pixel.character = value_;
+        pixel.automerge = true;
       }
     }
   }
@@ -56,7 +58,9 @@ class SeparatorAuto : public Node {
 
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).character = c;
+        Pixel& pixel = screen.PixelAt(x, y);
+        pixel.character = c;
+        pixel.automerge = true;
       }
     }
   }
@@ -66,7 +70,9 @@ class SeparatorAuto : public Node {
 
 class SeparatorWithPixel : public SeparatorAuto {
  public:
-  SeparatorWithPixel(Pixel pixel) : SeparatorAuto(LIGHT), pixel_(pixel) {}
+  SeparatorWithPixel(Pixel pixel) : SeparatorAuto(LIGHT), pixel_(pixel) {
+    pixel_.automerge = true;
+  }
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
