@@ -1,6 +1,5 @@
 #include <iostream>
-//#include "ftxui/component/event.hpp"
-//#include "ftxui/component/receiver.hpp"
+#include <cassert>
 #include <vector>
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"
@@ -57,7 +56,11 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
   if (depth <= 0)
     return Button(GeneratorString(data, size), [] {});
 
-  switch (value % 19) {
+  constexpr int value_max = 19;
+  value = (value % value_max + value_max) % value_max;
+  switch (value) {
+    case 0:
+      return Button(GeneratorString(data, size), [] {});
     case 1:
       return Checkbox(GeneratorString(data, size), &g_bool);
     case 2:
@@ -106,8 +109,12 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
       return Maybe(GeneratorComponent(data, size, depth - 1), &g_bool);
     case 17:
       return Dropdown(&g_list, &g_int);
+    case 18:
+      return Collapsible(GeneratorString(data, size),
+                         GeneratorComponent(data, size, depth - 1),
+                         GeneratorBool(data, size));
     default:
-      return Button(GeneratorString(data, size), [] {});
+      assert(false);
   }
 }
 
