@@ -3,7 +3,12 @@ if (NOT WIN32)
     GIT_REPOSITORY "https://github.com/google/benchmark"
     GIT_TAG 62937f91b5c763a8e119d0c20c67b87bde8eff1c 
   )
-  FetchContent_MakeAvailable(googlebenchmark)
+
+  FetchContent_GetProperties(googlebenchmark)
+  if(NOT googlebenchmark_POPULATED)
+    FetchContent_Populate(googlebenchmark)
+    add_subdirectory(${googlebenchmark_SOURCE_DIR} ${googlebenchmark_BINARY_DIR} EXCLUDE_FROM_ALL)
+  endif()
 
   add_executable(ftxui_benchmark
     src/ftxui/dom/benchmark_test.cpp

@@ -1,8 +1,11 @@
 Changelog
 =========
 
-unreleased (development) 
-------------------------
+current (development) 
+---------------------
+
+2.0.0
+-----
 
 ### Features:
 
