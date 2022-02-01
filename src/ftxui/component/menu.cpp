@@ -1,4 +1,4 @@
-#include <algorithm>   // for clamp, max
+#include <algorithm>   // for max
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator_traits<>::value_type
 #include <string>      // for operator+, string
@@ -13,9 +13,9 @@
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released, Mouse::WheelDown, Mouse::WheelUp, Mouse::None
 #include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, nothing, select, vbox, Elements, focus
-#include "ftxui/screen/box.hpp"  // for Box
-#include "ftxui/screen/util.hpp"
-#include "ftxui/util/ref.hpp"  // for Ref, ConstStringListRef, ConstStringRef
+#include "ftxui/screen/box.hpp"   // for Box
+#include "ftxui/screen/util.hpp"  // for clamp
+#include "ftxui/util/ref.hpp"     // for Ref, ConstStringListRef, ConstStringRef
 
 namespace ftxui {
 

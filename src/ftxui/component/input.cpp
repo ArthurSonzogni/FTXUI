@@ -1,5 +1,5 @@
 #include <stddef.h>    // for size_t
-#include <algorithm>   // for clamp, max, min
+#include <algorithm>   // for max, min
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator
 #include <string>      // for string, wstring
@@ -17,6 +17,7 @@
 #include "ftxui/dom/elements.hpp"  // for operator|, text, Element, reflect, inverted, Decorator, flex, focus, hbox, size, bold, dim, frame, select, EQUAL, HEIGHT
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/string.hpp"  // for GlyphPosition, GlyphCount, to_string, CellToGlyphIndex, to_wstring
+#include "ftxui/screen/util.hpp"  // for clamp
 #include "ftxui/util/ref.hpp"  // for StringRef, Ref, WideStringRef, ConstStringRef
 
 namespace ftxui {
@@ -189,7 +190,7 @@ class InputBase : public ComponentBase {
 
     auto mapping = CellToGlyphIndex(*content_);
     int original_glyph = cursor_position();
-    original_glyph = std::clamp(original_glyph, 0, int(mapping.size()));
+    original_glyph = util::clamp(original_glyph, 0, int(mapping.size()));
     int original_cell = 0;
     for (size_t i = 0; i < mapping.size(); i++) {
       if (mapping[i] == original_glyph) {
@@ -202,7 +203,7 @@ class InputBase : public ComponentBase {
     int target_cell = original_cell + event.mouse().x - cursor_box_.x_min;
     int target_glyph = target_cell < (int)mapping.size() ? mapping[target_cell]
                                                          : (int)mapping.size();
-    target_glyph = std::clamp(target_glyph, 0, GlyphCount(*content_));
+    target_glyph = util::clamp(target_glyph, 0, GlyphCount(*content_));
     if (cursor_position() != target_glyph) {
       cursor_position() = target_glyph;
       option_->on_change();
