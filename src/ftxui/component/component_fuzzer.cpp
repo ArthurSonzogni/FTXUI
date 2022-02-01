@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cassert>
+#include <iostream>
 #include <vector>
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"

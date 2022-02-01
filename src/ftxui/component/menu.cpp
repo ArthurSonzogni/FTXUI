@@ -38,9 +38,8 @@ class MenuBase : public ComponentBase {
                                              : option_->style_selected)
                                : (is_focused ? option_->style_focused
                                              : option_->style_normal);
-      auto focus_management = !is_selected      ? nothing
-                              : is_menu_focused ? focus
-                                                : select;
+      auto focus_management =
+          !is_selected ? nothing : is_menu_focused ? focus : select;
       auto icon = is_selected ? "> " : "  ";
       elements.push_back(text(icon + entries_[i]) | style | focus_management |
                          reflect(boxes_[i]));

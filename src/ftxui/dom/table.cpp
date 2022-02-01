@@ -41,10 +41,10 @@ Table::Table() {
 
 Table::Table(std::vector<std::vector<std::string>> input) {
   std::vector<std::vector<Element>> output;
-  for(auto& row : input) {
+  for (auto& row : input) {
     output.push_back({});
     auto& output_row = output.back();
-    for(auto& cell : row) {
+    for (auto& cell : row) {
       output_row.push_back(text(cell));
     }
   }
