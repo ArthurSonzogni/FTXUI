@@ -312,6 +312,7 @@ Feel free to add your projects here:
 - [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
 - [vantage](https://github.com/gokulmaxi/vantage)
 - [tabdeeli](https://github.com/typon/tabdeeli)
+- [tiles](https://github.com/tusharpm/tiles)
 
 ## Hosted on
  * [github](https://github.com/ArthurSonzogni/ftxui)
