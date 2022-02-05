@@ -46,11 +46,13 @@ class Gauge : public Node {
         requirement_.flex_grow_y = 0;
         requirement_.flex_shrink_x = 1;
         requirement_.flex_shrink_y = 0;
+	break;
       case VERTICAL:
         requirement_.flex_grow_x = 0;
         requirement_.flex_grow_y = 1;
         requirement_.flex_shrink_x = 0;
         requirement_.flex_shrink_y = 1;
+	break;
     }
     requirement_.min_x = 1;
     requirement_.min_y = 1;
@@ -58,8 +60,8 @@ class Gauge : public Node {
 
   void Render(Screen& screen) override {
     switch(direction_) {
-      case HORIZONTAL: RenderHorizontal(screen);
-      case VERTICAL: RenderVertical(screen);
+      case HORIZONTAL: RenderHorizontal(screen); break;
+      case VERTICAL: RenderVertical(screen); break;
     }
   }
 
