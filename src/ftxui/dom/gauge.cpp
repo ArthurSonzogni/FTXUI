@@ -41,18 +41,21 @@ class Gauge : public Node {
 
   void ComputeRequirement() override {
     switch(direction_) {
-      case HORIZONTAL:
+      case GaugeDirection::RIGHT:
         requirement_.flex_grow_x = 1;
         requirement_.flex_grow_y = 0;
         requirement_.flex_shrink_x = 1;
         requirement_.flex_shrink_y = 0;
 	break;
-      case VERTICAL:
+      case GaugeDirection::UP:
         requirement_.flex_grow_x = 0;
         requirement_.flex_grow_y = 1;
         requirement_.flex_shrink_x = 0;
         requirement_.flex_shrink_y = 1;
 	break;
+      case GaugeDirection::DOWN:
+      case GaugeDirection::LEFT:
+	break; //TODO implement these two
     }
     requirement_.min_x = 1;
     requirement_.min_y = 1;
@@ -60,12 +63,15 @@ class Gauge : public Node {
 
   void Render(Screen& screen) override {
     switch(direction_) {
-      case HORIZONTAL: RenderHorizontal(screen); break;
-      case VERTICAL: RenderVertical(screen); break;
+      case GaugeDirection::RIGHT: RenderRight(screen); break;
+      case GaugeDirection::UP: RenderUp(screen); break;
+      case GaugeDirection::DOWN:
+      case GaugeDirection::LEFT:
+	break; //TODO implement these two
     }
   }
 
-  void RenderHorizontal(Screen& screen) {
+  void RenderRight(Screen& screen) {
     int y = box_.y_min;
     if (y > box_.y_max)
       return;
@@ -80,7 +86,7 @@ class Gauge : public Node {
       screen.at(x++, y) = charset_horizontal[0];
   }
 
-  void RenderVertical(Screen& screen) {
+  void RenderUp(Screen& screen) {
     int x = box_.x_min;
     if (x > box_.x_max)
       return;
@@ -101,29 +107,15 @@ class Gauge : public Node {
 
 };
 
-/// @brief Draw a high definition progress bar.
+/// @brief Draw a high definition progress bar progressing in specified direction.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
+//  @param direction Direction of progress bars progression.
 /// @ingroup dom
-///
-/// ### Example
-///
-/// A gauge. It can be used to represent a progress bar.
-/// ~~~cpp
-/// border(gauge(0.5))
-/// ~~~
-///
-/// #### Output
-///
-/// ~~~bash
-/// ┌──────────────────────────────────────────────────────────────────────────┐
-/// │█████████████████████████████████████                                     │
-/// └──────────────────────────────────────────────────────────────────────────┘
-/// ~~~
-Element gauge(float progress) {
-  return std::make_shared<Gauge>(progress, HORIZONTAL);
+Element gaugeDirection(float progress, GaugeDirection direction) {
+  return std::make_shared<Gauge>(progress, direction);
 }
 
-/// @brief Draw a high definition vertical progress bar.
+/// @brief Draw a high definition progress bar progressing from bottom to top.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
 ///
@@ -148,8 +140,52 @@ Element gauge(float progress) {
 ///  │█│
 ///  └─┘
 /// ~~~
-Element gaugeVertical(float progress) {
-  return std::make_shared<Gauge>(progress, VERTICAL);
+Element gaugeUp(float progress) {
+  return gaugeDirection(progress, GaugeDirection::UP);
+}
+
+/// @brief Draw a high definition progress bar progressing from left to right.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge. It can be used to represent a progress bar.
+/// ~~~cpp
+/// border(gauge(0.5))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+/// ┌──────────────────────────────────────────────────────────────────────────┐
+/// │█████████████████████████████████████                                     │
+/// └──────────────────────────────────────────────────────────────────────────┘
+/// ~~~
+Element gaugeRight(float progress) {
+  return gaugeDirection(progress, GaugeDirection::RIGHT);
+}
+
+/// @brief Draw a high definition progress bar.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge. It can be used to represent a progress bar.
+/// ~~~cpp
+/// border(gauge(0.5))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+/// ┌──────────────────────────────────────────────────────────────────────────┐
+/// │█████████████████████████████████████                                     │
+/// └──────────────────────────────────────────────────────────────────────────┘
+/// ~~~
+Element gauge(float progress) {
+  return gaugeRight(progress);
 }
 
 }  // namespace ftxui
