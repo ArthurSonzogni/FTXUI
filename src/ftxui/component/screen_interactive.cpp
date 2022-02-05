@@ -277,7 +277,6 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 }
 
 void ScreenInteractive::Loop(Component component) {
-
   // Suspend previously active screen:
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
