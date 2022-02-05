@@ -45,6 +45,7 @@ Element separatorCharacter(std::string);
 Element gauge(float ratio);
 Element gaugeUp(float ratio);
 Element gaugeRight(float ratio);
+Element gaugeLeft(float ratio);
 Element gaugeDirection(float ratio, GaugeDirection);
 Element border(Element);
 Element borderLight(Element);

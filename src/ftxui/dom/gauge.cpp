@@ -10,7 +10,7 @@
 
 namespace ftxui {
 
-static std::string charset_horizontal[11] = {
+static std::string charset_right[11] = {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft's terminals often use fonts not handling the 8 unicode
     // characters for representing the whole gauge. Fallback with less.
@@ -22,7 +22,11 @@ static std::string charset_horizontal[11] = {
     // int(9 * (limit - limit_int) = 9
     "█"};
 
-static std::string charset_vertical[11] = {
+static std::string charset_left[7] = {
+    " ", " ", " ", "▕", "▐", "█",
+    "█"};
+
+static std::string charset_up[11] = {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft's terminals often use fonts not handling the 8 unicode
     // characters for representing the whole gauge. Fallback with less.
@@ -42,20 +46,19 @@ class Gauge : public Node {
   void ComputeRequirement() override {
     switch(direction_) {
       case GaugeDirection::RIGHT:
+      case GaugeDirection::LEFT:
         requirement_.flex_grow_x = 1;
         requirement_.flex_grow_y = 0;
         requirement_.flex_shrink_x = 1;
         requirement_.flex_shrink_y = 0;
 	break;
       case GaugeDirection::UP:
+      case GaugeDirection::DOWN:
         requirement_.flex_grow_x = 0;
         requirement_.flex_grow_y = 1;
         requirement_.flex_shrink_x = 0;
         requirement_.flex_shrink_y = 1;
 	break;
-      case GaugeDirection::DOWN:
-      case GaugeDirection::LEFT:
-	break; //TODO implement these two
     }
     requirement_.min_x = 1;
     requirement_.min_y = 1;
@@ -65,8 +68,8 @@ class Gauge : public Node {
     switch(direction_) {
       case GaugeDirection::RIGHT: RenderRight(screen); break;
       case GaugeDirection::UP: RenderUp(screen); break;
+      case GaugeDirection::LEFT: RenderLeft(screen); break;
       case GaugeDirection::DOWN:
-      case GaugeDirection::LEFT:
 	break; //TODO implement these two
     }
   }
@@ -80,10 +83,25 @@ class Gauge : public Node {
     int limit_int = limit;
     int x = box_.x_min;
     while (x < limit_int)
-      screen.at(x++, y) = charset_horizontal[9];
-    screen.at(x++, y) = charset_horizontal[int(9 * (limit - limit_int))];
+      screen.at(x++, y) = charset_right[9];
+    screen.at(x++, y) = charset_right[int(9 * (limit - limit_int))];
     while (x <= box_.x_max)
-      screen.at(x++, y) = charset_horizontal[0];
+      screen.at(x++, y) = charset_right[0];
+  }
+
+  void RenderLeft(Screen& screen) {
+    int y = box_.y_min;
+    if (y > box_.y_max)
+      return;
+
+    float limit = box_.x_max - (progress_ * box_.x_max) + 1;
+    int limit_int = limit;
+    int x = box_.x_max;
+    while (x > limit_int)
+      screen.at(x--, y) = charset_left[6];
+    screen.at(x++, y) = charset_left[int(6 - (6 * (limit - limit_int)))];
+    while (x <= box_.x_min)
+      screen.at(x--, y) = charset_left[0];
   }
 
   void RenderUp(Screen& screen) {
@@ -96,10 +114,10 @@ class Gauge : public Node {
 
     int y = box_.y_max;
     while (y > limit_int)
-      screen.at(x, y--) = charset_vertical[9];
-    screen.at(x, y--) = charset_vertical[int(9 - (9 * (limit - limit_int)))];
+      screen.at(x, y--) = charset_up[9];
+    screen.at(x, y--) = charset_up[int(9 - (9 * (limit - limit_int)))];
     while (y >= box_.y_min)
-      screen.at(x, y--) = charset_vertical[0];
+      screen.at(x, y--) = charset_up[0];
   }
  private:
   float progress_;
@@ -164,6 +182,28 @@ Element gaugeUp(float progress) {
 /// ~~~
 Element gaugeRight(float progress) {
   return gaugeDirection(progress, GaugeDirection::RIGHT);
+}
+
+/// @brief Draw a high definition progress bar progressing from right to left.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge. It can be used to represent a progress bar.
+/// ~~~cpp
+/// border(gauge(0.5))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+/// ┌──────────────────────────────────────────────────────────────────────────┐
+/// │                                     █████████████████████████████████████│
+/// └──────────────────────────────────────────────────────────────────────────┘
+/// ~~~
+Element gaugeLeft(float progress) {
+  return gaugeDirection(progress, GaugeDirection::LEFT);
 }
 
 /// @brief Draw a high definition progress bar.
