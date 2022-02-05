@@ -35,8 +35,8 @@ class CheckboxBase : public ComponentBase {
     bool is_focused = Focused();
     bool is_active = Active();
     auto style = (is_focused || hovered_) ? option_->style_selected_focused
-                                          : is_active ? option_->style_selected
-                                                      : option_->style_normal;
+                 : is_active              ? option_->style_selected
+                                          : option_->style_normal;
     auto focus_management = is_focused ? focus : is_active ? select : nothing;
     return hbox({
                text(*state_ ? option_->style_checked

@@ -53,8 +53,9 @@ class RadioboxBase : public ComponentBase {
                                              : option_->style_selected)
                                : (is_focused ? option_->style_focused
                                              : option_->style_normal);
-      auto focus_management =
-          !is_selected ? nothing : is_menu_focused ? focus : select;
+      auto focus_management = !is_selected      ? nothing
+                              : is_menu_focused ? focus
+                                                : select;
 
       const std::string& symbol =
           *selected_ == i ? option_->style_checked : option_->style_unchecked;

@@ -45,8 +45,9 @@ class ToggleBase : public ComponentBase {
                                              : option_->style_selected)
                                : (is_focused ? option_->style_focused
                                              : option_->style_normal);
-      auto focus_management =
-          !is_selected ? nothing : is_toggle_focused ? focus : select;
+      auto focus_management = !is_selected        ? nothing
+                              : is_toggle_focused ? focus
+                                                  : select;
       children.push_back(text(entries_[i]) | style | focus_management |
                          reflect(boxes_[i]));
     }
