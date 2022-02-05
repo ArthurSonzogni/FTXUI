@@ -23,8 +23,7 @@ static std::string charset_right[11] = {
     "█"};
 
 static std::string charset_left[7] = {
-    " ", " ", " ", "▕", "▐", "█",
-    "█"};
+    " ", " ", " ", "▕", "▐", "█", "█"};
 
 static std::string charset_up[11] = {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
@@ -38,6 +37,9 @@ static std::string charset_up[11] = {
     // An extra character in case when the fuzzer manage to have:
     // int(9 * (limit - limit_int) = 9
     "█"};
+
+static std::string charset_down[7] = {
+    " ", " ", " ", "▔", "▀", "█", "█"};
 
 class Gauge : public Node {
  public:
@@ -69,8 +71,7 @@ class Gauge : public Node {
       case GaugeDirection::RIGHT: RenderRight(screen); break;
       case GaugeDirection::UP: RenderUp(screen); break;
       case GaugeDirection::LEFT: RenderLeft(screen); break;
-      case GaugeDirection::DOWN:
-	break; //TODO implement these two
+      case GaugeDirection::DOWN: RenderDown(screen); break;
     }
   }
 
@@ -119,6 +120,23 @@ class Gauge : public Node {
     while (y >= box_.y_min)
       screen.at(x, y--) = charset_up[0];
   }
+
+  void RenderDown(Screen& screen) {
+    int x = box_.x_min;
+    if (x > box_.x_max)
+      return;
+
+    float limit = box_.y_min + (progress_ * box_.y_max) + 1;
+    int limit_int = limit;
+
+    int y = box_.y_min;
+    while (y < limit_int)
+      screen.at(x, y++) = charset_down[6];
+    screen.at(x, y++) = charset_down[int(6 * (limit - limit_int))];
+    while (y <= box_.y_max)
+      screen.at(x, y++) = charset_down[0];
+  }
+
  private:
   float progress_;
   GaugeDirection direction_;
@@ -133,35 +151,6 @@ Element gaugeDirection(float progress, GaugeDirection direction) {
   return std::make_shared<Gauge>(progress, direction);
 }
 
-/// @brief Draw a high definition progress bar progressing from bottom to top.
-/// @param progress The proportion of the area to be filled. Belong to [0,1].
-/// @ingroup dom
-///
-/// ### Example
-///
-/// A vertical gauge. It can be used to represent a vertical progress bar.
-/// ~~~cpp
-/// border(gaugeVertical(0.5))
-/// ~~~
-///
-/// #### Output
-///
-/// ~~~bash
-///  ┌─┐
-///  │ │
-///  │ │
-///  │ │
-///  │ │
-///  │█│
-///  │█│
-///  │█│
-///  │█│
-///  └─┘
-/// ~~~
-Element gaugeUp(float progress) {
-  return gaugeDirection(progress, GaugeDirection::UP);
-}
-
 /// @brief Draw a high definition progress bar progressing from left to right.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
@@ -170,7 +159,7 @@ Element gaugeUp(float progress) {
 ///
 /// A gauge. It can be used to represent a progress bar.
 /// ~~~cpp
-/// border(gauge(0.5))
+/// border(gaugeRight(0.5))
 /// ~~~
 ///
 /// #### Output
@@ -192,7 +181,7 @@ Element gaugeRight(float progress) {
 ///
 /// A gauge. It can be used to represent a progress bar.
 /// ~~~cpp
-/// border(gauge(0.5))
+/// border(gaugeLeft(0.5))
 /// ~~~
 ///
 /// #### Output
@@ -204,6 +193,64 @@ Element gaugeRight(float progress) {
 /// ~~~
 Element gaugeLeft(float progress) {
   return gaugeDirection(progress, GaugeDirection::LEFT);
+}
+
+/// @brief Draw a high definition progress bar progressing from bottom to top.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge. It can be used to represent a progress bar.
+/// ~~~cpp
+/// border(gaugeUp(0.5))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+///  ┌─┐
+///  │ │
+///  │ │
+///  │ │
+///  │ │
+///  │█│
+///  │█│
+///  │█│
+///  │█│
+///  └─┘
+/// ~~~
+Element gaugeUp(float progress) {
+  return gaugeDirection(progress, GaugeDirection::UP);
+}
+
+/// @brief Draw a high definition progress bar progressing from top to bottom.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge. It can be used to represent a progress bar.
+/// ~~~cpp
+/// border(gaugeDown(0.5))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+///  ┌─┐
+///  │█│
+///  │█│
+///  │█│
+///  │█│
+///  │ │
+///  │ │
+///  │ │
+///  │ │
+///  └─┘
+/// ~~~
+Element gaugeDown(float progress) {
+  return gaugeDirection(progress, GaugeDirection::DOWN);
 }
 
 /// @brief Draw a high definition progress bar.
