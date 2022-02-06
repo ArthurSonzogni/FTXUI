@@ -22,49 +22,54 @@ static std::string charset_right[11] = {
     // int(9 * (limit - limit_int) = 9
     "█"};
 
-static std::string charset_left[7] = {
-    " ", " ", " ", "▕", "▐", "█", "█"
-};
+static std::string charset_left[7] = {" ", " ", " ", "▕", "▐", "█", "█"};
 
-static std::string charset_up[11] = {
-    " ", " ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"
-};
+static std::string charset_up[11] = {" ", " ", "▁", "▂", "▃",
+                                     "▄", "▅", "▆", "▇", "█"};
 
-static std::string charset_down[7] = {
-    " ", " ", " ", "▔", "▀", "█", "█"
-};
+static std::string charset_down[7] = {" ", " ", " ", "▔", "▀", "█", "█"};
 
 class Gauge : public Node {
  public:
-  Gauge(float progress, GaugeDirection direction) : progress_(std::min(std::max(progress, 0.f), 1.f)), direction_(direction) {}
+  Gauge(float progress, GaugeDirection direction)
+      : progress_(std::min(std::max(progress, 0.f), 1.f)),
+        direction_(direction) {}
 
   void ComputeRequirement() override {
-    switch(direction_) {
+    switch (direction_) {
       case GaugeDirection::RIGHT:
       case GaugeDirection::LEFT:
         requirement_.flex_grow_x = 1;
         requirement_.flex_grow_y = 0;
         requirement_.flex_shrink_x = 1;
         requirement_.flex_shrink_y = 0;
-	break;
+        break;
       case GaugeDirection::UP:
       case GaugeDirection::DOWN:
         requirement_.flex_grow_x = 0;
         requirement_.flex_grow_y = 1;
         requirement_.flex_shrink_x = 0;
         requirement_.flex_shrink_y = 1;
-	break;
+        break;
     }
     requirement_.min_x = 1;
     requirement_.min_y = 1;
   }
 
   void Render(Screen& screen) override {
-    switch(direction_) {
-      case GaugeDirection::RIGHT: RenderRight(screen); break;
-      case GaugeDirection::UP: RenderUp(screen); break;
-      case GaugeDirection::LEFT: RenderLeft(screen); break;
-      case GaugeDirection::DOWN: RenderDown(screen); break;
+    switch (direction_) {
+      case GaugeDirection::RIGHT:
+        RenderRight(screen);
+        break;
+      case GaugeDirection::UP:
+        RenderUp(screen);
+        break;
+      case GaugeDirection::LEFT:
+        RenderLeft(screen);
+        break;
+      case GaugeDirection::DOWN:
+        RenderDown(screen);
+        break;
     }
   }
 
@@ -133,10 +138,10 @@ class Gauge : public Node {
  private:
   float progress_;
   GaugeDirection direction_;
-
 };
 
-/// @brief Draw a high definition progress bar progressing in specified direction.
+/// @brief Draw a high definition progress bar progressing in specified
+/// direction.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 //  @param direction Direction of progress bars progression.
 /// @ingroup dom
