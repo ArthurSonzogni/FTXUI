@@ -17,7 +17,7 @@ class Inverted : public NodeDecorator {
     Node::Render(screen);
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).inverted = true;
+        screen.PixelAt(x, y).inverted ^= true;
       }
     }
   }

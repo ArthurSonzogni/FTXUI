@@ -4,6 +4,20 @@ Changelog
 current (development) 
 ---------------------
 
+### Features:
+
+#### DOM:
+- The `inverted` decorator now toggle in the inverted attribute.
+- Add `gauge` for the 4 directions. Expose the following API:
+```cpp
+Element gauge(float ratio);
+Element gaugeLeft(float ratio);
+Element gaugeRight(float ratio);
+Element gaugeUp(float ratio);
+Element gaugeDown(float ratio);
+Element gaugeDirection(float ratio, GaugeDirection);
+```
+
 2.0.0
 -----
 
