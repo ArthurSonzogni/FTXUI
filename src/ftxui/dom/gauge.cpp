@@ -23,23 +23,16 @@ static std::string charset_right[11] = {
     "█"};
 
 static std::string charset_left[7] = {
-    " ", " ", " ", "▕", "▐", "█", "█"};
+    " ", " ", " ", "▕", "▐", "█", "█"
+};
 
 static std::string charset_up[11] = {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // Microsoft's terminals often use fonts not handling the 8 unicode
-    // characters for representing the whole gauge. Fallback with less.
-    " ", " ", "▁", "▂", "▃", "▄", "▅", "▆", "▇",
-#else
-
-    " ", " ", "▁", "▂", "▃", "▄", "▅", "▆", "▇",
-#endif
-    // An extra character in case when the fuzzer manage to have:
-    // int(9 * (limit - limit_int) = 9
-    "█"};
+    " ", " ", "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"
+};
 
 static std::string charset_down[7] = {
-    " ", " ", " ", "▔", "▀", "█", "█"};
+    " ", " ", " ", "▔", "▀", "█", "█"
+};
 
 class Gauge : public Node {
  public:
