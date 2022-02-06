@@ -45,15 +45,15 @@ class Gauge : public Node {
 
   void ComputeRequirement() override {
     switch (direction_) {
-      case GaugeDirection::RIGHT:
-      case GaugeDirection::LEFT:
+      case GaugeDirection::Right:
+      case GaugeDirection::Left:
         requirement_.flex_grow_x = 1;
         requirement_.flex_grow_y = 0;
         requirement_.flex_shrink_x = 1;
         requirement_.flex_shrink_y = 0;
         break;
-      case GaugeDirection::UP:
-      case GaugeDirection::DOWN:
+      case GaugeDirection::Up:
+      case GaugeDirection::Down:
         requirement_.flex_grow_x = 0;
         requirement_.flex_grow_y = 1;
         requirement_.flex_shrink_x = 0;
@@ -66,16 +66,16 @@ class Gauge : public Node {
 
   void Render(Screen& screen) override {
     switch (direction_) {
-      case GaugeDirection::RIGHT:
+      case GaugeDirection::Right:
         RenderHorizontal(screen, /*invert=*/false);
         break;
-      case GaugeDirection::UP:
+      case GaugeDirection::Up:
         RenderVertical(screen, /*invert=*/false);
         break;
-      case GaugeDirection::LEFT:
+      case GaugeDirection::Left:
         RenderHorizontal(screen, /*invert=*/true);
         break;
-      case GaugeDirection::DOWN:
+      case GaugeDirection::Down:
         RenderVertical(screen, /*invert=*/true);
         break;
     }
@@ -162,7 +162,7 @@ Element gaugeDirection(float progress, GaugeDirection direction) {
 /// └──────────────────────────────────────────────────────────────────────────┘
 /// ~~~
 Element gaugeRight(float progress) {
-  return gaugeDirection(progress, GaugeDirection::RIGHT);
+  return gaugeDirection(progress, GaugeDirection::Right);
 }
 
 /// @brief Draw a high definition progress bar progressing from right to left.
@@ -184,7 +184,7 @@ Element gaugeRight(float progress) {
 /// └──────────────────────────────────────────────────────────────────────────┘
 /// ~~~
 Element gaugeLeft(float progress) {
-  return gaugeDirection(progress, GaugeDirection::LEFT);
+  return gaugeDirection(progress, GaugeDirection::Left);
 }
 
 /// @brief Draw a high definition progress bar progressing from bottom to top.
@@ -213,7 +213,7 @@ Element gaugeLeft(float progress) {
 ///  └─┘
 /// ~~~
 Element gaugeUp(float progress) {
-  return gaugeDirection(progress, GaugeDirection::UP);
+  return gaugeDirection(progress, GaugeDirection::Up);
 }
 
 /// @brief Draw a high definition progress bar progressing from top to bottom.
@@ -242,7 +242,7 @@ Element gaugeUp(float progress) {
 ///  └─┘
 /// ~~~
 Element gaugeDown(float progress) {
-  return gaugeDirection(progress, GaugeDirection::DOWN);
+  return gaugeDirection(progress, GaugeDirection::Down);
 }
 
 /// @brief Draw a high definition progress bar.

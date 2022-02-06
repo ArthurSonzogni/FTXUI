@@ -21,7 +21,7 @@ using Decorator = std::function<Element(Element)>;
 using GraphFunction = std::function<std::vector<int>(int, int)>;
 
 enum BorderStyle { LIGHT, HEAVY, DOUBLE, ROUNDED, EMPTY };
-enum class GaugeDirection { LEFT, UP, RIGHT, DOWN };
+enum class GaugeDirection { Left, Up, Right, Down };
 
 // Pipe elements into decorator togethers.
 // For instance the next lines are equivalents:

@@ -16,23 +16,54 @@ int main(int argc, const char* argv[]) {
   for (float percentage = 0.0f; percentage <= 1.0f; percentage += 0.002f) {
     std::string data_downloaded =
         std::to_string(int(percentage * 5000)) + "/5000";
-    auto document = vbox({
-                        hbox({
-                            vtext("gauge horizontal"),
-                            separator(),
-                            gaugeUp(percentage) | color(Color::Red),
-                            gaugeUp(percentage),
-                            gaugeUp(percentage),
-                            separator(),
-                            gaugeDown(percentage) | inverted,
-                            gaugeDown(percentage),
-                            gaugeDown(percentage),
-                        }),
-                        separator(),
-                        text(data_downloaded),
-                    }) |
-                    border;
-    auto screen = Screen(11, 20);
+
+    auto gauge_up=  //
+        hbox({
+            vtext("gauge vertical"),
+            separator(),
+            gaugeUp(percentage),
+        }) |
+        border;
+
+    auto gauge_down=  //
+        hbox({
+            vtext("gauge vertical"),
+            separator(),
+            gaugeDown(percentage),
+        }) |
+        border;
+
+    auto gauge_right=  //
+        vbox({
+            text("gauge horizontal"),
+            separator(),
+            gaugeRight(percentage),
+        }) |
+        border;
+
+    auto gauge_left=  //
+        vbox({
+            text("gauge horizontal"),
+            separator(),
+            gaugeLeft(percentage),
+        }) |
+        border;
+
+    auto document = hbox({
+        gauge_up,
+        filler(),
+        vbox({
+            gauge_right,
+            filler(),
+            text(data_downloaded) | border | center,
+            filler(),
+            gauge_left,
+        }),
+        filler(),
+        gauge_down,
+    });
+
+    auto screen = Screen(32, 16);
     Render(screen, document);
     std::cout << reset_position;
     screen.Print();
