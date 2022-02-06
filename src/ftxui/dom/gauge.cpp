@@ -22,12 +22,20 @@ static std::string charset_right[11] = {
     // int(9 * (limit - limit_int) = 9
     "█"};
 
-static std::string charset_left[7] = {" ", " ", " ", "▕", "▐", "█", "█"};
-
-static std::string charset_up[11] = {" ", " ", "▁", "▂", "▃",
-                                     "▄", "▅", "▆", "▇", "█"};
-
-static std::string charset_down[7] = {" ", " ", " ", "▔", "▀", "█", "█"};
+static std::string charset_up[10] = {
+    " ",
+    "▁",
+    "▂",
+    "▃",
+    "▄",
+    "▅",
+    "▆",
+    "▇",
+    "█",
+    // An extra character in case when the fuzzer manage to have:
+    // int(8 * (limit - limit_int) = 8
+    "█",
+};
 
 class Gauge : public Node {
  public:
@@ -59,80 +67,66 @@ class Gauge : public Node {
   void Render(Screen& screen) override {
     switch (direction_) {
       case GaugeDirection::RIGHT:
-        RenderRight(screen);
+        RenderHorizontal(screen, false);
         break;
       case GaugeDirection::UP:
-        RenderUp(screen);
+        RenderVertical(screen, false);
         break;
       case GaugeDirection::LEFT:
-        RenderLeft(screen);
+        RenderHorizontal(screen, true);
         break;
       case GaugeDirection::DOWN:
-        RenderDown(screen);
+        RenderVertical(screen, true);
         break;
     }
   }
 
-  void RenderRight(Screen& screen) {
+  void RenderHorizontal(Screen& screen, bool invert) {
     int y = box_.y_min;
     if (y > box_.y_max)
       return;
 
-    float limit = box_.x_min + progress_ * (box_.x_max - box_.x_min + 1);
-    int limit_int = limit;
-    int x = box_.x_min;
-    while (x < limit_int)
-      screen.at(x++, y) = charset_right[9];
-    screen.at(x++, y) = charset_right[int(9 * (limit - limit_int))];
-    while (x <= box_.x_max)
-      screen.at(x++, y) = charset_right[0];
+    // Draw the progress bar horizontally.
+    {
+      float progress = invert ? 1.f - progress_ : progress_;
+      float limit = box_.x_min + progress * (box_.x_max - box_.x_min + 1);
+      int limit_int = limit;
+      int x = box_.x_min;
+      while (x < limit_int)
+        screen.at(x++, y) = charset_right[9];
+      screen.at(x++, y) = charset_right[int(9 * (limit - limit_int))];
+      while (x <= box_.x_max)
+        screen.at(x++, y) = charset_right[0];
+    }
+
+    if (invert) {
+      for (int x = box_.x_min; x <= box_.x_max; x++)
+        screen.PixelAt(x, y).inverted ^= true;
+    }
   }
 
-  void RenderLeft(Screen& screen) {
-    int y = box_.y_min;
-    if (y > box_.y_max)
-      return;
-
-    float limit = box_.x_max - (progress_ * box_.x_max) + 1;
-    int limit_int = limit;
-    int x = box_.x_max;
-    while (x > limit_int)
-      screen.at(x--, y) = charset_left[6];
-    screen.at(x++, y) = charset_left[int(6 - (6 * (limit - limit_int)))];
-    while (x <= box_.x_min)
-      screen.at(x--, y) = charset_left[0];
-  }
-
-  void RenderUp(Screen& screen) {
+  void RenderVertical(Screen& screen, bool invert) {
     int x = box_.x_min;
     if (x > box_.x_max)
       return;
 
-    float limit = box_.y_max - (progress_ * box_.y_max) + 1;
-    int limit_int = limit;
+    // Draw the progress bar vertically:
+    {
+      float progress = invert ? 1.f - progress_ : progress_;
+      float limit = box_.y_max - (progress * box_.y_max) + 1;
+      int limit_int = limit;
+      int y = box_.y_max;
+      while (y > limit_int)
+        screen.at(x, y--) = charset_up[8];
+      screen.at(x, y--) = charset_up[int(8 - (8 * (limit - limit_int)))];
+      while (y >= box_.y_min)
+        screen.at(x, y--) = charset_up[0];
+    }
 
-    int y = box_.y_max;
-    while (y > limit_int)
-      screen.at(x, y--) = charset_up[9];
-    screen.at(x, y--) = charset_up[int(9 - (9 * (limit - limit_int)))];
-    while (y >= box_.y_min)
-      screen.at(x, y--) = charset_up[0];
-  }
-
-  void RenderDown(Screen& screen) {
-    int x = box_.x_min;
-    if (x > box_.x_max)
-      return;
-
-    float limit = box_.y_min + (progress_ * box_.y_max) + 1;
-    int limit_int = limit;
-
-    int y = box_.y_min;
-    while (y < limit_int)
-      screen.at(x, y++) = charset_down[6];
-    screen.at(x, y++) = charset_down[int(6 * (limit - limit_int))];
-    while (y <= box_.y_max)
-      screen.at(x, y++) = charset_down[0];
+    if (invert) {
+      for (int y = box_.y_min; y <= box_.y_max; y++)
+        screen.PixelAt(x, y).inverted ^= true;
+    }
   }
 
  private:
