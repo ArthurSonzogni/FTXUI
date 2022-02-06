@@ -17,7 +17,7 @@ int main(int argc, const char* argv[]) {
     std::string data_downloaded =
         std::to_string(int(percentage * 5000)) + "/5000";
 
-    auto gauge_up=  //
+    auto gauge_up =  //
         hbox({
             vtext("gauge vertical"),
             separator(),
@@ -25,7 +25,7 @@ int main(int argc, const char* argv[]) {
         }) |
         border;
 
-    auto gauge_down=  //
+    auto gauge_down =  //
         hbox({
             vtext("gauge vertical"),
             separator(),
@@ -33,7 +33,7 @@ int main(int argc, const char* argv[]) {
         }) |
         border;
 
-    auto gauge_right=  //
+    auto gauge_right =  //
         vbox({
             text("gauge horizontal"),
             separator(),
@@ -41,7 +41,7 @@ int main(int argc, const char* argv[]) {
         }) |
         border;
 
-    auto gauge_left=  //
+    auto gauge_left =  //
         vbox({
             text("gauge horizontal"),
             separator(),
@@ -74,6 +74,6 @@ int main(int argc, const char* argv[]) {
   std::cout << std::endl;
 }
 
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
