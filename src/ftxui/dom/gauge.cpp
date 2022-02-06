@@ -10,7 +10,7 @@
 
 namespace ftxui {
 
-static std::string charset_right[11] = {
+static std::string charset_horizontal[11] = {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft's terminals often use fonts not handling the 8 unicode
     // characters for representing the whole gauge. Fallback with less.
@@ -22,19 +22,19 @@ static std::string charset_right[11] = {
     // int(9 * (limit - limit_int) = 9
     "█"};
 
-static std::string charset_up[10] = {
-    " ",
-    "▁",
-    "▂",
-    "▃",
-    "▄",
-    "▅",
-    "▆",
-    "▇",
+static std::string charset_vertical[10] = {
     "█",
+    "▇",
+    "▆",
+    "▅",
+    "▄",
+    "▃",
+    "▂",
+    "▁",
+    " ",
     // An extra character in case when the fuzzer manage to have:
     // int(8 * (limit - limit_int) = 8
-    "█",
+    " ",
 };
 
 class Gauge : public Node {
@@ -67,16 +67,16 @@ class Gauge : public Node {
   void Render(Screen& screen) override {
     switch (direction_) {
       case GaugeDirection::RIGHT:
-        RenderHorizontal(screen, false);
+        RenderHorizontal(screen, /*invert=*/false);
         break;
       case GaugeDirection::UP:
-        RenderVertical(screen, false);
+        RenderVertical(screen, /*invert=*/false);
         break;
       case GaugeDirection::LEFT:
-        RenderHorizontal(screen, true);
+        RenderHorizontal(screen, /*invert=*/true);
         break;
       case GaugeDirection::DOWN:
-        RenderVertical(screen, true);
+        RenderVertical(screen, /*invert=*/true);
         break;
     }
   }
@@ -93,10 +93,10 @@ class Gauge : public Node {
       int limit_int = limit;
       int x = box_.x_min;
       while (x < limit_int)
-        screen.at(x++, y) = charset_right[9];
-      screen.at(x++, y) = charset_right[int(9 * (limit - limit_int))];
+        screen.at(x++, y) = charset_horizontal[9];
+      screen.at(x++, y) = charset_horizontal[int(9 * (limit - limit_int))];
       while (x <= box_.x_max)
-        screen.at(x++, y) = charset_right[0];
+        screen.at(x++, y) = charset_horizontal[0];
     }
 
     if (invert) {
@@ -112,15 +112,15 @@ class Gauge : public Node {
 
     // Draw the progress bar vertically:
     {
-      float progress = invert ? 1.f - progress_ : progress_;
-      float limit = box_.y_max - (progress * box_.y_max) + 1;
+      float progress = invert ? progress_ : 1.f - progress_;
+      float limit = box_.y_min + progress * (box_.y_max - box_.y_min + 1);
       int limit_int = limit;
-      int y = box_.y_max;
-      while (y > limit_int)
-        screen.at(x, y--) = charset_up[8];
-      screen.at(x, y--) = charset_up[int(8 - (8 * (limit - limit_int)))];
-      while (y >= box_.y_min)
-        screen.at(x, y--) = charset_up[0];
+      int y = box_.y_min;
+      while (y < limit_int)
+        screen.at(x, y++) = charset_vertical[8];
+      screen.at(x, y++) = charset_vertical[int(8 * (limit - limit_int))];
+      while (y <= box_.y_max)
+        screen.at(x, y++) = charset_vertical[0];
     }
 
     if (invert) {
