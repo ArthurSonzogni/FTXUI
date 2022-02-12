@@ -1,18 +1,20 @@
 #include <stdio.h>    // for fileno, stdin
 #include <algorithm>  // for copy, max, min
-#include <csignal>  // for signal, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGWINCH
-#include <cstdlib>           // for NULL
+#include <csignal>  // for signal, raise, SIGTSTP, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGWINCH
+#include <cstdlib>  // for NULL
+#include <functional>        // for function
 #include <initializer_list>  // for initializer_list
 #include <iostream>  // for cout, ostream, basic_ostream, operator<<, endl, flush
 #include <stack>     // for stack
 #include <thread>    // for thread
-#include <utility>   // for swap, move
-#include <vector>    // for vector
+#include <type_traits>  // for decay_t
+#include <utility>      // for swap, move
+#include <variant>      // for visit
+#include <vector>       // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
-#include "ftxui/component/mouse.hpp"           // for Mouse
 #include "ftxui/component/receiver.hpp"  // for ReceiverImpl, MakeReceiver, Sender, SenderImpl, Receiver
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
@@ -32,8 +34,8 @@
 #endif
 #else
 #include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set
-#include <termios.h>     // for tcsetattr, tcgetattr, cc_t
-#include <unistd.h>      // for STDIN_FILENO, read
+#include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
+#include <unistd.h>  // for STDIN_FILENO, read
 #endif
 
 // Quick exit is missing in standard CLang headers
@@ -45,6 +47,8 @@ namespace ftxui {
 
 namespace {
 
+ScreenInteractive* g_active_screen = nullptr;
+
 void Flush() {
   // Emscripten doesn't implement flush. We interpret zero as flush.
   std::cout << '\0' << std::flush;
@@ -54,7 +58,7 @@ constexpr int timeout_milliseconds = 20;
 constexpr int timeout_microseconds = timeout_milliseconds * 1000;
 #if defined(_WIN32)
 
-void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
+void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
   auto console = GetStdHandle(STD_INPUT_HANDLE);
   auto parser = TerminalInputParser(out->Clone());
   while (!*quit) {
@@ -104,7 +108,7 @@ void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
 #include <emscripten.h>
 
 // Read char from the terminal.
-void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
+void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
   (void)timeout_microseconds;
   auto parser = TerminalInputParser(std::move(out));
 
@@ -131,7 +135,7 @@ int CheckStdinReady(int usec_timeout) {
 }
 
 // Read char from the terminal.
-void EventListener(std::atomic<bool>* quit, Sender<Event> out) {
+void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
   const int buffer_size = 100;
 
   auto parser = TerminalInputParser(std::move(out));
@@ -200,7 +204,7 @@ const std::string DeviceStatusReport(DSRMode ps) {
 }
 
 using SignalHandler = void(int);
-std::stack<ScreenInteractive::Callback> on_exit_functions;
+std::stack<Closure> on_exit_functions;
 void OnExit(int signal) {
   (void)signal;
   while (!on_exit_functions.empty()) {
@@ -211,12 +215,16 @@ void OnExit(int signal) {
 
 auto install_signal_handler = [](int sig, SignalHandler handler) {
   auto old_signal_handler = std::signal(sig, handler);
-  on_exit_functions.push([&] { std::signal(sig, old_signal_handler); });
+  on_exit_functions.push([=] { std::signal(sig, old_signal_handler); });
 };
 
-ScreenInteractive::Callback on_resize = [] {};
+Closure on_resize = [] {};
 void OnResize(int /* signal */) {
   on_resize();
+}
+
+void OnSigStop(int /*signal*/) {
+  ScreenInteractive::Private::SigStop(*g_active_screen);
 }
 
 class CapturedMouseImpl : public CapturedMouseInterface {
@@ -230,8 +238,6 @@ class CapturedMouseImpl : public CapturedMouseInterface {
 
 }  // namespace
 
-ScreenInteractive* g_active_screen = nullptr;
-
 ScreenInteractive::ScreenInteractive(int dimx,
                                      int dimy,
                                      Dimension dimension,
@@ -239,8 +245,7 @@ ScreenInteractive::ScreenInteractive(int dimx,
     : Screen(dimx, dimy),
       dimension_(dimension),
       use_alternative_screen_(use_alternative_screen) {
-  event_receiver_ = MakeReceiver<Event>();
-  event_sender_ = event_receiver_->MakeSender();
+  task_receiver_ = MakeReceiver<Task>();
 }
 
 // static
@@ -263,9 +268,12 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   return ScreenInteractive(0, 0, Dimension::FitComponent, false);
 }
 
-void ScreenInteractive::PostEvent(Event event) {
+void ScreenInteractive::Post(Task task) {
   if (!quit_)
-    event_sender_->Send(event);
+    task_sender_->Send(task);
+}
+void ScreenInteractive::PostEvent(Event event) {
+  Post(event);
 }
 
 CapturedMouse ScreenInteractive::CaptureMouse() {
@@ -314,7 +322,7 @@ void ScreenInteractive::Loop(Component component) {
 /// @brief Decorate a function. It executes the same way, but with the currently
 /// active screen terminal hooks temporarilly uninstalled during its execution.
 /// @param fn The function to decorate.
-ScreenInteractive::Callback ScreenInteractive::WithRestoredIO(Callback fn) {
+Closure ScreenInteractive::WithRestoredIO(Closure fn) {
   return [this, fn] {
     Uninstall();
     fn();
@@ -381,8 +389,11 @@ void ScreenInteractive::Install() {
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
   // Handle resize.
-  on_resize = [&] { event_sender_->Send(Event::Special({0})); };
+  on_resize = [&] { task_sender_->Send(Event::Special({0})); };
   install_signal_handler(SIGWINCH, OnResize);
+
+  // Handle SIGTSTP/SIGCONT.
+  install_signal_handler(SIGTSTP, OnSigStop);
 #endif
 
   auto enable = [&](std::vector<DECMode> parameters) {
@@ -418,8 +429,9 @@ void ScreenInteractive::Install() {
   Flush();
 
   quit_ = false;
+  task_sender_ = task_receiver_->MakeSender();
   event_listener_ =
-      std::thread(&EventListener, &quit_, event_receiver_->MakeSender());
+      std::thread(&EventListener, &quit_, task_receiver_->MakeSender());
 }
 
 void ScreenInteractive::Uninstall() {
@@ -431,30 +443,43 @@ void ScreenInteractive::Uninstall() {
 
 void ScreenInteractive::Main(Component component) {
   while (!quit_) {
-    if (!event_receiver_->HasPending()) {
+    if (!task_receiver_->HasPending()) {
       Draw(component);
       std::cout << ToString() << set_cursor_position;
       Flush();
       Clear();
     }
 
-    Event event;
-    if (!event_receiver_->Receive(&event))
+    Task task;
+    if (!task_receiver_->Receive(&task))
       break;
 
-    if (event.is_cursor_reporting()) {
-      cursor_x_ = event.cursor_x();
-      cursor_y_ = event.cursor_y();
-      continue;
-    }
+    std::visit(
+        [&](auto&& arg) {
+          using T = std::decay_t<decltype(arg)>;
 
-    if (event.is_mouse()) {
-      event.mouse().x -= cursor_x_;
-      event.mouse().y -= cursor_y_;
-    }
+          // Handle Event.
+          if constexpr (std::is_same_v<T, Event>) {
+            if (arg.is_cursor_reporting()) {
+              cursor_x_ = arg.cursor_x();
+              cursor_y_ = arg.cursor_y();
+              return;
+            }
 
-    event.screen_ = this;
-    component->OnEvent(event);
+            if (arg.is_mouse()) {
+              arg.mouse().x -= cursor_x_;
+              arg.mouse().y -= cursor_y_;
+            }
+
+            arg.screen_ = this;
+            component->OnEvent(arg);
+          }
+
+          // Handle callback
+          if constexpr (std::is_same_v<T, Closure>)
+            arg();
+        },
+        task);
   }
 }
 
@@ -537,11 +562,29 @@ void ScreenInteractive::Draw(Component component) {
   }
 }
 
-ScreenInteractive::Callback ScreenInteractive::ExitLoopClosure() {
+Closure ScreenInteractive::ExitLoopClosure() {
   return [this] {
     quit_ = true;
-    event_sender_.reset();
+    task_sender_.reset();
   };
+}
+
+void ScreenInteractive::SigStop() {
+#if defined(_WIN32)
+  // Windows do no support SIGTSTP.
+#else
+  Post([&] {
+    Uninstall();
+    std::cout << reset_cursor_position;
+    reset_cursor_position = "";
+    std::cout << ResetPosition(/*clear=*/true);
+    dimx_ = 0;
+    dimy_ = 0;
+    Flush();
+    std::raise(SIGTSTP);
+    Install();
+  });
+#endif
 }
 
 }  // namespace ftxui.

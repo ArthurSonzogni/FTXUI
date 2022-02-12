@@ -18,14 +18,12 @@ int main() {
   // temporarily uninstall the terminal hook and execute the provided callback
   // function. This allow running the application in a non-interactive mode.
   auto btn_run = Button("Execute with restored IO", screen.WithRestoredIO([] {
-    std::system("bash");
     std::cout << "This is a child program using stdin/stdout." << std::endl;
     for (int i = 0; i < 10; ++i) {
       std::cout << "Please enter 10 strings (" << i << "/10)" << std::flush;
       std::string input;
       std::getline(std::cin, input);
     }
-    std::system("bash");
   }));
 
   auto btn_quit = Button("Quit", screen.ExitLoopClosure());

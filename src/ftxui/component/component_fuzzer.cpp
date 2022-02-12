@@ -151,16 +151,16 @@ extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
   auto screen =
       Screen::Create(Dimension::Fixed(width), Dimension::Fixed(height));
 
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     for (size_t i = 0; i < size; ++i)
       parser.Add(data[i]);
   }
 
-  Event event;
+  Task event;
   while (event_receiver->Receive(&event)) {
-    component->OnEvent(event);
+    component->OnEvent(std::get<Event>(event));
     auto document = component->Render();
     Render(screen, document);
   }
