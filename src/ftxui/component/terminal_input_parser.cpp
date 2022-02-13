@@ -1,15 +1,15 @@
 #include "ftxui/component/terminal_input_parser.hpp"
 
-#include <algorithm>  // for max
-#include <cstdint>
+#include <cstdint>  // for uint32_t
 #include <memory>   // for unique_ptr
 #include <utility>  // for move
 
 #include "ftxui/component/event.hpp"  // for Event
+#include "ftxui/component/task.hpp"   // for Task
 
 namespace ftxui {
 
-TerminalInputParser::TerminalInputParser(Sender<Event> out)
+TerminalInputParser::TerminalInputParser(Sender<Task> out)
     : out_(std::move(out)) {}
 
 void TerminalInputParser::Timeout(int time) {

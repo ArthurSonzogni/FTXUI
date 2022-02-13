@@ -8,6 +8,7 @@
 #include "ftxui/component/event.hpp"     // for Event (ptr only)
 #include "ftxui/component/mouse.hpp"     // for Mouse
 #include "ftxui/component/receiver.hpp"  // for Sender
+#include "ftxui/component/task.hpp"      // for Task
 
 namespace ftxui {
 struct Event;
@@ -15,7 +16,7 @@ struct Event;
 // Parse a sequence of |char| accross |time|. Produces |Event|.
 class TerminalInputParser {
  public:
-  TerminalInputParser(Sender<Event> out);
+  TerminalInputParser(Sender<Task> out);
   void Timeout(int time);
   void Add(char c);
 
@@ -57,7 +58,7 @@ class TerminalInputParser {
   Output ParseMouse(bool altered, bool pressed, std::vector<int> arguments);
   Output ParseCursorReporting(std::vector<int> arguments);
 
-  Sender<Event> out_;
+  Sender<Task> out_;
   int position_ = -1;
   int timeout_ = 0;
   std::string pending_;

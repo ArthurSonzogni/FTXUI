@@ -5,14 +5,14 @@
 
 extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
   using namespace ftxui;
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     for (size_t i = 0; i < size; ++i)
       parser.Add(data[i]);
   }
 
-  Event received;
+  Task received;
   while (event_receiver->Receive(&received))
     ;
   return 0;  // Non-zero return values are reserved for future use.

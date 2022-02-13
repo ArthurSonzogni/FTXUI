@@ -2,6 +2,7 @@
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
 #include <algorithm>                // for max
 #include <memory>                   // for unique_ptr, allocator
+#include <variant>                  // for get
 
 #include "ftxui/component/event.hpp"     // for Event, Event::Escape
 #include "ftxui/component/receiver.hpp"  // for MakeReceiver, ReceiverImpl
@@ -18,61 +19,61 @@ TEST(Event, Character) {
   for (char c = 'A'; c <= 'Z'; ++c)
     basic_char.push_back(c);
 
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     for (char c : basic_char)
       parser.Add(c);
   }
 
-  Event received;
+  Task received;
   for (char c : basic_char) {
     EXPECT_TRUE(event_receiver->Receive(&received));
-    EXPECT_TRUE(received.is_character());
-    EXPECT_EQ(c, received.character()[0]);
+    EXPECT_TRUE(std::get<Event>(received).is_character());
+    EXPECT_EQ(c, std::get<Event>(received).character()[0]);
   }
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
 TEST(Event, EscapeKeyWithoutWaiting) {
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     parser.Add('\x1B');
   }
 
-  Event received;
+  Task received;
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
 TEST(Event, EscapeKeyNotEnoughWait) {
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     parser.Add('\x1B');
     parser.Timeout(49);
   }
 
-  Event received;
+  Task received;
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
 TEST(Event, EscapeKeyEnoughWait) {
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     parser.Add('\x1B');
     parser.Timeout(50);
   }
 
-  Event received;
+  Task received;
   EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_EQ(received, Event::Escape);
+  EXPECT_EQ(std::get<Event>(received), Event::Escape);
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
 TEST(Event, MouseLeftClick) {
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     parser.Add('\x1B');
@@ -88,17 +89,17 @@ TEST(Event, MouseLeftClick) {
     parser.Add('M');
   }
 
-  Event received;
+  Task received;
   EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(received.is_mouse());
-  EXPECT_EQ(Mouse::Left, received.mouse().button);
-  EXPECT_EQ(12, received.mouse().x);
-  EXPECT_EQ(42, received.mouse().y);
+  EXPECT_TRUE(std::get<Event>(received).is_mouse());
+  EXPECT_EQ(Mouse::Left, std::get<Event>(received).mouse().button);
+  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
+  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
 TEST(Event, MouseMiddleClick) {
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     parser.Add('\x1B');
@@ -114,17 +115,17 @@ TEST(Event, MouseMiddleClick) {
     parser.Add('M');
   }
 
-  Event received;
+  Task received;
   EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(received.is_mouse());
-  EXPECT_EQ(Mouse::Middle, received.mouse().button);
-  EXPECT_EQ(12, received.mouse().x);
-  EXPECT_EQ(42, received.mouse().y);
+  EXPECT_TRUE(std::get<Event>(received).is_mouse());
+  EXPECT_EQ(Mouse::Middle, std::get<Event>(received).mouse().button);
+  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
+  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
 TEST(Event, MouseRightClick) {
-  auto event_receiver = MakeReceiver<Event>();
+  auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     parser.Add('\x1B');
@@ -140,12 +141,12 @@ TEST(Event, MouseRightClick) {
     parser.Add('M');
   }
 
-  Event received;
+  Task received;
   EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(received.is_mouse());
-  EXPECT_EQ(Mouse::Right, received.mouse().button);
-  EXPECT_EQ(12, received.mouse().x);
-  EXPECT_EQ(42, received.mouse().y);
+  EXPECT_TRUE(std::get<Event>(received).is_mouse());
+  EXPECT_EQ(Mouse::Right, std::get<Event>(received).mouse().button);
+  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
+  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
@@ -216,16 +217,16 @@ TEST(Event, UTF8) {
 
   };
   for (auto test : kTestCase) {
-    auto event_receiver = MakeReceiver<Event>();
+    auto event_receiver = MakeReceiver<Task>();
     {
       auto parser = TerminalInputParser(event_receiver->MakeSender());
       for (auto input : test.input)
         parser.Add(input);
     }
-    Event received;
+    Task received;
     if (test.valid) {
       EXPECT_TRUE(event_receiver->Receive(&received));
-      EXPECT_TRUE(received.is_character());
+      EXPECT_TRUE(std::get<Event>(received).is_character());
     }
     EXPECT_FALSE(event_receiver->Receive(&received));
   }

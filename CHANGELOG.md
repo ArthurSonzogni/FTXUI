@@ -18,6 +18,10 @@ Element gaugeDown(float ratio);
 Element gaugeDirection(float ratio, GaugeDirection);
 ```
 
+#### Component
+- Support SIGTSTP. (ctrl+z).
+- Support task posting. `ScreenInteractive::Post(Task)`.
+
 2.0.0
 -----
 
