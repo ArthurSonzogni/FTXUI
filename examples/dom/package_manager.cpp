@@ -41,7 +41,7 @@ int main(int argc, const char* argv[]) {
 
   int remaining_threads = 12;
 
-  int nb_queued = remaining_tasks.size();
+  int nb_queued = (int)remaining_tasks.size();
   int nb_active = 0;
   int nb_done = 0;
 

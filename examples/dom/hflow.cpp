@@ -10,7 +10,7 @@
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;
-  auto make_box = [](size_t dimx, size_t dimy) {
+  auto make_box = [](int dimx, int dimy) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
     return window(text(title) | hcenter | bold,
                   text("content") | hcenter | dim) |

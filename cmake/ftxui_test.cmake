@@ -1,7 +1,7 @@
 enable_testing()
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
-set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
+option(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 include(FetchContent)
 
 FetchContent_Declare(googletest
