@@ -4,8 +4,6 @@ Changelog
 current (development) 
 ---------------------
 
-### Features:
-
 #### DOM:
 - The `inverted` decorator now toggle in the inverted attribute.
 - Add `gauge` for the 4 directions. Expose the following API:
@@ -20,6 +18,7 @@ Element gaugeDirection(float ratio, GaugeDirection);
 - Add the `automerge` decorator. This makes separator characters to be merged
   with others nearby.
 - Fix the `Table` rendering function, to allow automerging characters.
+- Bugfix: The `vscroll_indicator` now computes its offset and size correctly.
 
 #### Component
 - Support SIGTSTP. (ctrl+z).
