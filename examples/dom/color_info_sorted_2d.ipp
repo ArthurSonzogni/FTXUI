@@ -31,7 +31,7 @@ std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
               [](const ColorInfo& A, const ColorInfo& B) {
                 return A.value < B.value;
               });
-    for (size_t i = 0; i < column.size() - 1; ++i) {
+    for (int i = 0; i < int(column.size()) - 1; ++i) {
       int best_index = i + 1;
       int best_distance = 255 * 255 * 3;
       for (size_t j = i + 1; j < column.size(); ++j) {
