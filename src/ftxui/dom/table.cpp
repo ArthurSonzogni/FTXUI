@@ -250,10 +250,10 @@ void TableSelection::Border(BorderStyle style) {
   BorderTop(style);
   BorderBottom(style);
 
-  table_->elements_[y_min_][x_min_] = text(charset[style][0]);
-  table_->elements_[y_min_][x_max_] = text(charset[style][1]);
-  table_->elements_[y_max_][x_min_] = text(charset[style][2]);
-  table_->elements_[y_max_][x_max_] = text(charset[style][3]);
+  table_->elements_[y_min_][x_min_] = text(charset[style][0]) | automerge;
+  table_->elements_[y_min_][x_max_] = text(charset[style][1]) | automerge;
+  table_->elements_[y_max_][x_min_] = text(charset[style][2]) | automerge;
+  table_->elements_[y_max_][x_max_] = text(charset[style][3]) | automerge;
 }
 
 void TableSelection::Separator(BorderStyle style) {
@@ -261,8 +261,8 @@ void TableSelection::Separator(BorderStyle style) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0 || x % 2 == 0) {
         Element& e = table_->elements_[y][x];
-        e = (y % 2) ? separatorCharacter(charset[style][5])
-                    : separatorCharacter(charset[style][4]);
+        e = (y % 2) ? separatorCharacter(charset[style][5]) | automerge
+                    : separatorCharacter(charset[style][4]) | automerge;
       }
     }
   }
@@ -272,7 +272,8 @@ void TableSelection::SeparatorVertical(BorderStyle style) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (x % 2 == 0) {
-        table_->elements_[y][x] = separatorCharacter(charset[style][5]);
+        table_->elements_[y][x] =
+            separatorCharacter(charset[style][5]) | automerge;
       }
     }
   }
@@ -282,30 +283,39 @@ void TableSelection::SeparatorHorizontal(BorderStyle style) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0) {
-        table_->elements_[y][x] = separatorCharacter(charset[style][4]);
+        table_->elements_[y][x] =
+            separatorCharacter(charset[style][4]) | automerge;
       }
     }
   }
 }
 
 void TableSelection::BorderLeft(BorderStyle style) {
-  for (int y = y_min_; y <= y_max_; y++)
-    table_->elements_[y][x_min_] = separatorCharacter(charset[style][5]);
+  for (int y = y_min_; y <= y_max_; y++) {
+    table_->elements_[y][x_min_] =
+        separatorCharacter(charset[style][5]) | automerge;
+  }
 }
 
 void TableSelection::BorderRight(BorderStyle style) {
-  for (int y = y_min_; y <= y_max_; y++)
-    table_->elements_[y][x_max_] = separatorCharacter(charset[style][5]);
+  for (int y = y_min_; y <= y_max_; y++) {
+    table_->elements_[y][x_max_] =
+        separatorCharacter(charset[style][5]) | automerge;
+  }
 }
 
 void TableSelection::BorderTop(BorderStyle style) {
-  for (int x = x_min_; x <= x_max_; x++)
-    table_->elements_[y_min_][x] = separatorCharacter(charset[style][4]);
+  for (int x = x_min_; x <= x_max_; x++) {
+    table_->elements_[y_min_][x] =
+        separatorCharacter(charset[style][4]) | automerge;
+  }
 }
 
 void TableSelection::BorderBottom(BorderStyle style) {
-  for (int x = x_min_; x <= x_max_; x++)
-    table_->elements_[y_max_][x] = separatorCharacter(charset[style][4]);
+  for (int x = x_min_; x <= x_max_; x++) {
+    table_->elements_[y_max_][x] =
+        separatorCharacter(charset[style][4]) | automerge;
+  }
 }
 
 }  // namespace ftxui

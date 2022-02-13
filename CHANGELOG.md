@@ -17,6 +17,9 @@ Element gaugeUp(float ratio);
 Element gaugeDown(float ratio);
 Element gaugeDirection(float ratio, GaugeDirection);
 ```
+- Add the `automerge` decorator. This makes separator characters to be merged
+  with others nearby.
+- Fix the `Table` rendering function, to allow automerging characters.
 
 #### Component
 - Support SIGTSTP. (ctrl+z).

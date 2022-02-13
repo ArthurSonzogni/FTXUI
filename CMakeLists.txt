@@ -44,6 +44,7 @@ add_library(dom
   include/ftxui/dom/node.hpp
   include/ftxui/dom/requirement.hpp
   include/ftxui/dom/take_any_args.hpp
+  src/ftxui/dom/automerge.cpp
   src/ftxui/dom/blink.cpp
   src/ftxui/dom/bold.cpp
   src/ftxui/dom/border.cpp
