@@ -39,24 +39,26 @@ Element vscroll_indicator(Element child) {
       const Box& stencil = screen.stencil;
 
       int size_inner = box_.y_max - box_.y_min;
-      int size_outter = stencil.y_max - stencil.y_min;
+      int size_outter = stencil.y_max - stencil.y_min + 1;
       if (size_outter >= size_inner)
         return;
 
-      int start_y = 2 * stencil.y_min + 2 * float(stencil.y_min - box_.y_min) *
-                                            (size_outter - 1) / size_inner;
-      int size = 2 * float(size_outter) * (size_outter - 1) / size_inner + 2;
+      int size = 2 * size_outter * size_outter / size_inner;
       size = std::max(size, 1);
+
+      int start_y = 2 * stencil.y_min +  //
+                    2 * (stencil.y_min - box_.y_min) * size_outter / size_inner;
 
       const int x = stencil.x_max;
       for (int y = stencil.y_min; y <= stencil.y_max; ++y) {
-        bool up = (2 * y + -1 >= start_y) && (2 * y - 1 <= start_y + size);
-        bool down = (2 * y - 0 >= start_y) && (2 * y - 0 <= start_y + size);
+        int y_up = 2 * y + 0;
+        int y_down = 2 * y + 1;
+        bool up = (start_y <= y_up) && (y_up <= start_y + size);
+        bool down = (start_y <= y_down) && (y_down <= start_y + size);
 
         const char* c = up ? (down ? "┃" : "╹") : (down ? "╻" : " ");
         screen.PixelAt(x, y) = Pixel();
         screen.PixelAt(x, y).character = c;
-        screen.PixelAt(x, y).inverted = true;
       }
     };
   };
