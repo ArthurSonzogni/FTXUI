@@ -4,8 +4,12 @@ Changelog
 current (development) 
 ---------------------
 
-#### DOM:
-- The `inverted` decorator now toggle in the inverted attribute.
+### Build
+- **breaking**: The library prefix is now back to "lib" (the default). This
+    means non-cmake users should not link against "libftxui-dom" for instance.
+
+### DOM:
+- **breaking**: The `inverted` decorator now toggle in the inverted attribute.
 - Add `gauge` for the 4 directions. Expose the following API:
 ```cpp
 Element gauge(float ratio);
@@ -20,7 +24,7 @@ Element gaugeDirection(float ratio, GaugeDirection);
 - Fix the `Table` rendering function, to allow automerging characters.
 - Bugfix: The `vscroll_indicator` now computes its offset and size correctly.
 
-#### Component
+### Component
 - Support SIGTSTP. (ctrl+z).
 - Support task posting. `ScreenInteractive::Post(Task)`.
 
