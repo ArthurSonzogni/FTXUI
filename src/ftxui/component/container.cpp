@@ -190,6 +190,12 @@ class TabContainer : public ContainerBase {
     return text("Empty container");
   }
 
+  bool Focusable() const override {
+    if (children_.size() == 0)
+      return false;
+    return children_[*selector_ % children_.size()]->Focusable();
+  }
+
   bool OnMouseEvent(Event event) override {
     return ActiveChild()->OnEvent(event);
   }

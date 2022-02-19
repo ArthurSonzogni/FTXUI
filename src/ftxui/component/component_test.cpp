@@ -3,6 +3,7 @@
 #include <memory>  // for shared_ptr, __shared_ptr_access, allocator, make_shared
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Make
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, SuiteApiResolver, TEST, TestFactoryImpl
 
@@ -153,6 +154,22 @@ TEST(ContainerTest, ChildAt) {
 
   EXPECT_EQ(parent->ChildCount(), 1u);
   EXPECT_EQ(parent->ChildAt(0u), child_2);
+}
+
+TEST(ComponentTest, NonFocusableAreNotFocused) {
+  class NonFocusable : public ComponentBase {
+    bool Focusable() const override { return false; }
+  };
+  auto root = Make<NonFocusable>();
+  EXPECT_FALSE(root->Focused());
+  EXPECT_EQ(root->ActiveChild(), nullptr);
+
+  auto child = Make<NonFocusable>();
+  root->Add(child);
+  EXPECT_FALSE(root->Focused());
+  EXPECT_FALSE(child->Focused());
+  EXPECT_EQ(root->ActiveChild(), nullptr);
+  EXPECT_EQ(child->ActiveChild(), nullptr);
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

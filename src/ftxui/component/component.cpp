@@ -105,7 +105,11 @@ bool ComponentBase::OnEvent(Event event) {
 /// @return the currently Active child.
 /// @ingroup component
 Component ComponentBase::ActiveChild() {
-  return children_.empty() ? nullptr : children_.front();
+  for (auto& child : children_) {
+    if (child->Focusable())
+      return child;
+  }
+  return nullptr;
 }
 
 /// @brief Return true when the component contains focusable elements.
@@ -128,14 +132,15 @@ bool ComponentBase::Active() const {
 
 /// @brief Returns if the elements if focused by the user.
 /// True when the ComponentBase is focused by the user. An element is Focused
-/// when it is with all its ancestors the ActiveChild() of their parents.
+/// when it is with all its ancestors the ActiveChild() of their parents, and it
+/// Focusable().
 /// @ingroup component
 bool ComponentBase::Focused() const {
   auto current = this;
   while (current && current->Active()) {
     current = current->parent_;
   }
-  return !current;
+  return !current && Focusable();
 }
 
 /// @brief Make the |child| to be the "active" one.
