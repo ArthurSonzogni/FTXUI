@@ -1,5 +1,5 @@
 function(ftxui_set_options library)
-  set_target_properties(${library} PROPERTIES PREFIX "ftxui-")
+  set_target_properties(${library} PROPERTIES OUTPUT_NAME "ftxui-${library}")
 
 
   target_include_directories(${library}
