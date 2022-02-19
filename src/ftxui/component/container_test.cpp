@@ -305,6 +305,34 @@ TEST(ContainerTest, TakeFocus) {
   EXPECT_FALSE(c23->Active());
 }
 
+TEST(ContainerTest, TabFocusable) {
+  int selected = 0;
+  auto c = Container::Tab(
+      {
+          Focusable(),
+          NonFocusable(),
+          Focusable(),
+          NonFocusable(),
+      },
+      &selected);
+
+  selected = 0;
+  EXPECT_TRUE(c->Focusable());
+  EXPECT_TRUE(c->Focused());
+
+  selected = 1;
+  EXPECT_FALSE(c->Focusable());
+  EXPECT_FALSE(c->Focused());
+
+  selected = 2;
+  EXPECT_TRUE(c->Focusable());
+  EXPECT_TRUE(c->Focused());
+
+  selected = 3;
+  EXPECT_FALSE(c->Focusable());
+  EXPECT_FALSE(c->Focused());
+}
+
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.

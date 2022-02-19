@@ -27,6 +27,9 @@ Element gaugeDirection(float ratio, GaugeDirection);
 ### Component
 - Support SIGTSTP. (ctrl+z).
 - Support task posting. `ScreenInteractive::Post(Task)`.
+- **bugfix** Container::Tab implements `Focusable()`.
+- **bugfix** Improved default implementations of ComponentBase `Focusable()` and
+  `ActiveChild()` methods.
 
 2.0.0
 -----
