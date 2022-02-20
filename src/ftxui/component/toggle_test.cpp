@@ -90,10 +90,10 @@ TEST(ToggleTest, OnChange) {
   std::vector<std::string> entries = {"1", "2", "3"};
   int selected = 0;
   int counter = 0;
-  auto option = ToggleOption();
+  auto option = MenuOption::Toggle();
   option.on_change = [&] { counter++; };
 
-  auto toggle = Toggle(&entries, &selected, &option);
+  auto toggle = Menu(&entries, &selected, &option);
 
   EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 0);
@@ -120,9 +120,9 @@ TEST(ToggleTest, OnEnter) {
   int selected = 0;
   int counter = 0;
 
-  auto option = ToggleOption();
+  auto option = MenuOption::Toggle();
   option.on_enter = [&] { counter++; };
-  auto toggle = Toggle(&entries, &selected, &option);
+  auto toggle = Menu(&entries, &selected, &option);
 
   EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));
@@ -155,9 +155,9 @@ TEST(ToggleTest, RemoveEntries) {
   int focused_entry = 0;
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
-  ToggleOption option;
+  auto option = MenuOption::Toggle();
   option.focused_entry = &focused_entry;
-  auto toggle = Toggle(&entries, &selected, option);
+  auto toggle = Menu(&entries, &selected, option);
 
   EXPECT_EQ(selected, 0);
   EXPECT_EQ(focused_entry, 0);

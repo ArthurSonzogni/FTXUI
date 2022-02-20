@@ -13,6 +13,10 @@ class Delegate;
 class Focus;
 struct Event;
 
+namespace animation {
+class Params;
+}  // namespace animation
+
 class ComponentBase;
 using Component = std::shared_ptr<ComponentBase>;
 using Components = std::vector<Component>;
@@ -41,6 +45,9 @@ class ComponentBase {
   //
   // Returns whether the event was handled or not.
   virtual bool OnEvent(Event);
+
+  // Handle an animation step.
+  virtual void OnAnimation(animation::Params& params);
 
   // Focus management ----------------------------------------------------------
   //

@@ -84,19 +84,23 @@ add_library(dom
 )
 
 add_library(component
+  include/ftxui/component/animation.hpp
   include/ftxui/component/captured_mouse.hpp
   include/ftxui/component/component.hpp
   include/ftxui/component/component_base.hpp
+  include/ftxui/component/component_options.hpp
   include/ftxui/component/event.hpp
   include/ftxui/component/mouse.hpp
   include/ftxui/component/receiver.hpp
   include/ftxui/component/screen_interactive.hpp
   include/ftxui/component/task.hpp
+  src/ftxui/component/animation.cpp
   src/ftxui/component/button.cpp
   src/ftxui/component/catch_event.cpp
   src/ftxui/component/checkbox.cpp
   src/ftxui/component/collapsible.cpp
   src/ftxui/component/component.cpp
+  src/ftxui/component/component_options.cpp
   src/ftxui/component/container.cpp
   src/ftxui/component/dropdown.cpp
   src/ftxui/component/event.cpp
@@ -111,7 +115,6 @@ add_library(component
   src/ftxui/component/slider.cpp
   src/ftxui/component/terminal_input_parser.cpp
   src/ftxui/component/terminal_input_parser.hpp
-  src/ftxui/component/toggle.cpp
   src/ftxui/component/util.cpp
 )
 

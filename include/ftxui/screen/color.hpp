@@ -27,6 +27,7 @@ class Color {
   Color(uint8_t red, uint8_t green, uint8_t blue);
   static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
   static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);
+  static Color Interpolate(float t, const Color& a, const Color& b);
 
   //---------------------------
   // List of colors:

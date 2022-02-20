@@ -8,7 +8,7 @@
 #include <vector>      // for vector
 
 #include "ftxui/component/component_base.hpp"     // for Component, Components
-#include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption, InputOption, MenuOption, RadioboxOption, ToggleOption
+#include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption (ptr only), InputOption (ptr only), MenuEntryOption (ptr only), MenuOption, RadioboxOption (ptr only)
 #include "ftxui/dom/elements.hpp"                 // for Element
 #include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef, ConstStringListRef, StringRef
 
@@ -19,7 +19,6 @@ struct Event;
 struct InputOption;
 struct MenuOption;
 struct RadioboxOption;
-struct ToggleOption;
 struct MenuEntryOption;
 
 template <class T, class... Args>
@@ -46,7 +45,7 @@ Component Tab(Components children, int* selector);
 
 Component Button(ConstStringRef label,
                  std::function<void()> on_click,
-                 Ref<ButtonOption> = {});
+                 Ref<ButtonOption> = ButtonOption::Simple());
 
 Component Checkbox(ConstStringRef label,
                    bool* checked,
@@ -58,8 +57,7 @@ Component Input(StringRef content,
 
 Component Menu(ConstStringListRef entries,
                int* selected_,
-               Ref<MenuOption> = {});
-
+               Ref<MenuOption> = MenuOption::Vertical());
 Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> = {});
 
 Component Dropdown(ConstStringListRef entries, int* selected);
@@ -67,10 +65,7 @@ Component Dropdown(ConstStringListRef entries, int* selected);
 Component Radiobox(ConstStringListRef entries,
                    int* selected_,
                    Ref<RadioboxOption> option = {});
-
-Component Toggle(ConstStringListRef entries,
-                 int* selected,
-                 Ref<ToggleOption> option = {});
+Component Toggle(ConstStringListRef entries, int* selected);
 
 template <class T>  // T = {int, float, long}
 Component Slider(ConstStringRef label, T* value, T min, T max, T increment);

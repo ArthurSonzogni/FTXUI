@@ -1,21 +1,23 @@
 #include <stdio.h>    // for fileno, stdin
 #include <algorithm>  // for copy, max, min
+#include <chrono>  // for operator-, duration, operator>=, milliseconds, time_point, common_type<>::type
 #include <csignal>  // for signal, raise, SIGTSTP, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGWINCH
 #include <cstdlib>  // for NULL
 #include <functional>        // for function
 #include <initializer_list>  // for initializer_list
 #include <iostream>  // for cout, ostream, basic_ostream, operator<<, endl, flush
 #include <stack>     // for stack
-#include <thread>    // for thread
+#include <thread>    // for thread, sleep_for
 #include <type_traits>  // for decay_t
 #include <utility>      // for swap, move
 #include <variant>      // for visit
 #include <vector>       // for vector
 
+#include "ftxui/component/animation.hpp"  // for TimePoint, Clock, Duration, Params, RequestAnimationFrame
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
-#include "ftxui/component/receiver.hpp"  // for ReceiverImpl, MakeReceiver, Sender, SenderImpl, Receiver
+#include "ftxui/component/receiver.hpp"  // for ReceiverImpl, Sender, MakeReceiver, SenderImpl, Receiver
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
@@ -44,6 +46,14 @@
 #endif
 
 namespace ftxui {
+
+namespace animation {
+void RequestAnimationFrame() {
+  auto* screen = ScreenInteractive::Active();
+  if (screen)
+    screen->RequestAnimationFrame();
+}
+}  // namespace animation
 
 namespace {
 
@@ -236,6 +246,13 @@ class CapturedMouseImpl : public CapturedMouseInterface {
   std::function<void(void)> callback_;
 };
 
+void AnimationListener(std::atomic<bool>* quit, Sender<Task> out) {
+  while (!*quit) {
+    out->Send(AnimationTask());
+    std::this_thread::sleep_for(std::chrono::milliseconds(15));
+  }
+}
+
 }  // namespace
 
 ScreenInteractive::ScreenInteractive(int dimx,
@@ -274,6 +291,15 @@ void ScreenInteractive::Post(Task task) {
 }
 void ScreenInteractive::PostEvent(Event event) {
   Post(event);
+}
+
+void ScreenInteractive::RequestAnimationFrame() {
+  if (animation_requested_)
+    return;
+  animation_requested_ = true;
+  auto now = animation::Clock::now();
+  if (now - previous_animation_time >= std::chrono::milliseconds(33))
+    previous_animation_time = now;
 }
 
 CapturedMouse ScreenInteractive::CaptureMouse() {
@@ -328,6 +354,11 @@ Closure ScreenInteractive::WithRestoredIO(Closure fn) {
     fn();
     Install();
   };
+}
+
+// static
+ScreenInteractive* ScreenInteractive::Active() {
+  return g_active_screen;
 }
 
 void ScreenInteractive::Install() {
@@ -432,54 +463,85 @@ void ScreenInteractive::Install() {
   task_sender_ = task_receiver_->MakeSender();
   event_listener_ =
       std::thread(&EventListener, &quit_, task_receiver_->MakeSender());
+  animation_listener_ =
+      std::thread(&AnimationListener, &quit_, task_receiver_->MakeSender());
 }
 
 void ScreenInteractive::Uninstall() {
   ExitLoopClosure()();
   event_listener_.join();
+  animation_listener_.join();
 
   OnExit(0);
 }
 
 void ScreenInteractive::Main(Component component) {
+  previous_animation_time = animation::Clock::now();
+
+  auto draw = [&] {
+    Draw(component);
+    std::cout << ToString() << set_cursor_position;
+    Flush();
+    Clear();
+  };
+
+  draw();
+
   while (!quit_) {
-    if (!task_receiver_->HasPending()) {
-      Draw(component);
-      std::cout << ToString() << set_cursor_position;
-      Flush();
-      Clear();
-    }
+    if (!task_receiver_->HasPending())
+      draw();
 
-    Task task;
-    if (!task_receiver_->Receive(&task))
-      break;
+    bool continue_event_loop = true;
+    while (continue_event_loop) {
+      continue_event_loop = false;
+      Task task;
+      if (!task_receiver_->Receive(&task))
+        break;
 
-    std::visit(
-        [&](auto&& arg) {
-          using T = std::decay_t<decltype(arg)>;
+      std::visit(
+          [&](auto&& arg) {
+            using T = std::decay_t<decltype(arg)>;
 
-          // Handle Event.
-          if constexpr (std::is_same_v<T, Event>) {
-            if (arg.is_cursor_reporting()) {
-              cursor_x_ = arg.cursor_x();
-              cursor_y_ = arg.cursor_y();
+            // Handle Event.
+            if constexpr (std::is_same_v<T, Event>) {
+              if (arg.is_cursor_reporting()) {
+                cursor_x_ = arg.cursor_x();
+                cursor_y_ = arg.cursor_y();
+                return;
+              }
+
+              if (arg.is_mouse()) {
+                arg.mouse().x -= cursor_x_;
+                arg.mouse().y -= cursor_y_;
+              }
+
+              arg.screen_ = this;
+              component->OnEvent(arg);
+            }
+
+            // Handle callback
+            if constexpr (std::is_same_v<T, Closure>) {
+              arg();
               return;
             }
 
-            if (arg.is_mouse()) {
-              arg.mouse().x -= cursor_x_;
-              arg.mouse().y -= cursor_y_;
+            // Handle Animation
+            if constexpr (std::is_same_v<T, AnimationTask>) {
+              if (!animation_requested_) {
+                continue_event_loop = true;
+                return;
+              }
+              animation_requested_ = false;
+              animation::TimePoint now = animation::Clock::now();
+              animation::Duration delta = now - previous_animation_time;
+              previous_animation_time = now;
+
+              animation::Params params(delta);
+              component->OnAnimation(params);
             }
-
-            arg.screen_ = this;
-            component->OnEvent(arg);
-          }
-
-          // Handle callback
-          if constexpr (std::is_same_v<T, Closure>)
-            arg();
-        },
-        task);
+          },
+          task);
+    }
   }
 }
 

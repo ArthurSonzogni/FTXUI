@@ -9,6 +9,7 @@
 #include <thread>                        // for thread
 #include <variant>                       // for variant
 
+#include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/task.hpp"            // for Closure, Task
@@ -23,16 +24,21 @@ class ScreenInteractivePrivate;
 
 class ScreenInteractive : public Screen {
  public:
+  // Constructors:
   static ScreenInteractive FixedSize(int dimx, int dimy);
   static ScreenInteractive Fullscreen();
   static ScreenInteractive FitComponent();
   static ScreenInteractive TerminalOutput();
+
+  // Return the currently active screen, nullptr if none.
+  static ScreenInteractive* Active();
 
   void Loop(Component);
   Closure ExitLoopClosure();
 
   void Post(Task task);
   void PostEvent(Event event);
+  void RequestAnimationFrame();
 
   CapturedMouse CaptureMouse();
 
@@ -72,6 +78,9 @@ class ScreenInteractive : public Screen {
 
   std::atomic<bool> quit_ = false;
   std::thread event_listener_;
+  std::thread animation_listener_;
+  bool animation_requested_ = true;
+  animation::TimePoint previous_animation_time;
 
   int cursor_x_ = 1;
   int cursor_y_ = 1;
