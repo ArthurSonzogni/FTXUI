@@ -322,9 +322,23 @@ Feel free to add your projects here:
 
 It is **highly** recommanded to use cmake FetchContent to depends on FTXUI. This
 way you can specify which commit you would like to depends on.
+```cmake
+include(FetchContent)
+
+FetchContent_Declare(ftxui
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
+  GIT_TAG v2.0.0
+)
+
+FetchContent_GetProperties(ftxui)
+if(NOT ftxui_POPULATED)
+  FetchContent_Populate(ftxui)
+  add_subdirectory(${ftxui_SOURCE_DIR} ${ftxui_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+```
 
 If you don't, the following packages have been created:
-- vcpkg ([soon](https://github.com/ArthurSonzogni/FTXUI/issues/112))
+- [vcpkg](https://vcpkg.info/port/ftxui)
 - [Arch Linux PKGBUILD](https://aur.archlinux.org/packages/ftxui-git/).
 - [conan.io](https://conan.io/center/ftxui)
 
