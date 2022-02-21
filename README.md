@@ -326,6 +326,7 @@ way you can specify which commit you would like to depends on.
 If you don't, the following packages have been created:
 - vcpkg ([soon](https://github.com/ArthurSonzogni/FTXUI/issues/112))
 - [Arch Linux PKGBUILD](https://aur.archlinux.org/packages/ftxui-git/).
+- [conan.io](https://conan.io/center/ftxui)
 
 ## Contributors
 
