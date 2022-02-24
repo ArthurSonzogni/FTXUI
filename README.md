@@ -313,6 +313,7 @@ Feel free to add your projects here:
 - [vantage](https://github.com/gokulmaxi/vantage)
 - [tabdeeli](https://github.com/typon/tabdeeli)
 - [tiles](https://github.com/tusharpm/tiles)
+- [cachyos-cli-installer](https://github.com/cachyos/new-cli-installer)
 
 ## Hosted on
  * [github](https://github.com/ArthurSonzogni/ftxui)
