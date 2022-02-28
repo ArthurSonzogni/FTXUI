@@ -36,7 +36,7 @@ A simple C++ library for terminal based user interface.
 
 ## Operating systems
 
-- Webassembly
+- WebAssembly
 - Linux
 - MacOS
 - Windows
@@ -321,8 +321,8 @@ Feel free to add your projects here:
 
 ## External package
 
-It is **highly** recommanded to use cmake FetchContent to depends on FTXUI. This
-way you can specify which commit you would like to depends on.
+It is **highly** recommanded to use CMake FetchContent to depend on FTXUI. This
+way you can specify which commit you would like to depend on.
 ```cmake
 include(FetchContent)
 
