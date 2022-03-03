@@ -30,6 +30,9 @@ Element gaugeDirection(float ratio, GaugeDirection);
 - **bugfix** Container::Tab implements `Focusable()`.
 - **bugfix** Improved default implementations of ComponentBase `Focusable()` and
   `ActiveChild()` methods.
+- **bugfix** Automatically convert '\r' keys into '\n' for Linux programs that
+  do not send the correct code for the return key, like the 'bind'.
+  https://github.com/ArthurSonzogni/FTXUI/issues/337
 
 2.0.0
 -----

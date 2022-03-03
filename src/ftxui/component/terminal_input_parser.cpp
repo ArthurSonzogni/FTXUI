@@ -52,7 +52,14 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
 
     case SPECIAL:
-      out_->Send(Event::Special(std::move(pending_)));
+      // Microsoft's terminal uses a different new line character for the return
+      // key. This also happens with linux with the `bind` command:
+      // See https://github.com/ArthurSonzogni/FTXUI/issues/337
+      // Here, we uniformize the new line character to `\n`.
+      if (pending_ == "\r")
+        out_->Send(Event::Special("\n"));
+      else
+        out_->Send(Event::Special(std::move(pending_)));
       pending_.clear();
       return;
 
