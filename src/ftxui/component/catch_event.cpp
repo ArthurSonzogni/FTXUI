@@ -39,7 +39,14 @@ class CatchEventBase : public ComponentBase {
 /// auto renderer = Renderer([] {
 ///   return text("My interface");
 /// });
-/// screen.Loop(renderer);
+/// auto component = CatchEvent(renderer, [&](Event event) {
+///   if (event == Event::Character('q')) {
+///     screen.ExitLoopClosure()();
+///     return true;
+///   }
+///   return false;
+/// });
+/// screen.Loop(component);
 /// ```
 Component CatchEvent(Component child,
                      std::function<bool(Event event)> on_event) {
