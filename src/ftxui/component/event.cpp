@@ -58,11 +58,7 @@ const Event Event::ArrowDown = Event::Special("\x1B[B");
 const Event Event::Backspace = Event::Special({127});
 const Event Event::Delete = Event::Special("\x1B[3~");
 const Event Event::Escape = Event::Special("\x1B");
-#if defined(_WIN32)
-const Event Event::Return = Event::Special({13});
-#else
 const Event Event::Return = Event::Special({10});
-#endif
 const Event Event::Tab = Event::Special({9});
 const Event Event::TabReverse = Event::Special({27, 91, 90});
 const Event Event::F1 = Event::Special("\x1B[OP");
