@@ -70,6 +70,14 @@ Component Collapsible(ConstStringRef label,
                       Component child,
                       Ref<bool> show = false);
 
+// -- Decorator --
+template<typename Decorator>
+Component operator|(Component component, Decorator&& decorator) {
+  return decorator(std::move(component));
+}
+using ComponentDecorator = std::function<Component(Component)>;
+ComponentDecorator CatchEvent(std::function<bool(Event)>&& on_event);
+ComponentDecorator Maybe(const bool* show);
 }  // namespace ftxui
 
 // Include component using the old deprecated wstring.

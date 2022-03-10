@@ -33,6 +33,12 @@ Component Maybe(Component child, const bool* show) {
   return maybe;
 }
 
+ComponentDecorator Maybe(const bool* show) {
+  return [show](Component child) {
+    return Maybe(child, show);
+  };
+}
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.

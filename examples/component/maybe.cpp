@@ -21,20 +21,15 @@ int main(int argc, const char* argv[]) {
   };
   int menu_1_selected = 0;
   int menu_2_selected = 0;
-  auto menu_1 = Radiobox(&entries, &menu_1_selected);
-  auto menu_2 = Radiobox(&entries, &menu_2_selected);
-
-  menu_1 = Border(menu_1);
-  menu_2 = Border(menu_2);
 
   bool menu_1_show = false;
   bool menu_2_show = false;
 
   auto layout = Container::Vertical({
       Checkbox("Show menu_1", &menu_1_show),
-      Maybe(menu_1, &menu_1_show),
+      Radiobox(&entries, &menu_1_selected) | Border | Maybe(&menu_1_show),
       Checkbox("Show menu_2", &menu_2_show),
-      Maybe(menu_2, &menu_2_show),
+      Radiobox(&entries, &menu_2_selected) | Border | Maybe(&menu_2_show),
   });
 
   auto screen = ScreenInteractive::TerminalOutput();

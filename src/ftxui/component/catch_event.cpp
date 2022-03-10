@@ -55,6 +55,14 @@ Component CatchEvent(Component child,
   return out;
 }
 
+ComponentDecorator CatchEvent(std::function<bool(Event)>&& on_event) {
+  return [on_event = std::move(on_event)](Component child) {
+    return CatchEvent(child, [on_event = std::move(on_event)](Event event) {
+      return on_event(event);
+    });
+  };
+}
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
