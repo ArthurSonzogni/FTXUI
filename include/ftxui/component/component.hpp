@@ -66,6 +66,7 @@ Component Renderer(std::function<Element()>);
 Component Renderer(std::function<Element(bool /* focused */)>);
 Component CatchEvent(Component child, std::function<bool(Event)>);
 Component Maybe(Component, const bool* show);
+Component Maybe(Component, std::function<bool()>&&);
 Component Collapsible(ConstStringRef label,
                       Component child,
                       Ref<bool> show = false);
@@ -78,6 +79,7 @@ Component operator|(Component component, Decorator&& decorator) {
 using ComponentDecorator = std::function<Component(Component)>;
 ComponentDecorator CatchEvent(std::function<bool(Event)>&& on_event);
 ComponentDecorator Maybe(const bool* show);
+ComponentDecorator Maybe(std::function<bool()>&&);
 }  // namespace ftxui
 
 // Include component using the old deprecated wstring.

@@ -29,7 +29,9 @@ int main(int argc, const char* argv[]) {
       Checkbox("Show menu_1", &menu_1_show),
       Radiobox(&entries, &menu_1_selected) | Border | Maybe(&menu_1_show),
       Checkbox("Show menu_2", &menu_2_show),
-      Radiobox(&entries, &menu_2_selected) | Border | Maybe(&menu_2_show),
+      Radiobox(&entries, &menu_2_selected) | Border | Maybe([&menu_2_show] {
+        return menu_2_show;
+      }),
   });
 
   auto screen = ScreenInteractive::TerminalOutput();

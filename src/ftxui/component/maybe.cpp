@@ -9,28 +9,41 @@
 
 namespace ftxui {
 
-Component Maybe(Component child, const bool* show) {
+Component Maybe(Component child, std::function<bool()>&& do_show)
+{
   class Impl : public ComponentBase {
    public:
-    Impl(const bool* show) : show_(show) {}
+    Impl(std::function<bool()>&& do_show) : do_show_(std::move(do_show)) {}
 
    private:
     Element Render() override {
-      return *show_ ? ComponentBase::Render() : std::make_unique<Node>();
+      return do_show_() ? ComponentBase::Render() : std::make_unique<Node>();
     }
     bool Focusable() const override {
-      return *show_ && ComponentBase::Focusable();
+      return do_show_() && ComponentBase::Focusable();
     }
     bool OnEvent(Event event) override {
-      return *show_ && ComponentBase::OnEvent(event);
+      return do_show_() && ComponentBase::OnEvent(event);
     }
 
-    const bool* show_;
+    std::function<bool()> do_show_;
   };
 
-  auto maybe = Make<Impl>(show);
+  auto maybe = Make<Impl>(std::move(do_show));
   maybe->Add(std::move(child));
   return maybe;
+}
+
+ComponentDecorator Maybe(std::function<bool()>&& do_show) {
+  return [do_show = std::move(do_show)](Component child) mutable {
+    return Maybe(child, std::move(do_show));
+  };
+}
+
+Component Maybe(Component child, const bool* show) {
+  return Maybe(child, [show] {
+    return *show;
+  });
 }
 
 ComponentDecorator Maybe(const bool* show) {
