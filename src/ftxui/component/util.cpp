@@ -12,9 +12,7 @@ Component operator|(Component component, ComponentDecorator decorator) {
 }
 
 Component operator|(Component component, ElementDecorator decorator) {
-  return Renderer(component, [component, decorator] {
-    return decorator(component->Render());
-  });
+  return component | Renderer(decorator);
 }
 
 Component& operator|=(Component& component, ComponentDecorator decorator) {

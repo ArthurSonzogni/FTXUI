@@ -5,7 +5,7 @@
 
 namespace ftxui {
 
-[[deprecated("use Input(StringRef...) instead.")]] Component Input(
+[[deprecated("use Input with normal std::string instead.")]] Component Input(
     WideStringRef content,
     ConstStringRef placeholder,
     Ref<InputOption> option = {});

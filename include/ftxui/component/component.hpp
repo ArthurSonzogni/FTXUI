@@ -47,41 +47,55 @@ Component Tab(Components children, int* selector);
 Component Button(ConstStringRef label,
                  std::function<void()> on_click,
                  Ref<ButtonOption> = {});
+
 Component Checkbox(ConstStringRef label,
                    bool* checked,
                    Ref<CheckboxOption> option = {});
+
 Component Input(StringRef content,
                 ConstStringRef placeholder,
                 Ref<InputOption> option = {});
+
 Component Menu(ConstStringListRef entries,
                int* selected_,
                Ref<MenuOption> = {});
+
 Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> = {});
+
 Component Dropdown(ConstStringListRef entries, int* selected);
+
 Component Radiobox(ConstStringListRef entries,
                    int* selected_,
                    Ref<RadioboxOption> option = {});
+
 Component Toggle(ConstStringListRef entries,
                  int* selected,
                  Ref<ToggleOption> option = {});
+
 template <class T>  // T = {int, float, long}
 Component Slider(ConstStringRef label, T* value, T min, T max, T increment);
+
 Component ResizableSplitLeft(Component main, Component back, int* main_size);
 Component ResizableSplitRight(Component main, Component back, int* main_size);
 Component ResizableSplitTop(Component main, Component back, int* main_size);
 Component ResizableSplitBottom(Component main, Component back, int* main_size);
+
 Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);
 Component Renderer(std::function<Element(bool /* focused */)>);
+ComponentDecorator Renderer(ElementDecorator);
+
 Component CatchEvent(Component child, std::function<bool(Event)>);
+ComponentDecorator CatchEvent(std::function<bool(Event)> on_event);
+
 Component Maybe(Component, const bool* show);
 Component Maybe(Component, std::function<bool()>);
+ComponentDecorator Maybe(const bool* show);
+ComponentDecorator Maybe(std::function<bool()>);
+
 Component Collapsible(ConstStringRef label,
                       Component child,
                       Ref<bool> show = false);
-ComponentDecorator CatchEvent(std::function<bool(Event)> on_event);
-ComponentDecorator Maybe(const bool* show);
-ComponentDecorator Maybe(std::function<bool()>);
 }  // namespace ftxui
 
 // Include component using the old deprecated wstring.
