@@ -23,6 +23,7 @@ Element gaugeDirection(float ratio, GaugeDirection);
   with others nearby.
 - Fix the `Table` rendering function, to allow automerging characters.
 - Bugfix: The `vscroll_indicator` now computes its offset and size correctly.
+- Add the `operator|=(Element, Decorator)`
 
 ### Component
 - Support SIGTSTP. (ctrl+z).
@@ -33,6 +34,14 @@ Element gaugeDirection(float ratio, GaugeDirection);
 - **bugfix** Automatically convert '\r' keys into '\n' for Linux programs that
   do not send the correct code for the return key, like the 'bind'.
   https://github.com/ArthurSonzogni/FTXUI/issues/337
+- Add decorator for components:
+  - `operator|(Component, ComponentDecorator)`
+  - `operator|=(Component, ComponentDecorator)`
+  - `operator|(Component, ElementDecorator)`
+  - `operator|=(Component, ElementDecorator)`
+  - Add the `Maybe` decorator.
+  - Add the `CatchEvent` decorator.
+  - Add the `Renderer` decorator.
 
 2.0.0
 -----

@@ -82,7 +82,9 @@ int main(int argc, const char* argv[]) {
     for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i)
       children.push_back(text(Stringify(keys[i])));
     return window(text("keys"), vbox(std::move(children)));
-  }) | CatchEvent([&](Event event) {
+  });
+
+  component |= CatchEvent([&](Event event) {
     keys.push_back(event);
     return true;
   });

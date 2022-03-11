@@ -26,6 +26,14 @@ std::shared_ptr<T> Make(Args&&... args) {
   return std::make_shared<T>(std::forward<Args>(args)...);
 }
 
+// Pipe operator to decorate components.
+using ComponentDecorator = std::function<Component(Component)>;
+using ElementDecorator = std::function<Element(Element)>;
+Component operator|(Component component, ComponentDecorator decorator);
+Component operator|(Component component, ElementDecorator decorator);
+Component& operator|=(Component& component, ComponentDecorator decorator);
+Component& operator|=(Component& component, ElementDecorator decorator);
+
 namespace Container {
 Component Vertical(Components children);
 Component Vertical(Components children, int* selector);
@@ -66,20 +74,13 @@ Component Renderer(std::function<Element()>);
 Component Renderer(std::function<Element(bool /* focused */)>);
 Component CatchEvent(Component child, std::function<bool(Event)>);
 Component Maybe(Component, const bool* show);
-Component Maybe(Component, std::function<bool()>&&);
+Component Maybe(Component, std::function<bool()>);
 Component Collapsible(ConstStringRef label,
                       Component child,
                       Ref<bool> show = false);
-
-// -- Decorator --
-template<typename Decorator>
-Component operator|(Component component, Decorator&& decorator) {
-  return decorator(std::move(component));
-}
-using ComponentDecorator = std::function<Component(Component)>;
-ComponentDecorator CatchEvent(std::function<bool(Event)>&& on_event);
+ComponentDecorator CatchEvent(std::function<bool(Event)> on_event);
 ComponentDecorator Maybe(const bool* show);
-ComponentDecorator Maybe(std::function<bool()>&&);
+ComponentDecorator Maybe(std::function<bool()>);
 }  // namespace ftxui
 
 // Include component using the old deprecated wstring.

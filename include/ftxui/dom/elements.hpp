@@ -28,6 +28,7 @@ enum class GaugeDirection { Left, Up, Right, Down };
 // -> text("ftxui") | bold | underlined
 // -> underlined(bold(text("FTXUI")))
 Element operator|(Element, Decorator);
+Element& operator|=(Element&, Decorator);
 Elements operator|(Elements, Decorator);
 Decorator operator|(Decorator, Decorator);
 

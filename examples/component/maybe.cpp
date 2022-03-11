@@ -9,9 +9,6 @@
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, border
 
 using namespace ftxui;
-Component Border(Component child) {
-  return Renderer(child, [child] { return child->Render() | border; });
-}
 
 int main(int argc, const char* argv[]) {
   std::vector<std::string> entries = {
@@ -27,11 +24,13 @@ int main(int argc, const char* argv[]) {
 
   auto layout = Container::Vertical({
       Checkbox("Show menu_1", &menu_1_show),
-      Radiobox(&entries, &menu_1_selected) | Border | Maybe(&menu_1_show),
+      Radiobox(&entries, &menu_1_selected) | border | Maybe(&menu_1_show),
       Checkbox("Show menu_2", &menu_2_show),
-      Radiobox(&entries, &menu_2_selected) | Border | Maybe([&menu_2_show] {
-        return menu_2_show;
-      }),
+      Radiobox(&entries, &menu_2_selected) | border | Maybe(&menu_2_show),
+
+      Renderer([] {
+        return text("You found the secret combinaison!") | color(Color::Red);
+      }) | Maybe([&] { return menu_1_selected == 1 && menu_2_selected == 2; }),
   });
 
   auto screen = ScreenInteractive::TerminalOutput();
