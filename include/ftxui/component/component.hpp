@@ -4,6 +4,7 @@
 #include <functional>  // for function
 #include <memory>      // for make_shared, shared_ptr
 #include <string>      // for wstring
+#include <utility>     // for forward
 #include <vector>      // for vector
 
 #include "ftxui/component/component_base.hpp"     // for Component, Components

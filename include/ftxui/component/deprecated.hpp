@@ -5,10 +5,10 @@
 
 namespace ftxui {
 
-[[deprecated("use Input(StringRef...) instead.")]]
-Component Input(WideStringRef content,
-                ConstStringRef placeholder,
-                Ref<InputOption> option = {});
+[[deprecated("use Input(StringRef...) instead.")]] Component Input(
+    WideStringRef content,
+    ConstStringRef placeholder,
+    Ref<InputOption> option = {});
 }  // namespace ftxui
 
 #endif /* FTXUI_COMPONENT_DEPRECATED_HPP */

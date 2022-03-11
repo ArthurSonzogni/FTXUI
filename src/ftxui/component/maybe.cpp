@@ -1,8 +1,9 @@
+#include <functional>  // for function
 #include <memory>  // for make_unique, __shared_ptr_access, __shared_ptr_access<>::element_type, shared_ptr
 #include <utility>  // for move
 
-#include "ftxui/component/component.hpp"       // for Make, Maybe
-#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
+#include "ftxui/component/component.hpp"  // for ComponentDecorator, Maybe, Make
+#include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/dom/elements.hpp"              // for Element
 #include "ftxui/dom/node.hpp"                  // for Node
