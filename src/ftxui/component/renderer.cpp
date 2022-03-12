@@ -105,7 +105,7 @@ Component Renderer(std::function<Element(bool)> render) {
 }
 
 /// @brief Decorate a component, by decorating what it renders.
-/// @param decoratorr the function modifying the element it renders.
+/// @param decorator the function modifying the element it renders.
 /// @ingroup component
 ///
 /// ### Example
