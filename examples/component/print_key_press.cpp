@@ -84,7 +84,7 @@ int main(int argc, const char* argv[]) {
     return window(text("keys"), vbox(std::move(children)));
   });
 
-  component = CatchEvent(component, [&](Event event) {
+  component |= CatchEvent([&](Event event) {
     keys.push_back(event);
     return true;
   });

@@ -104,6 +104,28 @@ Component Renderer(std::function<Element(bool)> render) {
   return Make<Impl>(std::move(render));
 }
 
+/// @brief Decorate a component, by decorating what it renders.
+/// @param decorator the function modifying the element it renders.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto renderer =
+//     Renderer([] { return text("Hello");)
+///  | Renderer(bold)
+///  | Renderer(inverted);
+/// screen.Loop(renderer);
+/// ```
+ComponentDecorator Renderer(ElementDecorator decorator) {
+  return [decorator](Component component) {
+    return Renderer(component, [component, decorator] {
+      return component->Render() | decorator;
+    });
+  };
+}
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.

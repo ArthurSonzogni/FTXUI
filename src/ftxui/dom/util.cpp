@@ -66,6 +66,22 @@ Element operator|(Element element, Decorator decorator) {
   return decorator(std::move(element));
 }
 
+/// @brief Apply a decorator to an element.
+/// @return the decorated element.
+/// @ingroup dom
+///
+/// ### Example
+///
+/// Both of these are equivalent:
+/// ```cpp
+/// auto element = text("Hello");
+/// element |= bold;
+/// ```
+Element& operator|=(Element& e, Decorator d) {
+  e = e | d;
+  return e;
+}
+
 /// The minimal dimension that will fit the given element.
 /// @see Fixed
 /// @see Full

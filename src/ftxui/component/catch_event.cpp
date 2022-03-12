@@ -55,6 +55,33 @@ Component CatchEvent(Component child,
   return out;
 }
 
+/// @brief Decorate a component, using |on_event| to catch events. This function
+/// must returns true when the event has been handled, false otherwise.
+/// @param on_event The function drawing the interface.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto renderer = Renderer([] { return text("Hello world"); });
+/// renderer |= CatchEvent([&](Event event) {
+///   if (event == Event::Character('q')) {
+///     screen.ExitLoopClosure()();
+///     return true;
+///   }
+///   return false;
+/// });
+/// screen.Loop(renderer);
+/// ```
+ComponentDecorator CatchEvent(std::function<bool(Event)> on_event) {
+  return [on_event = std::move(on_event)](Component child) {
+    return CatchEvent(child, [on_event = std::move(on_event)](Event event) {
+      return on_event(event);
+    });
+  };
+}
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
