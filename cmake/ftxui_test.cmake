@@ -44,8 +44,6 @@ target_link_libraries(tests
 target_include_directories(tests
   PRIVATE src
 )
-target_compile_options(tests PRIVATE -fsanitize=address)
-target_link_libraries(tests PRIVATE -fsanitize=address)
 
 if (NOT MSVC)
   include(cmake/ftxui_benchmark.cmake)

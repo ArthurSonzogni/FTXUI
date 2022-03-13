@@ -1,3 +1,4 @@
+#include <array>   // for array
 #include <memory>  // for shared_ptr, __shared_ptr_access, allocator_traits<>::value_type
 #include <string>  // for operator+, to_string
 #include <vector>  // for vector

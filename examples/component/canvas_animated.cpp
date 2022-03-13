@@ -126,9 +126,9 @@ int main(int argc, const char* argv[]) {
 
     std::vector<int> ys(100);
     for (int x = 0; x < 100; x++) {
-      float dx = x - mouse_x;
-      float dy = 50;
-      ys[x] = dy + 20 * cos(dx * 0.14) + 10 * sin(dx * 0.42);
+      float dx = float(x - mouse_x);
+      float dy = 50.f;
+      ys[x] = int(dy + 20 * cos(dx * 0.14) + 10 * sin(dx * 0.42));
     }
     for (int x = 1; x < 99; x++)
       c.DrawPointLine(x, ys[x], x + 1, ys[x + 1]);
@@ -141,10 +141,10 @@ int main(int argc, const char* argv[]) {
     c.DrawText(0, 0, "A symmetrical graph filled");
     std::vector<int> ys(100);
     for (int x = 0; x < 100; x++) {
-      ys[x] = 30 +                                  //
-              10 * cos(x * 0.2 - mouse_x * 0.05) +  //
-              5 * sin(x * 0.4) +                    //
-              5 * sin(x * 0.3 - mouse_y * 0.05);    //
+      ys[x] = int(30 +                                  //
+                  10 * cos(x * 0.2 - mouse_x * 0.05) +  //
+                  5 * sin(x * 0.4) +                    //
+                  5 * sin(x * 0.3 - mouse_y * 0.05));   //
     }
     for (int x = 0; x < 100; x++) {
       c.DrawPointLine(x, 50 + ys[x], x, 50 - ys[x], Color::Red);
@@ -167,7 +167,7 @@ int main(int argc, const char* argv[]) {
       for (int x = 0; x < size; x++) {
         float dx = x - mx;
         float dy = y - my;
-        ys[y][x] = -1.5 + 3.0 * std::exp(-0.2f * (dx * dx + dy * dy));
+        ys[y][x] = (int)(-1.5 + 3.0 * std::exp(-0.2f * (dx * dx + dy * dy)));
       }
     }
     for (int y = 0; y < size; y++) {
