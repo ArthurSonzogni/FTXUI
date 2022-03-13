@@ -27,7 +27,7 @@ Element DefaultTransform(EntryState params) {
   if (params.focused)
     element |= inverted;
   return element;
-};
+}
 
 }  // namespace
 
@@ -173,7 +173,7 @@ Component Button(ConstStringRef label,
   };
 
   return Make<Impl>(label, std::move(on_click), std::move(option));
-};
+}
 
 }  // namespace ftxui
 
