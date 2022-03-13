@@ -44,6 +44,63 @@ int GeneratorInt(const char* data, size_t size) {
   return out;
 }
 
+Color GeneratorColor(const char* data, size_t size) {
+  return Color::RGB(GeneratorInt(data, size), GeneratorInt(data, size),
+                    GeneratorInt(data, size));
+}
+
+AnimatedColorOption GeneratorAnimatedColorOption(const char* data,
+                                                 size_t size) {
+  AnimatedColorOption option;
+  option.enabled = GeneratorBool(data, size);
+  option.inactive = GeneratorColor(data, size);
+  option.active = GeneratorColor(data, size);
+  option.duration = std::chrono::milliseconds(GeneratorInt(data, size));
+  return option;
+}
+
+AnimatedColorsOption GeneratorAnimatedColorsOptions(const char* data,
+                                                    size_t size) {
+  AnimatedColorsOption option;
+  option.background = GeneratorAnimatedColorOption(data, size);
+  option.foreground = GeneratorAnimatedColorOption(data, size);
+  return option;
+}
+
+ButtonOption GeneratorButtonOption(const char* data, size_t size) {
+  ButtonOption option;
+  option.animated_colors = GeneratorAnimatedColorsOptions(data, size);
+  return option;
+}
+
+UnderlineOption GeneratorUnderlineOption(const char* data, size_t size) {
+  UnderlineOption option;
+  option.enabled = GeneratorBool(data, size);
+  option.color_active = GeneratorColor(data, size);
+  option.color_inactive = GeneratorColor(data, size);
+  option.leader_duration = std::chrono::milliseconds(GeneratorInt(data, size));
+  option.follower_duration =
+      std::chrono::milliseconds(GeneratorInt(data, size));
+  option.leader_delay = std::chrono::milliseconds(GeneratorInt(data, size));
+  option.follower_delay = std::chrono::milliseconds(GeneratorInt(data, size));
+  return option;
+}
+
+MenuEntryOption GeneratorMenuEntryOption(const char* data, size_t size) {
+  MenuEntryOption option;
+  option.animated_colors = GeneratorAnimatedColorsOptions(data, size);
+  return option;
+}
+
+MenuOption GeneratorMenuOption(const char* data, size_t size) {
+  MenuOption option;
+  option.underline = GeneratorUnderlineOption(data, size);
+  option.entries = GeneratorMenuEntryOption(data, size);
+  option.direction =
+      static_cast<MenuOption::Direction>(GeneratorInt(data, size) % 4);
+  return option;
+}
+
 bool g_bool;
 int g_int;
 std::vector<std::string> g_list;
@@ -60,13 +117,15 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
   value = (value % value_max + value_max) % value_max;
   switch (value) {
     case 0:
-      return Button(GeneratorString(data, size), [] {});
+      return Button(
+          GeneratorString(data, size), [] {},
+          GeneratorButtonOption(data, size));
     case 1:
       return Checkbox(GeneratorString(data, size), &g_bool);
     case 2:
       return Input(GeneratorString(data, size), GeneratorString(data, size));
     case 3:
-      return Menu(&g_list, &g_int);
+      return Menu(&g_list, &g_int, GeneratorMenuOption(data, size));
     case 4:
       return Radiobox(&g_list, &g_int);
     case 5:

@@ -1,3 +1,4 @@
+#include <iostream>
 #include <algorithm>  // for max, min
 #include <memory>     // for allocator, make_shared
 #include <string>     // for string
@@ -40,8 +41,13 @@ static std::string charset_vertical[10] = {
 class Gauge : public Node {
  public:
   Gauge(float progress, GaugeDirection direction)
-      : progress_(std::min(std::max(progress, 0.f), 1.f)),
-        direction_(direction) {}
+      : progress_(progress), direction_(direction) {
+    // This handle NAN correctly:
+    if (!(progress_ > 0.f))
+      progress_ = 0.f;
+    if (!(progress_ < 1.f))
+      progress_ = 1.f;
+  }
 
   void ComputeRequirement() override {
     switch (direction_) {
