@@ -13,7 +13,9 @@
 
 namespace ftxui {
 
-/// @brief arguments for |ButtonOption::transform|.
+/// @brief arguments for |ButtonOption::transform|, |CheckboxOption::transform|,
+/// |Radiobox::transform|, |MenuEntryOption::transform|,
+/// |MenuOption::transform|.
 struct EntryState {
   std::string label; /// < The label to display.
   bool state;        /// < The state of the button/checkbox/radiobox
@@ -156,9 +158,9 @@ struct RadioboxOption {
   // Style:
   std::function<Element(EntryState)> transform;
 
+  // Observers:
   /// Called when the selected entry changes.
-  std::function<void()> on_change = []() {};
-
+  std::function<void()> on_change = [] {};
   Ref<int> focused_entry = 0;
 };
 
