@@ -1,25 +1,31 @@
+#include <functional>  // for function
 #include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
-#include <memory>    // for shared_ptr, __shared_ptr_access
-#include <string>    // for to_string, allocator
+#include <memory>    // for allocator, shared_ptr, __shared_ptr_access
+#include <string>  // for char_traits, to_string, operator+, string, basic_string
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for MenuEntry, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/component_options.hpp"   // for MenuEntryOption
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for operator|, separator, Element, Decorator, color, text, hbox, size, bold, frame, inverted, vbox, HEIGHT, LESS_THAN, border
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, separator, text, hbox, size, frame, color, vbox, HEIGHT, LESS_THAN, bold, border, inverted
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::Green, Color::Red, Color::Yellow
 
 using namespace ftxui;
 
 // Define a special style for some menu entry.
 MenuEntryOption Colored(ftxui::Color c) {
-  MenuEntryOption special_style;
-  special_style.style_normal = Decorator(color(c));
-  special_style.style_focused = Decorator(color(c)) | inverted;
-  special_style.style_selected = Decorator(color(c)) | bold;
-  special_style.style_selected_focused = Decorator(color(c)) | inverted | bold;
-  return special_style;
+  MenuEntryOption option;
+  option.transform = [c](EntryState state) {
+    state.label = (state.active? "> " : "  ") + state.label;
+    Element e = text(state.label) | color(c);
+    if (state.focused)
+      e = e | inverted;
+    if (state.active)
+      e = e | bold;
+    return e;
+  };
+  return option;
 }
 
 int main(int argc, const char* argv[]) {

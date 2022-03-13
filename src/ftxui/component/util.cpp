@@ -1,9 +1,7 @@
 #include <functional>  // for function
-#include <memory>      // for __shared_ptr_access
 
-#include "ftxui/component/component.hpp"  // for ElementDecorator, Renderer, ComponentDecorator, operator|, operator|=
-#include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
-#include "ftxui/dom/elements.hpp"              // for Element
+#include "ftxui/component/component.hpp"  // for Renderer, ComponentDecorator, ElementDecorator, operator|, operator|=
+#include "ftxui/component/component_base.hpp"  // for Component
 
 namespace ftxui {
 

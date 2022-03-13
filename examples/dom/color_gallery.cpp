@@ -5,11 +5,12 @@
 #include <utility>                    // for move
 #include <vector>                     // for vector
 
-using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 #include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, hbox, separator, operator|, Elements, Element, Fit, border
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
+
+using namespace ftxui;
+#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
 int main(int argc, const char* argv[]) {
   // clang-format off

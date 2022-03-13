@@ -10,6 +10,9 @@ add_subdirectory(component)
 add_subdirectory(dom)
 
 if (EMSCRIPTEN)
+  # 32MB should be enough to run all the examples, in debug mode.
+  target_link_options(component PUBLIC "SHELL: -s TOTAL_MEMORY=33554432")
+
   get_property(EXAMPLES GLOBAL PROPERTY FTXUI::EXAMPLES)
   foreach(file
       "index.html"

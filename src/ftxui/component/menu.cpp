@@ -1,23 +1,64 @@
-#include <algorithm>   // for max
+#include <algorithm>   // for max, reverse
+#include <chrono>      // for milliseconds
 #include <functional>  // for function
-#include <memory>      // for shared_ptr, allocator_traits<>::value_type
-#include <string>      // for operator+, string
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <memory>  // for allocator, shared_ptr, allocator_traits<>::value_type, swap
+#include <string>   // for char_traits, operator+, string, basic_string
+#include <utility>  // for move
+#include <vector>   // for vector, __alloc_traits<>::value_type
 
+#include "ftxui/component/animation.hpp"  // for Animator, Linear, Params (ptr only)
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/component.hpp"       // for Make, Menu, MenuEntry
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
+#include "ftxui/component/component.hpp"  // for Make, Menu, MenuEntry, Toggle
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, MenuOption::Direction, UnderlineOption, AnimatedColorOption, AnimatedColorsOption, MenuOption::Down, MenuOption::Left, MenuOption::Right, MenuOption::Up
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released, Mouse::WheelDown, Mouse::WheelUp, Mouse::None
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, text, nothing, select, vbox, Elements, focus
-#include "ftxui/screen/box.hpp"   // for Box
-#include "ftxui/screen/util.hpp"  // for clamp
-#include "ftxui/util/ref.hpp"     // for Ref, ConstStringListRef, ConstStringRef
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, Decorator, nothing, Elements, bgcolor, color, hbox, separatorHSelector, separatorVSelector, vbox, xflex, yflex, text, bold, focus, inverted, select
+#include "ftxui/screen/box.hpp"    // for Box
+#include "ftxui/screen/color.hpp"  // for Color
+#include "ftxui/screen/util.hpp"   // for clamp
+#include "ftxui/util/ref.hpp"  // for Ref, ConstStringListRef, ConstStringRef
 
 namespace ftxui {
+
+namespace {
+
+Element DefaultOptionTransform(EntryState state) {
+  state.label = (state.active ? "> " : "  ") + state.label;
+  Element e = text(state.label);
+  if (state.focused)
+    e = e | inverted;
+  if (state.active)
+    e = e | bold;
+  return e;
+}
+
+bool IsInverted(MenuOption::Direction direction) {
+  switch (direction) {
+    case MenuOption::Direction::Up:
+    case MenuOption::Direction::Left:
+      return true;
+    case MenuOption::Direction::Down:
+    case MenuOption::Direction::Right:
+      return false;
+  }
+  return false; // NOT_REACHED()
+}
+
+bool IsHorizontal(MenuOption::Direction direction) {
+  switch (direction) {
+    case MenuOption::Direction::Left:
+    case MenuOption::Direction::Right:
+      return true;
+    case MenuOption::Direction::Down:
+    case MenuOption::Direction::Up:
+      return false;
+  }
+  return false; // NOT_REACHED()
+}
+
+}  // namespace
 
 /// @brief A list of items. The user can navigate through them.
 /// @ingroup component
@@ -26,26 +67,148 @@ class MenuBase : public ComponentBase {
   MenuBase(ConstStringListRef entries, int* selected, Ref<MenuOption> option)
       : entries_(entries), selected_(selected), option_(option) {}
 
+  bool IsHorizontal() { return ftxui::IsHorizontal(option_->direction); }
+  void OnChange() {
+    if (option_->on_change)
+      option_->on_change();
+  }
+
+  void OnEnter() {
+    if (option_->on_enter)
+      option_->on_enter();
+  }
+
+  void Clamp() {
+    boxes_.resize(size());
+    *selected_ = util::clamp(*selected_, 0, size() - 1);
+    focused_entry() = util::clamp(focused_entry(), 0, size() - 1);
+  }
+
+  void OnAnimation(animation::Params& params) override {
+    animator_first_.OnAnimation(params);
+    animator_second_.OnAnimation(params);
+    for (auto& animator : animator_background_)
+      animator.OnAnimation(params);
+    for (auto& animator : animator_foreground_)
+      animator.OnAnimation(params);
+  }
+
   Element Render() override {
     Clamp();
+    UpdateAnimationTarget();
+
     Elements elements;
     bool is_menu_focused = Focused();
+    if (option_->elements_prefix)
+      elements.push_back(option_->elements_prefix());
     for (int i = 0; i < size(); ++i) {
+      if (i != 0 && option_->elements_infix)
+        elements.push_back(option_->elements_infix());
       bool is_focused = (focused_entry() == i) && is_menu_focused;
       bool is_selected = (*selected_ == i);
 
-      auto style = is_selected ? (is_focused ? option_->style_selected_focused
-                                             : option_->style_selected)
-                               : (is_focused ? option_->style_focused
-                                             : option_->style_normal);
       auto focus_management = !is_selected      ? nothing
                               : is_menu_focused ? focus
-                                                : select;
-      auto icon = is_selected ? "> " : "  ";
-      elements.push_back(text(icon + entries_[i]) | style | focus_management |
-                         reflect(boxes_[i]));
+                                                : nothing;
+      EntryState state = {
+          entries_[i],
+          false,
+          is_selected,
+          is_focused,
+      };
+
+      Element element =
+          (option_->entries.transform ? option_->entries.transform
+                                      : DefaultOptionTransform)  //
+          (std::move(state));
+      elements.push_back(element | AnimatedColorStyle(i) | reflect(boxes_[i]) |
+                         focus_management);
     }
-    return vbox(std::move(elements)) | reflect(box_);
+    if (option_->elements_postfix)
+      elements.push_back(option_->elements_postfix());
+
+    if (IsInverted(option_->direction))
+      std::reverse(elements.begin(), elements.end());
+
+    Element bar =
+        IsHorizontal() ? hbox(std::move(elements)) : vbox(std::move(elements));
+
+    if (!option_->underline.enabled)
+      return bar | reflect(box_);
+
+    if (IsHorizontal()) {
+      return vbox({
+                 bar | xflex,
+                 separatorHSelector(first_, second_,  //
+                                    option_->underline.color_active,
+                                    option_->underline.color_inactive),
+             }) |
+             reflect(box_);
+    } else {
+      return hbox({
+                 separatorVSelector(first_, second_,  //
+                                    option_->underline.color_active,
+                                    option_->underline.color_inactive),
+                 bar | yflex,
+             }) |
+             reflect(box_);
+    }
+  }
+
+  void OnUp() {
+    switch (option_->direction) {
+      case MenuOption::Direction::Up:
+        (*selected_)++;
+        break;
+      case MenuOption::Direction::Down:
+        (*selected_)--;
+        break;
+      case MenuOption::Direction::Left:
+      case MenuOption::Direction::Right:
+        break;
+    }
+  }
+
+  void OnDown() {
+    switch (option_->direction) {
+      case MenuOption::Direction::Up:
+        (*selected_)--;
+        break;
+      case MenuOption::Direction::Down:
+        (*selected_)++;
+        break;
+      case MenuOption::Direction::Left:
+      case MenuOption::Direction::Right:
+        break;
+    }
+  }
+
+  void OnLeft() {
+    switch (option_->direction) {
+      case MenuOption::Direction::Left:
+        (*selected_)++;
+        break;
+      case MenuOption::Direction::Right:
+        (*selected_)--;
+        break;
+      case MenuOption::Direction::Down:
+      case MenuOption::Direction::Up:
+        break;
+    }
+  }
+
+  void OnRight() {
+    switch (option_->direction) {
+      case MenuOption::Direction::Left:
+        (*selected_)--;
+        break;
+      case MenuOption::Direction::Right:
+        (*selected_)++;
+        break;
+      case MenuOption::Direction::Down:
+      case MenuOption::Direction::Up:
+        break;
+    }
   }
 
   bool OnEvent(Event event) override {
@@ -59,9 +222,13 @@ class MenuBase : public ComponentBase {
     if (Focused()) {
       int old_selected = *selected_;
       if (event == Event::ArrowUp || event == Event::Character('k'))
-        (*selected_)--;
+        OnUp();
       if (event == Event::ArrowDown || event == Event::Character('j'))
-        (*selected_)++;
+        OnDown();
+      if (event == Event::ArrowLeft || event == Event::Character('h'))
+        OnLeft();
+      if (event == Event::ArrowRight || event == Event::Character('l'))
+        OnRight();
       if (event == Event::PageUp)
         (*selected_) -= box_.y_max - box_.y_min;
       if (event == Event::PageDown)
@@ -79,13 +246,13 @@ class MenuBase : public ComponentBase {
 
       if (*selected_ != old_selected) {
         focused_entry() = *selected_;
-        option_->on_change();
+        OnChange();
         return true;
       }
     }
 
     if (event == Event::Return) {
-      option_->on_enter();
+      OnEnter();
       return true;
     }
 
@@ -114,7 +281,7 @@ class MenuBase : public ComponentBase {
           event.mouse().motion == Mouse::Released) {
         if (*selected_ != i) {
           *selected_ = i;
-          option_->on_change();
+          OnChange();
         }
         return true;
       }
@@ -135,19 +302,115 @@ class MenuBase : public ComponentBase {
     *selected_ = util::clamp(*selected_, 0, size() - 1);
 
     if (*selected_ != old_selected)
-      option_->on_change();
+      OnChange();
     return true;
   }
 
-  void Clamp() {
-    boxes_.resize(size());
-    *selected_ = util::clamp(*selected_, 0, size() - 1);
-    focused_entry() = util::clamp(focused_entry(), 0, size() - 1);
+  void UpdateAnimationTarget() {
+    UpdateColorTarget();
+    UpdateUnderlineTarget();
+  }
+
+  void UpdateColorTarget() {
+    if (size() != (int)animation_background_.size()) {
+      animation_background_.resize(size());
+      animation_foreground_.resize(size());
+      animator_background_.clear();
+      animator_foreground_.clear();
+
+      for (int i = 0; i < size(); ++i) {
+        animation_background_[i] = 0.f;
+        animation_foreground_[i] = 0.f;
+        animator_background_.emplace_back(&animation_background_[i], 0.f,
+                                          std::chrono::milliseconds(0),
+                                          animation::easing::Linear);
+        animator_foreground_.emplace_back(&animation_foreground_[i], 0.f,
+                                          std::chrono::milliseconds(0),
+                                          animation::easing::Linear);
+      }
+    }
+
+    bool is_menu_focused = Focused();
+    for (int i = 0; i < size(); ++i) {
+      bool is_focused = (focused_entry() == i) && is_menu_focused;
+      bool is_selected = (*selected_ == i);
+      float target = is_selected ? 1.f : is_focused ? 0.5f : 0.f;
+      if (animator_background_[i].to() != target) {
+        animator_background_[i] = animation::Animator(
+            &animation_background_[i], target,
+            option_->entries.animated_colors.background.duration,
+            option_->entries.animated_colors.background.function);
+        animator_foreground_[i] = animation::Animator(
+            &animation_foreground_[i], target,
+            option_->entries.animated_colors.foreground.duration,
+            option_->entries.animated_colors.foreground.function);
+      }
+    }
+  }
+
+  Decorator AnimatedColorStyle(int i) {
+    Decorator style = nothing;
+    if (option_->entries.animated_colors.foreground.enabled) {
+      style = style | color(Color::Interpolate(
+                          animation_foreground_[i],
+                          option_->entries.animated_colors.foreground.inactive,
+                          option_->entries.animated_colors.foreground.active));
+    }
+
+    if (option_->entries.animated_colors.background.enabled) {
+      style = style | bgcolor(Color::Interpolate(
+                          animation_background_[i],
+                          option_->entries.animated_colors.background.inactive,
+                          option_->entries.animated_colors.background.active));
+    }
+    return style;
+  }
+
+  void UpdateUnderlineTarget() {
+    if (!option_->underline.enabled)
+      return;
+
+    if (FirstTarget() == animator_first_.to() &&
+        SecondTarget() == animator_second_.to()) {
+      return;
+    }
+
+    if (FirstTarget() >= animator_first_.to()) {
+      animator_first_ = animation::Animator(
+          &first_, FirstTarget(), option_->underline.follower_duration,
+          option_->underline.follower_function,
+          option_->underline.follower_delay);
+
+      animator_second_ = animation::Animator(
+          &second_, SecondTarget(), option_->underline.leader_duration,
+          option_->underline.leader_function, option_->underline.leader_delay);
+    } else {
+      animator_first_ = animation::Animator(
+          &first_, FirstTarget(), option_->underline.leader_duration,
+          option_->underline.leader_function, option_->underline.leader_delay);
+
+      animator_second_ = animation::Animator(
+          &second_, SecondTarget(), option_->underline.follower_duration,
+          option_->underline.follower_function,
+          option_->underline.follower_delay);
+    }
   }
 
   bool Focusable() const final { return entries_.size(); }
   int& focused_entry() { return option_->focused_entry(); }
   int size() const { return entries_.size(); }
+  int FirstTarget() {
+    if (boxes_.size() == 0)
+      return 0;
+    return IsHorizontal() ? boxes_[*selected_].x_min - box_.x_min
+                          : boxes_[*selected_].y_min - box_.y_min;
+  }
+  int SecondTarget() {
+    if (boxes_.size() == 0)
+      return 0;
+    return IsHorizontal() ? boxes_[*selected_].x_max - box_.x_min
+                          : boxes_[*selected_].y_max - box_.y_min;
+  }
 
  protected:
   ConstStringListRef entries_;
@@ -156,6 +419,16 @@ class MenuBase : public ComponentBase {
 
   std::vector<Box> boxes_;
   Box box_;
+
+  float first_ = 0.f;
+  float second_ = 0.f;
+  animation::Animator animator_first_ = animation::Animator(&first_, 0.f);
+  animation::Animator animator_second_ = animation::Animator(&second_, 0.f);
+
+  std::vector<animation::Animator> animator_background_;
+  std::vector<animation::Animator> animator_foreground_;
+  std::vector<float> animation_background_;
+  std::vector<float> animation_foreground_;
 };
 
 /// @brief A list of text. The focused element is selected.
@@ -163,7 +436,6 @@ class MenuBase : public ComponentBase {
 /// @param selected The index of the currently selected element.
 /// @param option Additional optional parameters.
 /// @ingroup component
-/// @see MenuBase
 ///
 /// ### Example
 ///
@@ -192,6 +464,41 @@ Component Menu(ConstStringListRef entries,
   return Make<MenuBase>(entries, selected, std::move(option));
 }
 
+/// @brief An horizontal list of elements. The user can navigate through them.
+/// @param entries The list of selectable entries to display.
+/// @param selected Reference the selected entry.
+/// @param See also |Menu|.
+/// @ingroup component
+Component Toggle(ConstStringListRef entries, int* selected) {
+  return Menu(entries, selected, MenuOption::Toggle());
+}
+
+/// @brief A specific menu entry. They can be put into a Container::Vertical to
+/// form a menu.
+/// @param label The text drawn representing this element.
+/// @param option Additional optional parameters.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// int selected = 0;
+/// auto menu = Container::Vertical({
+///    MenuEntry("entry 1"),
+///    MenuEntry("entry 2"),
+///    MenuEntry("entry 3"),
+/// }, &selected);
+/// screen.Loop(menu);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// > entry 1
+///   entry 2
+///   entry 3
+/// ```
 Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
   class Impl : public ComponentBase {
    public:
@@ -201,15 +508,56 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
    private:
     Element Render() override {
       bool focused = Focused();
-      auto style =
-          hovered_ ? (focused ? option_->style_selected_focused
-                              : option_->style_selected)
-                   : (focused ? option_->style_focused : option_->style_normal);
+      UpdateAnimationTarget();
+
+      EntryState state = {
+          *label_,
+          hovered_,
+          focused,
+          false,
+      };
+
+      Element element =
+          (option_->transform ? option_->transform : DefaultOptionTransform)  //
+          (std::move(state));
+
       auto focus_management = focused ? select : nothing;
-      auto label = focused ? "> " + (*label_)  //
-                           : "  " + (*label_);
-      return text(label) | style | focus_management | reflect(box_);
+      return element | AnimatedColorStyle() | focus_management | reflect(box_);
     }
+
+    void UpdateAnimationTarget() {
+      bool focused = Focused();
+      float target = focused ? 1.0f : hovered_ ? 0.5f : 0.0f;
+      if (target == animator_background_.to())
+        return;
+      animator_background_ =
+          animation::Animator(&animation_background_, target,
+                              option_->animated_colors.background.duration,
+                              option_->animated_colors.background.function);
+      animator_foreground_ =
+          animation::Animator(&animation_foreground_, target,
+                              option_->animated_colors.foreground.duration,
+                              option_->animated_colors.foreground.function);
+    }
+
+    Decorator AnimatedColorStyle() {
+      Decorator style = nothing;
+      if (option_->animated_colors.foreground.enabled) {
+        style = style | color(Color::Interpolate(
+                            animation_foreground_,
+                            option_->animated_colors.foreground.inactive,
+                            option_->animated_colors.foreground.active));
+      }
+
+      if (option_->animated_colors.background.enabled) {
+        style = style | bgcolor(Color::Interpolate(
+                            animation_background_,
+                            option_->animated_colors.background.inactive,
+                            option_->animated_colors.background.active));
+      }
+      return style;
+    }
+
     bool Focusable() const override { return true; }
     bool OnEvent(Event event) override {
       if (!event.is_mouse())
@@ -228,10 +576,23 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
 
       return false;
     }
+
+    void OnAnimation(animation::Params& params) override {
+      animator_background_.OnAnimation(params);
+      animator_foreground_.OnAnimation(params);
+    }
+
     ConstStringRef label_;
     Ref<MenuEntryOption> option_;
     Box box_;
     bool hovered_ = false;
+
+    float animation_background_ = 0.f;
+    float animation_foreground_ = 0.f;
+    animation::Animator animator_background_ =
+        animation::Animator(&animation_background_, 0.f);
+    animation::Animator animator_foreground_ =
+        animation::Animator(&animation_foreground_, 0.f);
   };
 
   return Make<Impl>(std::move(label), std::move(option));

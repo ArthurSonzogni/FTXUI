@@ -12,6 +12,10 @@
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"                  // for text, Element
 
+namespace ftxui::animation {
+class Params;
+}  // namespace ftxui::animation
+
 namespace ftxui {
 
 namespace {
@@ -99,6 +103,15 @@ bool ComponentBase::OnEvent(Event event) {
       return true;
   }
   return false;
+}
+
+/// @brief Called in response to an animation event.
+/// @param animation_params the parameters of the animation
+/// The default implementation dispatch the event to every child.
+/// @ingroup component
+void ComponentBase::OnAnimation(animation::Params& params) {
+  for (Component& child : children_)
+    child->OnAnimation(params);
 }
 
 /// @brief Return the currently Active child.
