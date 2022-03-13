@@ -49,7 +49,7 @@ Component Button(ConstStringRef label,
 
 Component Checkbox(ConstStringRef label,
                    bool* checked,
-                   Ref<CheckboxOption> option = {});
+                   Ref<CheckboxOption> option = CheckboxOption::Simple());
 
 Component Input(StringRef content,
                 ConstStringRef placeholder,

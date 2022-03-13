@@ -10,17 +10,13 @@
 
 using namespace ftxui;
 
-struct CheckboxState {
-  bool checked;
-};
-
 int main(int argc, const char* argv[]) {
-  std::vector<CheckboxState> states(30);
+  std::array<bool, 30> states;
+
   auto container = Container::Vertical({});
   for (int i = 0; i < 30; ++i) {
-    states[i].checked = false;
-    container->Add(
-        Checkbox("Checkbox" + std::to_string(i), &states[i].checked));
+    states[i] = false;
+    container->Add(Checkbox("Checkbox" + std::to_string(i), &states[i]));
   }
 
   auto renderer = Renderer(container, [&] {

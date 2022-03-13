@@ -31,8 +31,15 @@ Component Collapsible(ConstStringRef label, Component child, Ref<bool> show) {
     Impl(ConstStringRef label, Component child, Ref<bool> show)
         : label_(label), show_(std::move(show)) {
       CheckboxOption opt;
-      opt.style_checked = "▼ ";
-      opt.style_unchecked = "▶ ";
+      opt.transform = [](EntryState s) {
+        auto prefix = text(s.state ? "▼ " : "▶ ");
+        auto t = text(s.label);
+        if (s.active)
+          t |= bold;
+        if (s.focused)
+          t |= inverted;
+        return hbox({prefix, t});
+      };
       Add(Container::Vertical({
           Checkbox(label_, show_.operator->(), opt),
           Maybe(std::move(child), show_.operator->()),

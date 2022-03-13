@@ -45,15 +45,14 @@ void UnderlineOption::SetAnimationFunction(
 MenuOption MenuOption::Horizontal() {
   MenuOption option;
   option.direction = Direction::Right;
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    Element e = text(label);
-    if (focused)
-      e = e | inverted;
-    if (selected)
-      e = e | bold;
-    if (!focused && !selected)
-      e = e | dim;
+  option.entries.transform = [](EntryState state) {
+    Element e = text(state.label);
+    if (state.focused)
+      e |= inverted;
+    if (state.active)
+      e |= bold;
+    if (!state.focused && !state.active)
+      e |= dim;
     return e;
   };
   option.elements_infix = [] { return text(" "); };
@@ -71,20 +70,19 @@ MenuOption MenuOption::HorizontalAnimated() {
 // static
 MenuOption MenuOption::Vertical() {
   MenuOption option;
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    if (selected)
-      label = "> " + label;
+  option.entries.transform = [](EntryState state) {
+    if (state.active)
+      state.label = "> " + state.label;
     else
-      label = "  " + label;
+      state.label = "  " + state.label;
 
-    Element e = text(label);
-    if (focused)
-      e = e | inverted;
-    if (selected)
-      e = e | bold;
-    if (!focused && !selected)
-      e = e | dim;
+    Element e = text(state.label);
+    if (state.focused)
+      e |= inverted;
+    if (state.active)
+      e |= bold;
+    if (!state.focused && !state.active)
+      e |= dim;
     return e;
   };
   return option;
@@ -93,15 +91,14 @@ MenuOption MenuOption::Vertical() {
 // static
 MenuOption MenuOption::VerticalAnimated() {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    Element e = text(label);
-    if (focused)
-      e = e | inverted;
-    if (selected)
-      e = e | bold;
-    if (!focused && !selected)
-      e = e | dim;
+  option.entries.transform = [](EntryState state) {
+    Element e = text(state.label);
+    if (state.focused)
+      e |= inverted;
+    if (state.active)
+      e |= bold;
+    if (!state.focused && !state.active)
+      e |= dim;
     return e;
   };
   option.underline.enabled = true;
@@ -117,25 +114,12 @@ MenuOption MenuOption::Toggle() {
 
 /// @brief Create a ButtonOption, highlighted using [] characters.
 // static
-ButtonOption Ascii() {
+ButtonOption ButtonOption::Ascii() {
   ButtonOption option;
-  option.transform = [](std::string label, bool focused) {
-    label = focused ? "[" + label + "]"  //
-                    : " " + label + " ";
-    return text(label);
-  };
-  return option;
-}
-
-/// @brief Create a ButtonOption, inverted when focused.
-// static
-ButtonOption Simple() {
-  ButtonOption option;
-  option.transform = [](std::string label, bool focused) {
-    auto element = text(label);
-    if (focused)
-      element |= inverted;
-    return element;
+  option.transform = [](EntryState s) {
+    s.label = s.focused ? "[" + s.label + "]"  //
+                        : " " + s.label + " ";
+    return text(s.label);
   };
   return option;
 }
@@ -144,9 +128,9 @@ ButtonOption Simple() {
 // static
 ButtonOption ButtonOption::Simple() {
   ButtonOption option;
-  option.transform = [](std::string label, bool focused) {
-    auto element = text(label) | borderLight;
-    if (focused)
+  option.transform = [](EntryState s) {
+    auto element = text(s.label) | borderLight;
+    if (s.focused)
       element |= inverted;
     return element;
   };
@@ -182,14 +166,58 @@ ButtonOption ButtonOption::Animated(Color background,
                                     Color background_focused,
                                     Color foreground_focused) {
   ButtonOption option;
-  option.transform = [](std::string label, bool focused) {
-    auto element = text(label) | borderEmpty;
-    if (focused)
+  option.transform = [](EntryState s) {
+    auto element = text(s.label) | borderEmpty;
+    if (s.focused)
       element |= bold;
     return element;
   };
   option.animated_colors.foreground.Set(foreground, foreground_focused);
   option.animated_colors.background.Set(background, background_focused);
+  return option;
+}
+
+/// @brief Option for standard Checkbox.
+// static
+CheckboxOption CheckboxOption::Simple() {
+  auto option = CheckboxOption();
+  option.transform = [](EntryState s) {
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+    // Microsoft terminal do not use fonts able to render properly the default
+    // radiobox glyph.
+    auto prefix = text(s.state ? "[X] " : "[ ] ");
+#else
+    auto prefix = text(s.state ? "▣ " : "☐ ");
+#endif
+    auto t = text(s.label);
+    if (s.active)
+      t |= bold;
+    if (s.focused)
+      t |= inverted;
+    return hbox({prefix, t});
+  };
+  return option;
+}
+
+/// @brief Option for standard Radiobox
+// static
+RadioboxOption RadioboxOption::Simple() {
+  auto option = RadioboxOption();
+  option.transform = [](EntryState s) {
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+    // Microsoft terminal do not use fonts able to render properly the default
+    // radiobox glyph.
+    auto prefix = text(s.state ? "(*) " : "( ) ");
+#else
+    auto prefix = text(s.state ? "◉ " : "○ ");
+#endif
+    auto t = text(s.label);
+    if (s.active)
+      t |= bold;
+    if (s.focused)
+      t |= inverted;
+    return hbox({prefix, t});
+  };
   return option;
 }
 

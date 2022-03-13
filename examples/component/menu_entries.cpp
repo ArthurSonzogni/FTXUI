@@ -16,12 +16,12 @@ using namespace ftxui;
 // Define a special style for some menu entry.
 MenuEntryOption Colored(ftxui::Color c) {
   MenuEntryOption option;
-  option.transform = [c](std::string label, bool focused, bool selected) {
-    label = (selected ? "> " : "  ") + label;
-    Element e = text(label) | color(c);
-    if (focused)
+  option.transform = [c](EntryState state) {
+    state.label = (state.active? "> " : "  ") + state.label;
+    Element e = text(state.label) | color(c);
+    if (state.focused)
       e = e | inverted;
-    if (selected)
+    if (state.active)
       e = e | bold;
     return e;
   };

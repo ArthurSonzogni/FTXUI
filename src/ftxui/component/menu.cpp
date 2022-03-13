@@ -24,16 +24,12 @@ namespace ftxui {
 
 namespace {
 
-Element DefaultOptionTransform(std::string label, bool focused, bool selected) {
-  if (selected)
-    label = "> " + label;
-  else
-    label = "  " + label;
-
-  Element e = text(label);
-  if (focused)
+Element DefaultOptionTransform(EntryState state) {
+  state.label = (state.active ? "> " : "  ") + state.label;
+  Element e = text(state.label);
+  if (state.focused)
     e = e | inverted;
-  if (selected)
+  if (state.active)
     e = e | bold;
   return e;
 };
@@ -111,11 +107,17 @@ class MenuBase : public ComponentBase {
       auto focus_management = !is_selected      ? nothing
                               : is_menu_focused ? focus
                                                 : nothing;
+      EntryState state = {
+          entries_[i],
+          false,
+          is_selected,
+          is_focused,
+      };
 
       Element element =
           (option_->entries.transform ? option_->entries.transform
                                       : DefaultOptionTransform)  //
-          (entries_[i], is_focused, is_selected);
+          (std::move(state));
       elements.push_back(element | AnimatedColorStyle(i) | reflect(boxes_[i]) |
                          focus_management);
     }
@@ -505,9 +507,16 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
       bool focused = Focused();
       UpdateAnimationTarget();
 
+      EntryState state = {
+          *label_,
+          hovered_,
+          focused,
+          false,
+      };
+
       Element element =
           (option_->transform ? option_->transform : DefaultOptionTransform)  //
-          (*label_, hovered_, focused);
+          (std::move(state));
 
       auto focus_management = focused ? select : nothing;
       return element | AnimatedColorStyle() | focus_management | reflect(box_);

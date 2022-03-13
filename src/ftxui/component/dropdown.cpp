@@ -17,8 +17,15 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
     Impl(ConstStringListRef entries, int* selected)
         : entries_(std::move(entries)), selected_(selected) {
       CheckboxOption option;
-      option.style_checked = "↓ ";
-      option.style_unchecked = "→ ";
+      option.transform = [](EntryState s) {
+        auto prefix = text(s.state ? "↓ " : "→ ");
+        auto t = text(s.label);
+        if (s.active)
+          t |= bold;
+        if (s.focused)
+          t |= inverted;
+        return hbox({prefix, t});
+      };
       checkbox_ = Checkbox(&title_, &show_, option),
       radiobox_ = Radiobox(entries_, selected_);
 

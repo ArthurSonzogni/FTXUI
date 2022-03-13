@@ -13,6 +13,14 @@
 
 namespace ftxui {
 
+/// @brief arguments for |ButtonOption::transform|.
+struct EntryState {
+  std::string label; /// < The label to display.
+  bool state;        /// < The state of the button/checkbox/radiobox
+  bool active;       /// < Whether the entry is the active one.
+  bool focused;      /// < Whether the entry is one focused by the user.
+};
+
 struct UnderlineOption {
   bool enabled = false;
 
@@ -60,8 +68,7 @@ struct AnimatedColorsOption {
 /// @brief Option for the MenuEntry component.
 /// @ingroup component
 struct MenuEntryOption {
-  std::function<Element(std::string label, bool focused, bool selected)>
-      transform;
+  std::function<Element(EntryState state)> transform;
   AnimatedColorsOption animated_colors;
 };
 
@@ -106,23 +113,22 @@ struct ButtonOption {
                                Color foreground_active);
 
   // Style:
-  std::function<Element(std::string label, bool focused)> transform;
+  std::function<Element(EntryState)> transform;
   AnimatedColorsOption animated_colors;
 };
 
 /// @brief Option for the Checkbox component.
 /// @ingroup component
 struct CheckboxOption {
-  std::string style_checked = "▣ ";    ///< Prefix for a "checked" state.
-  std::string style_unchecked = "☐ ";  ///< Prefix for a "unchecked" state.
-  Decorator style_normal = nothing;    ///< style.
-  Decorator style_focused = inverted;  ///< Style when focused.
-  Decorator style_selected = bold;     ///< Style when selected.
-  Decorator style_selected_focused =
-      Decorator(inverted) | bold;  ///< Style when selected and focused.
+  // Standard constructors:
+  static CheckboxOption Simple();
 
+  // Style:
+  std::function<Element(EntryState)> transform;
+
+  // Observer:
   /// Called when the user change the state.
-  std::function<void()> on_change = []() {};
+  std::function<void()> on_change = [] {};
 };
 
 /// @brief Option for the Input component.
@@ -144,13 +150,11 @@ struct InputOption {
 /// @brief Option for the Radiobox component.
 /// @ingroup component
 struct RadioboxOption {
-  std::string style_checked = "◉ ";    ///< Prefix for a "checked" state.
-  std::string style_unchecked = "○ ";  ///< Prefix for a "unchecked" state.
-  Decorator style_normal = nothing;    ///< style.
-  Decorator style_focused = inverted;  ///< Style when focused.
-  Decorator style_selected = bold;     ///< Style when selected.
-  Decorator style_selected_focused =
-      Decorator(inverted) | bold;  ///< Style when selected and focused.
+  // Standard constructors:
+  static RadioboxOption Simple();
+
+  // Style:
+  std::function<Element(EntryState)> transform;
 
   /// Called when the selected entry changes.
   std::function<void()> on_change = []() {};

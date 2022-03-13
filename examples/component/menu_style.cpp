@@ -110,13 +110,12 @@ int main(int argc, const char* argv[]) {
 
 Component VMenu1(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    label = (selected ? "> " : "  ") + label;
-    Element e = text(label);
-    if (focused)
+  option.entries.transform = [](EntryState state) {
+    state.label = (state.active ? "> " : "  ") + state.label;
+    Element e = text(state.label);
+    if (state.focused)
       e = e | bgcolor(Color::Blue);
-    if (selected)
+    if (state.active)
       e = e | bold;
     return e;
   };
@@ -125,13 +124,12 @@ Component VMenu1(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu2(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    label = label + (selected ? " <" : "  ");
-    Element e = hbox(filler(), text(label));
-    if (focused)
+  option.entries.transform = [](EntryState state) {
+    state.label += (state.active ? " <" : "  ");
+    Element e = hbox(filler(), text(state.label));
+    if (state.focused)
       e = e | bgcolor(Color::Red);
-    if (selected)
+    if (state.active)
       e = e | bold;
     return e;
   };
@@ -140,15 +138,15 @@ Component VMenu2(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu3(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    Element e = selected ? text("[" + label + "]") : text(" " + label + " ");
-    if (focused)
+  option.entries.transform = [](EntryState state) {
+    Element e = state.active ? text("[" + state.label + "]")
+                               : text(" " + state.label + " ");
+    if (state.focused)
       e = e | bold;
 
-    if (focused)
+    if (state.focused)
       e = e | color(Color::Blue);
-    if (selected)
+    if (state.active)
       e = e | bold;
     return e;
   };
@@ -157,32 +155,38 @@ Component VMenu3(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu4(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    if (selected && focused)
-      return text(label) | color(Color::Yellow) | bgcolor(Color::Black) | bold;
-    else if (selected)
-      return text(label) | color(Color::Yellow) | bgcolor(Color::Black);
-    else if (focused)
-      return text(label) | color(Color::Black) | bgcolor(Color::Yellow) | bold;
-    else
-      return text(label) | color(Color::Black) | bgcolor(Color::Yellow);
+  option.entries.transform = [](EntryState state) {
+    if (state.active && state.focused) {
+      return text(state.label) | color(Color::Yellow) | bgcolor(Color::Black) |
+             bold;
+    }
+
+    if (state.active) {
+      return text(state.label) | color(Color::Yellow) | bgcolor(Color::Black);
+    }
+    if (state.focused) {
+      return text(state.label) | color(Color::Black) | bgcolor(Color::Yellow) |
+             bold;
+    }
+    return text(state.label) | color(Color::Black) | bgcolor(Color::Yellow);
   };
   return Menu(entries, selected, option);
 }
 
 Component VMenu5(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    if (selected && focused)
-      return text(label) | borderDouble;
-    else if (selected)
-      return text(label) | border;
-    else if (focused)
-      return text(label) | bold;
-    else
-      return text(label);
+  option.entries.transform = [](EntryState state) {
+    auto element = text(state.label);
+    if (state.active && state.focused) {
+      return element | borderDouble;
+    }
+    if (state.active) {
+      return element | border;
+    }
+    if (state.focused) {
+      return element | bold;
+    }
+    return element;
   };
   return Menu(entries, selected, option);
 }
@@ -236,12 +240,11 @@ Component HMenu5(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::HorizontalAnimated();
   option.underline.SetAnimation(std::chrono::milliseconds(1500),
                                 animation::easing::ElasticOut);
-  option.entries.transform = [](std::string label, bool focused,
-                                bool selected) {
-    Element e = text(label) | hcenter | flex;
-    if (selected && focused)
+  option.entries.transform = [](EntryState state) {
+    Element e = text(state.label) | hcenter | flex;
+    if (state.active && state.focused)
       e = e | bold;
-    if (!focused && !selected)
+    if (!state.focused && !state.active)
       e = e | dim;
     return e;
   };

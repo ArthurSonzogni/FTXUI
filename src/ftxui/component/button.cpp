@@ -20,11 +20,13 @@ namespace ftxui {
 
 namespace {
 
-Element DefaultTransform(std::string label, bool focused) {
-  auto element = text(label);
-  if (focused)
+Element DefaultTransform(EntryState params) {
+  auto element = text(params.label) | border;
+  if (params.active)
+    element |= bold;
+  if (params.focused)
     element |= inverted;
-  return element | border;
+  return element;
 };
 
 }  // namespace
@@ -68,9 +70,16 @@ Component Button(ConstStringRef label,
       if (target != animator_background_.to())
         SetAnimationTarget(target);
 
+      EntryState state = {
+          *label_,
+          false,
+          Active(),
+          Focused(),
+      };
+
       auto element =
           (option_->transform ? option_->transform : DefaultTransform)  //
-          (*label_, Focused());
+          (state);
       return element | AnimatedColorStyle() | reflect(box_);
     }
 
@@ -119,20 +128,8 @@ Component Button(ConstStringRef label,
     }
 
     bool OnEvent(Event event) override {
-      if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
-        if (!CaptureMouse(event))
-          return false;
-
-        TakeFocus();
-
-        if (event.mouse().button == Mouse::Left &&
-            event.mouse().motion == Mouse::Pressed) {
-          OnClick();
-          return true;
-        }
-
-        return false;
-      }
+      if (event.is_mouse())
+        return OnMouseEvent(event);
 
       if (event == Event::Return) {
         OnClick();
@@ -141,11 +138,30 @@ Component Button(ConstStringRef label,
       return false;
     }
 
+    bool OnMouseEvent(Event event) {
+      mouse_hover_ =
+          box_.Contain(event.mouse().x, event.mouse().y) && CaptureMouse(event);
+
+      if (!mouse_hover_)
+        return false;
+
+      TakeFocus();
+
+      if (event.mouse().button == Mouse::Left &&
+          event.mouse().motion == Mouse::Pressed) {
+        OnClick();
+        return true;
+      }
+
+      return false;
+    }
+
     bool Focusable() const final { return true; }
 
    private:
     ConstStringRef label_;
     std::function<void()> on_click_;
+    bool mouse_hover_ = false;
     Box box_;
     Ref<ButtonOption> option_;
     float animation_background_ = 0;

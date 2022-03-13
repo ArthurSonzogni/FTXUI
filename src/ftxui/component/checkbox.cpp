@@ -18,32 +18,24 @@ namespace {
 class CheckboxBase : public ComponentBase {
  public:
   CheckboxBase(ConstStringRef label, bool* state, Ref<CheckboxOption> option)
-      : label_(label), state_(state), option_(std::move(option)) {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // Microsoft terminal do not use fonts able to render properly the default
-    // radiobox glyph.
-    if (option_->style_checked == "▣ ")
-      option_->style_checked = "[X]";
-    if (option_->style_unchecked == "☐ ")
-      option_->style_unchecked = "[ ]";
-#endif
-  }
+      : label_(label), state_(state), option_(std::move(option)) {}
 
  private:
   // Component implementation.
   Element Render() override {
     bool is_focused = Focused();
     bool is_active = Active();
-    auto style = (is_focused || hovered_) ? option_->style_selected_focused
-                 : is_active              ? option_->style_selected
-                                          : option_->style_normal;
     auto focus_management = is_focused ? focus : is_active ? select : nothing;
-    return hbox({
-               text(*state_ ? option_->style_checked
-                            : option_->style_unchecked),
-               text(*label_) | style | focus_management,
-           }) |
-           reflect(box_);
+    auto state = EntryState{
+        *label_,
+        *state_,
+        is_active,
+        is_focused || hovered_,
+    };
+    auto element = (option_->transform
+                        ? option_->transform
+                        : CheckboxOption::Simple().transform)(std::move(state));
+    return element | focus_management | reflect(box_);
   }
 
   bool OnEvent(Event event) override {
