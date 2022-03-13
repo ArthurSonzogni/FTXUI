@@ -32,7 +32,7 @@ Element DefaultOptionTransform(EntryState state) {
   if (state.active)
     e = e | bold;
   return e;
-};
+}
 
 bool IsInverted(MenuOption::Direction direction) {
   switch (direction) {
@@ -43,6 +43,7 @@ bool IsInverted(MenuOption::Direction direction) {
     case MenuOption::Direction::Right:
       return false;
   }
+  return false; // NOT_REACHED()
 }
 
 bool IsHorizontal(MenuOption::Direction direction) {
@@ -54,7 +55,9 @@ bool IsHorizontal(MenuOption::Direction direction) {
     case MenuOption::Direction::Up:
       return false;
   }
+  return false; // NOT_REACHED()
 }
+
 }  // namespace
 
 /// @brief A list of items. The user can navigate through them.

@@ -1,6 +1,8 @@
+#define _USE_MATH_DEFINES
+#include <cmath>  // for sin, pow, sqrt, M_PI_2, M_PI, cos
+
 #include "ftxui/component/animation.hpp"
 
-#include <cmath>  // for sin, pow, sqrt, M_PI_2, M_PI, cos
 #include <ratio>  // for ratio
 
 namespace ftxui {
