@@ -29,7 +29,7 @@ Component Collapsible(ConstStringRef label, Component child, Ref<bool> show) {
   class Impl : public ComponentBase {
    public:
     Impl(ConstStringRef label, Component child, Ref<bool> show)
-        : label_(label), show_(std::move(show)) {
+        : show_(std::move(show)) {
       CheckboxOption opt;
       opt.transform = [](EntryState s) {
         auto prefix = text(s.state ? "▼ " : "▶ ");
@@ -41,11 +41,10 @@ Component Collapsible(ConstStringRef label, Component child, Ref<bool> show) {
         return hbox({prefix, t});
       };
       Add(Container::Vertical({
-          Checkbox(label_, show_.operator->(), opt),
+          Checkbox(label, show_.operator->(), opt),
           Maybe(std::move(child), show_.operator->()),
       }));
     }
-    ConstStringRef label_;
     Ref<bool> show_;
   };
 
