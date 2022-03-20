@@ -29,13 +29,26 @@ A simple C++ library for terminal based user interfaces!
    [[1]](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
    and [React](https://reactjs.org/)
  * Simple and elegant syntax (in my opinion)
+ * Keyboard & mouse navigation.
  * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
+ * Support for animations. [Demo 1](https://arthursonzogni.com/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.com/FTXUI/examples/?file=component/button_style)
+ * Support for drawing. [Demo](https://arthursonzogni.com/FTXUI/examples/?file=component/canvas_animated)
  * No dependencies
- * Cross platform. Linux/MacOS (main target), Windows (experimental thanks to contributors), WebAssembly
- * Keyboard & mouse navigation
+ * Cross platform: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
+ * Learn by [examples](#documentation), and [tutorials](#documentation)
+ * Multiple packages: CMake [FetchContent](https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/) (preferred), vcpkg, pkgbuild, conan.
+ * Good practises: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
+
+## Documentation
+
+- [Starter example project](https://github.com/ArthurSonzogni/ftxui-starter)
+- [Documentation](https://arthursonzogni.github.io/FTXUI/)
+- [Examples (WebAssembly)](https://arthursonzogni.com/FTXUI/examples/)
+- [Build using CMake](https://github.com/ArthurSonzogni/FTXUI/blob/master/doc/mainpage.md#using-cmake)
 
 ## Operating systems
 
+This is expected to be cross platform. This supports / tests:
 - WebAssembly
 - Linux
 - MacOS
@@ -61,13 +74,6 @@ A simple C++ library for terminal based user interfaces!
 │██████████████████████████████████████                                      │
 └────────────────────────────────────────────────────────────────────────────┘
 ~~~
-
-## Documentation
-
-- [Starter example project](https://github.com/ArthurSonzogni/ftxui-starter)
-- [Documentation](https://arthursonzogni.github.io/FTXUI/)
-- [Examples (WebAssembly)](https://arthursonzogni.com/FTXUI/examples/)
-- [Build using CMake](https://github.com/ArthurSonzogni/FTXUI/blob/master/doc/mainpage.md#using-cmake)
 
 ## Short gallery
 
@@ -165,7 +171,7 @@ Element paragraphAlignCenter(std::string text);
 Element paragraphAlignJustify(std::string text);
 ```
   
-[Paragraph example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
+[Paragraph example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2paragraph_8cpp-example.html)
   
 ![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/4759106/147251370-983a06e7-6f41-4113-92b8-942f43d34d06.gif)
 
