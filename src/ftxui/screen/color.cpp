@@ -147,8 +147,8 @@ Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
 
 // static
 Color Color::Interpolate(float t, const Color& a, const Color& b) {
-  float red;
-  float green;
+  float red = 0.f;
+  float green = 0.f;
   float blue;
   switch (a.type_) {
     case ColorType::Palette1: {
