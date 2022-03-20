@@ -4,6 +4,9 @@ Changelog
 current (development) 
 ---------------------
 
+3.0.0
+-----
+
 ### Build
 - **breaking**: The library prefix is now back to "lib" (the default). This
     means non-cmake users should not link against "libftxui-dom" for instance.
