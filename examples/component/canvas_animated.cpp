@@ -167,7 +167,7 @@ int main(int argc, const char* argv[]) {
       for (int x = 0; x < size; x++) {
         float dx = x - mx;
         float dy = y - my;
-        ys[y][x] = (int)(-1.5 + 3.0 * std::exp(-0.2f * (dx * dx + dy * dy)));
+        ys[y][x] = -1.5 + 3.0 * std::exp(-0.2f * (dx * dx + dy * dy));
       }
     }
     for (int y = 0; y < size; y++) {

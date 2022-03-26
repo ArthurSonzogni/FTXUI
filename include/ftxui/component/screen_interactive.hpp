@@ -79,7 +79,7 @@ class ScreenInteractive : public Screen {
   std::atomic<bool> quit_ = false;
   std::thread event_listener_;
   std::thread animation_listener_;
-  bool animation_requested_ = true;
+  bool animation_requested_ = false;
   animation::TimePoint previous_animation_time;
 
   int cursor_x_ = 1;

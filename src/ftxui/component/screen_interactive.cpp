@@ -485,63 +485,64 @@ void ScreenInteractive::Main(Component component) {
     Clear();
   };
 
-  draw();
-
+  bool attempt_draw = true;
   while (!quit_) {
-    if (!task_receiver_->HasPending())
+    if (attempt_draw && !task_receiver_->HasPending()) {
       draw();
-
-    bool continue_event_loop = true;
-    while (continue_event_loop) {
-      continue_event_loop = false;
-      Task task;
-      if (!task_receiver_->Receive(&task))
-        break;
-
-      std::visit(
-          [&](auto&& arg) {
-            using T = std::decay_t<decltype(arg)>;
-
-            // Handle Event.
-            if constexpr (std::is_same_v<T, Event>) {
-              if (arg.is_cursor_reporting()) {
-                cursor_x_ = arg.cursor_x();
-                cursor_y_ = arg.cursor_y();
-                return;
-              }
-
-              if (arg.is_mouse()) {
-                arg.mouse().x -= cursor_x_;
-                arg.mouse().y -= cursor_y_;
-              }
-
-              arg.screen_ = this;
-              component->OnEvent(arg);
-            }
-
-            // Handle callback
-            if constexpr (std::is_same_v<T, Closure>) {
-              arg();
-              return;
-            }
-
-            // Handle Animation
-            if constexpr (std::is_same_v<T, AnimationTask>) {
-              if (!animation_requested_) {
-                continue_event_loop = true;
-                return;
-              }
-              animation_requested_ = false;
-              animation::TimePoint now = animation::Clock::now();
-              animation::Duration delta = now - previous_animation_time;
-              previous_animation_time = now;
-
-              animation::Params params(delta);
-              component->OnAnimation(params);
-            }
-          },
-          task);
+      attempt_draw = false;
     }
+
+    Task task;
+    if (!task_receiver_->Receive(&task))
+      break;
+
+    // clang-format off
+    std::visit([&](auto&& arg) {
+      using T = std::decay_t<decltype(arg)>;
+
+      // Handle Event.
+      if constexpr (std::is_same_v<T, Event>) {
+        if (arg.is_cursor_reporting()) {
+          cursor_x_ = arg.cursor_x();
+          cursor_y_ = arg.cursor_y();
+          return;
+        }
+
+        if (arg.is_mouse()) {
+          arg.mouse().x -= cursor_x_;
+          arg.mouse().y -= cursor_y_;
+        }
+
+        arg.screen_ = this;
+        component->OnEvent(arg);
+        attempt_draw = true;
+        return;
+      }
+
+      // Handle callback
+      if constexpr (std::is_same_v<T, Closure>) {
+        arg();
+        return;
+      }
+
+      // Handle Animation
+      if constexpr (std::is_same_v<T, AnimationTask>) {
+        if (!animation_requested_)
+          return;
+
+        animation_requested_ = false;
+        animation::TimePoint now = animation::Clock::now();
+        animation::Duration delta = now - previous_animation_time;
+        previous_animation_time = now;
+
+        animation::Params params(delta);
+        component->OnAnimation(params);
+        attempt_draw = true;
+        return;
+      }
+    },
+    task);
+    // clang-format on
   }
 }
 
