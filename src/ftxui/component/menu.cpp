@@ -512,9 +512,9 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
 
       EntryState state = {
           *label_,
+          false,
           hovered_,
           focused,
-          false,
       };
 
       Element element =
