@@ -3,11 +3,11 @@
 
 #include <chrono>                         // for milliseconds
 #include <ftxui/component/animation.hpp>  // for Duration, QuadraticInOut, Function
-#include <ftxui/dom/elements.hpp>  // for Decorator, bold, inverted, operator|, Element, nothing
-#include <ftxui/util/ref.hpp>  // for Ref
-#include <functional>          // for function
-#include <optional>            // for optional
-#include <string>              // for string, allocator
+#include <ftxui/dom/elements.hpp>         // for Element
+#include <ftxui/util/ref.hpp>             // for Ref
+#include <functional>                     // for function
+#include <optional>                       // for optional
+#include <string>                         // for string
 
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
 
@@ -17,10 +17,10 @@ namespace ftxui {
 /// |Radiobox::transform|, |MenuEntryOption::transform|,
 /// |MenuOption::transform|.
 struct EntryState {
-  std::string label; /// < The label to display.
-  bool state;        /// < The state of the button/checkbox/radiobox
-  bool active;       /// < Whether the entry is the active one.
-  bool focused;      /// < Whether the entry is one focused by the user.
+  std::string label;  /// < The label to display.
+  bool state;         /// < The state of the button/checkbox/radiobox
+  bool active;        /// < Whether the entry is the active one.
+  bool focused;       /// < Whether the entry is one focused by the user.
 };
 
 struct UnderlineOption {
@@ -70,7 +70,7 @@ struct AnimatedColorsOption {
 /// @brief Option for the MenuEntry component.
 /// @ingroup component
 struct MenuEntryOption {
-  std::function<Element(EntryState state)> transform;
+  std::function<Element(const EntryState& state)> transform;
   AnimatedColorsOption animated_colors;
 };
 
@@ -115,7 +115,7 @@ struct ButtonOption {
                                Color foreground_active);
 
   // Style:
-  std::function<Element(EntryState)> transform;
+  std::function<Element(const EntryState&)> transform;
   AnimatedColorsOption animated_colors;
 };
 
@@ -126,7 +126,7 @@ struct CheckboxOption {
   static CheckboxOption Simple();
 
   // Style:
-  std::function<Element(EntryState)> transform;
+  std::function<Element(const EntryState&)> transform;
 
   // Observer:
   /// Called when the user change the state.
@@ -156,7 +156,7 @@ struct RadioboxOption {
   static RadioboxOption Simple();
 
   // Style:
-  std::function<Element(EntryState)> transform;
+  std::function<Element(const EntryState&)> transform;
 
   // Observers:
   /// Called when the selected entry changes.

@@ -9,15 +9,15 @@ struct Box {
   int y_min = 0;
   int y_max = 0;
 
-  static Box Intersection(Box a, Box b);
-  bool Contain(int x, int y);
+  static auto Intersection(Box a, Box b) -> Box;
+  bool Contain(int x, int y) const;
   bool operator==(const Box& other) const;
   bool operator!=(const Box& other) const;
 };
 
 }  // namespace ftxui
 
-#endif /* end of include guard: FTXUI_SCREEN_BOX_HPP */
+#endif  // FTXUI_SCREEN_BOX_HPP
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

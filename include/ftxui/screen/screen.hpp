@@ -1,5 +1,5 @@
-#ifndef FTXUI_SCREEN_SCREEN
-#define FTXUI_SCREEN_SCREEN
+#ifndef FTXUI_SCREEN_SCREEN_HPP
+#define FTXUI_SCREEN_SCREEN_HPP
 
 #include <memory>
 #include <string>  // for string, allocator, basic_string
@@ -14,6 +14,8 @@ namespace ftxui {
 /// @brief A unicode character and its associated style.
 /// @ingroup screen
 struct Pixel {
+  bool operator==(const Pixel& other) const;
+
   // The graphemes stored into the pixel. To support combining characters,
   // like: a⃦, this can potentially contains multiple codepoitns.
   std::string character = " ";
@@ -68,13 +70,12 @@ class Screen {
   int dimy() const { return dimy_; }
 
   // Move the terminal cursor n-lines up with n = dimy().
-  std::string ResetPosition(bool clear = false);
+  std::string ResetPosition(bool clear = false) const;
 
   // Fill with space.
   void Clear();
 
   void ApplyShader();
-  Box stencil;
 
   struct Cursor {
     int x = 0;
@@ -83,16 +84,20 @@ class Screen {
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
+  Box stencil;
+
  protected:
   int dimx_;
   int dimy_;
   std::vector<std::vector<Pixel>> pixels_;
   Cursor cursor_;
+
+ private:
 };
 
 }  // namespace ftxui
 
-#endif /* end of include guard: FTXUI_SCREEN_SCREEN */
+#endif  // FTXUI_SCREEN_SCREEN_HPP
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

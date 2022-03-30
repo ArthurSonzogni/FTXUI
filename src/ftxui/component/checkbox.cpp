@@ -18,7 +18,7 @@ namespace {
 class CheckboxBase : public ComponentBase {
  public:
   CheckboxBase(ConstStringRef label, bool* state, Ref<CheckboxOption> option)
-      : label_(label), state_(state), option_(std::move(option)) {}
+      : label_(std::move(label)), state_(state), option_(std::move(option)) {}
 
  private:
   // Component implementation.
@@ -32,18 +32,20 @@ class CheckboxBase : public ComponentBase {
         is_active,
         is_focused || hovered_,
     };
-    auto element = (option_->transform
-                        ? option_->transform
-                        : CheckboxOption::Simple().transform)(std::move(state));
+    auto element =
+        (option_->transform ? option_->transform
+                            : CheckboxOption::Simple().transform)(state);
     return element | focus_management | reflect(box_);
   }
 
   bool OnEvent(Event event) override {
-    if (!CaptureMouse(event))
+    if (!CaptureMouse(event)) {
       return false;
+    }
 
-    if (event.is_mouse())
+    if (event.is_mouse()) {
       return OnMouseEvent(event);
+    }
 
     hovered_ = false;
     if (event == Event::Character(' ') || event == Event::Return) {
@@ -58,11 +60,13 @@ class CheckboxBase : public ComponentBase {
   bool OnMouseEvent(Event event) {
     hovered_ = box_.Contain(event.mouse().x, event.mouse().y);
 
-    if (!CaptureMouse(event))
+    if (!CaptureMouse(event)) {
       return false;
+    }
 
-    if (!hovered_)
+    if (!hovered_) {
       return false;
+    }
 
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
@@ -109,7 +113,7 @@ class CheckboxBase : public ComponentBase {
 Component Checkbox(ConstStringRef label,
                    bool* checked,
                    Ref<CheckboxOption> option) {
-  return Make<CheckboxBase>(label, checked, std::move(option));
+  return Make<CheckboxBase>(std::move(label), checked, std::move(option));
 }
 
 }  // namespace ftxui

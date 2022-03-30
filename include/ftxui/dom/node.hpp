@@ -20,6 +20,11 @@ class Node {
  public:
   Node();
   Node(Elements children);
+  Node(const Node&) = delete;
+  Node(const Node&&) = delete;
+  Node& operator=(const Node&) = delete;
+  Node& operator=(const Node&&) = delete;
+
   virtual ~Node();
 
   // Step 1: Compute layout requirement. Tell parent what dimensions this
@@ -50,12 +55,12 @@ class Node {
   Box box_;
 };
 
-void Render(Screen& screen, const Element& node);
+void Render(Screen& screen, const Element& element);
 void Render(Screen& screen, Node* node);
 
 }  // namespace ftxui
 
-#endif /* end of include guard: FTXUI_DOM_NODE_HPP */
+#endif  // FTXUI_DOM_NODE_HPP
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

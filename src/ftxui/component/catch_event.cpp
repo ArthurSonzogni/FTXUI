@@ -11,15 +11,16 @@ namespace ftxui {
 class CatchEventBase : public ComponentBase {
  public:
   // Constructor.
-  CatchEventBase(std::function<bool(Event)> on_event)
+  explicit CatchEventBase(std::function<bool(Event)> on_event)
       : on_event_(std::move(on_event)) {}
 
   // Component implementation.
   bool OnEvent(Event event) override {
-    if (on_event_(event))
+    if (on_event_(event)) {
       return true;
-    else
+    } else {
       return ComponentBase::OnEvent(event);
+    }
   }
 
  protected:
@@ -76,8 +77,8 @@ Component CatchEvent(Component child,
 /// ```
 ComponentDecorator CatchEvent(std::function<bool(Event)> on_event) {
   return [on_event = std::move(on_event)](Component child) {
-    return CatchEvent(child, [on_event = std::move(on_event)](Event event) {
-      return on_event(event);
+    return CatchEvent(std::move(child), [on_event = on_event](Event event) {
+      return on_event(std::move(event));
     });
   };
 }

@@ -1,5 +1,7 @@
-#include <memory>  // for make_shared, allocator
-#include <string>  // for string
+#include <array>    // for array, array<>::value_type
+#include <memory>   // for make_shared, allocator
+#include <string>   // for basic_string, string
+#include <utility>  // for move
 
 #include "ftxui/dom/elements.hpp"  // for Element, BorderStyle, LIGHT, separator, DOUBLE, EMPTY, HEAVY, separatorCharacter, separatorDouble, separatorEmpty, separatorHSelector, separatorHeavy, separatorLight, separatorStyled, separatorVSelector
 #include "ftxui/dom/node.hpp"      // for Node
@@ -10,19 +12,25 @@
 
 namespace ftxui {
 
+namespace {
 using ftxui::Screen;
 
-const std::string charset[][2] = {
-    {"│", "─"},  //
-    {"┃", "━"},  //
-    {"║", "═"},  //
-    {"│", "─"},  //
-    {" ", " "},  //
+using Charset = std::array<std::string, 2>;  // NOLINT
+using Charsets = std::array<Charset, 5>;     // NOLINT
+const Charsets charsets =                    // NOLINT
+    {
+        Charset{"│", "─"},  //
+        Charset{"┃", "━"},  //
+        Charset{"║", "═"},  //
+        Charset{"│", "─"},  //
+        Charset{" ", " "},  //
 };
+
+}  // namespace
 
 class Separator : public Node {
  public:
-  Separator(std::string value) : value_(value) {}
+  explicit Separator(std::string value) : value_(std::move(value)) {}
 
   void ComputeRequirement() override {
     requirement_.min_x = 1;
@@ -44,7 +52,7 @@ class Separator : public Node {
 
 class SeparatorAuto : public Node {
  public:
-  SeparatorAuto(BorderStyle style) : style_(style) {}
+  explicit SeparatorAuto(BorderStyle style) : style_(style) {}
 
   void ComputeRequirement() override {
     requirement_.min_x = 1;
@@ -55,7 +63,7 @@ class SeparatorAuto : public Node {
     bool is_column = (box_.x_max == box_.x_min);
     bool is_line = (box_.y_min == box_.y_max);
 
-    const std::string c = charset[style_][is_line && !is_column];
+    const std::string c = charsets[style_][int(is_line && !is_column)];
 
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
@@ -71,7 +79,8 @@ class SeparatorAuto : public Node {
 
 class SeparatorWithPixel : public SeparatorAuto {
  public:
-  SeparatorWithPixel(Pixel pixel) : SeparatorAuto(LIGHT), pixel_(pixel) {
+  explicit SeparatorWithPixel(Pixel pixel)
+      : SeparatorAuto(LIGHT), pixel_(std::move(pixel)) {
     pixel_.automerge = true;
   }
   void Render(Screen& screen) override {
@@ -337,7 +346,7 @@ Element separatorEmpty() {
 /// down
 /// ```
 Element separatorCharacter(std::string value) {
-  return std::make_shared<Separator>(value);
+  return std::make_shared<Separator>(std::move(value));
 }
 
 /// @brief Draw a separator in between two element filled with a given pixel.
@@ -367,7 +376,7 @@ Element separatorCharacter(std::string value) {
 /// Down
 /// ```
 Element separator(Pixel pixel) {
-  return std::make_shared<SeparatorWithPixel>(pixel);
+  return std::make_shared<SeparatorWithPixel>(std::move(pixel));
 }
 
 /// @brief Draw an horizontal bar, with the area in between left/right colored
@@ -384,27 +393,28 @@ Element separator(Pixel pixel) {
 /// ```
 Element separatorHSelector(float left,
                            float right,
-                           Color selected_color,
-                           Color unselected_color) {
+                           Color unselected_color,
+                           Color selected_color) {
   class Impl : public Node {
    public:
     Impl(float left, float right, Color selected_color, Color unselected_color)
         : left_(left),
           right_(right),
-          selected_color_(selected_color),
-          unselected_color_(unselected_color) {}
+          unselected_color_(unselected_color),
+          selected_color_(selected_color) {}
     void ComputeRequirement() override {
       requirement_.min_x = 1;
       requirement_.min_y = 1;
     }
 
     void Render(Screen& screen) override {
-      if (box_.y_max < box_.y_min)
+      if (box_.y_max < box_.y_min) {
         return;
+      }
 
       // This are the two location with an empty demi-cell.
-      int demi_cell_left = left_ * 2 - 1;
-      int demi_cell_right = right_ * 2 + 2;
+      int demi_cell_left = int(left_ * 2.F - 1.F);    // NOLINT
+      int demi_cell_right = int(right_ * 2.F + 2.F);  // NOLINT
 
       int y = box_.y_min;
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
@@ -419,23 +429,24 @@ Element separatorHSelector(float left,
           pixel.character = "─";
           pixel.automerge = true;
         } else {
-          pixel.character = a_empty ? "╶" : "╴";
+          pixel.character = a_empty ? "╶" : "╴";  // NOLINT
           pixel.automerge = false;
         }
 
-        if (demi_cell_left <= a && b <= demi_cell_right)
+        if (demi_cell_left <= a && b <= demi_cell_right) {
           pixel.foreground_color = selected_color_;
-        else
+        } else {
           pixel.foreground_color = unselected_color_;
+        }
       }
     }
 
     float left_;
     float right_;
-    Color selected_color_;
     Color unselected_color_;
+    Color selected_color_;
   };
-  return std::make_shared<Impl>(left, right, selected_color, unselected_color);
+  return std::make_shared<Impl>(left, right, unselected_color, selected_color);
 }
 
 /// @brief Draw an vertical bar, with the area in between up/downcolored
@@ -452,27 +463,28 @@ Element separatorHSelector(float left,
 /// ```
 Element separatorVSelector(float up,
                            float down,
-                           Color selected_color,
-                           Color unselected_color) {
+                           Color unselected_color,
+                           Color selected_color) {
   class Impl : public Node {
    public:
-    Impl(float up, float down, Color selected_color, Color unselected_color)
+    Impl(float up, float down, Color unselected_color, Color selected_color)
         : up_(up),
           down_(down),
-          selected_color_(selected_color),
-          unselected_color_(unselected_color) {}
+          unselected_color_(unselected_color),
+          selected_color_(selected_color) {}
     void ComputeRequirement() override {
       requirement_.min_x = 1;
       requirement_.min_y = 1;
     }
 
     void Render(Screen& screen) override {
-      if (box_.x_max < box_.x_min)
+      if (box_.x_max < box_.x_min) {
         return;
+      }
 
       // This are the two location with an empty demi-cell.
-      int demi_cell_up = up_ * 2 - 1;
-      int demi_cell_down = down_ * 2 + 2;
+      int demi_cell_up = int(up_ * 2 - 1);
+      int demi_cell_down = int(down_ * 2 + 2);
 
       int x = box_.x_min;
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
@@ -487,23 +499,24 @@ Element separatorVSelector(float up,
           pixel.character = "│";
           pixel.automerge = true;
         } else {
-          pixel.character = a_empty ? "╷" : "╵";
+          pixel.character = a_empty ? "╷" : "╵";  // NOLINT
           pixel.automerge = false;
         }
 
-        if (demi_cell_up <= a && b <= demi_cell_down)
+        if (demi_cell_up <= a && b <= demi_cell_down) {
           pixel.foreground_color = selected_color_;
-        else
+        } else {
           pixel.foreground_color = unselected_color_;
+        }
       }
     }
 
     float up_;
     float down_;
-    Color selected_color_;
     Color unselected_color_;
+    Color selected_color_;
   };
-  return std::make_shared<Impl>(up, down, selected_color, unselected_color);
+  return std::make_shared<Impl>(up, down, unselected_color, selected_color);
 }
 
 }  // namespace ftxui

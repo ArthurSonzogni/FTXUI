@@ -14,11 +14,14 @@ TerminalInputParser::TerminalInputParser(Sender<Task> out)
 
 void TerminalInputParser::Timeout(int time) {
   timeout_ += time;
-  if (timeout_ < 50)
+  const int timeout_threshold = 50;
+  if (timeout_ < timeout_threshold) {
     return;
+  }
   timeout_ = 0;
-  if (pending_.size())
+  if (!pending_.empty()) {
     Send(SPECIAL);
+  }
 }
 
 void TerminalInputParser::Add(char c) {
@@ -56,21 +59,23 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       // key. This also happens with linux with the `bind` command:
       // See https://github.com/ArthurSonzogni/FTXUI/issues/337
       // Here, we uniformize the new line character to `\n`.
-      if (pending_ == "\r")
+      if (pending_ == "\r") {
         out_->Send(Event::Special("\n"));
-      else
+      } else {
         out_->Send(Event::Special(std::move(pending_)));
+      }
       pending_.clear();
       return;
 
     case MOUSE:
-      out_->Send(Event::Mouse(std::move(pending_), output.mouse));
+      out_->Send(Event::Mouse(std::move(pending_), output.mouse));  // NOLINT
       pending_.clear();
       return;
 
     case CURSOR_REPORTING:
-      out_->Send(Event::CursorReporting(std::move(pending_), output.cursor.x,
-                                        output.cursor.y));
+      out_->Send(Event::CursorReporting(std::move(pending_),  // NOLINT
+                                        output.cursor.x,      // NOLINT
+                                        output.cursor.y));    // NOLINT
       pending_.clear();
       return;
   }
@@ -78,12 +83,13 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
 }
 
 TerminalInputParser::Output TerminalInputParser::Parse() {
-  if (!Eat())
+  if (!Eat()) {
     return UNCOMPLETED;
+  }
 
   switch (Current()) {
-    case 24:  // CAN
-    case 26:  // SUB
+    case 24:  // CAN NOLINT
+    case 26:  // SUB NOLINT
       return DROP;
 
     case '\x1B':
@@ -92,11 +98,13 @@ TerminalInputParser::Output TerminalInputParser::Parse() {
       break;
   }
 
-  if (Current() < 32)  // C0
+  if (Current() < 32) {  // C0 NOLINT
     return SPECIAL;
+  }
 
-  if (Current() == 127)  // Delete
+  if (Current() == 127) {  // Delete // NOLINT
     return SPECIAL;
+  }
 
   return ParseUTF8();
 }
@@ -118,18 +126,18 @@ TerminalInputParser::Output TerminalInputParser::Parse() {
 // Then some sequences are illegal if it exist a shorter representation of the
 // same codepoint.
 TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
-  unsigned char head = static_cast<unsigned char>(Current());
-  unsigned char selector = 0b1000'0000;
+  auto head = static_cast<unsigned char>(Current());
+  unsigned char selector = 0b1000'0000;  // NOLINT
 
   // The non code-point part of the first byte.
   unsigned char mask = selector;
 
   // Find the first zero in the first byte.
-  int first_zero = 8;
-  for (int i = 0; i < 8; ++i) {
+  unsigned int first_zero = 8;            // NOLINT
+  for (unsigned int i = 0; i < 8; ++i) {  // NOLINT
     mask |= selector;
     if (head & selector) {
-      selector >>= 1;
+      selector >>= 1U;
       continue;
     }
     first_zero = i;
@@ -137,48 +145,54 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   }
 
   // Accumulate the value of the first byte.
-  uint32_t value = head & ~mask;
+  auto value = uint32_t(head & ~mask);  // NOLINT
 
   // Invalid UTF8, with more than 5 bytes.
-  if (first_zero == 1 || first_zero >= 5)
+  const unsigned int max_utf8_bytes = 5;
+  if (first_zero == 1 || first_zero >= max_utf8_bytes) {
     return DROP;
+  }
 
   // Multi byte UTF-8.
-  for (int i = 2; i <= first_zero; ++i) {
-    if (!Eat())
+  for (unsigned int i = 2; i <= first_zero; ++i) {
+    if (!Eat()) {
       return UNCOMPLETED;
+    }
 
     // Invalid continuation byte.
     head = static_cast<unsigned char>(Current());
-    if ((head & 0b1100'0000) != 0b1000'0000)
+    if ((head & 0b1100'0000) != 0b1000'0000) {  // NOLINT
       return DROP;
-    value <<= 6;
-    value += head & 0b0011'1111;
+    }
+    value <<= 6;                  // NOLINT
+    value += head & 0b0011'1111;  // NOLINT
   }
 
   // Check for overlong UTF8 encoding.
-  int extra_byte;
-  if (value <= 0b000'0000'0111'1111) {
-    extra_byte = 0;
-  } else if (value <= 0b000'0111'1111'1111) {
-    extra_byte = 1;
-  } else if (value <= 0b1111'1111'1111'1111) {
-    extra_byte = 2;
-  } else if (value <= 0b1'0000'1111'1111'1111'1111) {
-    extra_byte = 3;
-  } else {
+  int extra_byte = 0;
+  if (value <= 0b000'0000'0111'1111) {                 // NOLINT
+    extra_byte = 0;                                    // NOLINT
+  } else if (value <= 0b000'0111'1111'1111) {          // NOLINT
+    extra_byte = 1;                                    // NOLINT
+  } else if (value <= 0b1111'1111'1111'1111) {         // NOLINT
+    extra_byte = 2;                                    // NOLINT
+  } else if (value <= 0b1'0000'1111'1111'1111'1111) {  // NOLINT
+    extra_byte = 3;                                    // NOLINT
+  } else {                                             // NOLINT
     return DROP;
   }
 
-  if (extra_byte != position_)
+  if (extra_byte != position_) {
     return DROP;
+  }
 
   return CHARACTER;
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseESC() {
-  if (!Eat())
+  if (!Eat()) {
     return UNCOMPLETED;
+  }
   switch (Current()) {
     case 'P':
       return ParseDCS();
@@ -187,26 +201,32 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
     case ']':
       return ParseOSC();
     default:
-      if (!Eat())
+      if (!Eat()) {
         return UNCOMPLETED;
-      return SPECIAL;
+      } else {
+        return SPECIAL;
+      }
   }
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseDCS() {
   // Parse until the string terminator ST.
-  while (1) {
-    if (!Eat())
+  while (true) {
+    if (!Eat()) {
       return UNCOMPLETED;
+    }
 
-    if (Current() != '\x1B')
+    if (Current() != '\x1B') {
       continue;
+    }
 
-    if (!Eat())
+    if (!Eat()) {
       return UNCOMPLETED;
+    }
 
-    if (Current() != '\\')
+    if (Current() != '\\') {
       continue;
+    }
 
     return SPECIAL;
   }
@@ -217,8 +237,9 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
   int argument = 0;
   std::vector<int> arguments;
   while (true) {
-    if (!Eat())
+    if (!Eat()) {
       return UNCOMPLETED;
+    }
 
     if (Current() == '<') {
       altered = true;
@@ -226,7 +247,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
     }
 
     if (Current() >= '0' && Current() <= '9') {
-      argument *= 10;
+      argument *= 10;  // NOLINT
       argument += int(Current() - '0');
       continue;
     }
@@ -239,7 +260,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
 
     if (Current() >= ' ' && Current() <= '~' && Current() != '<') {
       arguments.push_back(argument);
-      argument = 0;
+      argument = 0;  // NOLINT
       switch (Current()) {
         case 'M':
           return ParseMouse(altered, true, std::move(arguments));
@@ -253,53 +274,61 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
     }
 
     // Invalid ESC in CSI.
-    if (Current() == '\x1B')
+    if (Current() == '\x1B') {
       return SPECIAL;
+    }
   }
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseOSC() {
   // Parse until the string terminator ST.
   while (true) {
-    if (!Eat())
+    if (!Eat()) {
       return UNCOMPLETED;
-    if (Current() != '\x1B')
+    }
+    if (Current() != '\x1B') {
       continue;
-    if (!Eat())
+    }
+    if (!Eat()) {
       return UNCOMPLETED;
-    if (Current() != '\\')
+    }
+    if (Current() != '\\') {
       continue;
+    }
     return SPECIAL;
   }
 }
 
-TerminalInputParser::Output TerminalInputParser::ParseMouse(
+TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
     bool altered,
     bool pressed,
     std::vector<int> arguments) {
-  if (arguments.size() != 3)
+  if (arguments.size() != 3) {
     return SPECIAL;
+  }
 
   (void)altered;
 
   Output output(MOUSE);
-  output.mouse.button = Mouse::Button((arguments[0] & 3) +  //
-                                      ((arguments[0] & 64) >> 4));
-  output.mouse.motion = Mouse::Motion(pressed);
-  output.mouse.shift = bool(arguments[0] & 4);
-  output.mouse.meta = bool(arguments[0] & 8);
-  output.mouse.x = arguments[1];
-  output.mouse.y = arguments[2];
+  output.mouse.button = Mouse::Button((arguments[0] & 3) +          // NOLINT
+                                      ((arguments[0] & 64) >> 4));  // NOLINT
+  output.mouse.motion = Mouse::Motion(pressed);                     // NOLINT
+  output.mouse.shift = bool(arguments[0] & 4);                      // NOLINT
+  output.mouse.meta = bool(arguments[0] & 8);                       // NOLINT
+  output.mouse.x = arguments[1];                                    // NOLINT
+  output.mouse.y = arguments[2];                                    // NOLINT
   return output;
 }
 
+// NOLINTNEXTLINE
 TerminalInputParser::Output TerminalInputParser::ParseCursorReporting(
     std::vector<int> arguments) {
-  if (arguments.size() != 2)
+  if (arguments.size() != 2) {
     return SPECIAL;
+  }
   Output output(CURSOR_REPORTING);
-  output.cursor.y = arguments[0];
-  output.cursor.x = arguments[1];
+  output.cursor.y = arguments[0];  // NOLINT
+  output.cursor.x = arguments[1];  // NOLINT
   return output;
 }
 

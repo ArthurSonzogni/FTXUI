@@ -13,6 +13,7 @@ bool IsCell(int x, int y) {
   return x % 2 == 1 && y % 2 == 1;
 }
 
+// NOLINTNEXTLINE
 static std::string charset[6][6] = {
     {"┌", "┐", "└", "┘", "─", "│"},  //
     {"┏", "┓", "┗", "┛", "━", "┃"},  //
@@ -29,8 +30,9 @@ int Wrap(int input, int modulo) {
 }
 
 void Order(int& a, int& b) {
-  if (a >= b)
+  if (a >= b) {
     std::swap(a, b);
+  }
 }
 
 }  // namespace
@@ -42,10 +44,10 @@ Table::Table() {
 Table::Table(std::vector<std::vector<std::string>> input) {
   std::vector<std::vector<Element>> output;
   for (auto& row : input) {
-    output.push_back({});
+    output.emplace_back();
     auto& output_row = output.back();
     for (auto& cell : row) {
-      output_row.push_back(text(cell));
+      output_row.push_back(text(std::move(cell)));
     }
   }
   Initialize(std::move(output));
@@ -56,18 +58,20 @@ Table::Table(std::vector<std::vector<Element>> input) {
 }
 
 void Table::Initialize(std::vector<std::vector<Element>> input) {
-  input_dim_y_ = input.size();
+  input_dim_y_ = (int)input.size();
   input_dim_x_ = 0;
-  for (auto& row : input)
+  for (auto& row : input) {
     input_dim_x_ = std::max(input_dim_x_, (int)row.size());
+  }
 
   dim_y_ = 2 * input_dim_y_ + 1;
   dim_x_ = 2 * input_dim_x_ + 1;
 
   // Reserve space.
   elements_.resize(dim_y_);
-  for (int y = 0; y < dim_y_; ++y)
+  for (int y = 0; y < dim_y_; ++y) {
     elements_[y].resize(dim_x_);
+  }
 
   // Transfert elements_ from |input| toward |elements_|.
   {
@@ -88,8 +92,9 @@ void Table::Initialize(std::vector<std::vector<Element>> input) {
       auto& element = elements_[y][x];
 
       if (IsCell(x, y)) {
-        if (!element)
+        if (!element) {
           element = emptyElement();
+        }
         continue;
       }
 
@@ -129,7 +134,7 @@ TableSelection Table::SelectRectangle(int column_min,
   row_max = Wrap(row_max, input_dim_y_);
   Order(row_min, row_max);
 
-  TableSelection output;
+  TableSelection output;  // NOLINT
   output.table_ = this;
   output.x_min_ = 2 * column_min;
   output.x_max_ = 2 * column_max + 2;
@@ -139,7 +144,7 @@ TableSelection Table::SelectRectangle(int column_min,
 }
 
 TableSelection Table::SelectAll() {
-  TableSelection output;
+  TableSelection output;  // NOLINT
   output.table_ = this;
   output.x_min_ = 0;
   output.x_max_ = dim_x_ - 1;
@@ -172,6 +177,7 @@ Element Table::Render() {
   return gridbox(std::move(elements_));
 }
 
+// NOLINTNEXTLINE
 void TableSelection::Decorate(Decorator decorator) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
@@ -181,10 +187,11 @@ void TableSelection::Decorate(Decorator decorator) {
   }
 }
 
+// NOLINTNEXTLINE
 void TableSelection::DecorateCells(Decorator decorator) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
-      if (y % 2 && x % 2) {
+      if (y % 2 == 1 && x % 2 == 1) {
         Element& e = table_->elements_[y][x];
         e = std::move(e) | decorator;
       }
@@ -192,12 +199,13 @@ void TableSelection::DecorateCells(Decorator decorator) {
   }
 }
 
+// NOLINTNEXTLINE
 void TableSelection::DecorateAlternateColumn(Decorator decorator,
                                              int modulo,
                                              int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
-      if (y % 2 && (x / 2) % modulo == shift) {
+      if (y % 2 == 1 && (x / 2) % modulo == shift) {
         Element& e = table_->elements_[y][x];
         e = std::move(e) | decorator;
       }
@@ -205,12 +213,13 @@ void TableSelection::DecorateAlternateColumn(Decorator decorator,
   }
 }
 
+// NOLINTNEXTLINE
 void TableSelection::DecorateAlternateRow(Decorator decorator,
                                           int modulo,
                                           int shift) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
-      if (y % 2 && (y / 2) % modulo == shift) {
+      if (y % 2 == 1 && (y / 2) % modulo == shift) {
         Element& e = table_->elements_[y][x];
         e = std::move(e) | decorator;
       }
@@ -218,12 +227,13 @@ void TableSelection::DecorateAlternateRow(Decorator decorator,
   }
 }
 
+// NOLINTNEXTLINE
 void TableSelection::DecorateCellsAlternateColumn(Decorator decorator,
                                                   int modulo,
                                                   int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
-      if (y % 2 && x % 2 && ((x / 2) % modulo == shift)) {
+      if (y % 2 == 1 && x % 2 == 1 && ((x / 2) % modulo == shift)) {
         Element& e = table_->elements_[y][x];
         e = std::move(e) | decorator;
       }
@@ -231,12 +241,13 @@ void TableSelection::DecorateCellsAlternateColumn(Decorator decorator,
   }
 }
 
+// NOLINTNEXTLINE
 void TableSelection::DecorateCellsAlternateRow(Decorator decorator,
                                                int modulo,
                                                int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
-      if (y % 2 && x % 2 && ((y / 2) % modulo == shift)) {
+      if (y % 2 == 1 && x % 2 == 1 && ((y / 2) % modulo == shift)) {
         Element& e = table_->elements_[y][x];
         e = std::move(e) | decorator;
       }
@@ -244,77 +255,82 @@ void TableSelection::DecorateCellsAlternateRow(Decorator decorator,
   }
 }
 
-void TableSelection::Border(BorderStyle style) {
-  BorderLeft(style);
-  BorderRight(style);
-  BorderTop(style);
-  BorderBottom(style);
+void TableSelection::Border(BorderStyle border) {
+  BorderLeft(border);
+  BorderRight(border);
+  BorderTop(border);
+  BorderBottom(border);
 
-  table_->elements_[y_min_][x_min_] = text(charset[style][0]) | automerge;
-  table_->elements_[y_min_][x_max_] = text(charset[style][1]) | automerge;
-  table_->elements_[y_max_][x_min_] = text(charset[style][2]) | automerge;
-  table_->elements_[y_max_][x_max_] = text(charset[style][3]) | automerge;
+  // NOLINTNEXTLINE
+  table_->elements_[y_min_][x_min_] = text(charset[border][0]) | automerge;
+  // NOLINTNEXTLINE
+  table_->elements_[y_min_][x_max_] = text(charset[border][1]) | automerge;
+  // NOLINTNEXTLINE
+  table_->elements_[y_max_][x_min_] = text(charset[border][2]) | automerge;
+  // NOLINTNEXTLINE
+  table_->elements_[y_max_][x_max_] = text(charset[border][3]) | automerge;
 }
 
-void TableSelection::Separator(BorderStyle style) {
+void TableSelection::Separator(BorderStyle border) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0 || x % 2 == 0) {
         Element& e = table_->elements_[y][x];
-        e = (y % 2) ? separatorCharacter(charset[style][5]) | automerge
-                    : separatorCharacter(charset[style][4]) | automerge;
+        e = (y % 2 == 1)
+                ? separatorCharacter(charset[border][5]) | automerge   // NOLINT
+                : separatorCharacter(charset[border][4]) | automerge;  // NOLINT
       }
     }
   }
 }
 
-void TableSelection::SeparatorVertical(BorderStyle style) {
+void TableSelection::SeparatorVertical(BorderStyle border) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (x % 2 == 0) {
         table_->elements_[y][x] =
-            separatorCharacter(charset[style][5]) | automerge;
+            separatorCharacter(charset[border][5]) | automerge;  // NOLINT
       }
     }
   }
 }
 
-void TableSelection::SeparatorHorizontal(BorderStyle style) {
+void TableSelection::SeparatorHorizontal(BorderStyle border) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0) {
         table_->elements_[y][x] =
-            separatorCharacter(charset[style][4]) | automerge;
+            separatorCharacter(charset[border][4]) | automerge;  // NOLINT
       }
     }
   }
 }
 
-void TableSelection::BorderLeft(BorderStyle style) {
+void TableSelection::BorderLeft(BorderStyle border) {
   for (int y = y_min_; y <= y_max_; y++) {
     table_->elements_[y][x_min_] =
-        separatorCharacter(charset[style][5]) | automerge;
+        separatorCharacter(charset[border][5]) | automerge;  // NOLINT
   }
 }
 
-void TableSelection::BorderRight(BorderStyle style) {
+void TableSelection::BorderRight(BorderStyle border) {
   for (int y = y_min_; y <= y_max_; y++) {
     table_->elements_[y][x_max_] =
-        separatorCharacter(charset[style][5]) | automerge;
+        separatorCharacter(charset[border][5]) | automerge;  // NOLINT
   }
 }
 
-void TableSelection::BorderTop(BorderStyle style) {
+void TableSelection::BorderTop(BorderStyle border) {
   for (int x = x_min_; x <= x_max_; x++) {
     table_->elements_[y_min_][x] =
-        separatorCharacter(charset[style][4]) | automerge;
+        separatorCharacter(charset[border][4]) | automerge;  // NOLINT
   }
 }
 
-void TableSelection::BorderBottom(BorderStyle style) {
+void TableSelection::BorderBottom(BorderStyle border) {
   for (int x = x_min_; x <= x_max_; x++) {
     table_->elements_[y_max_][x] =
-        separatorCharacter(charset[style][4]) | automerge;
+        separatorCharacter(charset[border][4]) | automerge;  // NOLINT
   }
 }
 

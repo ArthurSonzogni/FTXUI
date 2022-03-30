@@ -1,7 +1,7 @@
 #ifndef FTXUI_DOM_CANVAS_HPP
 #define FTXUI_DOM_CANVAS_HPP
 
-#include <stddef.h>       // for size_t
+#include <cstddef>        // for size_t
 #include <functional>     // for function
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
@@ -13,7 +13,7 @@ namespace ftxui {
 
 struct Canvas {
  public:
-  Canvas() {}
+  Canvas() = default;
   Canvas(int width, int height);
 
   // Getters:
@@ -114,7 +114,8 @@ struct Canvas {
 
   struct XYHash {
     size_t operator()(const XY& xy) const {
-      return static_cast<size_t>(xy.x * 1024 + xy.y);
+      constexpr size_t shift = 1024;
+      return size_t(xy.x) * shift + size_t(xy.y);
     }
   };
 

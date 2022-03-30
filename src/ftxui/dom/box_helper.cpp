@@ -2,8 +2,7 @@
 
 #include <algorithm>  // for max
 
-namespace ftxui {
-namespace box_helper {
+namespace ftxui::box_helper {
 
 namespace {
 // Called when the size allowed is greater than the requested size. This
@@ -44,7 +43,7 @@ void ComputeShrinkHard(std::vector<Element>* elements,
                        int extra_space,
                        int size) {
   for (Element& element : *elements) {
-    if (element.flex_shrink) {
+    if (element.flex_shrink != 0) {
       element.size = 0;
       continue;
     }
@@ -68,23 +67,25 @@ void Compute(std::vector<Element>* elements, int target_size) {
   for (auto& element : *elements) {
     flex_grow_sum += element.flex_grow;
     flex_shrink_sum += element.min_size * element.flex_shrink;
-    if (element.flex_shrink)
+    if (element.flex_shrink != 0) {
       flex_shrink_size += element.min_size;
+    }
     size += element.min_size;
   }
 
   int extra_space = target_size - size;
-  if (extra_space >= 0)
+  if (extra_space >= 0) {
     ComputeGrow(elements, extra_space, flex_grow_sum);
-  else if (flex_shrink_size + extra_space >= 0)
+  } else if (flex_shrink_size + extra_space >= 0) {
     ComputeShrinkEasy(elements, extra_space, flex_shrink_sum);
-  else
+
+  } else {
     ComputeShrinkHard(elements, extra_space + flex_shrink_size,
                       size - flex_shrink_size);
+  }
 }
 
-}  // namespace box_helper
-}  // namespace ftxui
+}  // namespace ftxui::box_helper
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

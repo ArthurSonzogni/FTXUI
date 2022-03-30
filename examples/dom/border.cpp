@@ -1,3 +1,4 @@
+#include <stdlib.h>                // for EXIT_SUCCESS
 #include <ftxui/dom/elements.hpp>  // for text, operator|, vbox, border, Element, Fit, hbox
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <memory>                   // for allocator
@@ -5,7 +6,7 @@
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for ftxui
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
   auto document =  //
       hbox({
@@ -30,6 +31,7 @@ int main(int argc, const char* argv[]) {
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);
   screen.Print();
+  return EXIT_SUCCESS;
 }
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.

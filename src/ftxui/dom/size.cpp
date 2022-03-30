@@ -1,4 +1,3 @@
-#include <stddef.h>   // for size_t
 #include <algorithm>  // for min, max
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <utility>    // for move
@@ -13,7 +12,7 @@ namespace ftxui {
 
 class Size : public Node {
  public:
-  Size(Element child, Direction direction, Constraint constraint, size_t value)
+  Size(Element child, Direction direction, Constraint constraint, int value)
       : Node(unpack(std::move(child))),
         direction_(direction),
         constraint_(constraint),

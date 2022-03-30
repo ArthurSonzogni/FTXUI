@@ -54,7 +54,7 @@ struct Event {
   static const Event PageDown;
 
   // --- Custom ---
-  static Event Custom;
+  static const Event Custom;
 
   //--- Method section ---------------------------------------------------------
   bool is_character() const { return type_ == Type::Character; }

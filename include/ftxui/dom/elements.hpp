@@ -35,7 +35,7 @@ Decorator operator|(Decorator, Decorator);
 // --- Widget ---
 Element text(std::string text);
 Element vtext(std::string text);
-Element separator(void);
+Element separator();
 Element separatorLight();
 Element separatorHeavy();
 Element separatorDouble();
@@ -45,18 +45,18 @@ Element separator(Pixel);
 Element separatorCharacter(std::string);
 Element separatorHSelector(float left,
                            float right,
-                           Color background,
-                           Color foreground);
+                           Color unselected_color,
+                           Color selected_color);
 Element separatorVSelector(float up,
                            float down,
-                           Color background,
-                           Color foreground);
-Element gauge(float ratio);
-Element gaugeLeft(float ratio);
-Element gaugeRight(float ratio);
-Element gaugeUp(float ratio);
-Element gaugeDown(float ratio);
-Element gaugeDirection(float ratio, GaugeDirection);
+                           Color unselected_color,
+                           Color selected_color);
+Element gauge(float progress);
+Element gaugeLeft(float progress);
+Element gaugeRight(float progress);
+Element gaugeUp(float progress);
+Element gaugeDown(float progress);
+Element gaugeDirection(float progress, GaugeDirection);
 Element border(Element);
 Element borderLight(Element);
 Element borderHeavy(Element);
@@ -64,14 +64,14 @@ Element borderDouble(Element);
 Element borderRounded(Element);
 Element borderEmpty(Element);
 Decorator borderStyled(BorderStyle);
-Decorator borderWith(Pixel);
+Decorator borderWith(const Pixel&);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);
-Element paragraph(std::string text);
-Element paragraphAlignLeft(std::string text);
-Element paragraphAlignRight(std::string text);
-Element paragraphAlignCenter(std::string text);
-Element paragraphAlignJustify(std::string text);
+Element paragraph(const std::string& text);
+Element paragraphAlignLeft(const std::string& text);
+Element paragraphAlignRight(const std::string& text);
+Element paragraphAlignCenter(const std::string& text);
+Element paragraphAlignJustify(const std::string& text);
 Element graph(GraphFunction);
 Element emptyElement();
 Element canvas(ConstRef<Canvas>);
@@ -90,7 +90,7 @@ Element color(Color, Element);
 Element bgcolor(Color, Element);
 Decorator focusPosition(int x, int y);
 Decorator focusPositionRelative(float x, float y);
-Element automerge(Element);
+Element automerge(Element child);
 
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.
@@ -163,7 +163,7 @@ Dimensions Fit(Element&);
 
 // Include old definitions using wstring.
 #include "ftxui/dom/deprecated.hpp"
-#endif /* end of include guard: FTXUI_DOM_ELEMENTS_HPP */
+#endif  // FTXUI_DOM_ELEMENTS_HPP
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

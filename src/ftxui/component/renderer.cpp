@@ -28,7 +28,8 @@ namespace ftxui {
 Component Renderer(std::function<Element()> render) {
   class Impl : public ComponentBase {
    public:
-    Impl(std::function<Element()> render) : render_(std::move(render)) {}
+    explicit Impl(std::function<Element()> render)
+        : render_(std::move(render)) {}
     Element Render() override { return render_(); }
     std::function<Element()> render_;
   };
@@ -82,15 +83,17 @@ Component Renderer(Component child, std::function<Element()> render) {
 Component Renderer(std::function<Element(bool)> render) {
   class Impl : public ComponentBase {
    public:
-    Impl(std::function<Element(bool)> render) : render_(std::move(render)) {}
+    explicit Impl(std::function<Element(bool)> render)
+        : render_(std::move(render)) {}
 
    private:
     Element Render() override { return render_(Focused()) | reflect(box_); }
     bool Focusable() const override { return true; }
     bool OnEvent(Event event) override {
       if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
-        if (!CaptureMouse(event))
+        if (!CaptureMouse(event)) {
           return false;
+        }
 
         TakeFocus();
       }
@@ -118,8 +121,8 @@ Component Renderer(std::function<Element(bool)> render) {
 ///  | Renderer(inverted);
 /// screen.Loop(renderer);
 /// ```
-ComponentDecorator Renderer(ElementDecorator decorator) {
-  return [decorator](Component component) {
+ComponentDecorator Renderer(ElementDecorator decorator) {  // NOLINT
+  return [decorator](Component component) {                // NOLINT
     return Renderer(component, [component, decorator] {
       return component->Render() | decorator;
     });
