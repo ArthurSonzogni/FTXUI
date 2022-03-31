@@ -1,6 +1,6 @@
-#include <stddef.h>   // for size_t
 #include <algorithm>  // for find_if
 #include <cassert>    // for assert
+#include <cstddef>    // for size_t
 #include <iterator>   // for begin, end
 #include <utility>    // for move
 #include <vector>     // for vector, __alloc_traits<>::value_type
@@ -37,7 +37,7 @@ ComponentBase* ComponentBase::Parent() const {
 /// @brief Access the child at index `i`.
 /// @ingroup component
 Component& ComponentBase::ChildAt(size_t i) {
-  assert(i < ChildCount());
+  assert(i < ChildCount());  // NOLINT
   return children_[i];
 }
 
@@ -61,8 +61,9 @@ void ComponentBase::Add(Component child) {
 /// @see Parent
 /// @ingroup component
 void ComponentBase::Detach() {
-  if (!parent_)
+  if (parent_ == nullptr) {
     return;
+  }
   auto it = std::find_if(std::begin(parent_->children_),  //
                          std::end(parent_->children_),    //
                          [this](const Component& that) {  //
@@ -76,8 +77,9 @@ void ComponentBase::Detach() {
 /// @brief Remove all children.
 /// @ingroup component
 void ComponentBase::DetachAllChildren() {
-  while (!children_.empty())
+  while (!children_.empty()) {
     children_[0]->Detach();
+  }
 }
 
 /// @brief Draw the component.
@@ -85,8 +87,9 @@ void ComponentBase::DetachAllChildren() {
 /// ftxui::ComponentBase.
 /// @ingroup component
 Element ComponentBase::Render() {
-  if (children_.size() == 1)
+  if (children_.size() == 1) {
     return children_.front()->Render();
+  }
 
   return text("Not implemented component");
 }
@@ -97,10 +100,11 @@ Element ComponentBase::Render() {
 /// The default implementation called OnEvent on every child until one return
 /// true. If none returns true, return false.
 /// @ingroup component
-bool ComponentBase::OnEvent(Event event) {
-  for (Component& child : children_) {
-    if (child->OnEvent(event))
+bool ComponentBase::OnEvent(Event event) {  // NOLINT
+  for (Component& child : children_) {      // NOLINT
+    if (child->OnEvent(event)) {
       return true;
+    }
   }
   return false;
 }
@@ -110,8 +114,9 @@ bool ComponentBase::OnEvent(Event event) {
 /// The default implementation dispatch the event to every child.
 /// @ingroup component
 void ComponentBase::OnAnimation(animation::Params& params) {
-  for (Component& child : children_)
+  for (Component& child : children_) {
     child->OnAnimation(params);
+  }
 }
 
 /// @brief Return the currently Active child.
@@ -119,8 +124,9 @@ void ComponentBase::OnAnimation(animation::Params& params) {
 /// @ingroup component
 Component ComponentBase::ActiveChild() {
   for (auto& child : children_) {
-    if (child->Focusable())
+    if (child->Focusable()) {
       return child;
+    }
   }
   return nullptr;
 }
@@ -130,9 +136,10 @@ Component ComponentBase::ActiveChild() {
 /// keyboard.
 /// @ingroup component
 bool ComponentBase::Focusable() const {
-  for (const Component& child : children_) {
-    if (child->Focusable())
+  for (const Component& child : children_) {  // NOLINT
+    if (child->Focusable()) {
       return true;
+    }
   }
   return false;
 }
@@ -140,7 +147,7 @@ bool ComponentBase::Focusable() const {
 /// @brief Returns if the element if the currently active child of its parent.
 /// @ingroup component
 bool ComponentBase::Active() const {
-  return !parent_ || parent_->ActiveChild().get() == this;
+  return parent_ == nullptr || parent_->ActiveChild().get() == this;
 }
 
 /// @brief Returns if the elements if focused by the user.
@@ -149,7 +156,7 @@ bool ComponentBase::Active() const {
 /// Focusable().
 /// @ingroup component
 bool ComponentBase::Focused() const {
-  auto current = this;
+  const auto* current = this;
   while (current && current->Active()) {
     current = current->parent_;
   }
@@ -159,12 +166,12 @@ bool ComponentBase::Focused() const {
 /// @brief Make the |child| to be the "active" one.
 /// @param child the child to become active.
 /// @ingroup component
-void ComponentBase::SetActiveChild(ComponentBase*) {}
+void ComponentBase::SetActiveChild(ComponentBase* /*child*/) {}
 
 /// @brief Make the |child| to be the "active" one.
 /// @param child the child to become active.
 /// @ingroup component
-void ComponentBase::SetActiveChild(Component child) {
+void ComponentBase::SetActiveChild(Component child) {  // NOLINT
   SetActiveChild(child.get());
 }
 
@@ -182,9 +189,10 @@ void ComponentBase::TakeFocus() {
 /// them. It represents a component taking priority over others.
 /// @param event
 /// @ingroup component
-CapturedMouse ComponentBase::CaptureMouse(const Event& event) {
-  if (event.screen_)
+CapturedMouse ComponentBase::CaptureMouse(const Event& event) {  // NOLINT
+  if (event.screen_) {
     return event.screen_->CaptureMouse();
+  }
   return std::make_unique<CaptureMouseImpl>();
 }
 

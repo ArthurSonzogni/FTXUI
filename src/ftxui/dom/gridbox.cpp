@@ -1,5 +1,5 @@
-#include <stddef.h>   // for size_t
 #include <algorithm>  // for max, min
+#include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
 #include <utility>  // for move
 #include <vector>   // for vector, __alloc_traits<>::value_type
@@ -15,10 +15,11 @@ class Screen;
 
 class GridBox : public Node {
  public:
-  GridBox(std::vector<Elements> lines) : Node(), lines_(std::move(lines)) {
-    y_size = lines_.size();
-    for (const auto& line : lines_)
+  explicit GridBox(std::vector<Elements> lines) : lines_(std::move(lines)) {
+    y_size = (int)lines_.size();
+    for (const auto& line : lines_) {
       x_size = std::max(x_size, (int)line.size());
+    }
     for (auto& line : lines_) {
       while (line.size() < (size_t)x_size) {
         line.push_back(filler());
@@ -39,8 +40,9 @@ class GridBox : public Node {
         cell->ComputeRequirement();
 
         // Determine focus based on the focused child.
-        if (requirement_.selection >= cell->requirement().selection)
+        if (requirement_.selection >= cell->requirement().selection) {
           continue;
+        }
         requirement_.selection = cell->requirement().selection;
         requirement_.selected_box = cell->requirement().selected_box;
         requirement_.selected_box.x_min += requirement_.min_x;
@@ -51,16 +53,18 @@ class GridBox : public Node {
     // Work on the x-axis.
     for (int x = 0; x < x_size; ++x) {
       int min_x = 0;
-      for (int y = 0; y < y_size; ++y)
+      for (int y = 0; y < y_size; ++y) {
         min_x = std::max(min_x, lines_[y][x]->requirement().min_x);
+      }
       requirement_.min_x += min_x;
     }
 
     // Work on the y-axis.
     for (int y = 0; y < y_size; ++y) {
       int min_y = 0;
-      for (int x = 0; x < x_size; ++x)
+      for (int x = 0; x < x_size; ++x) {
         min_y = std::max(min_y, lines_[y][x]->requirement().min_y);
+      }
       requirement_.min_y += min_y;
     }
   }
@@ -70,8 +74,8 @@ class GridBox : public Node {
 
     box_helper::Element init;
     init.min_size = 0;
-    init.flex_grow = 1024;
-    init.flex_shrink = 1024;
+    init.flex_grow = 1024;    // NOLINT
+    init.flex_shrink = 1024;  // NOLINT
     std::vector<box_helper::Element> elements_x(x_size, init);
     std::vector<box_helper::Element> elements_y(y_size, init);
 
@@ -115,8 +119,9 @@ class GridBox : public Node {
 
   void Render(Screen& screen) override {
     for (auto& line : lines_) {
-      for (auto& cell : line)
+      for (auto& cell : line) {
         cell->Render(screen);
+      }
     }
   }
 

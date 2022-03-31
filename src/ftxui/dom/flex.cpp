@@ -67,7 +67,7 @@ void function_not_flex(Requirement& r) {
 
 class Flex : public Node {
  public:
-  Flex(FlexFunction f) : f_(f) {}
+  explicit Flex(FlexFunction f) : f_(f) {}
   Flex(FlexFunction f, Element child) : Node(unpack(std::move(child))), f_(f) {}
   void ComputeRequirement() override {
     requirement_.min_x = 0;
@@ -80,8 +80,9 @@ class Flex : public Node {
   }
 
   void SetBox(Box box) override {
-    if (children_.empty())
+    if (children_.empty()) {
       return;
+    }
     children_[0]->SetBox(box);
   }
 

@@ -12,7 +12,7 @@ namespace ftxui {
 
 class DBox : public Node {
  public:
-  DBox(Elements children) : Node(std::move(children)) {}
+  explicit DBox(Elements children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     requirement_.min_x = 0;
@@ -38,8 +38,9 @@ class DBox : public Node {
   void SetBox(Box box) override {
     Node::SetBox(box);
 
-    for (auto& child : children_)
+    for (auto& child : children_) {
       child->SetBox(box);
+    }
   }
 };
 

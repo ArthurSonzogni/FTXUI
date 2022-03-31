@@ -5,21 +5,25 @@
 
 namespace ftxui {
 
+// NOLINTNEXTLINE
 Component operator|(Component component, ComponentDecorator decorator) {
-  return decorator(component);
+  return decorator(component);  // NOLINT
 }
 
+// NOLINTNEXTLINE
 Component operator|(Component component, ElementDecorator decorator) {
-  return component | Renderer(decorator);
+  return component | Renderer(decorator);  // NOLINT
 }
 
+// NOLINTNEXTLINE
 Component& operator|=(Component& component, ComponentDecorator decorator) {
-  component = component | decorator;
+  component = component | decorator;  // NOLINT
   return component;
 }
 
+// NOLINTNEXTLINE
 Component& operator|=(Component& component, ElementDecorator decorator) {
-  component = component | decorator;
+  component = component | decorator;  // NOLINT
   return component;
 }
 

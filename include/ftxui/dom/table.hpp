@@ -52,10 +52,10 @@ class Table {
   void Initialize(std::vector<std::vector<Element>>);
   friend TableSelection;
   std::vector<std::vector<Element>> elements_;
-  int input_dim_x_;
-  int input_dim_y_;
-  int dim_x_;
-  int dim_y_;
+  int input_dim_x_ = 0;
+  int input_dim_y_ = 0;
+  int dim_x_ = 0;
+  int dim_y_ = 0;
 };
 
 class TableSelection {

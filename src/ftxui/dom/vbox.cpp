@@ -1,5 +1,5 @@
-#include <stddef.h>   // for size_t
 #include <algorithm>  // for max
+#include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, make_shared, allocator_traits<>::value_type
 #include <utility>  // for move
 #include <vector>   // for vector, __alloc_traits<>::value_type
@@ -14,7 +14,7 @@ namespace ftxui {
 
 class VBox : public Node {
  public:
-  VBox(Elements children) : Node(std::move(children)) {}
+  explicit VBox(Elements children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     requirement_.min_x = 0;

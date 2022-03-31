@@ -10,6 +10,7 @@ option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
 option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
+option(FTXUI_CLANG_TIDY "Execute clang-tidy" OFF)
 
 set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
 terminal used will be one of Microsoft and use a set of reasonnable fallback \
@@ -21,6 +22,7 @@ else()
   option(FTXUI_MICROSOFT_TERMINAL_FALLBACK
     ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} OFF)
 endif()
+
 
 add_library(screen
   include/ftxui/screen/box.hpp

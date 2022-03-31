@@ -1,6 +1,7 @@
+#include <stdint.h>  // for uint8_t
 #include <iostream>  // for operator<<, stringstream, basic_ostream, flush, cout, ostream
 #include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
-#include <memory>   // for allocator, allocator_traits<>::value_type
+#include <memory>   // for allocator
 #include <sstream>  // IWYU pragma: keep
 #include <utility>  // for pair
 
@@ -19,26 +20,11 @@
 namespace ftxui {
 
 namespace {
-static const char BOLD_SET[] = "\x1B[1m";
-static const char BOLD_RESET[] = "\x1B[22m";  // Can't use 21 here.
 
-static const char DIM_SET[] = "\x1B[2m";
-static const char DIM_RESET[] = "\x1B[22m";
-
-static const char UNDERLINED_SET[] = "\x1B[4m";
-static const char UNDERLINED_RESET[] = "\x1B[24m";
-
-static const char BLINK_SET[] = "\x1B[5m";
-static const char BLINK_RESET[] = "\x1B[25m";
-
-static const char INVERTED_SET[] = "\x1B[7m";
-static const char INVERTED_RESET[] = "\x1B[27m";
-
-static const char MOVE_LEFT[] = "\r";
-static const char MOVE_UP[] = "\x1B[1A";
-static const char CLEAR_LINE[] = "\x1B[2K";
-
-Pixel dev_null_pixel;
+Pixel& dev_null_pixel() {
+  static Pixel pixel;
+  return pixel;
+}
 
 #if defined(_WIN32)
 void WindowsEmulateVT100Terminal() {
@@ -66,20 +52,49 @@ void WindowsEmulateVT100Terminal() {
 void UpdatePixelStyle(std::stringstream& ss,
                       Pixel& previous,
                       const Pixel& next) {
-  if (next.bold != previous.bold)
-    ss << (next.bold ? BOLD_SET : BOLD_RESET);
+  if (next == previous) {
+    return;
+  }
 
-  if (next.dim != previous.dim)
-    ss << (next.dim ? DIM_SET : DIM_RESET);
+  if (next.bold && !previous.bold) {
+    ss << "\x1B[1m";  // BOLD_SET
+  }
 
-  if (next.underlined != previous.underlined)
-    ss << (next.underlined ? UNDERLINED_SET : UNDERLINED_RESET);
+  if (!next.bold && previous.bold) {
+    ss << "\x1B[22m";  // BOLD_RESET
+  }
 
-  if (next.blink != previous.blink)
-    ss << (next.blink ? BLINK_SET : BLINK_RESET);
+  if (next.dim && !previous.dim) {
+    ss << "\x1B[2m";  // DIM_SET
+  }
 
-  if (next.inverted != previous.inverted)
-    ss << (next.inverted ? INVERTED_SET : INVERTED_RESET);
+  if (!next.dim && previous.dim) {
+    ss << "\x1B[22m";  // DIM_RESET
+  }
+
+  if (next.underlined && !previous.underlined) {
+    ss << "\x1B[4m";  // UNDERLINED_SET
+  }
+
+  if (!next.underlined && previous.underlined) {
+    ss << "\x1B[24m";  // UNDERLINED_RESET
+  }
+
+  if (next.blink && !previous.blink) {
+    ss << "\x1B[5m";  // BLINK_SET
+  }
+
+  if (!next.blink && previous.blink) {
+    ss << "\x1B[25m";  // BLINK_RESET
+  }
+
+  if (next.inverted && !previous.inverted) {
+    ss << "\x1B[7m";  // INVERTED_SET
+  }
+
+  if (!next.inverted && previous.inverted) {
+    ss << "\x1B[27m";  // INVERTED_RESET
+  }
 
   if (next.foreground_color != previous.foreground_color ||
       next.background_color != previous.background_color) {
@@ -91,31 +106,31 @@ void UpdatePixelStyle(std::stringstream& ss,
 }
 
 struct TileEncoding {
-  unsigned int left : 2;
-  unsigned int top : 2;
-  unsigned int right : 2;
-  unsigned int down : 2;
-  unsigned int round : 1;
+  uint8_t left : 2;
+  uint8_t top : 2;
+  uint8_t right : 2;
+  uint8_t down : 2;
+  uint8_t round : 1;
 
   // clang-format off
   bool operator<(const TileEncoding& other) const {
-    if (left < other.left) return true;
-    if (left > other.left) return false;
-    if (top < other.top) return true;
-    if (top > other.top) return false;
-    if (right < other.right) return true;
-    if (right > other.right) return false;
-    if (down < other.down) return true;
-    if (down > other.down) return false;
-    if (round < other.round) return true;
-    if (round > other.round) return false;
+    if (left < other.left)   { return  true;  }
+    if (left > other.left)   { return  false; }
+    if (top < other.top)     { return  true;  }
+    if (top > other.top)     { return  false; }
+    if (right < other.right) { return  true;  }
+    if (right > other.right) { return  false; }
+    if (down < other.down)   { return  true;  }
+    if (down > other.down)   { return  false; }
+    if (round < other.round) { return  true;  }
+    if (round > other.round) { return  false; }
       return false;
   }
   // clang-format on
 };
 
 // clang-format off
-const std::map<std::string, TileEncoding> tile_encoding = {
+const std::map<std::string, TileEncoding> tile_encoding = { // NOLINT
     {"─", {1, 0, 1, 0, 0}},
     {"━", {2, 0, 2, 0, 0}},
 
@@ -257,63 +272,72 @@ const std::map<std::string, TileEncoding> tile_encoding = {
 // clang-format on
 
 template <class A, class B>
-const std::map<B, A> InvertMap(const std::map<A, B> input) {
+std::map<B, A> InvertMap(const std::map<A, B> input) {
   std::map<B, A> output;
-  for (const auto& it : input)
+  for (const auto& it : input) {
     output[it.second] = it.first;
+  }
   return output;
 }
 
-const std::map<TileEncoding, std::string> tile_encoding_inverse =
+const std::map<TileEncoding, std::string> tile_encoding_inverse =  // NOLINT
     InvertMap(tile_encoding);
 
 void UpgradeLeftRight(std::string& left, std::string& right) {
   const auto it_left = tile_encoding.find(left);
-  if (it_left == tile_encoding.end())
+  if (it_left == tile_encoding.end()) {
     return;
+  }
   const auto it_right = tile_encoding.find(right);
-  if (it_right == tile_encoding.end())
+  if (it_right == tile_encoding.end()) {
     return;
+  }
 
   if (it_left->second.right == 0 && it_right->second.left != 0) {
     TileEncoding encoding_left = it_left->second;
     encoding_left.right = it_right->second.left;
     const auto it_left_upgrade = tile_encoding_inverse.find(encoding_left);
-    if (it_left_upgrade != tile_encoding_inverse.end())
+    if (it_left_upgrade != tile_encoding_inverse.end()) {
       left = it_left_upgrade->second;
+    }
   }
 
   if (it_right->second.left == 0 && it_left->second.right != 0) {
     TileEncoding encoding_right = it_right->second;
     encoding_right.left = it_left->second.right;
     const auto it_right_upgrade = tile_encoding_inverse.find(encoding_right);
-    if (it_right_upgrade != tile_encoding_inverse.end())
+    if (it_right_upgrade != tile_encoding_inverse.end()) {
       right = it_right_upgrade->second;
+    }
   }
 }
 
 void UpgradeTopDown(std::string& top, std::string& down) {
   const auto it_top = tile_encoding.find(top);
-  if (it_top == tile_encoding.end())
+  if (it_top == tile_encoding.end()) {
     return;
+  }
   const auto it_down = tile_encoding.find(down);
-  if (it_down == tile_encoding.end())
+  if (it_down == tile_encoding.end()) {
     return;
+  }
 
   if (it_top->second.down == 0 && it_down->second.top != 0) {
     TileEncoding encoding_top = it_top->second;
     encoding_top.down = it_down->second.top;
     const auto it_top_down = tile_encoding_inverse.find(encoding_top);
-    if (it_top_down != tile_encoding_inverse.end())
+    if (it_top_down != tile_encoding_inverse.end()) {
       top = it_top_down->second;
+    }
   }
 
   if (it_down->second.top == 0 && it_top->second.down != 0) {
     TileEncoding encoding_down = it_down->second;
     encoding_down.top = it_top->second.down;
     const auto it_down_top = tile_encoding_inverse.find(encoding_down);
-    if (it_down_top != tile_encoding_inverse.end())
+    if (it_down_top != tile_encoding_inverse.end()) {
       down = it_down_top->second;
+    }
   }
 }
 
@@ -322,6 +346,18 @@ bool ShouldAttemptAutoMerge(Pixel& pixel) {
 }
 
 }  // namespace
+
+bool Pixel::operator==(const Pixel& other) const {
+  return character == other.character &&                //
+         background_color == other.background_color &&  //
+         foreground_color == other.foreground_color &&  //
+         blink == other.blink &&                        //
+         bold == other.bold &&                          //
+         dim == other.dim &&                            //
+         inverted == other.inverted &&                  //
+         underlined == other.underlined &&              //
+         automerge == other.automerge;                  //
+}
 
 /// A fixed dimension.
 /// @see Fit
@@ -409,7 +445,7 @@ std::string& Screen::at(int x, int y) {
 /// @param x The pixel position along the x-axis.
 /// @param y The pixel position along the y-axis.
 Pixel& Screen::PixelAt(int x, int y) {
-  return stencil.Contain(x, y) ? pixels_[y][x] : dev_null_pixel;
+  return stencil.Contain(x, y) ? pixels_[y][x] : dev_null_pixel();
 }
 
 /// @brief Return a string to be printed in order to reset the cursor position
@@ -431,17 +467,19 @@ Pixel& Screen::PixelAt(int x, int y) {
 ///
 /// @return The string to print in order to reset the cursor position to the
 ///         beginning.
-std::string Screen::ResetPosition(bool clear) {
+std::string Screen::ResetPosition(bool clear) const {
   std::stringstream ss;
   if (clear) {
-    ss << MOVE_LEFT << CLEAR_LINE;
+    ss << "\r";       // MOVE_LEFT;
+    ss << "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
-      ss << MOVE_UP << CLEAR_LINE;
+      ss << "\x1B[1A";  // MOVE_UP;
+      ss << "\x1B[2K";  // CLEAR_LINE;
     }
   } else {
-    ss << MOVE_LEFT;
+    ss << "\r";  // MOVE_LEFT;
     for (int y = 1; y < dimy_; ++y) {
-      ss << MOVE_UP;
+      ss << "\x1B[1A";  // MOVE_UP;
     }
   }
   return ss.str();
@@ -462,16 +500,19 @@ void Screen::ApplyShader() {
     for (int x = 1; x < dimx_; ++x) {
       // Box drawing character uses exactly 3 byte.
       Pixel& cur = pixels_[y][x];
-      if (!ShouldAttemptAutoMerge(cur))
+      if (!ShouldAttemptAutoMerge(cur)) {
         continue;
+      }
 
       Pixel& left = pixels_[y][x-1];
       Pixel& top = pixels_[y-1][x];
 
-      if (ShouldAttemptAutoMerge(left))
+      if (ShouldAttemptAutoMerge(left)) {
         UpgradeLeftRight(left.character, cur.character);
-      if (ShouldAttemptAutoMerge(top))
+      }
+      if (ShouldAttemptAutoMerge(top)) {
         UpgradeTopDown(top.character, cur.character);
+      }
     }
   }
 }

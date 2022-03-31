@@ -1,5 +1,5 @@
-#include <stddef.h>   // for size_t
 #include <algorithm>  // for min, max
+#include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator_traits<>::value_type, make_shared
 #include <utility>  // for move, swap
 #include <vector>   // for vector
@@ -56,11 +56,12 @@ class Flexbox : public Node {
     requirement_.flex_grow_x = 1;
     requirement_.flex_grow_y = 0;
 
-    if (IsColumnOriented())
+    if (IsColumnOriented()) {
       std::swap(requirement_.flex_grow_x, requirement_.flex_grow_y);
+    }
   }
 
-  bool IsColumnOriented() {
+  bool IsColumnOriented() const {
     return config_.direction == FlexboxConfig::Direction::Column ||
            config_.direction == FlexboxConfig::Direction::ColumnInversed;
   }
@@ -84,20 +85,21 @@ class Flexbox : public Node {
   }
 
   void ComputeRequirement() override {
-    for (auto& child : children_)
+    for (auto& child : children_) {
       child->ComputeRequirement();
+    }
     flexbox_helper::Global global;
     global.config = config_normalized_;
     if (IsColumnOriented()) {
-      global.size_x = 100000;
+      global.size_x = 100000;  // NOLINT
       global.size_y = asked_;
     } else {
       global.size_x = asked_;
-      global.size_y = 100000;
+      global.size_y = 100000;  // NOLINT
     }
     Layout(global, true);
 
-    if (global.blocks.size() == 0) {
+    if (global.blocks.empty()) {
       requirement_.min_x = 0;
       requirement_.min_y = 0;
       return;
@@ -150,18 +152,19 @@ class Flexbox : public Node {
   }
 
   void Check(Status* status) override {
-    for (auto& child : children_)
+    for (auto& child : children_) {
       child->Check(status);
+    }
 
     if (status->iteration == 0) {
-      asked_ = 6000;
+      asked_ = 6000;  // NOLINT
       need_iteration_ = true;
     }
 
     status->need_iteration |= need_iteration_;
   }
 
-  int asked_ = 6000;
+  int asked_ = 6000;  // NOLINT
   bool need_iteration_ = true;
   const FlexboxConfig config_;
   const FlexboxConfig config_normalized_;
@@ -190,7 +193,7 @@ class Flexbox : public Node {
 //  )
 /// ```
 Element flexbox(Elements children, FlexboxConfig config) {
-  return std::make_shared<Flexbox>(std::move(children), std::move(config));
+  return std::make_shared<Flexbox>(std::move(children), config);
 }
 
 /// @brief A container displaying elements in rows from left to right. When

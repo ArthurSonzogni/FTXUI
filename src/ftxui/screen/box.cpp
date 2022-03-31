@@ -17,7 +17,7 @@ Box Box::Intersection(Box a, Box b) {
 
 /// @return whether (x,y) is contained inside the box.
 /// @ingroup screen
-bool Box::Contain(int x, int y) {
+bool Box::Contain(int x, int y) const {
   return x_min <= x &&  //
          x_max >= x &&  //
          y_min <= y &&  //

@@ -44,12 +44,12 @@
     });
 
     let stdin_buffer = [];
-    let stdin = () => {
+    const stdin = () => {
       return stdin_buffer.shift() || 0;
     }
 
-    stdout_buffer = [];
-    let stdout = code => {
+    let stdout_buffer = [];
+    const stdout = code => {
       if (code == 0) {
         term.write(new Uint8Array(stdout_buffer));
         stdout_buffer = [];
@@ -57,7 +57,15 @@
         stdout_buffer.push(code)
       }
     }
-    const stderr = code => console.log(code);
+    let stderrbuffer = [];
+    const stderr = code => {
+      if (code == 0 || code == 10) {
+        console.error(String.fromCodePoint(...stderrbuffer));
+        stderrbuffer = [];
+      } else {
+        stderrbuffer.push(code)
+      }
+    }
     const term = new Terminal();
     term.open(document.querySelector('#terminal'));
     term.resize(140,43);
@@ -69,7 +77,9 @@
     term.onBinary(onBinary);
     term.onData(onBinary)
     window.Module = {
-      preRun: () => { FS.init(stdin, stdout, stderr); },
+      preRun: () => {
+        FS.init(stdin, stdout, stderr);
+      },
       postRun: [],
       onRuntimeInitialized: () => {},
     };

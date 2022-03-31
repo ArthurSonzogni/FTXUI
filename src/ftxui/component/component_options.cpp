@@ -1,9 +1,10 @@
 #include "ftxui/component/component_options.hpp"
 
-#include <memory>  // for allocator, shared_ptr
+#include <memory>   // for shared_ptr
+#include <utility>  // for move
 
 #include "ftxui/component/animation.hpp"  // for Function, Duration
-#include "ftxui/dom/elements.hpp"  // for Element, operator|, text, bold, dim, inverted, automerge
+#include "ftxui/dom/elements.hpp"  // for operator|=, text, Element, bold, inverted, operator|, dim, hbox, automerge, borderEmpty, borderLight
 
 namespace ftxui {
 
@@ -15,13 +16,13 @@ void AnimatedColorOption::Set(Color a_inactive,
   inactive = a_inactive;
   active = a_active;
   duration = a_duration;
-  function = a_function;
+  function = std::move(a_function);
 }
 
 void UnderlineOption::SetAnimation(animation::Duration d,
                                    animation::easing::Function f) {
   SetAnimationDuration(d);
-  SetAnimationFunction(f);
+  SetAnimationFunction(std::move(f));
 }
 
 void UnderlineOption::SetAnimationDuration(animation::Duration d) {
@@ -31,28 +32,31 @@ void UnderlineOption::SetAnimationDuration(animation::Duration d) {
 
 void UnderlineOption::SetAnimationFunction(animation::easing::Function f) {
   leader_function = f;
-  follower_function = f;
+  follower_function = std::move(f);
 }
 
 void UnderlineOption::SetAnimationFunction(
     animation::easing::Function f_leader,
     animation::easing::Function f_follower) {
-  leader_function = f_leader;
-  follower_function = f_follower;
+  leader_function = std::move(f_leader);
+  follower_function = std::move(f_follower);
 }
 
 // static
 MenuOption MenuOption::Horizontal() {
   MenuOption option;
   option.direction = Direction::Right;
-  option.entries.transform = [](EntryState state) {
+  option.entries.transform = [](const EntryState& state) {
     Element e = text(state.label);
-    if (state.focused)
+    if (state.focused) {
       e |= inverted;
-    if (state.active)
+    }
+    if (state.active) {
       e |= bold;
-    if (!state.focused && !state.active)
+    }
+    if (!state.focused && !state.active) {
       e |= dim;
+    }
     return e;
   };
   option.elements_infix = [] { return text(" "); };
@@ -70,19 +74,17 @@ MenuOption MenuOption::HorizontalAnimated() {
 // static
 MenuOption MenuOption::Vertical() {
   MenuOption option;
-  option.entries.transform = [](EntryState state) {
-    if (state.active)
-      state.label = "> " + state.label;
-    else
-      state.label = "  " + state.label;
-
-    Element e = text(state.label);
-    if (state.focused)
+  option.entries.transform = [](const EntryState& state) {
+    Element e = text((state.active ? "> " : "  ") + state.label);  // NOLINT
+    if (state.focused) {
       e |= inverted;
-    if (state.active)
+    }
+    if (state.active) {
       e |= bold;
-    if (!state.focused && !state.active)
+    }
+    if (!state.focused && !state.active) {
       e |= dim;
+    }
     return e;
   };
   return option;
@@ -91,14 +93,17 @@ MenuOption MenuOption::Vertical() {
 // static
 MenuOption MenuOption::VerticalAnimated() {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](EntryState state) {
+  option.entries.transform = [](const EntryState& state) {
     Element e = text(state.label);
-    if (state.focused)
+    if (state.focused) {
       e |= inverted;
-    if (state.active)
+    }
+    if (state.active) {
       e |= bold;
-    if (!state.focused && !state.active)
+    }
+    if (!state.focused && !state.active) {
       e |= dim;
+    }
     return e;
   };
   option.underline.enabled = true;
@@ -116,10 +121,10 @@ MenuOption MenuOption::Toggle() {
 // static
 ButtonOption ButtonOption::Ascii() {
   ButtonOption option;
-  option.transform = [](EntryState s) {
-    s.label = s.focused ? "[" + s.label + "]"  //
-                        : " " + s.label + " ";
-    return text(s.label);
+  option.transform = [](const EntryState& s) {
+    std::string label = s.focused ? "[" + s.label + "]"  //
+                                  : " " + s.label + " ";
+    return text(label);
   };
   return option;
 }
@@ -128,10 +133,11 @@ ButtonOption ButtonOption::Ascii() {
 // static
 ButtonOption ButtonOption::Simple() {
   ButtonOption option;
-  option.transform = [](EntryState s) {
+  option.transform = [](const EntryState& s) {
     auto element = text(s.label) | borderLight;
-    if (s.focused)
+    if (s.focused) {
       element |= inverted;
+    }
     return element;
   };
   return option;
@@ -147,10 +153,11 @@ ButtonOption ButtonOption::Animated() {
 /// @brief Create a ButtonOption, using animated colors.
 // static
 ButtonOption ButtonOption::Animated(Color color) {
-  return ButtonOption::Animated(Color::Interpolate(0.85f, color, Color::Black),
-                                Color::Interpolate(0.10f, color, Color::White),
-                                Color::Interpolate(0.10f, color, Color::Black),
-                                Color::Interpolate(0.85f, color, Color::White));
+  return ButtonOption::Animated(
+      Color::Interpolate(0.85F, color, Color::Black),   // NOLINT
+      Color::Interpolate(0.10F, color, Color::White),   // NOLINT
+      Color::Interpolate(0.10F, color, Color::Black),   // NOLINT
+      Color::Interpolate(0.85F, color, Color::White));  // NOLINT
 }
 
 /// @brief Create a ButtonOption, using animated colors.
@@ -163,17 +170,18 @@ ButtonOption ButtonOption::Animated(Color background, Color foreground) {
 // static
 ButtonOption ButtonOption::Animated(Color background,
                                     Color foreground,
-                                    Color background_focused,
-                                    Color foreground_focused) {
+                                    Color background_active,
+                                    Color foreground_active) {
   ButtonOption option;
-  option.transform = [](EntryState s) {
+  option.transform = [](const EntryState& s) {
     auto element = text(s.label) | borderEmpty;
-    if (s.focused)
+    if (s.focused) {
       element |= bold;
+    }
     return element;
   };
-  option.animated_colors.foreground.Set(foreground, foreground_focused);
-  option.animated_colors.background.Set(background, background_focused);
+  option.animated_colors.foreground.Set(foreground, foreground_active);
+  option.animated_colors.background.Set(background, background_active);
   return option;
 }
 
@@ -181,19 +189,21 @@ ButtonOption ButtonOption::Animated(Color background,
 // static
 CheckboxOption CheckboxOption::Simple() {
   auto option = CheckboxOption();
-  option.transform = [](EntryState s) {
+  option.transform = [](const EntryState& s) {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft terminal do not use fonts able to render properly the default
     // radiobox glyph.
-    auto prefix = text(s.state ? "[X] " : "[ ] ");
+    auto prefix = text(s.state ? "[X] " : "[ ] ");  // NOLINT
 #else
-    auto prefix = text(s.state ? "▣ " : "☐ ");
+    auto prefix = text(s.state ? "▣ " : "☐ ");  // NOLINT
 #endif
     auto t = text(s.label);
-    if (s.active)
+    if (s.active) {
       t |= bold;
-    if (s.focused)
+    }
+    if (s.focused) {
       t |= inverted;
+    }
     return hbox({prefix, t});
   };
   return option;
@@ -203,19 +213,21 @@ CheckboxOption CheckboxOption::Simple() {
 // static
 RadioboxOption RadioboxOption::Simple() {
   auto option = RadioboxOption();
-  option.transform = [](EntryState s) {
+  option.transform = [](const EntryState& s) {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft terminal do not use fonts able to render properly the default
     // radiobox glyph.
-    auto prefix = text(s.state ? "(*) " : "( ) ");
+    auto prefix = text(s.state ? "(*) " : "( ) ");  // NOLINT
 #else
-    auto prefix = text(s.state ? "◉ " : "○ ");
+    auto prefix = text(s.state ? "◉ " : "○ ");  // NOLINT
 #endif
     auto t = text(s.label);
-    if (s.active)
+    if (s.active) {
       t |= bold;
-    if (s.focused)
+    }
+    if (s.focused) {
       t |= inverted;
+    }
     return hbox({prefix, t});
   };
   return option;

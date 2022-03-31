@@ -18,13 +18,13 @@ template <class T>
 class SliderBase : public ComponentBase {
  public:
   SliderBase(ConstStringRef label, T* value, T min, T max, T increment)
-      : label_(label),
+      : label_(std::move(label)),
         value_(value),
         min_(min),
         max_(max),
         increment_(increment) {}
 
-  Element Render() {
+  Element Render() override {
     auto gauge_color =
         Focused() ? color(Color::GrayLight) : color(Color::GrayDark);
     float percent = float(*value_ - min_) / float(max_ - min_);
@@ -40,8 +40,9 @@ class SliderBase : public ComponentBase {
   }
 
   bool OnEvent(Event event) final {
-    if (event.is_mouse())
+    if (event.is_mouse()) {
       return OnMouseEvent(event);
+    }
 
     if (event == Event::ArrowLeft || event == Event::Character('h')) {
       *value_ -= increment_;

@@ -33,7 +33,7 @@ Component HMenu5(std::vector<std::string>* entries, int* selected);
 int main(int argc, const char* argv[]) {
   auto screen = ScreenInteractive::TerminalOutput();
 
-  std::vector<std::string> entries = {
+  std::vector<std::string> entries{
       "Monkey", "Dog", "Cat", "Bird", "Elephant", "Cat",
   };
   std::array<int, 12> selected = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -140,7 +140,7 @@ Component VMenu3(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
   option.entries.transform = [](EntryState state) {
     Element e = state.active ? text("[" + state.label + "]")
-                               : text(" " + state.label + " ");
+                             : text(" " + state.label + " ");
     if (state.focused)
       e = e | bold;
 

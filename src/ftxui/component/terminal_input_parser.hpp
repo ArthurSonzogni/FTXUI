@@ -48,7 +48,7 @@ class TerminalInputParser {
     Output(Type t) : type(t) {}
   };
 
-  void Send(Output type);
+  void Send(Output output);
   Output Parse();
   Output ParseUTF8();
   Output ParseESC();

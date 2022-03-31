@@ -13,7 +13,7 @@ namespace ftxui {
 Component Maybe(Component child, std::function<bool()> show) {
   class Impl : public ComponentBase {
    public:
-    Impl(std::function<bool()> show) : show_(std::move(show)) {}
+    explicit Impl(std::function<bool()> show) : show_(std::move(show)) {}
 
    private:
     Element Render() override {
@@ -48,7 +48,7 @@ Component Maybe(Component child, std::function<bool()> show) {
 /// ```
 ComponentDecorator Maybe(std::function<bool()> show) {
   return [show = std::move(show)](Component child) mutable {
-    return Maybe(child, std::move(show));
+    return Maybe(std::move(child), std::move(show));
   };
 }
 
@@ -64,7 +64,7 @@ ComponentDecorator Maybe(std::function<bool()> show) {
 /// auto maybe_component = Maybe(component, &show);
 /// ```
 Component Maybe(Component child, const bool* show) {
-  return Maybe(child, [show] { return *show; });
+  return Maybe(std::move(child), [show] { return *show; });
 }
 
 /// @brief Decorate a component. It is shown only when |show| is true.
@@ -78,7 +78,7 @@ Component Maybe(Component child, const bool* show) {
 /// auto maybe_component = component | Maybe(&show);
 /// ```
 ComponentDecorator Maybe(const bool* show) {
-  return [show](Component child) { return Maybe(child, show); };
+  return [show](Component child) { return Maybe(std::move(child), show); };
 }
 
 }  // namespace ftxui

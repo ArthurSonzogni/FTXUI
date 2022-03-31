@@ -1,5 +1,5 @@
-#include <stddef.h>    // for size_t
 #include <algorithm>   // for max, min
+#include <cstddef>     // for size_t
 #include <functional>  // for function
 #include <memory>      // for shared_ptr, allocator
 #include <string>      // for string, wstring
@@ -24,11 +24,12 @@ namespace ftxui {
 
 namespace {
 
-std::string PasswordField(int size) {
+std::string PasswordField(size_t size) {
   std::string out;
   out.reserve(2 * size);
-  while (size--)
+  while (size--) {
     out += "•";
+  }
   return out;
 }
 
@@ -38,21 +39,25 @@ class InputBase : public ComponentBase {
   InputBase(StringRef content,
             ConstStringRef placeholder,
             Ref<InputOption> option)
-      : content_(content), placeholder_(placeholder), option_(option) {}
+      : content_(std::move(content)),
+        placeholder_(std::move(placeholder)),
+        option_(std::move(option)) {}
 
   int cursor_position_internal_ = 0;
   int& cursor_position() {
     int& opt = option_->cursor_position();
-    if (opt != -1)
+    if (opt != -1) {
       return opt;
+    }
     return cursor_position_internal_;
   }
 
   // Component implementation:
   Element Render() override {
     std::string password_content;
-    if (option_->password())
+    if (option_->password()) {
       password_content = PasswordField(content_->size());
+    }
     std::string& content = option_->password() ? password_content : *content_;
 
     int size = GlyphCount(content);
@@ -65,19 +70,22 @@ class InputBase : public ComponentBase {
     if (size == 0) {
       bool hovered = hovered_;
       Decorator decorator = dim | main_decorator;
-      if (is_focused)
+      if (is_focused) {
         decorator = decorator | focus;
-      if (hovered || is_focused)
+      }
+      if (hovered || is_focused) {
         decorator = decorator | inverted;
+      }
       return text(*placeholder_) | decorator | reflect(box_);
     }
 
     // Not focused.
     if (!is_focused) {
-      if (hovered_)
+      if (hovered_) {
         return text(content) | main_decorator | inverted | reflect(box_);
-      else
+      } else {
         return text(content) | main_decorator | reflect(box_);
+      }
     }
 
     int index_before_cursor = GlyphPosition(content, cursor_position());
@@ -100,17 +108,19 @@ class InputBase : public ComponentBase {
 
   bool OnEvent(Event event) override {
     cursor_position() =
-        std::max(0, std::min<int>(content_->size(), cursor_position()));
+        std::max(0, std::min<int>((int)content_->size(), cursor_position()));
 
-    if (event.is_mouse())
+    if (event.is_mouse()) {
       return OnMouseEvent(event);
+    }
 
     std::string c;
 
     // Backspace.
     if (event == Event::Backspace) {
-      if (cursor_position() == 0)
+      if (cursor_position() == 0) {
         return false;
+      }
       size_t start = GlyphPosition(*content_, cursor_position() - 1);
       size_t end = GlyphPosition(*content_, cursor_position());
       content_->erase(start, end - start);
@@ -121,8 +131,9 @@ class InputBase : public ComponentBase {
 
     // Delete
     if (event == Event::Delete) {
-      if (cursor_position() == int(content_->size()))
+      if (cursor_position() == int(content_->size())) {
         return false;
+      }
       size_t start = GlyphPosition(*content_, cursor_position());
       size_t end = GlyphPosition(*content_, cursor_position() + 1);
       content_->erase(start, end - start);
@@ -176,8 +187,9 @@ class InputBase : public ComponentBase {
   bool OnMouseEvent(Event event) {
     hovered_ =
         box_.Contain(event.mouse().x, event.mouse().y) && CaptureMouse(event);
-    if (!hovered_)
+    if (!hovered_) {
       return false;
+    }
 
     if (event.mouse().button != Mouse::Left ||
         event.mouse().motion != Mouse::Pressed) {
@@ -185,22 +197,24 @@ class InputBase : public ComponentBase {
     }
 
     TakeFocus();
-    if (content_->size() == 0)
+    if (content_->empty()) {
       return true;
+    }
 
     auto mapping = CellToGlyphIndex(*content_);
     int original_glyph = cursor_position();
     original_glyph = util::clamp(original_glyph, 0, int(mapping.size()));
-    int original_cell = 0;
+    size_t original_cell = 0;
     for (size_t i = 0; i < mapping.size(); i++) {
       if (mapping[i] == original_glyph) {
-        original_cell = i;
+        original_cell = (int)i;
         break;
       }
     }
-    if (mapping[original_cell] != original_glyph)
+    if (mapping[original_cell] != original_glyph) {
       original_cell = mapping.size();
-    int target_cell = original_cell + event.mouse().x - cursor_box_.x_min;
+    }
+    int target_cell = int(original_cell) + event.mouse().x - cursor_box_.x_min;
     int target_glyph = target_cell < (int)mapping.size() ? mapping[target_cell]
                                                          : (int)mapping.size();
     target_glyph = util::clamp(target_glyph, 0, GlyphCount(*content_));
@@ -279,7 +293,8 @@ class WideInputBase : public InputBase {
 Component Input(StringRef content,
                 ConstStringRef placeholder,
                 Ref<InputOption> option) {
-  return Make<InputBase>(content, placeholder, std::move(option));
+  return Make<InputBase>(std::move(content), std::move(placeholder),
+                         std::move(option));
 }
 
 /// @brief . An input box for editing text.
@@ -307,7 +322,8 @@ Component Input(StringRef content,
 Component Input(WideStringRef content,
                 ConstStringRef placeholder,
                 Ref<InputOption> option) {
-  return Make<WideInputBase>(content, placeholder, std::move(option));
+  return Make<WideInputBase>(std::move(content), std::move(placeholder),
+                             std::move(option));
 }
 
 }  // namespace ftxui

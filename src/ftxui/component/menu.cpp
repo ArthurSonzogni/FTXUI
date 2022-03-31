@@ -24,13 +24,15 @@ namespace ftxui {
 
 namespace {
 
-Element DefaultOptionTransform(EntryState state) {
-  state.label = (state.active ? "> " : "  ") + state.label;
-  Element e = text(state.label);
-  if (state.focused)
+Element DefaultOptionTransform(const EntryState& state) {
+  std::string label = (state.active ? "> " : "  ") + state.label;  // NOLINT
+  Element e = text(label);
+  if (state.focused) {
     e = e | inverted;
-  if (state.active)
+  }
+  if (state.active) {
     e = e | bold;
+  }
   return e;
 }
 
@@ -43,7 +45,7 @@ bool IsInverted(MenuOption::Direction direction) {
     case MenuOption::Direction::Right:
       return false;
   }
-  return false; // NOT_REACHED()
+  return false;  // NOT_REACHED()
 }
 
 bool IsHorizontal(MenuOption::Direction direction) {
@@ -55,7 +57,7 @@ bool IsHorizontal(MenuOption::Direction direction) {
     case MenuOption::Direction::Up:
       return false;
   }
-  return false; // NOT_REACHED()
+  return false;  // NOT_REACHED()
 }
 
 }  // namespace
@@ -65,17 +67,19 @@ bool IsHorizontal(MenuOption::Direction direction) {
 class MenuBase : public ComponentBase {
  public:
   MenuBase(ConstStringListRef entries, int* selected, Ref<MenuOption> option)
-      : entries_(entries), selected_(selected), option_(option) {}
+      : entries_(entries), selected_(selected), option_(std::move(option)) {}
 
   bool IsHorizontal() { return ftxui::IsHorizontal(option_->direction); }
   void OnChange() {
-    if (option_->on_change)
+    if (option_->on_change) {
       option_->on_change();
+    }
   }
 
   void OnEnter() {
-    if (option_->on_enter)
+    if (option_->on_enter) {
       option_->on_enter();
+    }
   }
 
   void Clamp() {
@@ -87,10 +91,12 @@ class MenuBase : public ComponentBase {
   void OnAnimation(animation::Params& params) override {
     animator_first_.OnAnimation(params);
     animator_second_.OnAnimation(params);
-    for (auto& animator : animator_background_)
+    for (auto& animator : animator_background_) {
       animator.OnAnimation(params);
-    for (auto& animator : animator_foreground_)
+    }
+    for (auto& animator : animator_foreground_) {
       animator.OnAnimation(params);
+    }
   }
 
   Element Render() override {
@@ -99,11 +105,13 @@ class MenuBase : public ComponentBase {
 
     Elements elements;
     bool is_menu_focused = Focused();
-    if (option_->elements_prefix)
+    if (option_->elements_prefix) {
       elements.push_back(option_->elements_prefix());
+    }
     for (int i = 0; i < size(); ++i) {
-      if (i != 0 && option_->elements_infix)
+      if (i != 0 && option_->elements_infix) {
         elements.push_back(option_->elements_infix());
+      }
       bool is_focused = (focused_entry() == i) && is_menu_focused;
       bool is_selected = (*selected_ == i);
 
@@ -120,21 +128,24 @@ class MenuBase : public ComponentBase {
       Element element =
           (option_->entries.transform ? option_->entries.transform
                                       : DefaultOptionTransform)  //
-          (std::move(state));
+          (state);
       elements.push_back(element | AnimatedColorStyle(i) | reflect(boxes_[i]) |
                          focus_management);
     }
-    if (option_->elements_postfix)
+    if (option_->elements_postfix) {
       elements.push_back(option_->elements_postfix());
+    }
 
-    if (IsInverted(option_->direction))
+    if (IsInverted(option_->direction)) {
       std::reverse(elements.begin(), elements.end());
+    }
 
     Element bar =
         IsHorizontal() ? hbox(std::move(elements)) : vbox(std::move(elements));
 
-    if (!option_->underline.enabled)
+    if (!option_->underline.enabled) {
       return bar | reflect(box_);
+    }
 
     if (IsHorizontal()) {
       return vbox({
@@ -211,36 +222,49 @@ class MenuBase : public ComponentBase {
     }
   }
 
+  // NOLINTNEXTLINE(readability-function-cognitive-complexity)
   bool OnEvent(Event event) override {
     Clamp();
-    if (!CaptureMouse(event))
+    if (!CaptureMouse(event)) {
       return false;
+    }
 
-    if (event.is_mouse())
+    if (event.is_mouse()) {
       return OnMouseEvent(event);
+    }
 
     if (Focused()) {
       int old_selected = *selected_;
-      if (event == Event::ArrowUp || event == Event::Character('k'))
+      if (event == Event::ArrowUp || event == Event::Character('k')) {
         OnUp();
-      if (event == Event::ArrowDown || event == Event::Character('j'))
+      }
+      if (event == Event::ArrowDown || event == Event::Character('j')) {
         OnDown();
-      if (event == Event::ArrowLeft || event == Event::Character('h'))
+      }
+      if (event == Event::ArrowLeft || event == Event::Character('h')) {
         OnLeft();
-      if (event == Event::ArrowRight || event == Event::Character('l'))
+      }
+      if (event == Event::ArrowRight || event == Event::Character('l')) {
         OnRight();
-      if (event == Event::PageUp)
+      }
+      if (event == Event::PageUp) {
         (*selected_) -= box_.y_max - box_.y_min;
-      if (event == Event::PageDown)
+      }
+      if (event == Event::PageDown) {
         (*selected_) += box_.y_max - box_.y_min;
-      if (event == Event::Home)
+      }
+      if (event == Event::Home) {
         (*selected_) = 0;
-      if (event == Event::End)
+      }
+      if (event == Event::End) {
         (*selected_) = size() - 1;
-      if (event == Event::Tab && size())
+      }
+      if (event == Event::Tab && size()) {
         *selected_ = (*selected_ + 1) % size();
-      if (event == Event::TabReverse && size())
+      }
+      if (event == Event::TabReverse && size()) {
         *selected_ = (*selected_ + size() - 1) % size();
+      }
 
       *selected_ = util::clamp(*selected_, 0, size() - 1);
 
@@ -269,11 +293,13 @@ class MenuBase : public ComponentBase {
         event.mouse().button != Mouse::Left) {
       return false;
     }
-    if (!CaptureMouse(event))
+    if (!CaptureMouse(event)) {
       return false;
+    }
     for (int i = 0; i < size(); ++i) {
-      if (!boxes_[i].Contain(event.mouse().x, event.mouse().y))
+      if (!boxes_[i].Contain(event.mouse().x, event.mouse().y)) {
         continue;
+      }
 
       TakeFocus();
       focused_entry() = i;
@@ -290,19 +316,23 @@ class MenuBase : public ComponentBase {
   }
 
   bool OnMouseWheel(Event event) {
-    if (!box_.Contain(event.mouse().x, event.mouse().y))
+    if (!box_.Contain(event.mouse().x, event.mouse().y)) {
       return false;
+    }
     int old_selected = *selected_;
 
-    if (event.mouse().button == Mouse::WheelUp)
+    if (event.mouse().button == Mouse::WheelUp) {
       (*selected_)--;
-    if (event.mouse().button == Mouse::WheelDown)
+    }
+    if (event.mouse().button == Mouse::WheelDown) {
       (*selected_)++;
+    }
 
     *selected_ = util::clamp(*selected_, 0, size() - 1);
 
-    if (*selected_ != old_selected)
+    if (*selected_ != old_selected) {
       OnChange();
+    }
     return true;
   }
 
@@ -319,12 +349,12 @@ class MenuBase : public ComponentBase {
       animator_foreground_.clear();
 
       for (int i = 0; i < size(); ++i) {
-        animation_background_[i] = 0.f;
-        animation_foreground_[i] = 0.f;
-        animator_background_.emplace_back(&animation_background_[i], 0.f,
+        animation_background_[i] = 0.F;
+        animation_foreground_[i] = 0.F;
+        animator_background_.emplace_back(&animation_background_[i], 0.F,
                                           std::chrono::milliseconds(0),
                                           animation::easing::Linear);
-        animator_foreground_.emplace_back(&animation_foreground_[i], 0.f,
+        animator_foreground_.emplace_back(&animation_foreground_[i], 0.F,
                                           std::chrono::milliseconds(0),
                                           animation::easing::Linear);
       }
@@ -334,7 +364,7 @@ class MenuBase : public ComponentBase {
     for (int i = 0; i < size(); ++i) {
       bool is_focused = (focused_entry() == i) && is_menu_focused;
       bool is_selected = (*selected_ == i);
-      float target = is_selected ? 1.f : is_focused ? 0.5f : 0.f;
+      float target = is_selected ? 1.F : is_focused ? 0.5F : 0.F;  // NOLINT
       if (animator_background_[i].to() != target) {
         animator_background_[i] = animation::Animator(
             &animation_background_[i], target,
@@ -367,8 +397,9 @@ class MenuBase : public ComponentBase {
   }
 
   void UpdateUnderlineTarget() {
-    if (!option_->underline.enabled)
+    if (!option_->underline.enabled) {
       return;
+    }
 
     if (FirstTarget() == animator_first_.to() &&
         SecondTarget() == animator_second_.to()) {
@@ -398,32 +429,36 @@ class MenuBase : public ComponentBase {
 
   bool Focusable() const final { return entries_.size(); }
   int& focused_entry() { return option_->focused_entry(); }
-  int size() const { return entries_.size(); }
-  int FirstTarget() {
-    if (boxes_.size() == 0)
-      return 0;
-    return IsHorizontal() ? boxes_[*selected_].x_min - box_.x_min
-                          : boxes_[*selected_].y_min - box_.y_min;
+  int size() const { return int(entries_.size()); }
+  float FirstTarget() {
+    if (boxes_.empty()) {
+      return 0.F;
+    }
+    int value = IsHorizontal() ? boxes_[*selected_].x_min - box_.x_min
+                               : boxes_[*selected_].y_min - box_.y_min;
+    return float(value);
   }
-  int SecondTarget() {
-    if (boxes_.size() == 0)
-      return 0;
-    return IsHorizontal() ? boxes_[*selected_].x_max - box_.x_min
-                          : boxes_[*selected_].y_max - box_.y_min;
+  float SecondTarget() {
+    if (boxes_.empty()) {
+      return 0.F;
+    }
+    int value = IsHorizontal() ? boxes_[*selected_].x_max - box_.x_min
+                               : boxes_[*selected_].y_max - box_.y_min;
+    return float(value);
   }
 
  protected:
   ConstStringListRef entries_;
-  int* selected_ = 0;
+  int* selected_ = nullptr;
   Ref<MenuOption> option_;
 
   std::vector<Box> boxes_;
   Box box_;
 
-  float first_ = 0.f;
-  float second_ = 0.f;
-  animation::Animator animator_first_ = animation::Animator(&first_, 0.f);
-  animation::Animator animator_second_ = animation::Animator(&second_, 0.f);
+  float first_ = 0.F;
+  float second_ = 0.F;
+  animation::Animator animator_first_ = animation::Animator(&first_, 0.F);
+  animation::Animator animator_second_ = animation::Animator(&second_, 0.F);
 
   std::vector<animation::Animator> animator_background_;
   std::vector<animation::Animator> animator_foreground_;
@@ -519,7 +554,7 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
 
       Element element =
           (option_->transform ? option_->transform : DefaultOptionTransform)  //
-          (std::move(state));
+          (state);
 
       auto focus_management = focused ? select : nothing;
       return element | AnimatedColorStyle() | focus_management | reflect(box_);
@@ -527,9 +562,10 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
 
     void UpdateAnimationTarget() {
       bool focused = Focused();
-      float target = focused ? 1.0f : hovered_ ? 0.5f : 0.0f;
-      if (target == animator_background_.to())
+      float target = focused ? 1.F : hovered_ ? 0.5F : 0.F;  // NOLINT
+      if (target == animator_background_.to()) {
         return;
+      }
       animator_background_ =
           animation::Animator(&animation_background_, target,
                               option_->animated_colors.background.duration,
@@ -560,13 +596,15 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
 
     bool Focusable() const override { return true; }
     bool OnEvent(Event event) override {
-      if (!event.is_mouse())
+      if (!event.is_mouse()) {
         return false;
+      }
 
       hovered_ = box_.Contain(event.mouse().x, event.mouse().y);
 
-      if (!hovered_)
+      if (!hovered_) {
         return false;
+      }
 
       if (event.mouse().button == Mouse::Left &&
           event.mouse().motion == Mouse::Released) {
@@ -587,12 +625,12 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
     Box box_;
     bool hovered_ = false;
 
-    float animation_background_ = 0.f;
-    float animation_foreground_ = 0.f;
+    float animation_background_ = 0.F;
+    float animation_foreground_ = 0.F;
     animation::Animator animator_background_ =
-        animation::Animator(&animation_background_, 0.f);
+        animation::Animator(&animation_background_, 0.F);
     animation::Animator animator_foreground_ =
-        animation::Animator(&animation_foreground_, 0.f);
+        animation::Animator(&animation_foreground_, 0.F);
   };
 
   return Make<Impl>(std::move(label), std::move(option));

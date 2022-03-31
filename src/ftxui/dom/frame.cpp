@@ -16,7 +16,7 @@ namespace ftxui {
 
 class Select : public Node {
  public:
-  Select(Elements children) : Node(std::move(children)) {}
+  explicit Select(Elements children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();

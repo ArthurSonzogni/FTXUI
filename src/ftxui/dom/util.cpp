@@ -36,16 +36,18 @@ Element nothing(Element element) {
 /// auto decorator = bold | blink;
 /// ```
 Decorator operator|(Decorator a, Decorator b) {
-  return compose(a, b);
+  return compose(std::move(a),  //
+                 std::move(b));
 }
 
 /// @brief From a set of element, apply a decorator to every elements.
 /// @return the set of decorated element.
 /// @ingroup dom
-Elements operator|(Elements elements, Decorator decorator) {
+Elements operator|(Elements elements, Decorator decorator) {  // NOLINT
   Elements output;
-  for (auto& it : elements)
+  for (auto& it : elements) {
     output.push_back(std::move(it) | decorator);
+  }
   return output;
 }
 
@@ -62,7 +64,7 @@ Elements operator|(Elements elements, Decorator decorator) {
 /// ```cpp
 /// text("Hello") | bold;
 /// ```
-Element operator|(Element element, Decorator decorator) {
+Element operator|(Element element, Decorator decorator) {  // NOLINT
   return decorator(std::move(element));
 }
 
@@ -78,7 +80,7 @@ Element operator|(Element element, Decorator decorator) {
 /// element |= bold;
 /// ```
 Element& operator|=(Element& e, Decorator d) {
-  e = e | d;
+  e = e | std::move(d);
   return e;
 }
 
@@ -95,7 +97,8 @@ Dimensions Dimension::Fit(Element& e) {
 
   Node::Status status;
   e->Check(&status);
-  while (status.need_iteration && status.iteration < 20) {
+  const int max_iteration = 20;
+  while (status.need_iteration && status.iteration < max_iteration) {
     e->ComputeRequirement();
 
     // Don't give the element more space than it needs:
@@ -107,8 +110,9 @@ Dimensions Dimension::Fit(Element& e) {
     status.iteration++;
     e->Check(&status);
 
-    if (!status.need_iteration)
+    if (!status.need_iteration) {
       break;
+    }
     // Increase the size of the box until it fits, but not more than the with of
     // the terminal emulator:
     box.x_max = std::min(e->requirement().min_x, fullsize.dimx);

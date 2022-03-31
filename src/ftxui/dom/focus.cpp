@@ -29,17 +29,17 @@ Decorator focusPositionRelative(float x, float y) {
   class Impl : public NodeDecorator {
    public:
     Impl(Element child, float x, float y)
-        : NodeDecorator(child), x_(x), y_(y) {}
+        : NodeDecorator(std::move(child)), x_(x), y_(y) {}
 
     void ComputeRequirement() override {
       NodeDecorator::ComputeRequirement();
       requirement_.selection = Requirement::Selection::NORMAL;
 
       Box& box = requirement_.selected_box;
-      box.x_min = requirement_.min_x * x_;
-      box.y_min = requirement_.min_y * y_;
-      box.x_max = requirement_.min_x * x_;
-      box.y_max = requirement_.min_y * y_;
+      box.x_min = (int)((float)requirement_.min_x * x_);
+      box.y_min = (int)((float)requirement_.min_y * y_);
+      box.x_max = (int)((float)requirement_.min_x * x_);
+      box.y_max = (int)((float)requirement_.min_y * y_);
     }
 
    private:
@@ -67,8 +67,8 @@ Decorator focusPositionRelative(float x, float y) {
 Decorator focusPosition(int x, int y) {
   class Impl : public NodeDecorator {
    public:
-    Impl(Element child, float x, float y)
-        : NodeDecorator(child), x_(x), y_(y) {}
+    Impl(Element child, int x, int y)
+        : NodeDecorator(std::move(child)), x_(x), y_(y) {}
 
     void ComputeRequirement() override {
       NodeDecorator::ComputeRequirement();

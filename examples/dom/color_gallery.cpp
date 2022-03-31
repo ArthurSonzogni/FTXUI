@@ -12,7 +12,7 @@
 using namespace ftxui;
 #include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
-int main(int argc, const char* argv[]) {
+int main() {
   // clang-format off
   auto basic_color_display =
     vbox(
@@ -83,14 +83,18 @@ int main(int argc, const char* argv[]) {
   // True color display.
   auto true_color_display = text("TrueColors: 24bits:");
   {
-    int saturation = 255;
+    const int max_value = 255;
+    const int value_increment = 8;
+    const int hue_increment = 6;
+    int saturation = max_value;
     Elements array;
-    for (int value = 0; value < 255; value += 16) {
+    for (int value = 0; value < max_value; value += 2 * value_increment) {
       Elements line;
-      for (int hue = 0; hue < 255; hue += 6) {
-        line.push_back(text("▀")                                    //
-                       | color(Color::HSV(hue, saturation, value))  //
-                       | bgcolor(Color::HSV(hue, saturation, value + 8)));
+      for (int hue = 0; hue < max_value; hue += hue_increment) {
+        line.push_back(
+            text("▀")                                    //
+            | color(Color::HSV(hue, saturation, value))  //
+            | bgcolor(Color::HSV(hue, saturation, value + value_increment)));
       }
       array.push_back(hbox(std::move(line)));
     }

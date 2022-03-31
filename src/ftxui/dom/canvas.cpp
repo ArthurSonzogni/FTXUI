@@ -1,8 +1,8 @@
 #include "ftxui/dom/canvas.hpp"
 
-#include <stdlib.h>   // for abs
 #include <algorithm>  // for max, min
 #include <cstdint>    // for uint8_t
+#include <cstdlib>    // for abs
 #include <map>        // for allocator, map
 #include <memory>     // for make_shared
 #include <utility>    // for move, pair
@@ -42,26 +42,29 @@ namespace {
 // 11100010 10100000 10100000 // dot6
 // 11100010 10100010 10000000 // dot0-2
 
+// NOLINTNEXTLINE
 uint8_t g_map_braille[2][4][2] = {
     {
-        {0b00000000, 0b00000001},  // dot1
-        {0b00000000, 0b00000010},  // dot2
-        {0b00000000, 0b00000100},  // dot3
-        {0b00000001, 0b00000000},  // dot0-1
+        {0b00000000, 0b00000001},  // NOLINT | dot1
+        {0b00000000, 0b00000010},  // NOLINT | dot2
+        {0b00000000, 0b00000100},  // NOLINT | dot3
+        {0b00000001, 0b00000000},  // NOLINT | dot0-1
     },
     {
-        {0b00000000, 0b00001000},  // dot4
-        {0b00000000, 0b00010000},  // dot5
-        {0b00000000, 0b00100000},  // dot6
-        {0b00000010, 0b00000000},  // dot0-2
+        {0b00000000, 0b00001000},  // NOLINT | dot4
+        {0b00000000, 0b00010000},  // NOLINT | dot5
+        {0b00000000, 0b00100000},  // NOLINT | dot6
+        {0b00000010, 0b00000000},  // NOLINT | dot0-2
     },
 };
 
+// NOLINTNEXTLINE
 std::vector<std::string> g_map_block = {
     " ", "▘", "▖", "▌", "▝", "▀", "▞", "▛",
     "▗", "▚", "▄", "▙", "▐", "▜", "▟", "█",
 };
 
+// NOLINTNEXTLINE
 const std::map<std::string, uint8_t> g_map_block_inversed = {
     {" ", 0b0000}, {"▘", 0b0001}, {"▖", 0b0010}, {"▌", 0b0011},
     {"▝", 0b0100}, {"▀", 0b0101}, {"▞", 0b0110}, {"▛", 0b0111},
@@ -69,13 +72,17 @@ const std::map<std::string, uint8_t> g_map_block_inversed = {
     {"▐", 0b1100}, {"▜", 0b1101}, {"▟", 0b1110}, {"█", 0b1111},
 };
 
+constexpr auto nostyle = [](Pixel& /*pixel*/) {};
+
 }  // namespace
 
 /// @brief Constructor.
 /// @param width the width of the canvas. A cell is a 2x8 braille dot.
 /// @param height the height of the canvas. A cell is a 2x8 braille dot.
 Canvas::Canvas(int width, int height)
-    : width_(width), height_(height), storage_(width_ * height_ / 8) {}
+    : width_(width),
+      height_(height),
+      storage_(width_ * height_ / 8 /* NOLINT */) {}
 
 /// @brief Get the content of a cell.
 /// @param x the x coordinate of the cell.
@@ -90,7 +97,7 @@ Pixel Canvas::GetPixel(int x, int y) const {
 /// @param y the y coordinate of the dot.
 /// @param value whether the dot is filled or not.
 void Canvas::DrawPoint(int x, int y, bool value) {
-  DrawPoint(x, y, value, [](Pixel&) {});
+  DrawPoint(x, y, value, [](Pixel& /*pixel*/) {});
 }
 
 /// @brief Draw a braille dot.
@@ -109,42 +116,45 @@ void Canvas::DrawPoint(int x, int y, bool value, const Color& color) {
 /// @param style the style of the cell.
 void Canvas::DrawPoint(int x, int y, bool value, const Stylizer& style) {
   Style(x, y, style);
-  if (value)
+  if (value) {
     DrawPointOn(x, y);
-  else
+  } else {
     DrawPointOff(x, y);
+  }
 }
 
 /// @brief Draw a braille dot.
 /// @param x the x coordinate of the dot.
 /// @param y the y coordinate of the dot.
 void Canvas::DrawPointOn(int x, int y) {
-  if (!IsIn(x, y))
+  if (!IsIn(x, y)) {
     return;
+  }
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 bytes.
     cell.type = CellType::kBraille;
   }
 
-  cell.content.character[1] |= g_map_braille[x % 2][y % 4][0];
-  cell.content.character[2] |= g_map_braille[x % 2][y % 4][1];
+  cell.content.character[1] |= g_map_braille[x % 2][y % 4][0];  // NOLINT
+  cell.content.character[2] |= g_map_braille[x % 2][y % 4][1];  // NOLINT
 }
 
 /// @brief Erase a braille dot.
 /// @param x the x coordinate of the dot.
 /// @param y the y coordinate of the dot.
 void Canvas::DrawPointOff(int x, int y) {
-  if (!IsIn(x, y))
+  if (!IsIn(x, y)) {
     return;
+  }
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 byt
     cell.type = CellType::kBraille;
   }
 
-  cell.content.character[1] &= ~(g_map_braille[x % 2][y % 4][0]);
-  cell.content.character[2] &= ~(g_map_braille[x % 2][y % 4][1]);
+  cell.content.character[1] &= ~(g_map_braille[x % 2][y % 4][0]);  // NOLINT
+  cell.content.character[2] &= ~(g_map_braille[x % 2][y % 4][1]);  // NOLINT
 }
 
 /// @brief Toggle a braille dot. A filled one will be erased, and the other will
@@ -152,16 +162,17 @@ void Canvas::DrawPointOff(int x, int y) {
 /// @param x the x coordinate of the dot.
 /// @param y the y coordinate of the dot.
 void Canvas::DrawPointToggle(int x, int y) {
-  if (!IsIn(x, y))
+  if (!IsIn(x, y)) {
     return;
+  }
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBraille) {
     cell.content.character = "⠀";  // 3 byt
     cell.type = CellType::kBraille;
   }
 
-  cell.content.character[1] ^= g_map_braille[x % 2][y % 4][0];
-  cell.content.character[2] ^= g_map_braille[x % 2][y % 4][1];
+  cell.content.character[1] ^= g_map_braille[x % 2][y % 4][0];  // NOLINT
+  cell.content.character[2] ^= g_map_braille[x % 2][y % 4][1];  // NOLINT
 }
 
 /// @brief Draw a line made of braille dots.
@@ -170,7 +181,7 @@ void Canvas::DrawPointToggle(int x, int y) {
 /// @param x2 the x coordinate of the second dot.
 /// @param y2 the y coordinate of the second dot.
 void Canvas::DrawPointLine(int x1, int y1, int x2, int y2) {
-  DrawPointLine(x1, y1, x2, y2, [](Pixel&) {});
+  DrawPointLine(x1, y1, x2, y2, [](Pixel& /*pixel*/) {});
 }
 
 /// @brief Draw a line made of braille dots.
@@ -201,10 +212,12 @@ void Canvas::DrawPointLine(int x1,
   const int sy = y1 < y2 ? 1 : -1;
   const int length = std::max(dx, dy);
 
-  if (!IsIn(x1, y1) && !IsIn(x2, y2))
+  if (!IsIn(x1, y1) && !IsIn(x2, y2)) {
     return;
-  if (dx + dx > width_ * height_)
+  }
+  if (dx + dx > width_ * height_) {
     return;
+  }
 
   int error = dx - dy;
   for (int i = 0; i < length; ++i) {
@@ -226,7 +239,7 @@ void Canvas::DrawPointLine(int x1,
 /// @param y the y coordinate of the center of the circle.
 /// @param radius the radius of the circle.
 void Canvas::DrawPointCircle(int x, int y, int radius) {
-  DrawPointCircle(x, y, radius, [](Pixel&) {});
+  DrawPointCircle(x, y, radius, [](Pixel& /*pixel*/) {});
 }
 
 /// @brief Draw a circle made of braille dots.
@@ -253,7 +266,7 @@ void Canvas::DrawPointCircle(int x, int y, int radius, const Stylizer& style) {
 /// @param y the y coordinate of the center of the circle.
 /// @param radius the radius of the circle.
 void Canvas::DrawPointCircleFilled(int x, int y, int radius) {
-  DrawPointCircleFilled(x, y, radius, [](Pixel&) {});
+  DrawPointCircleFilled(x, y, radius, [](Pixel& /*pixel*/) {});
 }
 
 /// @brief Draw a filled circle made of braille dots.
@@ -287,7 +300,7 @@ void Canvas::DrawPointCircleFilled(int x,
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
 void Canvas::DrawPointEllipse(int x, int y, int r1, int r2) {
-  DrawPointEllipse(x, y, r1, r2, [](Pixel&) {});
+  DrawPointEllipse(x, y, r1, r2, [](Pixel& /*pixel*/) {});
 }
 
 /// @brief Draw an ellipse made of braille dots.
@@ -351,7 +364,7 @@ void Canvas::DrawPointEllipse(int x1,
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
 void Canvas::DrawPointEllipseFilled(int x1, int y1, int r1, int r2) {
-  DrawPointEllipseFilled(x1, y1, r1, r2, [](Pixel&) {});
+  DrawPointEllipseFilled(x1, y1, r1, r2, [](Pixel& /*pixel*/) {});
 }
 
 /// @brief Draw a filled ellipse made of braille dots.
@@ -395,11 +408,11 @@ void Canvas::DrawPointEllipseFilled(int x1,
     e2 = 2 * err;
     if (e2 >= dx) {
       x++;
-      err += dx += 2 * (long)r2 * r2;
+      err += dx += 2 * (long)r2 * r2;  // NOLINT
     }
     if (e2 <= dy) {
       y++;
-      err += dy += 2 * (long)r1 * r1;
+      err += dy += 2 * (long)r1 * r1;  // NOLINT
     }
   } while (x <= 0);
 
@@ -415,7 +428,7 @@ void Canvas::DrawPointEllipseFilled(int x1,
 /// @param y the y coordinate of the block.
 /// @param value whether the block is filled or not.
 void Canvas::DrawBlock(int x, int y, bool value) {
-  DrawBlock(x, y, value, [](Pixel&) {});
+  DrawBlock(x, y, value, [](Pixel& /*pixel*/) {});
 }
 
 /// @brief Draw a block.
@@ -434,18 +447,20 @@ void Canvas::DrawBlock(int x, int y, bool value, const Color& color) {
 /// @param style the style of the block.
 void Canvas::DrawBlock(int x, int y, bool value, const Stylizer& style) {
   Style(x, y, style);
-  if (value)
+  if (value) {
     DrawBlockOn(x, y);
-  else
+  } else {
     DrawBlockOff(x, y);
+  }
 }
 
 /// @brief Draw a block.
 /// @param x the x coordinate of the block.
 /// @param y the y coordinate of the block.
 void Canvas::DrawBlockOn(int x, int y) {
-  if (!IsIn(x, y))
+  if (!IsIn(x, y)) {
     return;
+  }
   y /= 2;
   Cell& cell = storage_[XY{x / 2, y / 2}];
   if (cell.type != CellType::kBlock) {
@@ -453,9 +468,9 @@ void Canvas::DrawBlockOn(int x, int y) {
     cell.type = CellType::kBlock;
   }
 
-  int bit = (x % 2) * 2 + y % 2;
+  uint8_t bit = (x % 2) * 2 + y % 2;
   uint8_t value = g_map_block_inversed.at(cell.content.character);
-  value |= 1 << bit;
+  value |= 1U << bit;
   cell.content.character = g_map_block[value];
 }
 
@@ -463,8 +478,9 @@ void Canvas::DrawBlockOn(int x, int y) {
 /// @param x the x coordinate of the block.
 /// @param y the y coordinate of the block.
 void Canvas::DrawBlockOff(int x, int y) {
-  if (!IsIn(x, y))
+  if (!IsIn(x, y)) {
     return;
+  }
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
@@ -472,9 +488,9 @@ void Canvas::DrawBlockOff(int x, int y) {
   }
   y /= 2;
 
-  int bit = (y % 2) * 2 + x % 2;
+  uint8_t bit = (y % 2) * 2 + x % 2;
   uint8_t value = g_map_block_inversed.at(cell.content.character);
-  value &= ~(1 << bit);
+  value &= ~(1U << bit);
   cell.content.character = g_map_block[value];
 }
 
@@ -483,8 +499,9 @@ void Canvas::DrawBlockOff(int x, int y) {
 /// @param x the x coordinate of the block.
 /// @param y the y coordinate of the block.
 void Canvas::DrawBlockToggle(int x, int y) {
-  if (!IsIn(x, y))
+  if (!IsIn(x, y)) {
     return;
+  }
   Cell& cell = storage_[XY{x / 2, y / 4}];
   if (cell.type != CellType::kBlock) {
     cell.content.character = " ";
@@ -492,9 +509,9 @@ void Canvas::DrawBlockToggle(int x, int y) {
   }
   y /= 2;
 
-  int bit = (y % 2) * 2 + x % 2;
+  uint8_t bit = (y % 2) * 2 + x % 2;
   uint8_t value = g_map_block_inversed.at(cell.content.character);
-  value ^= 1 << bit;
+  value ^= 1U << bit;
   cell.content.character = g_map_block[value];
 }
 
@@ -504,7 +521,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
 /// @param x2 the x coordinate of the second point of the line.
 /// @param y2 the y coordinate of the second point of the line.
 void Canvas::DrawBlockLine(int x1, int y1, int x2, int y2) {
-  DrawBlockLine(x1, y1, x2, y2, [](Pixel&) {});
+  DrawBlockLine(x1, y1, x2, y2, [](Pixel& /*pixel*/) {});
 }
 
 /// @brief Draw a line made of block characters.
@@ -538,10 +555,12 @@ void Canvas::DrawBlockLine(int x1,
   const int sy = y1 < y2 ? 1 : -1;
   const int length = std::max(dx, dy);
 
-  if (!IsIn(x1, y1) && !IsIn(x2, y2))
+  if (!IsIn(x1, y1) && !IsIn(x2, y2)) {
     return;
-  if (dx + dx > width_ * height_)
+  }
+  if (dx + dx > width_ * height_) {
     return;
+  }
 
   int error = dx - dy;
   for (int i = 0; i < length; ++i) {
@@ -563,7 +582,7 @@ void Canvas::DrawBlockLine(int x1,
 /// @param y the y coordinate of the center of the circle.
 /// @param radius the radius of the circle.
 void Canvas::DrawBlockCircle(int x, int y, int radius) {
-  DrawBlockCircle(x, y, radius, [](Pixel&) {});
+  DrawBlockCircle(x, y, radius, nostyle);
 }
 
 /// @brief Draw a circle made of block characters.
@@ -590,7 +609,7 @@ void Canvas::DrawBlockCircle(int x, int y, int radius, const Stylizer& style) {
 /// @param y the y coordinate of the center of the circle.
 /// @param radius the radius of the circle.
 void Canvas::DrawBlockCircleFilled(int x, int y, int radius) {
-  DrawBlockCircleFilled(x, y, radius, [](Pixel&) {});
+  DrawBlockCircleFilled(x, y, radius, nostyle);
 }
 
 /// @brief Draw a filled circle made of block characters.
@@ -624,7 +643,7 @@ void Canvas::DrawBlockCircleFilled(int x,
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
 void Canvas::DrawBlockEllipse(int x, int y, int r1, int r2) {
-  DrawBlockEllipse(x, y, r1, r2, [](Pixel&) {});
+  DrawBlockEllipse(x, y, r1, r2, nostyle);
 }
 
 /// @brief Draw an ellipse made of block characters.
@@ -690,7 +709,7 @@ void Canvas::DrawBlockEllipse(int x1,
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
 void Canvas::DrawBlockEllipseFilled(int x, int y, int r1, int r2) {
-  DrawBlockEllipseFilled(x, y, r1, r2, [](Pixel&) {});
+  DrawBlockEllipseFilled(x, y, r1, r2, nostyle);
 }
 
 /// @brief Draw a filled ellipse made of block characters.
@@ -756,7 +775,7 @@ void Canvas::DrawBlockEllipseFilled(int x1,
 /// @param y the y coordinate of the text.
 /// @param value the text to draw.
 void Canvas::DrawText(int x, int y, const std::string& value) {
-  DrawText(x, y, value, [](Pixel&) {});
+  DrawText(x, y, value, nostyle);
 }
 
 /// @brief Draw a piece of text.
@@ -781,8 +800,9 @@ void Canvas::DrawText(int x,
                       const std::string& value,
                       const Stylizer& style) {
   for (const auto& it : Utf8ToGlyphs(value)) {
-    if (!IsIn(x, y))
+    if (!IsIn(x, y)) {
       continue;
+    }
     Cell& cell = storage_[XY{x / 2, y / 4}];
     cell.type = CellType::kText;
     cell.content.character = it;
@@ -794,15 +814,16 @@ void Canvas::DrawText(int x,
 /// @brief Modify a pixel at a given location.
 /// @param style a function that modifies the pixel.
 void Canvas::Style(int x, int y, const Stylizer& style) {
-  if (IsIn(x, y))
+  if (IsIn(x, y)) {
     style(storage_[XY{x / 2, y / 4}].content);
+  }
 }
 
 namespace {
 
 class CanvasNodeBase : public Node {
  public:
-  CanvasNodeBase() {}
+  CanvasNodeBase() = default;
 
   void Render(Screen& screen) override {
     const Canvas& c = canvas();
@@ -824,7 +845,7 @@ class CanvasNodeBase : public Node {
 Element canvas(ConstRef<Canvas> canvas) {
   class Impl : public CanvasNodeBase {
    public:
-    Impl(ConstRef<Canvas> canvas) : canvas_(canvas) {
+    explicit Impl(ConstRef<Canvas> canvas) : canvas_(std::move(canvas)) {
       requirement_.min_x = (canvas_->width() + 1) / 2;
       requirement_.min_y = (canvas_->height() + 3) / 4;
     }
@@ -869,7 +890,8 @@ Element canvas(int width, int height, std::function<void(Canvas&)> fn) {
 /// @brief Produce an element drawing a canvas.
 /// @param fn a function drawing the canvas.
 Element canvas(std::function<void(Canvas&)> fn) {
-  return canvas(12, 12, std::move(fn));
+  const int default_dim = 12;
+  return canvas(default_dim, default_dim, std::move(fn));
 }
 
 }  // namespace ftxui

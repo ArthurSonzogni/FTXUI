@@ -1,17 +1,16 @@
-#include <iostream>
-#include <algorithm>  // for max, min
-#include <memory>     // for allocator, make_shared
-#include <string>     // for string
+#include <memory>  // for allocator, make_shared
+#include <string>  // for string
 
-#include "ftxui/dom/elements.hpp"     // for Element, gauge
-#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/elements.hpp"  // for GaugeDirection, Element, GaugeDirection::Down, GaugeDirection::Left, GaugeDirection::Right, GaugeDirection::Up, gauge, gaugeDirection, gaugeDown, gaugeLeft, gaugeRight, gaugeUp
+#include "ftxui/dom/node.hpp"      // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/screen/screen.hpp"    // for Screen, Pixel
 
 namespace ftxui {
 
-static std::string charset_horizontal[11] = {
+// NOLINTNEXTLINE
+static const std::string charset_horizontal[11] = {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     // Microsoft's terminals often use fonts not handling the 8 unicode
     // characters for representing the whole gauge. Fallback with less.
@@ -23,7 +22,8 @@ static std::string charset_horizontal[11] = {
     // int(9 * (limit - limit_int) = 9
     "█"};
 
-static std::string charset_vertical[10] = {
+// NOLINTNEXTLINE
+static const std::string charset_vertical[10] = {
     "█",
     "▇",
     "▆",
@@ -43,10 +43,12 @@ class Gauge : public Node {
   Gauge(float progress, GaugeDirection direction)
       : progress_(progress), direction_(direction) {
     // This handle NAN correctly:
-    if (!(progress_ > 0.f))
-      progress_ = 0.f;
-    if (!(progress_ < 1.f))
-      progress_ = 1.f;
+    if (!(progress_ > 0.F)) {
+      progress_ = 0.F;
+    }
+    if (!(progress_ < 1.F)) {
+      progress_ = 1.F;
+    }
   }
 
   void ComputeRequirement() override {
@@ -89,49 +91,61 @@ class Gauge : public Node {
 
   void RenderHorizontal(Screen& screen, bool invert) {
     int y = box_.y_min;
-    if (y > box_.y_max)
+    if (y > box_.y_max) {
       return;
+    }
 
     // Draw the progress bar horizontally.
     {
-      float progress = invert ? 1.f - progress_ : progress_;
-      float limit = box_.x_min + progress * (box_.x_max - box_.x_min + 1);
-      int limit_int = limit;
+      float progress = invert ? 1.F - progress_ : progress_;
+      float limit =
+          (float)box_.x_min + progress * (float)(box_.x_max - box_.x_min + 1);
+      int limit_int = (int)limit;
       int x = box_.x_min;
-      while (x < limit_int)
-        screen.at(x++, y) = charset_horizontal[9];
+      while (x < limit_int) {
+        screen.at(x++, y) = charset_horizontal[9];  // NOLINT
+      }
+      // NOLINTNEXTLINE
       screen.at(x++, y) = charset_horizontal[int(9 * (limit - limit_int))];
-      while (x <= box_.x_max)
+      while (x <= box_.x_max) {
         screen.at(x++, y) = charset_horizontal[0];
+      }
     }
 
     if (invert) {
-      for (int x = box_.x_min; x <= box_.x_max; x++)
+      for (int x = box_.x_min; x <= box_.x_max; x++) {
         screen.PixelAt(x, y).inverted ^= true;
+      }
     }
   }
 
   void RenderVertical(Screen& screen, bool invert) {
     int x = box_.x_min;
-    if (x > box_.x_max)
+    if (x > box_.x_max) {
       return;
+    }
 
     // Draw the progress bar vertically:
     {
-      float progress = invert ? progress_ : 1.f - progress_;
-      float limit = box_.y_min + progress * (box_.y_max - box_.y_min + 1);
-      int limit_int = limit;
+      float progress = invert ? progress_ : 1.F - progress_;
+      float limit =
+          (float)box_.y_min + progress * (float)(box_.y_max - box_.y_min + 1);
+      int limit_int = (int)limit;
       int y = box_.y_min;
-      while (y < limit_int)
-        screen.at(x, y++) = charset_vertical[8];
+      while (y < limit_int) {
+        screen.at(x, y++) = charset_vertical[8];  // NOLINT
+      }
+      // NOLINTNEXTLINE
       screen.at(x, y++) = charset_vertical[int(8 * (limit - limit_int))];
-      while (y <= box_.y_max)
+      while (y <= box_.y_max) {
         screen.at(x, y++) = charset_vertical[0];
+      }
     }
 
     if (invert) {
-      for (int y = box_.y_min; y <= box_.y_max; y++)
+      for (int y = box_.y_min; y <= box_.y_max; y++) {
         screen.PixelAt(x, y).inverted ^= true;
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 #include <algorithm>  // for min
 #include <memory>     // for make_shared
 #include <string>     // for string, wstring
+#include <utility>    // for move
 #include <vector>     // for vector
 
 #include "ftxui/dom/deprecated.hpp"   // for text, vtext
@@ -17,7 +18,7 @@ using ftxui::Screen;
 
 class Text : public Node {
  public:
-  Text(std::string text) : text_(text) {}
+  explicit Text(std::string text) : text_(std::move(text)) {}
 
   void ComputeRequirement() override {
     requirement_.min_x = string_width(text_);
@@ -27,11 +28,13 @@ class Text : public Node {
   void Render(Screen& screen) override {
     int x = box_.x_min;
     int y = box_.y_min;
-    if (y > box_.y_max)
+    if (y > box_.y_max) {
       return;
+    }
     for (const auto& cell : Utf8ToGlyphs(text_)) {
-      if (x > box_.x_max)
+      if (x > box_.x_max) {
         return;
+      }
       screen.PixelAt(x, y).character = cell;
       ++x;
     }
@@ -43,8 +46,8 @@ class Text : public Node {
 
 class VText : public Node {
  public:
-  VText(std::string text)
-      : text_(text), width_{std::min(string_width(text_), 1)} {}
+  explicit VText(std::string text)
+      : text_(std::move(text)), width_{std::min(string_width(text_), 1)} {}
 
   void ComputeRequirement() override {
     requirement_.min_x = width_;
@@ -54,11 +57,13 @@ class VText : public Node {
   void Render(Screen& screen) override {
     int x = box_.x_min;
     int y = box_.y_min;
-    if (x + width_ - 1 > box_.x_max)
+    if (x + width_ - 1 > box_.x_max) {
       return;
+    }
     for (const auto& it : Utf8ToGlyphs(text_)) {
-      if (y > box_.y_max)
+      if (y > box_.y_max) {
         return;
+      }
       screen.PixelAt(x, y).character = it;
       y += 1;
     }
@@ -85,7 +90,7 @@ class VText : public Node {
 /// Hello world!
 /// ```
 Element text(std::string text) {
-  return std::make_shared<Text>(text);
+  return std::make_shared<Text>(std::move(text));
 }
 
 /// @brief Display a piece of unicode text.
@@ -103,7 +108,7 @@ Element text(std::string text) {
 /// ```bash
 /// Hello world!
 /// ```
-Element text(std::wstring text) {
+Element text(std::wstring text) {  // NOLINT
   return std::make_shared<Text>(to_string(text));
 }
 
@@ -134,7 +139,7 @@ Element text(std::wstring text) {
 /// !
 /// ```
 Element vtext(std::string text) {
-  return std::make_shared<VText>(text);
+  return std::make_shared<VText>(std::move(text));
 }
 
 /// @brief Display a piece unicode text vertically.
@@ -163,7 +168,7 @@ Element vtext(std::string text) {
 /// d
 /// !
 /// ```
-Element vtext(std::wstring text) {
+Element vtext(std::wstring text) {  // NOLINT
   return std::make_shared<VText>(to_string(text));
 }
 

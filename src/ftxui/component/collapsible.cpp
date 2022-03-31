@@ -1,10 +1,12 @@
-#include <string>   // for string
-#include <utility>  // for move
+#include <functional>  // for function
+#include <memory>      // for shared_ptr, allocator
+#include <utility>     // for move
 
 #include "ftxui/component/component.hpp"  // for Checkbox, Maybe, Make, Vertical, Collapsible
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
-#include "ftxui/component/component_options.hpp"  // for CheckboxOption
-#include "ftxui/util/ref.hpp"                     // for Ref, ConstStringRef
+#include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
+#include "ftxui/dom/elements.hpp"  // for operator|=, text, hbox, Element, bold, inverted
+#include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef
 
 namespace ftxui {
 
@@ -28,27 +30,28 @@ namespace ftxui {
 Component Collapsible(ConstStringRef label, Component child, Ref<bool> show) {
   class Impl : public ComponentBase {
    public:
-    Impl(ConstStringRef label, Component child, Ref<bool> show)
-        : show_(std::move(show)) {
+    Impl(ConstStringRef label, Component child, Ref<bool> show) : show_(show) {
       CheckboxOption opt;
-      opt.transform = [](EntryState s) {
-        auto prefix = text(s.state ? "▼ " : "▶ ");
+      opt.transform = [](EntryState s) {            // NOLINT
+        auto prefix = text(s.state ? "▼ " : "▶ ");  // NOLINT
         auto t = text(s.label);
-        if (s.active)
+        if (s.active) {
           t |= bold;
-        if (s.focused)
+        }
+        if (s.focused) {
           t |= inverted;
+        }
         return hbox({prefix, t});
       };
       Add(Container::Vertical({
-          Checkbox(label, show_.operator->(), opt),
+          Checkbox(std::move(label), show_.operator->(), opt),
           Maybe(std::move(child), show_.operator->()),
       }));
     }
     Ref<bool> show_;
   };
 
-  return Make<Impl>(label, std::move(child), std::move(show));
+  return Make<Impl>(std::move(label), std::move(child), show);
 }
 
 }  // namespace ftxui

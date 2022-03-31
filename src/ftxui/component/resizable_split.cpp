@@ -15,16 +15,19 @@ namespace {
 class ResizableSplitLeftBase : public ComponentBase {
  public:
   ResizableSplitLeftBase(Component main, Component child, int* main_size)
-      : main_(main), child_(child), main_size_(main_size) {
+      : main_(std::move(main)),
+        child_(std::move(child)),
+        main_size_(main_size) {
     Add(Container::Horizontal({
-        main,
-        child,
+        main_,
+        child_,
     }));
   }
 
   bool OnEvent(Event event) final {
-    if (event.is_mouse())
+    if (event.is_mouse()) {
       return OnMouseEvent(std::move(event));
+    }
     return ComponentBase::OnEvent(std::move(event));
   }
 
@@ -71,16 +74,19 @@ class ResizableSplitLeftBase : public ComponentBase {
 class ResizableSplitRightBase : public ComponentBase {
  public:
   ResizableSplitRightBase(Component main, Component child, int* main_size)
-      : main_(main), child_(child), main_size_(main_size) {
+      : main_(std::move(main)),
+        child_(std::move(child)),
+        main_size_(main_size) {
     Add(Container::Horizontal({
-        child,
-        main,
+        child_,
+        main_,
     }));
   }
 
   bool OnEvent(Event event) final {
-    if (event.is_mouse())
+    if (event.is_mouse()) {
       return OnMouseEvent(std::move(event));
+    }
     return ComponentBase::OnEvent(std::move(event));
   }
 
@@ -127,16 +133,19 @@ class ResizableSplitRightBase : public ComponentBase {
 class ResizableSplitTopBase : public ComponentBase {
  public:
   ResizableSplitTopBase(Component main, Component child, int* main_size)
-      : main_(main), child_(child), main_size_(main_size) {
+      : main_(std::move(main)),
+        child_(std::move(child)),
+        main_size_(main_size) {
     Add(Container::Vertical({
-        main,
-        child,
+        main_,
+        child_,
     }));
   }
 
   bool OnEvent(Event event) final {
-    if (event.is_mouse())
+    if (event.is_mouse()) {
       return OnMouseEvent(std::move(event));
+    }
     return ComponentBase::OnEvent(std::move(event));
   }
 
@@ -183,16 +192,19 @@ class ResizableSplitTopBase : public ComponentBase {
 class ResizableSplitBottomBase : public ComponentBase {
  public:
   ResizableSplitBottomBase(Component main, Component child, int* main_size)
-      : main_(main), child_(child), main_size_(main_size) {
+      : main_(std::move(main)),
+        child_(std::move(child)),
+        main_size_(main_size) {
     Add(Container::Vertical({
-        child,
-        main,
+        child_,
+        main_,
     }));
   }
 
   bool OnEvent(Event event) final {
-    if (event.is_mouse())
+    if (event.is_mouse()) {
       return OnMouseEvent(std::move(event));
+    }
     return ComponentBase::OnEvent(std::move(event));
   }
 
