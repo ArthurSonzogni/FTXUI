@@ -2,6 +2,7 @@ set(DIRECTORY_LIB component)
 
 example(button)
 example(button_animated)
+example(button_in_frame)
 example(button_style)
 example(canvas_animated)
 example(checkbox)

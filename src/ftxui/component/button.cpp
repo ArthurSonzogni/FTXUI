@@ -69,22 +69,27 @@ Component Button(ConstStringRef label,
 
     // Component implementation:
     Element Render() override {
-      float target = Focused() ? 1.F : 0.F;  // NOLINT
+      const bool active = Active();
+      const bool focused = Focused();
+      const bool focused_or_hover = focused || mouse_hover_;
+
+      float target = focused_or_hover ? 1.F : 0.F;  // NOLINT
       if (target != animator_background_.to()) {
         SetAnimationTarget(target);
       }
 
+      auto focus_management = focused ? focus : active ? select : nothing;
       EntryState state = {
           *label_,
           false,
-          Active(),
-          Focused(),
+          active,
+          focused_or_hover,
       };
 
       auto element =
           (option_->transform ? option_->transform : DefaultTransform)  //
           (state);
-      return element | AnimatedColorStyle() | reflect(box_);
+      return element | AnimatedColorStyle() | focus_management | reflect(box_);
     }
 
     Decorator AnimatedColorStyle() {
@@ -151,10 +156,9 @@ Component Button(ConstStringRef label,
         return false;
       }
 
-      TakeFocus();
-
       if (event.mouse().button == Mouse::Left &&
           event.mouse().motion == Mouse::Pressed) {
+        TakeFocus();
         OnClick();
         return true;
       }

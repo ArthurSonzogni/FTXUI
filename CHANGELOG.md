@@ -21,6 +21,7 @@ current (development)
 - `Menu` can now be used in the 4 directions, using `MenuOption.direction`.
 - `Menu` can display an animated underline, using
   `MenuOption.underline.enabled`.
+- `Button` is now taking the focus in frame.
 - **breaking** All the options are now using a transform function.
 - **breaking** The `Toggle` component is now implemented using `Menu`.
 - **bugfix** Container::Tab implements `Focusable()`.
