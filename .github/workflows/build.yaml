@@ -19,54 +19,93 @@ jobs:
         include:
           - name: Linux GCC
             os: ubuntu-latest
-            compiler: g++-9
-            test: true
+            compiler: gcc
+            gcov_executable: gcov
 
           - name: Linux Clang
             os: ubuntu-latest
-            compiler: clang++
-            test: true
+            compiler: llvm
+            gcov_executable: "llvm-cov gcov"
 
           - name: MacOS clang
             os: macos-latest
-            compiler: clang++
-            test: true
+            compiler: llvm
+            gcov_executable: "llvm-cov gcov"
 
           - name: Windows MSVC
             os: windows-latest
             compiler: cl
-            test: false
 
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v2
 
-      - name: "Enable MSVC command prompt"
-        if: matrix.os == 'windows-latest'
-        uses: ilammy/msvc-dev-cmd@v1
+      - name: "Setup Cpp"
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          cmake: true
+          ninja: true
+          clangtidy: true
+          cppcheck: false
+          gcovr: true
+          opencppcoverage: true
 
-      - name: "Install cmake"
-        uses: lukka/get-cmake@latest
-
-      - name: "Build debug mode"
+      # make sure coverage is only enabled for Debug builds, since it sets -O0
+      # to make sure coverage has meaningful results
+      - name: "Configure CMake"
         run: >
-          mkdir build;
-          cd build;
-          cmake ..
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }}
-          -DFTXUI_BUILD_DOCS=OFF
-          -DFTXUI_BUILD_EXAMPLES=ON
-          -DFTXUI_BUILD_TESTS=ON
-          -DFTXUI_BUILD_TESTS_FUZZER=OFF
-          -DFTXUI_ENABLE_INSTALL=ON ;
-          cmake --build . --config Debug;
+          cmake -S .
+          -B ./build
+          -DCMAKE_BUILD_TYPE:STRING=Debug
+          -DFTXUI_ENABLE_COVERAGE:BOOL=ON
+          -DFTXUI_BUILD_DOCS:BOOL=OFF
+          -DFTXUI_BUILD_EXAMPLES:BOOL=ON
+          -DFTXUI_BUILD_TESTS:BOOL=ON
+          -DFTXUI_BUILD_TESTS_FUZZER:BOOL=OFF
+          -DFTXUI_ENABLE_INSTALL:BOOL=ON ;
 
-      - name: "Run tests"
-        if: matrix.test
+      - name: "Build"
         run: >
-          cd build;
-          ./tests
+          cmake
+          --build ./build
+
+      - name: Unix - Test and coverage
+        if: runner.os != 'Windows'
+        working-directory: ./build
+        run: >
+          ctest -C Debug;
+          gcovr
+          -j ${{env.nproc}}
+          --delete
+          --root ../
+          --exclude "../examples"
+          --exclude ".*google.*"
+          --print-summary
+          --xml-pretty
+          --xml
+          coverage.xml
+          .
+          --gcov-executable '${{ matrix.gcov_executable }}';
+
+      - name: Windows - Test and coverage
+        if: runner.os == 'Windows'
+        working-directory: ./build
+        run: >
+          OpenCppCoverage.exe
+          --export_type cobertura:coverage.xml
+          --cover_children
+          --
+          ctest -C Debug
+
+      - name: Publish to codecov
+        uses: codecov/codecov-action@v2
+        with:
+          flags: ${{ runner.os }}
+          name: ${{ runner.os }}-coverage
+          files: ./build/coverage.xml
 
   # Create a release on new v* tags
   release:
@@ -117,7 +156,7 @@ jobs:
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
           -DFTXUI_ENABLE_INSTALL=ON;
-          cmake --build . --config Release --target package;
+          cmake --build . --target package;
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}

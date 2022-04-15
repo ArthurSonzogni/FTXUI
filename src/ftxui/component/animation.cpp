@@ -189,8 +189,8 @@ float ElasticIn(float p) {
 // Modeled after the damped sine wave y = sin(-13pi/2*(x + 1))*pow(2, -10x) +
 // 1
 float ElasticOut(float p) {
-  return std::sin(-13.F * kPi2 * (p + 1)) * std::pow(2.F, -10.F * p) +
-         1;  // NOLINT
+  // NOLINTNEXTLINE
+  return std::sin(-13.F * kPi2 * (p + 1)) * std::pow(2.F, -10.F * p) + 1;
 }
 
 // Modeled after the piecewise exponentially-damped sine wave:

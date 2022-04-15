@@ -55,6 +55,7 @@ Element DefaultTransform(EntryState params) {  // NOLINT
 /// │Click to quit│
 /// └─────────────┘
 /// ```
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 Component Button(ConstStringRef label,
                  std::function<void()> on_click,
                  Ref<ButtonOption> option) {

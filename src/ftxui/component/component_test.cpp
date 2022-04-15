@@ -7,7 +7,7 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, SuiteApiResolver, TEST, TestFactoryImpl
 
-using namespace ftxui;
+namespace ftxui {
 
 namespace {
 Component Make() {
@@ -171,6 +171,8 @@ TEST(ComponentTest, NonFocusableAreNotFocused) {
   EXPECT_EQ(root->ActiveChild(), nullptr);
   EXPECT_EQ(child->ActiveChild(), nullptr);
 }
+
+}  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

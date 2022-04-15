@@ -12,7 +12,7 @@
 #include "ftxui/util/ref.hpp"         // for Ref
 #include "gtest/gtest_pred_impl.h"    // for EXPECT_EQ, Test, TEST
 
-using namespace ftxui;
+namespace ftxui {
 
 TEST(RadioboxTest, Navigation) {
   int selected = 0;
@@ -144,6 +144,8 @@ TEST(RadioboxTest, RemoveEntries) {
   EXPECT_EQ(selected, 1);
   EXPECT_EQ(focused_entry, 1);
 }
+
+}  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

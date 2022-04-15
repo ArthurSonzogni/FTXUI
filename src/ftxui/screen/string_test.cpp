@@ -5,7 +5,7 @@
 #include "ftxui/screen/string.hpp"
 #include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, TEST
 
-using namespace ftxui;
+namespace ftxui {
 
 TEST(StringTest, StringWidth) {
   // Basic:
@@ -120,6 +120,7 @@ TEST(StringTest, CellToGlyphIndex) {
   EXPECT_EQ(combining[2], 2);
 }
 
+}
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.

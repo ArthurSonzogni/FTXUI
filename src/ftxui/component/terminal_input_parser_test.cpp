@@ -9,7 +9,7 @@
 #include "ftxui/component/terminal_input_parser.hpp"
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ, EXPECT_TRUE, EXPECT_FALSE, TEST
 
-using namespace ftxui;
+namespace ftxui {
 
 // Test char |c| to are trivially converted into |Event::Character(c)|.
 TEST(Event, Character) {
@@ -231,6 +231,8 @@ TEST(Event, UTF8) {
     EXPECT_FALSE(event_receiver->Receive(&received));
   }
 }
+
+}  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

@@ -7,7 +7,7 @@
 #include "ftxui/dom/elements.hpp"   // for text, Element
 #include "gtest/gtest_pred_impl.h"  // for Test, TEST, EXPECT_EQ
 
-using namespace ftxui;
+namespace ftxui {
 
 namespace {
 bool TestSignal(int signal) {
@@ -46,6 +46,8 @@ TEST(ScreenInteractive, Signal_SIGABRT) {
 TEST(ScreenInteractive, Signal_SIGFPE) {
   TestSignal(SIGFPE);
 }
+
+}  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

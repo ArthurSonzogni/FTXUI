@@ -8,14 +8,16 @@
 #include "ftxui/component/event.hpp"  // for Event, Event::Tab, Event::TabReverse, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
 
-using namespace ftxui;
+namespace ftxui {
 
+namespace {
 Component Focusable() {
   return Button("", [] {});
 }
 Component NonFocusable() {
   return Container::Horizontal({});
 }
+}  // namespace
 
 TEST(ContainerTest, HorizontalEvent) {
   auto container = Container::Horizontal({});
@@ -332,6 +334,8 @@ TEST(ContainerTest, TabFocusable) {
   EXPECT_FALSE(c->Focusable());
   EXPECT_FALSE(c->Focused());
 }
+
+}  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

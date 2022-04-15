@@ -8,7 +8,7 @@
 #include "ftxui/screen/screen.hpp"  // for Screen
 #include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
-using namespace ftxui;
+namespace ftxui {
 
 TEST(TextTest, ScreenHeightSmaller) {
   auto element = text("test");
@@ -102,6 +102,8 @@ TEST(TextTest, CombiningCharacters) {
   Render(screen, element);
   EXPECT_EQ(t, screen.ToString());
 }
+
+}  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
