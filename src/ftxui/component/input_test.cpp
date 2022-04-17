@@ -15,7 +15,7 @@
 #include "ftxui/util/ref.hpp"       // for Ref
 #include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
-using namespace ftxui;
+namespace ftxui {
 
 TEST(InputTest, Init) {
   std::string content;
@@ -371,6 +371,8 @@ TEST(InputTest, MouseClickComplex) {
   render();
   EXPECT_EQ(option.cursor_position(), 4u);
 }
+
+}  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

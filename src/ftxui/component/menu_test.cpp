@@ -12,7 +12,7 @@
 #include "ftxui/util/ref.hpp"         // for Ref
 #include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
-using namespace ftxui;
+namespace ftxui {
 
 TEST(MenuTest, RemoveEntries) {
   int focused_entry = 0;
@@ -42,6 +42,8 @@ TEST(MenuTest, RemoveEntries) {
   EXPECT_EQ(selected, 1);
   EXPECT_EQ(focused_entry, 1);
 }
+
+}  // namespace ftxui
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

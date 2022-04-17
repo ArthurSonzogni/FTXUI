@@ -11,6 +11,7 @@ option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 option(FTXUI_CLANG_TIDY "Execute clang-tidy" OFF)
+option(FTXUI_ENABLE_COVERAGE "Execute code coverage" OFF)
 
 set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
 terminal used will be one of Microsoft and use a set of reasonnable fallback \
@@ -138,6 +139,11 @@ include(cmake/ftxui_set_options.cmake)
 ftxui_set_options(screen)
 ftxui_set_options(dom)
 ftxui_set_options(component)
+
+include(cmake/ftxui_coverage.cmake)
+ftxui_check_coverage(screen)
+ftxui_check_coverage(dom)
+ftxui_check_coverage(component)
 
 if (FTXUI_BUILD_TESTS AND ${CMAKE_VERSION} VERSION_GREATER "3.11.4")
   include(cmake/ftxui_test.cmake)

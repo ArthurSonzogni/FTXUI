@@ -6,7 +6,7 @@
 #include "ftxui/component/receiver.hpp"
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ
 
-using namespace ftxui;
+namespace ftxui {
 
 TEST(Receiver, Basic) {
   auto receiver = MakeReceiver<char>();
@@ -74,6 +74,8 @@ TEST(Receiver, BasicWithThread) {
   t12.join();
   t23.join();
 }
+
+}  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

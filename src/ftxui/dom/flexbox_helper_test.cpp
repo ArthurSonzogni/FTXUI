@@ -5,8 +5,7 @@
 #include "ftxui/dom/flexbox_helper.hpp"
 #include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, TEST
 
-using namespace ftxui;
-using namespace ftxui;
+namespace ftxui {
 
 TEST(FlexboxHelperTest, BasicRow) {
   flexbox_helper::Block block_10_5;
@@ -227,6 +226,8 @@ TEST(FlexboxHelperTest, BasicColumnInversed) {
   EXPECT_EQ(g.blocks[4].dim_x, 10);
   EXPECT_EQ(g.blocks[4].dim_y, 5);
 }
+
+}  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
