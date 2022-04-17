@@ -19,6 +19,10 @@
 namespace ftxui {
 
 namespace {
+
+bool g_cached = false;
+Terminal::Color g_cached_supported_color;
+
 Dimensions& FallbackSize() {
 #if defined(__EMSCRIPTEN__)
   // This dimension was chosen arbitrarily to be able to display:
@@ -76,7 +80,8 @@ Terminal::Color ComputeColorSupport() {
 
 }  // namespace
 
-Dimensions Terminal::Size() {
+namespace Terminal {
+Dimensions Size() {
 #if defined(__EMSCRIPTEN__)
   // This dimension was chosen arbitrarily to be able to display:
   // https://arthursonzogni.com/FTXUI/examples
@@ -106,20 +111,24 @@ Dimensions Terminal::Size() {
 
 /// @brief Override terminal size in case auto-detection fails
 /// @param fallbackSize Terminal dimensions to fallback to
-void Terminal::SetFallbackSize(const Dimensions& fallbackSize) {
+void SetFallbackSize(const Dimensions& fallbackSize) {
   FallbackSize() = fallbackSize;
 }
 
-Terminal::Color Terminal::ColorSupport() {
-  static bool cached = false;
-  static Terminal::Color cached_supported_color;
-  if (!cached) {
-    cached = true;
-    cached_supported_color = ComputeColorSupport();
+Color ColorSupport() {
+  if (!g_cached) {
+    g_cached = true;
+    g_cached_supported_color = ComputeColorSupport();
   }
-  return cached_supported_color;
+  return g_cached_supported_color;
 }
 
+void SetColorSupport(Color color) {
+  g_cached = true;
+  g_cached_supported_color = color;
+}
+
+}  // namespace Terminal
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
