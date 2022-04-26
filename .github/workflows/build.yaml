@@ -77,7 +77,7 @@ jobs:
         if: runner.os != 'Windows'
         working-directory: ./build
         run: >
-          ctest -C Debug;
+          ctest -C Debug --rerun-failed --output-on-failure;
           gcovr
           -j ${{env.nproc}}
           --delete
@@ -99,7 +99,7 @@ jobs:
           --export_type cobertura:coverage.xml
           --cover_children
           --
-          ctest -C Debug
+          ctest -C Debug --rerun-failed --output-on-failure;
 
       - name: Publish to codecov
         uses: codecov/codecov-action@v2

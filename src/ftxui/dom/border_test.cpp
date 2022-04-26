@@ -89,6 +89,16 @@ TEST(BorderTest, WithPixel) {
             "ooooo");
 }
 
+TEST(BorderTest, Window) {
+  auto element = window(text("title"), text("content"));
+  Screen screen(10, 3);
+  Render(screen, element);
+  EXPECT_EQ(screen.ToString(),
+            "╭title───╮\r\n"
+            "│content │\r\n"
+            "╰────────╯");
+}
+
 } // namespace ftxui
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.

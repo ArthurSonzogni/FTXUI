@@ -40,6 +40,48 @@ TEST(ColorTest, FallbackTo16) {
   EXPECT_EQ(Color::RGB(1,2,3).Print(false), "30");
 }
 
+TEST(ColorTest, Litterals) {
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+  using namespace ftxui::literals;
+  EXPECT_EQ(Color(0xABCDEF_rgb).Print(false), "38;2;171;205;239");
+}
+
+TEST(ColorTest, Interpolate) {
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+
+  EXPECT_EQ(Color::Interpolate(0.3f, Color(), Color()).Print(false), "39");
+  EXPECT_EQ(Color::Interpolate(0.3f, Color::Red, Color()).Print(false), "31");
+  EXPECT_EQ(Color::Interpolate(0.7f, Color::Red, Color()).Print(false), "39");
+  EXPECT_EQ(Color::Interpolate(0.3f, Color(), Color::Red).Print(false), "39");
+  EXPECT_EQ(Color::Interpolate(0.7f, Color(), Color::Red).Print(false), "31");
+
+  EXPECT_EQ(Color::Interpolate(0.3f,                       //
+                               Color::RGB(1, 2, 3),        //
+                               Color::RGB(244, 244, 123))  //
+                .Print(false),
+            "38;2;73;74;39");
+  EXPECT_EQ(Color::Interpolate(0.7f,                       //
+                               Color::RGB(1, 2, 3),        //
+                               Color::RGB(244, 244, 123))  //
+                .Print(false),
+            "38;2;171;171;87");
+  EXPECT_EQ(Color::Interpolate(0.7f,                       //
+                               Color(Color::Red),          //
+                               Color::RGB(244, 244, 123))  //
+                .Print(false),
+            "38;2;209;170;86");
+  EXPECT_EQ(Color::Interpolate(0.7f,                       //
+                               Color::RGB(244, 244, 123),  //
+                               Color(Color::Plum1))        //
+                .Print(false),
+            "38;2;251;195;215");
+}
+
+TEST(ColorTest, HSV) {
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+  EXPECT_EQ(Color::HSV(0, 255, 255).Print(false), "38;2;255;0;0");
+}
+
 }  // namespace ftxui
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.

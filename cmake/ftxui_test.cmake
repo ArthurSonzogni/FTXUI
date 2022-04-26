@@ -35,6 +35,7 @@ add_executable(tests
   src/ftxui/dom/blink_test.cpp
   src/ftxui/dom/bold_test.cpp
   src/ftxui/dom/border_test.cpp
+  src/ftxui/dom/canvas_test.cpp
   src/ftxui/dom/separator_test.cpp
   src/ftxui/dom/color_test.cpp
   src/ftxui/dom/dim_test.cpp
