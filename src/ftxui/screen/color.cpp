@@ -170,16 +170,9 @@ Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
 
 // static
 Color Color::Interpolate(float t, const Color& a, const Color& b) {
-  if (a.type_ == ColorType::Palette1) {
+  if (a.type_ == ColorType::Palette1 ||  //
+      b.type_ == ColorType::Palette1) {
     if (t < 0.5F) {  // NOLINT
-      return a;
-    } else {
-      return b;
-    }
-  }
-
-  if (b.type_ == ColorType::Palette1) {
-    if (t > 0.5F) {  // NOLINT
       return a;
     } else {
       return b;
