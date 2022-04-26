@@ -15,6 +15,7 @@ jobs:
   test:
     name: "Tests"
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: Linux GCC

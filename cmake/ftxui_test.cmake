@@ -32,6 +32,12 @@ add_executable(tests
   src/ftxui/component/screen_interactive_test.cpp
   src/ftxui/component/terminal_input_parser_test.cpp
   src/ftxui/component/toggle_test.cpp
+  src/ftxui/dom/blink_test.cpp
+  src/ftxui/dom/bold_test.cpp
+  src/ftxui/dom/border_test.cpp
+  src/ftxui/dom/separator_test.cpp
+  src/ftxui/dom/color_test.cpp
+  src/ftxui/dom/dim_test.cpp
   src/ftxui/dom/flexbox_helper_test.cpp
   src/ftxui/dom/flexbox_test.cpp
   src/ftxui/dom/gauge_test.cpp
@@ -39,9 +45,10 @@ add_executable(tests
   src/ftxui/dom/hbox_test.cpp
   src/ftxui/dom/table_test.cpp
   src/ftxui/dom/text_test.cpp
+  src/ftxui/dom/underlined_test.cpp
   src/ftxui/dom/vbox_test.cpp
-  src/ftxui/screen/string_test.cpp
   src/ftxui/screen/color_test.cpp
+  src/ftxui/screen/string_test.cpp
 )
 
 target_link_libraries(tests
