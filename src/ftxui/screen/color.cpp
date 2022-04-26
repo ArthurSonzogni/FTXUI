@@ -53,12 +53,12 @@ std::string Color::Print(bool is_background_color) const {
       return (is_background_color ? "48;5;"s : "38;5;"s) + std::to_string(red_);
 
     case ColorType::TrueColor:
+    default:
       return (is_background_color ? "48;2;"s : "38;2;"s)  //
              + std::to_string(red_) + ";"                 //
              + std::to_string(green_) + ";"               //
              + std::to_string(blue_);                     //
   }
-  return "";
 }
 
 /// @brief Build a transparent color.
@@ -96,7 +96,7 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
     return;
   }
 
-  // Find the closest coor from the database:
+  // Find the closest Color from the database:
   const int max_distance = 256 * 256 * 3;
   int closest = max_distance;
   int best = 0;
