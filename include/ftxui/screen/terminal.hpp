@@ -18,6 +18,8 @@ enum Color {
   TrueColor,
 };
 Color ColorSupport();
+void SetColorSupport(Color color);
+
 }  // namespace Terminal
 
 }  // namespace ftxui
