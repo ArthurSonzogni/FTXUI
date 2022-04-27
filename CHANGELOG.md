@@ -38,6 +38,8 @@ current (development)
   - Add the `Maybe` decorator.
   - Add the `CatchEvent` decorator.
   - Add the `Renderer` decorator.
+- **breaking** remove the "deprectated.hpp" header and Input support for wide
+    string.
 
 ### DOM:
 - **breaking**: The `inverted` decorator now toggle in the inverted attribute.

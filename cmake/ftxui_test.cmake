@@ -23,6 +23,8 @@ if(NOT googletest_POPULATED)
 endif()
 
 add_executable(tests
+  src/ftxui/component/animation_test.cpp
+  src/ftxui/component/component_test.cpp
   src/ftxui/component/component_test.cpp
   src/ftxui/component/container_test.cpp
   src/ftxui/component/input_test.cpp
