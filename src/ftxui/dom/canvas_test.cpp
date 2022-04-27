@@ -1,9 +1,9 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include "gtest/gtest_pred_impl.h"       // for Test, EXPECT_EQ, TEST
 #include <string>                   // for allocator
-#include "ftxui/dom/elements.hpp"        // for text, flexbox
-#include "ftxui/screen/screen.hpp"       // for Screen
+#include "ftxui/dom/elements.hpp"   // for text, flexbox
+#include "ftxui/screen/screen.hpp"  // for Screen
+#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
 namespace ftxui {
 
@@ -16,7 +16,7 @@ uint32_t Hash(const std::string s) {
   }
   return hash;
 }
-}
+}  // namespace
 
 TEST(CanvasTest, GoldPoint) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
@@ -40,7 +40,7 @@ TEST(CanvasTest, GoldPointColor) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   auto element = canvas([](Canvas& c) {  //
     c.DrawPoint(3, 3, 1, Color::Red);
-    c.DrawPointLine(3, 7, 10, 19,Color::Blue);
+    c.DrawPointLine(3, 7, 10, 19, Color::Blue);
     c.DrawPointCircle(10, 5, 3, Color::Yellow);
     c.DrawPointCircleFilled(20, 5, 3, Color::White);
     c.DrawPointEllipse(10, 10, 5, 2, Color::Black);
@@ -84,7 +84,6 @@ TEST(CanvasTest, GoldBlockColor) {
   EXPECT_EQ(Hash(screen.ToString()), 2869205941);
 }
 
-
 TEST(CanvasTest, GoldText) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   Canvas c(10, 10);
@@ -97,7 +96,7 @@ TEST(CanvasTest, GoldText) {
   EXPECT_EQ(Hash(screen.ToString()), 1074960375);
 }
 
-} // namespace ftxui
+}  // namespace ftxui
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

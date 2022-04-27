@@ -358,7 +358,6 @@ void Compute(Global& global) {
   Compute1(global);
 }
 
-
 }  // namespace ftxui::flexbox_helper
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.

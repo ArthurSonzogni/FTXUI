@@ -39,9 +39,8 @@ class RadioboxBase : public ComponentBase {
     for (int i = 0; i < size(); ++i) {
       bool is_focused = (focused_entry() == i) && is_menu_focused;
       bool is_selected = (hovered_ == i);
-      auto focus_management = !is_selected      ? nothing
-                              : is_menu_focused ? focus
-                                                : select;
+      auto focus_management =
+          !is_selected ? nothing : is_menu_focused ? focus : select;
       auto state = EntryState{
           entries_[i],
           *selected_ == i,

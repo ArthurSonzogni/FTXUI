@@ -17,7 +17,7 @@
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/string.hpp"  // for GlyphPosition, GlyphCount, to_string, CellToGlyphIndex, to_wstring
 #include "ftxui/screen/util.hpp"  // for clamp
-#include "ftxui/util/ref.hpp"  // for StringRef, Ref, ConstStringRef
+#include "ftxui/util/ref.hpp"     // for StringRef, Ref, ConstStringRef
 
 namespace ftxui {
 

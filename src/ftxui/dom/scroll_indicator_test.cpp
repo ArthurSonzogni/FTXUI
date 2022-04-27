@@ -1,9 +1,9 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include "gtest/gtest_pred_impl.h"       // for Test, EXPECT_EQ, TEST
 #include <string>                   // for allocator
-#include "ftxui/dom/elements.hpp"        // for text, flexbox
-#include "ftxui/screen/screen.hpp"       // for Screen
+#include "ftxui/dom/elements.hpp"   // for text, flexbox
+#include "ftxui/screen/screen.hpp"  // for Screen
+#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
 namespace ftxui {
 

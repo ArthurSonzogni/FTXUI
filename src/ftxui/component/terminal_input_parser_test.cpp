@@ -310,7 +310,7 @@ TEST(Event, Control) {
   cases.push_back({char(26), true});
   cases.push_back({char(127), false});
 
-  for(auto test : cases) {
+  for (auto test : cases) {
     auto event_receiver = MakeReceiver<Task>();
     {
       auto parser = TerminalInputParser(event_receiver->MakeSender());

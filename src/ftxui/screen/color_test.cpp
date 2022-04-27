@@ -26,18 +26,18 @@ TEST(ColorTest, PrintColor256) {
 
 TEST(ColorTest, PrintTrueCOlor) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
-  EXPECT_EQ(Color::RGB(1,2,3).Print(false), "38;2;1;2;3");
-  EXPECT_EQ(Color::RGB(1,2,3).Print(true), "48;2;1;2;3");
+  EXPECT_EQ(Color::RGB(1, 2, 3).Print(false), "38;2;1;2;3");
+  EXPECT_EQ(Color::RGB(1, 2, 3).Print(true), "48;2;1;2;3");
 }
 
 TEST(ColorTest, FallbackTo256) {
   Terminal::SetColorSupport(Terminal::Color::Palette256);
-  EXPECT_EQ(Color::RGB(1,2,3).Print(false), "38;5;16");
+  EXPECT_EQ(Color::RGB(1, 2, 3).Print(false), "38;5;16");
 }
 
 TEST(ColorTest, FallbackTo16) {
   Terminal::SetColorSupport(Terminal::Color::Palette16);
-  EXPECT_EQ(Color::RGB(1,2,3).Print(false), "30");
+  EXPECT_EQ(Color::RGB(1, 2, 3).Print(false), "30");
 }
 
 TEST(ColorTest, Litterals) {

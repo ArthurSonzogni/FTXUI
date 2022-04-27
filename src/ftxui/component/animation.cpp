@@ -197,13 +197,13 @@ float ElasticOut(float p) {
 // y = (1/2)*sin(13pi/2*(2*x))*pow(2, 10 * ((2*x) - 1))      ; [0,0.5)
 // y = (1/2)*(sin(-13pi/2*((2x-1)+1))*pow(2,-10(2*x-1)) + 2) ; [0.5, 1]
 float ElasticInOut(float p) {
-  if (p < 0.5F) {                                             // NOLINT
+  if (p < 0.5F) {                                               // NOLINT
     return 0.5 * std::sin(13.F * kPi2 * (2 * p)) *              // NOLINT
-           std::pow(2, 10 * ((2 * p) - 1));                   // NOLINT
-  } else {                                                    // NOLINT
+           std::pow(2, 10 * ((2 * p) - 1));                     // NOLINT
+  } else {                                                      // NOLINT
     return 0.5 * (std::sin(-13.F * kPi2 * ((2 * p - 1) + 1)) *  // NOLINT
-                      std::pow(2, -10 * (2 * p - 1)) +        // NOLINT
-                  2);                                         // NOLINT
+                      std::pow(2, -10 * (2 * p - 1)) +          // NOLINT
+                  2);                                           // NOLINT
   }
 }
 
