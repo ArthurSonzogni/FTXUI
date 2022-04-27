@@ -8,16 +8,17 @@
 namespace ftxui {
 
 namespace {
-int Hash(const std::string s) {
-  int hash = 0;
+uint32_t Hash(const std::string s) {
+  uint32_t hash = 0;
   for (auto c : s) {
     hash += c;
+    hash *= 7;
   }
   return hash;
 }
 }
 
-TEST(BorderTest, GoldPoint) {
+TEST(CanvasTest, GoldPoint) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   auto element = canvas([](Canvas& c) {  //
     c.DrawPoint(3, 3, 1);
@@ -32,10 +33,25 @@ TEST(BorderTest, GoldPoint) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 1069);
+  EXPECT_EQ(Hash(screen.ToString()), -1195891837);
 }
 
-TEST(BorderTest, GoldBlock) {
+TEST(CanvasTest, GoldPointColor) {
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+  auto element = canvas([](Canvas& c) {  //
+    c.DrawPoint(3, 3, 1, Color::Red);
+    c.DrawPointLine(3, 7, 10, 19,Color::Blue);
+    c.DrawPointCircle(10, 5, 3, Color::Yellow);
+    c.DrawPointCircleFilled(20, 5, 3, Color::White);
+    c.DrawPointEllipse(10, 10, 5, 2, Color::Black);
+    c.DrawPointEllipseFilled(10, 20, 5, 2, Color::Cyan);
+  });
+  Screen screen(30, 10);
+  Render(screen, element);
+  EXPECT_EQ(Hash(screen.ToString()), 1109533029);
+}
+
+TEST(CanvasTest, GoldBlock) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   auto element = canvas([](Canvas& c) {  //
     c.DrawBlock(3, 3, 1);
@@ -50,10 +66,26 @@ TEST(BorderTest, GoldBlock) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 472);
+  EXPECT_EQ(Hash(screen.ToString()), 817159424);
 }
 
-TEST(BorderTest, GoldText) {
+TEST(CanvasTest, GoldBlockColor) {
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+  auto element = canvas([](Canvas& c) {  //
+    c.DrawBlock(3, 3, 1, Color::Red);
+    c.DrawBlockLine(3, 7, 10, 19, Color::Green);
+    c.DrawBlockCircle(10, 5, 3, Color::Blue);
+    c.DrawBlockCircleFilled(20, 5, 3, Color::Yellow);
+    c.DrawBlockEllipse(10, 10, 5, 2, Color::White);
+    c.DrawBlockEllipseFilled(10, 20, 5, 2, Color::Black);
+  });
+  Screen screen(30, 10);
+  Render(screen, element);
+  EXPECT_EQ(Hash(screen.ToString()), 2869205941);
+}
+
+
+TEST(CanvasTest, GoldText) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   Canvas c(10, 10);
   c.DrawText(0, 0, "test");
@@ -62,7 +94,7 @@ TEST(BorderTest, GoldText) {
   auto element = canvas(c);
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 10447);
+  EXPECT_EQ(Hash(screen.ToString()), 1074960375);
 }
 
 } // namespace ftxui

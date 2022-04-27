@@ -15,13 +15,13 @@ namespace ftxui {
 
 using Charset = std::array<std::string, 6>;  // NOLINT
 using Charsets = std::array<Charset, 6>;     // NOLINT
-static Charsets simple_border_charset =      // NOLINT
-    {
-        Charset{"┌", "┐", "└", "┘", "─", "│"},
-        Charset{"┏", "┓", "┗", "┛", "━", "┃"},
-        Charset{"╔", "╗", "╚", "╝", "═", "║"},
-        Charset{"╭", "╮", "╰", "╯", "─", "│"},
-        Charset{" ", " ", " ", " ", " ", " "},
+// NOLINTNEXTLINE
+static Charsets simple_border_charset = {
+    Charset{"┌", "┐", "└", "┘", "─", "│"},
+    Charset{"┏", "┓", "┗", "┛", "━", "┃"},
+    Charset{"╔", "╗", "╚", "╝", "═", "║"},
+    Charset{"╭", "╮", "╰", "╯", "─", "│"},
+    Charset{" ", " ", " ", " ", " ", " "},
 };
 
 // For reference, here is the charset for normal border:

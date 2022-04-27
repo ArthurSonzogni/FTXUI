@@ -38,14 +38,17 @@ add_executable(tests
   src/ftxui/dom/bold_test.cpp
   src/ftxui/dom/border_test.cpp
   src/ftxui/dom/canvas_test.cpp
-  src/ftxui/dom/separator_test.cpp
   src/ftxui/dom/color_test.cpp
+  src/ftxui/dom/dbox_test.cpp
   src/ftxui/dom/dim_test.cpp
   src/ftxui/dom/flexbox_helper_test.cpp
   src/ftxui/dom/flexbox_test.cpp
   src/ftxui/dom/gauge_test.cpp
   src/ftxui/dom/gridbox_test.cpp
   src/ftxui/dom/hbox_test.cpp
+  src/ftxui/dom/scroll_indicator_test.cpp
+  src/ftxui/dom/separator_test.cpp
+  src/ftxui/dom/spinner_test.cpp
   src/ftxui/dom/table_test.cpp
   src/ftxui/dom/text_test.cpp
   src/ftxui/dom/underlined_test.cpp
