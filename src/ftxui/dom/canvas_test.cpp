@@ -20,33 +20,49 @@ int Hash(const std::string s) {
 TEST(BorderTest, GoldPoint) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   auto element = canvas([](Canvas& c) {  //
-    c.DrawPoint(3, 3, 1, Color::Red);
+    c.DrawPoint(3, 3, 1);
     c.DrawPointToggle(2, 8);
-    c.DrawPointLine(3, 7, 10, 19, Color::Blue);
-    c.DrawPointCircle(10, 5, 3, Color::Yellow);
-    c.DrawPointCircleFilled(20, 5, 3, Color::Green);
-    c.DrawPointEllipse(10, 10, 5, 2, Color::Blue);
-    c.DrawPointEllipseFilled(10, 20, 5, 2, Color::DarkGreen);
+    c.DrawPointToggle(2, 8);
+    c.DrawPointToggle(2, 8);
+    c.DrawPointLine(3, 7, 10, 19);
+    c.DrawPointCircle(10, 5, 3);
+    c.DrawPointCircleFilled(20, 5, 3);
+    c.DrawPointEllipse(10, 10, 5, 2);
+    c.DrawPointEllipseFilled(10, 20, 5, 2);
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 17651);
+  EXPECT_EQ(Hash(screen.ToString()), 1069);
 }
 
 TEST(BorderTest, GoldBlock) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   auto element = canvas([](Canvas& c) {  //
-    c.DrawBlock(3, 3, 1, Color::Red);
+    c.DrawBlock(3, 3, 1);
     c.DrawBlockToggle(2, 8);
-    c.DrawBlockLine(3, 7, 10, 19, Color::Blue);
-    c.DrawBlockCircle(10, 5, 3, Color::Yellow);
-    c.DrawBlockCircleFilled(20, 5, 3, Color::Green);
-    c.DrawBlockEllipse(10, 10, 5, 2, Color::Blue);
-    c.DrawBlockEllipseFilled(10, 20, 5, 2, Color::DarkGreen);
+    c.DrawBlockToggle(2, 8);
+    c.DrawBlockToggle(2, 8);
+    c.DrawBlockLine(3, 7, 10, 19);
+    c.DrawBlockCircle(10, 5, 3);
+    c.DrawBlockCircleFilled(20, 5, 3);
+    c.DrawBlockEllipse(10, 10, 5, 2);
+    c.DrawBlockEllipseFilled(10, 20, 5, 2);
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 14383);
+  EXPECT_EQ(Hash(screen.ToString()), 472);
+}
+
+TEST(BorderTest, GoldText) {
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+  Canvas c(10, 10);
+  c.DrawText(0, 0, "test");
+  c.DrawText(0, 5, "test");
+  c.DrawText(0, 10, "test");
+  auto element = canvas(c);
+  Screen screen(30, 10);
+  Render(screen, element);
+  EXPECT_EQ(Hash(screen.ToString()), 10447);
 }
 
 } // namespace ftxui

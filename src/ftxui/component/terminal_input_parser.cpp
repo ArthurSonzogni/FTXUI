@@ -136,12 +136,11 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
   unsigned int first_zero = 8;            // NOLINT
   for (unsigned int i = 0; i < 8; ++i) {  // NOLINT
     mask |= selector;
-    if (head & selector) {
-      selector >>= 1U;
-      continue;
+    if (!(head & selector)) {
+      first_zero = i;
+      break;
     }
-    first_zero = i;
-    break;
+    selector >>= 1U;
   }
 
   // Accumulate the value of the first byte.
