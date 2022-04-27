@@ -14,6 +14,8 @@
 
 namespace ftxui {
 
+using namespace std::chrono_literals;
+
 TEST(MenuTest, RemoveEntries) {
   int focused_entry = 0;
   int selected = 0;
@@ -87,6 +89,84 @@ TEST(MenuTest, Directions) {
               "  3"
               "  2"
               "\x1B[1m\x1B[7m> 1\x1B[22m\x1B[27m ");
+  }
+}
+
+TEST(MenuTest, AnimationsHorizontal) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  auto option = MenuOption::HorizontalAnimated();
+  auto menu = Menu(&entries, &selected, &option);
+  {
+    Screen screen(4, 3);
+    Render(screen, menu->Render());
+    EXPECT_EQ(
+        screen.ToString(),
+        "\x1B[1m\x1B[7m1\x1B[22m\x1B[27m \x1B[2m2\x1B[22m "
+        "\r\n\x1B[97m\x1B[49m\xE2\x94\x80\x1B[90m\x1B["
+        "49m\xE2\x95\xB6\xE2\x94\x80\xE2\x94\x80\x1B[39m\x1B[49m\r\n    ");
+  }
+  selected = 1;
+  {
+    Screen screen(4, 3);
+    Render(screen, menu->Render());
+    EXPECT_EQ(
+        screen.ToString(),
+        "\x1B[7m1\x1B[27m \x1B[1m2\x1B[22m "
+        "\r\n\x1B[97m\x1B[49m\xE2\x94\x80\x1B[90m\x1B["
+        "49m\xE2\x95\xB6\xE2\x94\x80\xE2\x94\x80\x1B[39m\x1B[49m\r\n    ");
+  }
+  animation::Params params(2s);
+  menu->OnAnimation(params);
+  {
+    Screen screen(4, 3);
+    Render(screen, menu->Render());
+    EXPECT_EQ(
+        screen.ToString(),
+        "\x1B[7m1\x1B[27m \x1B[1m2\x1B[22m "
+        "\r\n\x1B[90m\x1B[49m\xE2\x94\x80\xE2\x95\xB4\x1B[97m\x1B["
+        "49m\xE2\x94\x80\x1B[90m\x1B[49m\xE2\x95\xB6\x1B[39m\x1B[49m\r\n    ");
+  }
+}
+
+TEST(MenuTest, AnimationsVertical) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  auto option = MenuOption::VerticalAnimated();
+  auto menu = Menu(&entries, &selected, &option);
+  {
+    Screen screen(10, 3);
+    Render(screen, menu->Render());
+    EXPECT_EQ(
+        screen.ToString(),
+        "\x1B[90m\x1B[49m\xE2\x94\x82\x1B[1m\x1B[7m\x1B[39m\x1B[49m1\x1B["
+        "22m\x1B[27m        "
+        "\r\n\x1B[97m\x1B[49m\xE2\x95\xB7\x1B[2m\x1B[39m\x1B[49m2\x1B[22m      "
+        "  \r\n\x1B[97m\x1B[49m\xE2\x94\x82\x1B[2m\x1B[39m\x1B[49m3\x1B[22m    "
+        "    ");
+  }
+  selected = 1;
+  {
+    Screen screen(10, 3);
+    Render(screen, menu->Render());
+    EXPECT_EQ(
+        screen.ToString(),
+        "\x1B[90m\x1B[49m\xE2\x94\x82\x1B[7m\x1B[39m\x1B[49m1\x1B[27m        "
+        "\r\n\x1B[97m\x1B[49m\xE2\x95\xB7\x1B[1m\x1B[39m\x1B[49m2\x1B[22m      "
+        "  \r\n\x1B[97m\x1B[49m\xE2\x94\x82\x1B[2m\x1B[39m\x1B[49m3\x1B[22m    "
+        "    ");
+  }
+  animation::Params params(2s);
+  menu->OnAnimation(params);
+  {
+    Screen screen(10, 3);
+    Render(screen, menu->Render());
+    EXPECT_EQ(
+        screen.ToString(),
+        "\x1B[97m\x1B[49m\xE2\x95\xB5\x1B[7m\x1B[39m\x1B[49m1\x1B[27m        "
+        "\r\n\x1B[90m\x1B[49m\xE2\x94\x82\x1B[1m\x1B[39m\x1B[49m2\x1B[22m      "
+        "  \r\n\x1B[97m\x1B[49m\xE2\x95\xB7\x1B[2m\x1B[39m\x1B[49m3\x1B[22m    "
+        "    ");
   }
 }
 
