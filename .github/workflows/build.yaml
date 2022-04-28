@@ -85,6 +85,9 @@ jobs:
           --exclude "../examples"
           --exclude ".*google.*"
           --exclude ".*test.*"
+          --exclude-unreachable-branches
+          --exclude-throw-branches
+          --sort-uncovered
           --print-summary
           --xml-pretty
           --xml
