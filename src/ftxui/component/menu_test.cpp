@@ -45,51 +45,111 @@ TEST(MenuTest, RemoveEntries) {
   EXPECT_EQ(focused_entry, 1);
 }
 
-TEST(MenuTest, Directions) {
+TEST(MenuTest, DirectionDown) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
   MenuOption option;
   auto menu = Menu(&entries, &selected, &option);
 
-  {
-    option.direction = MenuOption::Down;
-    Screen screen(4, 3);
-    Render(screen, menu->Render());
-    EXPECT_EQ(screen.ToString(),
-              "\x1B[1m\x1B[7m> 1 \x1B[22m\x1B[27m\r\n"
-              "  2 \r\n"
-              "  3 ");
-  }
+  selected = 0;
+  option.direction = MenuOption::Down;
+  Screen screen(4, 3);
+  Render(screen, menu->Render());
+  EXPECT_EQ(screen.ToString(),
+            "\x1B[1m\x1B[7m> 1 \x1B[22m\x1B[27m\r\n"
+            "  2 \r\n"
+            "  3 ");
 
-  {
-    option.direction = MenuOption::Up;
-    Screen screen(4, 3);
-    Render(screen, menu->Render());
-    EXPECT_EQ(screen.ToString(),
-              "  3 \r\n"
-              "  2 \r\n"
-              "\x1B[1m\x1B[7m> 1 \x1B[22m\x1B[27m");
-  }
+  menu->OnEvent(Event::ArrowUp);
+  EXPECT_EQ(selected, 0);
+  menu->OnEvent(Event::ArrowDown);
+  EXPECT_EQ(selected, 1);
+  menu->OnEvent(Event::ArrowDown);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowDown);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowLeft);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowRight);
+  EXPECT_EQ(selected, 2);
+}
 
-  {
-    option.direction = MenuOption::Right;
-    Screen screen(10, 1);
-    Render(screen, menu->Render());
-    EXPECT_EQ(screen.ToString(),
-              "\x1B[1m\x1B[7m> 1\x1B[22m\x1B[27m"
-              "  2"
-              "  3 ");
-  }
+TEST(MenuTest, DirectionsUp) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  MenuOption option;
+  auto menu = Menu(&entries, &selected, &option);
+  option.direction = MenuOption::Up;
+  Screen screen(4, 3);
+  Render(screen, menu->Render());
+  EXPECT_EQ(screen.ToString(),
+            "  3 \r\n"
+            "  2 \r\n"
+            "\x1B[1m\x1B[7m> 1 \x1B[22m\x1B[27m");
+  menu->OnEvent(Event::ArrowDown);
+  EXPECT_EQ(selected, 0);
+  menu->OnEvent(Event::ArrowUp);
+  EXPECT_EQ(selected, 1);
+  menu->OnEvent(Event::ArrowUp);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowUp);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowLeft);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowRight);
+  EXPECT_EQ(selected, 2);
+}
 
-  {
-    option.direction = MenuOption::Left;
-    Screen screen(10, 1);
-    Render(screen, menu->Render());
-    EXPECT_EQ(screen.ToString(),
-              "  3"
-              "  2"
-              "\x1B[1m\x1B[7m> 1\x1B[22m\x1B[27m ");
-  }
+TEST(MenuTest, DirectionsRight) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  MenuOption option;
+  auto menu = Menu(&entries, &selected, &option);
+  option.direction = MenuOption::Right;
+  Screen screen(10, 1);
+  Render(screen, menu->Render());
+  EXPECT_EQ(screen.ToString(),
+            "\x1B[1m\x1B[7m> 1\x1B[22m\x1B[27m"
+            "  2"
+            "  3 ");
+  menu->OnEvent(Event::ArrowLeft);
+  EXPECT_EQ(selected, 0);
+  menu->OnEvent(Event::ArrowRight);
+  EXPECT_EQ(selected, 1);
+  menu->OnEvent(Event::ArrowRight);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowRight);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowUp);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowDown);
+  EXPECT_EQ(selected, 2);
+}
+
+TEST(MenuTest, DirectionsLeft) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  MenuOption option;
+  auto menu = Menu(&entries, &selected, &option);
+  option.direction = MenuOption::Left;
+  Screen screen(10, 1);
+  Render(screen, menu->Render());
+  EXPECT_EQ(screen.ToString(),
+            "  3"
+            "  2"
+            "\x1B[1m\x1B[7m> 1\x1B[22m\x1B[27m ");
+  menu->OnEvent(Event::ArrowRight);
+  EXPECT_EQ(selected, 0);
+  menu->OnEvent(Event::ArrowLeft);
+  EXPECT_EQ(selected, 1);
+  menu->OnEvent(Event::ArrowLeft);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowLeft);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowUp);
+  EXPECT_EQ(selected, 2);
+  menu->OnEvent(Event::ArrowDown);
+  EXPECT_EQ(selected, 2);
 }
 
 TEST(MenuTest, AnimationsHorizontal) {

@@ -24,14 +24,16 @@ endif()
 
 add_executable(tests
   src/ftxui/component/animation_test.cpp
+  src/ftxui/component/button_test.cpp
+  src/ftxui/component/collapsible_test.cpp
   src/ftxui/component/component_test.cpp
   src/ftxui/component/component_test.cpp
   src/ftxui/component/container_test.cpp
   src/ftxui/component/input_test.cpp
   src/ftxui/component/menu_test.cpp
   src/ftxui/component/radiobox_test.cpp
-  src/ftxui/component/resizable_split_test.cpp
   src/ftxui/component/receiver_test.cpp
+  src/ftxui/component/resizable_split_test.cpp
   src/ftxui/component/screen_interactive_test.cpp
   src/ftxui/component/terminal_input_parser_test.cpp
   src/ftxui/component/toggle_test.cpp
