@@ -1,9 +1,10 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include <string>                   // for allocator, basic_string, string
+#include <stddef.h>                 // for size_t
+#include <string>                   // for string, allocator
 #include <vector>                   // for vector
 
-#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex_grow, flex_shrink, hbox
+#include "ftxui/dom/elements.hpp"  // for text, operator|, hbox, Element, flex_grow, flex_shrink
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/color.hpp"   // for ftxui
 #include "ftxui/screen/screen.hpp"  // for Screen

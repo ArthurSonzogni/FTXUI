@@ -1,16 +1,19 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
-#include <string>  // for string, basic_string
+#include <chrono>                   // for operator""s, chrono_literals
+#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
+#include <string>  // for string
 #include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"     // for ftxui
+#include "ftxui/component/animation.hpp"          // for Duration, Params
 #include "ftxui/component/component.hpp"          // for Menu
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::Return
+#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuOption::Down, MenuOption::Left, MenuOption::Right, MenuOption::Up
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Return
+#include "ftxui/dom/node.hpp"         // for Render
+#include "ftxui/screen/screen.hpp"    // for Screen
 #include "ftxui/util/ref.hpp"         // for Ref
-#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
+#include "gtest/gtest_pred_impl.h"    // for EXPECT_EQ, Test, TEST
 
 namespace ftxui {
 

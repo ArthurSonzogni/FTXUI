@@ -2,7 +2,7 @@
 #define FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP
 
 #include <chrono>                         // for milliseconds
-#include <ftxui/component/animation.hpp>  // for Duration, QuadraticInOut, Function
+#include <ftxui/component/animation.hpp>  // for Duration, Function, QuadraticInOut
 #include <ftxui/dom/elements.hpp>         // for Element
 #include <ftxui/util/ref.hpp>             // for Ref
 #include <functional>                     // for function

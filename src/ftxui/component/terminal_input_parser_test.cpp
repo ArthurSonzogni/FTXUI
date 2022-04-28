@@ -1,13 +1,14 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
 #include <algorithm>                // for max
-#include <memory>                   // for unique_ptr, allocator
-#include <variant>                  // for get
+#include <initializer_list>  // for initializer_list
+#include <memory>            // for unique_ptr, allocator
+#include <variant>           // for get
 
-#include "ftxui/component/event.hpp"     // for Event, Event::Escape
+#include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::Escape, Event::F10, Event::F11, Event::F12, Event::F5, Event::F6, Event::F7, Event::F8, Event::F9, Event::Home, Event::PageDown, Event::PageUp, Event::Tab, Event::TabReverse
 #include "ftxui/component/receiver.hpp"  // for MakeReceiver, ReceiverImpl
 #include "ftxui/component/terminal_input_parser.hpp"
-#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ, EXPECT_TRUE, EXPECT_FALSE, TEST
+#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ, EXPECT_TRUE, TEST, EXPECT_FALSE
 
 namespace ftxui {
 

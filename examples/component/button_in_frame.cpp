@@ -1,12 +1,13 @@
-#include <array>   // for array
-#include <memory>  // for shared_ptr, __shared_ptr_access
-#include <string>  // for operator+, to_string
+#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
+#include <string>  // for to_string, operator+
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
+#include "ftxui/component/component.hpp"       // for Button, Renderer, Vertical
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component_options.hpp"   // for ButtonOption
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, size, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
+#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, hbox, separator, size, vbox, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
+#include "ftxui/screen/color.hpp"  // for Color, Color::Default, Color::GrayDark, Color::White
 
 using namespace ftxui;
 

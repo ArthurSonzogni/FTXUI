@@ -1,16 +1,18 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
-#include <string>  // for string, basic_string
-#include <vector>  // for vector
+#include <chrono>                   // for operator""s, chrono_literals
+#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
+#include <string>  // for string
 
-#include "ftxui/component/captured_mouse.hpp"     // for ftxui
-#include "ftxui/component/component.hpp"          // for container
+#include "ftxui/component/animation.hpp"          // for Duration, Params
+#include "ftxui/component/component.hpp"          // for Button, Horizontal
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::Return
-#include "ftxui/util/ref.hpp"         // for Ref
-#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
+#include "ftxui/component/component_options.hpp"  // for ButtonOption
+#include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowLeft, Event::ArrowRight
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
+#include "ftxui/dom/node.hpp"         // for Render
+#include "ftxui/screen/screen.hpp"    // for Screen
+#include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, Test, EXPECT_FALSE, EXPECT_TRUE, TEST
 
 namespace ftxui {
 
@@ -45,10 +47,12 @@ TEST(ButtonTest, Basic) {
   });
 
   int selected = 0;
-  auto container = Container::Horizontal({
-      btn1,
-      btn2,
-  }, &selected);
+  auto container = Container::Horizontal(
+      {
+          btn1,
+          btn2,
+      },
+      &selected);
 
   (void)container->Render();
 
@@ -93,20 +97,28 @@ TEST(ButtonTest, Animation) {
   int press_count = 0;
   std::string last_press = "";
   auto option = ButtonOption::Animated();
-  auto btn1 = Button("btn1", [&] {
-    press_count++;
-    last_press = "btn1";
-  }, option);
-  auto btn2 = Button("btn2", [&] {
-    press_count++;
-    last_press = "btn2";
-  }, option);
+  auto btn1 = Button(
+      "btn1",
+      [&] {
+        press_count++;
+        last_press = "btn1";
+      },
+      option);
+  auto btn2 = Button(
+      "btn2",
+      [&] {
+        press_count++;
+        last_press = "btn2";
+      },
+      option);
 
   int selected = 0;
-  auto container = Container::Horizontal({
-      btn1,
-      btn2,
-  }, &selected);
+  auto container = Container::Horizontal(
+      {
+          btn1,
+          btn2,
+      },
+      &selected);
 
   {
     Screen screen(12, 3);

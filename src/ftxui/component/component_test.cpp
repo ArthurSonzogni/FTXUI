@@ -1,11 +1,10 @@
-#include <gtest/gtest-message.h>    // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult
-#include <memory>  // for shared_ptr, __shared_ptr_access, allocator, make_shared
+#include <gtest/gtest-message.h>  // for Message
+#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
+#include <memory>  // for shared_ptr, __shared_ptr_access, allocator, __shared_ptr_access<>::element_type, make_shared
 
-#include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Make
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
-#include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, SuiteApiResolver, TEST, TestFactoryImpl
+#include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, AssertionResult, TEST, EXPECT_FALSE
 
 namespace ftxui {
 

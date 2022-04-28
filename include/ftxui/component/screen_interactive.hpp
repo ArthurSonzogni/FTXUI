@@ -2,9 +2,9 @@
 #define FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 
 #include <atomic>                        // for atomic
-#include <ftxui/component/receiver.hpp>  // for Receiver, Sender
+#include <ftxui/component/receiver.hpp>  // for ReceiverImpl, SenderImpl
 #include <functional>                    // for function
-#include <memory>                        // for shared_ptr
+#include <memory>                        // for unique_ptr, shared_ptr
 #include <string>                        // for string
 #include <thread>                        // for thread
 #include <variant>                       // for variant

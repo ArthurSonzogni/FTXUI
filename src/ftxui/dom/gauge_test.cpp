@@ -2,9 +2,8 @@
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
 #include <memory>                   // for allocator
 
-#include "ftxui/dom/elements.hpp"   // for gauge
+#include "ftxui/dom/elements.hpp"   // for gauge, gaugeUp
 #include "ftxui/dom/node.hpp"       // for Render
-#include "ftxui/screen/color.hpp"   // for ftxui
 #include "ftxui/screen/screen.hpp"  // for Screen
 #include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 

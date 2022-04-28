@@ -4,7 +4,6 @@
 
 #include "ftxui/dom/elements.hpp"   // for text, operator|, border, Element
 #include "ftxui/dom/node.hpp"       // for Render
-#include "ftxui/screen/color.hpp"   // for ftxui
 #include "ftxui/screen/screen.hpp"  // for Screen
 #include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 

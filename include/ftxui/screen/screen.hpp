@@ -2,7 +2,7 @@
 #define FTXUI_SCREEN_SCREEN_HPP
 
 #include <memory>
-#include <string>  // for string, allocator, basic_string
+#include <string>  // for string, allocator
 #include <vector>  // for vector
 
 #include "ftxui/screen/box.hpp"       // for Box

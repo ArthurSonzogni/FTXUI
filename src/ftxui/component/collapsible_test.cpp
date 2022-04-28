@@ -1,16 +1,14 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <memory>  // for allocator, __shared_ptr_access, shared_ptr
-#include <string>  // for string, basic_string
-#include <vector>  // for vector
+#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 
-#include "ftxui/component/captured_mouse.hpp"     // for ftxui
-#include "ftxui/component/component.hpp"          // for collapsible
-#include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::Return
-#include "ftxui/util/ref.hpp"         // for Ref
-#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
+#include "ftxui/component/component.hpp"       // for Collapsible, Renderer
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown
+#include "ftxui/dom/elements.hpp"     // for text, Element
+#include "ftxui/dom/node.hpp"         // for Render
+#include "ftxui/screen/screen.hpp"  // for Screen
+#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, TEST
 
 namespace ftxui {
 

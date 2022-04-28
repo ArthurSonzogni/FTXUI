@@ -1,10 +1,9 @@
 #include <algorithm>  // for max
 #include <memory>     // for __shared_ptr_access, shared_ptr, make_shared
 #include <utility>    // for move
-#include <vector>     // for vector
 
 #include "ftxui/dom/elements.hpp"     // for Element, Elements, dbox
-#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/node.hpp"         // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
 

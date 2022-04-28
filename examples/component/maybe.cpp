@@ -1,5 +1,4 @@
-#include <memory>  // for allocator, shared_ptr
-#include <string>  // for string, basic_string
+#include <string>  // for string, allocator
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
