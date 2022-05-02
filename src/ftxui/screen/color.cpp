@@ -202,7 +202,8 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
         return;
       }
 
-      case ColorType::TrueColor: {
+      case ColorType::TrueColor:
+      default: {
         *red = color.red_;
         *green = color.green_;
         *blue = color.blue_;
