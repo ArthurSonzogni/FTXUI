@@ -174,6 +174,8 @@ Element Table::Render() {
       it = std::move(it) | size(WIDTH, EQUAL, 0) | size(HEIGHT, EQUAL, 0);
     }
   }
+  dim_x_ = 0;
+  dim_y_ = 0;
   return gridbox(std::move(elements_));
 }
 
