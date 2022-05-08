@@ -2,6 +2,7 @@
 #include <functional>  // for function
 #include <memory>      // for __shared_ptr_access, make_unique
 #include <utility>     // for move
+#include <vector>      // for vector
 
 #include "ftxui/dom/elements.hpp"  // for Element, Decorator, Elements, operator|, Fit, emptyElement, nothing, operator|=
 #include "ftxui/dom/node.hpp"      // for Node, Node::Status

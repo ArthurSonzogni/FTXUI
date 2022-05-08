@@ -1,6 +1,7 @@
 #include <stdio.h>                 // for getchar
 #include <ftxui/dom/elements.hpp>  // for operator|, size, Element, text, hcenter, Decorator, Fit, WIDTH, hflow, window, EQUAL, GREATER_THAN, HEIGHT, bold, border, dim, LESS_THAN
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
+#include <memory>                   // for shared_ptr
 #include <string>  // for allocator, operator+, to_string, char_traits, string
 
 #include "ftxui/dom/node.hpp"      // for Render

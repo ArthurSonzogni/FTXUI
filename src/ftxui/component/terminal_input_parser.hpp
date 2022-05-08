@@ -7,7 +7,7 @@
 
 #include "ftxui/component/event.hpp"     // for Event (ptr only)
 #include "ftxui/component/mouse.hpp"     // for Mouse
-#include "ftxui/component/receiver.hpp"  // for SenderImpl
+#include "ftxui/component/receiver.hpp"  // for Sender
 #include "ftxui/component/task.hpp"      // for Task
 
 namespace ftxui {

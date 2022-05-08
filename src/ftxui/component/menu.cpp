@@ -115,8 +115,9 @@ class MenuBase : public ComponentBase {
       bool is_focused = (focused_entry() == i) && is_menu_focused;
       bool is_selected = (*selected_ == i);
 
-      auto focus_management =
-          !is_selected ? nothing : is_menu_focused ? focus : nothing;
+      auto focus_management = !is_selected      ? nothing
+                              : is_menu_focused ? focus
+                                                : nothing;
       EntryState state = {
           entries_[i],
           false,

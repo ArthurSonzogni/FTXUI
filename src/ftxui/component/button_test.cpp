@@ -12,6 +12,7 @@
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/dom/node.hpp"         // for Render
 #include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/screen/terminal.hpp"  // for SetColorSupport, Color, TrueColor
 #include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, Test, EXPECT_FALSE, EXPECT_TRUE, TEST
 
 namespace ftxui {

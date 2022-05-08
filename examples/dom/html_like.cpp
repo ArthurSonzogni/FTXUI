@@ -1,10 +1,11 @@
 #include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Screen
 #include <iostream>                 // for cout, ostream
+#include <memory>                   // for shared_ptr
 #include <string>                   // for allocator, operator<<, string
 #include <thread>                   // for sleep_for
 
-#include "ftxui/dom/elements.hpp"  // for paragraph, operator|, text, Element, border, Fit, color, hflow, spinner, vbox, bold, dim, underlined
+#include "ftxui/dom/elements.hpp"  // for paragraph, text, operator|, Element, border, Fit, color, hflow, spinner, vbox, bold, dim, underlined
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/box.hpp"    // for ftxui
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
