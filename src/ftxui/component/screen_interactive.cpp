@@ -300,7 +300,9 @@ void ScreenInteractive::Post(Task task) {
   }
 }
 void ScreenInteractive::PostEvent(Event event) {
-  Post(event);
+  if(g_active_screen) {
+    Post(event);
+  }
 }
 
 void ScreenInteractive::RequestAnimationFrame() {
