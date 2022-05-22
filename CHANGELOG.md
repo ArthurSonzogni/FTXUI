@@ -4,6 +4,13 @@ Changelog
 current (development) 
 ---------------------
 
+### DOM
+- Bugfix: Fix `focus`/`select` when the `vbox`/`hbox`/`dbox` contains a
+  `flexbox`
+
+### Screen
+- Feature: add `Box::Union(a,b) -> Box`
+
 3.0.0
 -----
 

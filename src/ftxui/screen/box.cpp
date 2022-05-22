@@ -15,6 +15,18 @@ Box Box::Intersection(Box a, Box b) {
   };
 }
 
+/// @return the smallest Box containing both |a| and |b|.
+/// @ingroup screen
+// static
+Box Box::Union(Box a, Box b) {
+  return Box{
+      std::min(a.x_min, b.x_min),
+      std::max(a.x_max, b.x_max),
+      std::min(a.y_min, b.y_min),
+      std::max(a.y_max, b.y_max),
+  };
+}
+
 /// @return whether (x,y) is contained inside the box.
 /// @ingroup screen
 bool Box::Contain(int x, int y) const {
