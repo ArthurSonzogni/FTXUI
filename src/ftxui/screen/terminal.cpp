@@ -20,8 +20,8 @@ namespace ftxui {
 
 namespace {
 
-bool g_cached = false;
-Terminal::Color g_cached_supported_color;
+bool g_cached = false;                     // NOLINT
+Terminal::Color g_cached_supported_color;  // NOLINT
 
 Dimensions& FallbackSize() {
 #if defined(__EMSCRIPTEN__)
