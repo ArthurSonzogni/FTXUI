@@ -295,14 +295,16 @@ ScreenInteractive ScreenInteractive::FitComponent() {
 }
 
 void ScreenInteractive::Post(Task task) {
-  if (!quit_) {
-    task_sender_->Send(std::move(task));
-  }
+  // Task/Events sent toward inactive screen or screen waiting to become
+  // inactive are dropped.
+  if (!task_sender_)
+    return;
+
+  task_sender_->Send(std::move(task));
 }
+
 void ScreenInteractive::PostEvent(Event event) {
-  if(g_active_screen) {
-    Post(event);
-  }
+  Post(event);
 }
 
 void ScreenInteractive::RequestAnimationFrame() {

@@ -47,6 +47,20 @@ TEST(ScreenInteractive, Signal_SIGFPE) {
   TestSignal(SIGFPE);
 }
 
+// Regression test for:
+// https://github.com/ArthurSonzogni/FTXUI/issues/402
+TEST(ScreenInteractive, PostEventToNonActive) {
+  auto screen = ScreenInteractive::FitComponent();
+  screen.Post(Event::Custom);
+}
+
+// Regression test for:
+// https://github.com/ArthurSonzogni/FTXUI/issues/402
+TEST(ScreenInteractive, PostTaskToNonActive) {
+  auto screen = ScreenInteractive::FitComponent();
+  screen.Post([] {});
+}
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
