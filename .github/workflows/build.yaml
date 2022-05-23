@@ -51,7 +51,7 @@ jobs:
           ninja: true
           clangtidy: true
           cppcheck: false
-          gcovr: true
+          gcovr: "5.0"
           opencppcoverage: true
 
       # make sure coverage is only enabled for Debug builds, since it sets -O0
