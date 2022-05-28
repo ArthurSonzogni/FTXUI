@@ -449,9 +449,9 @@ TEST(FlexboxTest, Focus) {
   Screen screen(1, 3);
   Render(screen, document);
   EXPECT_EQ(screen.ToString(),
-            "7\r\n"
             "-\r\n"
-            "8"
+            "7\r\n"
+            "-"
             );
 }
 

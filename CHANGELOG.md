@@ -7,6 +7,9 @@ current (development)
 ### DOM
 - Bugfix: Fix `focus`/`select` when the `vbox`/`hbox`/`dbox` contains a
   `flexbox`
+- Bugfix: Fix the selected/focused area. It used to be 1 cell larger/longer than
+  requested
+- Bugfix: Forward the selected/focused area from the child in gridbox.
 
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`

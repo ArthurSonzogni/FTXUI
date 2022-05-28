@@ -596,6 +596,25 @@ TEST(GridboxTest, MissingCells) {
             "                    ");
 }
 
+TEST(GridboxTest, Focus) {
+  auto root = gridbox({
+      {cell("1"), cell("2"), cell("3"), cell("4")},
+      {cell("5"), cell("6"), cell("7"), cell("8")},
+      {cell("9"), cell("10"), cell("11"), cell("12")},
+      {cell("13"), cell("14") | focus, cell("15"), cell("16")},
+      {cell("17"), cell("18"), cell("19"), cell("20")},
+  });
+
+  root |= frame;
+
+  Screen screen(4, 3);
+  Render(screen, root);
+  EXPECT_EQ(screen.ToString(),
+            "╭──╮\r\n"
+            "│14│\r\n"
+            "╰──╯");
+}
+
 }  // namespace ftxui
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
