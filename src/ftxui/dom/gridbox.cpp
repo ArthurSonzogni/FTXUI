@@ -13,6 +13,23 @@
 namespace ftxui {
 class Screen;
 
+namespace {
+
+// Accumulate the values of a list U[n] into v[n]. So that:
+// V[0] = 0;
+// V[n+1] = v[n] + U[n]
+// return the sum of U[n].
+int Integrate(std::vector<int>& elements) {
+  int accu = 0;
+  for (auto& i : elements) {
+    int old_accu = accu;
+    accu += i;
+    i = old_accu;
+  }
+  return accu;
+}
+}
+
 class GridBox : public Node {
  public:
   explicit GridBox(std::vector<Elements> lines) : lines_(std::move(lines)) {
@@ -38,34 +55,36 @@ class GridBox : public Node {
     for (auto& line : lines_) {
       for (auto& cell : line) {
         cell->ComputeRequirement();
+      }
+    }
 
-        // Determine focus based on the focused child.
-        if (requirement_.selection >= cell->requirement().selection) {
+    // Compute the size of each columns/row.
+    std::vector<int> size_x(x_size, 0);
+    std::vector<int> size_y(y_size, 0);
+    for (int x = 0; x < x_size; ++x) {
+      for (int y = 0; y < y_size; ++y) {
+        size_x[x] = std::max(size_x[x], lines_[y][x]->requirement().min_x);
+        size_y[y] = std::max(size_y[y], lines_[y][x]->requirement().min_y);
+      }
+    }
+
+    requirement_.min_x = Integrate(size_x);
+    requirement_.min_y = Integrate(size_y);
+
+    // Forward the selected/focused child state:
+    requirement_.selection = Requirement::NORMAL;
+    for (int x = 0; x < x_size; ++x) {
+      for (int y = 0; y < y_size; ++y) {
+        if (requirement_.selection >= lines_[y][x]->requirement().selection) {
           continue;
         }
-        requirement_.selection = cell->requirement().selection;
-        requirement_.selected_box = cell->requirement().selected_box;
-        requirement_.selected_box.x_min += requirement_.min_x;
-        requirement_.selected_box.x_max += requirement_.min_x;
+        requirement_.selection = lines_[y][x]->requirement().selection;
+        requirement_.selected_box = lines_[y][x]->requirement().selected_box;
+        requirement_.selected_box.x_min += size_x[x];
+        requirement_.selected_box.x_max += size_x[x];
+        requirement_.selected_box.y_min += size_y[y];
+        requirement_.selected_box.y_max += size_y[y];
       }
-    }
-
-    // Work on the x-axis.
-    for (int x = 0; x < x_size; ++x) {
-      int min_x = 0;
-      for (int y = 0; y < y_size; ++y) {
-        min_x = std::max(min_x, lines_[y][x]->requirement().min_x);
-      }
-      requirement_.min_x += min_x;
-    }
-
-    // Work on the y-axis.
-    for (int y = 0; y < y_size; ++y) {
-      int min_y = 0;
-      for (int x = 0; x < x_size; ++x) {
-        min_y = std::max(min_y, lines_[y][x]->requirement().min_y);
-      }
-      requirement_.min_y += min_y;
     }
   }
 
