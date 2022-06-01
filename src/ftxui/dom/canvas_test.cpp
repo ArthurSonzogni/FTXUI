@@ -39,7 +39,7 @@ TEST(CanvasTest, GoldPoint) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), -1195891837);
+  EXPECT_EQ(Hash(screen.ToString()), 2143518726);
 }
 
 TEST(CanvasTest, GoldPointColor) {
@@ -54,7 +54,7 @@ TEST(CanvasTest, GoldPointColor) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 1109533029);
+  EXPECT_EQ(Hash(screen.ToString()), 1264423298);
 }
 
 TEST(CanvasTest, GoldBlock) {
@@ -72,7 +72,7 @@ TEST(CanvasTest, GoldBlock) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 817159424);
+  EXPECT_EQ(Hash(screen.ToString()), 3826174883);
 }
 
 TEST(CanvasTest, GoldBlockColor) {
@@ -87,7 +87,7 @@ TEST(CanvasTest, GoldBlockColor) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 2869205941);
+  EXPECT_EQ(Hash(screen.ToString()), 3048712696);
 }
 
 TEST(CanvasTest, GoldText) {

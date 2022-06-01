@@ -10,6 +10,7 @@ current (development)
 - Bugfix: Fix the selected/focused area. It used to be 1 cell larger/longer than
   requested
 - Bugfix: Forward the selected/focused area from the child in gridbox.
+- Bugfix: Fix incorrect Canvas computed dimensions.
 
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`

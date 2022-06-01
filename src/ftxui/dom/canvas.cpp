@@ -871,8 +871,8 @@ Element canvas(int width, int height, std::function<void(Canvas&)> fn) {
     }
 
     void Render(Screen& screen) final {
-      int width = (box_.y_max - box_.y_min + 1) * 2;
-      int height = (box_.x_max - box_.x_min + 1) * 4;
+      int width = (box_.x_max - box_.x_min + 1) * 2;
+      int height = (box_.y_max - box_.y_min + 1) * 4;
       canvas_ = Canvas(width, height);
       fn_(canvas_);
       CanvasNodeBase::Render(screen);
