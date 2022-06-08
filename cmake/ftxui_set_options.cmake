@@ -15,11 +15,26 @@ function(ftxui_set_options library)
     )
   endif()
 
+  if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME}) # check if project is stand-alone
+    target_include_directories(${library}
+      PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    )
+  else()
+    target_include_directories(${library}
+      SYSTEM INTERFACE
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    )
+  endif()
+
   target_include_directories(${library}
-    PUBLIC
+    SYSTEM INTERFACE
       $<INSTALL_INTERFACE:include>
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  )
+
+  target_include_directories(${library}
     PRIVATE
+      include
       src
   )
 
