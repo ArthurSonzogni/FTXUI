@@ -23,15 +23,18 @@ function(ftxui_set_options library)
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     )
   else()
-    target_include_directories(${library}
-      SYSTEM INTERFACE
+    target_include_directories(${library} SYSTEM
+      INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     )
   endif()
 
-  target_include_directories(${library}
-    SYSTEM INTERFACE
+  target_include_directories(${library} SYSTEM
+    INTERFACE
       $<INSTALL_INTERFACE:include>
+  )
+
+  target_include_directories(${library}
     PRIVATE
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
