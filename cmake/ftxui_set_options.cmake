@@ -13,9 +13,11 @@ function(ftxui_set_options library)
     set_target_properties(${library}
       PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-warnings-as-errors=*"
     )
-  endif()
 
-  if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME}) # check if project is stand-alone
+    # By using "PUBLIC" as opposed to "SYSTEM INTERFACE", the compiler warning
+    # are enforced on the headers. This is behind "FTXUI_CLANG_TIDY", so that it
+    # applies only when developing FTXUI and on the CI. User's of the library
+    # get only the SYSTEM INTERFACE instead.
     target_include_directories(${library}
       PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -30,12 +32,9 @@ function(ftxui_set_options library)
   target_include_directories(${library}
     SYSTEM INTERFACE
       $<INSTALL_INTERFACE:include>
-  )
-
-  target_include_directories(${library}
     PRIVATE
-      include
-      src
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   )
 
   # C++17 is used. We require fold expression at least.
