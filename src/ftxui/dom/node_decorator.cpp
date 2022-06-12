@@ -1,5 +1,6 @@
-#include <memory>  // for __shared_ptr_access
-#include <vector>  // for __alloc_traits<>::value_type
+#include <ftxui/dom/node.hpp>  // for Node, Elements
+#include <memory>              // for __shared_ptr_access
+#include <vector>              // for __alloc_traits<>::value_type
 
 #include "ftxui/dom/node_decorator.hpp"
 #include "ftxui/dom/requirement.hpp"  // for Requirement

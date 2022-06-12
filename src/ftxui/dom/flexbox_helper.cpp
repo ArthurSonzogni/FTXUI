@@ -1,9 +1,10 @@
 #include "ftxui/dom/flexbox_helper.hpp"
 
-#include <algorithm>  // for min, max
-#include <cstddef>    // for size_t
-#include <memory>     // for allocator_traits<>::value_type
-#include <utility>    // for swap, move
+#include <algorithm>                     // for max, min
+#include <cstddef>                       // for size_t
+#include <ftxui/dom/flexbox_config.hpp>  // for FlexboxConfig, FlexboxConfig::Direction, FlexboxConfig::AlignContent, FlexboxConfig::JustifyContent, FlexboxConfig::Wrap, FlexboxConfig::Direction::RowInversed, FlexboxConfig::AlignItems, FlexboxConfig::Direction::Row, FlexboxConfig::Direction::Column, FlexboxConfig::Direction::ColumnInversed, FlexboxConfig::Wrap::WrapInversed, FlexboxConfig::AlignContent::Stretch, FlexboxConfig::JustifyContent::Stretch, FlexboxConfig::Wrap::Wrap, FlexboxConfig::AlignContent::Center, FlexboxConfig::AlignContent::FlexEnd, FlexboxConfig::AlignContent::FlexStart, FlexboxConfig::AlignContent::SpaceAround, FlexboxConfig::AlignContent::SpaceBetween, FlexboxConfig::AlignContent::SpaceEvenly, FlexboxConfig::AlignItems::Center, FlexboxConfig::AlignItems::FlexEnd, FlexboxConfig::AlignItems::FlexStart, FlexboxConfig::AlignItems::Stretch, FlexboxConfig::JustifyContent::Center, FlexboxConfig::JustifyContent::FlexEnd, FlexboxConfig::JustifyContent::FlexStart, FlexboxConfig::JustifyContent::SpaceAround, FlexboxConfig::JustifyContent::SpaceBetween, FlexboxConfig::JustifyContent::SpaceEvenly, FlexboxConfig::Wrap::NoWrap
+#include <memory>                        // for allocator_traits<>::value_type
+#include <utility>                       // for swap, move
 
 #include "ftxui/dom/box_helper.hpp"  // for Element, Compute
 

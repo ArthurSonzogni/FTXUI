@@ -2,10 +2,11 @@
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
 #include <stddef.h>                 // for size_t
 #include <algorithm>                // for remove
-#include <string>                   // for string, allocator, basic_string
+#include <memory>                   // for shared_ptr
+#include <string>                   // for allocator, basic_string, string
 #include <vector>                   // for vector
 
-#include "ftxui/dom/elements.hpp"  // for text, operator|, Elements, gridbox, Element, flex, flex_grow, flex_shrink, vtext, vbox, border
+#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, Elements, flex_grow, flex_shrink, vtext, gridbox, vbox, focus, operator|=, border, frame
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
 #include "gtest/gtest_pred_impl.h"  // for Test, TEST, EXPECT_EQ

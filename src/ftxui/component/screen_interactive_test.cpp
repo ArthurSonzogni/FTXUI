@@ -1,6 +1,7 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
 #include <csignal>  // for raise, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM
+#include <ftxui/component/event.hpp>  // for Event, Event::Custom
 
 #include "ftxui/component/component.hpp"  // for Renderer
 #include "ftxui/component/screen_interactive.hpp"

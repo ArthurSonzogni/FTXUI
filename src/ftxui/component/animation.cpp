@@ -1,4 +1,4 @@
-#include <cmath>
+#include <cmath>    // IWYU pragma: keep
 #include <ratio>    // for ratio
 #include <utility>  // for move
 

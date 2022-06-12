@@ -43,7 +43,7 @@ Component Maybe(Component child, std::function<bool()> show) {
 /// ### Example
 ///
 /// ```cpp
-/// auto component = Renderer([]{ return "Hello World!"; });
+/// auto component = Renderer([]{ return text("Hello World!"); });
 /// auto maybe_component = component | Maybe([&]{ return counter == 42; });
 /// ```
 ComponentDecorator Maybe(std::function<bool()> show) {
@@ -60,7 +60,7 @@ ComponentDecorator Maybe(std::function<bool()> show) {
 /// ### Example
 ///
 /// ```cpp
-/// auto component = Renderer([]{ return "Hello World!"; });
+/// auto component = Renderer([]{ return text("Hello World!"); });
 /// auto maybe_component = Maybe(component, &show);
 /// ```
 Component Maybe(Component child, const bool* show) {
@@ -74,7 +74,7 @@ Component Maybe(Component child, const bool* show) {
 /// ### Example
 ///
 /// ```cpp
-/// auto component = Renderer([]{ return "Hello World!"; });
+/// auto component = Renderer([]{ return text("Hello World!"); });
 /// auto maybe_component = component | Maybe(&show);
 /// ```
 ComponentDecorator Maybe(const bool* show) {

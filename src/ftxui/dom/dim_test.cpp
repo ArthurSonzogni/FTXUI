@@ -1,11 +1,11 @@
 #include <gtest/gtest-message.h>  // for Message
 #include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include <string>                   // for allocator
+#include <gtest/gtest.h>  // for Test, AssertionResult, TestInfo (ptr only), EXPECT_TRUE, TEST
+#include <string>  // for allocator
 
 #include "ftxui/dom/elements.hpp"   // for operator|, text, dim, Element
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen, Pixel
-#include "gtest/gtest_pred_impl.h"  // for Test, AssertionResult, EXPECT_TRUE, TEST
 
 namespace ftxui {
 

@@ -1,8 +1,10 @@
 #include "ftxui/component/terminal_input_parser.hpp"
 
-#include <cstdint>  // for uint32_t
-#include <memory>   // for unique_ptr
-#include <utility>  // for move
+#include <cstdint>                    // for uint32_t
+#include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Button, Mouse::Motion
+#include <ftxui/component/receiver.hpp>  // for SenderImpl, Sender
+#include <memory>                        // for unique_ptr, allocator
+#include <utility>                       // for move
 
 #include "ftxui/component/event.hpp"  // for Event
 #include "ftxui/component/task.hpp"   // for Task

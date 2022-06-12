@@ -1,5 +1,6 @@
 #include "ftxui/component/component_options.hpp"
 
+#include <ftxui/screen/color.hpp>  // for Color, Color::Black, Color::White, Color::GrayDark, Color::GrayLight
 #include <memory>   // for shared_ptr
 #include <utility>  // for move
 
