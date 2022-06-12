@@ -434,25 +434,25 @@ TEST(FlexboxTest, GapY) {
 
 TEST(FlexboxTest, Focus) {
   auto document = vbox({
-    paragraph("0 -"),
-    paragraph("1 -"),
-    paragraph("2 -"),
-    paragraph("3 -"),
-    paragraph("4 -"),
-    paragraph("5 -"),
-    paragraph("6 -"),
-    paragraph("7 -") | focus,
-    paragraph("8 -"),
-    paragraph("9 -"),
-  }) | yframe | flex;
+                      paragraph("0 -"),
+                      paragraph("1 -"),
+                      paragraph("2 -"),
+                      paragraph("3 -"),
+                      paragraph("4 -"),
+                      paragraph("5 -"),
+                      paragraph("6 -"),
+                      paragraph("7 -") | focus,
+                      paragraph("8 -"),
+                      paragraph("9 -"),
+                  }) |
+                  yframe | flex;
 
   Screen screen(1, 3);
   Render(screen, document);
   EXPECT_EQ(screen.ToString(),
             "-\r\n"
             "7\r\n"
-            "-"
-            );
+            "-");
 }
 
 }  // namespace ftxui

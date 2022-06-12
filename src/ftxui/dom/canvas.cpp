@@ -1,12 +1,13 @@
 #include "ftxui/dom/canvas.hpp"
 
-#include <algorithm>  // for max, min
-#include <cstdint>    // for uint8_t
-#include <cstdlib>    // for abs
-#include <map>        // for allocator, map
-#include <memory>     // for make_shared
-#include <utility>    // for move, pair
-#include <vector>     // for vector
+#include <algorithm>               // for max, min
+#include <cstdint>                 // for uint8_t
+#include <cstdlib>                 // for abs
+#include <ftxui/screen/color.hpp>  // for Color
+#include <map>                     // for map
+#include <memory>                  // for make_shared
+#include <utility>                 // for move, pair
+#include <vector>                  // for vector
 
 #include "ftxui/dom/elements.hpp"     // for Element, canvas
 #include "ftxui/dom/node.hpp"         // for Node

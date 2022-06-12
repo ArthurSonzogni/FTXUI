@@ -3,8 +3,10 @@
 #include <chrono>  // for operator-, milliseconds, duration, operator>=, time_point, common_type<>::type
 #include <csignal>  // for signal, raise, SIGTSTP, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGWINCH
 #include <cstdio>   // for fileno, size_t, stdin
-#include <functional>        // for function
-#include <initializer_list>  // for initializer_list
+#include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
+#include <ftxui/screen/screen.hpp>   // for Pixel, Screen::Cursor, Screen
+#include <functional>                // for function
+#include <initializer_list>          // for initializer_list
 #include <iostream>  // for cout, ostream, basic_ostream, operator<<, endl, flush
 #include <stack>     // for stack
 #include <thread>    // for thread, sleep_for
@@ -17,7 +19,7 @@
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
-#include "ftxui/component/receiver.hpp"  // for ReceiverImpl, Sender, MakeReceiver, SenderImpl, Receiver
+#include "ftxui/component/receiver.hpp"  // for Sender, ReceiverImpl, MakeReceiver, SenderImpl, Receiver
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render

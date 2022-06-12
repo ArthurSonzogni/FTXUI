@@ -31,6 +31,7 @@ add_executable(tests
   src/ftxui/component/container_test.cpp
   src/ftxui/component/input_test.cpp
   src/ftxui/component/menu_test.cpp
+  src/ftxui/component/modal_test.cpp
   src/ftxui/component/radiobox_test.cpp
   src/ftxui/component/receiver_test.cpp
   src/ftxui/component/resizable_split_test.cpp

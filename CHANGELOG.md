@@ -12,6 +12,9 @@ current (development)
 - Bugfix: Forward the selected/focused area from the child in gridbox.
 - Bugfix: Fix incorrect Canvas computed dimensions.
 
+### Component:
+- Feature: Add the `Modal` component.
+
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`
 

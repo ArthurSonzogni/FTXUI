@@ -7,9 +7,9 @@
 #include <utility>     // for forward
 #include <vector>      // for vector
 
-#include "ftxui/component/component_base.hpp"     // for Component, Components
-#include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption, InputOption (ptr only), MenuEntryOption (ptr only), MenuOption, RadioboxOption (ptr only)
-#include "ftxui/dom/elements.hpp"                 // for Element
+#include "ftxui/component/component_base.hpp"  // for Component, Components
+#include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption, MenuOption
+#include "ftxui/dom/elements.hpp"  // for Element
 #include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef, ConstStringListRef, StringRef
 
 namespace ftxui {
@@ -87,6 +87,9 @@ Component Maybe(Component, const bool* show);
 Component Maybe(Component, std::function<bool()>);
 ComponentDecorator Maybe(const bool* show);
 ComponentDecorator Maybe(std::function<bool()>);
+
+Component Modal(Component main, Component modal, const bool* show_modal);
+ComponentDecorator Modal(Component modal, const bool* show_modal);
 
 Component Collapsible(ConstStringRef label,
                       Component child,

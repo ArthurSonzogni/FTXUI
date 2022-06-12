@@ -28,7 +28,7 @@ int Integrate(std::vector<int>& elements) {
   }
   return accu;
 }
-}
+}  // namespace
 
 class GridBox : public Node {
  public:

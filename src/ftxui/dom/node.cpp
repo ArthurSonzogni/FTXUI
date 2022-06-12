@@ -1,4 +1,5 @@
-#include <utility>  // for move
+#include <ftxui/screen/box.hpp>  // for Box
+#include <utility>               // for move
 
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/screen.hpp"  // for Screen
