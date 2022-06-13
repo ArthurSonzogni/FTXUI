@@ -487,8 +487,11 @@ std::string Screen::ResetPosition(bool clear) const {
 
 /// @brief Clear all the pixel from the screen.
 void Screen::Clear() {
-  pixels_ = std::vector<std::vector<Pixel>>(dimy_,
-                                            std::vector<Pixel>(dimx_, Pixel()));
+  for (auto& line : pixels_) {
+    for (auto& cell : line) {
+      cell = Pixel();
+    }
+  }
   cursor_.x = dimx_ - 1;
   cursor_.y = dimy_ - 1;
 }
