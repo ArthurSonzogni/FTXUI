@@ -14,7 +14,7 @@
 namespace ftxui {
 
 using Charset = std::array<std::string, 6>;  // NOLINT
-using Charsets = std::array<Charset, 6>;     // NOLINT
+using Charsets = std::array<Charset, 5>;     // NOLINT
 // NOLINTNEXTLINE
 static Charsets simple_border_charset = {
     Charset{"┌", "┐", "└", "┘", "─", "│"},
