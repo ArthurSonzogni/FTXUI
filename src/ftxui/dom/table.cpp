@@ -14,7 +14,7 @@ bool IsCell(int x, int y) {
 }
 
 // NOLINTNEXTLINE
-static std::string charset[6][6] = {
+static std::string charset[5][6] = {
     {"┌", "┐", "└", "┘", "─", "│"},  //
     {"┏", "┓", "┗", "┛", "━", "┃"},  //
     {"╔", "╗", "╚", "╝", "═", "║"},  //
