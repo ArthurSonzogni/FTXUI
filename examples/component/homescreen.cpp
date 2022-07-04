@@ -1,5 +1,6 @@
 #include <stddef.h>    // for size_t
 #include <array>       // for array
+#include <atomic>      // for atomic
 #include <chrono>      // for operator""s, chrono_literals
 #include <cmath>       // for sin
 #include <functional>  // for ref, reference_wrapper, function
@@ -499,13 +500,18 @@ int main(int argc, const char* argv[]) {
     });
   });
 
-  bool refresh_ui_continue = true;
+  std::atomic<bool> refresh_ui_continue = true;
   std::thread refresh_ui([&] {
     while (refresh_ui_continue) {
       using namespace std::chrono_literals;
       std::this_thread::sleep_for(0.05s);
-      shift++;
-      screen.PostEvent(Event::Custom);
+      // The |shift| variable belong to the main thread. `screen.Post(task)`
+      // will execute the update on the thread where |screen| lives (e.g. the
+      // main thread). Using `screen.Post(task)` is threadsafe.
+      screen.Post([&] { shift++; });
+      // After updating the state, request a new frame to be drawn. This is done
+      // by simulating a new "custom" event to be handled.
+      screen.Post(Event::Custom);
     }
   });
 
