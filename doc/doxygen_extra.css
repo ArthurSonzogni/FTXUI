@@ -178,11 +178,12 @@ div.headertitle {
 }
 
 div.fragment {
-  padding: 16px;
   background-color: #f3f3f3;
-  border: 0 solid;
-  transition: all 0.5s ease-in-out;
   border-radius:5px;
+  border: 0 solid;
+  border: none;
+  padding:16px;
+  transition: all 0.5s ease-in-out;
 }
 
 div.fragment:hover {
@@ -192,8 +193,9 @@ div.fragment:hover {
 
 div.line {
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-  font-size: 85%;
-  line-height: 1.45;
+  font-size: 90%;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-kerning: none;
   -webkit-transition-duration: 0;
   -moz-transition-duration: 0;
   -ms-transition-duration: 0;
@@ -204,15 +206,6 @@ div.line {
 div.line.glow {
   background-color: auto;
   box-shadow: none;
-}
-
-pre.fragment {
-  border: 0 solid #C4CFE5;
-  padding: 16px;
-  background-color: #f3f3f3;
-  font-size: 85%;
-  line-height: 1.45;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
 }
 
 /* @group Code Colorization */
