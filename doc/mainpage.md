@@ -4,8 +4,8 @@
 
 Welcome to the FTXUI documentation!
 
-This is a brief tutorial. You are also encouraged to learn, by reading the
-[examples](./examples.html)
+This is a brief tutorial. You are also encouraged to self-learn by reading the
+[examples](./examples.html).
 
 @tableofcontents 
 
@@ -45,17 +45,19 @@ int main(void) {
 
 **output**
 ```bash
-┌────┐┌─────────────────────────────────────────────────────────────────┐┌─────┐
-│left││middle                                                           ││right│
-└────┘└─────────────────────────────────────────────────────────────────┘└─────┘
+┌────┐┌────────────────────────────────────┐┌─────┐
+│left││middle                              ││right│
+└────┘└────────────────────────────────────┘└─────┘
 ```
 
 # Build {#build}
 
 ## Using CMake {#build-cmake}
 
+This is an example configuration for your **CMakeLists.txt**
+
 CMakeLists.txt
-~~~cmake
+```cmake
 cmake_minimum_required (VERSION 3.11)
 
 # --- Fetch FTXUI --------------------------------------------------------------
@@ -89,38 +91,43 @@ target_link_libraries(ftxui-starter
   PRIVATE ftxui::component # Not needed for this example.
 )
 
-~~~
+```
 
-Build
-~~~sh
+Subsequently, you build the project in the standard fashion as follows:
+```bash
 mkdir build && cd build
 cmake ..
 make
 ./main
-~~~
+```
 
 # List of modules. {#modules}
 
-The project is made from into 3 modules:
+The project is comprised of 3 modules:
 
-1. **ftxui/screen** defines a `ftxui::Screen`, this is a grid of `ftxui::Pixel`.
+1. **ftxui/screen** defines a `ftxui::Screen`, a grid of `ftxui::Pixel`.
 
 2. **ftxui/dom** is the main module. It defines a hierarchical set of
    `ftxui::Element`.  An element draws something on the `ftxui::Screen`. It is
    responsive to the size of its container.
 
-3. **ftxui/component** The part is only needed if you need to respond to the
-   User input. It defines a set of `ftxui::Component`.  The use can navigates
+3. **ftxui/component** The module is required if your program needs to respond
+   to user input. It defines a set of `ftxui::Component`. These components can
+   be utilized to navigate the program by using the arrow keys and interacting
+   with widgets such as the checkbox. You can also make you own components.
+   The use can navigates
    using the arrow keys and interact with widgets like checkbox/inputbox/... You
    can make you own components.
 
 # screen {#module-screen}
 
-It defines a `ftxui::Screen`. This is a grid of `ftxui::Pixel`. A Pixel
-represent a Unicode character and its associated style (bold, colors, etc...).
-The screen can be printed as a string using `ftxui::Screen::ToString()`.
+This is the visual element of the program. It defines a `ftxui::Screen`, which
+is a grid of `ftxui::Pixel`. A Pixel represents a Unicode character and its
+associated style (bold, colors, etc.). The screen can be printed as a string
+using `ftxui::Screen::ToString()`. The following example highlights this
+process:
 
-~~~cpp
+```cpp
   #include <ftxui/screen/screen.hpp>
   #include <iostream>
 
@@ -136,12 +143,14 @@ The screen can be printed as a string using `ftxui::Screen::ToString()`.
     std::cout << screen.ToString();
     return EXIT_SUCCESS;
   }
-~~~
+```
 
 # dom {#module-dom}
 
 This module defines a hierarchical set of `ftxui::Element`. An element manages
-layout and can be responsive to the terminal dimensions.
+the layout and can be responsive to the terminal dimension changes. Note the
+following example where this module is used to create a simple layout with a
+number of operators:
 
 **Example:**
 ```cpp
@@ -165,7 +174,8 @@ document |= border
 
 **List of elements**
 
-They are all defined inside:
+The list of all elements are included and can be accessed by including the
+corresponding header file:
 ```cpp
 #include <ftxui/dom/elements.hpp>
 ```
@@ -175,41 +185,44 @@ They are all defined inside:
 ## text ## {#dom-text}
 
 The most simple widget. It displays a text.
-~~~cpp
+```cpp
 text("I am a piece of text");
-~~~
-~~~bash
+```
+```bash
 I am a piece of text.
-~~~
+```
 
 ## vtext {#dom-vtext}
 
-Same as `ftxui::text`, but vertical.
-~~~cpp
+Identical to `ftxui::text`, but displayed vertically.
+
+Code:
+```cpp
 vtext("HELLO");
-~~~
-~~~bash
+```
+
+Terminal output:
+```bash
 H
 E
 L
 L
 O
-~~~
+```
 
 ## paragraph {#dom-paragraph}
 
+Similar to `ftxui::text`, but the individual word are wrapped along multiple
+lines, depending on the width of its container.
+
+Sample Code:
 ```cpp
 paragraph("A very long text")
 ```
 
-Similar to `ftxui::text`, but this support line wrapping and alignments. The
-words are split by spaces
-
-[Paragraph example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2paragraph_8cpp-example.html)
-  
 ![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/4759106/147251370-983a06e7-6f41-4113-92b8-942f43d34d06.gif)
 
-See:
+For a more detailed example refer to [detailed example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2paragraph_8cpp-example.html). Paragraph also includes a number of other variants as shown below:
 ```cpp
 Element paragraph(std::string text);
 Element paragraphAlignLeft(std::string text);
@@ -221,25 +234,28 @@ Element paragraphAlignJustify(std::string text);
 
 ## border {#dom-border}
 
-Add a border around an element
-~~~cpp
-border(text("The element"))
-~~~
+Adds a border around an element.
 
-~~~bash
+Code:
+```cpp
+border(text("The element"))
+```
+
+Terminal output:
+```bash
 ┌───────────┐
 │The element│
 └───────────┘
-~~~
+```
 
-Same, with the pipe operator:
+You can achieve the same behavior by using the pipe operator.
 
+Code:
 ```cpp
 text("The element") | border
 ```
 
-Border come with different styles.
-See:
+Border also comes in a variety of styles as shown below:
 ```cpp
 Element border(Element);
 Element borderLight(Element);
@@ -254,24 +270,27 @@ Decorator borderWith(Pixel);
 
 ## window ## {#dom-window}
 
-A `ftxui::window` is a `ftxui::border`, but with some text on top of the border.
-Add a border around an element
-~~~cpp
+A `ftxui::window` is a `ftxui::border`, but with an additional header. To add a
+window around an element, wrap it and specify a string as the header.
+Code:
+```cpp
 window("The window", text("The element"))
-~~~
+```
 
-~~~bash
+Terminal output:
+```bash
 ┌The window─┐
 │The element│
 └───────────┘
-~~~
+```
 
 ## separator {#dom-separator}
 
-Display a vertical or horizontal line to visually split the content of a
+Displays a vertical/horizontal line to visually split the content of a
 container in two.
 
-~~~cpp
+Code:
+```cpp
 border(
   hbox({
     text("Left"), 
@@ -279,17 +298,17 @@ border(
     text("Right")
   })
 )
-~~~
+```
 
-~~~bash
+Terminal output:
+```bash
 ┌────┬─────┐
 │left│right│
 └────┴─────┘
-~~~
+```
 
 
-Separators come with different styles:
-See:
+Separators come in a variety of flavors as shown below:
 ```cpp
 Element separator(void);
 Element separatorLight();
@@ -311,18 +330,21 @@ Element separatorVSelector(float up,
 
 ## gauge {#dom-gauge}
 
-A gauge. It can be used to represent a progress bar.
-~~~cpp
-border(gauge(0.5))
-~~~
+It constitutes a gauge. It can be used to represent a progress bar.
 
-~~~bash
+Code:
+```cpp
+border(gauge(0.5))
+```
+
+Teminal output:
+```bash
 ┌────────────────────────────────────────────────────────────────────────────┐
 │██████████████████████████████████████                                      │
 └────────────────────────────────────────────────────────────────────────────┘
-~~~
+```
 
-A gauge can be displayed into several directions. See:
+Gauges can be displayed in many orientations as shown below:
 ```cpp
 Element gauge(float ratio);
 Element gaugeLeft(float ratio);
@@ -344,21 +366,21 @@ Element graph(GraphFunction);
 ```
 
 ## Colors {#dom-colors}
-A terminal console can usually display colored text and colored background.
 
-~~~cpp
+Most terminal consoles can display colored text and colored backgrounds. FTXUI
+supports every color palette:
+```cpp
 Decorator color(Color);
 Decorator bgcolor(Color);
-~~~
+```
 
-FTXUI support every color palette:
 
 Color [gallery](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gallery_8cpp-example.html):
 ![image](https://user-images.githubusercontent.com/4759106/147248595-04c7245a-5b85-4544-809d-a5984fc6f9e7.png)
 
 ### Palette16 #{#dom-colors-palette-16}
 
-On most terminal the following colors are supported:
+On most terminals the following colors are supported:
 - Default
 
 - Black
@@ -385,7 +407,7 @@ On most terminal the following colors are supported:
 - Yellow
 - YellowLight
 
-Example:
+Example use of the above colors using the pipe operator:
 ```cpp
 text("Blue foreground") | color(Color::Blue);
 text("Blue background") | bgcolor(Color::Blue);
@@ -405,7 +427,11 @@ text("HotPink") | color(Color::HotPink);
 
 ### TrueColor #{#dom-colors-true-color}
 
-On terminal supporting trueColor, you can directly chose the 24bit RGB color:
+On terminal supporting trueColor, you can directly use the 24bit RGB color
+space:
+
+Use the constructors below to specify the **RGB** or **HSV** values for your
+color:
 
 There are two constructors:
 ```cpp
@@ -419,11 +445,10 @@ ftxui::Color::HSV(uint8_t hue, uint8_t saturation, uint8_t value);
 @endhtmlonly
 
 ## Style {#dom-style}
-A terminal console can usually display colored text and colored background.
-The text can also have different effects: bold, dim, underlined, inverted,
-blink.
+In addition to colored text and colored backgrounds. Many terminals support text
+effects such as: `bold`, `dim`, `underlined`, `inverted`, `blink`.
 
-~~~cpp
+```cpp
 Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
@@ -431,85 +456,94 @@ Element underlined(Element);
 Element blink(Element);
 Decorator color(Color);
 Decorator bgcolor(Color);
-~~~
+```
 
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2style_gallery_8cpp-example.html)
 
 ![image](https://user-images.githubusercontent.com/4759106/147244118-380bf834-9e33-40df-9ff0-07c10f2598ef.png)
 
-Example:
-~~~cpp
+To use these effects, simply wrap your elements with your desired effect:
+```cpp
 underlined(bold(text("This text is bold and underlined")))
-~~~
+```
 
-Tips: The pipe operator can be used to chain Decorator:
-~~~cpp
+Alternatively, use the pipe operator to chain it on your element:
+```cpp
 text("This text is bold")) | bold | underlined
-~~~
+```
 
 ## Layout {#dom-layout}
 
-Element can be arranged together:
-  - horizontally with `ftxui::hbox`
-  - vertically with `ftxui::vbox`
-  - inside a grid with `ftxui::gridbox`
-  - wrap along one direction using the `ftxui::flexbox`.
+Enables elements to be arranged in the following ways:
+  - **Horizontally** with `ftxui::hbox`
+  - **Vertically** with `ftxui::vbox`
+  - **Inside a grid** with `ftxui::gridbox`
+  - **Wrapped along one direction** using the `ftxui::flexbox`.
   
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html) using `ftxui::hbox`, `ftxui::vbox` and `ftxui::filler`.
 
 ![image](https://user-images.githubusercontent.com/4759106/147242524-7103b5d9-1a92-4e2d-ac70-b3d6740061e3.png)
   
   
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2gridbox_8cpp-example.htmlp) using `ftxui::gridbox`:
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2gridbox_8cpp-example.htmlp)
+using `ftxui::gridbox`:
 
 ![image](https://user-images.githubusercontent.com/4759106/147242972-0db1f2e9-0790-496f-86e6-ed2c604f7a73.png)
 
-[Example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/hflow.cpp) using flexbox:
+[Example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/hflow.cpp)
+using flexbox:
 
 ![image](https://user-images.githubusercontent.com/4759106/147243064-780ac7cc-605b-475f-94b8-cf7c4aed03a5.png)
 
-[See](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html) also this [demo](https://arthursonzogni.com/FTXUI/examples/?file=component/flexbox).
+Checkout this
+[example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html)
+and the associated
+[demo](https://arthursonzogni.com/FTXUI/examples/?file=component/flexbox).
 
-Element can become flexible using the the `ftxui::flex` decorator.
+Element can also become flexible using the the `ftxui::flex` decorator.
 
-**Examples**
-~~~cpp
+Code:
+```cpp
   hbox({
     text("left") | border ,
     text("middle") | border | flex,
     text("right") | border,
   });
-~~~
-~~~bash
-┌────┐┌─────────────────────────────────────────────────────────────────┐┌─────┐
-│left││middle                                                           ││right│
-└────┘└─────────────────────────────────────────────────────────────────┘└─────┘
-~~~
+```
+Terminal output:
+```bash
+┌────┐┌─────────────────────────────────────────────────────┐┌─────┐
+│left││middle                                               ││right│
+└────┘└─────────────────────────────────────────────────────┘└─────┘
+```
 
-~~~cpp
+Code:
+```cpp
   hbox({
     text("left") | border ,
     text("middle") | border | flex,
     text("right") | border | flex,
   });
-~~~
-~~~bash
-┌────┐┌───────────────────────────────────┐┌───────────────────────────────────┐
-│left││middle                             ││right                              │
-└────┘└───────────────────────────────────┘└───────────────────────────────────┘
-~~~
+```
+
+Terminal output:
+```bash
+┌────┐┌───────────────────────────────┐┌───────────────────────────────┐
+│left││middle                         ││right                          │
+└────┘└───────────────────────────────┘└───────────────────────────────┘
+```
 
 ## Table {#dom-table}
 
-A class to easily style a table of data.
+Enables easy formatting of data into a neat table like visual form.
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
+[Code example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
 
 ## Canvas {#dom-canvas}
 
-See [<ftxui/dom/canvas.hpp>](./canvas_8hpp_source.html)
+See the API [<ftxui/dom/canvas.hpp>](./canvas_8hpp_source.html)
 
 ```cpp
   auto c = Canvas(100, 100);
@@ -517,33 +551,33 @@ See [<ftxui/dom/canvas.hpp>](./canvas_8hpp_source.html)
   auto element = canvas(c);
 ```
 
-Drawing can be made on a `ftxui::Canvas`, using braille, block, or simple
+Drawing can be performed on a `ftxui::Canvas`, using braille, block, or simple
 characters:
   
 Simple [example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/canvas.cpp):
   
 ![image](https://user-images.githubusercontent.com/4759106/147245843-76cc62fb-ccb4-421b-aacf-939f9afb42fe.png)
 
-Complex [examples](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/component/canvas_animated.cpp):
+Complex [example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/component/canvas_animated.cpp):
   
 ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/4759106/147250538-783a8246-98e0-4a25-b032-3bd3710549d1.gif)  
 
 # component {#module-component}
 
-The `ftxui::component`module defines the logic to produce interactive component
-responding to user's events (keyboard, mouse, etc...)
+The `ftxui::component` module defines the logic that produces interactive
+components that respond to user events (keyboard, mouse, etc.).
 
-A `ftxui::ScreenInteractive` defines a main loop to render a component.
+A `ftxui::ScreenInteractive` defines a main loop that renders a component.
 
-A `ftxui::Component` is a shared pointer to a `ftxui::ComponentBase`. The later
-defines
+A `ftxui::Component` is a shared pointer to a `ftxui::ComponentBase`. The latter defines:
   - `ftxui::ComponentBase::Render()`: How to render the interface.
   - `ftxui::ComponentBase::OnEvent()`: How to react to events.
-  - `ftxui::ComponentBase::Add()`: Give a parent/child relation ship in between
-    two component. This defines a tree a components, which help properly define
-    how keyboard navigation works.
+  - `ftxui::ComponentBase::Add()`: Construct a parent/child relationship
+    between two components. The tree of component is used to define how to
+    navigate using the keyboard.
 
-`ftxui::Element` are used to render a single frame. On the other side
+`ftxui::Element` are used to render a single frame.
+
 `ftxui::Component` are used to render dynamic user interface, producing multiple
 frame, and updating its state on events.
 
@@ -551,7 +585,8 @@ frame, and updating its state on events.
 
 ![image](https://user-images.githubusercontent.com/4759106/147247330-b60beb9f-e665-48b4-81c0-4b01ee95bc66.png)
 
-Predefined components are available in ["ftxui/dom/component.hpp"](./component_8hpp.html)
+All predefined components are available in
+["ftxui/dom/component.hpp"](./component_8hpp.html)
 
 \include ftxui/component/component.hpp
 
@@ -569,6 +604,8 @@ Produced by: `ftxui::Input()` from "ftxui/component/component.hpp"
 
 ## Menu {#component-menu}
 
+Defines a menu object. It contains a list of entries, one of them is selected.
+
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
@@ -582,6 +619,8 @@ Produced by: `ftxui::Menu()` from "ftxui/component/component.hpp"
 
 ## Toggle {#component-toggle}
 
+A special kind of menu. The entries are displayed horizontally.
+
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
@@ -593,6 +632,9 @@ Produced by: `ftxui::Toggle()` from "ftxui/component/component.hpp"
 @endhtmlonly
 
 ## CheckBox {#component-checkbox}
+
+This component defines a checkbox. It is a single entry that can be turned
+on/off.
 
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2checkbox_8cpp-example.html):
 
@@ -606,6 +648,8 @@ Produced by: `ftxui::Checkbox()` from "ftxui/component/component.hpp"
 
 ## RadioBox {#component-radiobox}
 
+A radiobutton component. This is a list of entries, where one can be turned on.
+
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2radiobox_8cpp-example.html):
   
 ![image](https://user-images.githubusercontent.com/4759106/147246401-809d14a5-6621-4e36-8dd9-a2d75ef2a94e.png)
@@ -618,6 +662,9 @@ Produced by: `ftxui::Radiobox()` from "ftxui/component/component.hpp"
 
 ## Dropdown {#component-dropdown}
 
+A drop down menu is a component that when checked display a list of element for
+the user to select one.
+
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html):
 
 ![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
@@ -625,6 +672,9 @@ Produced by: `ftxui::Radiobox()` from "ftxui/component/component.hpp"
 Produced by: `ftxui::Dropdown()` from "ftxui/component/component.hpp"
 
 ## Slider {#component-slider}
+
+Represents a slider object that consists of a range with binned intermediate
+intervals. It can be created by `ftxui::Slider()`.
 
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2slider_8cpp-example.html):
 
@@ -634,7 +684,7 @@ Produced by: `ftxui::Slider()` from "ftxui/component/component.hpp"
 
 ## Renderer {#component-renderer}
 
-Produced by: `ftxui::Renderer()` from \ref 'ftxui/component/component.hpp'. This
+Produced by: `ftxui::Renderer()` from \ref ftxui/component/component.hpp. This
 component decorate another one by using a different function to render an
 interface.
 
@@ -647,11 +697,11 @@ auto renderer = Renderer(inner, [&] {
 });
 ```
 
-`ftxui::Renderer` also support the component decorator pattern:
+`ftxui::Renderer` also supports the component decorator pattern:
 ```cpp
 auto component = [...]
 component = component
-  | Renderer([] (Element e) { return e | border))
+  | Renderer([](Element e) { return e | border))
   | Renderer(bold)
 ```
 
@@ -663,9 +713,8 @@ component = component | border | bold;
 
 ## CatchEvent {#component-catchevent}
 
-Produced by: `ftxui::CatchEvent()` from \ref 'ftxui/component/component.hpp'.
-This component decorate another one and catch the events before the underlying
-component.
+Produced by: `ftxui::CatchEvent()` from \ref ftxui/component/component.hpp.
+This component decorate others, catching events before the underlying component.
 
 Examples:
 ```cpp
@@ -694,9 +743,9 @@ component = component
 
 ## Collapsible {#component-collapsible}
 
-Useful for section whose visibility can be toggle on/off by the user.
-This is basically, a combinaison of a `ftxui::Checkbox` and a `ftxui::Maybe`
-components.
+Useful for visual elements whose visibility can be toggle on/off by the user.
+Essentially, this the combination of the `ftxui::Checkbox()` and
+`ftxui::Maybe()` components.
 
 ```cpp
 auto collabsible = Collapsible("Show more", inner_element);
@@ -704,9 +753,9 @@ auto collabsible = Collapsible("Show more", inner_element);
 
 ## Maybe {#component-maybe}
 
-Produced by: `ftxui::Maybe()` from \ref `ftxui/component/component.hpp`.
-This component decorate another one, by showing/hiding it depending on a boolean
-or a predicate.
+Produced by: `ftxui::Maybe()` from \ref ftxui/component/component.hpp.
+This component can be utilized to show/hide any other component via a boolean or
+a predicate.
 
 Example with a boolean:
 ```cpp
@@ -721,9 +770,8 @@ auto component = Renderer([]{ return "Hello World!"; });
 auto maybe_component = Maybe(component, [&] { return time > 10; })
 ```
 
-`ftxui::Maybe` can be used as a decorator.
-
-```
+As usual, `ftxui::Maybe` can also be used as a decorator:
+```cpp
 component = component
   | Maybe(&a_boolean)
   | Maybe([&] { return time > 10; })
@@ -759,22 +807,20 @@ one of them. This is useful for implementing a tab bar.
   ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif)
 
 
-## ResizableSplit::{Left, Right, Top, Bottom}  {#component-resizable-split}
+## ResizableSplit  {#component-resizable-split}
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2resizable_split_8cpp-example.html):
-
-![ezgif com-gif-maker](https://user-images.githubusercontent.com/4759106/147248372-c55512fe-9b96-4b08-a1df-d05cf2cae431.gif)  
-
-Produced by:
+It defines a horizontal or vertical separation between two children components.
+The position of the split is variable and controllable using the mouse. 
+There are four possible splits:
 - `ftxui::ResizableSplitLeft()`
 - `ftxui::ResizableSplitRight()`
 - `ftxui::ResizableSplitTop()`
 - `ftxui::ResizableSplitBottom()`
 from "ftxui/component/component.hpp"
 
-It defines an horizontal or vertical separation in between two children
-component. The position of the split is variable and controllable using the
-mouse.
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2resizable_split_8cpp-example.html):
+
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/4759106/147248372-c55512fe-9b96-4b08-a1df-d05cf2cae431.gif)  
 
 @htmlonly
 <script id="asciicast-tprMH2EdkUoMb7D2YxgMGgpzx" src="https://asciinema.org/a/tprMH2EdkUoMb7D2YxgMGgpzx.js" async></script>
@@ -782,16 +828,14 @@ mouse.
 
 ## Force a frame redraw. {#component-force-redraw}
 
-Whenever a new group of events have been processed: keyboard, mouse, window
-resize, etc..., the `ftxui::ScreenInteractive::Loop()` is responsible for
-drawing a new frame.
+Typically, `ftxui::ScreenInteractive::Loop()` is responsible for drawing a new
+frame whenever a new group of events (e.g keyboard, mouse, window resize, etc.)
+has been processed. However, you might want to react to arbitrary events that
+are unknown to FTXUI. To accomplish this, you must post events using
+`ftxui::ScreenInteractive::PostEvent` (**this is thread safe**) via a thread.
+You will have to post the event `ftxui::Event::Custom`.
 
-You might want to react to arbitrary events that are unknown to FTXUI. This can
-be achieve by posting events via `ftxui::ScreenInteractive::PostEvent`, via a
-thread. You can post the event`ftxui::Event::Custom`.
-
+Example:
 ```cpp
 screen->PostEvent(Event::Custom);
 ```
-
-`ftxui::ScreenInteractive::PostEvent` is thread safe.
