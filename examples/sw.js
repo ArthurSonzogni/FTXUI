@@ -2,8 +2,10 @@
 self.addEventListener("install", () => self.skipWaiting());
 self.addEventListener("activate", e => e.waitUntil(self.clients.claim()));
 self.addEventListener("fetch", e => {
-  if (e.request.mode != 'navigate')
+  if (e.request.mode != 'navigate' &&
+    !e.request.url.includes(".worker.js")) {
     return;
+  }
 
   e.respondWith((async () => {
     const response = await fetch(e.request);
