@@ -197,7 +197,8 @@ jobs:
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
           -DFTXUI_ENABLE_INSTALL=OFF;
-          cmake --build .;
+          cmake --build . --target doc;
+          cmake --build . ;
           rsync -amv
           --include='*/'
           --include='*.html'
