@@ -19,6 +19,7 @@ if (EMSCRIPTEN)
   get_property(EXAMPLES GLOBAL PROPERTY FTXUI::EXAMPLES)
   foreach(file
       "index.html"
+      "sw.js"
       "run_webassembly.py")
     configure_file(${file} ${file})
   endforeach(file)

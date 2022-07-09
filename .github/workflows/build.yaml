@@ -169,7 +169,7 @@ jobs:
           overwrite: true
   
   documentation:
-    needs: package
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repository"
@@ -190,9 +190,22 @@ jobs:
         run: >
           mkdir build;
           cd build;
-          emcmake cmake ..;
-          cmake --build . --target doc;
-          rsync -amv --include='*/' --include='*.html' --include='*.js' --include='*.wasm' --exclude='*' examples doc/doxygen/html;
+          emcmake cmake ..
+          -DCMAKE_BUILD_TYPE=Release
+          -DFTXUI_BUILD_DOCS=ON
+          -DFTXUI_BUILD_EXAMPLES=ON
+          -DFTXUI_BUILD_TESTS=OFF
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=OFF;
+          cmake --build .;
+          rsync -amv
+          --include='*/'
+          --include='*.html'
+          --include='*.js'
+          --include='*.wasm'
+          --exclude='*'
+          examples
+          doc/doxygen/html;
 
       - name: "Deploy"
         uses: peaceiris/actions-gh-pages@v3

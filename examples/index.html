@@ -5,6 +5,18 @@
     <script src="https://cdn.jsdelivr.net/npm/xterm@4.18.0/lib/xterm.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-webgl@0.11.4/lib/xterm-addon-webgl.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.11.0/css/xterm.css"></link>
+    <!--Add COOP/COEP via a ServiceWorker to use SharedArrayBuffer-->
+    <script>
+      if ("serviceWorker" in navigator && !window.crossOriginIsolated) {
+        navigator.serviceWorker.register(new URL("./sw.js", location.href)).then(
+          registration => {
+            if (registration.active && !navigator.serviceWorker.controller) {
+              window.location.reload();
+            }
+          },
+        );
+      } 
+    </script>
   </head>
   <body>
     <script id="example_script"></script>
