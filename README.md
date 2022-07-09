@@ -35,8 +35,8 @@ A simple C++ library for terminal based user interfaces!
  * Simple and elegant syntax (in my opinion)
  * Keyboard & mouse navigation.
  * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
- * Support for animations. [Demo 1](https://arthursonzogni.com/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.com/FTXUI/examples/?file=component/button_style)
- * Support for drawing. [Demo](https://arthursonzogni.com/FTXUI/examples/?file=component/canvas_animated)
+ * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
+ * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
  * No dependencies
  * Cross platform: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
  * Learn by [examples](#documentation), and [tutorials](#documentation)
@@ -47,7 +47,7 @@ A simple C++ library for terminal based user interfaces!
 
 - [Starter example project](https://github.com/ArthurSonzogni/ftxui-starter)
 - [Documentation](https://arthursonzogni.github.io/FTXUI/)
-- [Examples (WebAssembly)](https://arthursonzogni.com/FTXUI/examples/)
+- [Examples (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
 - [Build using CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
 
 ## Operating systems
@@ -111,7 +111,7 @@ Element can become flexible using the the `flex` decorator.
 
 ![image](https://user-images.githubusercontent.com/4759106/147243064-780ac7cc-605b-475f-94b8-cf7c4aed03a5.png)
 
-[See](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html) also this [demo](https://arthursonzogni.com/FTXUI/examples/?file=component/flexbox).
+[See](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html) also this [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox).
 
 </details>
 
@@ -212,7 +212,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Gallery</summary>
 
-[Gallery](https://arthursonzogni.github.io/FTXUI/examples_2component_2gallery_8cpp-example.html) of multiple components. ([demo](https://arthursonzogni.com/FTXUI/examples/?file=component/gallery))
+[Gallery](https://arthursonzogni.github.io/FTXUI/examples_2component_2gallery_8cpp-example.html) of multiple components. ([demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/gallery))
 
 ![image](https://user-images.githubusercontent.com/4759106/147247330-b60beb9f-e665-48b4-81c0-4b01ee95bc66.png)
 
@@ -331,7 +331,7 @@ Feel free to add your projects here:
 ## [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
 Several games using the FTXUI have been made during the Game Jam:
-- [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Play web version]**](https://arthursonzogni.com/TermBreaker/)
+- [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Play web version]**](https://arthursonzogni.github.io/TermBreaker/)
 - [Minesweeper Marathon](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/minesweeper_marathon.md) [**[Play web version]**](https://barlasgarden.com/minesweeper/index.html)
 - [Grand Rounds](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/grandrounds.md)
 - [LightsRound](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/LightsRound.v.0.1.0.md)

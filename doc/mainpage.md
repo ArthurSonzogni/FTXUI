@@ -498,7 +498,7 @@ using flexbox:
 Checkout this
 [example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html)
 and the associated
-[demo](https://arthursonzogni.com/FTXUI/examples/?file=component/flexbox).
+[demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox).
 
 Element can also become flexible using the the `ftxui::flex` decorator.
 
@@ -581,7 +581,7 @@ A `ftxui::Component` is a shared pointer to a `ftxui::ComponentBase`. The latter
 `ftxui::Component` are used to render dynamic user interface, producing multiple
 frame, and updating its state on events.
 
-[Gallery](https://arthursonzogni.github.io/FTXUI/examples_2component_2gallery_8cpp-example.html) of multiple components. ([demo](https://arthursonzogni.com/FTXUI/examples/?file=component/gallery))
+[Gallery](https://arthursonzogni.github.io/FTXUI/examples_2component_2gallery_8cpp-example.html) of multiple components. ([demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/gallery))
 
 ![image](https://user-images.githubusercontent.com/4759106/147247330-b60beb9f-e665-48b4-81c0-4b01ee95bc66.png)
 
