@@ -48,7 +48,7 @@ A simple C++ library for terminal based user interfaces!
 - [Starter example project](https://github.com/ArthurSonzogni/ftxui-starter)
 - [Documentation](https://arthursonzogni.github.io/FTXUI/)
 - [Examples (WebAssembly)](https://arthursonzogni.com/FTXUI/examples/)
-- [Build using CMake](https://github.com/ArthurSonzogni/FTXUI/blob/master/doc/mainpage.md#using-cmake)
+- [Build using CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
 
 ## Operating systems
 
