@@ -802,6 +802,7 @@ void Canvas::DrawText(int x,
                       const Stylizer& style) {
   for (const auto& it : Utf8ToGlyphs(value)) {
     if (!IsIn(x, y)) {
+      x += 2;
       continue;
     }
     Cell& cell = storage_[XY{x / 2, y / 4}];
