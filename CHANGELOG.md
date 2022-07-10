@@ -5,6 +5,13 @@ current (development)
 ---------------------
 
 ### DOM
+- Feature: Customize the cursor. Add the following decorators:
+  - `focusCursorBlock`
+  - `focusCursorBlockBlinking`
+  - `focusCursorBar`
+  - `focusCursorBarBlinking`
+  - `focusCursorUnderline`
+  - `focusCursorUnderlineBlinking`
 - Bugfix: Fix `focus`/`select` when the `vbox`/`hbox`/`dbox` contains a
   `flexbox`
 - Bugfix: Fix the selected/focused area. It used to be 1 cell larger/longer than
@@ -25,6 +32,7 @@ current (development)
   can be used to integrate FTXUI into another main loop, without taking the full
   control.
 - Feature: `Input` supports CTRL+Left and CTRL+Right
+- Feature: Use a blinking bar in the `Input` component.
 - Improvement: The `Menu` keeps the focus when an entry is selected with the
   mouse.
 - Bug: Add implementation of `ButtonOption::Border()`. It was missing.

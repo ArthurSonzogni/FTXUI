@@ -80,6 +80,17 @@ class Screen {
   struct Cursor {
     int x = 0;
     int y = 0;
+
+    enum Shape {
+      Hidden = 0,
+      BlockBlinking = 1,
+      Block = 2,
+      UnderlineBlinking = 3,
+      Underline = 4,
+      Bar = 5,
+      BarBlinking = 6,
+    };
+    Shape shape;
   };
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
@@ -91,8 +102,6 @@ class Screen {
   int dimy_;
   std::vector<std::vector<Pixel>> pixels_;
   Cursor cursor_;
-
- private:
 };
 
 }  // namespace ftxui
