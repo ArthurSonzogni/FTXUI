@@ -331,7 +331,7 @@ Feel free to add your projects here:
 ## [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
 Several games using the FTXUI have been made during the Game Jam:
-- [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Play web version]**](https://arthursonzogni.github.io/TermBreaker/)
+- [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Play web version]**](https://arthursonzogni.com/TermBreaker/)
 - [Minesweeper Marathon](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/minesweeper_marathon.md) [**[Play web version]**](https://barlasgarden.com/minesweeper/index.html)
 - [Grand Rounds](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/grandrounds.md)
 - [LightsRound](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/LightsRound.v.0.1.0.md)
