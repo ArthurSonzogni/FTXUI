@@ -1,9 +1,6 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <string>                   // for allocator, string
-
 #include "ftxui/screen/string.hpp"
-#include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, TEST
+#include <gtest/gtest.h>
+#include <string>  // for allocator, string
 
 namespace ftxui {
 

@@ -1,10 +1,8 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestPartResult, TestFactoryImpl
-#include <functional>               // for function
-#include <vector>                   // for allocator, vector
+#include <gtest/gtest.h>
+#include <functional>  // for function
+#include <vector>      // for allocator, vector
 
 #include "ftxui/component/animation.hpp"  // for Function, BackIn, BackInOut, BackOut, BounceIn, BounceInOut, BounceOut, CircularIn, CircularInOut, CircularOut, CubicIn, CubicInOut, CubicOut, ElasticIn, ElasticInOut, ElasticOut, ExponentialIn, ExponentialInOut, ExponentialOut, Linear, QuadraticIn, QuadraticInOut, QuadraticOut, QuarticIn, QuarticInOut, QuarticOut, QuinticIn, QuinticInOut, QuinticOut, SineIn, SineInOut, SineOut
-#include "gtest/gtest_pred_impl.h"        // for Test, EXPECT_NEAR, TEST
 
 namespace ftxui {
 

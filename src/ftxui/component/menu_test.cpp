@@ -1,6 +1,5 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <chrono>                   // for operator""s, chrono_literals
+#include <gtest/gtest.h>
+#include <chrono>  // for operator""s, chrono_literals
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 #include <string>  // for string
 #include <vector>  // for vector
@@ -13,7 +12,6 @@
 #include "ftxui/dom/node.hpp"         // for Render
 #include "ftxui/screen/screen.hpp"    // for Screen
 #include "ftxui/util/ref.hpp"         // for Ref
-#include "gtest/gtest_pred_impl.h"    // for EXPECT_EQ, Test, TEST
 
 namespace ftxui {
 

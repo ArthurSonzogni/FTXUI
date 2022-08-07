@@ -1,15 +1,13 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include <stddef.h>                 // for size_t
-#include <algorithm>                // for remove
-#include <memory>                   // for shared_ptr
-#include <string>                   // for allocator, basic_string, string
-#include <vector>                   // for vector
+#include <gtest/gtest.h>
+#include <stddef.h>   // for size_t
+#include <algorithm>  // for remove
+#include <memory>     // for shared_ptr
+#include <string>     // for allocator, basic_string, string
+#include <vector>     // for vector
 
 #include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, Elements, flex_grow, flex_shrink, vtext, gridbox, vbox, focus, operator|=, border, frame
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
-#include "gtest/gtest_pred_impl.h"  // for Test, TEST, EXPECT_EQ
 
 namespace ftxui {
 

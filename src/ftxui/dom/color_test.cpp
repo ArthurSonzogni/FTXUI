@@ -1,12 +1,10 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestPartResult, TestFactoryImpl
-#include <string>                   // for allocator
+#include <gtest/gtest.h>
+#include <string>  // for allocator
 
 #include "ftxui/dom/elements.hpp"  // for operator|, text, bgcolor, color, Element
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"   // for Color, Color::Red
 #include "ftxui/screen/screen.hpp"  // for Screen, Pixel
-#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
 namespace ftxui {
 

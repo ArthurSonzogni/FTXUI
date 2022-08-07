@@ -1,6 +1,4 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include <gtest/gtest.h>  // for Test, AssertionResult, TestInfo (ptr only), EXPECT_TRUE, TEST
+#include <gtest/gtest.h>
 #include <string>  // for allocator
 
 #include "ftxui/dom/elements.hpp"   // for operator|, text, dim, Element

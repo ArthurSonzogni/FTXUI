@@ -1,8 +1,6 @@
 #include "ftxui/screen/color.hpp"
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
+#include <gtest/gtest.h>
 #include "ftxui/screen/terminal.hpp"
-#include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, TEST
 
 namespace ftxui {
 

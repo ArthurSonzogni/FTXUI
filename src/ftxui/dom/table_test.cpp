@@ -1,12 +1,10 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include <memory>                   // for allocator
+#include <gtest/gtest.h>
+#include <memory>  // for allocator
 
 #include "ftxui/dom/elements.hpp"  // for LIGHT, flex, center, EMPTY, DOUBLE
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/dom/table.hpp"
 #include "ftxui/screen/screen.hpp"  // for Screen
-#include "gtest/gtest_pred_impl.h"  // for Test, EXPECT_EQ, TEST
 
 namespace ftxui {
 

@@ -1,5 +1,4 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
+#include <gtest/gtest.h>
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 
 #include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
@@ -9,7 +8,6 @@
 #include "ftxui/dom/elements.hpp"   // for text, Element
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
-#include "gtest/gtest_pred_impl.h"  // for AssertionResult, Test, EXPECT_EQ, EXPECT_TRUE, TEST
 
 namespace ftxui {
 

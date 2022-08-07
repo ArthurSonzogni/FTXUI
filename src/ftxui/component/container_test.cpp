@@ -1,11 +1,9 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
+#include <gtest/gtest.h>
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 
 #include "ftxui/component/component.hpp"  // for Horizontal, Vertical, Button, Tab
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/event.hpp"  // for Event, Event::Tab, Event::TabReverse, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
-#include "gtest/gtest_pred_impl.h"  // for AssertionResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, Test, TEST
 
 namespace ftxui {
 

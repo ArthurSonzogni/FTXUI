@@ -1,5 +1,4 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
+#include <gtest/gtest.h>
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 #include <string>  // for string
 
@@ -12,7 +11,6 @@
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Fixed, Screen, Pixel
 #include "ftxui/util/ref.hpp"       // for Ref
-#include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, TEST
 
 namespace ftxui {
 

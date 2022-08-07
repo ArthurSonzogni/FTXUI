@@ -1,7 +1,6 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for SuiteApiResolver, TestFactoryImpl, TestPartResult
-#include <stdint.h>                 // for uint32_t
-#include <string>                   // for allocator, string
+#include <gtest/gtest.h>
+#include <stdint.h>  // for uint32_t
+#include <string>    // for allocator, string
 
 #include "ftxui/dom/canvas.hpp"    // for Canvas
 #include "ftxui/dom/elements.hpp"  // for canvas
@@ -9,7 +8,6 @@
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::Red, Color::White, Color::Yellow, Color::Cyan, Color::Green
 #include "ftxui/screen/screen.hpp"    // for Screen
 #include "ftxui/screen/terminal.hpp"  // for SetColorSupport, Color, TrueColor
-#include "gtest/gtest_pred_impl.h"    // for Test, EXPECT_EQ, TEST
 
 namespace ftxui {
 
