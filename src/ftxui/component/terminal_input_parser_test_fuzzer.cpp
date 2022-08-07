@@ -1,5 +1,3 @@
-//#include "ftxui/component/event.hpp"
-//#include "ftxui/component/receiver.hpp"
 #include <vector>
 #include "ftxui/component/terminal_input_parser.hpp"
 

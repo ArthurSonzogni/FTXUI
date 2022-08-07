@@ -1,5 +1,4 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
+#include <gtest/gtest.h>
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 #include <string>  // for string
 #include <vector>  // for vector
@@ -9,7 +8,6 @@
 #include "ftxui/component/component_options.hpp"  // for RadioboxOption
 #include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowUp, Event::Tab, Event::TabReverse
 #include "ftxui/util/ref.hpp"         // for Ref
-#include "gtest/gtest_pred_impl.h"    // for EXPECT_EQ, Test, TEST
 
 namespace ftxui {
 

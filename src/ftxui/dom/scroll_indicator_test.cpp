@@ -1,13 +1,11 @@
-#include <gtest/gtest-message.h>  // for Message
-#include <gtest/gtest-test-part.h>  // for TestPartResult, SuiteApiResolver, TestFactoryImpl
-#include <memory>                   // for shared_ptr
-#include <string>                   // for allocator, to_string, string
-#include <utility>                  // for move
+#include <gtest/gtest.h>
+#include <memory>   // for shared_ptr
+#include <string>   // for allocator, to_string, string
+#include <utility>  // for move
 
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, operator|=, text, vbox, Elements, border, focus, frame, vscroll_indicator
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
-#include "gtest/gtest_pred_impl.h"  // for EXPECT_EQ, Test, TEST
 
 namespace ftxui {
 
