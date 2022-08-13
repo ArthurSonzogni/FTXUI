@@ -67,8 +67,21 @@ Component Radiobox(ConstStringListRef entries,
                    Ref<RadioboxOption> option = {});
 Component Toggle(ConstStringListRef entries, int* selected);
 
-template <class T>  // T = {int, float, long}
-Component Slider(ConstStringRef label, T* value, T min, T max, T increment);
+Component Slider(ConstStringRef label,
+                 Ref<int> value,
+                 ConstRef<int> min = 0,
+                 ConstRef<int> max = 100,
+                 ConstRef<int> increment = 5);
+Component Slider(ConstStringRef label,
+                 Ref<float> value,
+                 ConstRef<float> min = 0.f,
+                 ConstRef<float> max = 100.f,
+                 ConstRef<float> increment = 5.f);
+Component Slider(ConstStringRef label,
+                 Ref<long> value,
+                 ConstRef<long> min = 0l,
+                 ConstRef<long> max = 100l,
+                 ConstRef<long> increment = 5l);
 
 Component ResizableSplitLeft(Component main, Component back, int* main_size);
 Component ResizableSplitRight(Component main, Component back, int* main_size);

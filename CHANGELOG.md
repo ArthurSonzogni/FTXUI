@@ -14,6 +14,7 @@ current (development)
 
 ### Component:
 - Feature: Add the `Modal` component.
+- Feature: `Slider` supports taking references for all its arguments.
 
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`
