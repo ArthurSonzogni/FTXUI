@@ -17,19 +17,23 @@ namespace ftxui {
 template <class T>
 class SliderBase : public ComponentBase {
  public:
-  SliderBase(ConstStringRef label, T* value, T min, T max, T increment)
+  SliderBase(ConstStringRef label,
+             Ref<T> value,
+             ConstRef<T> min,
+             ConstRef<T> max,
+             ConstRef<T> increment)
       : label_(std::move(label)),
-        value_(value),
-        min_(min),
-        max_(max),
-        increment_(increment) {}
+        value_(std::move(value)),
+        min_(std::move(min)),
+        max_(std::move(max)),
+        increment_(std::move(increment)) {}
 
   Element Render() override {
     auto gauge_color =
         Focused() ? color(Color::GrayLight) : color(Color::GrayDark);
-    float percent = float(*value_ - min_) / float(max_ - min_);
+    float percent = float(value_() - min_()) / float(max_() - min_());
     return hbox({
-               text(*label_) | dim | vcenter,
+               text(label_()) | dim | vcenter,
                hbox({
                    text("["),
                    gauge(percent) | underlined | xflex | reflect(gauge_box_),
@@ -45,14 +49,14 @@ class SliderBase : public ComponentBase {
     }
 
     if (event == Event::ArrowLeft || event == Event::Character('h')) {
-      *value_ -= increment_;
-      *value_ = std::max(*value_, min_);
+      value_() -= increment_();
+      value_() = std::max(value_(), min_());
       return true;
     }
 
     if (event == Event::ArrowRight || event == Event::Character('l')) {
-      *value_ += increment_;
-      *value_ = std::min(*value_, max_);
+      value_() += increment_();
+      value_() = std::min(*value_, max_());
       return true;
     }
 
@@ -77,9 +81,9 @@ class SliderBase : public ComponentBase {
     }
 
     if (captured_mouse_) {
-      *value_ = min_ + (event.mouse().x - gauge_box_.x_min) * (max_ - min_) /
+      value_() = min_() + (event.mouse().x - gauge_box_.x_min) * (max_() - min_()) /
                            (gauge_box_.x_max - gauge_box_.x_min);
-      *value_ = std::max(min_, std::min(max_, *value_));
+      value_() = std::max(min_(), std::min(max_(), value_()));
       return true;
     }
     return false;
@@ -89,10 +93,10 @@ class SliderBase : public ComponentBase {
 
  private:
   ConstStringRef label_;
-  T* value_;
-  T min_;
-  T max_;
-  T increment_ = 1;
+  Ref<T> value_;
+  ConstRef<T> min_;
+  ConstRef<T> max_;
+  ConstRef<T> increment_;
   Box box_;
   Box gauge_box_;
   CapturedMouse captured_mouse_;
@@ -120,28 +124,30 @@ class SliderBase : public ComponentBase {
 /// ```bash
 /// Value:[██████████████████████████                          ]
 /// ```
-template <class T>
-Component Slider(ConstStringRef label, T* value, T min, T max, T increment) {
-  return Make<SliderBase<T>>(std::move(label), value, min, max, increment);
+Component Slider(ConstStringRef label,
+                 Ref<int> value,
+                 ConstRef<int> min,
+                 ConstRef<int> max,
+                 ConstRef<int> increment) {
+  return Make<SliderBase<int>>(std::move(label), std::move(value), std::move(min),
+                             std::move(max), std::move(increment));
 }
-
-template Component Slider(ConstStringRef label,
-                          int* value,
-                          int min,
-                          int max,
-                          int increment);
-
-template Component Slider(ConstStringRef label,
-                          float* value,
-                          float min,
-                          float max,
-                          float increment);
-
-template Component Slider(ConstStringRef label,
-                          long* value,
-                          long min,
-                          long max,
-                          long increment);
+Component Slider(ConstStringRef label,
+                 Ref<float> value,
+                 ConstRef<float> min,
+                 ConstRef<float> max,
+                 ConstRef<float> increment) {
+  return Make<SliderBase<float>>(std::move(label), std::move(value), std::move(min),
+                             std::move(max), std::move(increment));
+}
+Component Slider(ConstStringRef label,
+                 Ref<long> value,
+                 ConstRef<long> min,
+                 ConstRef<long> max,
+                 ConstRef<long> increment) {
+  return Make<SliderBase<long>>(std::move(label), std::move(value), std::move(min),
+                             std::move(max), std::move(increment));
+}
 
 }  // namespace ftxui
 
