@@ -23,10 +23,10 @@ class SliderBase : public ComponentBase {
              ConstRef<T> max,
              ConstRef<T> increment)
       : label_(std::move(label)),
-        value_(std::move(value)),
-        min_(std::move(min)),
-        max_(std::move(max)),
-        increment_(std::move(increment)) {}
+        value_(value),
+        min_(min),
+        max_(max),
+        increment_(increment) {}
 
   Element Render() override {
     auto gauge_color =
@@ -81,8 +81,9 @@ class SliderBase : public ComponentBase {
     }
 
     if (captured_mouse_) {
-      value_() = min_() + (event.mouse().x - gauge_box_.x_min) * (max_() - min_()) /
-                           (gauge_box_.x_max - gauge_box_.x_min);
+      value_() = min_() + (event.mouse().x - gauge_box_.x_min) *
+                              (max_() - min_()) /
+                              (gauge_box_.x_max - gauge_box_.x_min);
       value_() = std::max(min_(), std::min(max_(), value_()));
       return true;
     }
@@ -129,24 +130,21 @@ Component Slider(ConstStringRef label,
                  ConstRef<int> min,
                  ConstRef<int> max,
                  ConstRef<int> increment) {
-  return Make<SliderBase<int>>(std::move(label), std::move(value), std::move(min),
-                             std::move(max), std::move(increment));
+  return Make<SliderBase<int>>(std::move(label), value, min, max, increment);
 }
 Component Slider(ConstStringRef label,
                  Ref<float> value,
                  ConstRef<float> min,
                  ConstRef<float> max,
                  ConstRef<float> increment) {
-  return Make<SliderBase<float>>(std::move(label), std::move(value), std::move(min),
-                             std::move(max), std::move(increment));
+  return Make<SliderBase<float>>(std::move(label), value, min, max, increment);
 }
 Component Slider(ConstStringRef label,
                  Ref<long> value,
                  ConstRef<long> min,
                  ConstRef<long> max,
                  ConstRef<long> increment) {
-  return Make<SliderBase<long>>(std::move(label), std::move(value), std::move(min),
-                             std::move(max), std::move(increment));
+  return Make<SliderBase<long>>(std::move(label), value, min, max, increment);
 }
 
 }  // namespace ftxui

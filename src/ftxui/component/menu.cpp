@@ -83,8 +83,13 @@ class MenuBase : public ComponentBase {
   }
 
   void Clamp() {
+    if (*selected_ != selected_previous_) {
+      SelectedTakeFocus();
+    }
     boxes_.resize(size());
     *selected_ = util::clamp(*selected_, 0, size() - 1);
+    selected_previous_ = util::clamp(selected_previous_, 0, size() - 1);
+    selected_focus_ = util::clamp(selected_focus_, 0, size() - 1);
     focused_entry() = util::clamp(focused_entry(), 0, size() - 1);
   }
 
@@ -115,15 +120,15 @@ class MenuBase : public ComponentBase {
       bool is_focused = (focused_entry() == i) && is_menu_focused;
       bool is_selected = (*selected_ == i);
 
-      auto focus_management = !is_selected      ? nothing
-                              : is_menu_focused ? focus
-                                                : nothing;
       EntryState state = {
           entries_[i],
           false,
           is_selected,
           is_focused,
       };
+
+      auto focus_management =
+          is_menu_focused && (selected_focus_ == i) ? focus : nothing;
 
       Element element =
           (option_->entries.transform ? option_->entries.transform
@@ -164,6 +169,11 @@ class MenuBase : public ComponentBase {
              }) |
              reflect(box_);
     }
+  }
+
+  void SelectedTakeFocus() {
+    selected_previous_ = *selected_;
+    selected_focus_ = *selected_;
   }
 
   void OnUp() {
@@ -270,6 +280,7 @@ class MenuBase : public ComponentBase {
 
       if (*selected_ != old_selected) {
         focused_entry() = *selected_;
+        SelectedTakeFocus();
         OnChange();
         return true;
       }
@@ -307,6 +318,7 @@ class MenuBase : public ComponentBase {
           event.mouse().motion == Mouse::Released) {
         if (*selected_ != i) {
           *selected_ = i;
+          selected_previous_ = *selected_;
           OnChange();
         }
         return true;
@@ -331,6 +343,7 @@ class MenuBase : public ComponentBase {
     *selected_ = util::clamp(*selected_, 0, size() - 1);
 
     if (*selected_ != old_selected) {
+      SelectedTakeFocus();
       OnChange();
     }
     return true;
@@ -449,7 +462,9 @@ class MenuBase : public ComponentBase {
 
  protected:
   ConstStringListRef entries_;
-  int* selected_ = nullptr;
+  int* selected_;
+  int selected_previous_ = *selected_;
+  int selected_focus_= *selected_;
   Ref<MenuOption> option_;
 
   std::vector<Box> boxes_;

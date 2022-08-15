@@ -15,6 +15,8 @@ current (development)
 ### Component:
 - Feature: Add the `Modal` component.
 - Feature: `Slider` supports taking references for all its arguments.
+- Improvement: The `Menu` keeps the focus when an entry is selected with the
+  mouse.
 
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`
