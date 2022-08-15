@@ -106,7 +106,7 @@ jobs:
           ctest -C Debug --rerun-failed --output-on-failure;
 
       - name: Publish to codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           flags: ${{ runner.os }}
           name: ${{ runner.os }}-coverage
