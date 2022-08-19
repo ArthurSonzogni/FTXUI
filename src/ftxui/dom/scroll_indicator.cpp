@@ -40,13 +40,14 @@ Element vscroll_indicator(Element child) {
       const Box& stencil = screen.stencil;
 
       int size_inner = box_.y_max - box_.y_min;
+      if (size_inner <= 0) {
+        return;
+      }
       int size_outter = stencil.y_max - stencil.y_min + 1;
       if (size_outter >= size_inner) {
         return;
       }
-      if (size_inner < 1) {
-        return;
-      }
+
       int size = 2 * size_outter * size_outter / size_inner;
       size = std::max(size, 1);
 
