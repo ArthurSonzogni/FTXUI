@@ -66,7 +66,7 @@ void UpdatePixelStyle(std::stringstream& ss,
     previous.dim = false;
   }
 
-  if ((next.bold && !previous.bold)) {
+  if (next.bold && !previous.bold) {
     ss << "\x1B[1m";  // BOLD_SET
   }
 
