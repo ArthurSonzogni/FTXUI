@@ -44,7 +44,9 @@ Element vscroll_indicator(Element child) {
       if (size_outter >= size_inner) {
         return;
       }
-
+      if (size_inner < 1) {
+        return;
+      }
       int size = 2 * size_outter * size_outter / size_inner;
       size = std::max(size, 1);
 
