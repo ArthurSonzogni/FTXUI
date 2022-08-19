@@ -70,7 +70,7 @@ void UpdatePixelStyle(std::stringstream& ss,
     ss << "\x1B[1m";  // BOLD_SET
   }
 
-  if ((next.dim && !previous.dim)) {
+  if (next.dim && !previous.dim) {
     ss << "\x1B[2m";  // DIM_SET
   }
 
