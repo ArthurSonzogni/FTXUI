@@ -11,6 +11,7 @@ current (development)
   requested
 - Bugfix: Forward the selected/focused area from the child in gridbox.
 - Bugfix: Fix incorrect Canvas computed dimensions.
+- Bugfix: Support `vscroll_indicator` with a zero inner size.
 
 ### Component:
 - Feature: Add the `Modal` component.
@@ -20,6 +21,8 @@ current (development)
 
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`
+- Bugfix: Fix resetting `dim` clashing with resetting of `bold`.
+- Feature: Add emscripten screen resize support.
 
 3.0.0
 -----
