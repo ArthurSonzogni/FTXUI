@@ -56,18 +56,21 @@ void UpdatePixelStyle(std::stringstream& ss,
     return;
   }
   
-  if ((!next.bold && previous.bold) ||
+  if ((!next.bold && previous.bold) ||  //
       (!next.dim && previous.dim)) {
     ss << "\x1B[22m";  // BOLD_RESET and DIM_RESET
+    // We might have wrongfully reset dim or bold because they share the same
+    // resetter. Take it into account so that the side effect will cause it to
+    // be set again below.
+    previous.bold = false;
+    previous.dim = false;
   }
 
-  if ((next.bold && !previous.bold) ||
-      (previous.bold && !next.dim && previous.dim)) {
+  if ((next.bold && !previous.bold)) {
     ss << "\x1B[1m";  // BOLD_SET
   }
 
-  if ((next.dim && !previous.dim) ||
-      (previous.dim && !next.bold && previous.bold)) {
+  if ((next.dim && !previous.dim)) {
     ss << "\x1B[2m";  // DIM_SET
   }
 
