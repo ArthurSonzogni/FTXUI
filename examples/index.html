@@ -4,6 +4,7 @@
     <title>FTXUI examples WebAssembly</title>
     <script src="https://cdn.jsdelivr.net/npm/xterm@4.18.0/lib/xterm.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-webgl@0.11.4/lib/xterm-addon-webgl.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.11.0/css/xterm.css"></link>
     <!--Add COOP/COEP via a ServiceWorker to use SharedArrayBuffer-->
     <script>
@@ -79,9 +80,12 @@
       }
     }
     const term = new Terminal();
-    term.open(document.querySelector('#terminal'));
-    term.resize(140,43);
-    term.loadAddon(new (WebglAddon.WebglAddon)());
+    const term_element = document.querySelector('#terminal');
+    term.open(term_element);
+
+    const webgl_addon = new (WebglAddon.WebglAddon)();
+    term.loadAddon(webgl_addon);
+
     const onBinary = e => {
       for(c of e)
         stdin_buffer.push(c.charCodeAt(0));
@@ -93,7 +97,23 @@
         FS.init(stdin, stdout, stderr);
       },
       postRun: [],
-      onRuntimeInitialized: () => {},
+      onRuntimeInitialized: () => {
+        // Handle screen resize:
+        const fit_addon = new (FitAddon.FitAddon)();
+        term.loadAddon(fit_addon);
+        fit_addon.fit();
+        const resize_handler = () => {
+          const {cols, rows} = fit_addon.proposeDimensions();
+          term.resize(cols, rows);
+          window.Module._ftxui_on_resize(cols, rows);
+        };
+        const resize_observer = new ResizeObserver(resize_handler);
+        resize_observer.observe(term_element);
+        resize_handler();
+
+        // Disable scrollbar
+        term.write('\x1b[?47h')
+      },
     };
 
     const words = example.split('/')
@@ -137,9 +157,11 @@
     }
 
     #terminal {
-      padding:10px;
+      width:100%;
+      height: 500px;
+      height: calc(clamp(200px, 100vh - 300px, 900px));
+      overflow: hidden;
       border:none;
-      background-color:black;
       padding:auto;
     }
 

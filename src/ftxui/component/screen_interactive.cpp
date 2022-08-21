@@ -135,6 +135,17 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
   }
 }
 
+extern "C" {
+  EMSCRIPTEN_KEEPALIVE
+  void ftxui_on_resize(int columns, int rows) {
+    Terminal::SetFallbackSize({
+        columns,
+        rows,
+    });
+    std::raise(SIGWINCH);
+  }
+}
+
 #else
 #include <sys/time.h>  // for timeval
 

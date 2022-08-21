@@ -38,7 +38,10 @@ Dimensions& FallbackSize() {
   constexpr int fallback_width = 80;
   constexpr int fallback_height = 24;
 #endif
-  static Dimensions g_fallback_size{fallback_width, fallback_height};
+  static Dimensions g_fallback_size{
+      fallback_width,
+      fallback_height,
+  };
   return g_fallback_size;
 }
 
