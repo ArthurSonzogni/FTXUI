@@ -94,7 +94,7 @@ struct MenuOption {
   std::function<Element()> elements_postfix;
 
   // Observers:
-  std::function<void()> on_change;  ///> Called when the seelcted entry changes.
+  std::function<void()> on_change;  ///> Called when the selected entry changes.
   std::function<void()> on_enter;   ///> Called when the user presses enter.
   Ref<int> focused_entry = 0;
 };
