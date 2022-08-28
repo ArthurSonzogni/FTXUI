@@ -13,8 +13,6 @@
 namespace ftxui {
 
 namespace {
-using ftxui::Screen;
-
 using Charset = std::array<std::string, 2>;  // NOLINT
 using Charsets = std::array<Charset, 5>;     // NOLINT
 // NOLINTNEXTLINE

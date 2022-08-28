@@ -132,7 +132,7 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
 /// @ingroup screen
 // static
 Color Color::RGB(uint8_t red, uint8_t green, uint8_t blue) {
-  return Color(red, green, blue);
+  return {red, green, blue};
 }
 
 /// @brief Build a Color from its HSV representation.
@@ -145,7 +145,7 @@ Color Color::RGB(uint8_t red, uint8_t green, uint8_t blue) {
 // static
 Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
   if (s == 0) {
-    return Color(v, v, v);
+    return {0,0,0};
   }
 
   uint8_t region = h / 43;                                        // NOLINT
@@ -164,8 +164,7 @@ Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
     case 5: return Color(v,p,q); // NOLINT
   }                              // NOLINT
   // clang-format on
-
-  return Color(0, 0, 0);
+  return {0, 0, 0};
 }
 
 // static
@@ -236,7 +235,7 @@ Color operator""_rgb(unsigned long long int combined) {
   auto const red = static_cast<uint8_t>(combined >> 16U);
   auto const green = static_cast<uint8_t>(combined >> 8U);
   auto const blue = static_cast<uint8_t>(combined);
-  return Color(red, green, blue);
+  return {red, green, blue};
 }
 
 }  // namespace literals
