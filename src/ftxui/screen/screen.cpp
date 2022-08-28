@@ -378,13 +378,13 @@ Dimensions Dimension::Full() {
 // static
 /// Create a screen with the given dimension along the x-axis and y-axis.
 Screen Screen::Create(Dimensions width, Dimensions height) {
-  return Screen(width.dimx, height.dimy);
+  return {width.dimx, height.dimy};
 }
 
 // static
 /// Create a screen with the given dimension.
 Screen Screen::Create(Dimensions dimension) {
-  return Screen(dimension.dimx, dimension.dimy);
+  return {dimension.dimx, dimension.dimy};
 }
 
 Screen::Screen(int dimx, int dimy)

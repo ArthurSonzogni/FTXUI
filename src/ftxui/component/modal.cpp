@@ -19,7 +19,6 @@ Component Modal(Component main, Component modal, const bool* show_modal) {
         : main_(std::move(main)),
           modal_(std::move(modal)),
           show_modal_(show_modal) {
-      selector_ = *show_modal_;
       Add(Container::Tab({main_, modal_}, &selector_));
     }
 
@@ -44,7 +43,7 @@ Component Modal(Component main, Component modal, const bool* show_modal) {
     Component main_;
     Component modal_;
     const bool* show_modal_;
-    int selector_ = 0;
+    int selector_ = *show_modal_;
   };
   return Make<Impl>(main, modal, show_modal);
 }

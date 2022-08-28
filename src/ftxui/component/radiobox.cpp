@@ -28,7 +28,6 @@ class RadioboxBase : public ComponentBase {
                int* selected,
                Ref<RadioboxOption> option)
       : entries_(entries), selected_(selected), option_(std::move(option)) {
-    hovered_ = *selected_;
   }
 
  private:
@@ -175,7 +174,7 @@ class RadioboxBase : public ComponentBase {
 
   ConstStringListRef entries_;
   int* selected_;
-  int hovered_;
+  int hovered_ = *selected_;
   std::vector<Box> boxes_;
   Box box_;
   Ref<RadioboxOption> option_;
