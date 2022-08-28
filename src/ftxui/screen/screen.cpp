@@ -55,7 +55,7 @@ void UpdatePixelStyle(std::stringstream& ss,
   if (next == previous) {
     return;
   }
-  
+
   if ((!next.bold && previous.bold) ||  //
       (!next.dim && previous.dim)) {
     ss << "\x1B[22m";  // BOLD_RESET and DIM_RESET

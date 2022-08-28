@@ -3,11 +3,11 @@
 
 #include <chrono>                         // for milliseconds
 #include <ftxui/component/animation.hpp>  // for Duration, QuadraticInOut, Function
-#include <ftxui/dom/elements.hpp>         // for Element
-#include <ftxui/util/ref.hpp>             // for Ref
-#include <functional>                     // for function
-#include <optional>                       // for optional
-#include <string>                         // for string
+#include <ftxui/dom/elements.hpp>  // for Element, GaugeDirection, GaugeDirection::Right
+#include <ftxui/util/ref.hpp>  // for Ref, ConstRef
+#include <functional>          // for function
+#include <optional>            // for optional
+#include <string>              // for string
 
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
 
@@ -162,6 +162,19 @@ struct RadioboxOption {
   /// Called when the selected entry changes.
   std::function<void()> on_change = [] {};
   Ref<int> focused_entry = 0;
+};
+
+// @brief Option for the `Slider` component.
+// @ingroup component
+template <typename T>
+struct SliderOption {
+  Ref<T> value;
+  ConstRef<T> min = T(0);
+  ConstRef<T> max = T(100);
+  ConstRef<T> increment = (max() - min()) / 20;
+  GaugeDirection direction = GaugeDirection::Right;
+  Color color_active = Color::White;
+  Color color_inactive = Color::GrayDark;
 };
 
 }  // namespace ftxui

@@ -1,14 +1,13 @@
 #include <functional>  // for function
-#include <memory>      // for shared_ptr
 #include <utility>     // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/component.hpp"       // for Make, Component, Checkbox
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for CheckboxOption
+#include "ftxui/component/component.hpp"       // for Make, Checkbox
+#include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
+#include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
 #include "ftxui/component/event.hpp"              // for Event, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, hbox, reflect, focus, nothing, select
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, focus, nothing, select
 #include "ftxui/screen/box.hpp"  // for Box
 #include "ftxui/util/ref.hpp"    // for Ref, ConstStringRef
 

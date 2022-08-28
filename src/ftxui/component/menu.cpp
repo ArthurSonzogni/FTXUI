@@ -464,7 +464,7 @@ class MenuBase : public ComponentBase {
   ConstStringListRef entries_;
   int* selected_;
   int selected_previous_ = *selected_;
-  int selected_focus_= *selected_;
+  int selected_focus_ = *selected_;
   Ref<MenuOption> option_;
 
   std::vector<Box> boxes_;

@@ -7,7 +7,11 @@ endif()
 
 
 function(ftxui_set_options library)
-  set_target_properties(${library} PROPERTIES OUTPUT_NAME "ftxui-${library}")
+  set_target_properties(${library} PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    CXX_STANDARD 20
+    OUTPUT_NAME "ftxui-${library}"
+  )
 
   if(CLANG_TIDY_EXE AND FTXUI_CLANG_TIDY)
     set_target_properties(${library}

@@ -16,6 +16,10 @@ current (development)
 ### Component:
 - Feature: Add the `Modal` component.
 - Feature: `Slider` supports taking references for all its arguments.
+- Feature: `Slider` supports `SliderOption`. It supports:
+    - multiple directions.
+    - multiple colors.
+    - various values (value, min, max, increment).
 - Improvement: The `Menu` keeps the focus when an entry is selected with the
   mouse.
 
