@@ -1,6 +1,7 @@
-#include <algorithm>  // for copy, max, min
+#include <algorithm>  // for min
 #include <array>      // for array
-#include <chrono>  // for operator-, milliseconds, duration, operator>=, time_point, common_type<>::type
+#include <chrono>  // for operator-, milliseconds, duration, operator<=>, time_point, common_type<>::type
+#include <compare>  // for operator>=, strong_ordering
 #include <csignal>  // for signal, raise, SIGTSTP, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGWINCH
 #include <cstdio>   // for fileno, size_t, stdin
 #include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
@@ -136,14 +137,14 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
 }
 
 extern "C" {
-  EMSCRIPTEN_KEEPALIVE
-  void ftxui_on_resize(int columns, int rows) {
-    Terminal::SetFallbackSize({
-        columns,
-        rows,
-    });
-    std::raise(SIGWINCH);
-  }
+EMSCRIPTEN_KEEPALIVE
+void ftxui_on_resize(int columns, int rows) {
+  Terminal::SetFallbackSize({
+      columns,
+      rows,
+  });
+  std::raise(SIGWINCH);
+}
 }
 
 #else

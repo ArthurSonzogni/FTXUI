@@ -10,7 +10,7 @@
 #include "ftxui/component/component_base.hpp"  // for Component, Components
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption, MenuOption
 #include "ftxui/dom/elements.hpp"  // for Element
-#include "ftxui/util/ref.hpp"  // for Ref, ConstStringRef, ConstStringListRef, StringRef
+#include "ftxui/util/ref.hpp"  // for ConstRef, Ref, ConstStringRef, ConstStringListRef, StringRef
 
 namespace ftxui {
 struct ButtonOption;
@@ -82,6 +82,9 @@ Component Slider(ConstStringRef label,
                  ConstRef<long> min = 0l,
                  ConstRef<long> max = 100l,
                  ConstRef<long> increment = 5l);
+// General slider type without support for a `label`.
+template <typename T>  // T = {int, float, long}
+Component Slider(SliderOption<T> options = {});
 
 Component ResizableSplitLeft(Component main, Component back, int* main_size);
 Component ResizableSplitRight(Component main, Component back, int* main_size);

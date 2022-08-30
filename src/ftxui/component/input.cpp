@@ -1,8 +1,7 @@
 #include <algorithm>   // for max, min
 #include <cstddef>     // for size_t
 #include <functional>  // for function
-#include <memory>      // for shared_ptr, allocator
-#include <string>      // for string, wstring
+#include <string>      // for string, allocator
 #include <utility>     // for move
 #include <vector>      // for vector
 
@@ -15,7 +14,7 @@
 #include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, text, Element, reflect, inverted, Decorator, flex, focus, hbox, size, bold, dim, frame, select, EQUAL, HEIGHT
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/screen/string.hpp"  // for GlyphPosition, GlyphCount, to_string, CellToGlyphIndex, to_wstring
+#include "ftxui/screen/string.hpp"  // for GlyphPosition, GlyphCount, CellToGlyphIndex
 #include "ftxui/screen/util.hpp"  // for clamp
 #include "ftxui/util/ref.hpp"     // for StringRef, Ref, ConstStringRef
 

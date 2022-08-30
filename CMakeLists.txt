@@ -132,10 +132,6 @@ target_link_libraries(component
   PUBLIC Threads::Threads
 )
 
-set_target_properties(screen PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(dom PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(component PROPERTIES VERSION ${PROJECT_VERSION})
-
 include(cmake/ftxui_set_options.cmake)
 ftxui_set_options(screen)
 ftxui_set_options(dom)

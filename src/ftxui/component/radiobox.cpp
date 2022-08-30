@@ -1,6 +1,5 @@
-#include <algorithm>   // for max
 #include <functional>  // for function
-#include <memory>      // for shared_ptr, allocator_traits<>::value_type
+#include <memory>      // for allocator_traits<>::value_type
 #include <utility>     // for move
 #include <vector>      // for vector
 
