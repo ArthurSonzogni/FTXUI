@@ -22,6 +22,7 @@ current (development)
     - various values (value, min, max, increment).
 - Improvement: The `Menu` keeps the focus when an entry is selected with the
   mouse.
+- Bug: Add implementation of `ButtonOption::Border()`. It was missing.
 
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`

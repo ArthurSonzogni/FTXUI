@@ -144,6 +144,23 @@ ButtonOption ButtonOption::Simple() {
   return option;
 }
 
+/// @brief Create a ButtonOption. The button is shown using a border, inverted
+/// when focused. This is the current default.
+ButtonOption ButtonOption::Border() {
+  ButtonOption option;
+  option.transform = [](const EntryState& s) {
+    auto element = text(s.label) | border;
+    if (s.active) {
+      element |= bold;
+    }
+    if (s.focused) {
+      element |= inverted;
+    }
+    return element;
+  };
+  return option;
+}
+
 /// @brief Create a ButtonOption, using animated colors.
 // static
 ButtonOption ButtonOption::Animated() {
