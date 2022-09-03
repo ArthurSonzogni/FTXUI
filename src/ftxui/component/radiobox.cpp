@@ -26,8 +26,7 @@ class RadioboxBase : public ComponentBase {
   RadioboxBase(ConstStringListRef entries,
                int* selected,
                Ref<RadioboxOption> option)
-      : entries_(entries), selected_(selected), option_(std::move(option)) {
-  }
+      : entries_(entries), selected_(selected), option_(std::move(option)) {}
 
  private:
   Element Render() override {

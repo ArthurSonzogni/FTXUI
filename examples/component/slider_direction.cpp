@@ -1,8 +1,10 @@
-#include <array>                               // for array
-#include <cmath>                               // for sin
-#include <ftxui/component/component_base.hpp>  // for ComponentBase
-#include <ftxui/dom/elements.hpp>  // for size, GaugeDirection, GaugeDirection::Up, GREATER_THAN, HEIGHT
-#include <memory>  // for shared_ptr, __shared_ptr_access
+#include <array>                                  // for array
+#include <cmath>                                  // for sin
+#include <ftxui/component/component_base.hpp>     // for ComponentBase
+#include <ftxui/component/component_options.hpp>  // for SliderOption
+#include <ftxui/dom/elements.hpp>  // for size, GREATER_THAN, GaugeDirection, GaugeDirection::Up, HEIGHT
+#include <ftxui/util/ref.hpp>  // for ConstRef, Ref
+#include <memory>              // for shared_ptr, __shared_ptr_access
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Horizontal, Slider, operator|=
@@ -19,12 +21,22 @@ int main(int argc, const char* argv[]) {
 
   auto layout_horizontal = Container::Horizontal({});
   for (int i = 0; i < values.size(); ++i) {
+    // In C++17:
+    SliderOption<int> option;
+    option.value = &values[i];
+    option.max = 100;
+    option.increment = 5;
+    option.direction = GaugeDirection::Up;
+    layout_horizontal->Add(Slider<int>(option));
+
+    /* In C++20:
     layout_horizontal->Add(Slider<int>({
         .value = &values[i],
         .max = 100,
         .increment = 5,
         .direction = GaugeDirection::Up,
     }));
+    */
   }
 
   layout_horizontal |= size(HEIGHT, GREATER_THAN, 20);

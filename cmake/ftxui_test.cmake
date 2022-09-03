@@ -71,6 +71,7 @@ target_include_directories(tests
   PRIVATE src
 )
 ftxui_set_options(tests)
+target_compile_features(tests PUBLIC cxx_std_20)
 
 include(GoogleTest)
 gtest_discover_tests(tests
