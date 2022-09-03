@@ -266,12 +266,12 @@ Component Slider(ConstStringRef label,
                  ConstRef<int> min,
                  ConstRef<int> max,
                  ConstRef<int> increment) {
-  auto slider = Make<SliderBase<int>>(SliderOption<int>({
-      .value = value,
-      .min = min,
-      .max = max,
-      .increment = increment,
-  }));
+  SliderOption<int> option;
+  option.value = value;
+  option.min = min;
+  option.max = max;
+  option.increment = increment;
+  auto slider = Make<SliderBase<int>>(option);
   return Make<SliderWithLabel>(label, slider);
 }
 
@@ -280,12 +280,12 @@ Component Slider(ConstStringRef label,
                  ConstRef<float> min,
                  ConstRef<float> max,
                  ConstRef<float> increment) {
-  auto slider = Make<SliderBase<float>>(SliderOption<float>({
-      .value = value,
-      .min = min,
-      .max = max,
-      .increment = increment,
-  }));
+  SliderOption<float> option;
+  option.value = value;
+  option.min = min;
+  option.max = max;
+  option.increment = increment;
+  auto slider = Make<SliderBase<float>>(option);
   return Make<SliderWithLabel>(label, slider);
 }
 Component Slider(ConstStringRef label,
@@ -293,12 +293,12 @@ Component Slider(ConstStringRef label,
                  ConstRef<long> min,
                  ConstRef<long> max,
                  ConstRef<long> increment) {
-  auto slider = Make<SliderBase<long>>(SliderOption<long>({
-      .value = value,
-      .min = min,
-      .max = max,
-      .increment = increment,
-  }));
+  SliderOption<long> option;
+  option.value = value;
+  option.min = min;
+  option.max = max;
+  option.increment = increment;
+  auto slider = Make<SliderBase<long>>(option);
   return Make<SliderWithLabel>(label, slider);
 }
 

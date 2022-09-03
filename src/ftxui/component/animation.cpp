@@ -1,5 +1,4 @@
 #include <cmath>    // IWYU pragma: keep
-#include <compare>  // for operator<=, operator>=, partial_ordering
 #include <ratio>    // for ratio
 #include <utility>  // for move
 

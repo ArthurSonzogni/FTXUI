@@ -19,12 +19,21 @@ int main(int argc, const char* argv[]) {
 
   auto layout_horizontal = Container::Horizontal({});
   for (int i = 0; i < values.size(); ++i) {
-    layout_horizontal->Add(Slider<int>({
-        .value = &values[i],
-        .max = 100,
-        .increment = 5,
-        .direction = GaugeDirection::Up,
-    }));
+    // In C++20:
+    // layout_horizontal->Add(Slider<int>({
+    //     .value = &values[i],
+    //     .max = 100,
+    //     .increment = 5,
+    //     .direction = GaugeDirection::Up,
+    // }));
+    
+    // In C++17:
+    SliderOption<int> option;
+    option.value = &values[i];
+    option.max = 100;
+    option.increment = 5;
+    option.direction = GaugeDirection::Up;
+    layout_horizontal->Add(option);
   }
 
   layout_horizontal |= size(HEIGHT, GREATER_THAN, 20);

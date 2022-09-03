@@ -9,7 +9,6 @@ endif()
 function(ftxui_set_options library)
   set_target_properties(${library} PROPERTIES
     VERSION ${PROJECT_VERSION}
-    CXX_STANDARD 20
     OUTPUT_NAME "ftxui-${library}"
   )
 
