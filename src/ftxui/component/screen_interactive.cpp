@@ -19,6 +19,7 @@
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/loop.hpp"            // for Loop
 #include "ftxui/component/receiver.hpp"  // for Sender, ReceiverImpl, MakeReceiver, SenderImpl, Receiver
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
@@ -328,8 +329,8 @@ void ScreenInteractive::RequestAnimationFrame() {
   animation_requested_ = true;
   auto now = animation::Clock::now();
   const auto time_histeresis = std::chrono::milliseconds(33);
-  if (now - previous_animation_time >= time_histeresis) {
-    previous_animation_time = now;
+  if (now - previous_animation_time_ >= time_histeresis) {
+    previous_animation_time_ = now;
   }
 }
 
@@ -343,6 +344,15 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 }
 
 void ScreenInteractive::Loop(Component component) {  // NOLINT
+  class Loop loop(this, component);
+  loop.Run();
+}
+
+bool ScreenInteractive::HasQuitted() {
+  return task_receiver_->HasQuitted();
+}
+
+void ScreenInteractive::PreMain() {
   // Suspend previously active screen:
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
@@ -356,7 +366,11 @@ void ScreenInteractive::Loop(Component component) {  // NOLINT
   // This screen is now active:
   g_active_screen = this;
   g_active_screen->Install();
-  g_active_screen->Main(std::move(component));
+
+  previous_animation_time_ = animation::Clock::now();
+}
+
+void ScreenInteractive::PostMain() {
   g_active_screen->Uninstall();
   g_active_screen = nullptr;
 
@@ -509,81 +523,78 @@ void ScreenInteractive::Uninstall() {
 }
 
 // NOLINTNEXTLINE
-void ScreenInteractive::Main(Component component) {
-  previous_animation_time = animation::Clock::now();
-
-  auto draw = [&] {
-    Draw(component);
-    std::cout << ToString() << set_cursor_position;
-    Flush();
-    Clear();
-  };
-
-  bool attempt_draw = true;
-  while (!quit_) {
-    if (attempt_draw && !task_receiver_->HasPending()) {
-      draw();
-      attempt_draw = false;
-    }
-
-    Task task;
-    if (!task_receiver_->Receive(&task)) {
-      break;
-    }
-
-    // clang-format off
-    std::visit([&](auto&& arg) {
-      using T = std::decay_t<decltype(arg)>;
-
-      // Handle Event.
-      if constexpr (std::is_same_v<T, Event>) {
-        if (arg.is_cursor_reporting()) {
-          cursor_x_ = arg.cursor_x();
-          cursor_y_ = arg.cursor_y();
-          return;
-        }
-
-        if (arg.is_mouse()) {
-          arg.mouse().x -= cursor_x_;
-          arg.mouse().y -= cursor_y_;
-        }
-
-        arg.screen_ = this;
-        component->OnEvent(arg);
-        attempt_draw = true;
-        return;
-      }
-
-      // Handle callback
-      if constexpr (std::is_same_v<T, Closure>) {
-        arg();
-        return;
-      }
-
-      // Handle Animation
-      if constexpr (std::is_same_v<T, AnimationTask>) {
-        if (!animation_requested_) {
-          return;
-        }
-
-        animation_requested_ = false;
-        animation::TimePoint now = animation::Clock::now();
-        animation::Duration delta = now - previous_animation_time;
-        previous_animation_time = now;
-
-        animation::Params params(delta);
-        component->OnAnimation(params);
-        attempt_draw = true;
-        return;
-      }
-    },
-    task);
-    // clang-format on
+void ScreenInteractive::RunOnceBlocking(Component component) {
+  Task task;
+  if (task_receiver_->Receive(&task)) {
+    HandleTask(component, task);
   }
+
+  RunOnce(component);
+}
+
+void ScreenInteractive::RunOnce(Component component) {
+  Task task;
+  while (task_receiver_->ReceiveNonBlocking(&task)) {
+    HandleTask(component, task);
+  }
+  Draw(component);
+}
+
+void ScreenInteractive::HandleTask(Component component, Task& task) {
+  // clang-format off
+  std::visit([&](auto&& arg) {
+    using T = std::decay_t<decltype(arg)>;
+
+    // Handle Event.
+    if constexpr (std::is_same_v<T, Event>) {
+      if (arg.is_cursor_reporting()) {
+        cursor_x_ = arg.cursor_x();
+        cursor_y_ = arg.cursor_y();
+        return;
+      }
+
+      if (arg.is_mouse()) {
+        arg.mouse().x -= cursor_x_;
+        arg.mouse().y -= cursor_y_;
+      }
+
+      arg.screen_ = this;
+      component->OnEvent(arg);
+      frame_valid_ = false;
+      return;
+    }
+
+    // Handle callback
+    if constexpr (std::is_same_v<T, Closure>) {
+      arg();
+      return;
+    }
+
+    // Handle Animation
+    if constexpr (std::is_same_v<T, AnimationTask>) {
+      if (!animation_requested_) {
+        return;
+      }
+
+      animation_requested_ = false;
+      animation::TimePoint now = animation::Clock::now();
+      animation::Duration delta = now - previous_animation_time_;
+      previous_animation_time_ = now;
+
+      animation::Params params(delta);
+      component->OnAnimation(params);
+      frame_valid_ = false;
+      return;
+    }
+  },
+  task);
+  // clang-format on
 }
 
 // NOLINTNEXTLINE
 void ScreenInteractive::Draw(Component component) {
+  if (frame_valid_)
+    return;
   auto document = component->Render();
   int dimx = 0;
   int dimy = 0;
@@ -663,13 +674,22 @@ void ScreenInteractive::Draw(Component component) {
     set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
     reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
   }
+
+  std::cout << ToString() << set_cursor_position;
+  Flush();
+  Clear();
+  frame_valid_ = true;
 }
 
 Closure ScreenInteractive::ExitLoopClosure() {
-  return [this] {
+  return [this] { Exit(); };
+}
+
+void ScreenInteractive::Exit() {
+  Post([this] {
     quit_ = true;
     task_sender_.reset();
-  };
+  });
 }
 
 void ScreenInteractive::SigStop() {
