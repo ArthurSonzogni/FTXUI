@@ -33,7 +33,7 @@ Decorator flexDirection(GaugeDirection direction) {
 template <class T>
 class SliderBase : public ComponentBase {
  public:
-  SliderBase(Ref<SliderOption<T>> options)
+  explicit SliderBase(Ref<SliderOption<T>> options)
       : value_(options->value),
         min_(options->min),
         max_(options->max),
@@ -125,8 +125,9 @@ class SliderBase : public ComponentBase {
     }
 
     value_() = util::clamp(value_(), min_(), max_());
-    if (old_value != value_())
+    if (old_value != value_()) {
       return true;
+    }
 
     return ComponentBase::OnEvent(event);
   }
@@ -196,15 +197,17 @@ class SliderBase : public ComponentBase {
 
 class SliderWithLabel : public ComponentBase {
  public:
-  SliderWithLabel(ConstStringRef label, Component inner) : label_(label) {
-    Add(inner);
-    SetActiveChild(inner);
+  SliderWithLabel(ConstStringRef label, Component inner)
+      : label_(std::move(label)) {
+    Add(std::move(inner));
+    SetActiveChild(ChildAt(0));
   }
 
  private:
   bool OnEvent(Event event) final {
-    if (ComponentBase::OnEvent(event))
+    if (ComponentBase::OnEvent(event)) {
       return true;
+    }
 
     if (!event.is_mouse()) {
       return false;
@@ -272,7 +275,7 @@ Component Slider(ConstStringRef label,
   option.max = max;
   option.increment = increment;
   auto slider = Make<SliderBase<int>>(option);
-  return Make<SliderWithLabel>(label, slider);
+  return Make<SliderWithLabel>(std::move(label), slider);
 }
 
 Component Slider(ConstStringRef label,
@@ -286,7 +289,7 @@ Component Slider(ConstStringRef label,
   option.max = max;
   option.increment = increment;
   auto slider = Make<SliderBase<float>>(option);
-  return Make<SliderWithLabel>(label, slider);
+  return Make<SliderWithLabel>(std::move(label), slider);
 }
 Component Slider(ConstStringRef label,
                  Ref<long> value,
@@ -299,7 +302,7 @@ Component Slider(ConstStringRef label,
   option.max = max;
   option.increment = increment;
   auto slider = Make<SliderBase<long>>(option);
-  return Make<SliderWithLabel>(label, slider);
+  return Make<SliderWithLabel>(std::move(label), slider);
 }
 
 /// @brief A slider in any direction.

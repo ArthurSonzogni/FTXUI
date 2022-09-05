@@ -10,6 +10,7 @@
 #include <iostream>  // for cout, ostream, basic_ostream, operator<<, endl, flush
 #include <stack>     // for stack
 #include <thread>    // for thread, sleep_for
+#include <tuple>
 #include <type_traits>  // for decay_t
 #include <utility>      // for move, swap
 #include <variant>      // for visit
@@ -240,7 +241,8 @@ void OnExit(int signal) {
 
 const auto install_signal_handler = [](int sig, SignalHandler handler) {
   auto old_signal_handler = std::signal(sig, handler);
-  on_exit_functions.push([=] { std::signal(sig, old_signal_handler); });
+  on_exit_functions.push(
+      [=] { std::ignore = std::signal(sig, old_signal_handler); });
 };
 
 Closure g_on_resize = [] {};  // NOLINT
@@ -289,22 +291,42 @@ ScreenInteractive::ScreenInteractive(int dimx,
 
 // static
 ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
-  return ScreenInteractive(dimx, dimy, Dimension::Fixed, false);
+  return {
+      dimx,
+      dimy,
+      Dimension::Fixed,
+      false,
+  };
 }
 
 // static
 ScreenInteractive ScreenInteractive::Fullscreen() {
-  return ScreenInteractive(0, 0, Dimension::Fullscreen, true);
+  return {
+      0,
+      0,
+      Dimension::Fullscreen,
+      true,
+  };
 }
 
 // static
 ScreenInteractive ScreenInteractive::TerminalOutput() {
-  return ScreenInteractive(0, 0, Dimension::TerminalOutput, false);
+  return {
+      0,
+      0,
+      Dimension::TerminalOutput,
+      false,
+  };
 }
 
 // static
 ScreenInteractive ScreenInteractive::FitComponent() {
-  return ScreenInteractive(0, 0, Dimension::FitComponent, false);
+  return {
+      0,
+      0,
+      Dimension::FitComponent,
+      false,
+  };
 }
 
 void ScreenInteractive::Post(Task task) {
@@ -684,7 +706,7 @@ void ScreenInteractive::SigStop() {
     dimx_ = 0;
     dimy_ = 0;
     Flush();
-    std::raise(SIGTSTP);
+    std::ignore = std::raise(SIGTSTP);
     Install();
   });
 #endif
