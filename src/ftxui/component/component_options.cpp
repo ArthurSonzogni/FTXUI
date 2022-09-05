@@ -181,11 +181,13 @@ ButtonOption ButtonOption::Animated(Color color) {
 /// @brief Create a ButtonOption, using animated colors.
 // static
 ButtonOption ButtonOption::Animated(Color background, Color foreground) {
+  // NOLINTBEGIN
   return ButtonOption::Animated(
       /*bakground=*/background,
       /*foreground=*/foreground,
       /*background_active=*/foreground,
       /*foreground_active=*/background);
+  // NOLINTEND
 }
 
 /// @brief Create a ButtonOption, using animated colors.
