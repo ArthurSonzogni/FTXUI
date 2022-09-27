@@ -9,9 +9,14 @@ TEST(StringTest, StringWidth) {
   EXPECT_EQ(0, string_width(""));
   EXPECT_EQ(1, string_width("a"));
   EXPECT_EQ(2, string_width("ab"));
+  EXPECT_EQ(1, string_width("⬤"));
+
   // Fullwidth glyphs:
   EXPECT_EQ(2, string_width("测"));
   EXPECT_EQ(4, string_width("测试"));
+  EXPECT_EQ(2, string_width("⚫"));
+  EXPECT_EQ(2, string_width("🪐"));
+
   // Combining characters:
   EXPECT_EQ(1, string_width("ā"));
   EXPECT_EQ(1, string_width("a⃒"));
