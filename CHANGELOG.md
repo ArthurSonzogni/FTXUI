@@ -28,6 +28,7 @@ current (development)
 - Feature: add `Box::Union(a,b) -> Box`
 - Bugfix: Fix resetting `dim` clashing with resetting of `bold`.
 - Feature: Add emscripten screen resize support.
+- Bugfix: Add unicode 13 support for full width characters.
 
 3.0.0
 -----
