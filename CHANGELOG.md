@@ -20,6 +20,7 @@ current (development)
     - multiple directions.
     - multiple colors.
     - various values (value, min, max, increment).
+- Feature: `Input` supports CTRL+Left and CTRL+Right
 - Improvement: The `Menu` keeps the focus when an entry is selected with the
   mouse.
 - Bug: Add implementation of `ButtonOption::Border()`. It was missing.

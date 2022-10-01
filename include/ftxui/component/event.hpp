@@ -38,6 +38,11 @@ struct Event {
   static const Event ArrowUp;
   static const Event ArrowDown;
 
+  static const Event ArrowLeftCtrl;
+  static const Event ArrowRightCtrl;
+  static const Event ArrowUpCtrl;
+  static const Event ArrowDownCtrl;
+
   // --- Other ---
   static const Event Backspace;
   static const Event Delete;

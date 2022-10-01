@@ -369,6 +369,124 @@ TEST(InputTest, MouseClickComplex) {
   EXPECT_EQ(option.cursor_position(), 4u);
 }
 
+TEST(InputTest, CtrlArrowLeft) {
+  std::string content = "word word 测ord wo测d word";
+  //                     0    5    10    15    20
+  std::string placeholder;
+  auto option = InputOption();
+  option.cursor_position = 22;
+  auto input = Input(&content, &placeholder, &option);
+
+  // Use CTRL+Left several time
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 20u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 15u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 10u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 5u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 0u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 0u);
+}
+
+TEST(InputTest, CtrlArrowLeft2) {
+  std::string content = "   word  word  测ord  wo测d  word   ";
+  //                     0  3  6  9 12  15  18 21  24 27 30 33
+  std::string placeholder;
+  auto option = InputOption();
+  option.cursor_position = 33;
+  auto input = Input(&content, &placeholder, &option);
+
+  // Use CTRL+Left several time
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 27u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 21u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 15u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 9u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 3u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 0u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftCtrl));
+  EXPECT_EQ(option.cursor_position(), 0u);
+}
+
+TEST(InputTest, CtrlArrowRight) {
+  std::string content = "word word 测ord wo测d word";
+  //                     0    5    10    15    20
+  std::string placeholder;
+  auto option = InputOption();
+  option.cursor_position = 2;
+  auto input = Input(&content, &placeholder, &option);
+
+  // Use CTRL+Left several time
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 4);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 9);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 14u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 19u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 24u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 24u);
+}
+
+TEST(InputTest, CtrlArrowRight2) {
+  std::string content = "   word  word  测ord  wo测d  word   ";
+  //                     0  3  6  9 12  15  18 21  24 27 30 33
+  std::string placeholder;
+  auto option = InputOption();
+  option.cursor_position = 0;
+  auto input = Input(&content, &placeholder, &option);
+
+  // Use CTRL+Left several time
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 7u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 13u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 19u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 25u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 31u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 34u);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(option.cursor_position(), 34u);
+}
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.

@@ -22,6 +22,36 @@ namespace ftxui {
 
 namespace {
 
+// Group together several propertiej so they appear to form a similar group.
+// For instance, letters are grouped with number and form a single word.
+bool IsWordCharacter(WordBreakProperty property) {
+  switch (property) {
+    case WordBreakProperty::ALetter:
+    case WordBreakProperty::Hebrew_Letter:
+    case WordBreakProperty::Katakana:
+    case WordBreakProperty::Numeric:
+      return true;
+
+    case WordBreakProperty::CR:
+    case WordBreakProperty::Double_Quote:
+    case WordBreakProperty::LF:
+    case WordBreakProperty::MidLetter:
+    case WordBreakProperty::MidNum:
+    case WordBreakProperty::MidNumLet:
+    case WordBreakProperty::Newline:
+    case WordBreakProperty::Single_Quote:
+    case WordBreakProperty::WSegSpace:
+    // Unsure:
+    case WordBreakProperty::Extend:
+    case WordBreakProperty::ExtendNumLet:
+    case WordBreakProperty::Format:
+    case WordBreakProperty::Regional_Indicator:
+    case WordBreakProperty::ZWJ:
+      return false;
+  };
+  return true; // NOT_REACHED();
+};
+
 std::string PasswordField(size_t size) {
   std::string out;
   out.reserve(2 * size);
@@ -111,7 +141,6 @@ class InputBase : public ComponentBase {
     if (event.is_mouse()) {
       return OnMouseEvent(event);
     }
-
     std::string c;
 
     // Backspace.
@@ -149,6 +178,7 @@ class InputBase : public ComponentBase {
       return false;
     }
 
+    // Arrow
     if (event == Event::ArrowLeft && cursor_position() > 0) {
       cursor_position()--;
       return true;
@@ -157,6 +187,16 @@ class InputBase : public ComponentBase {
     if (event == Event::ArrowRight &&
         cursor_position() < (int)content_->size()) {
       cursor_position()++;
+      return true;
+    }
+
+    // CTRL + Arrow:
+    if (event == Event::ArrowLeftCtrl) {
+      HandleLeftCtrl();
+      return true;
+    }
+    if (event == Event::ArrowRightCtrl) {
+      HandleRightCtrl();
       return true;
     }
 
@@ -182,6 +222,39 @@ class InputBase : public ComponentBase {
   }
 
  private:
+  void HandleLeftCtrl() {
+    auto properties = Utf8ToWordBreakProperty(*content_);
+
+    // Move left, as long as left is not a word character.
+    while (cursor_position() > 0 &&
+           !IsWordCharacter(properties[cursor_position() - 1])) {
+      cursor_position()--;
+    }
+
+    // Move left, as long as left is a word character:
+    while (cursor_position() > 0 &&
+           IsWordCharacter(properties[cursor_position() - 1])) {
+      cursor_position()--;
+    }
+  }
+
+  void HandleRightCtrl() {
+    auto properties = Utf8ToWordBreakProperty(*content_);
+    int max = (int)properties.size();
+
+    // Move right, as long as right is not a word character.
+    while (cursor_position() < max &&
+           !IsWordCharacter(properties[cursor_position()])) {
+      cursor_position()++;
+    }
+
+    // Move right, as long as right is a word character:
+    while (cursor_position() < max &&
+           IsWordCharacter(properties[cursor_position()])) {
+      cursor_position()++;
+    }
+  }
+
   bool OnMouseEvent(Event event) {
     hovered_ =
         box_.Contain(event.mouse().x, event.mouse().y) && CaptureMouse(event);
