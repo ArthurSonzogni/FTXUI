@@ -3,13 +3,23 @@
 #include <cstdint>                    // for uint32_t
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Button, Mouse::Motion
 #include <ftxui/component/receiver.hpp>  // for SenderImpl, Sender
-#include <memory>                        // for unique_ptr, allocator
-#include <utility>                       // for move
+#include <map>
+#include <memory>   // for unique_ptr, allocator
+#include <utility>  // for move
 
 #include "ftxui/component/event.hpp"  // for Event
 #include "ftxui/component/task.hpp"   // for Task
 
 namespace ftxui {
+
+// NOLINTNEXTLINE
+const std::map<std::string, std::string> g_uniformize = {{
+    // Microsoft's terminal uses a different new line character for the return
+    // key. This also happens with linux with the `bind` command:
+    // See https://github.com/ArthurSonzogni/FTXUI/issues/337
+    // Here, we uniformize the new line character to `\n`.
+    {"\r", "\n"},
+}};
 
 TerminalInputParser::TerminalInputParser(Sender<Task> out)
     : out_(std::move(out)) {}
@@ -56,17 +66,14 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       pending_.clear();
       return;
 
-    case SPECIAL:
-      // Microsoft's terminal uses a different new line character for the return
-      // key. This also happens with linux with the `bind` command:
-      // See https://github.com/ArthurSonzogni/FTXUI/issues/337
-      // Here, we uniformize the new line character to `\n`.
-      if (pending_ == "\r") {
-        out_->Send(Event::Special("\n"));
-      } else {
-        out_->Send(Event::Special(std::move(pending_)));
+    case SPECIAL: {
+      auto it = g_uniformize.find(pending_);
+      if (it != g_uniformize.end()) {
+        pending_ = it->second;
       }
+      out_->Send(Event::Special(std::move(pending_)));
       pending_.clear();
+    }
       return;
 
     case MOUSE:

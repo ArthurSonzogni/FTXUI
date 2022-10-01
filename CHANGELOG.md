@@ -27,7 +27,8 @@ current (development)
 - Feature: `Input` supports CTRL+Left and CTRL+Right
 - Improvement: The `Menu` keeps the focus when an entry is selected with the
   mouse.
-- Bug: Add implementation of `ButtonOption::Border()`. It was missing.
+- Bugfix: Add implementation of `ButtonOption::Border()`. It was missing.
+- Bugfix: Provide the correct key for F1-F4 and F11.
 
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`

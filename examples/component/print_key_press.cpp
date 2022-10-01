@@ -25,7 +25,7 @@ std::string Stringify(Event event) {
 
   out = "(" + out + " ) -> ";
   if (event.is_character()) {
-    out += "character(" + event.character() + ")";
+    out += "Event::Character(\"" + event.character() + "\")";
   } else if (event.is_mouse()) {
     out += "mouse";
     switch (event.mouse().button) {
@@ -66,6 +66,68 @@ std::string Stringify(Event event) {
     out += "(" +  //
            std::to_string(event.mouse().x) + "," +
            std::to_string(event.mouse().y) + ")";
+  } else if (event == Event::ArrowLeft) {
+    out += "Event::ArrowLeft";
+  } else if (event == Event::ArrowRight) {
+    out += "Event::ArrowRight";
+  } else if (event == Event::ArrowUp) {
+    out += "Event::ArrowUp";
+  } else if (event == Event::ArrowDown) {
+    out += "Event::ArrowDown";
+  } else if (event == Event::ArrowLeftCtrl) {
+    out += "Event::ArrowLeftCtrl";
+  } else if (event == Event ::ArrowRightCtrl) {
+    out += "Event::ArrowRightCtrl";
+  } else if (event == Event::ArrowUpCtrl) {
+    out += "Event::ArrowUpCtrl";
+  } else if (event == Event::ArrowDownCtrl) {
+    out += "Event::ArrowDownCtrl";
+  } else if (event == Event::Backspace) {
+    out += "Event::Backspace";
+  } else if (event == Event::Delete) {
+    out += "Event::Delete";
+  } else if (event == Event::Escape) {
+    out += "Event::Escape";
+  } else if (event == Event::Return) {
+    out += "Event::Return";
+  } else if (event == Event::Tab) {
+    out += "Event::Tab";
+  } else if (event == Event::TabReverse) {
+    out += "Event::TabReverse";
+  } else if (event == Event::F1) {
+    out += "Event::F1";
+  } else if (event == Event::F2) {
+    out += "Event::F2";
+  } else if (event == Event::F3) {
+    out += "Event::F3";
+  } else if (event == Event::F4) {
+    out += "Event::F4";
+  } else if (event == Event::F5) {
+    out += "Event::F5";
+  } else if (event == Event::F6) {
+    out += "Event::F6";
+  } else if (event == Event::F7) {
+    out += "Event::F7";
+  } else if (event == Event::F8) {
+    out += "Event::F8";
+  } else if (event == Event::F9) {
+    out += "Event::F9";
+  } else if (event == Event::F10) {
+    out += "Event::F10";
+  } else if (event == Event::F11) {
+    out += "Event::F11";
+  } else if (event == Event::F12) {
+    out += "Event::F12";
+  } else if (event == Event::Home) {
+    out += "Event::Home";
+  } else if (event == Event::End) {
+    out += "Event::End";
+  } else if (event == Event::PageUp) {
+    out += "Event::PageUp";
+  } else if (event == Event::PageDown) {
+    out += "Event::PageDown";
+  } else if (event == Event::Custom) {
+    out += "Custom";
   } else {
     out += "(special)";
   }
