@@ -103,8 +103,8 @@ class RadioboxBase : public ComponentBase {
 
     if (event == Event::Character(' ') || event == Event::Return) {
       *selected_ = hovered_;
-      //*selected_ = focused_entry();
       option_->on_change();
+      return true;
     }
 
     return false;

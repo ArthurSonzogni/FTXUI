@@ -113,6 +113,39 @@ TEST(RadioboxTest, Navigation) {
   radiobox->OnEvent(Event::Return);
 }
 
+TEST(RadioboxTest, EventHandling) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2"};
+  auto radiobox = Radiobox(&entries, &selected);
+  ASSERT_EQ(selected, 0);
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
+  EXPECT_FALSE(radiobox->OnEvent(Event::ArrowDown))
+      << "Should not handle ArrowDown when we are on last item";
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowUp));
+  EXPECT_FALSE(radiobox->OnEvent(Event::ArrowUp))
+      << "Should not handle ArrowUp when we are on first item";
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::End));
+  EXPECT_FALSE(radiobox->OnEvent(Event::End))
+      << "Should not handle End when we are on last item";
+  EXPECT_TRUE(radiobox->OnEvent(Event::Home));
+  EXPECT_FALSE(radiobox->OnEvent(Event::Home))
+      << "Should not handle Home when we are on first item";
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character(' ')));
+  ASSERT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character(' ')))
+      << "Should handle Space even when focused item is already selected";
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowUp));
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  ASSERT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return))
+      << "Should handle Return even when focused item is already selected";
+}
+
 TEST(RadioboxTest, RemoveEntries) {
   int focused_entry = 0;
   int selected = 0;
