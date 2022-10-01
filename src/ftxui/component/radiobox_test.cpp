@@ -11,106 +11,205 @@
 
 namespace ftxui {
 
-TEST(RadioboxTest, Navigation) {
+TEST(RadioboxTest, NavigationArrow) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
   auto radiobox = Radiobox(&entries, &selected);
 
-  // With arrow key.
+  // Down + Return
   EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::ArrowDown);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::ArrowDown);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::ArrowDown);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::ArrowUp);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::ArrowUp);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
   EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::ArrowUp);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+  EXPECT_FALSE(radiobox->OnEvent(Event::ArrowDown));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+
+  // Up + Return
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowUp));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowUp));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+  EXPECT_FALSE(radiobox->OnEvent(Event::ArrowUp));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+}
+
+TEST(RadioboxTest, NavigationArrowVim) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  auto radiobox = Radiobox(&entries, &selected);
+
+  // J + Return
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character('j')));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character('j')));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+  EXPECT_FALSE(radiobox->OnEvent(Event::Character('j')));
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+
+  // K + Return
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character('k')));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character('k')));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+  EXPECT_FALSE(radiobox->OnEvent(Event::Character('k')));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+}
+
+TEST(RadioboxTest, NavigationTab) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  auto radiobox = Radiobox(&entries, &selected);
+
+  // Tab + Return
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Tab));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Tab));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Tab));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Tab));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Tab));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+
+  // TabReverse + Return
+  EXPECT_TRUE(radiobox->OnEvent(Event::TabReverse));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::TabReverse));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::TabReverse));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::TabReverse));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::TabReverse));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+}
+
+TEST(RadioboxTest, NavigationHome) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  auto radiobox = Radiobox(&entries, &selected);
+
+  selected = 0;
+  EXPECT_FALSE(radiobox->OnEvent(Event::Home));
   EXPECT_EQ(selected, 0);
 
-  // With vim like characters.
-  EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::Character('j'));
-  radiobox->OnEvent(Event::Return);
+  selected = 1;
+  EXPECT_FALSE(radiobox->OnEvent(Event::Home));
   EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::Character('j'));
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::Character('j'));
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::Character('k'));
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::Character('k'));
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
   EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::Character('k'));
-  radiobox->OnEvent(Event::Return);
+  EXPECT_FALSE(radiobox->OnEvent(Event::Home));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
   EXPECT_EQ(selected, 0);
 
-  // With more entries
-  entries = {"1", "2", "3"};
-  EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::ArrowDown);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::ArrowDown);
-  radiobox->OnEvent(Event::Return);
+  selected = 2;
+  EXPECT_FALSE(radiobox->OnEvent(Event::Home));
   EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::ArrowDown);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::ArrowUp);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::ArrowUp);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
   EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::ArrowUp);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_FALSE(radiobox->OnEvent(Event::Home));
   EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+}
 
-  // With tab.
+TEST(RadioboxTest, NavigationEnd) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  auto radiobox = Radiobox(&entries, &selected);
+
+  selected = 0;
+  EXPECT_TRUE(radiobox->OnEvent(Event::End));
   EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::Tab);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::Tab);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
   EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::Tab);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_FALSE(radiobox->OnEvent(Event::End));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+
+  selected = 1;
+  EXPECT_FALSE(radiobox->OnEvent(Event::End));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+  EXPECT_FALSE(radiobox->OnEvent(Event::End));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+
+  selected = 2;
+  EXPECT_FALSE(radiobox->OnEvent(Event::End));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+}
+
+TEST(RadioboxTest, EventSpace) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3"};
+  auto radiobox = Radiobox(&entries, &selected);
+
   EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::Tab);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::Tab);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::TabReverse);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::TabReverse);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
   EXPECT_EQ(selected, 0);
-  radiobox->OnEvent(Event::TabReverse);
-  radiobox->OnEvent(Event::Return);
-  EXPECT_EQ(selected, 2);
-  radiobox->OnEvent(Event::TabReverse);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character(' ')));
   EXPECT_EQ(selected, 1);
-  radiobox->OnEvent(Event::TabReverse);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character(' ')));
+  EXPECT_EQ(selected, 2);
+  EXPECT_FALSE(radiobox->OnEvent(Event::ArrowDown));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Character(' ')));
+  EXPECT_EQ(selected, 2);
 }
 
 TEST(RadioboxTest, RemoveEntries) {
@@ -124,9 +223,9 @@ TEST(RadioboxTest, RemoveEntries) {
   EXPECT_EQ(selected, 0);
   EXPECT_EQ(focused_entry, 0);
 
-  radiobox->OnEvent(Event::ArrowDown);
-  radiobox->OnEvent(Event::ArrowDown);
-  radiobox->OnEvent(Event::Return);
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
+  EXPECT_TRUE(radiobox->OnEvent(Event::ArrowDown));
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
 
   EXPECT_EQ(selected, 2);
   EXPECT_EQ(focused_entry, 2);
