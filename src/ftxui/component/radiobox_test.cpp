@@ -160,6 +160,64 @@ TEST(RadioboxTest, NavigationHome) {
   EXPECT_EQ(selected, 0);
 }
 
+TEST(RadioboxTest, NavigationPageDown) {
+  int selected = 0;
+  std::vector<std::string> entries = {"1", "2", "3", "4", "5", "6"};
+  auto radiobox = Radiobox(&entries, &selected) | yframe;
+
+  Screen screen(1, 3);
+  Render(screen, radiobox->Render());
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::PageDown));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 2);
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::PageDown));
+  EXPECT_EQ(selected, 2);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 4);
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::PageDown));
+  EXPECT_EQ(selected, 4);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 5);
+
+  EXPECT_FALSE(radiobox->OnEvent(Event::PageDown));
+  EXPECT_EQ(selected, 5);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 5);
+}
+
+TEST(RadioboxTest, NavigationPageUp) {
+  int selected = 5;
+  std::vector<std::string> entries = {"1", "2", "3", "4", "5", "6"};
+  auto radiobox = Radiobox(&entries, &selected) | yframe;
+
+  Screen screen(1, 3);
+  Render(screen, radiobox->Render());
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::PageUp));
+  EXPECT_EQ(selected, 5);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 3);
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::PageUp));
+  EXPECT_EQ(selected, 3);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 1);
+
+  EXPECT_TRUE(radiobox->OnEvent(Event::PageUp));
+  EXPECT_EQ(selected, 1);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+
+  EXPECT_FALSE(radiobox->OnEvent(Event::PageUp));
+  EXPECT_EQ(selected, 0);
+  EXPECT_TRUE(radiobox->OnEvent(Event::Return));
+  EXPECT_EQ(selected, 0);
+}
+
 TEST(RadioboxTest, NavigationEnd) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
