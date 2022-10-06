@@ -122,6 +122,22 @@ TEST(StringTest, CellToGlyphIndex) {
   EXPECT_EQ(combining[2], 2);
 }
 
+TEST(StringTest, Utf8ToWordBreakProperty) {
+  using T = std::vector<WordBreakProperty>;
+  using P = WordBreakProperty;
+  EXPECT_EQ(Utf8ToWordBreakProperty("a"), T({P::ALetter}));
+  EXPECT_EQ(Utf8ToWordBreakProperty("0"), T({P::Numeric}));
+  EXPECT_EQ(Utf8ToWordBreakProperty("א"), T({P::Hebrew_Letter}));
+  EXPECT_EQ(Utf8ToWordBreakProperty("ㇰ"), T({P::Katakana}));
+  EXPECT_EQ(Utf8ToWordBreakProperty(" "), T({P::WSegSpace}));
+  EXPECT_EQ(Utf8ToWordBreakProperty("\""), T({P::Double_Quote}));
+  EXPECT_EQ(Utf8ToWordBreakProperty("'"), T({P::Single_Quote}));
+  EXPECT_EQ(Utf8ToWordBreakProperty(":"), T({P::MidLetter}));
+  EXPECT_EQ(Utf8ToWordBreakProperty("."), T({P::MidNumLet}));
+  EXPECT_EQ(Utf8ToWordBreakProperty("\r"), T({})); // FIXME
+  EXPECT_EQ(Utf8ToWordBreakProperty("\n"), T({})); // FIXME
+}
+
 }  // namespace ftxui
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
