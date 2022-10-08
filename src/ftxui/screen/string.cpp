@@ -14,7 +14,15 @@
 #include <string>   // for string, basic_string, wstring
 #include <tuple>    // for std::ignore
 
-#include "ftxui/screen/deprecated.hpp"  // for wchar_width, wstring_width
+// `codecvt_utf8_utf16 is deprecated in C++17. However there are no replacement.
+// Microsoft provides one, but that's not standardized. Hence the two code path.
+#if defined(_WIN32)
+#include <windows.h>
+#include <stringapiset.h>
+#else
+#include <codecvt>  // for codecvt_utf8_utf16
+#include <locale>   // for wstring_convert
+#endif
 
 namespace {
 
@@ -1855,26 +1863,35 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(
   return out;
 }
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable : 4996)  // codecvt_utf8_utf16 is deprecated
-#endif
-
 /// Convert a UTF8 std::string into a std::wstring.
 std::string to_string(const std::wstring& s) {
-  std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-  return converter.to_bytes(s);
+#if defined(_WIN32)
+  if (s.empty())
+    return std::string();
+  int size = WideCharToMultiByte(CP_UTF8, 0, &s[0], (int)s.size(), nullptr, 0,
+                                 nullptr, nullptr);
+  std::string out(size, 0);
+  WideCharToMultiByte(CP_UTF8, 0, &s[0], (int)s.size(), &out[0], size, nullptr,
+                      nullptr);
+  return out;
+#else
+  return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>().to_bytes(s);
+#endif
 }
 
 /// Convert a std::wstring into a UTF8 std::string.
 std::wstring to_wstring(const std::string& s) {
-  std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-  return converter.from_bytes(s);
-}
-
-#ifdef _MSC_VER
-#pragma warning(pop)
+#if defined(_WIN32)
+  if (s.empty())
+    return std::wstring();
+  int size = MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), nullptr, 0);
+  std::wstring out(size, 0);
+  MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), &out[0], size);
+  return out;
+#else
+  return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>().from_bytes(s);
 #endif
+}
 
 }  // namespace ftxui
 
