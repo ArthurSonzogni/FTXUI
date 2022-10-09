@@ -327,6 +327,7 @@ Feel free to add your projects here:
 - [beagle-config](https://github.com/SAtacker/beagle-config)
 - [turing_cmd](https://github.com/DanArmor/turing_cmd)
 - [StartUp](https://github.com/StubbornVegeta/StartUp)
+- [eCAL monitor](https://github.com/eclipse-ecal/ecal)
 
 ## [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
