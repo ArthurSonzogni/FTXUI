@@ -50,7 +50,7 @@ bool IsWordCharacter(WordBreakProperty property) {
       return false;
   };
   return true; // NOT_REACHED();
-};
+}
 
 std::string PasswordField(size_t size) {
   std::string out;
