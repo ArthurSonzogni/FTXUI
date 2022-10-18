@@ -131,7 +131,7 @@ Element emptyElement() {
   class Impl : public Node {
     void ComputeRequirement() override {
       requirement_.min_x = 0;
-      requirement_.min_x = 0;
+      requirement_.min_y = 0;
     }
   };
   return std::make_unique<Impl>();

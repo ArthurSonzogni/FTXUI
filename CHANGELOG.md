@@ -24,6 +24,7 @@ current (development)
 - Feature: Add `Loop` to give developers a better control on the main loop. This
   can be used to integrate FTXUI into another main loop, without taking the full
   control.
+- Feature: `Input` supports CTRL+Left and CTRL+Right
 - Improvement: The `Menu` keeps the focus when an entry is selected with the
   mouse.
 - Bug: Add implementation of `ButtonOption::Border()`. It was missing.
@@ -32,6 +33,7 @@ current (development)
 - Feature: add `Box::Union(a,b) -> Box`
 - Bugfix: Fix resetting `dim` clashing with resetting of `bold`.
 - Feature: Add emscripten screen resize support.
+- Bugfix: Add unicode 13 support for full width characters.
 
 3.0.0
 -----

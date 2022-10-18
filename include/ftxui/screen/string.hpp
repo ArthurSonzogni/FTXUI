@@ -26,6 +26,33 @@ int GlyphPosition(const std::string& input,
 // Returns the number of glyphs in |input|.
 int GlyphCount(const std::string& input);
 
+// Properties from:
+// https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
+enum class WordBreakProperty {
+  ALetter,
+  CR,
+  Double_Quote,
+  Extend,
+  ExtendNumLet,
+  Format,
+  Hebrew_Letter,
+  Katakana,
+  LF,
+  MidLetter,
+  MidNum,
+  MidNumLet,
+  Newline,
+  Numeric,
+  Regional_Indicator,
+  Single_Quote,
+  WSegSpace,
+  ZWJ,
+};
+std::vector<WordBreakProperty> Utf8ToWordBreakProperty(
+    const std::string& input);
+
+bool IsWordBreakingCharacter(const std::string& input, size_t glyph_index);
+
 // Map every cells drawn by |input| to their corresponding Glyphs. Half-size
 // Glyphs takes one cell, full-size Glyphs take two cells.
 std::vector<int> CellToGlyphIndex(const std::string& input);

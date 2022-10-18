@@ -10,7 +10,7 @@
 #define NOMINMAX
 #endif
 
-#include <Windows.h>
+#include <windows.h>
 #else
 #include <sys/ioctl.h>  // for winsize, ioctl, TIOCGWINSZ
 #include <unistd.h>     // for STDOUT_FILENO
