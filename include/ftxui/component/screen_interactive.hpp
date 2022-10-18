@@ -12,11 +12,12 @@
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"           // for Event
-#include "ftxui/component/task.hpp"            // for Closure, Task
+#include "ftxui/component/task.hpp"            // for Task, Closure
 #include "ftxui/screen/screen.hpp"             // for Screen
 
 namespace ftxui {
 class ComponentBase;
+class Loop;
 struct Event;
 
 using Component = std::shared_ptr<ComponentBase>;
@@ -33,9 +34,12 @@ class ScreenInteractive : public Screen {
   // Return the currently active screen, nullptr if none.
   static ScreenInteractive* Active();
 
+  // Start/Stop the main loop.
   void Loop(Component);
+  void Exit();
   Closure ExitLoopClosure();
 
+  // Post tasks to be executed by the loop.
   void Post(Task task);
   void PostEvent(Event event);
   void RequestAnimationFrame();
@@ -51,9 +55,16 @@ class ScreenInteractive : public Screen {
   void Install();
   void Uninstall();
 
-  void Main(Component component);
+  void PreMain();
+  void PostMain();
 
+  bool HasQuitted();
+  void RunOnce(Component component);
+  void RunOnceBlocking(Component component);
+
+  void HandleTask(Component component, Task& task);
   void Draw(Component component);
+
   void SigStop();
 
   ScreenInteractive* suspended_screen_ = nullptr;
@@ -80,13 +91,17 @@ class ScreenInteractive : public Screen {
   std::thread event_listener_;
   std::thread animation_listener_;
   bool animation_requested_ = false;
-  animation::TimePoint previous_animation_time;
+  animation::TimePoint previous_animation_time_;
 
   int cursor_x_ = 1;
   int cursor_y_ = 1;
 
   bool mouse_captured = false;
   bool previous_frame_resized_ = false;
+
+  bool frame_valid_ = false;
+
+  friend class Loop;
 
  public:
   class Private {

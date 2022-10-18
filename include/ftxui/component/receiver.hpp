@@ -86,9 +86,23 @@ class ReceiverImpl {
     return false;
   }
 
+  bool ReceiveNonBlocking(T* t) {
+    std::unique_lock<std::mutex> lock(mutex_);
+    if (queue_.empty())
+      return false;
+    *t = queue_.front();
+    queue_.pop();
+    return true;
+  }
+
   bool HasPending() {
     std::unique_lock<std::mutex> lock(mutex_);
     return !queue_.empty();
+  }
+
+  bool HasQuitted() {
+    std::unique_lock<std::mutex> lock(mutex_);
+    return queue_.empty() && !senders_;
   }
 
  private:

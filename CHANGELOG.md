@@ -20,6 +20,10 @@ current (development)
     - multiple directions.
     - multiple colors.
     - various values (value, min, max, increment).
+- Feature: Define `ScreenInteractive::Exit()`.
+- Feature: Add `Loop` to give developers a better control on the main loop. This
+  can be used to integrate FTXUI into another main loop, without taking the full
+  control.
 - Feature: `Input` supports CTRL+Left and CTRL+Right
 - Improvement: The `Menu` keeps the focus when an entry is selected with the
   mouse.
