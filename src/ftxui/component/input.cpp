@@ -48,7 +48,7 @@ bool IsWordCharacter(WordBreakProperty property) {
     case WordBreakProperty::Regional_Indicator:
     case WordBreakProperty::ZWJ:
       return false;
-  };
+  }
   return true; // NOT_REACHED();
 }
 

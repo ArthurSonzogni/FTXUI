@@ -65,18 +65,22 @@ const Event Event::Escape = Event::Special("\x1B");               // NOLINT
 const Event Event::Return = Event::Special({10});                 // NOLINT
 const Event Event::Tab = Event::Special({9});                     // NOLINT
 const Event Event::TabReverse = Event::Special({27, 91, 90});     // NOLINT
-const Event Event::F1 = Event::Special("\x1B[OP");                // NOLINT
-const Event Event::F2 = Event::Special("\x1B[OQ");                // NOLINT
-const Event Event::F3 = Event::Special("\x1B[OR");                // NOLINT
-const Event Event::F4 = Event::Special("\x1B[OS");                // NOLINT
-const Event Event::F5 = Event::Special("\x1B[15~");               // NOLINT
-const Event Event::F6 = Event::Special("\x1B[17~");               // NOLINT
-const Event Event::F7 = Event::Special("\x1B[18~");               // NOLINT
-const Event Event::F8 = Event::Special("\x1B[19~");               // NOLINT
-const Event Event::F9 = Event::Special("\x1B[20~");               // NOLINT
-const Event Event::F10 = Event::Special("\x1B[21~");              // NOLINT
-const Event Event::F11 = Event::Special("\x1B[21~");  // Doesn't exist // NOLINT
+
+// See https://invisible-island.net/xterm/xterm-function-keys.html
+// We follow xterm-new / vterm-xf86-v4 / mgt / screen
+const Event Event::F1 = Event::Special("\x1BOP");     // NOLINT
+const Event Event::F2 = Event::Special("\x1BOQ");     // NOLINT
+const Event Event::F3 = Event::Special("\x1BOR");     // NOLINT
+const Event Event::F4 = Event::Special("\x1BOS");     // NOLINT
+const Event Event::F5 = Event::Special("\x1B[15~");   // NOLINT
+const Event Event::F6 = Event::Special("\x1B[17~");   // NOLINT
+const Event Event::F7 = Event::Special("\x1B[18~");   // NOLINT
+const Event Event::F8 = Event::Special("\x1B[19~");   // NOLINT
+const Event Event::F9 = Event::Special("\x1B[20~");   // NOLINT
+const Event Event::F10 = Event::Special("\x1B[21~");  // NOLINT
+const Event Event::F11 = Event::Special("\x1B[23~");  // NOLINT
 const Event Event::F12 = Event::Special("\x1B[24~");  // NOLINT
+
 const Event Event::Home = Event::Special({27, 91, 72});           // NOLINT
 const Event Event::End = Event::Special({27, 91, 70});            // NOLINT
 const Event Event::PageUp = Event::Special({27, 91, 53, 126});    // NOLINT
