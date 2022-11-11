@@ -512,8 +512,13 @@ void ScreenInteractive::Install() {
     });
   }
 
+  on_exit_functions.push([=] {
+    std::cout << "\033[?25h";  // Enable cursor.
+    std::cout << "\033[?1 q";  // Cursor block blinking.
+  });
+
   disable({
-      DECMode::kCursor,
+      //DECMode::kCursor,
       DECMode::kLineWrap,
   });
 
@@ -685,16 +690,26 @@ void ScreenInteractive::Draw(Component component) {
   set_cursor_position = "";
   reset_cursor_position = "";
 
-  int dx = dimx_ - 1 - cursor_.x;
-  int dy = dimy_ - 1 - cursor_.y;
+  {
+    int dx = dimx_ - 1 - cursor_.x;
+    int dy = dimy_ - 1 - cursor_.y;
 
-  if (dx != 0) {
-    set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
-    reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
-  }
-  if (dy != 0) {
-    set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
-    reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
+    if (dy != 0) {
+      set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
+      reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
+    }
+
+    if (dx != 0) {
+      set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
+      reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
+    }
+
+    if (cursor_.shape == Cursor::Hidden) {
+      set_cursor_position += "\033[?25l";
+    } else {
+      set_cursor_position += "\033[?25h";
+      set_cursor_position += "\033[" + std::to_string(int(cursor_.shape)) + " q";
+    }
   }
 
   std::cout << ToString() << set_cursor_position;

@@ -71,7 +71,11 @@ class Focus : public Select {
     // https://github.com/microsoft/terminal/issues/1203
     // https://github.com/microsoft/terminal/issues/3093
 #if !defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    screen.SetCursor(Screen::Cursor{box_.x_min, box_.y_min});
+    screen.SetCursor(Screen::Cursor{
+        box_.x_min,
+        box_.y_min,
+        Screen::Cursor::Shape::Hidden,
+    });
 #endif
   }
 };
@@ -145,6 +149,48 @@ Element xframe(Element child) {
 
 Element yframe(Element child) {
   return std::make_shared<Frame>(unpack(std::move(child)), false, true);
+}
+
+class FocusCursor : public Focus {
+ public:
+  FocusCursor(Elements children, Screen::Cursor::Shape shape)
+      : Focus(std::move(children)), shape_(shape) {}
+
+ private:
+  void Render(Screen& screen) override {
+    Select::Render(screen);
+    screen.SetCursor(Screen::Cursor{
+        box_.x_min,
+        box_.y_min,
+        shape_,
+    });
+  }
+  Screen::Cursor::Shape shape_;
+};
+
+Element focusCursorBlock(Element child) {
+  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+                                       Screen::Cursor::Block);
+}
+Element focusCursorBlockBlinking(Element child) {
+  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+                                       Screen::Cursor::BlockBlinking);
+}
+Element focusCursorBar(Element child) {
+  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+                                       Screen::Cursor::Bar);
+}
+Element focusCursorBarBlinking(Element child) {
+  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+                                       Screen::Cursor::BarBlinking);
+}
+Element focusCursorUnderline(Element child) {
+  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+                                       Screen::Cursor::Underline);
+}
+Element focusCursorUnderlineBlinking(Element child) {
+  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+                                       Screen::Cursor::UnderlineBlinking);
 }
 
 }  // namespace ftxui

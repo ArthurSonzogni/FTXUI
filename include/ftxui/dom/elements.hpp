@@ -126,9 +126,6 @@ enum Direction { WIDTH, HEIGHT };
 enum Constraint { LESS_THAN, EQUAL, GREATER_THAN };
 Decorator size(Direction, Constraint, int value);
 
-// --
-Decorator reflect(Box& box);
-
 // --- Frame ---
 // A frame is a scrollable area. The internal area is potentially larger than
 // the external one. The internal area is scrolled in order to make visible the
@@ -139,7 +136,21 @@ Element yframe(Element);
 Element focus(Element);
 Element select(Element);
 
+// --- Cursor ---
+// Those are similar to `focus`, but also change the shape of the cursor.
+Element focusCursorBlock(Element);
+Element focusCursorBlockBlinking(Element);
+Element focusCursorBar(Element);
+Element focusCursorBarBlinking(Element);
+Element focusCursorUnderline(Element);
+Element focusCursorUnderlineBlinking(Element);
+
+// --- Misc ---
 Element vscroll_indicator(Element);
+Decorator reflect(Box& box);
+// Before drawing the |element| clear the pixel below. This is useful in
+// combinaison with dbox.
+Element clear_under(Element element);
 
 // --- Util --------------------------------------------------------------------
 Element hcenter(Element);
@@ -147,10 +158,6 @@ Element vcenter(Element);
 Element center(Element);
 Element align_right(Element);
 Element nothing(Element element);
-
-// Before drawing the |element| clear the pixel below. This is useful in
-// combinaison with dbox.
-Element clear_under(Element element);
 
 namespace Dimension {
 Dimensions Fit(Element&);

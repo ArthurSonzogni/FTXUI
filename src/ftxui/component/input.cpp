@@ -96,24 +96,23 @@ class InputBase : public ComponentBase {
 
     // placeholder.
     if (size == 0) {
-      bool hovered = hovered_;
-      Decorator decorator = dim | main_decorator;
+      auto element = text(*placeholder_) | dim | main_decorator | reflect(box_);
       if (is_focused) {
-        decorator = decorator | focus;
+        element |= focus;
       }
-      if (hovered || is_focused) {
-        decorator = decorator | inverted;
+      if (hovered_|| is_focused) {
+        element |= inverted;
       }
-      return text(*placeholder_) | decorator | reflect(box_);
+      return element;
     }
 
     // Not focused.
     if (!is_focused) {
+      auto element = text(content) | main_decorator | reflect(box_);
       if (hovered_) {
-        return text(content) | main_decorator | inverted | reflect(box_);
-      } else {
-        return text(content) | main_decorator | reflect(box_);
-      }
+        element |= inverted;
+      } 
+      return element;
     }
 
     int index_before_cursor = GlyphPosition(content, cursor_position());
@@ -125,10 +124,10 @@ class InputBase : public ComponentBase {
                                       index_after_cursor - index_before_cursor);
     }
     std::string part_after_cursor = content.substr(index_after_cursor);
-    auto focused = (is_focused || hovered_) ? focus : select;
+    auto focused = (is_focused || hovered_) ? focusCursorBarBlinking : select;
     return hbox({
                text(part_before_cursor),
-               text(part_at_cursor) | focused | inverted | reflect(cursor_box_),
+               text(part_at_cursor) | focused | reflect(cursor_box_),
                text(part_after_cursor),
            }) |
            flex | frame | bold | main_decorator | reflect(box_);
