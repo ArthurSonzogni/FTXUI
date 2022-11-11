@@ -92,13 +92,16 @@
     }
     term.onBinary(onBinary);
     term.onData(onBinary)
+    term.resize(140,43);
     window.Module = {
       preRun: () => {
         FS.init(stdin, stdout, stderr);
       },
       postRun: [],
       onRuntimeInitialized: () => {
-        // Handle screen resize:
+        if (window.Module._ftxui_on_resize == undefined)
+          return;
+
         const fit_addon = new (FitAddon.FitAddon)();
         term.loadAddon(fit_addon);
         fit_addon.fit();
