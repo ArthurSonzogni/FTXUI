@@ -19,6 +19,8 @@ const std::map<std::string, std::string> g_uniformize = {{
     // See https://github.com/ArthurSonzogni/FTXUI/issues/337
     // Here, we uniformize the new line character to `\n`.
     {"\r", "\n"},
+    // See: https://github.com/ArthurSonzogni/FTXUI/issues/508
+    {std::string({8}), std::string({127})},
 }};
 
 TerminalInputParser::TerminalInputParser(Sender<Task> out)
