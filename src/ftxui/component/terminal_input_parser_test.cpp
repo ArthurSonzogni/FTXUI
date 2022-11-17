@@ -302,7 +302,7 @@ TEST(Event, Control) {
   };
   std::vector<TestCase> cases;
   for (int i = 0; i < 32; ++i) {
-    if (i == 13 || i == 24 || i == 26 || i == 27)
+    if (i == 8 || i == 13 || i == 24 || i == 26 || i == 27)
       continue;
     cases.push_back({char(i), false});
   }
@@ -342,6 +342,8 @@ TEST(Event, Special) {
       {str("\x1B[A"), Event::ArrowUp},
       {str("\x1B[B"), Event::ArrowDown},
       {{127}, Event::Backspace},
+      // Quirk for: https://github.com/ArthurSonzogni/FTXUI/issues/508
+      {{8}, Event::Backspace},
       {str("\x1B[3~"), Event::Delete},
       //{str("\x1B"), Event::Escape},
       {{10}, Event::Return},
