@@ -501,22 +501,25 @@ void Screen::Clear() {
 // clang-format off
 void Screen::ApplyShader() {
   // Merge box characters togethers.
-  for (int y = 1; y < dimy_; ++y) {
-    for (int x = 1; x < dimx_; ++x) {
+  for (int y = 0; y < dimy_; ++y) {
+    for (int x = 0; x < dimx_; ++x) {
       // Box drawing character uses exactly 3 byte.
       Pixel& cur = pixels_[y][x];
       if (!ShouldAttemptAutoMerge(cur)) {
         continue;
       }
 
-      Pixel& left = pixels_[y][x-1];
-      Pixel& top = pixels_[y-1][x];
-
-      if (ShouldAttemptAutoMerge(left)) {
-        UpgradeLeftRight(left.character, cur.character);
+      if (x > 0) {
+        Pixel& left = pixels_[y][x-1];
+        if (ShouldAttemptAutoMerge(left)) {
+          UpgradeLeftRight(left.character, cur.character);
+        }
       }
-      if (ShouldAttemptAutoMerge(top)) {
-        UpgradeTopDown(top.character, cur.character);
+      if (y > 0) {
+        Pixel& top = pixels_[y-1][x];
+        if (ShouldAttemptAutoMerge(top)) {
+          UpgradeTopDown(top.character, cur.character);
+        }
       }
     }
   }

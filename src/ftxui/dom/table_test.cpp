@@ -708,6 +708,28 @@ TEST(TableTest, RowFlexTwo) {
       screen.ToString());
 }
 
+TEST(TableTest, Merge) {
+  auto table = Table({
+      {"a", "b", "c"},
+      {"d", "e", "f"},
+      {"g", "h", "i"},
+  });
+  table.SelectAll().Border(LIGHT);
+  table.SelectColumn(1).Border(HEAVY);
+  table.SelectRow(1).Border(HEAVY);
+  Screen screen(7, 7);
+  Render(screen, table.Render());
+  EXPECT_EQ(
+    "┌─┲━┱─┐\r\n"
+    "│a┃b┃c│\r\n"
+    "┢━╋━╋━┪\r\n"
+    "┃d┃e┃f┃\r\n"
+    "┡━╋━╋━┩\r\n"
+    "│g┃h┃i│\r\n"
+    "└─┺━┹─┘",
+    screen.ToString());
+}
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
