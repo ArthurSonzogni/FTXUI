@@ -366,7 +366,7 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 }
 
 void ScreenInteractive::Loop(Component component) {  // NOLINT
-  class Loop loop(this, component);
+  class Loop loop(this, std::move(component));
   loop.Run();
 }
 
@@ -559,12 +559,13 @@ void ScreenInteractive::RunOnceBlocking(Component component) {
   RunOnce(component);
 }
 
+// NOLINTNEXTLINE
 void ScreenInteractive::RunOnce(Component component) {
   Task task;
   while (task_receiver_->ReceiveNonBlocking(&task)) {
     HandleTask(component, task);
   }
-  Draw(component);
+  Draw(std::move(component));
 }
 
 void ScreenInteractive::HandleTask(Component component, Task& task) {
@@ -620,8 +621,9 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
 // NOLINTNEXTLINE
 void ScreenInteractive::Draw(Component component) {
-  if (frame_valid_)
+  if (frame_valid_) {
     return;
+  }
   auto document = component->Render();
   int dimx = 0;
   int dimy = 0;

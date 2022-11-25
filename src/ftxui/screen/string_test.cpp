@@ -138,6 +138,28 @@ TEST(StringTest, Utf8ToWordBreakProperty) {
   EXPECT_EQ(Utf8ToWordBreakProperty("\n"), T({})); // FIXME
 }
 
+TEST(StringTest, to_string) {
+  EXPECT_EQ(to_string(L"hello"), "hello");
+  EXPECT_EQ(to_string(L"€"), "€");
+  EXPECT_EQ(to_string(L"ÿ"), "ÿ");
+  EXPECT_EQ(to_string(L"߿"), "߿");
+  EXPECT_EQ(to_string(L"ɰɱ"), "ɰɱ");
+  EXPECT_EQ(to_string(L"«»"), "«»");
+  EXPECT_EQ(to_string(L"嵰嵲嵫"), "嵰嵲嵫");
+  EXPECT_EQ(to_string(L"🎅🎄"), "🎅🎄");
+}
+
+TEST(StringTest, to_wstring) {
+  EXPECT_EQ(to_wstring(std::string("hello")), L"hello");
+  EXPECT_EQ(to_wstring(std::string("€")), L"€");
+  EXPECT_EQ(to_wstring(std::string("ÿ")), L"ÿ");
+  EXPECT_EQ(to_wstring(std::string("߿")), L"߿");
+  EXPECT_EQ(to_wstring(std::string("ɰɱ")), L"ɰɱ");
+  EXPECT_EQ(to_wstring(std::string("«»")), L"«»");
+  EXPECT_EQ(to_wstring(std::string("嵰嵲嵫")), L"嵰嵲嵫");
+  EXPECT_EQ(to_wstring(std::string("🎅🎄")), L"🎅🎄");
+}
+
 }  // namespace ftxui
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
