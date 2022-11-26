@@ -26,8 +26,8 @@ TEST(AnimationTest, StartAndEnd) {
       animation::easing::BounceInOut,
   };
   for (auto& it : functions) {
-    EXPECT_NEAR(0.f, it(0.f), 1.0e-4);
-    EXPECT_NEAR(1.f, it(1.f), 1.0e-4);
+    EXPECT_NEAR(0.F, it(0.F), 1.0e-4);
+    EXPECT_NEAR(1.F, it(1.F), 1.0e-4);
   }
 }
 

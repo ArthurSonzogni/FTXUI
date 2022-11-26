@@ -158,7 +158,7 @@ class FocusCursor : public Focus {
 
  private:
   void Render(Screen& screen) override {
-    Select::Render(screen);
+    Select::Render(screen);  // NOLINT
     screen.SetCursor(Screen::Cursor{
         box_.x_min,
         box_.y_min,

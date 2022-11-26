@@ -1,28 +1,15 @@
-// Most of this code is borrowed from:
-// Markus Kuhn -- 2007-05-26 (Unicode 5.0)
-// Latest version: http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
+// Content of this file was created thanks to:
+// - https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
+// - Markus Kuhn -- 2007-05-26 (Unicode 5.0)
+//   http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
 // Thanks you!
-//
-// Modified by Arthur Sonzogni for FTXUI.
 
 #include "ftxui/screen/string.hpp"
 
 #include <array>    // for array
-#include <codecvt>  // for codecvt_utf8_utf16
 #include <cstdint>  // for uint32_t, uint8_t
-#include <locale>   // for wstring_convert
 #include <string>   // for string, basic_string, wstring
 #include <tuple>    // for std::ignore
-
-// `codecvt_utf8_utf16 is deprecated in C++17. However there are no replacement.
-// Microsoft provides one, but that's not standardized. Hence the two code path.
-#if defined(_WIN32)
-#include <windows.h>
-#include <stringapiset.h>
-#else
-#include <codecvt>  // for codecvt_utf8_utf16
-#include <locale>   // for wstring_convert
-#endif
 
 namespace {
 
@@ -1587,62 +1574,105 @@ bool EatCodePoint(const std::string& input,
     *end = start + 1;
     return false;
   }
-  uint8_t byte_1 = input[start];
+  uint8_t C0 = input[start];
 
   // 1 byte string.
-  if ((byte_1 & 0b1000'0000) == 0b0000'0000) {  // NOLINT
-    *ucs = byte_1 & 0b0111'1111;                // NOLINT
+  if ((C0 & 0b1000'0000) == 0b0000'0000) {  // NOLINT
+    *ucs = C0 & 0b0111'1111;                // NOLINT
     *end = start + 1;
     return true;
   }
 
   // 2 byte string.
-  if ((byte_1 & 0b1110'0000) == 0b1100'0000 &&  // NOLINT
+  if ((C0 & 0b1110'0000) == 0b1100'0000 &&  // NOLINT
       start + 1 < input.size()) {
-    uint8_t byte_2 = input[start + 1];
+    uint8_t C1 = input[start + 1];
     *ucs = 0;
-    *ucs += byte_1 & 0b0001'1111;  // NOLINT
-    *ucs <<= 6;                    // NOLINT
-    *ucs += byte_2 & 0b0011'1111;  // NOLINT
+    *ucs += C0 & 0b0001'1111;  // NOLINT
+    *ucs <<= 6;                // NOLINT
+    *ucs += C1 & 0b0011'1111;  // NOLINT
     *end = start + 2;
     return true;
   }
 
   // 3 byte string.
-  if ((byte_1 & 0b1111'0000) == 0b1110'0000 &&  // NOLINT
+  if ((C0 & 0b1111'0000) == 0b1110'0000 &&  // NOLINT
       start + 2 < input.size()) {
-    uint8_t byte_2 = input[start + 1];
-    uint8_t byte_3 = input[start + 2];
+    uint8_t C1 = input[start + 1];
+    uint8_t C2 = input[start + 2];
     *ucs = 0;
-    *ucs += byte_1 & 0b0000'1111;  // NOLINT
-    *ucs <<= 6;                    // NOLINT
-    *ucs += byte_2 & 0b0011'1111;  // NOLINT
-    *ucs <<= 6;                    // NOLINT
-    *ucs += byte_3 & 0b0011'1111;  // NOLINT
+    *ucs += C0 & 0b0000'1111;  // NOLINT
+    *ucs <<= 6;                // NOLINT
+    *ucs += C1 & 0b0011'1111;  // NOLINT
+    *ucs <<= 6;                // NOLINT
+    *ucs += C2 & 0b0011'1111;  // NOLINT
     *end = start + 3;
     return true;
   }
 
   // 4 byte string.
-  if ((byte_1 & 0b1111'1000) == 0b1111'0000 &&  // NOLINT
+  if ((C0 & 0b1111'1000) == 0b1111'0000 &&  // NOLINT
       start + 3 < input.size()) {
-    uint8_t byte_2 = input[start + 1];
-    uint8_t byte_3 = input[start + 2];
-    uint8_t byte_4 = input[start + 3];
+    uint8_t C1 = input[start + 1];
+    uint8_t C2 = input[start + 2];
+    uint8_t C3 = input[start + 3];
     *ucs = 0;
-    *ucs += byte_1 & 0b0000'0111;  // NOLINT
-    *ucs <<= 6;                    // NOLINT
-    *ucs += byte_2 & 0b0011'1111;  // NOLINT
-    *ucs <<= 6;                    // NOLINT
-    *ucs += byte_3 & 0b0011'1111;  // NOLINT
-    *ucs <<= 6;                    // NOLINT
-    *ucs += byte_4 & 0b0011'1111;  // NOLINT
+    *ucs += C0 & 0b0000'0111;  // NOLINT
+    *ucs <<= 6;                // NOLINT
+    *ucs += C1 & 0b0011'1111;  // NOLINT
+    *ucs <<= 6;                // NOLINT
+    *ucs += C2 & 0b0011'1111;  // NOLINT
+    *ucs <<= 6;                // NOLINT
+    *ucs += C3 & 0b0011'1111;  // NOLINT
     *end = start + 4;
     return true;
   }
 
   *end = start + 1;
   return false;
+}
+
+// From UTF16 encoded string |input|, eat in between 1 and 4 byte representing
+// one codepoint. Put the codepoint into |ucs|. Start at |start| and update
+// |end| to represent the beginning of the next byte to eat for consecutive
+// executions.
+bool EatCodePoint(const std::wstring& input,
+                  size_t start,
+                  size_t* end,
+                  uint32_t* ucs) {
+  if (start >= input.size()) {
+    *end = start + 1;
+    return false;
+  }
+
+
+  // On linux wstring uses the UTF32 encoding:
+  if constexpr (sizeof(wchar_t) == 4) {
+    *ucs = input[start]; // NOLINT
+    *end = start + 1;
+    return true;
+  }
+
+  // On windows, wstring uses the UTF16 encoding:
+  int32_t C0 = input[start];  // NOLINT
+
+  // 1 word size:
+  if (C0 < 0xd800 || C0 >= 0xdc00) {  // NOLINT
+    *ucs = C0;
+    *end = start + 1;
+    return true;
+  }
+
+  // 2 word size:
+  if (start + 1 >= input.size()) {
+    *end = start + 2;
+    return false;
+  }
+
+  int32_t C1 = input[start + 1];                         // NOLINT
+  *ucs = ((C0 & 0x3ff) << 10) + (C1 & 0x3ff) + 0x10000;  // NOLINT
+  *end = start + 2;
+  return true;
 }
 
 }  // namespace
@@ -1865,32 +1895,107 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(
 
 /// Convert a UTF8 std::string into a std::wstring.
 std::string to_string(const std::wstring& s) {
-#if defined(_WIN32)
-  if (s.empty())
-    return std::string();
-  int size = WideCharToMultiByte(CP_UTF8, 0, &s[0], (int)s.size(), nullptr, 0,
-                                 nullptr, nullptr);
-  std::string out(size, 0);
-  WideCharToMultiByte(CP_UTF8, 0, &s[0], (int)s.size(), &out[0], size, nullptr,
-                      nullptr);
+  std::string out;
+
+  size_t i = 0;
+  uint32_t codepoint = 0;
+  while (EatCodePoint(s, i, &i, &codepoint)) {
+    // Code point <-> UTF-8 conversion
+    //
+    // ┏━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━━┓
+    // ┃Byte 1  ┃Byte 2  ┃Byte 3  ┃Byte 4  ┃
+    // ┡━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━━┩
+    // │0xxxxxxx│        │        │        │
+    // ├────────┼────────┼────────┼────────┤
+    // │110xxxxx│10xxxxxx│        │        │
+    // ├────────┼────────┼────────┼────────┤
+    // │1110xxxx│10xxxxxx│10xxxxxx│        │
+    // ├────────┼────────┼────────┼────────┤
+    // │11110xxx│10xxxxxx│10xxxxxx│10xxxxxx│
+    // └────────┴────────┴────────┴────────┘
+
+    // 1 byte UTF8
+    if (codepoint <= 0b000'0000'0111'1111) {  // NOLINT
+      uint8_t p1 = codepoint;
+      out.push_back(p1);  // NOLINT
+      continue;
+    }
+
+    // 2 bytes UTF8
+    if (codepoint <= 0b000'0111'1111'1111) {  // NOLINT
+      uint8_t p2 = codepoint & 0b111111;      // NOLINT
+      codepoint >>= 6;                        // NOLINT
+      uint8_t p1 = codepoint;                 // NOLINT
+      out.push_back(0b11000000 + p1);         // NOLINT
+      out.push_back(0b10000000 + p2);         // NOLINT
+      continue;
+    }
+
+    // 3 bytes UTF8
+    if (codepoint <= 0b1111'1111'1111'1111) {  // NOLINT
+      uint8_t p3 = codepoint & 0b111111;       // NOLINT
+      codepoint >>= 6;                         // NOLINT
+      uint8_t p2 = codepoint & 0b111111;       // NOLINT
+      codepoint >>= 6;                         // NOLINT
+      uint8_t p1 = codepoint;                  // NOLINT
+      out.push_back(0b11100000 + p1);          // NOLINT
+      out.push_back(0b10000000 + p2);          // NOLINT
+      out.push_back(0b10000000 + p3);          // NOLINT
+      continue;
+    }
+
+    // 4 bytes UTF8
+    if (codepoint <= 0b1'0000'1111'1111'1111'1111) {  // NOLINT
+      uint8_t p4 = codepoint & 0b111111;              // NOLINT
+      codepoint >>= 6;                                // NOLINT
+      uint8_t p3 = codepoint & 0b111111;              // NOLINT
+      codepoint >>= 6;                                // NOLINT
+      uint8_t p2 = codepoint & 0b111111;              // NOLINT
+      codepoint >>= 6;                                // NOLINT
+      uint8_t p1 = codepoint;                         // NOLINT
+      out.push_back(0b11110000 + p1);                 // NOLINT
+      out.push_back(0b10000000 + p2);                 // NOLINT
+      out.push_back(0b10000000 + p3);                 // NOLINT
+      out.push_back(0b10000000 + p4);                 // NOLINT
+      continue;
+    }
+
+    // Something else?
+  }
   return out;
-#else
-  return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>().to_bytes(s);
-#endif
 }
 
 /// Convert a std::wstring into a UTF8 std::string.
 std::wstring to_wstring(const std::string& s) {
-#if defined(_WIN32)
-  if (s.empty())
-    return std::wstring();
-  int size = MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), nullptr, 0);
-  std::wstring out(size, 0);
-  MultiByteToWideChar(CP_UTF8, 0, &s[0], (int)s.size(), &out[0], size);
+  std::wstring out;
+
+  size_t i = 0;
+  uint32_t codepoint = 0;
+  while (EatCodePoint(s, i, &i, &codepoint)) {
+    // On linux wstring are UTF32 encoded:
+    if constexpr (sizeof(wchar_t) == 4) {
+      out.push_back(codepoint);  // NOLINT
+      continue;
+    }
+
+    // On Windows, wstring are UTF16 encoded:
+
+    // Codepoint encoded using 1 word:
+    // NOLINTNEXTLINE
+    if (codepoint < 0xD800 || (codepoint > 0xDFFF && codepoint < 0x10000)) {
+      uint16_t p0 = codepoint;  // NOLINT
+      out.push_back(p0);        // NOLINT
+      continue;
+    }
+
+    // Codepoint encoded using 2 words:
+    codepoint -= 0x010000;                               // NOLINT
+    uint16_t p0 = (((codepoint << 12) >> 22) + 0xD800);  // NOLINT
+    uint16_t p1 = (((codepoint << 22) >> 22) + 0xDC00);  // NOLINT
+    out.push_back(p0);                                   // NOLINT
+    out.push_back(p1);                                   // NOLINT
+  }
   return out;
-#else
-  return std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>().from_bytes(s);
-#endif
 }
 
 }  // namespace ftxui

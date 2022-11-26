@@ -3,8 +3,9 @@
 
 namespace ftxui {
 
+// NOLINTNEXTLINE
 Loop::Loop(ScreenInteractive* screen, Component component)
-    : screen_(screen), component_(component) {
+    : screen_(screen), component_(std::move(component)) {
   screen_->PreMain();
 }
 
