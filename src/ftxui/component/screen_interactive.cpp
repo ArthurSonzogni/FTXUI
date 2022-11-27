@@ -148,7 +148,8 @@ void ftxui_on_resize(int columns, int rows) {
 }
 }
 
-#else
+#else // POSIX (Linux & Mac)
+
 #include <sys/time.h>  // for timeval
 
 int CheckStdinReady(int usec_timeout) {
@@ -178,8 +179,65 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
     }
   }
 }
-
 #endif
+
+std::stack<Closure> on_exit_functions;  // NOLINT
+void OnExit(int signal) {
+  (void)signal;
+  while (!on_exit_functions.empty()) {
+    on_exit_functions.top()();
+    on_exit_functions.pop();
+  }
+}
+
+std::atomic<int> g_signal_exit_count  = 0;
+std::atomic<int> g_signal_stop_count = 0;
+std::atomic<int> g_signal_resize_count = 0;
+
+// Async signal safe function
+void RecordSignal(int signal) {
+  switch (signal) {
+    case SIGABRT:
+    case SIGFPE:
+    case SIGILL:
+    case SIGINT:
+    case SIGSEGV:
+    case SIGTERM:
+      g_signal_exit_count++;
+      break;
+
+    case SIGTSTP:
+      g_signal_stop_count++;
+      break;
+
+    case SIGWINCH:
+      g_signal_resize_count++;
+
+    default:
+      break;
+  }
+}
+
+void ExecuteSignalHandlers() {
+  int signal_exit_count = g_signal_exit_count.exchange(0);
+  int signal_stop_count = g_signal_stop_count.exchange(0);
+  int signal_resize_count = g_signal_resize_count.exchange(0);
+  while (signal_exit_count--) {
+    ScreenInteractive::Private::Signal(*g_active_screen, SIGABRT);
+  }
+  while (signal_stop_count--) {
+    ScreenInteractive::Private::Signal(*g_active_screen, SIGTSTP);
+  }
+  while (signal_resize_count--) {
+    ScreenInteractive::Private::Signal(*g_active_screen, SIGWINCH);
+  }
+}
+
+void InstallSignalHandler(int sig) {
+  auto old_signal_handler = std::signal(sig, RecordSignal);
+  on_exit_functions.push(
+      [=] { std::ignore = std::signal(sig, old_signal_handler); });
+};
 
 const std::string CSI = "\x1b[";  // NOLINT
 
@@ -230,30 +288,6 @@ std::string DeviceStatusReport(DSRMode ps) {
   return CSI + std::to_string(int(ps)) + "n";
 }
 
-using SignalHandler = void(int);
-std::stack<Closure> on_exit_functions;  // NOLINT
-void OnExit(int signal) {
-  (void)signal;
-  while (!on_exit_functions.empty()) {
-    on_exit_functions.top()();
-    on_exit_functions.pop();
-  }
-}
-
-const auto install_signal_handler = [](int sig, SignalHandler handler) {
-  auto old_signal_handler = std::signal(sig, handler);
-  on_exit_functions.push(
-      [=] { std::ignore = std::signal(sig, old_signal_handler); });
-};
-
-Closure g_on_resize = [] {};  // NOLINT
-void OnResize(int /* signal */) {
-  g_on_resize();
-}
-
-void OnSigStop(int /*signal*/) {
-  ScreenInteractive::Private::SigStop(*g_active_screen);
-}
 
 class CapturedMouseImpl : public CapturedMouseInterface {
  public:
@@ -438,8 +472,17 @@ void ScreenInteractive::Install() {
 
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
-  for (int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
-    install_signal_handler(signal, OnExit);
+  for (int signal : {
+           SIGTERM,
+           SIGSEGV,
+           SIGINT,
+           SIGILL,
+           SIGABRT,
+           SIGFPE,
+           SIGWINCH,
+           SIGTSTP,
+       }) {
+    InstallSignalHandler(signal);
   }
 
   // Save the old terminal configuration and restore it on exit.
@@ -488,12 +531,6 @@ void ScreenInteractive::Install() {
 
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
-  // Handle resize.
-  g_on_resize = [&] { task_sender_->Send(Event::Special({0})); };
-  install_signal_handler(SIGWINCH, OnResize);
-
-  // Handle SIGTSTP/SIGCONT.
-  install_signal_handler(SIGTSTP, OnSigStop);
 #endif
 
   auto enable = [&](const std::vector<DECMode>& parameters) {
@@ -551,19 +588,19 @@ void ScreenInteractive::Uninstall() {
 
 // NOLINTNEXTLINE
 void ScreenInteractive::RunOnceBlocking(Component component) {
+  ExecuteSignalHandlers();
   Task task;
   if (task_receiver_->Receive(&task)) {
     HandleTask(component, task);
   }
-
   RunOnce(component);
 }
 
-// NOLINTNEXTLINE
 void ScreenInteractive::RunOnce(Component component) {
   Task task;
   while (task_receiver_->ReceiveNonBlocking(&task)) {
     HandleTask(component, task);
+    ExecuteSignalHandlers();
   }
   Draw(std::move(component));
 }
@@ -731,22 +768,35 @@ void ScreenInteractive::Exit() {
   });
 }
 
-void ScreenInteractive::SigStop() {
+void ScreenInteractive::Signal(int signal) {
+  if (signal == SIGTSTP) {
 #if defined(_WIN32)
-  // Windows do no support SIGTSTP.
+    // Windows do no support SIGTSTP.
 #else
-  Post([&] {
-    Uninstall();
-    std::cout << reset_cursor_position;
-    reset_cursor_position = "";
-    std::cout << ResetPosition(/*clear=*/true);
-    dimx_ = 0;
-    dimy_ = 0;
-    Flush();
-    std::ignore = std::raise(SIGTSTP);
-    Install();
-  });
+    Post([&] {
+      Uninstall();
+      std::cout << reset_cursor_position;
+      reset_cursor_position = "";
+      std::cout << ResetPosition(/*clear=*/true);
+      dimx_ = 0;
+      dimy_ = 0;
+      Flush();
+      std::ignore = std::raise(SIGTSTP);
+      Install();
+    });
 #endif
+    return;
+  }
+
+  if (signal == SIGWINCH) {
+    Post(Event::Special({0}));
+    return;
+  }
+
+  if (signal == SIGABRT) {
+    Post([] { OnExit(SIGABRT); });
+    return;
+  }
 }
 
 }  // namespace ftxui.
