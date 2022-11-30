@@ -191,8 +191,10 @@ void OnExit(int signal) {
 }
 
 std::atomic<int> g_signal_exit_count  = 0;
+#if !defined(_WIN32)
 std::atomic<int> g_signal_stop_count = 0;
 std::atomic<int> g_signal_resize_count = 0;
+#endif
 
 // Async signal safe function
 void RecordSignal(int signal) {
@@ -206,12 +208,14 @@ void RecordSignal(int signal) {
       g_signal_exit_count++;
       break;
 
+#if !defined(_WIN32)
     case SIGTSTP:
       g_signal_stop_count++;
       break;
 
     case SIGWINCH:
       g_signal_resize_count++;
+#endif
 
     default:
       break;
@@ -220,17 +224,22 @@ void RecordSignal(int signal) {
 
 void ExecuteSignalHandlers() {
   int signal_exit_count = g_signal_exit_count.exchange(0);
+#if !defined(_WIN32)
   int signal_stop_count = g_signal_stop_count.exchange(0);
   int signal_resize_count = g_signal_resize_count.exchange(0);
+#endif
+
   while (signal_exit_count--) {
     ScreenInteractive::Private::Signal(*g_active_screen, SIGABRT);
   }
+#if !defined(_WIN32)
   while (signal_stop_count--) {
     ScreenInteractive::Private::Signal(*g_active_screen, SIGTSTP);
   }
   while (signal_resize_count--) {
     ScreenInteractive::Private::Signal(*g_active_screen, SIGWINCH);
   }
+#endif
 }
 
 void InstallSignalHandler(int sig) {
@@ -478,9 +487,11 @@ void ScreenInteractive::Install() {
            SIGINT,
            SIGILL,
            SIGABRT,
-           SIGFPE,
-           SIGWINCH,
-           SIGTSTP,
+           SIGFPE
+#if !defined(_WIN32)
+          ,SIGWINCH
+          ,SIGTSTP
+#endif
        }) {
     InstallSignalHandler(signal);
   }
@@ -769,10 +780,9 @@ void ScreenInteractive::Exit() {
 }
 
 void ScreenInteractive::Signal(int signal) {
+#if !defined(_WIN32)
+  // Windows do no support SIGTSTP.
   if (signal == SIGTSTP) {
-#if defined(_WIN32)
-    // Windows do no support SIGTSTP.
-#else
     Post([&] {
       Uninstall();
       std::cout << reset_cursor_position;
@@ -784,14 +794,16 @@ void ScreenInteractive::Signal(int signal) {
       std::ignore = std::raise(SIGTSTP);
       Install();
     });
-#endif
     return;
   }
+#endif
 
+#if !defined(_WIN32)
   if (signal == SIGWINCH) {
     Post(Event::Special({0}));
     return;
   }
+#endif
 
   if (signal == SIGABRT) {
     Post([] { OnExit(SIGABRT); });
