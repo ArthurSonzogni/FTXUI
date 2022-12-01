@@ -419,10 +419,13 @@ void ScreenInteractive::PreMain() {
   // Suspend previously active screen:
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
-    std::cout << suspended_screen_->reset_cursor_position
-              << suspended_screen_->ResetPosition(/*clear=*/true);
+    // Reset cursor position to the top of the screen and clear the screen.
+    suspended_screen_->ResetCursorPosition();
+    std::cout << suspended_screen_->ResetPosition(/*clear=*/true);
     suspended_screen_->dimx_ = 0;
     suspended_screen_->dimy_ = 0;
+
+    // Reset dimensions to force drawing the screen again next time:
     suspended_screen_->Uninstall();
   }
 
@@ -434,20 +437,22 @@ void ScreenInteractive::PreMain() {
 }
 
 void ScreenInteractive::PostMain() {
-  g_active_screen->Uninstall();
-  g_active_screen = nullptr;
-
   // Put cursor position at the end of the drawing.
-  std::cout << reset_cursor_position;
+  ResetCursorPosition();
+
+  g_active_screen = nullptr;
 
   // Restore suspended screen.
   if (suspended_screen_) {
+    // Clear screen, and put the cursor at the beginning of the drawing.
     std::cout << ResetPosition(/*clear=*/true);
     dimx_ = 0;
     dimy_ = 0;
+    Uninstall();
     std::swap(g_active_screen, suspended_screen_);
     g_active_screen->Install();
   } else {
+    Uninstall();
     // On final exit, keep the current drawing and reset cursor position one
     // line after it.
     std::cout << std::endl;
@@ -471,6 +476,8 @@ ScreenInteractive* ScreenInteractive::Active() {
 }
 
 void ScreenInteractive::Install() {
+  frame_valid_ = false;
+
   // After uninstalling the new configuration, flush it to the terminal to
   // ensure it is fully applied:
   on_exit_functions.push([] { Flush(); });
@@ -479,17 +486,11 @@ void ScreenInteractive::Install() {
 
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
-  for (int signal : {
-         SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE
-#if !defined(_WIN32)
-             ,
-             SIGWINCH, SIGTSTP
-#endif
-       }) {
+  for (int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
     InstallSignalHandler(signal);
   }
 
-  // Save the old terminal configuration and restore it on exit.
+// Save the old terminal configuration and restore it on exit.
 #if defined(_WIN32)
   // Enable VT processing on stdout and stdin
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -521,6 +522,10 @@ void ScreenInteractive::Install() {
   SetConsoleMode(stdin_handle, in_mode);
   SetConsoleMode(stdout_handle, out_mode);
 #else
+  for (int signal : {SIGWINCH, SIGTSTP}) {
+    InstallSignalHandler(signal);
+  }
+
   struct termios terminal;  // NOLINT
   tcgetattr(STDIN_FILENO, &terminal);
   on_exit_functions.push([=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
@@ -570,8 +575,8 @@ void ScreenInteractive::Install() {
       DECMode::kMouseSgrExtMode,
   });
 
-  // After installing the new configuration, flush it to the terminal to ensure
-  // it is fully applied:
+  // After installing the new configuration, flush it to the terminal to
+  // ensure it is fully applied:
   Flush();
 
   quit_ = false;
@@ -690,7 +695,8 @@ void ScreenInteractive::Draw(Component component) {
   }
 
   bool resized = (dimx != dimx_) || (dimy != dimy_);
-  std::cout << reset_cursor_position << ResetPosition(/*clear=*/resized);
+  ResetCursorPosition();
+  std::cout << ResetPosition(/*clear=*/resized);
 
   // Resize the screen if needed.
   if (resized) {
@@ -761,6 +767,11 @@ void ScreenInteractive::Draw(Component component) {
   frame_valid_ = true;
 }
 
+void ScreenInteractive::ResetCursorPosition() {
+  std::cout << reset_cursor_position;
+  reset_cursor_position = "";
+}
+
 Closure ScreenInteractive::ExitLoopClosure() {
   return [this] { Exit(); };
 }
@@ -784,10 +795,9 @@ void ScreenInteractive::Signal(int signal) {
 #if !defined(_WIN32)
   if (signal == SIGTSTP) {
     Post([&] {
+      ResetCursorPosition();
+      std::cout << ResetPosition(/*clear*/ true);  // Cursor to the beginning
       Uninstall();
-      std::cout << reset_cursor_position;
-      reset_cursor_position = "";
-      std::cout << ResetPosition(/*clear*/ true);
       dimx_ = 0;
       dimy_ = 0;
       Flush();

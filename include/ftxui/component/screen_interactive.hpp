@@ -66,6 +66,7 @@ class ScreenInteractive : public Screen {
 
   void HandleTask(Component component, Task& task);
   void Draw(Component component);
+  void ResetCursorPosition();
 
   void Signal(int signal);
 
