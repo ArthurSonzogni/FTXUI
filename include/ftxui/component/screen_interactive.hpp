@@ -52,6 +52,8 @@ class ScreenInteractive : public Screen {
   Closure WithRestoredIO(Closure);
 
  private:
+  void ExitNow();
+
   void Install();
   void Uninstall();
 

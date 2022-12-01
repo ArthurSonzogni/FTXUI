@@ -148,7 +148,7 @@ void ftxui_on_resize(int columns, int rows) {
 }
 }
 
-#else // POSIX (Linux & Mac)
+#else  // POSIX (Linux & Mac)
 
 #include <sys/time.h>  // for timeval
 
@@ -182,15 +182,14 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
 #endif
 
 std::stack<Closure> on_exit_functions;  // NOLINT
-void OnExit(int signal) {
-  (void)signal;
+void OnExit() {
   while (!on_exit_functions.empty()) {
     on_exit_functions.top()();
     on_exit_functions.pop();
   }
 }
 
-std::atomic<int> g_signal_exit_count  = 0;
+std::atomic<int> g_signal_exit_count = 0;
 #if !defined(_WIN32)
 std::atomic<int> g_signal_stop_count = 0;
 std::atomic<int> g_signal_resize_count = 0;
@@ -215,6 +214,7 @@ void RecordSignal(int signal) {
 
     case SIGWINCH:
       g_signal_resize_count++;
+      break;
 #endif
 
     default:
@@ -224,18 +224,17 @@ void RecordSignal(int signal) {
 
 void ExecuteSignalHandlers() {
   int signal_exit_count = g_signal_exit_count.exchange(0);
-#if !defined(_WIN32)
-  int signal_stop_count = g_signal_stop_count.exchange(0);
-  int signal_resize_count = g_signal_resize_count.exchange(0);
-#endif
-
   while (signal_exit_count--) {
     ScreenInteractive::Private::Signal(*g_active_screen, SIGABRT);
   }
+
 #if !defined(_WIN32)
+  int signal_stop_count = g_signal_stop_count.exchange(0);
   while (signal_stop_count--) {
     ScreenInteractive::Private::Signal(*g_active_screen, SIGTSTP);
   }
+
+  int signal_resize_count = g_signal_resize_count.exchange(0);
   while (signal_resize_count--) {
     ScreenInteractive::Private::Signal(*g_active_screen, SIGWINCH);
   }
@@ -296,7 +295,6 @@ std::string Reset(const std::vector<DECMode>& parameters) {
 std::string DeviceStatusReport(DSRMode ps) {
   return CSI + std::to_string(int(ps)) + "n";
 }
-
 
 class CapturedMouseImpl : public CapturedMouseInterface {
  public:
@@ -482,15 +480,10 @@ void ScreenInteractive::Install() {
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
   for (int signal : {
-           SIGTERM,
-           SIGSEGV,
-           SIGINT,
-           SIGILL,
-           SIGABRT,
-           SIGFPE
+         SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE
 #if !defined(_WIN32)
-          ,SIGWINCH
-          ,SIGTSTP
+             ,
+             SIGWINCH, SIGTSTP
 #endif
        }) {
     InstallSignalHandler(signal);
@@ -566,7 +559,7 @@ void ScreenInteractive::Install() {
   });
 
   disable({
-      //DECMode::kCursor,
+      // DECMode::kCursor,
       DECMode::kLineWrap,
   });
 
@@ -590,11 +583,10 @@ void ScreenInteractive::Install() {
 }
 
 void ScreenInteractive::Uninstall() {
-  ExitLoopClosure()();
+  ExitNow();
   event_listener_.join();
   animation_listener_.join();
-
-  OnExit(0);
+  OnExit();
 }
 
 // NOLINTNEXTLINE
@@ -758,7 +750,8 @@ void ScreenInteractive::Draw(Component component) {
       set_cursor_position += "\033[?25l";
     } else {
       set_cursor_position += "\033[?25h";
-      set_cursor_position += "\033[" + std::to_string(int(cursor_.shape)) + " q";
+      set_cursor_position +=
+          "\033[" + std::to_string(int(cursor_.shape)) + " q";
     }
   }
 
@@ -773,21 +766,28 @@ Closure ScreenInteractive::ExitLoopClosure() {
 }
 
 void ScreenInteractive::Exit() {
-  Post([this] {
-    quit_ = true;
-    task_sender_.reset();
-  });
+  Post([this] { ExitNow(); });
+}
+
+void ScreenInteractive::ExitNow() {
+  quit_ = true;
+  task_sender_.reset();
 }
 
 void ScreenInteractive::Signal(int signal) {
+  if (signal == SIGABRT) {
+    OnExit();
+    return;
+  }
+
+// Windows do no support SIGTSTP / SIGWINCH
 #if !defined(_WIN32)
-  // Windows do no support SIGTSTP.
   if (signal == SIGTSTP) {
     Post([&] {
       Uninstall();
       std::cout << reset_cursor_position;
       reset_cursor_position = "";
-      std::cout << ResetPosition(/*clear=*/true);
+      std::cout << ResetPosition(/*clear*/ true);
       dimx_ = 0;
       dimy_ = 0;
       Flush();
@@ -796,19 +796,12 @@ void ScreenInteractive::Signal(int signal) {
     });
     return;
   }
-#endif
 
-#if !defined(_WIN32)
   if (signal == SIGWINCH) {
     Post(Event::Special({0}));
     return;
   }
 #endif
-
-  if (signal == SIGABRT) {
-    Post([] { OnExit(SIGABRT); });
-    return;
-  }
 }
 
 }  // namespace ftxui.
