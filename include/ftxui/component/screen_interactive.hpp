@@ -52,6 +52,8 @@ class ScreenInteractive : public Screen {
   Closure WithRestoredIO(Closure);
 
  private:
+  void ExitNow();
+
   void Install();
   void Uninstall();
 
@@ -64,8 +66,9 @@ class ScreenInteractive : public Screen {
 
   void HandleTask(Component component, Task& task);
   void Draw(Component component);
+  void ResetCursorPosition();
 
-  void SigStop();
+  void Signal(int signal);
 
   ScreenInteractive* suspended_screen_ = nullptr;
   enum class Dimension {
@@ -106,7 +109,7 @@ class ScreenInteractive : public Screen {
  public:
   class Private {
    public:
-    static void SigStop(ScreenInteractive& s) { return s.SigStop(); }
+    static void Signal(ScreenInteractive& s, int signal) { s.Signal(signal); }
   };
   friend Private;
 };
