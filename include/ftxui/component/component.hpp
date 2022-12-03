@@ -110,6 +110,18 @@ ComponentDecorator Modal(Component modal, const bool* show_modal);
 Component Collapsible(ConstStringRef label,
                       Component child,
                       Ref<bool> show = false);
+
+Component Hoverable(Component component, bool* hover);
+Component Hoverable(Component component,
+                    std::function<void()> on_enter,
+                    std::function<void()> on_leave);
+Component Hoverable(Component component,  //
+                    std::function<void(bool)> on_change);
+ComponentDecorator Hoverable(bool* hover);
+ComponentDecorator Hoverable(std::function<void()> on_enter,
+                             std::function<void()> on_leave);
+ComponentDecorator Hoverable(std::function<void(bool)> on_change);
+
 }  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_HPP */
