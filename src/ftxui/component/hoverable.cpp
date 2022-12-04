@@ -139,8 +139,23 @@ ComponentDecorator Hoverable(bool* hover) {
   return [hover](Component component) { return Hoverable(component, hover); };
 }
 
-/// @brief Wrap a component. Two callback can be used to know when the mouse
-/// enter and leave its area.
+/// @brief Wrap a component. Gives the ability to know if it is hovered by the
+/// mouse.
+/// @param on_enter is called when the mouse hover the component.
+/// @param on_leave is called when the mouse leave the component.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto button = Button("exit", screen.ExitLoopClosure());
+/// int on_enter_cnt = 0;
+/// int on_leave_cnt = 0;
+/// button |= Hoverable(
+///   [&]{ on_enter_cnt++; }, 
+///   [&]{ on_leave_cnt++; }
+//  );
+/// ```
 ComponentDecorator Hoverable(std::function<void()> on_enter,
                              std::function<void()> on_leave) {
   return [on_enter, on_leave](Component component) {
@@ -148,6 +163,20 @@ ComponentDecorator Hoverable(std::function<void()> on_enter,
   };
 }
 
+/// @brief Wrap a component. Gives the ability to know if it is hovered by the
+/// mouse.
+/// @param component the wrapped component.
+/// @param on_change is called when the mouse enter or leave the component.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto button = Button("exit", screen.ExitLoopClosure());
+/// bool hovered = false;
+/// auto button_hoverable = Hoverable(button,
+//                                    [&](bool hover) { hovered = hover;});
+/// ```
 Component Hoverable(Component component, std::function<void(bool)> on_change) {
   return Hoverable(
       component,                         //
@@ -156,8 +185,18 @@ Component Hoverable(Component component, std::function<void(bool)> on_change) {
   );
 }
 
-/// @brief Wrap a component. Two callback can be used to know when the mouse
-/// enter and leave its area.
+/// @brief Wrap a component. Gives the ability to know if it is hovered by the
+/// mouse.
+/// @param on_change is called when the mouse enter or leave the component.
+/// @ingroup component
+///
+/// ### Example
+///
+/// ```cpp
+/// auto button = Button("exit", screen.ExitLoopClosure());
+/// bool hovered = false;
+/// button |= Hoverable([&](bool hover) { hovered = hover;});
+/// ```
 ComponentDecorator Hoverable(std::function<void(bool)> on_change) {
   return [on_change](Component component) {
     return Hoverable(component, on_change);
