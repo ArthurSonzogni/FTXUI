@@ -37,6 +37,7 @@ current (development)
   mouse.
 - Bugfix: Add implementation of `ButtonOption::Border()`. It was missing.
 - Bugfix: Provide the correct key for F1-F4 and F11.
+- Feature: Add the `Hoverable` component decorators.
 
 ### Screen
 - Feature: add `Box::Union(a,b) -> Box`

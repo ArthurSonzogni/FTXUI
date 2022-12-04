@@ -108,6 +108,7 @@ add_library(component
   src/ftxui/component/container.cpp
   src/ftxui/component/dropdown.cpp
   src/ftxui/component/event.cpp
+  src/ftxui/component/hoverable.cpp
   src/ftxui/component/input.cpp
   src/ftxui/component/loop.cpp
   src/ftxui/component/maybe.cpp
