@@ -252,10 +252,15 @@ const std::string CSI = "\x1b[";  // NOLINT
 // DEC: Digital Equipment Corporation
 enum class DECMode {
   kLineWrap = 7,
-  kMouseX10 = 9,
   kCursor = 25,
+
+  kMouseX10 = 9,
   kMouseVt200 = 1000,
+  kMouseVt200Highlight = 1001,
+
+  kMouseBtnEventMouse = 1002,
   kMouseAnyEvent = 1003,
+
   kMouseUtf8 = 1005,
   kMouseSgrExtMode = 1006,
   kMouseUrxvtMode = 1015,
@@ -568,12 +573,10 @@ void ScreenInteractive::Install() {
       DECMode::kLineWrap,
   });
 
-  enable({
-      // DECMode::kMouseVt200,
-      DECMode::kMouseAnyEvent,
-      DECMode::kMouseUtf8,
-      DECMode::kMouseSgrExtMode,
-  });
+  enable({DECMode::kMouseVt200});
+  enable({DECMode::kMouseAnyEvent});
+  enable({DECMode::kMouseUrxvtMode});
+  enable({DECMode::kMouseSgrExtMode});
 
   // After installing the new configuration, flush it to the terminal to
   // ensure it is fully applied:
