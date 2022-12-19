@@ -1,13 +1,13 @@
-#include <gtest/gtest.h>
-#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for string
+#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, EXPECT_FALSE, EXPECT_EQ, Test, EXPECT_TRUE, TestInfo (ptr only), TEST
+#include <ftxui/dom/elements.hpp>  // for Element, text
+#include <memory>  // for shared_ptr, __shared_ptr_access, allocator
 
-#include "ftxui/component/component.hpp"       // for Input
+#include "ftxui/component/component.hpp"  // for Hoverable, Horizontal, operator|=, Renderer
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Delete, Event::End, Event::Home
-#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Button, Mouse::Left, Mouse::Motion, Mouse::Pressed
-#include "ftxui/dom/node.hpp"       // for Render
-#include "ftxui/screen/screen.hpp"  // for Screen
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released
+#include "ftxui/dom/node.hpp"         // for Render
+#include "ftxui/screen/screen.hpp"    // for Screen
 
 namespace ftxui {
 

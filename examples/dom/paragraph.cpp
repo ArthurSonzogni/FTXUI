@@ -1,4 +1,4 @@
-#include <chrono>                   // for operator""s, chrono_literals
+#include <bits/chrono.h>            // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <iostream>                 // for cout, ostream
 #include <memory>                   // for allocator, shared_ptr

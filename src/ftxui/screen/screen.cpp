@@ -410,7 +410,7 @@ std::string Screen::ToString() {
   std::stringstream ss;
 
   Pixel previous_pixel;
-  Pixel final_pixel;
+  const Pixel final_pixel;
 
   for (int y = 0; y < dimy_; ++y) {
     if (y != 0) {

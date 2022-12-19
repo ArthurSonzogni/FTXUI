@@ -1,6 +1,7 @@
 #ifndef FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP
 #define FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP
 
+#include <bits/chrono.h>                  // for milliseconds
 #include <chrono>                         // for milliseconds
 #include <ftxui/component/animation.hpp>  // for Duration, QuadraticInOut, Function
 #include <ftxui/dom/elements.hpp>  // for Element, GaugeDirection, GaugeDirection::Right

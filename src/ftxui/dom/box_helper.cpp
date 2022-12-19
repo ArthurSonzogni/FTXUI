@@ -12,7 +12,7 @@ void ComputeGrow(std::vector<Element>* elements,
                  int extra_space,
                  int flex_grow_sum) {
   for (Element& element : *elements) {
-    int added_space =
+    const int added_space =
         extra_space * element.flex_grow / std::max(flex_grow_sum, 1);
     extra_space -= added_space;
     flex_grow_sum -= element.flex_grow;
@@ -27,8 +27,8 @@ void ComputeShrinkEasy(std::vector<Element>* elements,
                        int extra_space,
                        int flex_shrink_sum) {
   for (Element& element : *elements) {
-    int added_space = extra_space * element.min_size * element.flex_shrink /
-                      std::max(flex_shrink_sum, 1);
+    const int added_space = extra_space * element.min_size *
+                            element.flex_shrink / std::max(flex_shrink_sum, 1);
     extra_space -= added_space;
     flex_shrink_sum -= element.flex_shrink * element.min_size;
     element.size = element.min_size + added_space;
@@ -48,7 +48,7 @@ void ComputeShrinkHard(std::vector<Element>* elements,
       continue;
     }
 
-    int added_space = extra_space * element.min_size / std::max(1, size);
+    const int added_space = extra_space * element.min_size / std::max(1, size);
     extra_space -= added_space;
     size -= element.min_size;
 
@@ -73,7 +73,7 @@ void Compute(std::vector<Element>* elements, int target_size) {
     size += element.min_size;
   }
 
-  int extra_space = target_size - size;
+  const int extra_space = target_size - size;
   if (extra_space >= 0) {
     ComputeGrow(elements, extra_space, flex_grow_sum);
   } else if (flex_shrink_size + extra_space >= 0) {

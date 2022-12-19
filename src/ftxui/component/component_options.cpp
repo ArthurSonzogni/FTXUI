@@ -123,8 +123,8 @@ MenuOption MenuOption::Toggle() {
 ButtonOption ButtonOption::Ascii() {
   ButtonOption option;
   option.transform = [](const EntryState& s) {
-    std::string label = s.focused ? "[" + s.label + "]"  //
-                                  : " " + s.label + " ";
+    const std::string label = s.focused ? "[" + s.label + "]"  //
+                                        : " " + s.label + " ";
     return text(label);
   };
   return option;

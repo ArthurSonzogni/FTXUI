@@ -1,8 +1,9 @@
-#include <algorithm>   // for min
-#include <functional>  // for function
-#include <memory>      // for __shared_ptr_access, make_unique
-#include <utility>     // for move
-#include <vector>      // for vector
+#include <algorithm>    // for min
+#include <functional>   // for function
+#include <memory>       // for __shared_ptr_access, make_unique
+#include <type_traits>  // for remove_reference, remove_reference<>::type
+#include <utility>      // for move
+#include <vector>       // for vector
 
 #include "ftxui/dom/elements.hpp"  // for Element, Decorator, Elements, operator|, Fit, emptyElement, nothing, operator|=
 #include "ftxui/dom/node.hpp"      // for Node, Node::Status
@@ -88,7 +89,7 @@ Element& operator|=(Element& e, Decorator d) {
 /// @see Fixed
 /// @see Full
 Dimensions Dimension::Fit(Element& e) {
-  Dimensions fullsize = Dimension::Full();
+  const Dimensions fullsize = Dimension::Full();
   Box box;
   box.x_min = 0;
   box.y_min = 0;

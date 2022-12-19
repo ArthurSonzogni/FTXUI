@@ -49,7 +49,7 @@ class VBox : public Node {
       element.flex_grow = requirement.flex_grow_y;
       element.flex_shrink = requirement.flex_shrink_y;
     }
-    int target_size = box.y_max - box.y_min + 1;
+    const int target_size = box.y_max - box.y_min + 1;
     box_helper::Compute(&elements, target_size);
 
     int y = box.y_min;

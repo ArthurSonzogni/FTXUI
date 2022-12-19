@@ -114,7 +114,7 @@ bool ComponentBase::OnEvent(Event event) {  // NOLINT
 /// The default implementation dispatch the event to every child.
 /// @ingroup component
 void ComponentBase::OnAnimation(animation::Params& params) {
-  for (Component& child : children_) {
+  for (const Component& child : children_) {
     child->OnAnimation(params);
   }
 }

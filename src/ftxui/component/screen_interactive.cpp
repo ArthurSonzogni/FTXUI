@@ -1,19 +1,19 @@
-#include <algorithm>  // for copy, max, min
-#include <array>      // for array
-#include <chrono>  // for operator-, milliseconds, duration, operator>=, time_point, common_type<>::type
-#include <csignal>  // for signal, raise, SIGTSTP, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, SIGWINCH
-#include <cstdio>   // for fileno, size_t, stdin
+#include <bits/chrono.h>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
+#include <algorithm>      // for copy, max, min
+#include <array>          // for array
+#include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
+#include <cstdio>   // for fileno, stdin
 #include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
-#include <ftxui/screen/screen.hpp>   // for Pixel, Screen::Cursor, Screen
-#include <functional>                // for function
-#include <initializer_list>          // for initializer_list
-#include <iostream>  // for cout, ostream, basic_ostream, operator<<, endl, flush
+#include <ftxui/screen/screen.hpp>  // for Pixel, Screen::Cursor, Screen, Screen::Cursor::Hidden
+#include <functional>        // for function
+#include <initializer_list>  // for initializer_list
+#include <iostream>  // for cout, ostream, operator<<, basic_ostream, endl, flush
 #include <stack>     // for stack
 #include <thread>    // for thread, sleep_for
-#include <tuple>
+#include <tuple>     // for _Swallow_assign, ignore
 #include <type_traits>  // for decay_t
 #include <utility>      // for move, swap
-#include <variant>      // for visit
+#include <variant>      // for visit, variant
 #include <vector>       // for vector
 
 #include "ftxui/component/animation.hpp"  // for TimePoint, Clock, Duration, Params, RequestAnimationFrame
@@ -21,7 +21,7 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/loop.hpp"            // for Loop
-#include "ftxui/component/receiver.hpp"  // for Sender, ReceiverImpl, MakeReceiver, SenderImpl, Receiver
+#include "ftxui/component/receiver.hpp"  // for ReceiverImpl, Sender, MakeReceiver, SenderImpl, Receiver
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
@@ -39,7 +39,7 @@
 #error Must be compiled in UNICODE mode
 #endif
 #else
-#include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set
+#include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set, timeval
 #include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
 #include <unistd.h>  // for STDIN_FILENO, read
 #endif
@@ -150,8 +150,6 @@ void ftxui_on_resize(int columns, int rows) {
 
 #else  // POSIX (Linux & Mac)
 
-#include <sys/time.h>  // for timeval
-
 int CheckStdinReady(int usec_timeout) {
   timeval tv = {0, usec_timeout};
   fd_set fds;
@@ -189,10 +187,10 @@ void OnExit() {
   }
 }
 
-std::atomic<int> g_signal_exit_count = 0;
+std::atomic<int> g_signal_exit_count = 0;  // NOLINT
 #if !defined(_WIN32)
-std::atomic<int> g_signal_stop_count = 0;
-std::atomic<int> g_signal_resize_count = 0;
+std::atomic<int> g_signal_stop_count = 0;    // NOLINT
+std::atomic<int> g_signal_resize_count = 0;  // NOLINT
 #endif
 
 // Async signal safe function
@@ -276,7 +274,7 @@ enum class DSRMode {
 std::string Serialize(const std::vector<DECMode>& parameters) {
   bool first = true;
   std::string out;
-  for (DECMode parameter : parameters) {
+  for (const DECMode parameter : parameters) {
     if (!first) {
       out += ";";
     }
@@ -491,7 +489,7 @@ void ScreenInteractive::Install() {
 
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
-  for (int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
+  for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
     InstallSignalHandler(signal);
   }
 
@@ -527,7 +525,7 @@ void ScreenInteractive::Install() {
   SetConsoleMode(stdin_handle, in_mode);
   SetConsoleMode(stdout_handle, out_mode);
 #else
-  for (int signal : {SIGWINCH, SIGTSTP}) {
+  for (const int signal : {SIGWINCH, SIGTSTP}) {
     InstallSignalHandler(signal);
   }
 
@@ -653,8 +651,8 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
       }
 
       animation_requested_ = false;
-      animation::TimePoint now = animation::Clock::now();
-      animation::Duration delta = now - previous_animation_time_;
+      const animation::TimePoint now = animation::Clock::now();
+      const animation::Duration delta = now - previous_animation_time_;
       previous_animation_time_ = now;
 
       animation::Params params(delta);
@@ -697,7 +695,7 @@ void ScreenInteractive::Draw(Component component) {
       break;
   }
 
-  bool resized = (dimx != dimx_) || (dimy != dimy_);
+  const bool resized = (dimx != dimx_) || (dimy != dimy_);
   ResetCursorPosition();
   std::cout << ResetPosition(/*clear=*/resized);
 
@@ -742,8 +740,8 @@ void ScreenInteractive::Draw(Component component) {
   reset_cursor_position = "";
 
   {
-    int dx = dimx_ - 1 - cursor_.x;
-    int dy = dimy_ - 1 - cursor_.y;
+    const int dx = dimx_ - 1 - cursor_.x;
+    const int dy = dimy_ - 1 - cursor_.y;
 
     if (dy != 0) {
       set_cursor_position += "\x1B[" + std::to_string(dy) + "A";

@@ -1,4 +1,4 @@
-#include <chrono>                  // for operator""s, chrono_literals
+#include <bits/chrono.h>           // for operator""s, chrono_literals
 #include <ftxui/dom/elements.hpp>  // for Element, operator|, separator, filler, hbox, size, spinner, text, vbox, bold, border, Fit, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <iostream>                 // for cout, endl, ostream

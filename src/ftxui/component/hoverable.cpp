@@ -1,15 +1,14 @@
-#include <memory>   // for shared_ptr
-#include <utility>  // for move
+#include <ftxui/component/captured_mouse.hpp>  // for CapturedMouse
+#include <functional>                          // for function
+#include <utility>                             // for move
 
-#include "ftxui/component/component.hpp"       // for Make, Button
+#include "ftxui/component/component.hpp"  // for ComponentDecorator, Hoverable, Make
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/event.hpp"           // for Event, Event::Return
-#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for operator|, Decorator, Element, operator|=, bgcolor, color, reflect, text, bold, border, inverted, nothing
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"           // for Mouse
+#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/screen/color.hpp"  // for Color
-#include "ftxui/util/ref.hpp"      // for Ref, ConstStringRef
 
 namespace ftxui {
 
@@ -23,7 +22,7 @@ void Post(std::function<void()> f) {
   f();
 }
 
-} // namespace
+}  // namespace
 
 /// @brief Wrap a component. Gives the ability to know if it is hovered by the
 /// mouse.
@@ -38,11 +37,12 @@ void Post(std::function<void()> f) {
 /// bool hover = false;
 /// auto button_hover = Hoverable(button, &hover);
 /// ```
+// NOLINTNEXTLINE
 Component Hoverable(Component component, bool* hover) {
   class Impl : public ComponentBase {
    public:
     Impl(Component component, bool* hover)
-        : component_(component), hover_(hover) {
+        : component_(std::move(component)), hover_(hover) {
       Add(component_);
     }
 
@@ -102,8 +102,8 @@ Component Hoverable(Component component,
 
     bool OnEvent(Event event) override {
       if (event.is_mouse()) {
-        bool hover = box_.Contain(event.mouse().x, event.mouse().y) &&
-                     CaptureMouse(event);
+        const bool hover = box_.Contain(event.mouse().x, event.mouse().y) &&
+                           CaptureMouse(event);
         if (hover != hover_) {
           Post(hover ? on_enter_ : on_leave_);
         }
@@ -120,7 +120,8 @@ Component Hoverable(Component component,
     std::function<void()> on_leave_;
   };
 
-  return Make<Impl>(component, on_enter, on_leave);
+  return Make<Impl>(std::move(component), std::move(on_enter),
+                    std::move(on_leave));
 }
 
 /// @brief Wrap a component. Gives the ability to know if it is hovered by the
@@ -136,7 +137,9 @@ Component Hoverable(Component component,
 /// button |= Hoverable(&hover);
 /// ```
 ComponentDecorator Hoverable(bool* hover) {
-  return [hover](Component component) { return Hoverable(component, hover); };
+  return [hover](Component component) {
+    return Hoverable(std::move(component), hover);
+  };
 }
 
 /// @brief Wrap a component. Gives the ability to know if it is hovered by the
@@ -152,14 +155,16 @@ ComponentDecorator Hoverable(bool* hover) {
 /// int on_enter_cnt = 0;
 /// int on_leave_cnt = 0;
 /// button |= Hoverable(
-///   [&]{ on_enter_cnt++; }, 
+///   [&]{ on_enter_cnt++; },
 ///   [&]{ on_leave_cnt++; }
 //  );
 /// ```
+// NOLINTNEXTLINE
 ComponentDecorator Hoverable(std::function<void()> on_enter,
+                             // NOLINTNEXTLINE
                              std::function<void()> on_leave) {
   return [on_enter, on_leave](Component component) {
-    return Hoverable(component, on_enter, on_leave);
+    return Hoverable(std::move(component), on_enter, on_leave);
   };
 }
 
@@ -177,9 +182,10 @@ ComponentDecorator Hoverable(std::function<void()> on_enter,
 /// auto button_hoverable = Hoverable(button,
 //                                    [&](bool hover) { hovered = hover;});
 /// ```
+// NOLINTNEXTLINE
 Component Hoverable(Component component, std::function<void(bool)> on_change) {
   return Hoverable(
-      component,                         //
+      std::move(component),              //
       [on_change] { on_change(true); },  //
       [on_change] { on_change(false); }  //
   );
@@ -197,9 +203,10 @@ Component Hoverable(Component component, std::function<void(bool)> on_change) {
 /// bool hovered = false;
 /// button |= Hoverable([&](bool hover) { hovered = hover;});
 /// ```
+// NOLINTNEXTLINE
 ComponentDecorator Hoverable(std::function<void(bool)> on_change) {
   return [on_change](Component component) {
-    return Hoverable(component, on_change);
+    return Hoverable(std::move(component), on_change);
   };
 }
 

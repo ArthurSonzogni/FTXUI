@@ -37,15 +37,15 @@ class Graph : public Node {
   }
 
   void Render(Screen& screen) override {
-    int width = (box_.x_max - box_.x_min + 1) * 2;
-    int height = (box_.y_max - box_.y_min + 1) * 2;
+    const int width = (box_.x_max - box_.x_min + 1) * 2;
+    const int height = (box_.y_max - box_.y_min + 1) * 2;
     auto data = graph_function_(width, height);
     int i = 0;
     for (int x = box_.x_min; x <= box_.x_max; ++x) {
-      int height_1 = 2 * box_.y_max - data[i++];
-      int height_2 = 2 * box_.y_max - data[i++];
+      const int height_1 = 2 * box_.y_max - data[i++];
+      const int height_2 = 2 * box_.y_max - data[i++];
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
-        int yy = 2 * y;
+        const int yy = 2 * y;
         int i_1 = yy < height_1 ? 0 : yy == height_1 ? 3 : 6;  // NOLINT
         int i_2 = yy < height_2 ? 0 : yy == height_2 ? 1 : 2;  // NOLINT
         screen.at(x, y) = charset[i_1 + i_2];                  // NOLINT

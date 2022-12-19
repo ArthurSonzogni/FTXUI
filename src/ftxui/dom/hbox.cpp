@@ -49,7 +49,7 @@ class HBox : public Node {
       element.flex_grow = requirement.flex_grow_x;
       element.flex_shrink = requirement.flex_shrink_x;
     }
-    int target_size = box.x_max - box.x_min + 1;
+    const int target_size = box.x_max - box.x_min + 1;
     box_helper::Compute(&elements, target_size);
 
     int x = box.x_min;

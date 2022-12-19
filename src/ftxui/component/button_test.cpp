@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
-#include <chrono>  // for operator""s, chrono_literals
-#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for string
+#include <bits/chrono.h>  // for operator""s, chrono_literals
+#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, Test, EXPECT_FALSE, EXPECT_TRUE, TestInfo (ptr only), TEST
+#include <memory>         // for __shared_ptr_access, shared_ptr, allocator
+#include <string>         // for string
 
 #include "ftxui/component/animation.hpp"          // for Duration, Params
 #include "ftxui/component/component.hpp"          // for Button, Horizontal

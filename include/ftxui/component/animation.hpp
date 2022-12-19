@@ -1,6 +1,7 @@
 #ifndef FTXUI_ANIMATION_HPP
 #define FTXUI_ANIMATION_HPP
 
+#include <bits/chrono.h>  // for milliseconds, duration, steady_clock, time_point
 #include <chrono>      // for milliseconds, duration, steady_clock, time_point
 #include <functional>  // for function
 

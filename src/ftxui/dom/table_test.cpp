@@ -720,14 +720,14 @@ TEST(TableTest, Merge) {
   Screen screen(7, 7);
   Render(screen, table.Render());
   EXPECT_EQ(
-    "┌─┲━┱─┐\r\n"
-    "│a┃b┃c│\r\n"
-    "┢━╋━╋━┪\r\n"
-    "┃d┃e┃f┃\r\n"
-    "┡━╋━╋━┩\r\n"
-    "│g┃h┃i│\r\n"
-    "└─┺━┹─┘",
-    screen.ToString());
+      "┌─┲━┱─┐\r\n"
+      "│a┃b┃c│\r\n"
+      "┢━╋━╋━┪\r\n"
+      "┃d┃e┃f┃\r\n"
+      "┡━╋━╋━┩\r\n"
+      "│g┃h┃i│\r\n"
+      "└─┺━┹─┘",
+      screen.ToString());
 }
 
 }  // namespace ftxui

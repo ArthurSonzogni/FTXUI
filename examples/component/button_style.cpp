@@ -1,4 +1,3 @@
-#include <memory>  // for shared_ptr
 #include <string>  // for operator+, to_string
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
@@ -6,7 +5,7 @@
 #include "ftxui/component/component_base.hpp"      // for Component
 #include "ftxui/component/component_options.hpp"   // for ButtonOption
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for separator, Element, text, border
+#include "ftxui/dom/elements.hpp"  // for Element, separator, text, border
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Green, Color::Red
 
 using namespace ftxui;

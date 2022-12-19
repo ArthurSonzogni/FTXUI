@@ -58,8 +58,8 @@ class SeparatorAuto : public Node {
   }
 
   void Render(Screen& screen) override {
-    bool is_column = (box_.x_max == box_.x_min);
-    bool is_line = (box_.y_min == box_.y_max);
+    const bool is_column = (box_.x_max == box_.x_min);
+    const bool is_line = (box_.y_min == box_.y_max);
 
     const std::string c = charsets[style_][int(is_line && !is_column)];
 
@@ -414,14 +414,14 @@ Element separatorHSelector(float left,
       int demi_cell_left = int(left_ * 2.F - 1.F);    // NOLINT
       int demi_cell_right = int(right_ * 2.F + 2.F);  // NOLINT
 
-      int y = box_.y_min;
+      const int y = box_.y_min;
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
         Pixel& pixel = screen.PixelAt(x, y);
 
-        int a = (x - box_.x_min) * 2;
-        int b = a + 1;
-        bool a_empty = demi_cell_left == a || demi_cell_right == a;
-        bool b_empty = demi_cell_left == b || demi_cell_right == b;
+        const int a = (x - box_.x_min) * 2;
+        const int b = a + 1;
+        const bool a_empty = demi_cell_left == a || demi_cell_right == a;
+        const bool b_empty = demi_cell_left == b || demi_cell_right == b;
 
         if (!a_empty && !b_empty) {
           pixel.character = "─";
@@ -481,17 +481,17 @@ Element separatorVSelector(float up,
       }
 
       // This are the two location with an empty demi-cell.
-      int demi_cell_up = int(up_ * 2 - 1);
-      int demi_cell_down = int(down_ * 2 + 2);
+      const int demi_cell_up = int(up_ * 2 - 1);
+      const int demi_cell_down = int(down_ * 2 + 2);
 
-      int x = box_.x_min;
+      const int x = box_.x_min;
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         Pixel& pixel = screen.PixelAt(x, y);
 
-        int a = (y - box_.y_min) * 2;
-        int b = a + 1;
-        bool a_empty = demi_cell_up == a || demi_cell_down == a;
-        bool b_empty = demi_cell_up == b || demi_cell_down == b;
+        const int a = (y - box_.y_min) * 2;
+        const int b = a + 1;
+        const bool a_empty = demi_cell_up == a || demi_cell_down == a;
+        const bool b_empty = demi_cell_up == b || demi_cell_down == b;
 
         if (!a_empty && !b_empty) {
           pixel.character = "│";

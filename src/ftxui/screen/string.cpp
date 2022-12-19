@@ -1,5 +1,6 @@
 // Content of this file was created thanks to:
-// - https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
+// -
+// https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
 // - Markus Kuhn -- 2007-05-26 (Unicode 5.0)
 //   http://www.cl.cam.ac.uk/~mgk25/ucs/wcwidth.c
 // Thanks you!
@@ -7,9 +8,11 @@
 #include "ftxui/screen/string.hpp"
 
 #include <array>    // for array
-#include <cstdint>  // for uint32_t, uint8_t
+#include <cstdint>  // for uint32_t, uint8_t, uint16_t, int32_t
 #include <string>   // for string, basic_string, wstring
-#include <tuple>    // for std::ignore
+#include <tuple>    // for _Swallow_assign, ignore
+
+#include "ftxui/screen/deprecated.hpp"  // for wchar_width, wstring_width
 
 namespace {
 
@@ -1485,7 +1488,7 @@ bool Bisearch(uint32_t ucs, const std::array<Interval, N> table) {
   int min = 0;
   int max = N - 1;
   while (max >= min) {
-    int mid = (min + max) / 2;
+    const int mid = (min + max) / 2;
     if (ucs > table[mid].last) {  // NOLINT
       min = mid + 1;
     } else if (ucs < table[mid].first) {  // NOLINT
@@ -1508,7 +1511,7 @@ bool Bisearch(uint32_t ucs, const std::array<C, N> table, C* out) {
   int min = 0;
   int max = N - 1;
   while (max >= min) {
-    int mid = (min + max) / 2;
+    const int mid = (min + max) / 2;
     if (ucs > table[mid].last) {  // NOLINT
       min = mid + 1;
     } else if (ucs < table[mid].first) {  // NOLINT
@@ -1574,7 +1577,7 @@ bool EatCodePoint(const std::string& input,
     *end = start + 1;
     return false;
   }
-  uint8_t C0 = input[start];
+  const uint8_t C0 = input[start];
 
   // 1 byte string.
   if ((C0 & 0b1000'0000) == 0b0000'0000) {  // NOLINT
@@ -1586,7 +1589,7 @@ bool EatCodePoint(const std::string& input,
   // 2 byte string.
   if ((C0 & 0b1110'0000) == 0b1100'0000 &&  // NOLINT
       start + 1 < input.size()) {
-    uint8_t C1 = input[start + 1];
+    const uint8_t C1 = input[start + 1];
     *ucs = 0;
     *ucs += C0 & 0b0001'1111;  // NOLINT
     *ucs <<= 6;                // NOLINT
@@ -1598,8 +1601,8 @@ bool EatCodePoint(const std::string& input,
   // 3 byte string.
   if ((C0 & 0b1111'0000) == 0b1110'0000 &&  // NOLINT
       start + 2 < input.size()) {
-    uint8_t C1 = input[start + 1];
-    uint8_t C2 = input[start + 2];
+    const uint8_t C1 = input[start + 1];
+    const uint8_t C2 = input[start + 2];
     *ucs = 0;
     *ucs += C0 & 0b0000'1111;  // NOLINT
     *ucs <<= 6;                // NOLINT
@@ -1613,9 +1616,9 @@ bool EatCodePoint(const std::string& input,
   // 4 byte string.
   if ((C0 & 0b1111'1000) == 0b1111'0000 &&  // NOLINT
       start + 3 < input.size()) {
-    uint8_t C1 = input[start + 1];
-    uint8_t C2 = input[start + 2];
-    uint8_t C3 = input[start + 3];
+    const uint8_t C1 = input[start + 1];
+    const uint8_t C2 = input[start + 2];
+    const uint8_t C3 = input[start + 3];
     *ucs = 0;
     *ucs += C0 & 0b0000'0111;  // NOLINT
     *ucs <<= 6;                // NOLINT
@@ -1645,10 +1648,9 @@ bool EatCodePoint(const std::wstring& input,
     return false;
   }
 
-
   // On linux wstring uses the UTF32 encoding:
   if constexpr (sizeof(wchar_t) == 4) {
-    *ucs = input[start]; // NOLINT
+    *ucs = input[start];  // NOLINT
     *end = start + 1;
     return true;
   }
@@ -1686,7 +1688,7 @@ int wstring_width(const std::wstring& text) {
   int width = 0;
 
   for (const wchar_t& it : text) {
-    int w = wchar_width(it);
+    const int w = wchar_width(it);
     if (w < 0) {
       return -1;
     }
@@ -1724,7 +1726,7 @@ int string_width(const std::string& input) {
 
 std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
   std::vector<std::string> out;
-  std::string current;
+  const std::string current;
   out.reserve(input.size());
   size_t start = 0;
   size_t end = 0;
@@ -1735,7 +1737,7 @@ std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
       continue;
     }
 
-    std::string append = input.substr(start, end - start);
+    const std::string append = input.substr(start, end - start);
     start = end;
 
     // Ignore control characters.
@@ -1772,7 +1774,7 @@ int GlyphPosition(const std::string& input, size_t glyph_index, size_t start) {
   size_t end = 0;
   while (start < input.size()) {
     uint32_t codepoint = 0;
-    bool eaten = EatCodePoint(input, start, &end, &codepoint);
+    const bool eaten = EatCodePoint(input, start, &end, &codepoint);
 
     // Ignore invalid, control characters and combining characters.
     if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
@@ -1801,7 +1803,7 @@ std::vector<int> CellToGlyphIndex(const std::string& input) {
   size_t end = 0;
   while (start < input.size()) {
     uint32_t codepoint = 0;
-    bool eaten = EatCodePoint(input, start, &end, &codepoint);
+    const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
     // Ignore invalid / control characters.
@@ -1840,7 +1842,7 @@ int GlyphCount(const std::string& input) {
   size_t end = 0;
   while (start < input.size()) {
     uint32_t codepoint = 0;
-    bool eaten = EatCodePoint(input, start, &end, &codepoint);
+    const bool eaten = EatCodePoint(input, start, &end, &codepoint);
     start = end;
 
     // Ignore invalid characters:
@@ -1916,7 +1918,7 @@ std::string to_string(const std::wstring& s) {
 
     // 1 byte UTF8
     if (codepoint <= 0b000'0000'0111'1111) {  // NOLINT
-      uint8_t p1 = codepoint;
+      const uint8_t p1 = codepoint;
       out.push_back(p1);  // NOLINT
       continue;
     }

@@ -32,10 +32,10 @@ class RadioboxBase : public ComponentBase {
   Element Render() override {
     Clamp();
     Elements elements;
-    bool is_menu_focused = Focused();
+    const bool is_menu_focused = Focused();
     for (int i = 0; i < size(); ++i) {
-      bool is_focused = (focused_entry() == i) && is_menu_focused;
-      bool is_selected = (hovered_ == i);
+      const bool is_focused = (focused_entry() == i) && is_menu_focused;
+      const bool is_selected = (hovered_ == i);
       auto focus_management = !is_selected      ? nothing
                               : is_menu_focused ? focus
                                                 : select;
@@ -66,7 +66,7 @@ class RadioboxBase : public ComponentBase {
     }
 
     if (Focused()) {
-      int old_hovered = hovered_;
+      const int old_hovered = hovered_;
       if (event == Event::ArrowUp || event == Event::Character('k')) {
         (hovered_)--;
       }
@@ -141,7 +141,7 @@ class RadioboxBase : public ComponentBase {
       return false;
     }
 
-    int old_hovered = hovered_;
+    const int old_hovered = hovered_;
 
     if (event.mouse().button == Mouse::WheelUp) {
       (hovered_)--;
