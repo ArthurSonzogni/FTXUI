@@ -13,7 +13,7 @@
 namespace ftxui {
 
 // NOLINTNEXTLINE
-const std::map<std::string, std::string> g_uniformize = {{
+const std::map<std::string, std::string> g_uniformize = {
     // Microsoft's terminal uses a different new line character for the return
     // key. This also happens with linux with the `bind` command:
     // See https://github.com/ArthurSonzogni/FTXUI/issues/337
@@ -21,7 +21,7 @@ const std::map<std::string, std::string> g_uniformize = {{
     {"\r", "\n"},
     // See: https://github.com/ArthurSonzogni/FTXUI/issues/508
     {std::string({8}), std::string({127})},
-}};
+};
 
 TerminalInputParser::TerminalInputParser(Sender<Task> out)
     : out_(std::move(out)) {}
