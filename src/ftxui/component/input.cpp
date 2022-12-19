@@ -1,6 +1,7 @@
 #include <algorithm>   // for max, min
 #include <cstddef>     // for size_t
 #include <functional>  // for function
+#include <memory>      // for shared_ptr
 #include <string>      // for string, allocator
 #include <utility>     // for move
 #include <vector>      // for vector
@@ -9,14 +10,14 @@
 #include "ftxui/component/component.hpp"          // for Make, Input
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
-#include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::Home, Event::Return
+#include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowLeftCtrl, Event::ArrowRight, Event::ArrowRightCtrl, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::Home, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, reflect, inverted, Decorator, flex, focus, hbox, size, bold, dim, frame, select, EQUAL, HEIGHT
+#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, reflect, operator|=, flex, inverted, hbox, size, bold, dim, focus, focusCursorBarBlinking, frame, select, Decorator, EQUAL, HEIGHT
 #include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/screen/string.hpp"  // for GlyphPosition, GlyphCount, CellToGlyphIndex
-#include "ftxui/screen/util.hpp"  // for clamp
-#include "ftxui/util/ref.hpp"     // for StringRef, Ref, ConstStringRef
+#include "ftxui/screen/string.hpp"  // for GlyphPosition, WordBreakProperty, GlyphCount, Utf8ToWordBreakProperty, CellToGlyphIndex, WordBreakProperty::ALetter, WordBreakProperty::CR, WordBreakProperty::Double_Quote, WordBreakProperty::Extend, WordBreakProperty::ExtendNumLet, WordBreakProperty::Format, WordBreakProperty::Hebrew_Letter, WordBreakProperty::Katakana, WordBreakProperty::LF, WordBreakProperty::MidLetter, WordBreakProperty::MidNum, WordBreakProperty::MidNumLet, WordBreakProperty::Newline, WordBreakProperty::Numeric, WordBreakProperty::Regional_Indicator, WordBreakProperty::Single_Quote, WordBreakProperty::WSegSpace, WordBreakProperty::ZWJ
+#include "ftxui/screen/util.hpp"    // for clamp
+#include "ftxui/util/ref.hpp"       // for StringRef, Ref, ConstStringRef
 
 namespace ftxui {
 
@@ -49,7 +50,7 @@ bool IsWordCharacter(WordBreakProperty property) {
     case WordBreakProperty::ZWJ:
       return false;
   }
-  return true; // NOT_REACHED();
+  return true;  // NOT_REACHED();
 }
 
 std::string PasswordField(size_t size) {
@@ -86,13 +87,14 @@ class InputBase : public ComponentBase {
     if (option_->password()) {
       password_content = PasswordField(content_->size());
     }
-    std::string& content = option_->password() ? password_content : *content_;
+    const std::string& content =
+        option_->password() ? password_content : *content_;
 
-    int size = GlyphCount(content);
+    const int size = GlyphCount(content);
 
     cursor_position() = std::max(0, std::min<int>(size, cursor_position()));
     auto main_decorator = flex | ftxui::size(HEIGHT, EQUAL, 1);
-    bool is_focused = Focused();
+    const bool is_focused = Focused();
 
     // placeholder.
     if (size == 0) {
@@ -100,7 +102,7 @@ class InputBase : public ComponentBase {
       if (is_focused) {
         element |= focus;
       }
-      if (hovered_|| is_focused) {
+      if (hovered_ || is_focused) {
         element |= inverted;
       }
       return element;
@@ -111,19 +113,21 @@ class InputBase : public ComponentBase {
       auto element = text(content) | main_decorator | reflect(box_);
       if (hovered_) {
         element |= inverted;
-      } 
+      }
       return element;
     }
 
-    int index_before_cursor = GlyphPosition(content, cursor_position());
-    int index_after_cursor = GlyphPosition(content, 1, index_before_cursor);
-    std::string part_before_cursor = content.substr(0, index_before_cursor);
+    const int index_before_cursor = GlyphPosition(content, cursor_position());
+    const int index_after_cursor =
+        GlyphPosition(content, 1, index_before_cursor);
+    const std::string part_before_cursor =
+        content.substr(0, index_before_cursor);
     std::string part_at_cursor = " ";
     if (cursor_position() < size) {
       part_at_cursor = content.substr(index_before_cursor,
                                       index_after_cursor - index_before_cursor);
     }
-    std::string part_after_cursor = content.substr(index_after_cursor);
+    const std::string part_after_cursor = content.substr(index_after_cursor);
     auto focused = (is_focused || hovered_) ? focusCursorBarBlinking : select;
     return hbox({
                text(part_before_cursor),
@@ -140,15 +144,14 @@ class InputBase : public ComponentBase {
     if (event.is_mouse()) {
       return OnMouseEvent(event);
     }
-    std::string c;
 
     // Backspace.
     if (event == Event::Backspace) {
       if (cursor_position() == 0) {
         return false;
       }
-      size_t start = GlyphPosition(*content_, cursor_position() - 1);
-      size_t end = GlyphPosition(*content_, cursor_position());
+      const size_t start = GlyphPosition(*content_, cursor_position() - 1);
+      const size_t end = GlyphPosition(*content_, cursor_position());
       content_->erase(start, end - start);
       cursor_position()--;
       option_->on_change();
@@ -160,8 +163,8 @@ class InputBase : public ComponentBase {
       if (cursor_position() == int(content_->size())) {
         return false;
       }
-      size_t start = GlyphPosition(*content_, cursor_position());
-      size_t end = GlyphPosition(*content_, cursor_position() + 1);
+      const size_t start = GlyphPosition(*content_, cursor_position());
+      const size_t end = GlyphPosition(*content_, cursor_position() + 1);
       content_->erase(start, end - start);
       option_->on_change();
       return true;
@@ -211,7 +214,7 @@ class InputBase : public ComponentBase {
 
     // Content
     if (event.is_character()) {
-      size_t start = GlyphPosition(*content_, cursor_position());
+      const size_t start = GlyphPosition(*content_, cursor_position());
       content_->insert(start, event.character());
       cursor_position()++;
       option_->on_change();
@@ -239,7 +242,7 @@ class InputBase : public ComponentBase {
 
   void HandleRightCtrl() {
     auto properties = Utf8ToWordBreakProperty(*content_);
-    int max = (int)properties.size();
+    const int max = (int)properties.size();
 
     // Move right, as long as right is not a word character.
     while (cursor_position() < max &&
@@ -284,7 +287,8 @@ class InputBase : public ComponentBase {
     if (mapping[original_cell] != original_glyph) {
       original_cell = mapping.size();
     }
-    int target_cell = int(original_cell) + event.mouse().x - cursor_box_.x_min;
+    const int target_cell =
+        int(original_cell) + event.mouse().x - cursor_box_.x_min;
     int target_glyph = target_cell < (int)mapping.size() ? mapping[target_cell]
                                                          : (int)mapping.size();
     target_glyph = util::clamp(target_glyph, 0, GlyphCount(*content_));

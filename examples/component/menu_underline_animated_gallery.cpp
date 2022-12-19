@@ -1,6 +1,6 @@
 #include <chrono>  // for operator""ms, literals
-#include <memory>  // for shared_ptr, __shared_ptr_access, allocator
-#include <string>  // for string, basic_string, operator+, to_string
+#include <memory>  // for allocator, shared_ptr, __shared_ptr_access
+#include <string>  // for string, operator+, to_string, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/animation.hpp"       // for BackOut, Duration

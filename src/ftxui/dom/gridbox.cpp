@@ -22,7 +22,7 @@ namespace {
 int Integrate(std::vector<int>& elements) {
   int accu = 0;
   for (auto& i : elements) {
-    int old_accu = accu;
+    const int old_accu = accu;
     accu += i;
     i = old_accu;
   }
@@ -113,8 +113,8 @@ class GridBox : public Node {
       }
     }
 
-    int target_size_x = box.x_max - box.x_min + 1;
-    int target_size_y = box.y_max - box.y_min + 1;
+    const int target_size_x = box.x_max - box.x_min + 1;
+    const int target_size_y = box.y_max - box.y_min + 1;
     box_helper::Compute(&elements_x, target_size_x);
     box_helper::Compute(&elements_y, target_size_y);
 
@@ -165,15 +165,15 @@ class GridBox : public Node {
 /// ```
 /// Output:
 /// ```
-///╭──────────╮╭──────╮╭──────────╮
-///│north-west││north ││north-east│
-///╰──────────╯╰──────╯╰──────────╯
-///╭──────────╮╭──────╮╭──────────╮
-///│west      ││center││east      │
-///╰──────────╯╰──────╯╰──────────╯
-///╭──────────╮╭──────╮╭──────────╮
-///│south-west││south ││south-east│
-///╰──────────╯╰──────╯╰──────────╯
+/// ╭──────────╮╭──────╮╭──────────╮
+/// │north-west││north ││north-east│
+/// ╰──────────╯╰──────╯╰──────────╯
+/// ╭──────────╮╭──────╮╭──────────╮
+/// │west      ││center││east      │
+/// ╰──────────╯╰──────╯╰──────────╯
+/// ╭──────────╮╭──────╮╭──────────╮
+/// │south-west││south ││south-east│
+/// ╰──────────╯╰──────╯╰──────────╯
 /// ```
 Element gridbox(std::vector<Elements> lines) {
   return std::make_shared<GridBox>(std::move(lines));

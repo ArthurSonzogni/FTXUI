@@ -162,9 +162,9 @@ void SetY(Global& g, std::vector<Line> lines) {
 
     case FlexboxConfig::AlignContent::Stretch: {
       for (int i = ys.size() - 1; i >= 0; --i) {  // NOLINT
-        int shifted = remaining_space * (i + 0) / (i + 1);
+        const int shifted = remaining_space * (i + 0) / (i + 1);
         ys[i] += shifted;
-        int consumed = remaining_space - shifted;
+        const int consumed = remaining_space - shifted;
         elements[i].size += consumed;
         remaining_space -= consumed;
       }
@@ -200,10 +200,10 @@ void SetY(Global& g, std::vector<Line> lines) {
   for (size_t i = 0; i < lines.size(); ++i) {
     auto& element = elements[i];
     for (auto* block : lines[i].blocks) {
-      bool stretch =
+      const bool stretch =
           block->flex_grow_y != 0 ||
           g.config.align_content == FlexboxConfig::AlignContent::Stretch;
-      int size =
+      const int size =
           stretch ? element.size : std::min(element.size, block->min_size_y);
       switch (g.config.align_items) {
         case FlexboxConfig::AlignItems::FlexStart: {

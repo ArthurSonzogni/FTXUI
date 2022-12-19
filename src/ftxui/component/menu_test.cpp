@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
+#include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
 #include <chrono>  // for operator""s, chrono_literals
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for string
+#include <string>  // for string, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/animation.hpp"          // for Duration, Params

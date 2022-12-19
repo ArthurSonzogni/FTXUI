@@ -82,8 +82,8 @@ class ContainerBase : public ComponentBase {
       return;
     }
     for (size_t offset = 1; offset < children_.size(); ++offset) {
-      size_t i = ((size_t(*selector_ + offset * dir + children_.size())) %
-                  children_.size());
+      const size_t i = ((size_t(*selector_ + offset * dir + children_.size())) %
+                        children_.size());
       if (children_[i]->Focusable()) {
         *selector_ = (int)i;
         return;
@@ -108,7 +108,7 @@ class VerticalContainer : public ContainerBase {
   }
 
   bool EventHandler(Event event) override {
-    int old_selected = *selector_;
+    const int old_selected = *selector_;
     if (event == Event::ArrowUp || event == Event::Character('k')) {
       MoveSelector(-1);
     }
@@ -190,7 +190,7 @@ class HorizontalContainer : public ContainerBase {
   }
 
   bool EventHandler(Event event) override {
-    int old_selected = *selector_;
+    const int old_selected = *selector_;
     if (event == Event::ArrowLeft || event == Event::Character('h')) {
       MoveSelector(-1);
     }
@@ -214,7 +214,7 @@ class TabContainer : public ContainerBase {
   using ContainerBase::ContainerBase;
 
   Element Render() override {
-    Component active_child = ActiveChild();
+    const Component active_child = ActiveChild();
     if (active_child) {
       return active_child->Render();
     }

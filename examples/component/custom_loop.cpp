@@ -1,12 +1,12 @@
 #include <stdlib.h>                   // for EXIT_SUCCESS
 #include <chrono>                     // for milliseconds
 #include <ftxui/component/event.hpp>  // for Event
+#include <ftxui/component/mouse.hpp>  // for ftxui
 #include <ftxui/dom/elements.hpp>  // for text, separator, Element, operator|, vbox, border
-#include <memory>                  // for shared_ptr
-#include <string>                  // for operator+, to_string, allocator
+#include <memory>                  // for allocator, shared_ptr
+#include <string>                  // for operator+, to_string
 #include <thread>                  // for sleep_for
 
-#include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for CatchEvent, Renderer, operator|=
 #include "ftxui/component/loop.hpp"       // for Loop
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive

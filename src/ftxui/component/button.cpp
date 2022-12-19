@@ -80,7 +80,7 @@ Component Button(ConstStringRef label,
       }
 
       auto focus_management = focused ? focus : active ? select : nothing;
-      EntryState state = {
+      const EntryState state = {
           *label_,
           false,
           active,

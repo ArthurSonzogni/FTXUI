@@ -103,11 +103,11 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
   const int database_begin = 16;
   const int database_end = 256;
   for (int i = database_begin; i < database_end; ++i) {
-    ColorInfo color_info = GetColorInfo(Color::Palette256(i));
-    int dr = color_info.red - red;
-    int dg = color_info.green - green;
-    int db = color_info.blue - blue;
-    int dist = dr * dr + dg * dg + db * db;
+    const ColorInfo color_info = GetColorInfo(Color::Palette256(i));
+    const int dr = color_info.red - red;
+    const int dg = color_info.green - green;
+    const int db = color_info.blue - blue;
+    const int dist = dr * dr + dg * dg + db * db;
     if (closest > dist) {
       closest = dist;
       best = i;
@@ -186,7 +186,7 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
       }
 
       case ColorType::Palette16: {
-        ColorInfo info = GetColorInfo(Color::Palette16(color.red_));
+        const ColorInfo info = GetColorInfo(Color::Palette16(color.red_));
         *red = info.red;
         *green = info.green;
         *blue = info.blue;
@@ -194,7 +194,7 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
       }
 
       case ColorType::Palette256: {
-        ColorInfo info = GetColorInfo(Color::Palette256(color.red_));
+        const ColorInfo info = GetColorInfo(Color::Palette256(color.red_));
         *red = info.red;
         *green = info.green;
         *blue = info.blue;

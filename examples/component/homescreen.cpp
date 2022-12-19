@@ -5,14 +5,14 @@
 #include <cmath>       // for sin
 #include <functional>  // for ref, reference_wrapper, function
 #include <memory>      // for allocator, shared_ptr, __shared_ptr_access
-#include <string>  // for string, basic_string, operator+, to_string, char_traits
+#include <string>  // for string, basic_string, char_traits, operator+, to_string
 #include <thread>   // for sleep_for, thread
 #include <utility>  // for move
 #include <vector>   // for vector
 
 #include "../dom/color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, ResizableSplitLeft, Tab
-#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for MenuOption, InputOption
 #include "ftxui/component/event.hpp"              // for Event, Event::Custom
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive

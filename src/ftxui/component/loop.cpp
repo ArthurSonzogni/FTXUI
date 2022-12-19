@@ -1,5 +1,8 @@
 #include "ftxui/component/loop.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+
+#include <utility>  // for move
+
+#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
 
 namespace ftxui {
 

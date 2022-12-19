@@ -1,8 +1,8 @@
 #include <chrono>                  // for operator""s, chrono_literals
-#include <ftxui/dom/elements.hpp>  // for text, gauge, operator|, flex, hbox, Element
+#include <ftxui/dom/elements.hpp>  // for filler, operator|, separator, text, border, Element, vbox, vtext, hbox, center, gaugeDown, gaugeLeft, gaugeRight, gaugeUp
 #include <ftxui/screen/screen.hpp>  // for Screen
 #include <iostream>                 // for cout, endl, ostream
-#include <string>  // for allocator, operator+, char_traits, operator<<, string, to_string, basic_string
+#include <string>  // for allocator, operator+, operator<<, string, to_string
 #include <thread>  // for sleep_for
 
 #include "ftxui/dom/node.hpp"      // for Render

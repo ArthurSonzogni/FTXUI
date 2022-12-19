@@ -22,8 +22,8 @@ class CheckboxBase : public ComponentBase {
  private:
   // Component implementation.
   Element Render() override {
-    bool is_focused = Focused();
-    bool is_active = Active();
+    const bool is_focused = Focused();
+    const bool is_active = Active();
     auto focus_management = is_focused ? focus : is_active ? select : nothing;
     auto state = EntryState{
         *label_,

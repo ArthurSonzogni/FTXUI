@@ -90,17 +90,17 @@ class Gauge : public Node {
   }
 
   void RenderHorizontal(Screen& screen, bool invert) {
-    int y = box_.y_min;
+    const int y = box_.y_min;
     if (y > box_.y_max) {
       return;
     }
 
     // Draw the progress bar horizontally.
     {
-      float progress = invert ? 1.F - progress_ : progress_;
-      float limit =
+      const float progress = invert ? 1.F - progress_ : progress_;
+      const float limit =
           (float)box_.x_min + progress * (float)(box_.x_max - box_.x_min + 1);
-      int limit_int = (int)limit;
+      const int limit_int = (int)limit;
       int x = box_.x_min;
       while (x < limit_int) {
         screen.at(x++, y) = charset_horizontal[9];  // NOLINT
@@ -120,17 +120,17 @@ class Gauge : public Node {
   }
 
   void RenderVertical(Screen& screen, bool invert) {
-    int x = box_.x_min;
+    const int x = box_.x_min;
     if (x > box_.x_max) {
       return;
     }
 
     // Draw the progress bar vertically:
     {
-      float progress = invert ? progress_ : 1.F - progress_;
-      float limit =
+      const float progress = invert ? progress_ : 1.F - progress_;
+      const float limit =
           (float)box_.y_min + progress * (float)(box_.y_max - box_.y_min + 1);
-      int limit_int = (int)limit;
+      const int limit_int = (int)limit;
       int y = box_.y_min;
       while (y < limit_int) {
         screen.at(x, y++) = charset_vertical[8];  // NOLINT

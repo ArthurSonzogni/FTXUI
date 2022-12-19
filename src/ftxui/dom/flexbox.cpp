@@ -145,7 +145,7 @@ class Flexbox : public Node {
   void SetBox(Box box) override {
     Node::SetBox(box);
 
-    int asked_previous = asked_;
+    const int asked_previous = asked_;
     asked_ = std::min(asked_, IsColumnOriented() ? box.y_max - box.y_min + 1
                                                  : box.x_max - box.x_min + 1);
     need_iteration_ = (asked_ != asked_previous);
@@ -166,7 +166,7 @@ class Flexbox : public Node {
       children_box.x_max = box.x_min + b.x + b.dim_x - 1;
       children_box.y_max = box.y_min + b.y + b.dim_y - 1;
 
-      Box intersection = Box::Intersection(children_box, box);
+      const Box intersection = Box::Intersection(children_box, box);
       child->SetBox(intersection);
 
       need_iteration_ |= (intersection != children_box);

@@ -1,16 +1,16 @@
-#include <algorithm>   // for max, reverse
+#include <algorithm>   // for max, fill_n, reverse
 #include <chrono>      // for milliseconds
 #include <functional>  // for function
-#include <memory>  // for allocator, shared_ptr, allocator_traits<>::value_type, swap
-#include <string>   // for char_traits, operator+, string, basic_string
-#include <utility>  // for move
-#include <vector>   // for vector, __alloc_traits<>::value_type
+#include <memory>      // for allocator_traits<>::value_type, swap
+#include <string>      // for operator+, string
+#include <utility>     // for move
+#include <vector>      // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/component/animation.hpp"  // for Animator, Linear, Params (ptr only)
+#include "ftxui/component/animation.hpp"       // for Animator, Linear
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/component.hpp"  // for Make, Menu, MenuEntry, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, MenuOption::Direction, UnderlineOption, AnimatedColorOption, AnimatedColorsOption, MenuOption::Down, MenuOption::Left, MenuOption::Right, MenuOption::Up
+#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, MenuOption::Direction, UnderlineOption, AnimatedColorOption, AnimatedColorsOption, EntryState, MenuOption::Down, MenuOption::Left, MenuOption::Right, MenuOption::Up
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released, Mouse::WheelDown, Mouse::WheelUp, Mouse::None
 #include "ftxui/component/screen_interactive.hpp"  // for Component
@@ -109,7 +109,7 @@ class MenuBase : public ComponentBase {
     UpdateAnimationTarget();
 
     Elements elements;
-    bool is_menu_focused = Focused();
+    const bool is_menu_focused = Focused();
     if (option_->elements_prefix) {
       elements.push_back(option_->elements_prefix());
     }
@@ -117,10 +117,10 @@ class MenuBase : public ComponentBase {
       if (i != 0 && option_->elements_infix) {
         elements.push_back(option_->elements_infix());
       }
-      bool is_focused = (focused_entry() == i) && is_menu_focused;
-      bool is_selected = (*selected_ == i);
+      const bool is_focused = (focused_entry() == i) && is_menu_focused;
+      const bool is_selected = (*selected_ == i);
 
-      EntryState state = {
+      const EntryState state = {
           entries_[i],
           false,
           is_selected,
@@ -130,7 +130,7 @@ class MenuBase : public ComponentBase {
       auto focus_management =
           is_menu_focused && (selected_focus_ == i) ? focus : nothing;
 
-      Element element =
+      const Element element =
           (option_->entries.transform ? option_->entries.transform
                                       : DefaultOptionTransform)  //
           (state);
@@ -145,7 +145,7 @@ class MenuBase : public ComponentBase {
       std::reverse(elements.begin(), elements.end());
     }
 
-    Element bar =
+    const Element bar =
         IsHorizontal() ? hbox(std::move(elements)) : vbox(std::move(elements));
 
     if (!option_->underline.enabled) {
@@ -244,7 +244,7 @@ class MenuBase : public ComponentBase {
     }
 
     if (Focused()) {
-      int old_selected = *selected_;
+      const int old_selected = *selected_;
       if (event == Event::ArrowUp || event == Event::Character('k')) {
         OnUp();
       }
@@ -331,7 +331,7 @@ class MenuBase : public ComponentBase {
     if (!box_.Contain(event.mouse().x, event.mouse().y)) {
       return false;
     }
-    int old_selected = *selected_;
+    const int old_selected = *selected_;
 
     if (event.mouse().button == Mouse::WheelUp) {
       (*selected_)--;
@@ -373,10 +373,10 @@ class MenuBase : public ComponentBase {
       }
     }
 
-    bool is_menu_focused = Focused();
+    const bool is_menu_focused = Focused();
     for (int i = 0; i < size(); ++i) {
-      bool is_focused = (focused_entry() == i) && is_menu_focused;
-      bool is_selected = (*selected_ == i);
+      const bool is_focused = (focused_entry() == i) && is_menu_focused;
+      const bool is_selected = (*selected_ == i);
       float target = is_selected ? 1.F : is_focused ? 0.5F : 0.F;  // NOLINT
       if (animator_background_[i].to() != target) {
         animator_background_[i] = animation::Animator(
@@ -447,16 +447,16 @@ class MenuBase : public ComponentBase {
     if (boxes_.empty()) {
       return 0.F;
     }
-    int value = IsHorizontal() ? boxes_[*selected_].x_min - box_.x_min
-                               : boxes_[*selected_].y_min - box_.y_min;
+    const int value = IsHorizontal() ? boxes_[*selected_].x_min - box_.x_min
+                                     : boxes_[*selected_].y_min - box_.y_min;
     return float(value);
   }
   float SecondTarget() {
     if (boxes_.empty()) {
       return 0.F;
     }
-    int value = IsHorizontal() ? boxes_[*selected_].x_max - box_.x_min
-                               : boxes_[*selected_].y_max - box_.y_min;
+    const int value = IsHorizontal() ? boxes_[*selected_].x_max - box_.x_min
+                                     : boxes_[*selected_].y_max - box_.y_min;
     return float(value);
   }
 
@@ -557,17 +557,17 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
 
    private:
     Element Render() override {
-      bool focused = Focused();
+      const bool focused = Focused();
       UpdateAnimationTarget();
 
-      EntryState state = {
+      const EntryState state = {
           *label_,
           false,
           hovered_,
           focused,
       };
 
-      Element element =
+      const Element element =
           (option_->transform ? option_->transform : DefaultOptionTransform)  //
           (state);
 
@@ -576,7 +576,7 @@ Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> option) {
     }
 
     void UpdateAnimationTarget() {
-      bool focused = Focused();
+      const bool focused = Focused();
       float target = focused ? 1.F : hovered_ ? 0.5F : 0.F;  // NOLINT
       if (target == animator_background_.to()) {
         return;

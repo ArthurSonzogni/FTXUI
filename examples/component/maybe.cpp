@@ -1,12 +1,11 @@
-#include <memory>  // for shared_ptr
-#include <string>  // for string, basic_string, allocator
+#include <string>  // for string, allocator, basic_string
 #include <vector>  // for vector
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for operator|, Maybe, Checkbox, Radiobox, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"      // for Component
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for border, color, operator|, text, Element
+#include "ftxui/dom/elements.hpp"  // for Element, border, color, operator|, text
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
 
 using namespace ftxui;

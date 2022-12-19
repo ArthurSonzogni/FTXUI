@@ -1,6 +1,7 @@
 #include "ftxui/dom/canvas.hpp"
 
 #include <algorithm>               // for max, min
+#include <cmath>                   // for abs
 #include <cstdint>                 // for uint8_t
 #include <cstdlib>                 // for abs
 #include <ftxui/screen/color.hpp>  // for Color
@@ -469,7 +470,7 @@ void Canvas::DrawBlockOn(int x, int y) {
     cell.type = CellType::kBlock;
   }
 
-  uint8_t bit = (x % 2) * 2 + y % 2;
+  const uint8_t bit = (x % 2) * 2 + y % 2;
   uint8_t value = g_map_block_inversed.at(cell.content.character);
   value |= 1U << bit;
   cell.content.character = g_map_block[value];
@@ -489,7 +490,7 @@ void Canvas::DrawBlockOff(int x, int y) {
   }
   y /= 2;
 
-  uint8_t bit = (y % 2) * 2 + x % 2;
+  const uint8_t bit = (y % 2) * 2 + x % 2;
   uint8_t value = g_map_block_inversed.at(cell.content.character);
   value &= ~(1U << bit);
   cell.content.character = g_map_block[value];
@@ -510,7 +511,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
   }
   y /= 2;
 
-  uint8_t bit = (y % 2) * 2 + x % 2;
+  const uint8_t bit = (y % 2) * 2 + x % 2;
   uint8_t value = g_map_block_inversed.at(cell.content.character);
   value ^= 1U << bit;
   cell.content.character = g_map_block[value];
@@ -829,8 +830,8 @@ class CanvasNodeBase : public Node {
 
   void Render(Screen& screen) override {
     const Canvas& c = canvas();
-    int y_max = std::min(c.height() / 4, box_.y_max - box_.y_min + 1);
-    int x_max = std::min(c.width() / 2, box_.x_max - box_.x_min + 1);
+    const int y_max = std::min(c.height() / 4, box_.y_max - box_.y_min + 1);
+    const int x_max = std::min(c.width() / 2, box_.x_max - box_.x_min + 1);
     for (int y = 0; y < y_max; ++y) {
       for (int x = 0; x < x_max; ++x) {
         screen.PixelAt(box_.x_min + x, box_.y_min + y) = c.GetPixel(x, y);
@@ -873,8 +874,8 @@ Element canvas(int width, int height, std::function<void(Canvas&)> fn) {
     }
 
     void Render(Screen& screen) final {
-      int width = (box_.x_max - box_.x_min + 1) * 2;
-      int height = (box_.y_max - box_.y_min + 1) * 4;
+      const int width = (box_.x_max - box_.x_min + 1) * 2;
+      const int height = (box_.y_max - box_.y_min + 1) * 4;
       canvas_ = Canvas(width, height);
       fn_(canvas_);
       CanvasNodeBase::Render(screen);

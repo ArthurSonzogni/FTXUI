@@ -27,7 +27,7 @@ class Text : public Node {
 
   void Render(Screen& screen) override {
     int x = box_.x_min;
-    int y = box_.y_min;
+    const int y = box_.y_min;
     if (y > box_.y_max) {
       return;
     }
@@ -55,7 +55,7 @@ class VText : public Node {
   }
 
   void Render(Screen& screen) override {
-    int x = box_.x_min;
+    const int x = box_.x_min;
     int y = box_.y_min;
     if (x + width_ - 1 > box_.x_max) {
       return;

@@ -1,4 +1,6 @@
 [
+  { include: ["<bits/chrono.h>", "private", "<chrono>", "public"]},
+  { include: ["<bits/std_abs.h>", "private", "<cmath>", "public"]},
   { include: ["<bits/termios-c_cc.h>", "private", "<termios.h>", "public"]},
   { include: ["<bits/termios-c_lflag.h>", "private", "<termios.h>", "public"]},
   { include: ["<bits/termios-struct.h>", "private", "<termios.h>", "public"]},

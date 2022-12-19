@@ -1,14 +1,14 @@
 #include <array>       // for array
 #include <chrono>      // for milliseconds
 #include <functional>  // for function
-#include <memory>      // for shared_ptr, __shared_ptr_access, allocator
-#include <string>      // for string, char_traits, basic_string, operator+
+#include <memory>      // for __shared_ptr_access, shared_ptr, allocator
+#include <string>      // for string, char_traits, operator+, basic_string
 #include <vector>      // for vector
 
 #include "ftxui/component/animation.hpp"  // for ElasticOut, Linear
 #include "ftxui/component/component.hpp"  // for Menu, Horizontal, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, AnimatedColorOption, AnimatedColorsOption, UnderlineOption
+#include "ftxui/component/component_options.hpp"  // for MenuOption, EntryState, MenuEntryOption, AnimatedColorOption, AnimatedColorsOption, UnderlineOption
 #include "ftxui/component/mouse.hpp"              // for ftxui
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, text, bgcolor, hbox, bold, color, filler, border, vbox, borderDouble, dim, flex, hcenter

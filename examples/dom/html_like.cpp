@@ -1,7 +1,6 @@
 #include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/screen/screen.hpp>  // for Screen
 #include <iostream>                 // for cout, ostream
-#include <memory>                   // for shared_ptr
 #include <string>                   // for allocator, operator<<, string
 #include <thread>                   // for sleep_for
 

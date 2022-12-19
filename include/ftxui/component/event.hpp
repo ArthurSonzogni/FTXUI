@@ -66,9 +66,7 @@ struct Event {
   std::string character() const { return input_; }
 
   bool is_mouse() const { return type_ == Type::Mouse; }
-  struct Mouse& mouse() {
-    return mouse_;
-  }
+  struct Mouse& mouse() { return mouse_; }
 
   bool is_cursor_reporting() const { return type_ == Type::CursorReporting; }
   int cursor_x() const { return cursor_.x; }

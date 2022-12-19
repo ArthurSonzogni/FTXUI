@@ -1,12 +1,15 @@
-#include <gtest/gtest.h>
+#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, EXPECT_TRUE, Test, TestInfo (ptr only), EXPECT_FALSE, TEST
+#include <ftxui/dom/elements.hpp>   // for yframe
+#include <ftxui/dom/node.hpp>       // for Render
+#include <ftxui/screen/screen.hpp>  // for Screen
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for string
+#include <string>  // for string, basic_string
 #include <vector>  // for vector
 
-#include "ftxui/component/component.hpp"          // for Radiobox
-#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component.hpp"       // for Radiobox, operator|
+#include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for RadioboxOption
-#include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowUp, Event::Tab, Event::TabReverse
+#include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::End, Event::Home, Event::Tab, Event::TabReverse, Event::PageDown, Event::PageUp, Event::ArrowUp
 #include "ftxui/util/ref.hpp"         // for Ref
 
 namespace ftxui {

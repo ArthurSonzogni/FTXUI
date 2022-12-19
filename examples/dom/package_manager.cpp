@@ -2,7 +2,7 @@
 #include <ftxui/dom/elements.hpp>  // for operator|, text, Element, hbox, bold, color, filler, separator, vbox, window, gauge, Fit, size, dim, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
 #include <iostream>                 // for cout, endl, ostream
-#include <list>  // for list, operator!=, _List_iterator, _List_iterator<>::_Self
+#include <list>  // for list, operator==, _List_iterator, _List_iterator<>::_Self
 #include <memory>   // for allocator, shared_ptr, allocator_traits<>::value_type
 #include <string>   // for string, operator<<, to_string
 #include <thread>   // for sleep_for

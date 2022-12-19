@@ -58,7 +58,7 @@ float CubicIn(float p) {
 
 // Modeled after the cubic y = (x - 1)^3 + 1
 float CubicOut(float p) {
-  float f = (p - 1);
+  const float f = (p - 1);
   return f * f * f + 1;
 }
 
@@ -69,7 +69,7 @@ float CubicInOut(float p) {
   if (p < 0.5F) {  // NOLINT
     return 4 * p * p * p;
   } else {
-    float f = ((2 * p) - 2);
+    const float f = ((2 * p) - 2);
     return 0.5F * f * f * f + 1;  // NOLINT
   }
 }
@@ -81,7 +81,7 @@ float QuarticIn(float p) {
 
 // Modeled after the quartic y = 1 - (x - 1)^4
 float QuarticOut(float p) {
-  float f = (p - 1);
+  const float f = (p - 1);
   return f * f * f * (1 - p) + 1;
 }
 
@@ -92,7 +92,7 @@ float QuarticInOut(float p) {
   if (p < 0.5F) {              // NOLINT
     return 8 * p * p * p * p;  // NOLINT
   } else {
-    float f = (p - 1);
+    const float f = (p - 1);
     return -8 * f * f * f * f + 1;  // NOLINT
   }
 }
@@ -104,7 +104,7 @@ float QuinticIn(float p) {
 
 // Modeled after the quintic y = (x - 1)^5 + 1
 float QuinticOut(float p) {
-  float f = (p - 1);
+  const float f = (p - 1);
   return f * f * f * f * f + 1;
 }
 
@@ -214,7 +214,7 @@ float BackIn(float p) {
 
 // Modeled after overshooting cubic y = 1-((1-x)^3-(1-x)*sin((1-x)*pi))
 float BackOut(float p) {
-  float f = (1 - p);
+  const float f = (1 - p);
   return 1 - (f * f * f - f * std::sin(f * kPi));
 }
 
@@ -223,7 +223,7 @@ float BackOut(float p) {
 // y = (1/2)*(1-((1-x)^3-(1-x)*sin((1-x)*pi))+1) ; [0.5, 1]
 float BackInOut(float p) {
   if (p < 0.5F) {  // NOLINT
-    float f = 2 * p;
+    const float f = 2 * p;
     return 0.5F * (f * f * f - f * std::sin(f * kPi));  // NOLINT
   } else {
     float f = (1 - (2 * p - 1));                                    // NOLINT
