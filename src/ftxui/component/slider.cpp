@@ -325,9 +325,18 @@ template <typename T>
 Component Slider(SliderOption<T> options) {
   return Make<SliderBase<T>>(options);
 }
-template Component Slider(SliderOption<int> options);
-template Component Slider(SliderOption<float> options);
-template Component Slider(SliderOption<long> options);
+template Component Slider(SliderOption<int8_t>);
+template Component Slider(SliderOption<int16_t>);
+template Component Slider(SliderOption<int32_t>);
+template Component Slider(SliderOption<int64_t>);
+
+template Component Slider(SliderOption<uint8_t>);
+template Component Slider(SliderOption<uint16_t>);
+template Component Slider(SliderOption<uint32_t>);
+template Component Slider(SliderOption<uint64_t>);
+
+template Component Slider(SliderOption<float>);
+template Component Slider(SliderOption<double>);
 
 }  // namespace ftxui
 
