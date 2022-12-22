@@ -243,7 +243,7 @@ void InstallSignalHandler(int sig) {
   auto old_signal_handler = std::signal(sig, RecordSignal);
   on_exit_functions.push(
       [=] { std::ignore = std::signal(sig, old_signal_handler); });
-};
+}
 
 const std::string CSI = "\x1b[";  // NOLINT
 
