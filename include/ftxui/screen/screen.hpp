@@ -87,8 +87,8 @@ class Screen {
       Block = 2,
       UnderlineBlinking = 3,
       Underline = 4,
-      Bar = 5,
-      BarBlinking = 6,
+      BarBlinking = 5,
+      Bar = 6,
     };
     Shape shape;
   };
