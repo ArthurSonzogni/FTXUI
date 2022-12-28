@@ -26,6 +26,7 @@
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
 #include "ftxui/dom/requirement.hpp"                  // for Requirement
+#include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"                  // for Size, Dimensions
 
 #if defined(_WIN32)
@@ -104,7 +105,11 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
           // ignore UP key events
           if (key_event.bKeyDown == FALSE)
             continue;
-          parser.Add((char)key_event.uChar.UnicodeChar);
+          std::wstring wstring;
+          wstring += key_event.uChar.UnicodeChar;
+          for(auto it : to_string(wstring)) {
+            parser.Add(it);
+          }
         } break;
         case WINDOW_BUFFER_SIZE_EVENT:
           out->Send(Event::Special({0}));
