@@ -229,7 +229,7 @@ class TabContainer : public ContainerBase {
   }
 
   bool OnMouseEvent(Event event) override {
-    return ActiveChild()->OnEvent(event);
+    return ActiveChild() && ActiveChild()->OnEvent(event);
   }
 };
 
