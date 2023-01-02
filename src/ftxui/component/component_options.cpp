@@ -1,11 +1,12 @@
 #include "ftxui/component/component_options.hpp"
 
-#include <ftxui/screen/color.hpp>  // for Color, Color::Black, Color::White, Color::GrayDark, Color::GrayLight
-#include <memory>   // for shared_ptr
-#include <utility>  // for move
+#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
+#include <ftxui/screen/color.hpp>  // for Color, Color::White, Color::Black, Color::GrayDark, Color::Blue, Color::GrayLight, Color::Red
+#include <memory>                  // for shared_ptr
+#include <utility>                 // for move
 
 #include "ftxui/component/animation.hpp"  // for Function, Duration
-#include "ftxui/dom/elements.hpp"  // for operator|=, text, Element, bold, inverted, operator|, dim, hbox, automerge, borderEmpty, borderLight
+#include "ftxui/dom/elements.hpp"  // for operator|=, Element, text, bgcolor, inverted, bold, dim, operator|, color, borderEmpty, hbox, automerge, border, borderLight
 
 namespace ftxui {
 
@@ -253,6 +254,77 @@ RadioboxOption RadioboxOption::Simple() {
       t |= inverted;
     }
     return hbox({prefix, t});
+  };
+  return option;
+}
+
+// static
+InputOption InputOption::Default() {
+  InputOption option;
+  option.transform = [](InputState state) {
+    state.element |= color(Color::White);
+
+    if (state.is_placeholder) {
+      state.element |= dim;
+    }
+
+    if (state.focused) {
+      state.element |= inverted;
+    } else if (state.hovered) {
+      state.element |= bgcolor(Color::GrayDark);
+    }
+
+    return state.element;
+  };
+  return option;
+}
+
+// static
+InputOption InputOption::Spacious() {
+  InputOption option;
+  option.transform = [](InputState state) {
+    state.element |= borderEmpty;
+    state.element |= color(Color::White);
+
+    if (state.is_placeholder) {
+      state.element |= dim;
+    }
+
+    if (state.focused) {
+      state.element |= bgcolor(Color::Black);
+    }
+
+    if (state.hovered) {
+      state.element |= bgcolor(Color::GrayDark);
+    }
+
+    return state.element;
+  };
+  return option;
+}
+
+// static
+InputOption InputOption::Arthur() {
+  InputOption option;
+  option.transform = [](InputState state) {
+    state.element |= borderEmpty;
+    state.element |= color(Color::White);
+
+    if (state.is_placeholder) {
+      state.element |= dim;
+    }
+
+    if (state.focused) {
+      state.element |= bgcolor(Color::Black);
+    } else {
+      state.element |= bgcolor(LinearGradient(0, Color::Blue, Color::Red));
+    }
+
+    if (state.hovered) {
+      state.element |= bgcolor(Color::GrayDark);
+    }
+
+    return state.element;
   };
   return option;
 }

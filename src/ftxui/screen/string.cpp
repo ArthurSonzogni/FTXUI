@@ -7,14 +7,21 @@
 
 #include "ftxui/screen/string.hpp"
 
-#include <array>    // for array
-#include <cstdint>  // for uint32_t, uint8_t, uint16_t, int32_t
-#include <string>   // for string, basic_string, wstring
-#include <tuple>    // for _Swallow_assign, ignore
+#include <stddef.h>  // for size_t
+#include <array>     // for array
+#include <cstdint>   // for uint32_t, uint8_t, uint16_t, int32_t
+#include <string>    // for string, basic_string, wstring
+#include <tuple>     // for _Swallow_assign, ignore
 
-#include "ftxui/screen/deprecated.hpp"  // for wchar_width, wstring_width
+#include "ftxui/screen/deprecated.hpp"       // for wchar_width, wstring_width
+#include "ftxui/screen/string_internal.hpp"  // for WordBreakProperty, EatCodePoint, CodepointToWordBreakProperty, GlyphCount, GlyphIterate, GlyphNext, GlyphPrevious, IsCombining, IsControl, IsFullWidth, Utf8ToWordBreakProperty
 
 namespace {
+
+using ftxui::EatCodePoint;
+using ftxui::IsCombining;
+using ftxui::IsControl;
+using ftxui::IsFullWidth;
 
 struct Interval {
   uint32_t first;
@@ -1411,45 +1418,25 @@ bool Bisearch(uint32_t ucs, const std::array<C, N> table, C* out) {
   return false;
 }
 
-bool IsCombining(uint32_t ucs) {
-  return ftxui::CodepointToWordBreakProperty(ucs) == WBP::Extend;
-}
-
-bool IsFullWidth(uint32_t ucs) {
-  if (ucs < 0x0300)  // Quick path: // NOLINT
-    return false;
-
-  return Bisearch(ucs, g_full_width_characters);
-}
-
-bool IsControl(uint32_t ucs) {
-  if (ucs == 0) {
-    return true;
-  }
-  if (ucs < 32) {  // NOLINT
-    return true;
-  }
-  if (ucs >= 0x7f && ucs < 0xa0) {  // NOLINT
-    return true;
-  }
-  return false;
-}
-
 int codepoint_width(uint32_t ucs) {
-  if (IsControl(ucs)) {
+  if (ftxui::IsControl(ucs)) {
     return -1;
   }
 
-  if (IsCombining(ucs)) {
+  if (ftxui::IsCombining(ucs)) {
     return 0;
   }
 
-  if (IsFullWidth(ucs)) {
+  if (ftxui::IsFullWidth(ucs)) {
     return 2;
   }
 
   return 1;
 }
+
+}  // namespace
+
+namespace ftxui {
 
 // From UTF8 encoded string |input|, eat in between 1 and 4 byte representing
 // one codepoint. Put the codepoint into |ucs|. Start at |start| and update
@@ -1563,9 +1550,29 @@ bool EatCodePoint(const std::wstring& input,
   return true;
 }
 
-}  // namespace
+bool IsCombining(uint32_t ucs) {
+  return ftxui::CodepointToWordBreakProperty(ucs) == WBP::Extend;
+}
 
-namespace ftxui {
+bool IsFullWidth(uint32_t ucs) {
+  if (ucs < 0x0300)  // Quick path: // NOLINT
+    return false;
+
+  return Bisearch(ucs, g_full_width_characters);
+}
+
+bool IsControl(uint32_t ucs) {
+  if (ucs == 0) {
+    return true;
+  }
+  if (ucs < 32) {      // NOLINT
+    return ucs != 10;  // 10 => Line feed.
+  }
+  if (ucs >= 0x7f && ucs < 0xa0) {  // NOLINT
+    return true;
+  }
+  return false;
+}
 
 WordBreakProperty CodepointToWordBreakProperty(uint32_t codepoint) {
   WordBreakPropertyInterval interval = {0, 0, WBP::ALetter};
@@ -1660,12 +1667,35 @@ std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
   return out;
 }
 
-int GlyphPosition(const std::string& input, size_t glyph_index, size_t start) {
-  if (glyph_index <= 0) {
-    return 0;
+size_t GlyphPrevious(const std::string& input, size_t start) {
+  while (true) {
+    if (start == 0) {
+      return 0;
+    }
+    start--;
+
+    // Skip the UTF8 continuation bytes.
+    if ((input[start] & 0b1100'0000) == 0b1000'0000) {
+      continue;
+    }
+
+    uint32_t codepoint = 0;
+    size_t end = 0;
+    const bool eaten = EatCodePoint(input, start, &end, &codepoint);
+
+    // Ignore invalid, control characters and combining characters.
+    if (!eaten || IsControl(codepoint) || IsCombining(codepoint)) {
+      continue;
+    }
+
+    return start;
   }
-  size_t end = 0;
+}
+
+size_t GlyphNext(const std::string& input, size_t start) {
+  bool glyph_found = false;
   while (start < input.size()) {
+    size_t end = 0;
     uint32_t codepoint = 0;
     const bool eaten = EatCodePoint(input, start, &end, &codepoint);
 
@@ -1677,15 +1707,29 @@ int GlyphPosition(const std::string& input, size_t glyph_index, size_t start) {
 
     // We eat the beginning of the next glyph. If we are eating the one
     // requested, return its start position immediately.
-    if (glyph_index == 0) {
+    if (glyph_found) {
       return static_cast<int>(start);
     }
 
     // Otherwise, skip this glyph and iterate:
-    glyph_index--;
+    glyph_found = true;
     start = end;
   }
   return static_cast<int>(input.size());
+}
+
+size_t GlyphIterate(const std::string& input, int glyph_offset, size_t start) {
+  if (glyph_offset >= 0) {
+    for (int i = 0; i < glyph_offset; ++i) {
+      start = GlyphNext(input, start);
+    }
+    return start;
+  } else {
+    for (int i = 0; i < -glyph_offset; ++i) {
+      start = GlyphPrevious(input, start);
+    }
+    return start;
+  }
 }
 
 std::vector<int> CellToGlyphIndex(const std::string& input) {

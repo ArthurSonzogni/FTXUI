@@ -1,7 +1,6 @@
-#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, Test, EXPECT_FALSE, EXPECT_TRUE, TestInfo (ptr only), TEST
-#include <chrono>         // for operator""s, chrono_literals
-#include <memory>         // for __shared_ptr_access, shared_ptr, allocator
-#include <string>         // for string
+#include <chrono>  // for operator""s, chrono_literals
+#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
+#include <string>  // for string
 
 #include "ftxui/component/animation.hpp"          // for Duration, Params
 #include "ftxui/component/component.hpp"          // for Button, Horizontal
@@ -12,6 +11,7 @@
 #include "ftxui/dom/node.hpp"         // for Render
 #include "ftxui/screen/screen.hpp"    // for Screen
 #include "ftxui/screen/terminal.hpp"  // for SetColorSupport, Color, TrueColor
+#include "gtest/gtest.h"  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, Test, EXPECT_FALSE, EXPECT_TRUE, TEST
 
 // NOLINTBEGIN
 namespace ftxui {

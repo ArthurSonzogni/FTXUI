@@ -5,7 +5,7 @@
 #include <ftxui/component/animation.hpp>  // for Duration, QuadraticInOut, Function
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Left, Direction::Right, Direction::Down
 #include <ftxui/dom/elements.hpp>  // for Element, separator
-#include <ftxui/util/ref.hpp>      // for Ref, ConstRef
+#include <ftxui/util/ref.hpp>      // for Ref, ConstRef, StringRef
 #include <functional>              // for function
 #include <optional>                // for optional
 #include <string>                  // for string
@@ -134,20 +134,42 @@ struct CheckboxOption {
   std::function<void()> on_change = [] {};
 };
 
+/// @brief Used to define style for the Input component.
+struct InputState {
+  Element element;
+  bool hovered;         /// < Whether the input is hovered by the mouse.
+  bool focused;         /// < Whether the input is focused by the user.
+  bool is_placeholder;  /// < Whether the input is empty and displaying the
+                        /// < placeholder.
+};
+
 /// @brief Option for the Input component.
 /// @ingroup component
 struct InputOption {
+  // A set of predefined styles:
+
+  /// @brief Create the default input style:
+  static InputOption Default();
+  /// @brief A white on black style with high margins:
+  static InputOption Spacious();
+  /// @brief A style with a border:
+  static InputOption Arthur();
+
+  /// The content of the input when it's empty.
+  StringRef placeholder = "";
+
+  // Style:
+  std::function<Element(InputState)> transform;
+  Ref<bool> password = false;  /// < Obscure the input content using '*'.
+  Ref<bool> multiline = true;  /// < Whether the input can be multiline.
+
   /// Called when the content changes.
   std::function<void()> on_change = [] {};
   /// Called when the user presses enter.
   std::function<void()> on_enter = [] {};
 
-  /// Obscure the input content using '*'.
-  Ref<bool> password = false;
-
-  /// When set different from -1, this attributes is used to store the cursor
-  /// position.
-  Ref<int> cursor_position = -1;
+  // The char position of the cursor:
+  Ref<int> cursor_position = 0;
 };
 
 /// @brief Option for the Radiobox component.

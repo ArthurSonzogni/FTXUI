@@ -1,12 +1,13 @@
-#include <gtest/gtest.h>
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
+#include <string>  // for string
 
 #include "ftxui/component/component.hpp"       // for Collapsible, Renderer
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown
-#include "ftxui/dom/elements.hpp"     // for text, Element
+#include "ftxui/dom/elements.hpp"     // for Element, text
 #include "ftxui/dom/node.hpp"         // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
+#include "gtest/gtest.h"  // for AssertionResult, Message, Test, TestPartResult, EXPECT_EQ, EXPECT_FALSE, EXPECT_TRUE, TEST
 
 // NOLINTBEGIN
 namespace ftxui {

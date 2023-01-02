@@ -37,12 +37,12 @@ const std::map<std::string, std::string> g_uniformize = {
     //   Home    ESC [ H   ESC O H
     //   End     ESC [ F   ESC O F
     //
-    {"\x1BOA", "\x1B[A"}, // UP
-    {"\x1BOB", "\x1B[B"}, // DOWN
-    {"\x1BOC", "\x1B[C"}, // RIGHT
-    {"\x1BOD", "\x1B[D"}, // LEFT
-    {"\x1BOH", "\x1B[H"}, // HOME
-    {"\x1BOF", "\x1B[F"}, // END
+    {"\x1BOA", "\x1B[A"},  // UP
+    {"\x1BOB", "\x1B[B"},  // DOWN
+    {"\x1BOC", "\x1B[C"},  // RIGHT
+    {"\x1BOD", "\x1B[D"},  // LEFT
+    {"\x1BOH", "\x1B[H"},  // HOME
+    {"\x1BOF", "\x1B[F"},  // END
 
 };
 
