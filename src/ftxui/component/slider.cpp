@@ -227,6 +227,7 @@ class SliderWithLabel : public ComponentBase {
   }
 
   Element Render() override {
+    auto focus_management = Focused() ? focus : Active() ? select : nothing;
     auto gauge_color = Focused() ? color(Color::White) : color(Color::GrayDark);
     return hbox({
                text(label_()) | dim | vcenter,
@@ -236,7 +237,7 @@ class SliderWithLabel : public ComponentBase {
                    text("]"),
                }) | xflex,
            }) |
-           gauge_color | xflex | reflect(box_);
+           gauge_color | xflex | reflect(box_) | focus_management;
   }
 
   ConstStringRef label_;
