@@ -17,7 +17,7 @@ int main(int argc, const char* argv[]) {
   std::string reset_position;
   for (int index = 0; index < 200; ++index) {
     std::vector<Element> entries;
-    for (int i = 0; i < 22; ++i) {
+    for (int i = 0; i < 23; ++i) {
       if (i != 0)
         entries.push_back(separator());
       entries.push_back(  //
