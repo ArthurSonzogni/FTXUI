@@ -1,3 +1,7 @@
+if(NOT FTXUI_ENABLE_INSTALL)
+  return()
+endif()
+
 if (UNIX AND NOT APPLE)
   set(CPACK_GENERATOR "DEB;External;RPM;STGZ;TBZ2;TGZ;TXZ;TZ;TZST;ZIP")
 elseif (UNIX AND APPLE)

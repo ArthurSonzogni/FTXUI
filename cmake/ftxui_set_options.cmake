@@ -1,16 +1,16 @@
-find_program( CLANG_TIDY_EXE NAMES "clang-tidy" DOC "Path to clang-tidy executable" )
+find_program(CLANG_TIDY_EXE NAMES "clang-tidy" DOC "Path to clang-tidy executable" )
 if(NOT CLANG_TIDY_EXE)
   message(STATUS "clang-tidy not found.")
 else()
   message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
 endif()
 
-
 function(ftxui_set_options library)
-  set_target_properties(${library} PROPERTIES
-    VERSION ${PROJECT_VERSION}
-    OUTPUT_NAME "ftxui-${library}"
-  )
+  message(STATUS "ftxui_set_options " ${library})
+  set_target_properties(${library} PROPERTIES VERSION ${PROJECT_VERSION})
+  if (NOT ${library} MATCHES "ftxui-*")
+    set_target_properties(${library} PROPERTIES OUTPUT_NAME "ftxui-${library}")
+  endif()
 
   if(CLANG_TIDY_EXE AND FTXUI_CLANG_TIDY)
     set_target_properties(${library}
@@ -44,7 +44,11 @@ function(ftxui_set_options library)
   )
 
   # C++17 is used. We require fold expression at least.
-  target_compile_features(${library} PUBLIC cxx_std_17)
+  target_compile_features(${library} PUBLIC cxx_std_20)
+  set_target_properties(${library} PROPERTIES
+    CXX_STANDARD 17
+    CXX_EXTENSIONS OFF
+  )
 
   # Force Microsoft Visual Studio to decode sources files in UTF-8. This applies
   # to the library and the library users.
@@ -80,9 +84,7 @@ function(ftxui_set_options library)
 endfunction()
 
 if (EMSCRIPTEN)
-  #string(APPEND CMAKE_CXX_FLAGS " -s ASSERTIONS=1")
   string(APPEND CMAKE_CXX_FLAGS " -s USE_PTHREADS")
   string(APPEND CMAKE_EXE_LINKER_FLAGS " -s ASYNCIFY")
   string(APPEND CMAKE_EXE_LINKER_FLAGS " -s PROXY_TO_PTHREAD")
 endif()
-

@@ -1,3 +1,7 @@
+if(NOT FTXUI_ENABLE_INSTALL)
+  return()
+endif()
+
 include(GNUInstallDirs)
 install(TARGETS screen dom component
     EXPORT ftxui-export
