@@ -1,3 +1,7 @@
+if (FTXUI_BUILD_TESTS_FUZZER)
+  return()
+endif()
+
 set(CMAKE_C_COMPILER clang)
 set(CMAKE_CXX_COMPILER clang++)
 

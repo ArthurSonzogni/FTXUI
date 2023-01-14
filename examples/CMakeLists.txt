@@ -1,3 +1,7 @@
+if(NOT FTXUI_BUILD_EXAMPLES)
+  return()
+endif()
+
 set(EXAMPLES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 function(example name)
   add_executable(ftxui_example_${name} ${name}.cpp)
