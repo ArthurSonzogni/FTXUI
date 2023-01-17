@@ -1,4 +1,4 @@
-if (FTXUI_BUILD_TESTS_FUZZER)
+if (NOT FTXUI_BUILD_TESTS_FUZZER)
   return()
 endif()
 
