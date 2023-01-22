@@ -10,14 +10,16 @@ int main(int argc, const char* argv[]) {
   // clang-format off
   auto document =
     hbox({
-      text("normal")                           , text(" ") ,
-      text("bold")      | bold                 , text(" ") ,
-      text("dim")       | dim                  , text(" ") ,
-      text("inverted")  | inverted             , text(" ") ,
-      text("underlined")| underlined           , text(" ") ,
-      text("blink")     | blink                , text(" ") ,
-      text("color")     | color(Color::Blue)   , text(" ") ,
-      text("bgcolor")   | bgcolor(Color::Blue),
+      text("normal")                                    , text(" ") ,
+      text("bold")               | bold                 , text(" ") ,
+      text("dim")                | dim                  , text(" ") ,
+      text("inverted")           | inverted             , text(" ") ,
+      text("underlined")         | underlined           , text(" ") ,
+      text("underlinedDouble")   | underlinedDouble     , text(" ") ,
+      text("blink")              | blink                , text(" ") ,
+      text("strikethrough")      | strikethrough        , text(" ") ,
+      text("color")              | color(Color::Blue)   , text(" ") ,
+      text("bgcolor")            | bgcolor(Color::Blue) ,
     });
   // clang-format on
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));

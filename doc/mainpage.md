@@ -453,6 +453,8 @@ Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
+Element underlinedDouble(Element);
+Element strikethrough(Element);
 Element blink(Element);
 Decorator color(Color);
 Decorator bgcolor(Color);
@@ -469,7 +471,7 @@ underlined(bold(text("This text is bold and underlined")))
 
 Alternatively, use the pipe operator to chain it on your element:
 ```cpp
-text("This text is bold")) | bold | underlined
+text("This text is bold") | bold | underlined
 ```
 
 ## Layout {#dom-layout}

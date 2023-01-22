@@ -66,6 +66,16 @@ void UpdatePixelStyle(std::stringstream& ss,
     previous.dim = false;
   }
 
+  if ((!next.underlined && previous.underlined) ||
+      (!next.underlined_double && previous.underlined_double)) {
+    // We might have wrongfully reset underlined or underlinedbold because they
+    // share the same resetter. Take it into account so that the side effect
+    // will cause it to be set again below.
+    ss << "\x1B[24m";  // UNDERLINED_RESET
+    previous.underlined = false;
+    previous.underlined_double = false;
+  }
+
   if (next.bold && !previous.bold) {
     ss << "\x1B[1m";  // BOLD_SET
   }
@@ -76,10 +86,6 @@ void UpdatePixelStyle(std::stringstream& ss,
 
   if (next.underlined && !previous.underlined) {
     ss << "\x1B[4m";  // UNDERLINED_SET
-  }
-
-  if (!next.underlined && previous.underlined) {
-    ss << "\x1B[24m";  // UNDERLINED_RESET
   }
 
   if (next.blink && !previous.blink) {
@@ -96,6 +102,18 @@ void UpdatePixelStyle(std::stringstream& ss,
 
   if (!next.inverted && previous.inverted) {
     ss << "\x1B[27m";  // INVERTED_RESET
+  }
+
+  if (next.strikethrough && !previous.strikethrough) {
+    ss << "\x1B[9m";  // CROSSED_OUT
+  }
+
+  if (!next.strikethrough && previous.strikethrough) {
+    ss << "\x1B[29m";  // CROSSED_OUT_RESET
+  }
+
+  if (next.underlined_double && !previous.underlined_double) {
+    ss << "\x1B[21m";  // DOUBLE_UNDERLINED_SET
   }
 
   if (next.foreground_color != previous.foreground_color ||
