@@ -678,23 +678,22 @@ void ScreenInteractive::Draw(Component component) {
   auto document = component->Render();
   int dimx = 0;
   int dimy = 0;
+  auto terminal = Terminal::Size();
+  document->ComputeRequirement();
   switch (dimension_) {
     case Dimension::Fixed:
       dimx = dimx_;
       dimy = dimy_;
       break;
     case Dimension::TerminalOutput:
-      document->ComputeRequirement();
-      dimx = Terminal::Size().dimx;
+      dimx = terminal.dimx;
       dimy = document->requirement().min_y;
       break;
     case Dimension::Fullscreen:
-      dimx = Terminal::Size().dimx;
-      dimy = Terminal::Size().dimy;
+      dimx = terminal.dimx;
+      dimy = terminal.dimy;
       break;
     case Dimension::FitComponent:
-      auto terminal = Terminal::Size();
-      document->ComputeRequirement();
       dimx = std::min(document->requirement().min_x, terminal.dimx);
       dimy = std::min(document->requirement().min_y, terminal.dimy);
       break;
@@ -741,22 +740,14 @@ void ScreenInteractive::Draw(Component component) {
   Render(*this, document);
 
   // Set cursor position for user using tools to insert CJK characters.
-  set_cursor_position = "";
-  reset_cursor_position = "";
-
   {
-    const int dx = dimx_ - 1 - cursor_.x;
+    const int dx = dimx_ - 1 - cursor_.x + int(dimx_ != terminal.dimx);
     const int dy = dimy_ - 1 - cursor_.y;
 
-    if (dy != 0) {
-      set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
-      reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
-    }
-
-    if (dx != 0) {
-      set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
-      reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
-    }
+    set_cursor_position = "\x1B[" + std::to_string(dy) + "A" +  //
+                          "\x1B[" + std::to_string(dx) + "D";
+    reset_cursor_position = "\x1B[" + std::to_string(dy) + "B" +  //
+                            "\x1B[" + std::to_string(dx) + "C";
 
     if (cursor_.shape == Cursor::Hidden) {
       set_cursor_position += "\033[?25l";
