@@ -122,7 +122,9 @@ An element can be decorated using the functions:
   - `dim`
   - `inverted`
   - `underlined`
+  - `underlinedDouble`
   - `blink`
+  - `strikethrough`
   - `color`
   - `bgcolor`
 

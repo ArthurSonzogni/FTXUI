@@ -5,6 +5,9 @@ current (development)
 ---------------------
 
 ### DOM
+- Feature: more styles:
+  - `strikethrough`
+  - `underlinedDouble`
 - Feature: Customize the cursor. Add the following decorators:
   - `focusCursorBlock`
   - `focusCursorBlockBlinking`

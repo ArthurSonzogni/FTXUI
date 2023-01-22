@@ -30,6 +30,8 @@ struct Pixel {
   bool dim : 1;
   bool inverted : 1;
   bool underlined : 1;
+  bool underlined_double : 1;
+  bool strikethrough : 1;
   bool automerge : 1;
 
   Pixel()
@@ -38,6 +40,8 @@ struct Pixel {
         dim(false),
         inverted(false),
         underlined(false),
+        underlined_double(false),
+        strikethrough(false),
         automerge(false) {}
 };
 

@@ -79,9 +79,11 @@ add_library(dom
   src/ftxui/dom/separator.cpp
   src/ftxui/dom/size.cpp
   src/ftxui/dom/spinner.cpp
+  src/ftxui/dom/strikethrough.cpp
   src/ftxui/dom/table.cpp
   src/ftxui/dom/text.cpp
   src/ftxui/dom/underlined.cpp
+  src/ftxui/dom/underlined_double.cpp
   src/ftxui/dom/util.cpp
   src/ftxui/dom/vbox.cpp
 )
