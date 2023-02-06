@@ -36,7 +36,7 @@ class ScreenInteractive : public Screen {
 
   // Start/Stop the main loop.
   void Loop(Component);
-  void Loop(Component, Closure);
+  void Loop(Component, Closure on_update);
   void Exit();
   Closure ExitLoopClosure();
 
