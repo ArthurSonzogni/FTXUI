@@ -415,8 +415,7 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 }
 
 void ScreenInteractive::Loop(Component component) {  // NOLINT
-  class Loop loop(this, std::move(component));
-  loop.Run();
+  Loop(std::move(component), nullptr);
 }
 
 void ScreenInteractive::Loop(Component component, Closure on_update) { // NOLINT
