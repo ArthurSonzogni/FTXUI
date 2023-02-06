@@ -36,6 +36,7 @@ class ScreenInteractive : public Screen {
 
   // Start/Stop the main loop.
   void Loop(Component);
+  void Loop(Component, Closure);
   void Exit();
   Closure ExitLoopClosure();
 
@@ -86,6 +87,7 @@ class ScreenInteractive : public Screen {
 
   Sender<Task> task_sender_;
   Receiver<Task> task_receiver_;
+  Closure on_update_;
 
   std::string set_cursor_position;
   std::string reset_cursor_position;

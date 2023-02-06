@@ -419,6 +419,12 @@ void ScreenInteractive::Loop(Component component) {  // NOLINT
   loop.Run();
 }
 
+void ScreenInteractive::Loop(Component component, Closure on_update) { // NOLINT
+  on_update_ = std::move(on_update);
+  class Loop loop(this, std::move(component));
+  loop.Run();
+}
+
 bool ScreenInteractive::HasQuitted() {
   return task_receiver_->HasQuitted();
 }
@@ -617,6 +623,9 @@ void ScreenInteractive::RunOnce(Component component) {
     ExecuteSignalHandlers();
   }
   Draw(std::move(component));
+
+  if (on_update_)
+    on_update_();
 }
 
 void ScreenInteractive::HandleTask(Component component, Task& task) {
