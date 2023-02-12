@@ -22,6 +22,7 @@ current (development)
 - Bugfix: Forward the selected/focused area from the child in gridbox.
 - Bugfix: Fix incorrect Canvas computed dimensions.
 - Bugfix: Support `vscroll_indicator` with a zero inner size.
+- Bugfix: Fix `vscroll_indicator` hidding the last column.
 
 ### Component:
 - Feature: Add the `Modal` component.
