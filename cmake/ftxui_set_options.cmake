@@ -44,7 +44,6 @@ function(ftxui_set_options library)
   )
 
   # C++17 is used. We require fold expression at least.
-  target_compile_features(${library} PUBLIC cxx_std_20)
   set_target_properties(${library} PROPERTIES
     CXX_STANDARD 17
     CXX_EXTENSIONS OFF

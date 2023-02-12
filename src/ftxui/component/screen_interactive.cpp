@@ -1,7 +1,6 @@
 #include <algorithm>  // for copy, max, min
 #include <array>      // for array
-#include <chrono>  // for operator-, milliseconds, operator<=>, duration, common_type<>::type, time_point
-#include <compare>  // for operator>=, strong_ordering
+#include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
 #include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
 #include <cstdio>   // for fileno, stdin
 #include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask

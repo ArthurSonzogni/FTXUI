@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.11)
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 3.0.0
+  VERSION 4.0.0
 )
 
 option(FTXUI_BUILD_DOCS "Set to ON to build docs" ON)
@@ -131,11 +131,16 @@ target_link_libraries(dom
   PUBLIC screen
 )
 
-find_package(Threads)
 target_link_libraries(component
   PUBLIC dom
-  PUBLIC Threads::Threads
 )
+
+if (NOT EMSCRIPTEN)
+  find_package(Threads)
+  target_link_libraries(component
+    PUBLIC Threads::Threads
+  )
+endif()
 
 include(cmake/ftxui_set_options.cmake)
 ftxui_set_options(screen)

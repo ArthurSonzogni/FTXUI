@@ -4,6 +4,9 @@ Changelog
 current (development) 
 ---------------------
 
+4.0.0
+-----
+
 ### DOM
 - Feature: more styles:
   - `strikethrough`
