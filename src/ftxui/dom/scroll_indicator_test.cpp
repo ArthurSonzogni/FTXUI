@@ -109,7 +109,7 @@ namespace {
 Element MakeHorizontalFlexboxList(int n) {
   Elements list;
   for (int i = 0; i < n; ++i) {
-    list.push_back(text(std::to_string(i%10)));
+    list.push_back(text(std::to_string(i % 10)));
   }
   return flexbox(std::move(list)) | vscroll_indicator | yframe | border;
 }
@@ -194,7 +194,7 @@ TEST(ScrollIndicator, HorizontalFlexbox) {
             "╰────╯");
 }
 
-}
+}  // namespace
 
 }  // namespace ftxui
 

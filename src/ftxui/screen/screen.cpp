@@ -49,6 +49,7 @@ void WindowsEmulateVT100Terminal() {
 }
 #endif
 
+// NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void UpdatePixelStyle(std::stringstream& ss,
                       Pixel& previous,
                       const Pixel& next) {
