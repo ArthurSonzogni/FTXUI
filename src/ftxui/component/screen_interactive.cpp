@@ -1,6 +1,7 @@
 #include <algorithm>  // for copy, max, min
 #include <array>      // for array
-#include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
+#include <chrono>  // for operator-, milliseconds, operator<=>, duration, common_type<>::type, time_point
+#include <compare>  // for operator>=, strong_ordering
 #include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
 #include <cstdio>   // for fileno, stdin
 #include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
@@ -26,8 +27,7 @@
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
 #include "ftxui/dom/requirement.hpp"                  // for Requirement
-#include "ftxui/screen/string.hpp"
-#include "ftxui/screen/terminal.hpp"                  // for Size, Dimensions
+#include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
 
 #if defined(_WIN32)
 #define DEFINE_CONSOLEV2_PROPERTIES
@@ -107,7 +107,7 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
             continue;
           std::wstring wstring;
           wstring += key_event.uChar.UnicodeChar;
-          for(auto it : to_string(wstring)) {
+          for (auto it : to_string(wstring)) {
             parser.Add(it);
           }
         } break;

@@ -67,9 +67,8 @@ Component Radiobox(ConstStringListRef entries,
                    Ref<RadioboxOption> option = {});
 Component Toggle(ConstStringListRef entries, int* selected);
 
-
 // General slider constructor:
-template <typename T> 
+template <typename T>
 Component Slider(SliderOption<T> options = {});
 
 // Shorthand without the `SliderOption` constructor:
