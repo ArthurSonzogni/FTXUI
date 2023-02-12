@@ -27,10 +27,8 @@ Element vscroll_indicator(Element child) {
     }
 
     void SetBox(Box box) override {
-      NodeDecorator::SetBox(box);
-      if (box_.x_min > box_.x_max) {
-        box_.x_max--;
-      }
+      Node::SetBox(box);
+      box.x_max--;
       children_[0]->SetBox(box);
     }
 
