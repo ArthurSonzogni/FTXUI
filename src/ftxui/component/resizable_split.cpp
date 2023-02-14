@@ -14,10 +14,14 @@ namespace {
 
 class ResizableSplitLeftBase : public ComponentBase {
  public:
-  ResizableSplitLeftBase(Component main, Component child, int* main_size)
+  ResizableSplitLeftBase(Component main,
+                         Component child,
+                         int* main_size,
+                         Element separator)
       : main_(std::move(main)),
         child_(std::move(child)),
-        main_size_(main_size) {
+        main_size_(main_size),
+        separator_(separator) {
     Add(Container::Horizontal({
         main_,
         child_,
@@ -56,7 +60,7 @@ class ResizableSplitLeftBase : public ComponentBase {
   Element Render() final {
     return hbox({
                main_->Render() | size(WIDTH, EQUAL, *main_size_),
-               separator() | reflect(separator_box_),
+               separator_ | reflect(separator_box_),
                child_->Render() | xflex,
            }) |
            reflect(box_);
@@ -67,16 +71,21 @@ class ResizableSplitLeftBase : public ComponentBase {
   Component child_;
   int* const main_size_;
   CapturedMouse captured_mouse_;
+  Element separator_;
   Box separator_box_;
   Box box_;
 };
 
 class ResizableSplitRightBase : public ComponentBase {
  public:
-  ResizableSplitRightBase(Component main, Component child, int* main_size)
+  ResizableSplitRightBase(Component main,
+                          Component child,
+                          int* main_size,
+                          Element separator)
       : main_(std::move(main)),
         child_(std::move(child)),
-        main_size_(main_size) {
+        main_size_(main_size),
+        separator_(separator) {
     Add(Container::Horizontal({
         child_,
         main_,
@@ -115,7 +124,7 @@ class ResizableSplitRightBase : public ComponentBase {
   Element Render() final {
     return hbox({
                child_->Render() | xflex,
-               separator() | reflect(separator_box_),
+               separator_ | reflect(separator_box_),
                main_->Render() | size(WIDTH, EQUAL, *main_size_),
            }) |
            reflect(box_);
@@ -126,16 +135,21 @@ class ResizableSplitRightBase : public ComponentBase {
   Component child_;
   int* const main_size_;
   CapturedMouse captured_mouse_;
+  Element separator_;
   Box separator_box_;
   Box box_;
 };
 
 class ResizableSplitTopBase : public ComponentBase {
  public:
-  ResizableSplitTopBase(Component main, Component child, int* main_size)
+  ResizableSplitTopBase(Component main,
+                        Component child,
+                        int* main_size,
+                        Element separator)
       : main_(std::move(main)),
         child_(std::move(child)),
-        main_size_(main_size) {
+        main_size_(main_size),
+        separator_(separator) {
     Add(Container::Vertical({
         main_,
         child_,
@@ -174,7 +188,7 @@ class ResizableSplitTopBase : public ComponentBase {
   Element Render() final {
     return vbox({
                main_->Render() | size(HEIGHT, EQUAL, *main_size_),
-               separator() | reflect(separator_box_),
+               separator_ | reflect(separator_box_),
                child_->Render() | yflex,
            }) |
            reflect(box_);
@@ -185,16 +199,21 @@ class ResizableSplitTopBase : public ComponentBase {
   Component child_;
   int* const main_size_;
   CapturedMouse captured_mouse_;
+  Element separator_;
   Box separator_box_;
   Box box_;
 };
 
 class ResizableSplitBottomBase : public ComponentBase {
  public:
-  ResizableSplitBottomBase(Component main, Component child, int* main_size)
+  ResizableSplitBottomBase(Component main,
+                           Component child,
+                           int* main_size,
+                           Element separator)
       : main_(std::move(main)),
         child_(std::move(child)),
-        main_size_(main_size) {
+        main_size_(main_size),
+        separator_(separator) {
     Add(Container::Vertical({
         child_,
         main_,
@@ -233,7 +252,7 @@ class ResizableSplitBottomBase : public ComponentBase {
   Element Render() final {
     return vbox({
                child_->Render() | yflex,
-               separator() | reflect(separator_box_),
+               separator_ | reflect(separator_box_),
                main_->Render() | size(HEIGHT, EQUAL, *main_size_),
            }) |
            reflect(box_);
@@ -244,6 +263,7 @@ class ResizableSplitBottomBase : public ComponentBase {
   Component child_;
   int* const main_size_;
   CapturedMouse captured_mouse_;
+  Element separator_;
   Box separator_box_;
   Box box_;
 };
@@ -264,20 +284,23 @@ class ResizableSplitBottomBase : public ComponentBase {
 /// int left_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
-/// auto split = ResizableSplitLeft(left, right, &left_size);
+/// auto split = ResizableSplitLeft(left, right, &left_size, separatorDouble());
 /// screen.Loop(split);
 /// ```
 ///
 /// ### Output
 ///
 /// ```bash
-///           │
-///    left   │   right
-///           │
+///           ║
+///    left   ║   right
+///           ║
 /// ```
-Component ResizableSplitLeft(Component main, Component back, int* main_size) {
+Component ResizableSplitLeft(Component main,
+                             Component back,
+                             int* main_size,
+                             Element separator) {
   return Make<ResizableSplitLeftBase>(std::move(main), std::move(back),
-                                      main_size);
+                                      main_size, separator);
 }
 
 /// @brief An horizontal split in between two components, configurable using the
@@ -294,20 +317,23 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// int right_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
-/// auto split = ResizableSplitRight(right, left, &right_size);
+/// auto split = ResizableSplitRight(right, left, &right_size, separatorDouble());
 /// screen.Loop(split);
 /// ```
 ///
 /// ### Output
 ///
 /// ```bash
-///           │
-///    left   │   right
-///           │
+///           ║
+///    left   ║   right
+///           ║
 /// ```
-Component ResizableSplitRight(Component main, Component back, int* main_size) {
+Component ResizableSplitRight(Component main,
+                              Component back,
+                              int* main_size,
+                              Element separator) {
   return Make<ResizableSplitRightBase>(std::move(main), std::move(back),
-                                       main_size);
+                                       main_size, separator);
 }
 
 /// @brief An vertical split in between two components, configurable using the
@@ -324,7 +350,7 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// int top_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
-/// auto split = ResizableSplitTop(top, bottom, &top_size);
+/// auto split = ResizableSplitTop(top, bottom, &top_size, separatorDouble());
 /// screen.Loop(split);
 /// ```
 ///
@@ -332,12 +358,15 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 ///
 /// ```bash
 ///    top
-/// ────────────
+/// ════════════
 ///    bottom
 /// ```
-Component ResizableSplitTop(Component main, Component back, int* main_size) {
+Component ResizableSplitTop(Component main,
+                            Component back,
+                            int* main_size,
+                            Element separator) {
   return Make<ResizableSplitTopBase>(std::move(main), std::move(back),
-                                     main_size);
+                                     main_size, separator);
 }
 
 /// @brief An vertical split in between two components, configurable using the
@@ -354,7 +383,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// int bottom_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
-/// auto split = ResizableSplit::Bottom(bottom, top, &bottom_size);
+/// auto split = ResizableSplit::Bottom(bottom, top, &bottom_size, separatorDouble());
 /// screen.Loop(split);
 /// ```
 ///
@@ -362,12 +391,15 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 ///
 /// ```bash
 ///    top
-/// ────────────
+/// ════════════
 ///    bottom
 /// ```
-Component ResizableSplitBottom(Component main, Component back, int* main_size) {
+Component ResizableSplitBottom(Component main,
+                               Component back,
+                               int* main_size,
+                               Element separator) {
   return Make<ResizableSplitBottomBase>(std::move(main), std::move(back),
-                                        main_size);
+                                        main_size, separator);
 }
 }  // namespace ftxui
 

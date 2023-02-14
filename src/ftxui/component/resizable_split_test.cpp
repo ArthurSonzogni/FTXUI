@@ -56,6 +56,27 @@ TEST(ResizableSplit, BasicLeft) {
   EXPECT_EQ(position, 10);
 }
 
+TEST(ResizableSplit, BasicLeftWithCustomSeparator) {
+  int position = 1;
+  auto component =
+      ResizableSplitLeft(BasicComponent(), BasicComponent(), &position, 
+                         separatorDouble());
+  auto screen = Screen(4, 4);
+  Render(screen, component->Render());
+  EXPECT_EQ(position, 1);
+  EXPECT_EQ(screen.ToString(),
+            " ║  \r\n"
+            " ║  \r\n"
+            " ║  \r\n"
+            " ║  ");
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
+  EXPECT_EQ(position, 1);
+  EXPECT_TRUE(component->OnEvent(MousePressed(2, 1)));
+  EXPECT_EQ(position, 2);
+  EXPECT_TRUE(component->OnEvent(MouseReleased(2, 1)));
+  EXPECT_EQ(position, 2);
+}
+
 TEST(ResizableSplit, BasicRight) {
   int position = 3;
   auto component =
@@ -69,6 +90,27 @@ TEST(ResizableSplit, BasicRight) {
   EXPECT_EQ(position, 9);
   EXPECT_TRUE(component->OnEvent(MouseReleased(10, 1)));
   EXPECT_EQ(position, 9);
+}
+
+TEST(ResizableSplit, BasicRightWithCustomSeparator) {
+  int position = 1;
+  auto component =
+      ResizableSplitRight(BasicComponent(), BasicComponent(), &position, 
+                          separatorDouble());
+  auto screen = Screen(4, 4);
+  Render(screen, component->Render());
+  EXPECT_EQ(position, 1);
+  EXPECT_EQ(screen.ToString(),
+            "  ║ \r\n"
+            "  ║ \r\n"
+            "  ║ \r\n"
+            "  ║ ");
+  EXPECT_TRUE(component->OnEvent(MousePressed(2, 1)));
+  EXPECT_EQ(position, 1);
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
+  EXPECT_EQ(position, 2);
+  EXPECT_TRUE(component->OnEvent(MouseReleased(1, 1)));
+  EXPECT_EQ(position, 2);
 }
 
 TEST(ResizableSplit, BasicTop) {
@@ -86,6 +128,27 @@ TEST(ResizableSplit, BasicTop) {
   EXPECT_EQ(position, 10);
 }
 
+TEST(ResizableSplit, BasicTopWithCustomSeparator) {
+  int position = 1;
+  auto component =
+      ResizableSplitTop(BasicComponent(), BasicComponent(), &position, 
+                        separatorDouble());
+  auto screen = Screen(4, 4);
+  Render(screen, component->Render());
+  EXPECT_EQ(position, 1);
+  EXPECT_EQ(screen.ToString(),
+            "    \r\n"
+            "════\r\n"
+            "    \r\n"
+            "    ");
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
+  EXPECT_EQ(position, 1);
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 2)));
+  EXPECT_EQ(position, 2);
+  EXPECT_TRUE(component->OnEvent(MouseReleased(1, 2)));
+  EXPECT_EQ(position, 2);
+}
+
 TEST(ResizableSplit, BasicBottom) {
   int position = 3;
   auto component =
@@ -99,6 +162,27 @@ TEST(ResizableSplit, BasicBottom) {
   EXPECT_EQ(position, 9);
   EXPECT_TRUE(component->OnEvent(MouseReleased(1, 10)));
   EXPECT_EQ(position, 9);
+}
+
+TEST(ResizableSplit, BasicBottomWithCustomSeparator) {
+  int position = 1;
+  auto component =
+      ResizableSplitBottom(BasicComponent(), BasicComponent(), &position, 
+                           separatorDouble());
+  auto screen = Screen(4, 4);
+  Render(screen, component->Render());
+  EXPECT_EQ(position, 1);
+  EXPECT_EQ(screen.ToString(),
+            "    \r\n"
+            "    \r\n"
+            "════\r\n"
+            "    ");
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 2)));
+  EXPECT_EQ(position, 1);
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
+  EXPECT_EQ(position, 2);
+  EXPECT_TRUE(component->OnEvent(MouseReleased(1, 1)));
+  EXPECT_EQ(position, 2);
 }
 
 }  // namespace ftxui

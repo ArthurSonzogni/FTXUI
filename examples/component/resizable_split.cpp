@@ -23,10 +23,14 @@ int main(int argc, const char* argv[]) {
   int bottom_size = 10;
 
   auto container = middle;
-  container = ResizableSplitLeft(left, container, &left_size);
-  container = ResizableSplitRight(right, container, &right_size);
-  container = ResizableSplitTop(top, container, &top_size);
-  container = ResizableSplitBottom(bottom, container, &bottom_size);
+  container = ResizableSplitLeft(left, container, &left_size,
+                                 separatorDouble());
+  container = ResizableSplitRight(right, container, &right_size,
+                                  separatorDouble());
+  container = ResizableSplitTop(top, container, &top_size,
+                                separatorHeavy());
+  container = ResizableSplitBottom(bottom, container, &bottom_size,
+                                   separatorHeavy());
 
   auto renderer =
       Renderer(container, [&] { return container->Render() | border; });
