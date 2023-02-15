@@ -12,19 +12,13 @@
 namespace ftxui {
 namespace {
 
-class ResizableSplitLeftBase : public ComponentBase {
+class ResizableSplitBase : public ComponentBase {
  public:
-  ResizableSplitLeftBase(Component main,
-                         Component child,
-                         int* main_size,
-                         Element separator)
-      : main_(std::move(main)),
-        child_(std::move(child)),
-        main_size_(main_size),
-        separator_(separator) {
+  ResizableSplitBase(ResizableSplitOption options)
+      : options_(std::move(options)) {
     Add(Container::Horizontal({
-        main_,
-        child_,
+        options_->main,
+        options_->back,
     }));
   }
 
@@ -49,226 +43,96 @@ class ResizableSplitLeftBase : public ComponentBase {
       return true;
     }
 
-    if (captured_mouse_) {
-      *main_size_ = event.mouse().x - box_.x_min;
-      return true;
+    if (!captured_mouse_) {
+      return ComponentBase::OnEvent(event);
     }
 
-    return ComponentBase::OnEvent(event);
+    switch (options_->direction()) {
+      case ResizableSplitOption::Left:
+        options_->main_size() = event.mouse().x - box_.x_min;
+        return true;
+      case ResizableSplitOption::Right:
+        options_->main_size() = box_.x_max - event.mouse().x;
+        return true;
+      case ResizableSplitOption::Top:
+        options_->main_size() = event.mouse().y - box_.y_min;
+        return true;
+      case ResizableSplitOption::Bottom:
+        options_->main_size() = box_.y_max - event.mouse().y;
+        return true;
+    }
+
+    // NOTREACHED()
+    return false;
   }
 
   Element Render() final {
+    switch (options_->direction()) {
+      case ResizableSplitOption::Left:
+        return RenderLeft();
+      case ResizableSplitOption::Right:
+        return RenderRight();
+      case ResizableSplitOption::Top:
+        return RenderTop();
+      case ResizableSplitOption::Bottom:
+        return RenderBottom();
+    }
+    // NOTREACHED()
+    return text("unreacheable");
+  }
+
+  Element RenderLeft() {
     return hbox({
-               main_->Render() | size(WIDTH, EQUAL, *main_size_),
-               separator_ | reflect(separator_box_),
-               child_->Render() | xflex,
+               options_->main->Render() |
+                   size(WIDTH, EQUAL, options_->main_size()),
+               options_->separator_func() | reflect(separator_box_),
+               options_->back->Render() | xflex,
            }) |
            reflect(box_);
   };
 
- private:
-  Component main_;
-  Component child_;
-  int* const main_size_;
-  CapturedMouse captured_mouse_;
-  Element separator_;
-  Box separator_box_;
-  Box box_;
-};
-
-class ResizableSplitRightBase : public ComponentBase {
- public:
-  ResizableSplitRightBase(Component main,
-                          Component child,
-                          int* main_size,
-                          Element separator)
-      : main_(std::move(main)),
-        child_(std::move(child)),
-        main_size_(main_size),
-        separator_(separator) {
-    Add(Container::Horizontal({
-        child_,
-        main_,
-    }));
-  }
-
-  bool OnEvent(Event event) final {
-    if (event.is_mouse()) {
-      return OnMouseEvent(std::move(event));
-    }
-    return ComponentBase::OnEvent(std::move(event));
-  }
-
-  bool OnMouseEvent(Event event) {
-    if (captured_mouse_ && event.mouse().motion == Mouse::Released) {
-      captured_mouse_.reset();
-      return true;
-    }
-
-    if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed &&
-        separator_box_.Contain(event.mouse().x, event.mouse().y) &&
-        !captured_mouse_) {
-      captured_mouse_ = CaptureMouse(event);
-      return true;
-    }
-
-    if (captured_mouse_) {
-      *main_size_ = box_.x_max - event.mouse().x;
-      return true;
-    }
-
-    return ComponentBase::OnEvent(event);
-  }
-
-  Element Render() final {
+  Element RenderRight() {
     return hbox({
-               child_->Render() | xflex,
-               separator_ | reflect(separator_box_),
-               main_->Render() | size(WIDTH, EQUAL, *main_size_),
+               options_->back->Render() | xflex,
+               options_->separator_func() | reflect(separator_box_),
+               options_->main->Render() |
+                   size(WIDTH, EQUAL, options_->main_size()),
            }) |
            reflect(box_);
   };
 
- private:
-  Component main_;
-  Component child_;
-  int* const main_size_;
-  CapturedMouse captured_mouse_;
-  Element separator_;
-  Box separator_box_;
-  Box box_;
-};
-
-class ResizableSplitTopBase : public ComponentBase {
- public:
-  ResizableSplitTopBase(Component main,
-                        Component child,
-                        int* main_size,
-                        Element separator)
-      : main_(std::move(main)),
-        child_(std::move(child)),
-        main_size_(main_size),
-        separator_(separator) {
-    Add(Container::Vertical({
-        main_,
-        child_,
-    }));
-  }
-
-  bool OnEvent(Event event) final {
-    if (event.is_mouse()) {
-      return OnMouseEvent(std::move(event));
-    }
-    return ComponentBase::OnEvent(std::move(event));
-  }
-
-  bool OnMouseEvent(Event event) {
-    if (captured_mouse_ && event.mouse().motion == Mouse::Released) {
-      captured_mouse_.reset();
-      return true;
-    }
-
-    if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed &&
-        separator_box_.Contain(event.mouse().x, event.mouse().y) &&
-        !captured_mouse_) {
-      captured_mouse_ = CaptureMouse(event);
-      return true;
-    }
-
-    if (captured_mouse_) {
-      *main_size_ = event.mouse().y - box_.y_min;
-      return true;
-    }
-
-    return ComponentBase::OnEvent(event);
-  }
-
-  Element Render() final {
+  Element RenderTop() {
     return vbox({
-               main_->Render() | size(HEIGHT, EQUAL, *main_size_),
-               separator_ | reflect(separator_box_),
-               child_->Render() | yflex,
+               options_->main->Render() |
+                   size(HEIGHT, EQUAL, options_->main_size()),
+               options_->separator_func() | reflect(separator_box_),
+               options_->back->Render() | yflex,
            }) |
            reflect(box_);
   };
 
- private:
-  Component main_;
-  Component child_;
-  int* const main_size_;
-  CapturedMouse captured_mouse_;
-  Element separator_;
-  Box separator_box_;
-  Box box_;
-};
-
-class ResizableSplitBottomBase : public ComponentBase {
- public:
-  ResizableSplitBottomBase(Component main,
-                           Component child,
-                           int* main_size,
-                           Element separator)
-      : main_(std::move(main)),
-        child_(std::move(child)),
-        main_size_(main_size),
-        separator_(separator) {
-    Add(Container::Vertical({
-        child_,
-        main_,
-    }));
-  }
-
-  bool OnEvent(Event event) final {
-    if (event.is_mouse()) {
-      return OnMouseEvent(std::move(event));
-    }
-    return ComponentBase::OnEvent(std::move(event));
-  }
-
-  bool OnMouseEvent(Event event) {
-    if (captured_mouse_ && event.mouse().motion == Mouse::Released) {
-      captured_mouse_.reset();
-      return true;
-    }
-
-    if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed &&
-        separator_box_.Contain(event.mouse().x, event.mouse().y) &&
-        !captured_mouse_) {
-      captured_mouse_ = CaptureMouse(event);
-      return true;
-    }
-
-    if (captured_mouse_) {
-      *main_size_ = box_.y_max - event.mouse().y;
-      return true;
-    }
-
-    return ComponentBase::OnEvent(event);
-  }
-
-  Element Render() final {
+  Element RenderBottom() {
     return vbox({
-               child_->Render() | yflex,
-               separator_ | reflect(separator_box_),
-               main_->Render() | size(HEIGHT, EQUAL, *main_size_),
+               options_->back->Render() | yflex,
+               options_->separator_func() | reflect(separator_box_),
+               options_->main->Render() |
+                   size(HEIGHT, EQUAL, options_->main_size()),
            }) |
            reflect(box_);
   };
 
  private:
-  Component main_;
-  Component child_;
-  int* const main_size_;
+  Ref<ResizableSplitOption> options_;
   CapturedMouse captured_mouse_;
-  Element separator_;
   Box separator_box_;
   Box box_;
 };
 
 }  // namespace
+
+Component ResizableSplit(ResizableSplitOption options) {
+  return Make<ResizableSplitBase>(std::move(options));
+}
 
 /// @brief An horizontal split in between two components, configurable using the
 /// mouse.
@@ -295,12 +159,13 @@ class ResizableSplitBottomBase : public ComponentBase {
 ///    left   ║   right
 ///           ║
 /// ```
-Component ResizableSplitLeft(Component main,
-                             Component back,
-                             int* main_size,
-                             Element separator) {
-  return Make<ResizableSplitLeftBase>(std::move(main), std::move(back),
-                                      main_size, separator);
+Component ResizableSplitLeft(Component main, Component back, int* main_size) {
+  return ResizableSplit({
+      .main = std::move(main),
+      .back = std::move(back),
+      .direction = ResizableSplitOption::Left,
+      .main_size = main_size,
+  });
 }
 
 /// @brief An horizontal split in between two components, configurable using the
@@ -317,7 +182,7 @@ Component ResizableSplitLeft(Component main,
 /// int right_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
-/// auto split = ResizableSplitRight(right, left, &right_size, separatorDouble());
+/// auto split = ResizableSplitRight(right, left, &right_size)
 /// screen.Loop(split);
 /// ```
 ///
@@ -328,12 +193,13 @@ Component ResizableSplitLeft(Component main,
 ///    left   ║   right
 ///           ║
 /// ```
-Component ResizableSplitRight(Component main,
-                              Component back,
-                              int* main_size,
-                              Element separator) {
-  return Make<ResizableSplitRightBase>(std::move(main), std::move(back),
-                                       main_size, separator);
+Component ResizableSplitRight(Component main, Component back, int* main_size) {
+  return ResizableSplit({
+      .main = std::move(main),
+      .back = std::move(back),
+      .direction = ResizableSplitOption::Right,
+      .main_size = main_size,
+  });
 }
 
 /// @brief An vertical split in between two components, configurable using the
@@ -350,7 +216,7 @@ Component ResizableSplitRight(Component main,
 /// int top_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
-/// auto split = ResizableSplitTop(top, bottom, &top_size, separatorDouble());
+/// auto split = ResizableSplitTop(top, bottom, &top_size)
 /// screen.Loop(split);
 /// ```
 ///
@@ -361,12 +227,13 @@ Component ResizableSplitRight(Component main,
 /// ════════════
 ///    bottom
 /// ```
-Component ResizableSplitTop(Component main,
-                            Component back,
-                            int* main_size,
-                            Element separator) {
-  return Make<ResizableSplitTopBase>(std::move(main), std::move(back),
-                                     main_size, separator);
+Component ResizableSplitTop(Component main, Component back, int* main_size) {
+  return ResizableSplit({
+      .main = std::move(main),
+      .back = std::move(back),
+      .direction = ResizableSplitOption::Top,
+      .main_size = main_size,
+  });
 }
 
 /// @brief An vertical split in between two components, configurable using the
@@ -383,7 +250,7 @@ Component ResizableSplitTop(Component main,
 /// int bottom_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
-/// auto split = ResizableSplit::Bottom(bottom, top, &bottom_size, separatorDouble());
+/// auto split = ResizableSplit::Bottom(bottom, top, &bottom_size)
 /// screen.Loop(split);
 /// ```
 ///
@@ -394,13 +261,15 @@ Component ResizableSplitTop(Component main,
 /// ════════════
 ///    bottom
 /// ```
-Component ResizableSplitBottom(Component main,
-                               Component back,
-                               int* main_size,
-                               Element separator) {
-  return Make<ResizableSplitBottomBase>(std::move(main), std::move(back),
-                                        main_size, separator);
+Component ResizableSplitBottom(Component main, Component back, int* main_size) {
+  return ResizableSplit({
+      .main = std::move(main),
+      .back = std::move(back),
+      .direction = ResizableSplitOption::Bottom,
+      .main_size = main_size,
+  });
 }
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.

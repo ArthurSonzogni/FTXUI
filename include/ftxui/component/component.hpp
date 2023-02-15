@@ -88,22 +88,11 @@ Component Slider(ConstStringRef label,
                  ConstRef<long> max = 100l,
                  ConstRef<long> increment = 5l);
 
-Component ResizableSplitLeft(Component main,
-                             Component back,
-                             int* main_size,
-                             Element separator = separator());
-Component ResizableSplitRight(Component main,
-                              Component back,
-                              int* main_size,
-                              Element separator = separator());
-Component ResizableSplitTop(Component main,
-                            Component back,
-                            int* main_size,
-                            Element separator = separator());
-Component ResizableSplitBottom(Component main,
-                               Component back,
-                               int* main_size,
-                               Element separator = separator());
+Component ResizableSplitLeft(Component main, Component back, int* main_size);
+Component ResizableSplitRight(Component main, Component back, int* main_size);
+Component ResizableSplitTop(Component main, Component back, int* main_size);
+Component ResizableSplitBottom(Component main, Component back, int* main_size);
+Component ResizableSplit(ResizableSplitOption options);
 
 Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);

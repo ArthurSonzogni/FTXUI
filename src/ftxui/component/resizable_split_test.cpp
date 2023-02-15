@@ -58,9 +58,13 @@ TEST(ResizableSplit, BasicLeft) {
 
 TEST(ResizableSplit, BasicLeftWithCustomSeparator) {
   int position = 1;
-  auto component =
-      ResizableSplitLeft(BasicComponent(), BasicComponent(), &position, 
-                         separatorDouble());
+  auto component = ResizableSplit({
+      .main = BasicComponent(),
+      .back = BasicComponent(),
+      .direction = ResizableSplitOption::Left,
+      .main_size = &position,
+      .separator_func = [] { return separatorDouble(); },
+  });
   auto screen = Screen(4, 4);
   Render(screen, component->Render());
   EXPECT_EQ(position, 1);
@@ -94,9 +98,13 @@ TEST(ResizableSplit, BasicRight) {
 
 TEST(ResizableSplit, BasicRightWithCustomSeparator) {
   int position = 1;
-  auto component =
-      ResizableSplitRight(BasicComponent(), BasicComponent(), &position, 
-                          separatorDouble());
+  auto component = ResizableSplit({
+      .main = BasicComponent(),
+      .back = BasicComponent(),
+      .direction = ResizableSplitOption::Right,
+      .main_size = &position,
+      .separator_func = [] { return separatorDouble(); },
+  });
   auto screen = Screen(4, 4);
   Render(screen, component->Render());
   EXPECT_EQ(position, 1);
@@ -130,9 +138,13 @@ TEST(ResizableSplit, BasicTop) {
 
 TEST(ResizableSplit, BasicTopWithCustomSeparator) {
   int position = 1;
-  auto component =
-      ResizableSplitTop(BasicComponent(), BasicComponent(), &position, 
-                        separatorDouble());
+  auto component = ResizableSplit({
+      .main = BasicComponent(),
+      .back = BasicComponent(),
+      .direction = ResizableSplitOption::Top,
+      .main_size = &position,
+      .separator_func = [] { return separatorDouble(); },
+  });
   auto screen = Screen(4, 4);
   Render(screen, component->Render());
   EXPECT_EQ(position, 1);
@@ -166,9 +178,13 @@ TEST(ResizableSplit, BasicBottom) {
 
 TEST(ResizableSplit, BasicBottomWithCustomSeparator) {
   int position = 1;
-  auto component =
-      ResizableSplitBottom(BasicComponent(), BasicComponent(), &position, 
-                           separatorDouble());
+  auto component = ResizableSplit({
+      .main = BasicComponent(),
+      .back = BasicComponent(),
+      .direction = ResizableSplitOption::Bottom,
+      .main_size = &position,
+      .separator_func = [] { return separatorDouble(); },
+  });
   auto screen = Screen(4, 4);
   Render(screen, component->Render());
   EXPECT_EQ(position, 1);

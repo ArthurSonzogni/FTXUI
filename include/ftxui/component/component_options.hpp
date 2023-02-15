@@ -9,6 +9,7 @@
 #include <optional>            // for optional
 #include <string>              // for string
 
+#include "ftxui/component/component_base.hpp"  // for Component, Components
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
 
 namespace ftxui {
@@ -162,6 +163,17 @@ struct RadioboxOption {
   /// Called when the selected entry changes.
   std::function<void()> on_change = [] {};
   Ref<int> focused_entry = 0;
+};
+
+struct ResizableSplitOption {
+  Component main;
+  Component back;
+  enum Position { Top, Bottom, Left, Right };
+  Ref<Position> direction = Left;
+  Ref<int> main_size =
+      (direction() == Position::Left || direction() == Position::Right) ? 20
+                                                                        : 10;
+  std::function<Element()> separator_func = [] { return ::ftxui::separator(); };
 };
 
 // @brief Option for the `Slider` component.
