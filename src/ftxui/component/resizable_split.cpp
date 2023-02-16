@@ -1,12 +1,16 @@
-#include <memory>   // for __shared_ptr_access
+#include <ftxui/component/component_options.hpp>  // for ResizableSplitOption
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
+#include <ftxui/util/ref.hpp>       // for Ref
+#include <functional>               // for function
+#include <memory>   // for __shared_ptr_access, shared_ptr, allocator
 #include <utility>  // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
-#include "ftxui/component/component.hpp"  // for Component, Make, Horizontal, Vertical, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
-#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/component.hpp"  // for Horizontal, Make, ResizableSplit, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
+#include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element, separator, size, EQUAL, xflex, yflex, hbox, vbox, HEIGHT, WIDTH
+#include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element, size, EQUAL, xflex, yflex, hbox, vbox, HEIGHT, WIDTH, text
 #include "ftxui/screen/box.hpp"    // for Box
 
 namespace ftxui {
@@ -48,16 +52,16 @@ class ResizableSplitBase : public ComponentBase {
     }
 
     switch (options_->direction()) {
-      case ResizableSplitOption::Left:
+      case Direction::Left:
         options_->main_size() = event.mouse().x - box_.x_min;
         return true;
-      case ResizableSplitOption::Right:
+      case Direction::Right:
         options_->main_size() = box_.x_max - event.mouse().x;
         return true;
-      case ResizableSplitOption::Top:
+      case Direction::Up:
         options_->main_size() = event.mouse().y - box_.y_min;
         return true;
-      case ResizableSplitOption::Bottom:
+      case Direction::Down:
         options_->main_size() = box_.y_max - event.mouse().y;
         return true;
     }
@@ -68,13 +72,13 @@ class ResizableSplitBase : public ComponentBase {
 
   Element Render() final {
     switch (options_->direction()) {
-      case ResizableSplitOption::Left:
+      case Direction::Left:
         return RenderLeft();
-      case ResizableSplitOption::Right:
+      case Direction::Right:
         return RenderRight();
-      case ResizableSplitOption::Top:
+      case Direction::Up:
         return RenderTop();
-      case ResizableSplitOption::Bottom:
+      case Direction::Down:
         return RenderBottom();
     }
     // NOTREACHED()
@@ -130,6 +134,31 @@ class ResizableSplitBase : public ComponentBase {
 
 }  // namespace
 
+/// @brief A split in between two components.
+/// @param options: all the parameters.
+///
+/// ### Example
+///
+/// ```cpp
+/// auto left = Renderer([] { return text("Left") | center;});
+/// auto right = Renderer([] { return text("right") | center;});
+/// int left_size = 10;
+/// auto component = ResizableSplit({
+///   .main = left,
+///   .back = right,
+///   .direction = Direction::Left,
+///   .main_size = &left_size,
+///   .separator_func = [] { return separatorDouble(); },
+/// });
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+///           ║
+///    left   ║   right
+///           ║
+/// ```
 Component ResizableSplit(ResizableSplitOption options) {
   return Make<ResizableSplitBase>(std::move(options));
 }
@@ -148,23 +177,23 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// int left_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
-/// auto split = ResizableSplitLeft(left, right, &left_size, separatorDouble());
+/// auto split = ResizableSplitLeft(left, right, &left_size);
 /// screen.Loop(split);
 /// ```
 ///
 /// ### Output
 ///
 /// ```bash
-///           ║
-///    left   ║   right
-///           ║
+///           │
+///    left   │   right
+///           │
 /// ```
 Component ResizableSplitLeft(Component main, Component back, int* main_size) {
   return ResizableSplit({
-      .main = std::move(main),
-      .back = std::move(back),
-      .direction = ResizableSplitOption::Left,
-      .main_size = main_size,
+      std::move(main),
+      std::move(back),
+      Direction::Left,
+      main_size,
   });
 }
 
@@ -189,16 +218,16 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// ### Output
 ///
 /// ```bash
-///           ║
-///    left   ║   right
-///           ║
+///           │
+///    left   │   right
+///           │
 /// ```
 Component ResizableSplitRight(Component main, Component back, int* main_size) {
   return ResizableSplit({
-      .main = std::move(main),
-      .back = std::move(back),
-      .direction = ResizableSplitOption::Right,
-      .main_size = main_size,
+      std::move(main),
+      std::move(back),
+      Direction::Right,
+      main_size,
   });
 }
 
@@ -224,15 +253,15 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 ///
 /// ```bash
 ///    top
-/// ════════════
+/// ────────────
 ///    bottom
 /// ```
 Component ResizableSplitTop(Component main, Component back, int* main_size) {
   return ResizableSplit({
-      .main = std::move(main),
-      .back = std::move(back),
-      .direction = ResizableSplitOption::Top,
-      .main_size = main_size,
+      std::move(main),
+      std::move(back),
+      Direction::Up,
+      main_size,
   });
 }
 
@@ -258,15 +287,15 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 ///
 /// ```bash
 ///    top
-/// ════════════
+/// ────────────
 ///    bottom
 /// ```
 Component ResizableSplitBottom(Component main, Component back, int* main_size) {
   return ResizableSplit({
-      .main = std::move(main),
-      .back = std::move(back),
-      .direction = ResizableSplitOption::Bottom,
-      .main_size = main_size,
+      std::move(main),
+      std::move(back),
+      Direction::Down,
+      main_size,
   });
 }
 

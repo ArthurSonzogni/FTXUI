@@ -1,11 +1,12 @@
-#include <gtest/gtest.h>
+#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, TestInfo (ptr only), TEST
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 
-#include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
+#include "ftxui/component/component.hpp"  // for ResizableSplit, Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include "ftxui/dom/elements.hpp"   // for text, Element
+#include "ftxui/dom/elements.hpp"   // for Element, separatorDouble, text
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
 
@@ -61,7 +62,7 @@ TEST(ResizableSplit, BasicLeftWithCustomSeparator) {
   auto component = ResizableSplit({
       .main = BasicComponent(),
       .back = BasicComponent(),
-      .direction = ResizableSplitOption::Left,
+      .direction = Direction::Left,
       .main_size = &position,
       .separator_func = [] { return separatorDouble(); },
   });
@@ -101,7 +102,7 @@ TEST(ResizableSplit, BasicRightWithCustomSeparator) {
   auto component = ResizableSplit({
       .main = BasicComponent(),
       .back = BasicComponent(),
-      .direction = ResizableSplitOption::Right,
+      .direction = Direction::Right,
       .main_size = &position,
       .separator_func = [] { return separatorDouble(); },
   });
@@ -141,7 +142,7 @@ TEST(ResizableSplit, BasicTopWithCustomSeparator) {
   auto component = ResizableSplit({
       .main = BasicComponent(),
       .back = BasicComponent(),
-      .direction = ResizableSplitOption::Top,
+      .direction = Direction::Up,
       .main_size = &position,
       .separator_func = [] { return separatorDouble(); },
   });
@@ -181,7 +182,7 @@ TEST(ResizableSplit, BasicBottomWithCustomSeparator) {
   auto component = ResizableSplit({
       .main = BasicComponent(),
       .back = BasicComponent(),
-      .direction = ResizableSplitOption::Bottom,
+      .direction = Direction::Down,
       .main_size = &position,
       .separator_func = [] { return separatorDouble(); },
   });

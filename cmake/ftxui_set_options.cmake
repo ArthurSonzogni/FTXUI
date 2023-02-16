@@ -43,9 +43,9 @@ function(ftxui_set_options library)
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   )
 
-  # C++20 is used. We require fold expression at least.
+  # C++17 is used. We require fold expression at least.
   set_target_properties(${library} PROPERTIES
-    CXX_STANDARD 20
+    CXX_STANDARD 17
     CXX_EXTENSIONS OFF
   )
 
