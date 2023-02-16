@@ -112,10 +112,10 @@ The project is comprised of 3 modules:
    responsive to the size of its container.
 
 3. **ftxui/component** The module is required if your program needs to respond
-   to user input. It defines a set of `ftxui::Component`. These components can 
-   be utilized to navigate the program by using the arrow keys *and/or* cursor 
-   to interact with widgets including checkbox/inputbox/etc... You are also 
-   able to create your own custom components.
+   to user input. It defines a set of `ftxui::Component`. These components can
+   be utilized to navigate using the arrow keys *and/or* cursor. There are 
+   several builtin widgets like checkbox/inputbox/etc to interact with. You can
+   combine them, or even define your own custom components.
 
 # screen {#module-screen}
 
