@@ -5,7 +5,7 @@
 Welcome to the FTXUI documentation!
 
 This is a brief tutorial. You are also encouraged to self-learn by reading the
-[examples](./examples.html).
+[examples](https://arthursonzogni.github.io/FTXUI/examples.html).
 
 @tableofcontents 
 
@@ -543,7 +543,7 @@ Enables easy formatting of data into a neat table like visual form.
 
 ## Canvas {#dom-canvas}
 
-See the API [<ftxui/dom/canvas.hpp>](./canvas_8hpp_source.html)
+See the API [<ftxui/dom/canvas.hpp>](https://arthursonzogni.github.io/FTXUI/canvas_8hpp_source.html)
 
 ```cpp
   auto c = Canvas(100, 100);
@@ -586,7 +586,7 @@ frame, and updating its state on events.
 ![image](https://user-images.githubusercontent.com/4759106/147247330-b60beb9f-e665-48b4-81c0-4b01ee95bc66.png)
 
 All predefined components are available in
-["ftxui/dom/component.hpp"](./component_8hpp.html)
+["ftxui/component/component.hpp"](https://arthursonzogni.github.io/FTXUI/component_8hpp.html)
 
 \include ftxui/component/component.hpp
 
