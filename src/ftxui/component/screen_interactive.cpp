@@ -174,9 +174,9 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
     }
 
     const size_t buffer_size = 100;
-    std::array<char, buffer_size> buffer;                     // NOLINT;
-    int l = read(fileno(stdin), buffer.data(), buffer_size);  // NOLINT
-    for (int i = 0; i < l; ++i) {
+    std::array<char, buffer_size> buffer;                        // NOLINT;
+    size_t l = read(fileno(stdin), buffer.data(), buffer_size);  // NOLINT
+    for (size_t i = 0; i < l; ++i) {
       parser.Add(buffer[i]);  // NOLINT
     }
   }
