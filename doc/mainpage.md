@@ -370,6 +370,8 @@ supports every color palette:
 ```cpp
 Decorator color(Color);
 Decorator bgcolor(Color);
+Decorator colorgrad(Color,Color);
+Decorator bgcolorgrad(Color,Color);
 ```
 
 
@@ -410,6 +412,7 @@ Example use of the above colors using the pipe operator:
 text("Blue foreground") | color(Color::Blue);
 text("Blue background") | bgcolor(Color::Blue);
 text("Black on white") | color(Color::Black) | bgcolor(Color::White);
+text("Gradient black on white") | colorgrad(Color::Black, Color::White) | bgcolorgrad(Color::White, Color::Black);
 ```
 
 ### Palette256 #{#dom-colors-palette-256}
@@ -456,6 +459,8 @@ Element strikethrough(Element);
 Element blink(Element);
 Decorator color(Color);
 Decorator bgcolor(Color);
+Decorator colorgrad(Color,Color);
+Decorator bgcolorgrad(Color,Color);
 ```
 
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2style_gallery_8cpp-example.html)

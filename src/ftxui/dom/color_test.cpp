@@ -24,6 +24,28 @@ TEST(ColorTest, Background) {
   EXPECT_EQ(screen.PixelAt(0, 0).background_color, Color::Red);
 }
 
+TEST(ColorTest, GradientForeground) {
+  auto element = text("text") | colorgrad(Color::RedLight, Color::Red);
+  Screen screen(5, 1);
+  Render(screen, element);
+  EXPECT_EQ(screen.PixelAt(0, 0).foreground_color, Color::RedLight);
+  EXPECT_EQ(screen.PixelAt(0, 0).background_color, Color());
+
+  EXPECT_EQ(screen.PixelAt(4, 0).foreground_color, Color::Red);
+  EXPECT_EQ(screen.PixelAt(4, 0).background_color, Color());
+}
+
+TEST(ColorTest, GradientBackground) {
+  auto element = text("text") | bgcolorgrad(Color::RedLight, Color::Red);
+  Screen screen(5, 1);
+  Render(screen, element);
+  EXPECT_EQ(screen.PixelAt(0, 0).foreground_color, Color());
+  EXPECT_EQ(screen.PixelAt(0, 0).background_color, Color::RedLight);
+
+  EXPECT_EQ(screen.PixelAt(4, 0).foreground_color, Color());
+  EXPECT_EQ(screen.PixelAt(4, 0).background_color, Color::Red);
+}
+
 }  // namespace ftxui
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.

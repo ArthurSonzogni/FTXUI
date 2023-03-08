@@ -20,6 +20,9 @@ current (development)
 -----
 
 ### DOM
+- Feature: Customize with gradient color effect. Add the following decorators:
+  - `colorgrad`
+  - `bgcolorgrad`
 - Feature: more styles:
   - `strikethrough`
   - `underlinedDouble`
