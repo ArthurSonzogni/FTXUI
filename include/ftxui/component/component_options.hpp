@@ -3,12 +3,14 @@
 
 #include <chrono>                         // for milliseconds
 #include <ftxui/component/animation.hpp>  // for Duration, QuadraticInOut, Function
-#include <ftxui/dom/elements.hpp>  // for Element, GaugeDirection, GaugeDirection::Right
-#include <ftxui/util/ref.hpp>  // for Ref, ConstRef
-#include <functional>          // for function
-#include <optional>            // for optional
-#include <string>              // for string
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Left, Direction::Right, Direction::Down
+#include <ftxui/dom/elements.hpp>  // for Element, separator
+#include <ftxui/util/ref.hpp>      // for Ref, ConstRef
+#include <functional>              // for function
+#include <optional>                // for optional
+#include <string>                  // for string
 
+#include "ftxui/component/component_base.hpp"  // for Component
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
 
 namespace ftxui {
@@ -87,8 +89,7 @@ struct MenuOption {
   // Style:
   UnderlineOption underline;
   MenuEntryOption entries;
-  enum Direction { Up, Down, Left, Right };
-  Direction direction = Down;
+  Direction direction = Direction::Down;
   std::function<Element()> elements_prefix;
   std::function<Element()> elements_infix;
   std::function<Element()> elements_postfix;
@@ -164,6 +165,16 @@ struct RadioboxOption {
   Ref<int> focused_entry = 0;
 };
 
+struct ResizableSplitOption {
+  Component main;
+  Component back;
+  Ref<Direction> direction = Direction::Left;
+  Ref<int> main_size =
+      (direction() == Direction::Left || direction() == Direction::Right) ? 20
+                                                                          : 10;
+  std::function<Element()> separator_func = [] { return ::ftxui::separator(); };
+};
+
 // @brief Option for the `Slider` component.
 // @ingroup component
 template <typename T>
@@ -172,7 +183,7 @@ struct SliderOption {
   ConstRef<T> min = T(0);
   ConstRef<T> max = T(100);
   ConstRef<T> increment = (max() - min()) / 20;
-  GaugeDirection direction = GaugeDirection::Right;
+  Direction direction = Direction::Right;
   Color color_active = Color::White;
   Color color_inactive = Color::GrayDark;
 };

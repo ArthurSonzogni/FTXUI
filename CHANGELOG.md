@@ -4,6 +4,14 @@ Changelog
 current (development) 
 ---------------------
 
+### Component
+- Feature: Support `ResizableSplit` with customizable separator.
+- Breaking: MenuDirection enum is renamed Direction
+
+###
+- Breaking: Direction enum is renamed WidthOrHeight
+- Breaking: GaugeDirection enum is renamed Direction
+
 4.0.0
 -----
 

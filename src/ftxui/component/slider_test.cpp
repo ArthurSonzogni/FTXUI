@@ -2,7 +2,8 @@
 #include <stddef.h>       // for size_t
 #include <array>          // for array
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include <ftxui/dom/elements.hpp>  // for GaugeDirection, GaugeDirection::Down, GaugeDirection::Left, GaugeDirection::Right, GaugeDirection::Up, frame
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
+#include <ftxui/dom/elements.hpp>   // for frame
 #include <memory>  // for shared_ptr, __shared_ptr_access, allocator
 #include <string>  // for to_string
 
@@ -47,7 +48,7 @@ TEST(SliderTest, Right) {
       .min = 0,
       .max = 100,
       .increment = 10,
-      .direction = GaugeDirection::Right,
+      .direction = Direction::Right,
   });
   Screen screen(11, 1);
   Render(screen, slider->Render());
@@ -70,7 +71,7 @@ TEST(SliderTest, Left) {
       .min = 0,
       .max = 100,
       .increment = 10,
-      .direction = GaugeDirection::Left,
+      .direction = Direction::Left,
   });
   Screen screen(11, 1);
   Render(screen, slider->Render());
@@ -93,7 +94,7 @@ TEST(SliderTest, Down) {
       .min = 0,
       .max = 100,
       .increment = 10,
-      .direction = GaugeDirection::Down,
+      .direction = Direction::Down,
   });
   Screen screen(1, 11);
   Render(screen, slider->Render());
@@ -116,7 +117,7 @@ TEST(SliderTest, Up) {
       .min = 0,
       .max = 100,
       .increment = 10,
-      .direction = GaugeDirection::Up,
+      .direction = Direction::Up,
   });
   Screen screen(1, 11);
   Render(screen, slider->Render());
