@@ -2,9 +2,10 @@
 #include <cmath>                                  // for sin
 #include <ftxui/component/component_base.hpp>     // for ComponentBase
 #include <ftxui/component/component_options.hpp>  // for SliderOption
-#include <ftxui/dom/elements.hpp>  // for size, GREATER_THAN, GaugeDirection, GaugeDirection::Up, HEIGHT
-#include <ftxui/util/ref.hpp>  // for ConstRef, Ref
-#include <memory>              // for shared_ptr, __shared_ptr_access
+#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Up
+#include <ftxui/dom/elements.hpp>   // for size, GREATER_THAN, HEIGHT
+#include <ftxui/util/ref.hpp>       // for ConstRef, Ref
+#include <memory>                   // for shared_ptr, __shared_ptr_access
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Horizontal, Slider, operator|=
@@ -26,7 +27,7 @@ int main(int argc, const char* argv[]) {
     option.value = &values[i];
     option.max = 100;
     option.increment = 5;
-    option.direction = GaugeDirection::Up;
+    option.direction = Direction::Up;
     layout_horizontal->Add(Slider<int>(option));
 
     /* In C++20:
@@ -34,7 +35,7 @@ int main(int argc, const char* argv[]) {
         .value = &values[i],
         .max = 100,
         .increment = 5,
-        .direction = GaugeDirection::Up,
+        .direction = Direction::Up,
     }));
     */
   }

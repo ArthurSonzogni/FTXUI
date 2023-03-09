@@ -3,7 +3,7 @@
 #include <utility>    // for move
 #include <vector>     // for __alloc_traits<>::value_type
 
-#include "ftxui/dom/elements.hpp"  // for Constraint, Direction, EQUAL, GREATER_THAN, LESS_THAN, WIDTH, unpack, Decorator, Element, size
+#include "ftxui/dom/elements.hpp"  // for Constraint, WidthOrHeight, EQUAL, GREATER_THAN, LESS_THAN, WIDTH, unpack, Decorator, Element, size
 #include "ftxui/dom/node.hpp"      // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
@@ -12,7 +12,7 @@ namespace ftxui {
 
 class Size : public Node {
  public:
-  Size(Element child, Direction direction, Constraint constraint, int value)
+  Size(Element child, WidthOrHeight direction, Constraint constraint, int value)
       : Node(unpack(std::move(child))),
         direction_(direction),
         constraint_(constraint),
@@ -71,7 +71,7 @@ class Size : public Node {
   }
 
  private:
-  Direction direction_;
+  WidthOrHeight direction_;
   Constraint constraint_;
   int value_;
 };
@@ -82,7 +82,7 @@ class Size : public Node {
 /// @param constraint The type of constaint.
 /// @param value The value.
 /// @ingroup dom
-Decorator size(Direction direction, Constraint constraint, int value) {
+Decorator size(WidthOrHeight direction, Constraint constraint, int value) {
   return [=](Element e) {
     return std::make_shared<Size>(std::move(e), direction, constraint, value);
   };
