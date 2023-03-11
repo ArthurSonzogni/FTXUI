@@ -8,6 +8,9 @@ current (development)
 - Feature: Support `ResizableSplit` with customizable separator.
 - Breaking: MenuDirection enum is renamed Direction
 
+### Dom
+- Feature: Add the dashed style for border and separator.
+
 ###
 - Breaking: Direction enum is renamed WidthOrHeight
 - Breaking: GaugeDirection enum is renamed Direction
