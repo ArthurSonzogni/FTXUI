@@ -73,6 +73,8 @@ Element borderDouble(Element);
 Element borderRounded(Element);
 Element borderEmpty(Element);
 Decorator borderStyled(BorderStyle);
+Decorator borderStyled(BorderStyle, Color);
+Decorator borderStyled(Color);
 Decorator borderWith(const Pixel&);
 Element window(Element title, Element content);
 Element spinner(int charset_index, size_t image_index);

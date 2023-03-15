@@ -1,9 +1,10 @@
 #include <algorithm>  // for max
 #include <array>      // for array
 #include <memory>     // for allocator, make_shared, __shared_ptr_access
-#include <string>     // for basic_string, string
-#include <utility>    // for move
-#include <vector>     // for __alloc_traits<>::value_type
+#include <optional>
+#include <string>   // for basic_string, string
+#include <utility>  // for move
+#include <vector>   // for __alloc_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, BorderStyle, ROUNDED, Elements, DOUBLE, EMPTY, HEAVY, LIGHT, border, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, borderStyled, borderWith, window
 #include "ftxui/dom/node.hpp"      // for Node, Elements
@@ -17,22 +18,26 @@ using Charset = std::array<std::string, 6>;  // NOLINT
 using Charsets = std::array<Charset, 6>;     // NOLINT
 // NOLINTNEXTLINE
 static Charsets simple_border_charset = {
-    Charset{"┌", "┐", "└", "┘", "─", "│"}, // LIGHT
-    Charset{"┏", "┓", "┗", "┛", "╍", "╏"}, // DASHED
-    Charset{"┏", "┓", "┗", "┛", "━", "┃"}, // HEAVY
-    Charset{"╔", "╗", "╚", "╝", "═", "║"}, // DOUBLE
-    Charset{"╭", "╮", "╰", "╯", "─", "│"}, // ROUNDED
-    Charset{" ", " ", " ", " ", " ", " "}, // EMPTY
+    Charset{"┌", "┐", "└", "┘", "─", "│"},  // LIGHT
+    Charset{"┏", "┓", "┗", "┛", "╍", "╏"},  // DASHED
+    Charset{"┏", "┓", "┗", "┛", "━", "┃"},  // HEAVY
+    Charset{"╔", "╗", "╚", "╝", "═", "║"},  // DOUBLE
+    Charset{"╭", "╮", "╰", "╯", "─", "│"},  // ROUNDED
+    Charset{" ", " ", " ", " ", " ", " "},  // EMPTY
 };
 
 // For reference, here is the charset for normal border:
 class Border : public Node {
  public:
-  Border(Elements children, BorderStyle style)
+  Border(Elements children,
+         BorderStyle style,
+         std::optional<Color> foreground_color = std::nullopt)
       : Node(std::move(children)),
-        charset_(simple_border_charset[style]) {}  // NOLINT
+        charset_(simple_border_charset[style]),
+        foreground_color_(foreground_color) {}  // NOLINT
 
   const Charset& charset_;  // NOLINT
+  std::optional<Color> foreground_color_;
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -100,6 +105,18 @@ class Border : public Node {
     // Draw title.
     if (children_.size() == 2) {
       children_[1]->Render(screen);
+    }
+
+    // Draw the border color.
+    if (foreground_color_) {
+      for (int x = box_.x_min; x <= box_.x_max; ++x) {
+        screen.PixelAt(x, box_.y_min).foreground_color = *foreground_color_;
+        screen.PixelAt(x, box_.y_max).foreground_color = *foreground_color_;
+      }
+      for (int y = box_.y_min; y <= box_.y_max; ++y) {
+        screen.PixelAt(box_.x_min, y).foreground_color = *foreground_color_;
+        screen.PixelAt(box_.x_max, y).foreground_color = *foreground_color_;
+      }
     }
   }
 };
@@ -179,6 +196,8 @@ class BorderPixel : public Node {
 /// @see borderHeavy
 /// @see borderEmpty
 /// @see borderRounded
+/// @see borderStyled
+/// @see borderWith
 ///
 /// Add a border around an element
 ///
@@ -218,6 +237,26 @@ Decorator borderWith(const Pixel& pixel) {
 Decorator borderStyled(BorderStyle style) {
   return [style](Element child) {
     return std::make_shared<Border>(unpack(std::move(child)), style);
+  };
+}
+
+/// @brief Same as border but with a foreground color.
+/// @ingroup dom
+/// @see border
+Decorator borderStyled(Color foreground_color) {
+  return [foreground_color](Element child) {
+    return std::make_shared<Border>(unpack(std::move(child)), ROUNDED,
+                                    foreground_color);
+  };
+}
+
+/// @brief Same as border but with a foreground color and a different style
+/// @ingroup dom
+/// @see border
+Decorator borderStyled(BorderStyle style, Color foreground_color) {
+  return [style, foreground_color](Element child) {
+    return std::make_shared<Border>(unpack(std::move(child)), style,
+                                    foreground_color);
   };
 }
 
