@@ -11,6 +11,7 @@ int main(int argc, const char* argv[]) {
 
   auto document = vbox({
       text("borderLight") | borderLight,
+      text("borderDashed") | borderDashed,
       text("borderHeavy") | borderHeavy,
       text("borderDouble") | borderDouble,
       text("borderRounded") | borderRounded,
