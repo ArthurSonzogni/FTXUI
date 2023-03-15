@@ -14,14 +14,15 @@
 namespace ftxui {
 
 using Charset = std::array<std::string, 6>;  // NOLINT
-using Charsets = std::array<Charset, 5>;     // NOLINT
+using Charsets = std::array<Charset, 6>;     // NOLINT
 // NOLINTNEXTLINE
 static Charsets simple_border_charset = {
-    Charset{"┌", "┐", "└", "┘", "─", "│"},
-    Charset{"┏", "┓", "┗", "┛", "━", "┃"},
-    Charset{"╔", "╗", "╚", "╝", "═", "║"},
-    Charset{"╭", "╮", "╰", "╯", "─", "│"},
-    Charset{" ", " ", " ", " ", " ", " "},
+    Charset{"┌", "┐", "└", "┘", "─", "│"}, // LIGHT
+    Charset{"┏", "┓", "┗", "┛", "╍", "╏"}, // DASHED
+    Charset{"┏", "┓", "┗", "┛", "━", "┃"}, // HEAVY
+    Charset{"╔", "╗", "╚", "╝", "═", "║"}, // DOUBLE
+    Charset{"╭", "╮", "╰", "╯", "─", "│"}, // ROUNDED
+    Charset{" ", " ", " ", " ", " ", " "}, // EMPTY
 };
 
 // For reference, here is the charset for normal border:
@@ -173,6 +174,7 @@ class BorderPixel : public Node {
 /// @ingroup dom
 /// @see border
 /// @see borderLight
+/// @see borderDashed
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderEmpty
@@ -223,6 +225,42 @@ Decorator borderStyled(BorderStyle style) {
 /// @ingroup dom
 /// @see border
 /// @see borderLight
+/// @see borderDashed
+/// @see borderDouble
+/// @see borderHeavy
+/// @see borderRounded
+/// @see borderEmpty
+/// @see borderStyled
+/// @see borderWith
+///
+/// Add a border around an element
+///
+/// ### Example
+///
+/// ```cpp
+/// // Use 'borderDash' as a function...
+/// Element document = borderDash(text("The element"));
+///
+/// // ...Or as a 'pipe'.
+/// Element document = text("The element") | borderDAsh;
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// ┏╍╍╍╍╍╍╍╍╍╍╍╍╍╍┓
+/// ╏The element   ╏
+/// ┗╍╍╍╍╍╍╍╍╍╍╍╍╍╍┛
+/// ```
+Element borderDashed(Element child) {
+  return std::make_shared<Border>(unpack(std::move(child)), DASHED);
+}
+
+/// @brief Draw a dashed border around the element.
+/// @ingroup dom
+/// @see border
+/// @see borderLight
+/// @see borderDashed
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded
@@ -257,6 +295,7 @@ Element borderLight(Element child) {
 /// @ingroup dom
 /// @see border
 /// @see borderLight
+/// @see borderDashed
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded
@@ -291,6 +330,7 @@ Element borderHeavy(Element child) {
 /// @ingroup dom
 /// @see border
 /// @see borderLight
+/// @see borderDashed
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded
@@ -325,6 +365,7 @@ Element borderDouble(Element child) {
 /// @ingroup dom
 /// @see border
 /// @see borderLight
+/// @see borderDashed
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded
@@ -359,6 +400,7 @@ Element borderRounded(Element child) {
 /// @ingroup dom
 /// @see border
 /// @see borderLight
+/// @see borderDashed
 /// @see borderDouble
 /// @see borderHeavy
 /// @see borderRounded

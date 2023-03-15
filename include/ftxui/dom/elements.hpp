@@ -21,7 +21,14 @@ using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
 using GraphFunction = std::function<std::vector<int>(int, int)>;
 
-enum BorderStyle { LIGHT, HEAVY, DOUBLE, ROUNDED, EMPTY };
+enum BorderStyle {
+  LIGHT,
+  DASHED,
+  HEAVY,
+  DOUBLE,
+  ROUNDED,
+  EMPTY,
+};
 
 // Pipe elements into decorator togethers.
 // For instance the next lines are equivalents:
@@ -37,6 +44,7 @@ Element text(std::string text);
 Element vtext(std::string text);
 Element separator();
 Element separatorLight();
+Element separatorDashed();
 Element separatorHeavy();
 Element separatorDouble();
 Element separatorEmpty();
@@ -59,6 +67,7 @@ Element gaugeDown(float progress);
 Element gaugeDirection(float progress, Direction direction);
 Element border(Element);
 Element borderLight(Element);
+Element borderDashed(Element);
 Element borderHeavy(Element);
 Element borderDouble(Element);
 Element borderRounded(Element);

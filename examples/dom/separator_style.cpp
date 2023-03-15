@@ -17,6 +17,12 @@ int main(int argc, const char* argv[]) {
       }) | borderLight,
 
       vbox({
+          text("separatorDashed"),
+          separatorDashed(),
+          hbox(text("left"), separatorDashed(), text("right")),
+      }) | borderDashed,
+
+      vbox({
           text("separatorHeavy"),
           separatorHeavy(),
           hbox(text("left"), separatorHeavy(), text("right")),

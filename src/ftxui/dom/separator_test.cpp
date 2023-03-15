@@ -35,6 +35,20 @@ TEST(SeparatorTest, Light) {
             "down");
 }
 
+TEST(SeparatorTest, Dashed) {
+  auto element = vbox({
+      text("top"),
+      separatorDashed(),
+      text("down"),
+  });
+  Screen screen(4, 3);
+  Render(screen, element);
+  EXPECT_EQ(screen.ToString(),
+            "top \r\n"
+            "╍╍╍╍\r\n"
+            "down");
+}
+
 TEST(SeparatorTest, Double) {
   auto element = vbox({
       text("top"),

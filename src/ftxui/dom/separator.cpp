@@ -14,14 +14,15 @@ namespace ftxui {
 
 namespace {
 using Charset = std::array<std::string, 2>;  // NOLINT
-using Charsets = std::array<Charset, 5>;     // NOLINT
+using Charsets = std::array<Charset, 6>;     // NOLINT
 // NOLINTNEXTLINE
 const Charsets charsets = {
-    Charset{"│", "─"},  //
-    Charset{"┃", "━"},  //
-    Charset{"║", "═"},  //
-    Charset{"│", "─"},  //
-    Charset{" ", " "},  //
+    Charset{"│", "─"},  // LIGHT
+    Charset{"╏", "╍"},  // DASHED
+    Charset{"┃", "━"},  // HEAVY
+    Charset{"║", "═"},  // DOUBLE
+    Charset{"│", "─"},  // ROUNDED
+    Charset{" ", " "},  // EMPTY
 };
 
 }  // namespace
@@ -98,6 +99,7 @@ class SeparatorWithPixel : public SeparatorAuto {
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
+/// @see separatorDashed
 /// @see separatorDouble
 /// @see separatorHeavy
 /// @see separatorEmpty
@@ -135,6 +137,7 @@ Element separator() {
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
+/// @see separatorDashed
 /// @see separatorDouble
 /// @see separatorHeavy
 /// @see separatorEmpty
@@ -171,6 +174,7 @@ Element separatorStyled(BorderStyle style) {
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
+/// @see separatorDashed
 /// @see separatorDouble
 /// @see separatorHeavy
 /// @see separatorEmpty
@@ -203,10 +207,48 @@ Element separatorLight() {
 }
 
 /// @brief Draw a vertical or horizontal separation in between two other
+/// elements, using the DASHED style.
+/// @ingroup dom
+/// @see separator
+/// @see separatorLight
+/// @see separatorDashed
+/// @see separatorDouble
+/// @see separatorHeavy
+/// @see separatorEmpty
+/// @see separatorRounded
+/// @see separatorStyled
+/// @see separatorCharacter
+///
+/// Add a visual separation in between two elements.
+///
+/// ### Example
+///
+/// ```cpp
+/// // Use 'border' as a function...
+/// Element document = vbox({
+///   text("up"),
+///   separatorLight(),
+///   text("down"),
+/// });
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// up
+/// ╍╍╍╍
+/// down
+/// ```
+Element separatorDashed() {
+  return std::make_shared<SeparatorAuto>(DASHED);
+}
+
+/// @brief Draw a vertical or horizontal separation in between two other
 /// elements, using the HEAVY style.
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
+/// @see separatorDashed
 /// @see separatorDouble
 /// @see separatorHeavy
 /// @see separatorEmpty
@@ -243,6 +285,7 @@ Element separatorHeavy() {
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
+/// @see separatorDashed
 /// @see separatorDouble
 /// @see separatorHeavy
 /// @see separatorEmpty
@@ -279,6 +322,7 @@ Element separatorDouble() {
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
+/// @see separatorDashed
 /// @see separatorDouble
 /// @see separatorHeavy
 /// @see separatorEmpty
@@ -316,6 +360,7 @@ Element separatorEmpty() {
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
+/// @see separatorDashed
 /// @see separatorDouble
 /// @see separatorHeavy
 /// @see separatorEmpty
@@ -351,6 +396,7 @@ Element separatorCharacter(std::string value) {
 /// @ingroup dom
 /// @see separator
 /// @see separatorLight
+/// @see separatorDashed
 /// @see separatorHeavy
 /// @see separatorDouble
 /// @see separatorStyled
