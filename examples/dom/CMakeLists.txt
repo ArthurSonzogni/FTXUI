@@ -1,6 +1,7 @@
 set(DIRECTORY_LIB dom)
 
 example(border)
+example(border_colored)
 example(border_style)
 example(color_gallery)
 example(color_info_palette256)
