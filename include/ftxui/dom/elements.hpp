@@ -7,6 +7,7 @@
 #include "ftxui/dom/canvas.hpp"
 #include "ftxui/dom/direction.hpp"
 #include "ftxui/dom/flexbox_config.hpp"
+#include "ftxui/dom/linear_gradient.hpp"
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
@@ -99,12 +100,12 @@ Element blink(Element);
 Element strikethrough(Element);
 Decorator color(Color);
 Decorator bgcolor(Color);
-Decorator colorgrad(Color, Color);
-Decorator bgcolorgrad(Color, Color);
+Decorator color(const LinearGradient&);
+Decorator bgcolor(const LinearGradient&);
 Element color(Color, Element);
 Element bgcolor(Color, Element);
-Element colorgrad(Color, Color, Element);
-Element bgcolorgrad(Color, Color, Element);
+Element color(const LinearGradient&, Element);
+Element bgcolor(const LinearGradient&, Element);
 Decorator focusPosition(int x, int y);
 Decorator focusPositionRelative(float x, float y);
 Element automerge(Element child);

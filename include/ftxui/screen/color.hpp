@@ -3,6 +3,7 @@
 
 #include <cstdint>  // for uint8_t
 #include <string>   // for wstring
+#include <vector>   // for vector
 
 #ifdef RGB
 // Workaround for wingdi.h (via Windows.h) defining macros that break things.
@@ -11,6 +12,9 @@
 #endif
 
 namespace ftxui {
+
+class Color;
+using Colors = std::vector<Color>;
 
 /// @brief A class representing terminal colors.
 /// @ingroup screen
@@ -305,6 +309,11 @@ class Color {
   bool operator!=(const Color& rhs) const;
 
   std::string Print(bool is_background_color) const;
+  std::string PrettyPrint() const {
+    return std::string{"red:" + std::to_string(red_) +
+                       " green:" + std::to_string(green_) +
+                       " blue:" + std::to_string(blue_)};
+  }
 
  private:
   enum class ColorType : uint8_t {

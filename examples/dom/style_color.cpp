@@ -30,7 +30,7 @@ int main(int argc, const char* argv[]) {
         color(Color::Yellow, text("Yellow")),
         color(Color::YellowLight, text("YellowLight")),
         color(0x66ff66_rgb, text("Phosphor")),
-        colorgrad(Color::BlueLight,Color::Blue, text("Blue"))
+        color(LinearGradient({Color::SkyBlue1,Color::DeepSkyBlue4}), text("Skyblue to DeepSkyBlue"))
       ),
       vbox(
         bgcolor(Color::Default, text("Default")),
@@ -51,7 +51,7 @@ int main(int argc, const char* argv[]) {
         bgcolor(Color::Yellow, text("Yellow")),
         bgcolor(Color::YellowLight, text("YellowLight")),
         bgcolor(0x66ff66_rgb, text("Phosphor")),
-        bgcolorgrad(Color::BlueLight,Color::Blue, text("Blue"))
+        bgcolor(LinearGradient({Color::SkyBlue1,Color::DeepSkyBlue4}), text("Skyblue to DeepSkyBlue"))
       ),
       filler()
     );
