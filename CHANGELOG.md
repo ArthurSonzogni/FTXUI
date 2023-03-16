@@ -10,6 +10,7 @@ current (development)
 
 ### Dom
 - Feature: Add the dashed style for border and separator.
+- Feature: Add colored borders.
 
 ###
 - Breaking: Direction enum is renamed WidthOrHeight
