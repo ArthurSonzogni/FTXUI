@@ -1,9 +1,10 @@
-#include <gtest/gtest.h>
-#include <string>  // for allocator
+#include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
+#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
+#include <string>                         // for allocator
 
 #include "ftxui/dom/elements.hpp"  // for operator|, text, bgcolor, color, Element
 #include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/color.hpp"   // for Color, Color::Red
+#include "ftxui/screen/color.hpp"   // for Color, Color::Red, Color::RedLight
 #include "ftxui/screen/screen.hpp"  // for Screen, Pixel
 
 namespace ftxui {
@@ -26,7 +27,8 @@ TEST(ColorTest, Background) {
 
 TEST(ColorTest, GradientForeground) {
   auto element =
-      text("text") | color(LinearGradient({Color::RedLight, Color::Red}));
+      text("text") |
+      color(LinearGradient{0.f, {{Color::RedLight, 0.f}, {Color::Red, 1.f}}});
   Screen screen(5, 1);
   Render(screen, element);
 
@@ -42,7 +44,8 @@ TEST(ColorTest, GradientForeground) {
 
 TEST(ColorTest, GradientBackground) {
   auto element =
-      text("text") | bgcolor(LinearGradient({Color::RedLight, Color::Red}));
+      text("text") |
+      bgcolor(LinearGradient{0.f, {{Color::RedLight, 0.f}, {Color::Red, 1.f}}});
   Screen screen(5, 1);
   Render(screen, element);
 
