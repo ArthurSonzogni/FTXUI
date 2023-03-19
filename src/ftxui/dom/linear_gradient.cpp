@@ -1,6 +1,6 @@
 #include <stddef.h>                       // for size_t
 #include <algorithm>                      // for max, min, sort, copy
-#include <cmath>                          // for fmod, cos, sin, M_PI
+#include <cmath>                          // for fmod, cos, sin
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
 #include <memory>    // for allocator_traits<>::value_type, make_shared
 #include <optional>  // for optional, operator!=, operator<
@@ -19,7 +19,7 @@ namespace {
 struct LinearGradientNormalized {
   float angle = 0.f;
   std::vector<Color> colors;
-  std::vector<float> positions;
+  std::vector<float> positions; // Sorted.
 };
 
 // Convert a LinearGradient to a normalized version.
@@ -30,7 +30,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
         0.f, {Color::Default, Color::Default}, {0.f, 1.f}};
   }
 
-  // Fill in the two extent, if needed.
+  // Fill in the two extent, if not provided.
   if (!gradient.stops.front().position) {
     gradient.stops.front().position = 0;
   }
@@ -64,11 +64,12 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
 
   // If we don't being with zero, add a stop at zero.
   if (gradient.stops.front().position != 0) {
-    gradient.stops.insert(gradient.stops.begin(), {Color::Default, 0.f});
+    gradient.stops.insert(gradient.stops.begin(),
+                          {gradient.stops.front().color, 0.f});
   }
   // If we don't end with one, add a stop at one.
   if (gradient.stops.back().position != 1) {
-    gradient.stops.push_back({Color::Default, 0.f});
+    gradient.stops.push_back({gradient.stops.back().color, 1.f});
   }
 
   // Normalize the angle.
@@ -83,24 +84,27 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
 
 Color Interpolate(const LinearGradientNormalized& gradient, float t) {
   // Find the right color in the gradient's stops.
-  for (size_t i = 0; i < gradient.positions.size() - 1; ++i) {
-    if (t < gradient.positions[i] ||  //
-        t > gradient.positions[i + 1]) {
-      continue;
+  size_t i = 1;
+  while (true) {
+    if (i > gradient.positions.size()) {
+      return Color::Interpolate(0.5f, gradient.colors.back(),
+                                gradient.colors.back());
     }
-
-    const float t0 = gradient.positions[i];
-    const float t1 = gradient.positions[i + 1];
-    const float tt = (t - t0) / (t1 - t0);
-
-    const Color& c0 = gradient.colors[i];
-    const Color& c1 = gradient.colors[i + 1];
-    const Color& cc = Color::Interpolate(tt, c0, c1);
-
-    return cc;
+    if (t <= gradient.positions[i]) {
+      break;
+    }
+    ++i;
   }
 
-  return Color::Blue;
+  const float t0 = gradient.positions[i - 1];
+  const float t1 = gradient.positions[i - 0];
+  const float tt = (t - t0) / (t1 - t0);
+
+  const Color& c0 = gradient.colors[i - 1];
+  const Color& c1 = gradient.colors[i - 0];
+  const Color& cc = Color::Interpolate(tt, c0, c1);
+
+  return cc;
 }
 
 class LinearGradientColor : public NodeDecorator {
@@ -112,9 +116,11 @@ class LinearGradientColor : public NodeDecorator {
         gradient_(Normalize(gradient)),
         background_color_{background_color} {}
 
+ private:
   void Render(Screen& screen) override {
-    const float dx = std::cos(gradient_.angle * M_PI / 180);
-    const float dy = std::sin(gradient_.angle * M_PI / 180);
+    const float degtorad = 0.01745329251f;
+    const float dx = std::cos(gradient_.angle * degtorad);
+    const float dy = std::sin(gradient_.angle * degtorad);
 
     // Project every corner to get the extent of the gradient.
     const float p1 = box_.x_min * dx + box_.y_min * dy;
@@ -131,20 +137,23 @@ class LinearGradientColor : public NodeDecorator {
     const float dZ = -min / (max - min);
 
     // Project every pixel to get the color.
-    for (int y = box_.y_min; y <= box_.y_max; ++y) {
-      for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        const float t = x * dX + y * dY + dZ;
-        GetColorRef(screen, x, y) = Interpolate(gradient_, t);
+    if (background_color_) {
+      for (int y = box_.y_min; y <= box_.y_max; ++y) {
+        for (int x = box_.x_min; x <= box_.x_max; ++x) {
+          const float t = x * dX + y * dY + dZ;
+          screen.PixelAt(x, y).background_color = Interpolate(gradient_, t);
+        }
+      }
+    } else {
+      for (int y = box_.y_min; y <= box_.y_max; ++y) {
+        for (int x = box_.x_min; x <= box_.x_max; ++x) {
+          const float t = x * dX + y * dY + dZ;
+          screen.PixelAt(x, y).foreground_color = Interpolate(gradient_, t);
+        }
       }
     }
 
     NodeDecorator::Render(screen);
-  }
-
-  // Utility to get background or foreground color from pixel on screen
-  Color& GetColorRef(Screen& screen, int x, int y) {
-    return background_color_ ? screen.PixelAt(x, y).background_color
-                             : screen.PixelAt(x, y).foreground_color;
   }
 
   LinearGradientNormalized gradient_;

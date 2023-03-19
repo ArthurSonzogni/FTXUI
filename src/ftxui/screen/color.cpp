@@ -1,6 +1,7 @@
 #include "ftxui/screen/color.hpp"
 
-#include <array>        // for array
+#include <array>  // for array
+#include <cmath>
 #include <string_view>  // for literals
 
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
@@ -220,12 +221,13 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
   get_color(a, &red_a, &green_a, &blue_a);
   get_color(b, &red_b, &green_b, &blue_b);
 
-  return Color::RGB(static_cast<uint8_t>(static_cast<float>(red_a) * (1 - t) +
-                                         static_cast<float>(red_b) * t),
-                    static_cast<uint8_t>(static_cast<float>(green_a) * (1 - t) +
-                                         static_cast<float>(green_b) * t),
-                    static_cast<uint8_t>(static_cast<float>(blue_a) * (1 - t) +
-                                         static_cast<float>(blue_b) * t));
+
+  // Gamma correction:
+  // https://en.wikipedia.org/wiki/Gamma_correction
+  return Color::RGB(
+      pow(pow(red_a, 2.2f) * (1 - t) + pow(red_b, 2.2f) * t, 1 / 2.2f),
+      pow(pow(green_a, 2.2f) * (1 - t) + pow(green_b, 2.2f) * t, 1 / 2.2f),
+      pow(pow(blue_a, 2.2f) * (1 - t) + pow(blue_b, 2.2f) * t, 1 / 2.2f));
 }
 
 inline namespace literals {
