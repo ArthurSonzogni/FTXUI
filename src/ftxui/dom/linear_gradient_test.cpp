@@ -42,7 +42,7 @@ TEST(ColorTest, API_constructor_bicolor) {
 }
 
 TEST(ColorTest, API_constructor_bicolor_angle) {
-  auto gradient = LinearGradient(Color::Red, Color::RedLight, 45);
+  auto gradient = LinearGradient(45, Color::Red, Color::RedLight);
   EXPECT_EQ(gradient.angle, 45);
   EXPECT_EQ(gradient.stops.size(), 2);
   EXPECT_EQ(gradient.stops[0].color, Color::Red);
