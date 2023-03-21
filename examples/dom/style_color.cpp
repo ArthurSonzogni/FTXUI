@@ -1,11 +1,10 @@
-#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
+#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
 #include <ftxui/screen/screen.hpp>        // for Full, Screen
 #include <memory>                         // for allocator
 
 #include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, filler, Fit, hbox
 #include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/box.hpp"    // for ftxui
-#include "ftxui/screen/color.hpp"  // for Color, Color::DeepSkyBlue4, Color::SkyBlue1, operator""_rgb, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight
+#include "ftxui/screen/color.hpp"  // for Color, operator""_rgb, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::DeepSkyBlue4, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::SkyBlue1, Color::White, Color::Yellow, Color::YellowLight, ftxui
 
 int main(int argc, const char* argv[]) {
   using namespace ftxui;

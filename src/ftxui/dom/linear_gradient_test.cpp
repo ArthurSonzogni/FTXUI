@@ -83,7 +83,6 @@ TEST(ColorTest, GradientBackground) {
   EXPECT_EQ(screen.PixelAt(4, 0).background_color, gradient_end);
 }
 
-
 }  // namespace ftxui
 
 // Copyright 2023 Arthur Sonzogni. All rights reserved.

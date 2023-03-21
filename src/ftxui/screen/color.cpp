@@ -221,7 +221,6 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
   get_color(a, &red_a, &green_a, &blue_a);
   get_color(b, &red_b, &green_b, &blue_b);
 
-
   // Gamma correction:
   // https://en.wikipedia.org/wiki/Gamma_correction
   return Color::RGB(

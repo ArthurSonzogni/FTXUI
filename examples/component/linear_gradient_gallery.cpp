@@ -1,11 +1,12 @@
-#include <functional>  // for function
-#include <iostream>  // for basic_ostream::operator<<, operator<<, endl, basic_ostream, basic_ostream<>::__ostream_type, cout, ostream
-#include <string>    // for string, basic_string, allocator
-#include <vector>    // for vector
+#include <ftxui/component/component_base.hpp>  // for ComponentBase, Component
+#include <ftxui/dom/elements.hpp>  // for operator|, Element, flex, bgcolor, text, vbox, center
+#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
+#include <ftxui/screen/color.hpp>         // for Color, Color::Blue, Color::Red
+#include <memory>                         // for __shared_ptr_access, shared_ptr
+#include <string>  // for allocator, operator+, char_traits, string, to_string
 
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Menu
-#include "ftxui/component/component_options.hpp"   // for MenuOption
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 int main(int argc, const char* argv[]) {
@@ -25,9 +26,9 @@ int main(int argc, const char* argv[]) {
   auto slider_end = Slider(&slider_end_text, &end, 0.f, 1.f);
 
   auto layout = Container::Vertical({
-    slider_angle,
-    slider_start,
-    slider_end,
+      slider_angle,
+      slider_start,
+      slider_end,
   });
 
   auto renderer = Renderer(layout, [&] {

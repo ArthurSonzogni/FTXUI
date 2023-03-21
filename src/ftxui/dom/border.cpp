@@ -1,12 +1,13 @@
-#include <algorithm>  // for max
-#include <array>      // for array
-#include <memory>     // for allocator, make_shared, __shared_ptr_access
-#include <optional>
-#include <string>   // for basic_string, string
-#include <utility>  // for move
-#include <vector>   // for __alloc_traits<>::value_type
+#include <algorithm>               // for max
+#include <array>                   // for array
+#include <ftxui/screen/color.hpp>  // for Color
+#include <memory>    // for allocator, make_shared, __shared_ptr_access
+#include <optional>  // for optional, nullopt
+#include <string>    // for basic_string, string
+#include <utility>   // for move
+#include <vector>    // for __alloc_traits<>::value_type
 
-#include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, BorderStyle, ROUNDED, Elements, DOUBLE, EMPTY, HEAVY, LIGHT, border, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, borderStyled, borderWith, window
+#include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, BorderStyle, ROUNDED, borderStyled, Elements, DASHED, DOUBLE, EMPTY, HEAVY, LIGHT, border, borderDashed, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, borderWith, window
 #include "ftxui/dom/node.hpp"      // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box

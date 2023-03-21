@@ -19,7 +19,7 @@ namespace {
 struct LinearGradientNormalized {
   float angle = 0.f;
   std::vector<Color> colors;
-  std::vector<float> positions; // Sorted.
+  std::vector<float> positions;  // Sorted.
 };
 
 // Convert a LinearGradient to a normalized version.
@@ -166,7 +166,7 @@ class LinearGradientColor : public NodeDecorator {
 /// LinearGradient::Angle() and LinearGradient::Stop().
 /// Example:
 /// ```cpp
-///  auto gradient = 
+///  auto gradient =
 ///   LinearGradient()
 ///    .Angle(45)
 ///    .Stop(Color::Red, 0.0)

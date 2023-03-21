@@ -2,7 +2,7 @@
 #define FTXUI_SCREEN_COLOR_HPP
 
 #include <cstdint>  // for uint8_t
-#include <string>   // for wstring
+#include <string>   // for string
 #include <vector>   // for vector
 
 #ifdef RGB
