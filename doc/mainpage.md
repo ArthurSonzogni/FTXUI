@@ -370,8 +370,6 @@ supports every color palette:
 ```cpp
 Decorator color(Color);
 Decorator bgcolor(Color);
-Decorator colorgrad(Color,Color);
-Decorator bgcolorgrad(Color,Color);
 ```
 
 
@@ -412,7 +410,6 @@ Example use of the above colors using the pipe operator:
 text("Blue foreground") | color(Color::Blue);
 text("Blue background") | bgcolor(Color::Blue);
 text("Black on white") | color(Color::Black) | bgcolor(Color::White);
-text("Gradient black on white") | colorgrad(Color::Black, Color::White) | bgcolorgrad(Color::White, Color::Black);
 ```
 
 ### Palette256 #{#dom-colors-palette-256}
@@ -445,6 +442,36 @@ ftxui::Color::HSV(uint8_t hue, uint8_t saturation, uint8_t value);
 <script id="asciicast-xwzzghmqcqzIuyLwCpQFEqbEu" src="https://asciinema.org/a/xwzzghmqcqzIuyLwCpQFEqbEu.js" async></script>
 @endhtmlonly
 
+## LinearGradient #{#dom-linear-gradient}
+
+FTXUI supports linear gradient. Either on the foreground or the background.
+
+```cpp
+Decorator color(const LinearGradient&);
+Decorator bgcolor(const LinearGradient&);
+```
+
+A `ftxui::LinearGradient` is defined by an angle in degree, and a list of color
+stops.
+```cpp
+auto gradient = LinearGradient()
+  .Angle(45)
+  .AddStop(0.0, Color::Red)
+  .AddStop(0.5, Color::Green)
+  .AddStop(1.0, Color::Blue);
+```
+
+You can also use simplified constructors:
+```cpp
+LinearGradient(Color::Red, Color::Blue);
+```
+```cpp
+LinearGradient(45, Color::Red, Color::Blue);
+```
+
+See [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/linear_gradient_gallery).
+
+
 ## Style {#dom-style}
 In addition to colored text and colored backgrounds. Many terminals support text
 effects such as: `bold`, `dim`, `underlined`, `inverted`, `blink`.
@@ -459,8 +486,8 @@ Element strikethrough(Element);
 Element blink(Element);
 Decorator color(Color);
 Decorator bgcolor(Color);
-Decorator colorgrad(Color,Color);
-Decorator bgcolorgrad(Color,Color);
+Decorator colorgrad(LinearGradient);
+Decorator bgcolorgrad(LinearGradient);
 ```
 
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2style_gallery_8cpp-example.html)
@@ -565,8 +592,7 @@ Simple [example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/do
 
 Complex [example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/component/canvas_animated.cpp):
   
-![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/4759106/147250538-783a8246-98e0-4a25-b032-3bd3710549d1.gif)  
-
+![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/4759106/147250538-783a8246-98e0-4a25-b032-3bd3710549d1.gif)
 # component {#module-component}
 
 The `ftxui::component` module defines the logic that produces interactive
