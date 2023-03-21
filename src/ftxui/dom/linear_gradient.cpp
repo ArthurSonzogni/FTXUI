@@ -218,7 +218,7 @@ LinearGradient& LinearGradient::Stop(Color c, float p) {
 /// @param c The color of the stop.
 /// @return The gradient.
 /// @ingroup dom
-/// @note The position of the stop is interpolated from nerby stops.
+/// @note The position of the stop is interpolated from nearby stops.
 LinearGradient& LinearGradient::Stop(Color c) {
   stops.push_back({c, {}});
   return *this;

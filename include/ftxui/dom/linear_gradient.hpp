@@ -10,20 +10,19 @@ namespace ftxui {
 
 /// @brief A class representing the settings for linear-gradient color effect.
 ///
-/// Example in with C++20 designated initializers
+/// Example:
 /// ```cpp
-/// LinearGradient{
-///   .angle = 0,
-///   .stops = {
-///      {Color::Red},
-///      {Color::Green},
-///      {Color::Blue},
-///   });
+/// LinearGradient()
+///    .Angle(45)
+///    .Stop(Color::Red, 0.0)
+///    .Stop(Color::Green, 0.5)
+///    .Stop(Color::Blue, 1.0);
 /// ```
 ///
-/// Example with C++17
+/// There are also shorthand constructors:
 /// ```cpp
-/// LinearGradient{0.f, {Color::Red, Color::Green, Color::Blue}};
+/// LinearGradient(Color::Red, Color::Blue);
+/// LinearGradient(45, Color::Red, Color::Blue);
 /// ```
 struct LinearGradient {
   float angle = 0.f;
