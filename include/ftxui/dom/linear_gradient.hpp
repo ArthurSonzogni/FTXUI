@@ -28,14 +28,20 @@ namespace ftxui {
 struct LinearGradient {
   float angle = 0.f;
   struct Stop {
-    Stop(Color color) : color(color) {}
-    Stop(Color color, float position) : color(color), position(position) {}
-    Stop(float position, Color color) : color(color), position(position) {}
-
     Color color = Color::Default;
     std::optional<float> position;
   };
   std::vector<Stop> stops;
+
+  // Simple constructor
+  LinearGradient();
+  LinearGradient(Color begin, Color end);
+  LinearGradient(float angle, Color begin, Color end);
+
+  // Modifier using the builder pattern.
+  LinearGradient& Angle(float angle);
+  LinearGradient& Stop(Color color, float position);
+  LinearGradient& Stop(Color color);
 };
 
 }  // namespace ftxui

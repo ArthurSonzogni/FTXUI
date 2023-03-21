@@ -36,8 +36,10 @@ int main(int argc, const char* argv[]) {
     slider_end_text = "end   = " + std::to_string(int(end * 100)) + "%";
 
     auto background = text("Gradient") | center |
-                      bgcolor(LinearGradient(
-                          angle, {{Color::Red, start}, {Color::Blue, end}}));
+                      bgcolor(LinearGradient()
+                                  .Angle(angle)
+                                  .Stop(Color::Blue, start)
+                                  .Stop(Color::Red, end));
     return vbox({
                background | flex,
                layout->Render(),

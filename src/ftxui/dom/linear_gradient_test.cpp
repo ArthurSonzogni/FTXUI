@@ -9,12 +9,51 @@
 
 namespace ftxui {
 
+TEST(ColorTest, API_default) {
+  LinearGradient gradient;
+  EXPECT_EQ(gradient.angle, 0);
+  EXPECT_EQ(gradient.stops.size(), 0);
+}
+
+TEST(ColorTest, API_builder) {
+  auto gradient = LinearGradient()  //
+                      .Angle(45)
+                      .Stop(Color::Red)
+                      .Stop(Color::RedLight, 0.5)
+                      .Stop(Color::RedLight);
+  EXPECT_EQ(gradient.angle, 45);
+  EXPECT_EQ(gradient.stops.size(), 3);
+  EXPECT_EQ(gradient.stops[0].color, Color::Red);
+  EXPECT_EQ(gradient.stops[0].position, std::nullopt);
+  EXPECT_EQ(gradient.stops[1].color, Color::RedLight);
+  EXPECT_EQ(gradient.stops[1].position, 0.5);
+  EXPECT_EQ(gradient.stops[2].color, Color::RedLight);
+  EXPECT_EQ(gradient.stops[2].position, std::nullopt);
+}
+
+TEST(ColorTest, API_constructor_bicolor) {
+  auto gradient = LinearGradient(Color::Red, Color::RedLight);
+  EXPECT_EQ(gradient.angle, 0);
+  EXPECT_EQ(gradient.stops.size(), 2);
+  EXPECT_EQ(gradient.stops[0].color, Color::Red);
+  EXPECT_EQ(gradient.stops[0].position, std::nullopt);
+  EXPECT_EQ(gradient.stops[1].color, Color::RedLight);
+  EXPECT_EQ(gradient.stops[1].position, std::nullopt);
+}
+
+TEST(ColorTest, API_constructor_bicolor_angle) {
+  auto gradient = LinearGradient(Color::Red, Color::RedLight, 45);
+  EXPECT_EQ(gradient.angle, 45);
+  EXPECT_EQ(gradient.stops.size(), 2);
+  EXPECT_EQ(gradient.stops[0].color, Color::Red);
+  EXPECT_EQ(gradient.stops[0].position, std::nullopt);
+  EXPECT_EQ(gradient.stops[1].color, Color::RedLight);
+  EXPECT_EQ(gradient.stops[1].position, std::nullopt);
+}
+
 TEST(ColorTest, GradientForeground) {
-  auto element = text("text") | color(LinearGradient{0.f,
-                                                     {
-                                                         {Color::RedLight, 0.f},
-                                                         {Color::Red, 1.f},
-                                                     }});
+  auto element =
+      text("text") | color(LinearGradient(Color::RedLight, Color::Red));
   Screen screen(5, 1);
   Render(screen, element);
 
@@ -30,11 +69,7 @@ TEST(ColorTest, GradientForeground) {
 
 TEST(ColorTest, GradientBackground) {
   auto element =
-      text("text") | bgcolor(LinearGradient{0.f,
-                                            {
-                                                {Color::RedLight, 0.f},
-                                                {Color::Red, 1.f},
-                                            }});
+      text("text") | bgcolor(LinearGradient(Color::RedLight, Color::Red));
   Screen screen(5, 1);
   Render(screen, element);
 
@@ -47,6 +82,7 @@ TEST(ColorTest, GradientBackground) {
   EXPECT_EQ(screen.PixelAt(4, 0).foreground_color, Color());
   EXPECT_EQ(screen.PixelAt(4, 0).background_color, gradient_end);
 }
+
 
 }  // namespace ftxui
 

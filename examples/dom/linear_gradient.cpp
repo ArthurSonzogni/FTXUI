@@ -10,13 +10,10 @@ int main(int argc, const char* argv[]) {
   using namespace ftxui;
   auto document = text("gradient") | center;
 
-  document |= bgcolor(LinearGradient{45,
-                                     {
-                                         {Color::DeepPink1},
-                                         {Color::DeepSkyBlue1},
-                                         {Color::Yellow},
-                                         {Color::DeepPink1},
-                                     }});
+  document |= bgcolor(LinearGradient()
+                          .Angle(45)
+                          .Stop(Color::DeepPink1)
+                          .Stop(Color::DeepSkyBlue1));
   auto screen = Screen::Create(Dimension::Full(), Dimension::Full());
   Render(screen, document);
   screen.Print();
