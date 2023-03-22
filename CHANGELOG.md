@@ -11,6 +11,10 @@ current (development)
 ### Dom
 - Feature: Add the dashed style for border and separator.
 - Feature: Add colored borders.
+- Feature: Customize with gradient color effect. Add the following decorators:
+  - `colorgrad`
+  - `bgcolorgrad`
+- Improvement: Color::Interpolate() uses gamma correction.
 
 ###
 - Breaking: Direction enum is renamed WidthOrHeight
