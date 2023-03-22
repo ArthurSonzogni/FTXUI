@@ -124,10 +124,10 @@ TEST(ButtonTest, Animation) {
     Screen screen(12, 3);
     Render(screen, container->Render());
     EXPECT_EQ(screen.ToString(),
-              "\x1B[1m\x1B[38;2;192;192;192m\x1B[48;2;0;0;0m      \x1B[22m     "
-              " \x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;192;192;192m\x1B[48;2;0;0;"
+              "\x1B[1m\x1B[38;2;191;191;191m\x1B[48;2;0;0;0m      \x1B[22m     "
+              " \x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;191;191;191m\x1B[48;2;0;0;"
               "0m btn1 \x1B[22m btn2 "
-              "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;192;192;192m\x1B[48;2;0;0;"
+              "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;191;191;191m\x1B[48;2;0;0;"
               "0m      \x1B[22m      \x1B[39m\x1B[49m");
   }
   selected = 1;
@@ -135,10 +135,10 @@ TEST(ButtonTest, Animation) {
     Screen screen(12, 3);
     Render(screen, container->Render());
     EXPECT_EQ(screen.ToString(),
-              "\x1B[38;2;192;192;192m\x1B[48;2;0;0;0m      \x1B[1m      "
-              "\x1B[22m\x1B[39m\x1B[49m\r\n\x1B[38;2;192;192;192m\x1B[48;2;0;0;"
+              "\x1B[38;2;191;191;191m\x1B[48;2;0;0;0m      \x1B[1m      "
+              "\x1B[22m\x1B[39m\x1B[49m\r\n\x1B[38;2;191;191;191m\x1B[48;2;0;0;"
               "0m btn1 \x1B[1m btn2 "
-              "\x1B[22m\x1B[39m\x1B[49m\r\n\x1B[38;2;192;192;192m\x1B[48;2;0;0;"
+              "\x1B[22m\x1B[39m\x1B[49m\r\n\x1B[38;2;191;191;191m\x1B[48;2;0;0;"
               "0m      \x1B[1m      \x1B[22m\x1B[39m\x1B[49m");
   }
   animation::Params params(2s);
@@ -148,12 +148,12 @@ TEST(ButtonTest, Animation) {
     Render(screen, container->Render());
     EXPECT_EQ(
         screen.ToString(),
-        "\x1B[38;2;192;192;192m\x1B[48;2;0;0;0m      "
-        "\x1B[1m\x1B[38;2;255;255;255m\x1B[48;2;128;128;128m      "
-        "\x1B[22m\x1B[39m\x1B[49m\r\n\x1B[38;2;192;192;192m\x1B[48;2;0;0;0m "
-        "btn1 \x1B[1m\x1B[38;2;255;255;255m\x1B[48;2;128;128;128m btn2 "
-        "\x1B[22m\x1B[39m\x1B[49m\r\n\x1B[38;2;192;192;192m\x1B[48;2;0;0;0m    "
-        "  \x1B[1m\x1B[38;2;255;255;255m\x1B[48;2;128;128;128m      "
+        "\x1B[38;2;191;191;191m\x1B[48;2;0;0;0m      "
+        "\x1B[1m\x1B[38;2;254;254;254m\x1B[48;2;127;127;127m      "
+        "\x1B[22m\x1B[39m\x1B[49m\r\n\x1B[38;2;191;191;191m\x1B[48;2;0;0;0m "
+        "btn1 \x1B[1m\x1B[38;2;254;254;254m\x1B[48;2;127;127;127m btn2 "
+        "\x1B[22m\x1B[39m\x1B[49m\r\n\x1B[38;2;191;191;191m\x1B[48;2;0;0;0m    "
+        "  \x1B[1m\x1B[38;2;254;254;254m\x1B[48;2;127;127;127m      "
         "\x1B[22m\x1B[39m\x1B[49m");
   }
   EXPECT_EQ(selected, 1);
@@ -164,12 +164,12 @@ TEST(ButtonTest, Animation) {
     Render(screen, container->Render());
     EXPECT_EQ(
         screen.ToString(),
-        "\x1B[1m\x1B[38;2;223;223;223m\x1B[48;2;64;64;64m      "
-        "\x1B[22m\x1B[38;2;255;255;255m\x1B[48;2;128;128;128m      "
-        "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;223;223;223m\x1B[48;2;64;64;64m "
-        "btn1 \x1B[22m\x1B[38;2;255;255;255m\x1B[48;2;128;128;128m btn2 "
-        "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;223;223;223m\x1B[48;2;64;64;64m  "
-        "    \x1B[22m\x1B[38;2;255;255;255m\x1B[48;2;128;128;128m      "
+        "\x1B[1m\x1B[38;2;226;226;226m\x1B[48;2;93;93;93m      "
+        "\x1B[22m\x1B[38;2;254;254;254m\x1B[48;2;127;127;127m      "
+        "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;226;226;226m\x1B[48;2;93;93;93m "
+        "btn1 \x1B[22m\x1B[38;2;254;254;254m\x1B[48;2;127;127;127m btn2 "
+        "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;226;226;226m\x1B[48;2;93;93;93m  "
+        "    \x1B[22m\x1B[38;2;254;254;254m\x1B[48;2;127;127;127m      "
         "\x1B[39m\x1B[49m");
   }
   container->OnAnimation(params);
@@ -178,12 +178,12 @@ TEST(ButtonTest, Animation) {
     Render(screen, container->Render());
     EXPECT_EQ(
         screen.ToString(),
-        "\x1B[1m\x1B[38;2;255;255;255m\x1B[48;2;128;128;128m      "
-        "\x1B[22m\x1B[38;2;192;192;192m\x1B[48;2;0;0;0m      "
-        "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;255;255;255m\x1B[48;2;128;128;"
-        "128m btn1 \x1B[22m\x1B[38;2;192;192;192m\x1B[48;2;0;0;0m btn2 "
-        "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;255;255;255m\x1B[48;2;128;128;"
-        "128m      \x1B[22m\x1B[38;2;192;192;192m\x1B[48;2;0;0;0m      "
+        "\x1B[1m\x1B[38;2;254;254;254m\x1B[48;2;127;127;127m      "
+        "\x1B[22m\x1B[38;2;191;191;191m\x1B[48;2;0;0;0m      "
+        "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;254;254;254m\x1B[48;2;127;127;"
+        "127m btn1 \x1B[22m\x1B[38;2;191;191;191m\x1B[48;2;0;0;0m btn2 "
+        "\x1B[39m\x1B[49m\r\n\x1B[1m\x1B[38;2;254;254;254m\x1B[48;2;127;127;"
+        "127m      \x1B[22m\x1B[38;2;191;191;191m\x1B[48;2;0;0;0m      "
         "\x1B[39m\x1B[49m");
   }
 }
