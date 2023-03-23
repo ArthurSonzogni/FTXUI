@@ -7,8 +7,8 @@
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, border, filler, operator|=, separator, size, text, vbox, frame, vscroll_indicator, hbox, HEIGHT, LESS_THAN, bold, inverted
+#include "ftxui/screen/util.hpp"   // for clamp
 #include "ftxui/util/ref.hpp"      // for ConstStringListRef
-
 namespace ftxui {
 
 Component Dropdown(ConstStringListRef entries, int* selected) {
@@ -38,8 +38,8 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
     }
 
     Element Render() override {
-      *selected_ = std::min((int)entries_.size() - 1, std::max(0, *selected_));
-      title_ = entries_[*selected_];
+      *selected_ = util::clamp(*selected_, 0, (int)entries_.size() - 1);
+      title_ = entries_[static_cast<size_t>(*selected_)];
       if (show_) {
         const int max_height = 12;
         return vbox({
