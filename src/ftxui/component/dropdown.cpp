@@ -28,7 +28,7 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
         }
         return hbox({prefix, t});
       };
-      checkbox_ = Checkbox(&title_, &show_, option),
+      checkbox_ = Checkbox(&title_, &show_, option);
       radiobox_ = Radiobox(entries_, selected_);
 
       Add(Container::Vertical({
