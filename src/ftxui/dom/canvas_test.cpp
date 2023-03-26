@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include <stdint.h>  // for uint32_t
-#include <string>    // for allocator, string
+#include <cstdint>  // for uint32_t
+#include <string>   // for allocator, string
 
 #include "ftxui/dom/canvas.hpp"    // for Canvas
 #include "ftxui/dom/elements.hpp"  // for canvas
@@ -9,6 +9,7 @@
 #include "ftxui/screen/screen.hpp"    // for Screen
 #include "ftxui/screen/terminal.hpp"  // for SetColorSupport, Color, TrueColor
 
+// NOLINTBEGIN
 namespace ftxui {
 
 namespace {
@@ -101,6 +102,7 @@ TEST(CanvasTest, GoldText) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

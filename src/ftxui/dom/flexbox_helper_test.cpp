@@ -4,6 +4,7 @@
 
 #include "ftxui/dom/flexbox_helper.hpp"
 
+// NOLINTBEGIN
 namespace ftxui {
 
 TEST(FlexboxHelperTest, BasicRow) {
@@ -227,6 +228,7 @@ TEST(FlexboxHelperTest, BasicColumnInversed) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

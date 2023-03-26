@@ -66,11 +66,11 @@ struct Event {
   std::string character() const { return input_; }
 
   bool is_mouse() const { return type_ == Type::Mouse; }
-  struct Mouse& mouse() { return mouse_; }
+  struct Mouse& mouse() { return data_.mouse; }
 
   bool is_cursor_reporting() const { return type_ == Type::CursorReporting; }
-  int cursor_x() const { return cursor_.x; }
-  int cursor_y() const { return cursor_.y; }
+  int cursor_x() const { return data_.cursor.x; }
+  int cursor_y() const { return data_.cursor.y; }
 
   const std::string& input() const { return input_; }
 
@@ -92,14 +92,15 @@ struct Event {
   Type type_ = Type::Unknown;
 
   struct Cursor {
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
   };
 
   union {
-    struct Mouse mouse_;
-    struct Cursor cursor_;
-  };
+    struct Mouse mouse;
+    struct Cursor cursor;
+  } data_ = {};
+
   std::string input_;
 };
 

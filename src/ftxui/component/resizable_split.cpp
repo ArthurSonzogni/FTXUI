@@ -18,7 +18,7 @@ namespace {
 
 class ResizableSplitBase : public ComponentBase {
  public:
-  ResizableSplitBase(ResizableSplitOption options)
+  explicit ResizableSplitBase(ResizableSplitOption options)
       : options_(std::move(options)) {
     Add(Container::Horizontal({
         options_->main,

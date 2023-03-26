@@ -9,6 +9,7 @@
 #include "ftxui/dom/node.hpp"         // for Render
 #include "ftxui/screen/screen.hpp"    // for Screen
 
+// NOLINTBEGIN
 namespace ftxui {
 
 namespace {
@@ -186,6 +187,7 @@ TEST(HoverableTest, Coverage) {
 
 }  // namespace
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

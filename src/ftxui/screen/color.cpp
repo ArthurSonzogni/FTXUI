@@ -212,21 +212,22 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
     }
   };
 
-  uint8_t red_a = 0;
-  uint8_t green_a = 0;
-  uint8_t blue_a = 0;
-  uint8_t red_b = 0;
-  uint8_t green_b = 0;
-  uint8_t blue_b = 0;
-  get_color(a, &red_a, &green_a, &blue_a);
-  get_color(b, &red_b, &green_b, &blue_b);
+  uint8_t a_r = 0;
+  uint8_t a_g = 0;
+  uint8_t a_b = 0;
+  uint8_t b_r = 0;
+  uint8_t b_g = 0;
+  uint8_t b_b = 0;
+  get_color(a, &a_r, &a_g, &a_b);
+  get_color(b, &b_r, &b_g, &b_b);
 
   // Gamma correction:
   // https://en.wikipedia.org/wiki/Gamma_correction
+  constexpr float gamma = 2.2f;
   return Color::RGB(
-      pow(pow(red_a, 2.2f) * (1 - t) + pow(red_b, 2.2f) * t, 1 / 2.2f),
-      pow(pow(green_a, 2.2f) * (1 - t) + pow(green_b, 2.2f) * t, 1 / 2.2f),
-      pow(pow(blue_a, 2.2f) * (1 - t) + pow(blue_b, 2.2f) * t, 1 / 2.2f));
+      uint8_t(pow(pow(a_r, gamma) * (1 - t) + pow(b_r, gamma) * t, 1 / gamma)),
+      uint8_t(pow(pow(a_g, gamma) * (1 - t) + pow(b_g, gamma) * t, 1 / gamma)),
+      uint8_t(pow(pow(a_b, gamma) * (1 - t) + pow(b_b, gamma) * t, 1 / gamma)));
 }
 
 inline namespace literals {

@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include <stddef.h>   // for size_t
 #include <algorithm>  // for remove
+#include <cstddef>    // for size_t
 #include <string>     // for string, allocator, basic_string
 #include <vector>     // for vector
 
@@ -8,6 +8,7 @@
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
 
+// NOLINTBEGIN
 namespace ftxui {
 namespace {
 
@@ -365,6 +366,7 @@ TEST(VBoxText, FlexGrow_NoFlex_FlewShrink) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

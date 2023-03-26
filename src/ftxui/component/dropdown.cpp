@@ -1,6 +1,6 @@
-#include <algorithm>   // for max, min
+#include <cstddef>     // for size_t
 #include <functional>  // for function
-#include <memory>      // for __shared_ptr_access, shared_ptr, allocator
+#include <memory>      // for __shared_ptr_access, allocator, shared_ptr
 #include <string>      // for string
 
 #include "ftxui/component/component.hpp"  // for Maybe, Checkbox, Make, Radiobox, Vertical, Dropdown
@@ -9,6 +9,7 @@
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, border, filler, operator|=, separator, size, text, vbox, frame, vscroll_indicator, hbox, HEIGHT, LESS_THAN, bold, inverted
 #include "ftxui/screen/util.hpp"   // for clamp
 #include "ftxui/util/ref.hpp"      // for ConstStringListRef
+
 namespace ftxui {
 
 Component Dropdown(ConstStringListRef entries, int* selected) {

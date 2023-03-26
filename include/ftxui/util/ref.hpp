@@ -29,7 +29,7 @@ class Ref {
   Ref() {}
   Ref(const T& t) : owned_(t) {}
   Ref(T&& t) : owned_(std::forward<T>(t)) {}
-  Ref(T* t) : address_(t) {}
+  Ref(T* t) : owned_(), address_(t) {}
   T& operator*() { return address_ ? *address_ : owned_; }
   T& operator()() { return address_ ? *address_ : owned_; }
   T* operator->() { return address_ ? address_ : &owned_; }

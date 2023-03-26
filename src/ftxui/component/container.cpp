@@ -85,7 +85,7 @@ class ContainerBase : public ComponentBase {
       const size_t i = ((size_t(*selector_ + offset * dir + children_.size())) %
                         children_.size());
       if (children_[i]->Focusable()) {
-        *selector_ = i;
+        *selector_ = int(i);
         return;
       }
     }

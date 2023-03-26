@@ -11,7 +11,8 @@
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/util/ref.hpp"         // for Ref
 
-using namespace ftxui;
+// NOLINTBEGIN
+namespace ftxui {
 
 TEST(ToggleTest, leftRightArrow) {
   std::vector<std::string> entries = {"On", "Off"};
@@ -176,6 +177,9 @@ TEST(ToggleTest, RemoveEntries) {
   EXPECT_EQ(selected, 1);
   EXPECT_EQ(focused_entry, 1);
 }
+
+}  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

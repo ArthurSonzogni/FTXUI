@@ -14,7 +14,7 @@ bool TestSignal(int signal) {
   // The tree of components. This defines how to navigate using the keyboard.
   auto component = Renderer([&] {
     called++;
-    std::raise(signal);
+    std::ignore = std::raise(signal);
     called++;
     return text("");
   });

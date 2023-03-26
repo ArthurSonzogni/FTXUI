@@ -7,7 +7,7 @@
 namespace ftxui {
 
 TEST(AnimationTest, StartAndEnd) {
-  std::vector<animation::easing::Function> functions = {
+  const std::vector<animation::easing::Function> functions = {
       animation::easing::Linear,         animation::easing::QuadraticIn,
       animation::easing::QuadraticOut,   animation::easing::QuadraticInOut,
       animation::easing::CubicIn,        animation::easing::CubicOut,
@@ -25,7 +25,7 @@ TEST(AnimationTest, StartAndEnd) {
       animation::easing::BounceIn,       animation::easing::BounceOut,
       animation::easing::BounceInOut,
   };
-  for (auto& it : functions) {
+  for (const auto& it : functions) {
     EXPECT_NEAR(0.F, it(0.F), 1.0e-4);
     EXPECT_NEAR(1.F, it(1.F), 1.0e-4);
   }

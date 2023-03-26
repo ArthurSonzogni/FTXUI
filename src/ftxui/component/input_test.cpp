@@ -12,6 +12,7 @@
 #include "ftxui/screen/screen.hpp"  // for Fixed, Screen, Pixel
 #include "ftxui/util/ref.hpp"       // for Ref
 
+// NOLINTBEGIN
 namespace ftxui {
 
 TEST(InputTest, Init) {
@@ -488,6 +489,7 @@ TEST(InputTest, CtrlArrowRight2) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
