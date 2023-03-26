@@ -9,8 +9,8 @@ namespace ftxui::animation {
 namespace easing {
 
 namespace {
-constexpr float kPi = 3.14159265358979323846F;
-constexpr float kPi2 = kPi / 2.F;
+constexpr float kPi = 3.14159265358979323846f;
+constexpr float kPi2 = kPi / 2.f;
 }  // namespace
 
 // Easing function have been taken out of:
@@ -37,17 +37,17 @@ float QuadraticIn(float p) {
 
 // Modeled after the parabola y = -x^2 + 2x
 float QuadraticOut(float p) {
-  return -(p * (p - 2));
+  return -(p * (p - 2.f));
 }
 
 // Modeled after the piecewise quadratic
 // y = (1/2)((2x)^2)             ; [0, 0.5)
 // y = -(1/2)((2x-1)*(2x-3) - 1) ; [0.5, 1]
 float QuadraticInOut(float p) {
-  if (p < 0.5F) {  // NOLINT
-    return 2 * p * p;
+  if (p < 0.5f) {  // NOLINT
+    return 2.f * p * p;
   } else {
-    return (-2 * p * p) + (4 * p) - 1;
+    return (-2.f * p * p) + (4.f * p) - 1.f;
   }
 }
 
@@ -58,19 +58,19 @@ float CubicIn(float p) {
 
 // Modeled after the cubic y = (x - 1)^3 + 1
 float CubicOut(float p) {
-  const float f = (p - 1);
-  return f * f * f + 1;
+  const float f = (p - 1.f);
+  return f * f * f + 1.f;
 }
 
 // Modeled after the piecewise cubic
 // y = (1/2)((2x)^3)       ; [0, 0.5)
 // y = (1/2)((2x-2)^3 + 2) ; [0.5, 1]
 float CubicInOut(float p) {
-  if (p < 0.5F) {  // NOLINT
-    return 4 * p * p * p;
+  if (p < 0.5f) {  // NOLINT
+    return 4.f * p * p * p;
   } else {
-    const float f = ((2 * p) - 2);
-    return 0.5F * f * f * f + 1;  // NOLINT
+    const float f = ((2.f * p) - 2.f);
+    return 0.5f * f * f * f + 1.f;  // NOLINT
   }
 }
 
@@ -81,19 +81,19 @@ float QuarticIn(float p) {
 
 // Modeled after the quartic y = 1 - (x - 1)^4
 float QuarticOut(float p) {
-  const float f = (p - 1);
-  return f * f * f * (1 - p) + 1;
+  const float f = (p - 1.f);
+  return f * f * f * (1.f - p) + 1.f;
 }
 
 // Modeled after the piecewise quartic
 // y = (1/2)((2x)^4)        ; [0, 0.5)
 // y = -(1/2)((2x-2)^4 - 2) ; [0.5, 1]
 float QuarticInOut(float p) {
-  if (p < 0.5F) {              // NOLINT
-    return 8 * p * p * p * p;  // NOLINT
+  if (p < 0.5f) {                // NOLINT
+    return 8.f * p * p * p * p;  // NOLINT
   } else {
-    const float f = (p - 1);
-    return -8 * f * f * f * f + 1;  // NOLINT
+    const float f = (p - 1.f);
+    return -8.f * f * f * f * f + 1.f;  // NOLINT
   }
 }
 
@@ -104,25 +104,25 @@ float QuinticIn(float p) {
 
 // Modeled after the quintic y = (x - 1)^5 + 1
 float QuinticOut(float p) {
-  const float f = (p - 1);
-  return f * f * f * f * f + 1;
+  const float f = (p - 1.f);
+  return f * f * f * f * f + 1.f;
 }
 
 // Modeled after the piecewise quintic
 // y = (1/2)((2x)^5)       ; [0, 0.5)
 // y = (1/2)((2x-2)^5 + 2) ; [0.5, 1]
 float QuinticInOut(float p) {
-  if (p < 0.5F) {                        // NOLINT
-    return 16 * p * p * p * p * p;       // NOLINT
-  } else {                               // NOLINT
-    float f = ((2 * p) - 2);             // NOLINT
-    return 0.5 * f * f * f * f * f + 1;  // NOLINT
+  if (p < 0.5f) {                           // NOLINT
+    return 16.f * p * p * p * p * p;        // NOLINT
+  } else {                                  // NOLINT
+    float f = ((2.f * p) - 2.f);            // NOLINT
+    return 0.5f * f * f * f * f * f + 1.f;  // NOLINT
   }
 }
 
 // Modeled after quarter-cycle of sine wave
 float SineIn(float p) {
-  return std::sin((p - 1) * kPi2) + 1;
+  return std::sin((p - 1.f) * kPi2) + 1.f;
 }
 
 // Modeled after quarter-cycle of sine wave (different phase)
@@ -132,78 +132,79 @@ float SineOut(float p) {
 
 // Modeled after half sine wave
 float SineInOut(float p) {
-  return 0.5F * (1 - std::cos(p * kPi));  // NOLINT
+  return 0.5f * (1.f - std::cos(p * kPi));  // NOLINT
 }
 
 // Modeled after shifted quadrant IV of unit circle
 float CircularIn(float p) {
-  return 1 - std::sqrt(1 - (p * p));
+  return 1.f - std::sqrt(1.f - (p * p));
 }
 
 // Modeled after shifted quadrant II of unit circle
 float CircularOut(float p) {
-  return std::sqrt((2 - p) * p);
+  return std::sqrt((2.f - p) * p);
 }
 
 // Modeled after the piecewise circular function
 // y = (1/2)(1 - sqrt(1 - 4x^2))           ; [0, 0.5)
 // y = (1/2)(sqrt(-(2x - 3)*(2x - 1)) + 1) ; [0.5, 1]
 float CircularInOut(float p) {
-  if (p < 0.5F) {                                    // NOLINT
-    return 0.5F * (1 - std::sqrt(1 - 4 * (p * p)));  // NOLINT
+  if (p < 0.5f) {                                          // NOLINT
+    return 0.5f * (1.f - std::sqrt(1.f - 4.f * (p * p)));  // NOLINT
   } else {
-    return 0.5F * (std::sqrt(-((2 * p) - 3) * ((2 * p) - 1)) + 1);  // NOLINT
+    // NOLINTNEXTLINE
+    return 0.5f * (std::sqrt(-((2.f * p) - 3.f) * ((2.f * p) - 1.f)) + 1.f);
   }
 }
 
 // Modeled after the exponential function y = 2^(10(x - 1))
 float ExponentialIn(float p) {
-  return (p == 0.0) ? p : std::pow(2, 10 * (p - 1));  // NOLINT
+  return (p == 0.f) ? p : std::pow(2.f, 10.f * (p - 1.f));  // NOLINT
 }
 
 // Modeled after the exponential function y = -2^(-10x) + 1
 float ExponentialOut(float p) {
-  return (p == 1.0) ? p : 1 - std::pow(2, -10 * p);  // NOLINT
+  return (p == 1.f) ? p : 1.f - std::pow(2.f, -10.f * p);  // NOLINT
 }
 
 // Modeled after the piecewise exponential
 // y = (1/2)2^(10(2x - 1))         ; [0,0.5)
 // y = -(1/2)*2^(-10(2x - 1))) + 1 ; [0.5,1]
 float ExponentialInOut(float p) {
-  if (p == 0.0 || p == 1.F) {
+  if (p == 0.f || p == 1.f) {
     return p;
   }
 
-  if (p < 0.5F) {                                   // NOLINT
-    return 0.5 * std::pow(2, (20 * p) - 10);        // NOLINT
-  } else {                                          // NOLINT
-    return -0.5 * std::pow(2, (-20 * p) + 10) + 1;  // NOLINT
+  if (p < 0.5f) {                                            // NOLINT
+    return 0.5f * std::pow(2.f, (20.f * p) - 10.f);          // NOLINT
+  } else {                                                   // NOLINT
+    return -0.5f * std::pow(2.f, (-20.f * p) + 10.f) + 1.f;  // NOLINT
   }
 }
 
 // Modeled after the damped sine wave y = sin(13pi/2*x)*pow(2, 10 * (x - 1))
 float ElasticIn(float p) {
-  return std::sin(13.F * kPi2 * p) * std::pow(2.F, 10.F * (p - 1));  // NOLINT
+  return std::sin(13.f * kPi2 * p) * std::pow(2.f, 10.f * (p - 1.f));  // NOLINT
 }
 
 // Modeled after the damped sine wave y = sin(-13pi/2*(x + 1))*pow(2, -10x) +
 // 1
 float ElasticOut(float p) {
   // NOLINTNEXTLINE
-  return std::sin(-13.F * kPi2 * (p + 1)) * std::pow(2.F, -10.F * p) + 1;
+  return std::sin(-13.f * kPi2 * (p + 1.f)) * std::pow(2.f, -10.f * p) + 1.f;
 }
 
 // Modeled after the piecewise exponentially-damped sine wave:
 // y = (1/2)*sin(13pi/2*(2*x))*pow(2, 10 * ((2*x) - 1))      ; [0,0.5)
 // y = (1/2)*(sin(-13pi/2*((2x-1)+1))*pow(2,-10(2*x-1)) + 2) ; [0.5, 1]
 float ElasticInOut(float p) {
-  if (p < 0.5F) {                                               // NOLINT
-    return 0.5 * std::sin(13.F * kPi2 * (2 * p)) *              // NOLINT
-           std::pow(2, 10 * ((2 * p) - 1));                     // NOLINT
-  } else {                                                      // NOLINT
-    return 0.5 * (std::sin(-13.F * kPi2 * ((2 * p - 1) + 1)) *  // NOLINT
-                      std::pow(2, -10 * (2 * p - 1)) +          // NOLINT
-                  2);                                           // NOLINT
+  if (p < 0.5f) {                                                      // NOLINT
+    return 0.5f * std::sin(13.f * kPi2 * (2.f * p)) *                  // NOLINT
+           std::pow(2.f, 10.f * ((2.f * p) - 1.f));                    // NOLINT
+  } else {                                                             // NOLINT
+    return 0.5f * (std::sin(-13.f * kPi2 * ((2.f * p - 1.f) + 1.f)) *  // NOLINT
+                       std::pow(2.f, -10.f * (2.f * p - 1.f)) +        // NOLINT
+                   2.f);                                               // NOLINT
   }
 }
 
@@ -214,45 +215,45 @@ float BackIn(float p) {
 
 // Modeled after overshooting cubic y = 1-((1-x)^3-(1-x)*sin((1-x)*pi))
 float BackOut(float p) {
-  const float f = (1 - p);
-  return 1 - (f * f * f - f * std::sin(f * kPi));
+  const float f = (1.f - p);
+  return 1.f - (f * f * f - f * std::sin(f * kPi));
 }
 
 // Modeled after the piecewise overshooting cubic function:
 // y = (1/2)*((2x)^3-(2x)*sin(2*x*pi))           ; [0, 0.5)
 // y = (1/2)*(1-((1-x)^3-(1-x)*sin((1-x)*pi))+1) ; [0.5, 1]
 float BackInOut(float p) {
-  if (p < 0.5F) {  // NOLINT
-    const float f = 2 * p;
-    return 0.5F * (f * f * f - f * std::sin(f * kPi));  // NOLINT
+  if (p < 0.5f) {  // NOLINT
+    const float f = 2.f * p;
+    return 0.5f * (f * f * f - f * std::sin(f * kPi));  // NOLINT
   } else {
-    float f = (1 - (2 * p - 1));                                    // NOLINT
-    return 0.5F * (1 - (f * f * f - f * std::sin(f * kPi))) + 0.5;  // NOLINT
+    float f = (1.f - (2.f * p - 1.f));                                 // NOLINT
+    return 0.5f * (1.f - (f * f * f - f * std::sin(f * kPi))) + 0.5f;  // NOLINT
   }
 }
 
 float BounceIn(float p) {
-  return 1 - BounceOut(1 - p);
+  return 1.f - BounceOut(1.f - p);
 }
 
 float BounceOut(float p) {
-  if (p < 4 / 11.0) {                                           // NOLINT
-    return (121 * p * p) / 16.0;                                // NOLINT
-  } else if (p < 8 / 11.0) {                                    // NOLINT
-    return (363 / 40.0 * p * p) - (99 / 10.0 * p) + 17 / 5.0;   // NOLINT
-  } else if (p < 9 / 10.0) {                                    // NOLINT
-    return (4356 / 361.0 * p * p) - (35442 / 1805.0 * p) +      // NOLINT
-           16061 / 1805.0;                                      // NOLINT
-  } else {                                                      // NOLINT
-    return (54 / 5.0 * p * p) - (513 / 25.0 * p) + 268 / 25.0;  // NOLINT
+  if (p < 4.f / 11.f) {                                                // NOLINT
+    return (121.f * p * p) / 16.f;                                   // NOLINT
+  } else if (p < 8.f / 11.f) {                                         // NOLINT
+    return (363.f / 40.f * p * p) - (99.f / 10.f * p) + 17.f / 5.f;  // NOLINT
+  } else if (p < 9.f / 10.f) {                                         // NOLINT
+    return (4356.f / 361.f * p * p) - (35442.f / 1805.f * p) +       // NOLINT
+           16061.f / 1805.f;                                           // NOLINT
+  } else {                                                           // NOLINT
+    return (54.f / 5.f * p * p) - (513 / 25.f * p) + 268 / 25.f;       // NOLINT
   }
 }
 
-float BounceInOut(float p) {                    // NOLINT
-  if (p < 0.5F) {                               // NOLINT
-    return 0.5F * BounceIn(p * 2);              // NOLINT
-  } else {                                      // NOLINT
-    return 0.5F * BounceOut(p * 2 - 1) + 0.5F;  // NOLINT
+float BounceInOut(float p) {                        // NOLINT
+  if (p < 0.5f) {                                   // NOLINT
+    return 0.5f * BounceIn(p * 2.f);                // NOLINT
+  } else {                                          // NOLINT
+    return 0.5f * BounceOut(p * 2.f - 1.f) + 0.5f;  // NOLINT
   }
 }
 
