@@ -37,7 +37,7 @@ Component Maybe(Component child, std::function<bool()> show) {
 
 /// @brief Decorate a component. It is shown only when the |show| function
 /// returns true.
-/// @params show a function returning whether the decoratorated component should
+/// @param show a function returning whether the decoratorated component should
 /// be shown.
 /// @ingroup component
 ///
@@ -54,8 +54,8 @@ ComponentDecorator Maybe(std::function<bool()> show) {
 }
 
 /// @brief Decorate a component |child|. It is shown only when |show| is true.
-/// @params child the compoennt to decorate.
-/// @params show a boolean. |child| is shown when |show| is true.
+/// @param child the compoennt to decorate.
+/// @param show a boolean. |child| is shown when |show| is true.
 /// @ingroup component
 ///
 /// ### Example
@@ -69,7 +69,7 @@ Component Maybe(Component child, const bool* show) {
 }
 
 /// @brief Decorate a component. It is shown only when |show| is true.
-/// @params show a boolean. |child| is shown when |show| is true.
+/// @param show a boolean. |child| is shown when |show| is true.
 /// @ingroup component
 ///
 /// ### Example
