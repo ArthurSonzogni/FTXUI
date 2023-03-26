@@ -93,7 +93,7 @@ class ResizableSplitBase : public ComponentBase {
                options_->back->Render() | xflex,
            }) |
            reflect(box_);
-  };
+  }
 
   Element RenderRight() {
     return hbox({
@@ -103,7 +103,7 @@ class ResizableSplitBase : public ComponentBase {
                    size(WIDTH, EQUAL, options_->main_size()),
            }) |
            reflect(box_);
-  };
+  }
 
   Element RenderTop() {
     return vbox({
@@ -113,7 +113,7 @@ class ResizableSplitBase : public ComponentBase {
                options_->back->Render() | yflex,
            }) |
            reflect(box_);
-  };
+  }
 
   Element RenderBottom() {
     return vbox({
@@ -123,7 +123,7 @@ class ResizableSplitBase : public ComponentBase {
                    size(HEIGHT, EQUAL, options_->main_size()),
            }) |
            reflect(box_);
-  };
+  }
 
  private:
   Ref<ResizableSplitOption> options_;

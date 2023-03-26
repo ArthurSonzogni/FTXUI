@@ -64,7 +64,7 @@ Element vscroll_indicator(Element child) {
         screen.PixelAt(x, y) = Pixel();
         screen.PixelAt(x, y).character = c;
       }
-    };
+    }
   };
   return std::make_shared<Impl>(std::move(child));
 }
