@@ -32,7 +32,7 @@
             "-DCMAKE_BUILD_TYPE=Release"
           ];
 
-          meta = with pkgs.lib; {
+          meta = {
             homepage = "https://arthursonzogni.github.io/FTXUI/";
             description = "C++ Functional Terminal User Interface.";
             longDescription = ''
@@ -52,8 +52,8 @@
               - Multiple packages: CMake FetchContent (preferred), vcpkg, pkgbuild, conan, nix, etc...
               - Good practises: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
             '';
-            license = licenses.mit;
-            platforms = platforms.all;
+            license = pkgs.lib.licenses.mit;
+            platforms = pkgs.lib.platforms.all;
           };
         };
       }
