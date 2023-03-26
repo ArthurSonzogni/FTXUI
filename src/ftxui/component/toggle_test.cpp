@@ -1,13 +1,12 @@
-#include <gtest/gtest.h>
-#include <functional>  // for function
-#include <memory>      // for __shared_ptr_access, shared_ptr, allocator
-#include <string>      // for string, basic_string
-#include <vector>      // for vector
+#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, Test, EXPECT_TRUE, TestInfo (ptr only), EXPECT_FALSE, TEST
+#include <functional>     // for function
+#include <memory>         // for __shared_ptr_access, shared_ptr, allocator
+#include <string>         // for string, basic_string
+#include <vector>         // for vector
 
-#include "ftxui/component/captured_mouse.hpp"     // for ftxui
-#include "ftxui/component/component.hpp"          // for Toggle
+#include "ftxui/component/component.hpp"          // for Menu, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for ToggleOption
+#include "ftxui/component/component_options.hpp"  // for MenuOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/util/ref.hpp"         // for Ref
 

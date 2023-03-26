@@ -1,6 +1,7 @@
-#include <gtest/gtest.h>
+#include <gtest/gtest.h>  // for Test, TestInfo (ptr only), TEST, EXPECT_EQ, Message, TestPartResult
 #include <csignal>  // for raise, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM
 #include <ftxui/component/event.hpp>  // for Event, Event::Custom
+#include <tuple>                      // for _Swallow_assign, ignore
 
 #include "ftxui/component/component.hpp"  // for Renderer
 #include "ftxui/component/screen_interactive.hpp"

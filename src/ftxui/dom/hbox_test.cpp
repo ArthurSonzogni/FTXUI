@@ -1,11 +1,10 @@
-#include <gtest/gtest.h>
+#include <gtest/gtest.h>  // for Test, TestInfo (ptr only), EXPECT_EQ, Message, TEST, TestPartResult
 #include <cstddef>  // for size_t
-#include <string>   // for string, allocator
+#include <string>   // for allocator, basic_string, string
 #include <vector>   // for vector
 
-#include "ftxui/dom/elements.hpp"  // for text, operator|, hbox, Element, flex_grow, flex_shrink
+#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex_grow, flex_shrink, hbox
 #include "ftxui/dom/node.hpp"       // for Render
-#include "ftxui/screen/color.hpp"   // for ftxui
 #include "ftxui/screen/screen.hpp"  // for Screen
 
 // NOLINTBEGIN
