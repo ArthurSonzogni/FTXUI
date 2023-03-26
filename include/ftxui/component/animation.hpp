@@ -18,7 +18,7 @@ void RequestAnimationFrame();
 
 using Clock = std::chrono::steady_clock;
 using TimePoint = std::chrono::time_point<Clock>;
-using Duration = std::chrono::duration<double>;
+using Duration = std::chrono::duration<float>;
 
 // Parameter of Component::OnAnimation(param).
 class Params {
