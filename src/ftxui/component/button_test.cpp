@@ -13,6 +13,7 @@
 #include "ftxui/screen/screen.hpp"    // for Screen
 #include "ftxui/screen/terminal.hpp"  // for SetColorSupport, Color, TrueColor
 
+// NOLINTBEGIN
 namespace ftxui {
 
 namespace {
@@ -189,6 +190,7 @@ TEST(ButtonTest, Animation) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

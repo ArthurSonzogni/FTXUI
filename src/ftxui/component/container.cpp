@@ -44,13 +44,13 @@ class ContainerBase : public ComponentBase {
       return nullptr;
     }
 
-    return children_[*selector_ % children_.size()];
+    return children_[static_cast<size_t>(*selector_) % children_.size()];
   }
 
   void SetActiveChild(ComponentBase* child) override {
     for (size_t i = 0; i < children_.size(); ++i) {
       if (children_[i].get() == child) {
-        *selector_ = (int)i;
+        *selector_ = static_cast<int>(i);
         return;
       }
     }
@@ -68,7 +68,7 @@ class ContainerBase : public ComponentBase {
   int* selector_ = nullptr;
 
   void MoveSelector(int dir) {
-    for (int i = *selector_ + dir; i >= 0 && i < (int)children_.size();
+    for (int i = *selector_ + dir; i >= 0 && i < int(children_.size());
          i += dir) {
       if (children_[i]->Focusable()) {
         *selector_ = i;
@@ -85,7 +85,7 @@ class ContainerBase : public ComponentBase {
       const size_t i = ((size_t(*selector_ + offset * dir + children_.size())) %
                         children_.size());
       if (children_[i]->Focusable()) {
-        *selector_ = (int)i;
+        *selector_ = int(i);
         return;
       }
     }
@@ -225,7 +225,7 @@ class TabContainer : public ContainerBase {
     if (children_.empty()) {
       return false;
     }
-    return children_[*selector_ % children_.size()]->Focusable();
+    return children_[size_t(*selector_) % children_.size()]->Focusable();
   }
 
   bool OnMouseEvent(Event event) override {

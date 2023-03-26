@@ -29,7 +29,7 @@ Event Event::Mouse(std::string input, struct Mouse mouse) {
   Event event;
   event.input_ = std::move(input);
   event.type_ = Type::Mouse;
-  event.mouse_ = mouse;  // NOLINT
+  event.data_.mouse = mouse;  // NOLINT
   return event;
 }
 
@@ -45,8 +45,7 @@ Event Event::CursorReporting(std::string input, int x, int y) {
   Event event;
   event.input_ = std::move(input);
   event.type_ = Type::CursorReporting;
-  event.cursor_.x = x;  // NOLINT
-  event.cursor_.y = y;  // NOLINT
+  event.data_.cursor = {x, y};  // NOLINT
   return event;
 }
 

@@ -1,6 +1,6 @@
-#include <stddef.h>                       // for size_t
 #include <algorithm>                      // for max, min, sort, copy
 #include <cmath>                          // for fmod, cos, sin
+#include <cstddef>                        // for size_t
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
 #include <memory>    // for allocator_traits<>::value_type, make_shared
 #include <optional>  // for optional, operator!=, operator<
@@ -25,7 +25,7 @@ struct LinearGradientNormalized {
 // Convert a LinearGradient to a normalized version.
 LinearGradientNormalized Normalize(LinearGradient gradient) {
   // Handle gradient of size 0.
-  if (gradient.stops.size() == 0) {
+  if (gradient.stops.empty()) {
     return LinearGradientNormalized{
         0.f, {Color::Default, Color::Default}, {0.f, 1.f}};
   }
@@ -46,11 +46,13 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     }
 
     if (i - last_checkpoint >= 2) {
-      const float min = gradient.stops[i].position.value();
-      const float max = gradient.stops[last_checkpoint].position.value();
+      const float min = gradient.stops[i].position.value();  // NOLINT
+      const float max =
+          gradient.stops[last_checkpoint].position.value();  // NOLINT
       for (size_t j = last_checkpoint + 1; j < i; ++j) {
-        gradient.stops[j].position =
-            min + (max - min) * (j - last_checkpoint) / (i - last_checkpoint);
+        gradient.stops[j].position = min + (max - min) *
+                                               float(j - last_checkpoint) /
+                                               float(i - last_checkpoint);
       }
     }
 
@@ -74,10 +76,11 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
 
   // Normalize the angle.
   LinearGradientNormalized normalized;
+  // NOLINTNEXTLINE
   normalized.angle = std::fmod(std::fmod(gradient.angle, 360.f) + 360.f, 360.f);
   for (auto& stop : gradient.stops) {
     normalized.colors.push_back(stop.color);
-    normalized.positions.push_back(stop.position.value());
+    normalized.positions.push_back(stop.position.value());  // NOLINT
   }
   return normalized;
 }
@@ -87,6 +90,7 @@ Color Interpolate(const LinearGradientNormalized& gradient, float t) {
   size_t i = 1;
   while (true) {
     if (i > gradient.positions.size()) {
+      // NOLINTNEXTLINE
       return Color::Interpolate(0.5f, gradient.colors.back(),
                                 gradient.colors.back());
     }
@@ -123,10 +127,10 @@ class LinearGradientColor : public NodeDecorator {
     const float dy = std::sin(gradient_.angle * degtorad);
 
     // Project every corner to get the extent of the gradient.
-    const float p1 = box_.x_min * dx + box_.y_min * dy;
-    const float p2 = box_.x_min * dx + box_.y_max * dy;
-    const float p3 = box_.x_max * dx + box_.y_min * dy;
-    const float p4 = box_.x_max * dx + box_.y_max * dy;
+    const float p1 = float(box_.x_min) * dx + float(box_.y_min) * dy;
+    const float p2 = float(box_.x_min) * dx + float(box_.y_max) * dy;
+    const float p3 = float(box_.x_max) * dx + float(box_.y_min) * dy;
+    const float p4 = float(box_.x_max) * dx + float(box_.y_max) * dy;
     const float min = std::min({p1, p2, p3, p4});
     const float max = std::max({p1, p2, p3, p4});
 
@@ -140,14 +144,14 @@ class LinearGradientColor : public NodeDecorator {
     if (background_color_) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          const float t = x * dX + y * dY + dZ;
+          const float t = float(x) * dX + float(y) * dY + dZ;
           screen.PixelAt(x, y).background_color = Interpolate(gradient_, t);
         }
       }
     } else {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          const float t = x * dX + y * dY + dZ;
+          const float t = float(x) * dX + float(y) * dY + dZ;
           screen.PixelAt(x, y).foreground_color = Interpolate(gradient_, t);
         }
       }
@@ -180,18 +184,15 @@ LinearGradient::LinearGradient() = default;
 /// @param begin The color at the beginning of the gradient.
 /// @param end The color at the end of the gradient.
 /// @ingroup dom
-LinearGradient::LinearGradient(Color begin, Color end) {
-  stops.push_back({begin, {}});
-  stops.push_back({end, {}});
-}
+LinearGradient::LinearGradient(Color begin, Color end)
+    : LinearGradient(0, begin, end) {}
 
 /// @brief Build a gradient with two colors and an angle.
 /// @param a The angle of the gradient.
 /// @param begin The color at the beginning of the gradient.
 /// @param end The color at the end of the gradient.
 /// @ingroup dom
-LinearGradient::LinearGradient(float a, Color begin, Color end) {
-  angle = a;
+LinearGradient::LinearGradient(float a, Color begin, Color end) : angle(a) {
   stops.push_back({begin, {}});
   stops.push_back({end, {}});
 }

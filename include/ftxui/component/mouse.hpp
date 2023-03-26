@@ -21,19 +21,19 @@ struct Mouse {
   };
 
   // Button
-  Button button;
+  Button button = Button::None;
 
   // Motion
-  Motion motion;
+  Motion motion = Motion::Pressed;
 
   // Modifiers:
-  bool shift;
-  bool meta;
-  bool control;
+  bool shift = false;
+  bool meta = false;
+  bool control = false;
 
   // Coordinates:
-  int x;
-  int y;
+  int x = 0;
+  int y = 0;
 };
 
 }  // namespace ftxui

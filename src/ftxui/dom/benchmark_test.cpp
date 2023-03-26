@@ -4,6 +4,7 @@
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
 
+// NOLINTBEGIN
 namespace ftxui {
 
 static void BencharkBasic(benchmark::State& state) {
@@ -12,11 +13,11 @@ static void BencharkBasic(benchmark::State& state) {
                         text("Test"),
                         separator(),
                         hbox({
-                            gauge(0.9),
+                            gauge(0.9f),
                             separator() | blink,
-                            gauge(0.5),
+                            gauge(0.5f),
                             separator() | inverted,
-                            gauge(0.1),
+                            gauge(0.1f),
                             separator(),
                         }),
                         text("Test"),
@@ -30,6 +31,7 @@ static void BencharkBasic(benchmark::State& state) {
 BENCHMARK(BencharkBasic)->DenseRange(0, 256, 16);
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

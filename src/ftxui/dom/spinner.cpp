@@ -278,7 +278,7 @@ const std::vector<std::vector<std::vector<std::string>>> elements = {
 /// every "step".
 /// @ingroup dom
 Element spinner(int charset_index, size_t image_index) {
-  if (charset_index == 0) {
+  if (charset_index <= 0) {
     const int progress_size = 40;
     image_index %= progress_size;
     if (image_index > progress_size / 2) {

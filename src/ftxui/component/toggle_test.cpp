@@ -1,17 +1,17 @@
-#include <gtest/gtest.h>
-#include <functional>  // for function
-#include <memory>      // for __shared_ptr_access, shared_ptr, allocator
-#include <string>      // for string, basic_string
-#include <vector>      // for vector
+#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, Test, EXPECT_TRUE, TestInfo (ptr only), EXPECT_FALSE, TEST
+#include <functional>     // for function
+#include <memory>         // for __shared_ptr_access, shared_ptr, allocator
+#include <string>         // for string, basic_string
+#include <vector>         // for vector
 
-#include "ftxui/component/captured_mouse.hpp"     // for ftxui
-#include "ftxui/component/component.hpp"          // for Toggle
+#include "ftxui/component/component.hpp"          // for Menu, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for ToggleOption
+#include "ftxui/component/component_options.hpp"  // for MenuOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowLeft, Event::ArrowRight, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/util/ref.hpp"         // for Ref
 
-using namespace ftxui;
+// NOLINTBEGIN
+namespace ftxui {
 
 TEST(ToggleTest, leftRightArrow) {
   std::vector<std::string> entries = {"On", "Off"};
@@ -176,6 +176,9 @@ TEST(ToggleTest, RemoveEntries) {
   EXPECT_EQ(selected, 1);
   EXPECT_EQ(focused_entry, 1);
 }
+
+}  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

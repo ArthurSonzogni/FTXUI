@@ -5,6 +5,7 @@
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen, Pixel
 
+// NOLINTBEGIN
 namespace ftxui {
 
 TEST(SeparatorTest, Default) {
@@ -122,6 +123,7 @@ TEST(SeparatorTest, WithPixel) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

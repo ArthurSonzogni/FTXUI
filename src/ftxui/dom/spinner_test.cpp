@@ -5,6 +5,7 @@
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
 
+// NOLINTBEGIN
 namespace ftxui {
 
 TEST(SpinnerTest, Spinner1) {
@@ -36,6 +37,7 @@ TEST(SpinnerTest, Spinner4) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

@@ -1,12 +1,13 @@
 #include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
-#include <string>                         // for allocator
+#include <memory>                         // for allocator_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for operator|, text, bgcolor, color, Element
 #include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/color.hpp"   // for Color, Color::Red, Color::RedLight
+#include "ftxui/screen/color.hpp"   // for Color, Color::RedLight, Color::Red
 #include "ftxui/screen/screen.hpp"  // for Screen, Pixel
 
+// NOLINTBEGIN
 namespace ftxui {
 
 TEST(ColorTest, API_default) {
@@ -84,6 +85,7 @@ TEST(ColorTest, GradientBackground) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2023 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

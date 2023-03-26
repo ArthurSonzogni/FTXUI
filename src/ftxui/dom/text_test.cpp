@@ -5,6 +5,7 @@
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
 
+// NOLINTBEGIN
 namespace ftxui {
 
 TEST(TextTest, ScreenHeightSmaller) {
@@ -118,6 +119,7 @@ TEST(TextTest, CombiningCharactersWithSpace) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

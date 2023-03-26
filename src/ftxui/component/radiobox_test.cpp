@@ -12,6 +12,7 @@
 #include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::End, Event::Home, Event::Tab, Event::TabReverse, Event::PageDown, Event::PageUp, Event::ArrowUp
 #include "ftxui/util/ref.hpp"         // for Ref
 
+// NOLINTBEGIN
 namespace ftxui {
 
 TEST(RadioboxTest, NavigationArrow) {
@@ -303,6 +304,7 @@ TEST(RadioboxTest, RemoveEntries) {
 }
 
 }  // namespace ftxui
+// NOLINTEND
 
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
