@@ -321,11 +321,11 @@ void Canvas::DrawPointEllipse(int x,
 }
 
 /// @brief Draw an ellipse made of braille dots.
-/// @param x the x coordinate of the center of the ellipse.
-/// @param y the y coordinate of the center of the ellipse.
+/// @param x1 the x coordinate of the center of the ellipse.
+/// @param y1 the y coordinate of the center of the ellipse.
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
-/// @param style the style of the ellipse.
+/// @param s the style of the ellipse.
 void Canvas::DrawPointEllipse(int x1,
                               int y1,
                               int r1,
@@ -361,8 +361,8 @@ void Canvas::DrawPointEllipse(int x1,
 }
 
 /// @brief Draw a filled ellipse made of braille dots.
-/// @param x the x coordinate of the center of the ellipse.
-/// @param y the y coordinate of the center of the ellipse.
+/// @param x1 the x coordinate of the center of the ellipse.
+/// @param y1 the y coordinate of the center of the ellipse.
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
 void Canvas::DrawPointEllipseFilled(int x1, int y1, int r1, int r2) {
@@ -370,8 +370,8 @@ void Canvas::DrawPointEllipseFilled(int x1, int y1, int r1, int r2) {
 }
 
 /// @brief Draw a filled ellipse made of braille dots.
-/// @param x the x coordinate of the center of the ellipse.
-/// @param y the y coordinate of the center of the ellipse.
+/// @param x1 the x coordinate of the center of the ellipse.
+/// @param y1 the y coordinate of the center of the ellipse.
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
 /// @param color the color of the ellipse.
@@ -385,11 +385,11 @@ void Canvas::DrawPointEllipseFilled(int x1,
 }
 
 /// @brief Draw a filled ellipse made of braille dots.
-/// @param x the x coordinate of the center of the ellipse.
-/// @param y the y coordinate of the center of the ellipse.
+/// @param x1 the x coordinate of the center of the ellipse.
+/// @param y1 the y coordinate of the center of the ellipse.
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
-/// @param style the style of the ellipse.
+/// @param s the style of the ellipse.
 void Canvas::DrawPointEllipseFilled(int x1,
                                     int y1,
                                     int r1,
@@ -410,11 +410,11 @@ void Canvas::DrawPointEllipseFilled(int x1,
     e2 = 2 * err;
     if (e2 >= dx) {
       x++;
-      err += dx += 2 * (long)r2 * r2;  // NOLINT
+      err += dx += 2 * static_cast<long>(r2) * r2;  // NOLINT
     }
     if (e2 <= dy) {
       y++;
-      err += dy += 2 * (long)r1 * r1;  // NOLINT
+      err += dy += 2 * static_cast<long>(r1) * r1;  // NOLINT
     }
   } while (x <= 0);
 
@@ -631,7 +631,7 @@ void Canvas::DrawBlockCircleFilled(int x,
 /// @param x the x coordinate of the center of the circle.
 /// @param y the y coordinate of the center of the circle.
 /// @param radius the radius of the circle.
-/// @param style the style of the circle.
+/// @param s the style of the circle.
 void Canvas::DrawBlockCircleFilled(int x,
                                    int y,
                                    int radius,
@@ -664,11 +664,11 @@ void Canvas::DrawBlockEllipse(int x,
 }
 
 /// @brief Draw an ellipse made of block characters.
-/// @param x the x coordinate of the center of the ellipse.
-/// @param y the y coordinate of the center of the ellipse.
+/// @param x1 the x coordinate of the center of the ellipse.
+/// @param y1 the y coordinate of the center of the ellipse.
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
-/// @param style the style of the ellipse.
+/// @param s the style of the ellipse.
 void Canvas::DrawBlockEllipse(int x1,
                               int y1,
                               int r1,
@@ -730,11 +730,11 @@ void Canvas::DrawBlockEllipseFilled(int x,
 }
 
 /// @brief Draw a filled ellipse made of block characters.
-/// @param x the x coordinate of the center of the ellipse.
-/// @param y the y coordinate of the center of the ellipse.
+/// @param x1 the x coordinate of the center of the ellipse.
+/// @param y1 the y coordinate of the center of the ellipse.
 /// @param r1 the radius of the ellipse along the x axis.
 /// @param r2 the radius of the ellipse along the y axis.
-/// @param style the style of the ellipse.
+/// @param s the style of the ellipse.
 void Canvas::DrawBlockEllipseFilled(int x1,
                                     int y1,
                                     int r1,
