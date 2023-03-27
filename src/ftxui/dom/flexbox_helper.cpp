@@ -258,7 +258,7 @@ void JustifyContent(Global& g, std::vector<Line> lines) {
       }
 
       case FlexboxConfig::JustifyContent::SpaceBetween: {
-        for (int i = (int)line.blocks.size() - 1; i >= 1; --i) {
+        for (int i = static_cast<int>(line.blocks.size()) - 1; i >= 1; --i) {
           line.blocks[i]->x += remaining_space;
           remaining_space = remaining_space * (i - 1) / i;
         }
@@ -266,7 +266,7 @@ void JustifyContent(Global& g, std::vector<Line> lines) {
       }
 
       case FlexboxConfig::JustifyContent::SpaceAround: {
-        for (int i = (int)line.blocks.size() - 1; i >= 0; --i) {
+        for (int i = static_cast<int>(line.blocks.size()) - 1; i >= 0; --i) {
           line.blocks[i]->x += remaining_space * (2 * i + 1) / (2 * i + 2);
           remaining_space = remaining_space * (2 * i) / (2 * i + 2);
         }
@@ -274,7 +274,7 @@ void JustifyContent(Global& g, std::vector<Line> lines) {
       }
 
       case FlexboxConfig::JustifyContent::SpaceEvenly: {
-        for (int i = (int)line.blocks.size() - 1; i >= 0; --i) {
+        for (int i = static_cast<int>(line.blocks.size()) - 1; i >= 0; --i) {
           line.blocks[i]->x += remaining_space * (i + 1) / (i + 2);
           remaining_space = remaining_space * (i + 1) / (i + 2);
         }
@@ -328,8 +328,8 @@ void Compute3(Global& global) {
         line = Line();
       }
 
-      block.line = (int)lines.size();
-      block.line_position = (int)line.blocks.size();
+      block.line = static_cast<int>(lines.size());
+      block.line_position = static_cast<int>(line.blocks.size());
       line.blocks.push_back(&block);
       x += block.min_size_x + global.config.gap_x;
     }

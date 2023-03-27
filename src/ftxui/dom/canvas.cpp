@@ -470,7 +470,7 @@ void Canvas::DrawBlockOn(int x, int y) {
     cell.type = CellType::kBlock;
   }
 
-  const uint8_t bit = (x % 2) * 2 + y % 2;
+  const uint8_t bit = static_cast<uint8_t>((x % 2) * 2 + y % 2);
   uint8_t value = g_map_block_inversed.at(cell.content.character);
   value |= 1U << bit;
   cell.content.character = g_map_block[value];
@@ -490,7 +490,7 @@ void Canvas::DrawBlockOff(int x, int y) {
   }
   y /= 2;
 
-  const uint8_t bit = (y % 2) * 2 + x % 2;
+  const uint8_t bit = static_cast<uint8_t>((y % 2) * 2 + x % 2);
   uint8_t value = g_map_block_inversed.at(cell.content.character);
   value &= ~(1U << bit);
   cell.content.character = g_map_block[value];
@@ -511,7 +511,7 @@ void Canvas::DrawBlockToggle(int x, int y) {
   }
   y /= 2;
 
-  const uint8_t bit = (y % 2) * 2 + x % 2;
+  const uint8_t bit = static_cast<uint8_t>((y % 2) * 2 + x % 2);
   uint8_t value = g_map_block_inversed.at(cell.content.character);
   value ^= 1U << bit;
   cell.content.character = g_map_block[value];
