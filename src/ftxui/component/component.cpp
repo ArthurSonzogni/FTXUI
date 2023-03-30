@@ -166,12 +166,7 @@ bool ComponentBase::Focused() const {
 /// @brief Make the |child| to be the "active" one.
 /// @param child the child to become active.
 /// @ingroup component
-void ComponentBase::SetActiveChild(ComponentBase* child) {
-    // Do nothing
-    (void)child; // Fix for unused parameter error (-Wextra)
-    // Now clang's -Wdocumentation runs without complaining of
-    // missing parameter "child"
-}
+void ComponentBase::SetActiveChild([[maybe_unused]] ComponentBase* child) {}
 
 /// @brief Make the |child| to be the "active" one.
 /// @param child the child to become active.
