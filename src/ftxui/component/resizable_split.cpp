@@ -135,7 +135,7 @@ class ResizableSplitBase : public ComponentBase {
 }  // namespace
 
 /// @brief A split in between two components.
-/// @param options: all the parameters.
+/// @param options all the parameters.
 ///
 /// ### Example
 ///

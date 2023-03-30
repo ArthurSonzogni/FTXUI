@@ -51,7 +51,7 @@ unsigned char TerminalInputParser::Current() {
 
 bool TerminalInputParser::Eat() {
   position_++;
-  return position_ < (int)pending_.size();
+  return position_ < static_cast<int>(pending_.size());
 }
 
 void TerminalInputParser::Send(TerminalInputParser::Output output) {
