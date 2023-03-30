@@ -59,10 +59,10 @@ Table::Table(std::vector<std::vector<Element>> input) {
 }
 
 void Table::Initialize(std::vector<std::vector<Element>> input) {
-  input_dim_y_ = (int)input.size();
+  input_dim_y_ = static_cast<int>(input.size());
   input_dim_x_ = 0;
   for (auto& row : input) {
-    input_dim_x_ = std::max(input_dim_x_, (int)row.size());
+    input_dim_x_ = std::max(input_dim_x_, static_cast<int>(row.size()));
   }
 
   dim_y_ = 2 * input_dim_y_ + 1;

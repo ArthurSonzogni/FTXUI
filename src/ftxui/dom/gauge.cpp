@@ -100,8 +100,8 @@ class Gauge : public Node {
     {
       const float progress = invert ? 1.F - progress_ : progress_;
       const float limit =
-          (float)box_.x_min + progress * (float)(box_.x_max - box_.x_min + 1);
-      const int limit_int = (int)limit;
+          static_cast<float>(box_.x_min) + progress * static_cast<float>(box_.x_max - box_.x_min + 1);
+      const int limit_int = static_cast<int>(limit);
       int x = box_.x_min;
       while (x < limit_int) {
         screen.at(x++, y) = charset_horizontal[9];  // NOLINT
@@ -130,8 +130,8 @@ class Gauge : public Node {
     {
       const float progress = invert ? progress_ : 1.F - progress_;
       const float limit =
-          (float)box_.y_min + progress * (float)(box_.y_max - box_.y_min + 1);
-      const int limit_int = (int)limit;
+        static_cast<float>(box_.y_min) + progress * static_cast<float>(box_.y_max - box_.y_min + 1);
+      const int limit_int = static_cast<int>(limit);
       int y = box_.y_min;
       while (y < limit_int) {
         screen.at(x, y++) = charset_vertical[8];  // NOLINT

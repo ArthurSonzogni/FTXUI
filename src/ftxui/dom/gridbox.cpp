@@ -33,12 +33,12 @@ int Integrate(std::vector<int>& elements) {
 class GridBox : public Node {
  public:
   explicit GridBox(std::vector<Elements> lines) : lines_(std::move(lines)) {
-    y_size = (int)lines_.size();
+    y_size = static_cast<int>(lines_.size());
     for (const auto& line : lines_) {
-      x_size = std::max(x_size, (int)line.size());
+      x_size = std::max(x_size, static_cast<int>(line.size()));
     }
     for (auto& line : lines_) {
-      while (line.size() < (size_t)x_size) {
+      while (line.size() < static_cast<size_t>(x_size)) {
         line.push_back(filler());
       }
     }
