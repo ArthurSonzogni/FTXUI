@@ -286,8 +286,8 @@ Element spinner(int charset_index, size_t image_index) {
     }
     return gauge(float(image_index) * 0.05F);  // NOLINT
   }
-  charset_index %= static_cast<int>(elements.size());
-  image_index %= static_cast<int>(elements[charset_index].size());
+  charset_index %= int(elements.size());
+  image_index %= int(elements[charset_index].size());
   std::vector<Element> lines;
   for (const auto& it : elements[charset_index][image_index]) {
     lines.push_back(text(it));

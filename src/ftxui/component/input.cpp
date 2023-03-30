@@ -139,7 +139,7 @@ class InputBase : public ComponentBase {
 
   bool OnEvent(Event event) override {
     cursor_position() =
-        std::max(0, std::min<int>(static_cast<int>(content_->size()), cursor_position()));
+        std::max(0, std::min<int>(content_->size(), cursor_position()));
 
     if (event.is_mouse()) {
       return OnMouseEvent(event);
@@ -242,7 +242,7 @@ class InputBase : public ComponentBase {
 
   void HandleRightCtrl() {
     auto properties = Utf8ToWordBreakProperty(*content_);
-    const int max = static_cast<int>(properties.size());
+    const int max = properties.size();
 
     // Move right, as long as right is not a word character.
     while (cursor_position() < max &&
@@ -280,7 +280,7 @@ class InputBase : public ComponentBase {
     size_t original_cell = 0;
     for (size_t i = 0; i < mapping.size(); i++) {
       if (mapping[i] == original_glyph) {
-        original_cell = static_cast<int>(i);
+        original_cell = i;
         break;
       }
     }
@@ -289,8 +289,8 @@ class InputBase : public ComponentBase {
     }
     const int target_cell =
         int(original_cell) + event.mouse().x - cursor_box_.x_min;
-    int target_glyph = target_cell < static_cast<int>(mapping.size()) ? mapping[target_cell]
-                                                         : static_cast<int>(mapping.size());
+    int target_glyph = target_cell < mapping.size() ? mapping[target_cell]
+                                                    : (int)mapping.size();
     target_glyph = util::clamp(target_glyph, 0, GlyphCount(*content_));
     if (cursor_position() != target_glyph) {
       cursor_position() = target_glyph;

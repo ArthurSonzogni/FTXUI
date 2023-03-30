@@ -412,7 +412,7 @@ Screen::Screen(int dimx, int dimy)
     : stencil{0, dimx - 1, 0, dimy - 1},
       dimx_(dimx),
       dimy_(dimy),
-      pixels_(static_cast<unsigned int>(dimy), std::vector<Pixel>(static_cast<unsigned int>(dimx))) {
+      pixels_(dimy, std::vector<Pixel>(dimx)) {
 #if defined(_WIN32)
   // The placement of this call is a bit weird, however we can assume that
   // anybody who instantiates a Screen object eventually wants to output
@@ -433,7 +433,7 @@ std::string Screen::ToString() {
   Pixel previous_pixel;
   const Pixel final_pixel;
 
-  for (unsigned int y = 0; y < static_cast<unsigned int>(dimy_); ++y) {
+  for (int y = 0; y < dimy_; ++y) {
     if (y != 0) {
       UpdatePixelStyle(ss, previous_pixel, final_pixel);
       ss << "\r\n";
@@ -522,8 +522,8 @@ void Screen::Clear() {
 // clang-format off
 void Screen::ApplyShader() {
   // Merge box characters togethers.
-  for (unsigned int y = 0; y < static_cast<unsigned int>(dimy_); ++y) {
-    for (unsigned int x = 0; x < static_cast<unsigned int>(dimx_); ++x) {
+  for (int y = 0; y < dimy_; ++y) {
+    for (int x = 0; x < dimx_; ++x) {
       // Box drawing character uses exactly 3 byte.
       Pixel& cur = pixels_[y][x];
       if (!ShouldAttemptAutoMerge(cur)) {

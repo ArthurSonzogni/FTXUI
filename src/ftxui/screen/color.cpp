@@ -117,7 +117,7 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
 
   if (Terminal::ColorSupport() == Terminal::Color::Palette256) {
     type_ = ColorType::Palette256;
-    red_ = static_cast<uint8_t>(best);
+    red_ = best;
   } else {
     type_ = ColorType::Palette16;
     red_ = GetColorInfo(Color::Palette256(best)).index_16;
