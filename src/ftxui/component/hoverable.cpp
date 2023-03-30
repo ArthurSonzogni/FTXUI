@@ -26,8 +26,8 @@ void Post(std::function<void()> f) {
 
 /// @brief Wrap a component. Gives the ability to know if it is hovered by the
 /// mouse.
-/// @param component: The wrapped component.
-/// @param hover: The value to reflect whether the component is hovered or not.
+/// @param component The wrapped component.
+/// @param hover The value to reflect whether the component is hovered or not.
 /// @ingroup component
 ///
 /// ### Example
@@ -68,10 +68,10 @@ Component Hoverable(Component component, bool* hover) {
   return Make<Impl>(component, hover);
 }
 
-/// @brief Wrap a component. Gives the ability to know if it is hovered by the
-/// mouse.
-/// @param component: The wrapped component.
-/// @param hover: The value to reflect whether the component is hovered or not.
+/// @brief Wrap a component. Uses callbacks.
+/// @param component The wrapped component.
+/// @param on_enter Callback OnEnter
+/// @param on_leave Callback OnLeave
 /// @ingroup component
 ///
 /// ### Example
@@ -126,7 +126,7 @@ Component Hoverable(Component component,
 
 /// @brief Wrap a component. Gives the ability to know if it is hovered by the
 /// mouse.
-/// @param hover: The value to reflect whether the component is hovered or not.
+/// @param hover The value to reflect whether the component is hovered or not.
 /// @ingroup component
 ///
 /// ### Example
