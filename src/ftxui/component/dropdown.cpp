@@ -39,7 +39,7 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
     }
 
     Element Render() override {
-      *selected_ = util::clamp(*selected_, 0, (int)entries_.size() - 1);
+      *selected_ = util::clamp(*selected_, 0, static_cast<int>(entries_.size()) - 1);
       title_ = entries_[static_cast<size_t>(*selected_)];
       if (show_) {
         const int max_height = 12;
