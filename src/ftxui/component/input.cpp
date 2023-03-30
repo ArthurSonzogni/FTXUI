@@ -289,8 +289,8 @@ class InputBase : public ComponentBase {
     }
     const int target_cell =
         int(original_cell) + event.mouse().x - cursor_box_.x_min;
-    int target_glyph = target_cell < mapping.size() ? mapping[target_cell]
-                                                    : (int)mapping.size();
+    int target_glyph = target_cell < int(mapping.size()) ? mapping[target_cell]
+                                                         : int(mapping.size());
     target_glyph = util::clamp(target_glyph, 0, GlyphCount(*content_));
     if (cursor_position() != target_glyph) {
       cursor_position() = target_glyph;

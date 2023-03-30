@@ -356,7 +356,7 @@ class MenuBase : public ComponentBase {
   }
 
   void UpdateColorTarget() {
-    if (size() != animation_background_.size()) {
+    if (size() != int(animation_background_.size())) {
       animation_background_.resize(size());
       animation_foreground_.resize(size());
       animator_background_.clear();

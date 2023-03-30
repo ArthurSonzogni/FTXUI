@@ -74,6 +74,7 @@ function(ftxui_set_options library)
     target_compile_options(${library} PRIVATE "-Wmissing-declarations")
     target_compile_options(${library} PRIVATE "-Wdeprecated")
     target_compile_options(${library} PRIVATE "-Wshadow")
+    target_compile_options(${library} PRIVATE "-Wdocumentation")
   endif()
 
   if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
