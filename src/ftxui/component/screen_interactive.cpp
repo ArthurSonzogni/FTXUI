@@ -460,9 +460,13 @@ void ScreenInteractive::PostMain() {
     g_active_screen->Install();
   } else {
     Uninstall();
+
+    std::cout << '\r';
     // On final exit, keep the current drawing and reset cursor position one
     // line after it.
-    std::cout << std::endl;
+    if (!use_alternative_screen_) {
+      std::cout << std::endl;
+    }
   }
 }
 
