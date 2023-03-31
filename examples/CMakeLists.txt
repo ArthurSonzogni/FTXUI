@@ -9,7 +9,7 @@ function(example name)
   file(RELATIVE_PATH dir ${EXAMPLES_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
   set_property(GLOBAL APPEND PROPERTY FTXUI::EXAMPLES ${dir}/${name})
   set_target_properties(ftxui_example_${name} PROPERTIES
-    CXX_STANDARD 20
+    CXX_STANDARD 17
   )
 endfunction(example)
 

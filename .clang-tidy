@@ -1,5 +1,7 @@
 ---
 Checks: "*,
+        -*-narrowing-conversions
+        -*-uppercase-literal-suffix,
         -abseil-*,
         -altera-*,
         -android-*,
@@ -7,7 +9,6 @@ Checks: "*,
         -cppcoreguidelines-non-private-member-variables-in-classes,
         -fuchsia-*,
         -google-*,
-        -hicpp-uppercase-literal-suffix,
         -llvm*,
         -misc-no-recursion,
         -misc-non-private-member-variables-in-classes,
@@ -19,7 +20,6 @@ Checks: "*,
         -readability-implicit-bool-conversion,
         -readability-non-const-parameter,
         -readability-static-accessed-through-instance,
-        -readability-uppercase-literal-suffix,
         -zircon-*,
 "
 WarningsAsErrors: ''

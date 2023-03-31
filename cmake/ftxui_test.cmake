@@ -57,8 +57,10 @@ target_link_libraries(ftxui-tests
 target_include_directories(ftxui-tests
   PRIVATE src
 )
-ftxui_set_options(ftxui-tests)
-target_compile_features(ftxui-tests PUBLIC cxx_std_20)
+set_target_properties(ftxui-tests PROPERTIES
+  CXX_STANDARD 20
+  CXX_EXTENSIONS OFF
+)
 
 include(GoogleTest)
 gtest_discover_tests(ftxui-tests
