@@ -68,13 +68,24 @@ function(ftxui_set_options library)
     target_compile_definitions(${library} PRIVATE UNICODE _UNICODE)
   else()
     target_compile_options(${library} PRIVATE "-Wall")
-    target_compile_options(${library} PRIVATE "-Wextra")
-    target_compile_options(${library} PRIVATE "-pedantic")
     target_compile_options(${library} PRIVATE "-Werror")
-    target_compile_options(${library} PRIVATE "-Wmissing-declarations")
+    target_compile_options(${library} PRIVATE "-Wextra")
+
+    target_compile_options(${library} PRIVATE "-Wcast-align")
     target_compile_options(${library} PRIVATE "-Wdeprecated")
+    target_compile_options(${library} PRIVATE "-Wmissing-declarations")
+    target_compile_options(${library} PRIVATE "-Wnon-virtual-dtor")
+    target_compile_options(${library} PRIVATE "-Wnull-dereference")
+    target_compile_options(${library} PRIVATE "-Woverloaded-virtual")
+    target_compile_options(${library} PRIVATE "-Wpedantic")
     target_compile_options(${library} PRIVATE "-Wshadow")
+    target_compile_options(${library} PRIVATE "-Wunused")
   endif()
+
+  if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(${library} PRIVATE "-Wdocumentation")
+  endif()
+
 
   if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     target_compile_definitions(${library}

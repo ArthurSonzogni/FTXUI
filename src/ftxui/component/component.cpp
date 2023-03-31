@@ -110,7 +110,7 @@ bool ComponentBase::OnEvent(Event event) {  // NOLINT
 }
 
 /// @brief Called in response to an animation event.
-/// @param animation_params the parameters of the animation
+/// @param params the parameters of the animation
 /// The default implementation dispatch the event to every child.
 /// @ingroup component
 void ComponentBase::OnAnimation(animation::Params& params) {
@@ -166,7 +166,7 @@ bool ComponentBase::Focused() const {
 /// @brief Make the |child| to be the "active" one.
 /// @param child the child to become active.
 /// @ingroup component
-void ComponentBase::SetActiveChild(ComponentBase* /*child*/) {}
+void ComponentBase::SetActiveChild([[maybe_unused]] ComponentBase* child) {}
 
 /// @brief Make the |child| to be the "active" one.
 /// @param child the child to become active.
@@ -187,7 +187,7 @@ void ComponentBase::TakeFocus() {
 
 /// @brief Take the CapturedMouse if available. There is only one component of
 /// them. It represents a component taking priority over others.
-/// @param event
+/// @param event The event
 /// @ingroup component
 CapturedMouse ComponentBase::CaptureMouse(const Event& event) {  // NOLINT
   if (event.screen_) {

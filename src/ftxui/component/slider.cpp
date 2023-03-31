@@ -309,7 +309,7 @@ Component Slider(ConstStringRef label,
 }
 
 /// @brief A slider in any direction.
-/// @param option The options
+/// @param options The options
 /// ### Example
 ///
 /// ```cpp

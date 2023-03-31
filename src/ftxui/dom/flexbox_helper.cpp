@@ -328,8 +328,8 @@ void Compute3(Global& global) {
         line = Line();
       }
 
-      block.line = (int)lines.size();
-      block.line_position = (int)line.blocks.size();
+      block.line = lines.size();
+      block.line_position = line.blocks.size();
       line.blocks.push_back(&block);
       x += block.min_size_x + global.config.gap_x;
     }

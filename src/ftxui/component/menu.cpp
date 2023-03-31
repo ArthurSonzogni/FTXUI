@@ -356,7 +356,7 @@ class MenuBase : public ComponentBase {
   }
 
   void UpdateColorTarget() {
-    if (size() != (int)animation_background_.size()) {
+    if (size() != int(animation_background_.size())) {
       animation_background_.resize(size());
       animation_foreground_.resize(size());
       animator_background_.clear();
@@ -518,7 +518,7 @@ Component Menu(ConstStringListRef entries,
 /// @brief An horizontal list of elements. The user can navigate through them.
 /// @param entries The list of selectable entries to display.
 /// @param selected Reference the selected entry.
-/// @param See also |Menu|.
+/// See also |Menu|.
 /// @ingroup component
 Component Toggle(ConstStringListRef entries, int* selected) {
   return Menu(entries, selected, MenuOption::Toggle());

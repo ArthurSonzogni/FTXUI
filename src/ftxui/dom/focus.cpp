@@ -36,10 +36,10 @@ Decorator focusPositionRelative(float x, float y) {
       requirement_.selection = Requirement::Selection::NORMAL;
 
       Box& box = requirement_.selected_box;
-      box.x_min = (int)((float)requirement_.min_x * x_);
-      box.y_min = (int)((float)requirement_.min_y * y_);
-      box.x_max = (int)((float)requirement_.min_x * x_);
-      box.y_max = (int)((float)requirement_.min_y * y_);
+      box.x_min = int(float(requirement_.min_x) * x_);
+      box.y_min = int(float(requirement_.min_y) * y_);
+      box.x_max = int(float(requirement_.min_x) * x_);
+      box.y_max = int(float(requirement_.min_y) * y_);
     }
 
    private:
