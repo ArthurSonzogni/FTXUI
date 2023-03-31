@@ -139,7 +139,7 @@ class InputBase : public ComponentBase {
 
   bool OnEvent(Event event) override {
     cursor_position() =
-        std::max(0, std::min<int>(content_->size(), cursor_position()));
+        std::max(0, std::min<int>((int)content_->size(), cursor_position()));
 
     if (event.is_mouse()) {
       return OnMouseEvent(event);
