@@ -62,6 +62,11 @@ set_target_properties(ftxui-tests PROPERTIES
   CXX_EXTENSIONS OFF
 )
 
+if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+  target_compile_definitions(ftxui-tests
+    PRIVATE "FTXUI_MICROSOFT_TERMINAL_FALLBACK")
+endif()
+
 include(GoogleTest)
 gtest_discover_tests(ftxui-tests
   DISCOVERY_TIMEOUT 600

@@ -73,7 +73,7 @@ Terminal::Color ComputeColorSupport() {
   // colors: https://github.com/microsoft/terminal/issues/1040
   // As a fallback, assume microsoft terminal are the ones not setting those
   // variables, and enable true colors.
-  if (TERM == "" && COLORTERM == "") {
+  if (TERM.empty() && COLORTERM.empty()) {
     return Terminal::Color::TrueColor;
   }
 #endif

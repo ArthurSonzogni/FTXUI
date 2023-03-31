@@ -73,7 +73,6 @@ function(ftxui_set_options library)
 
     target_compile_options(${library} PRIVATE "-Wcast-align")
     target_compile_options(${library} PRIVATE "-Wdeprecated")
-    target_compile_options(${library} PRIVATE "-Wdocumentation")
     target_compile_options(${library} PRIVATE "-Wmissing-declarations")
     target_compile_options(${library} PRIVATE "-Wnon-virtual-dtor")
     target_compile_options(${library} PRIVATE "-Wnull-dereference")
@@ -82,6 +81,11 @@ function(ftxui_set_options library)
     target_compile_options(${library} PRIVATE "-Wshadow")
     target_compile_options(${library} PRIVATE "-Wunused")
   endif()
+
+  if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(${library} PRIVATE "-Wdocumentation")
+  endif()
+
 
   if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
     target_compile_definitions(${library}
