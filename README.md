@@ -369,6 +369,7 @@ If you don't, the following packages have been created:
 - [vcpkg](https://vcpkgx.com/details.html?package=ftxui)
 - [Arch Linux PKGBUILD](https://aur.archlinux.org/packages/ftxui-git/).
 - [conan.io](https://conan.io/center/ftxui)
+- [openSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
 
 ## Contributors
 
