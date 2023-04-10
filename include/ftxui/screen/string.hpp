@@ -48,6 +48,7 @@ enum class WordBreakProperty {
   WSegSpace,
   ZWJ,
 };
+WordBreakProperty CodepointToWordBreakProperty(uint32_t codepoint);
 std::vector<WordBreakProperty> Utf8ToWordBreakProperty(
     const std::string& input);
 
