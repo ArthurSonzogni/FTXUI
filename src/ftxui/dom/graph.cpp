@@ -39,6 +39,9 @@ class Graph : public Node {
   void Render(Screen& screen) override {
     const int width = (box_.x_max - box_.x_min + 1) * 2;
     const int height = (box_.y_max - box_.y_min + 1) * 2;
+    if (width <= 0 || height <= 0) {
+      return;
+    }
     auto data = graph_function_(width, height);
     int i = 0;
     for (int x = box_.x_min; x <= box_.x_max; ++x) {
