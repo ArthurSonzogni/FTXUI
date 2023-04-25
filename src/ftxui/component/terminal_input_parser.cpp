@@ -19,8 +19,31 @@ const std::map<std::string, std::string> g_uniformize = {
     // See https://github.com/ArthurSonzogni/FTXUI/issues/337
     // Here, we uniformize the new line character to `\n`.
     {"\r", "\n"},
+
     // See: https://github.com/ArthurSonzogni/FTXUI/issues/508
     {std::string({8}), std::string({127})},
+
+    // See: https://github.com/ArthurSonzogni/FTXUI/issues/626
+    //
+    // Depending on the Cursor Key Mode (DECCKM), the terminal sends different
+    // escape sequences:
+    //
+    //   Key     Normal    Application
+    //   -----   --------  -----------
+    //   Up      ESC [ A   ESC O A
+    //   Down    ESC [ B   ESC O B
+    //   Right   ESC [ C   ESC O C
+    //   Left    ESC [ D   ESC O D
+    //   Home    ESC [ H   ESC O H
+    //   End     ESC [ F   ESC O F
+    //
+    {"\x1BOA", "\x1B[A"}, // UP
+    {"\x1BOB", "\x1B[B"}, // DOWN
+    {"\x1BOC", "\x1B[C"}, // RIGHT
+    {"\x1BOD", "\x1B[D"}, // LEFT
+    {"\x1BOH", "\x1B[H"}, // HOME
+    {"\x1BOF", "\x1B[F"}, // END
+
 };
 
 TerminalInputParser::TerminalInputParser(Sender<Task> out)
