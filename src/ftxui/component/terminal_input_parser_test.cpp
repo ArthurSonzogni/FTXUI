@@ -333,22 +333,44 @@ TEST(Event, Special) {
       output.push_back(it);
     return output;
   };
+
   struct {
     std::vector<unsigned char> input;
     Event expected;
   } kTestCase[] = {
-      {str("\x1B[D"), Event::ArrowLeft},
-      {str("\x1B[C"), Event::ArrowRight},
+      // Arrow (defaut cursor mode)
       {str("\x1B[A"), Event::ArrowUp},
       {str("\x1B[B"), Event::ArrowDown},
+      {str("\x1B[C"), Event::ArrowRight},
+      {str("\x1B[D"), Event::ArrowLeft},
+      {str("\x1B[H"), Event::Home},
+      {str("\x1B[F"), Event::End},
+
+      // Arrow (application cursor mode)
+      {str("\x1BOA"), Event::ArrowUp},
+      {str("\x1BOB"), Event::ArrowDown},
+      {str("\x1BOC"), Event::ArrowRight},
+      {str("\x1BOD"), Event::ArrowLeft},
+      {str("\x1BOH"), Event::Home},
+      {str("\x1BOF"), Event::End},
+
+      // Backspace & Quirk for:
+      // https://github.com/ArthurSonzogni/FTXUI/issues/508
       {{127}, Event::Backspace},
-      // Quirk for: https://github.com/ArthurSonzogni/FTXUI/issues/508
       {{8}, Event::Backspace},
+
+      // Delete
       {str("\x1B[3~"), Event::Delete},
-      //{str("\x1B"), Event::Escape},
+
+      // Return
+      {{13}, Event::Return},
       {{10}, Event::Return},
+
+      // Tabs:
       {{9}, Event::Tab},
       {{27, 91, 90}, Event::TabReverse},
+
+      // Function keys
       {str("\x1BOP"), Event::F1},
       {str("\x1BOQ"), Event::F2},
       {str("\x1BOR"), Event::F3},
@@ -361,10 +383,12 @@ TEST(Event, Special) {
       {str("\x1B[21~"), Event::F10},
       {str("\x1B[23~"), Event::F11},
       {str("\x1B[24~"), Event::F12},
-      {{27, 91, 72}, Event::Home},
-      {{27, 91, 70}, Event::End},
-      {{27, 91, 53, 126}, Event::PageUp},
-      {{27, 91, 54, 126}, Event::PageDown},
+
+      // Page up and down:
+      {str("\x1B[5~"), Event::PageUp},
+      {str("\x1B[6~"), Event::PageDown},
+
+      // Custom:
       {{0}, Event::Custom},
   };
 
