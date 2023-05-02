@@ -1,17 +1,17 @@
-#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, TestInfo (ptr only), EXPECT_FALSE, TEST
-#include <array>          // for array
-#include <cstddef>        // for size_t
+#include <array>                      // for array
+#include <cstddef>                    // for size_t
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <ftxui/dom/elements.hpp>   // for frame
 #include <memory>  // for shared_ptr, __shared_ptr_access, allocator
-#include <string>  // for to_string
+#include <string>  // for string, to_string
 
 #include "ftxui/component/component.hpp"  // for Slider, Vertical, operator|=
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event, Event::ArrowDown
 #include "ftxui/dom/node.hpp"                  // for Render
 #include "ftxui/screen/screen.hpp"             // for Screen
+#include "gtest/gtest.h"  // for AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, EXPECT_FALSE, TEST
 
 // NOLINTBEGIN
 namespace ftxui {

@@ -35,6 +35,9 @@ class Text : public Node {
       if (x > box_.x_max) {
         return;
       }
+      if (cell == "\n") {
+        continue;
+      }
       screen.PixelAt(x, y).character = cell;
       ++x;
     }

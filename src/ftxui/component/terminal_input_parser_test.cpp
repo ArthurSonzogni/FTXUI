@@ -1,13 +1,13 @@
-#include <gtest/gtest.h>  // for AssertionResult, Test, Message, TestPartResult, SuiteApiResolver, TestInfo (ptr only), EXPECT_EQ, EXPECT_TRUE, TEST, TestFactoryImpl, EXPECT_FALSE
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::Pressed, Mouse::Released, Mouse::Right
 #include <ftxui/component/task.hpp>   // for Task
 #include <initializer_list>           // for initializer_list
 #include <memory>                     // for allocator, unique_ptr
 #include <variant>                    // for get
 
-#include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Backspace, Event::Custom, Event::Delete, Event::End, Event::F10, Event::F11, Event::F12, Event::F5, Event::F6, Event::F7, Event::F8, Event::F9, Event::Home, Event::PageDown, Event::PageUp, Event::Tab, Event::TabReverse, Event::Escape
+#include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Backspace, Event::End, Event::Home, Event::Custom, Event::Delete, Event::F1, Event::F10, Event::F11, Event::F12, Event::F2, Event::F3, Event::F4, Event::F5, Event::F6, Event::F7, Event::F8, Event::F9, Event::PageDown, Event::PageUp, Event::Tab, Event::TabReverse, Event::Escape
 #include "ftxui/component/receiver.hpp"  // for MakeReceiver, ReceiverImpl
 #include "ftxui/component/terminal_input_parser.hpp"
+#include "gtest/gtest.h"  // for AssertionResult, Test, Message, TestPartResult, EXPECT_EQ, EXPECT_TRUE, TEST, EXPECT_FALSE
 
 // NOLINTBEGIN
 namespace ftxui {

@@ -5,6 +5,8 @@ current (development)
 ---------------------
 
 ### Component
+- Feature: `input` is now multi-line.
+- Feature: `input` style can now be customized.
 - Feature: Support `ResizableSplit` with customizable separator.
 - Breaking: MenuDirection enum is renamed Direction
 - Fix: Remove useless new line when using an alternative screen.
@@ -12,9 +14,7 @@ current (development)
 ### Dom
 - Feature: Add the dashed style for border and separator.
 - Feature: Add colored borders.
-- Feature: Customize with gradient color effect. Add the following decorators:
-  - `colorgrad`
-  - `bgcolorgrad`
+- Feature: Add `LinearGradient`!
 - Improvement: Color::Interpolate() uses gamma correction.
 
 ###

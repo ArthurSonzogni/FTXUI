@@ -15,44 +15,10 @@ std::wstring to_wstring(T s) {
 }
 
 int string_width(const std::string&);
+
 // Split the string into a its glyphs. An empty one is inserted ater fullwidth
 // ones.
 std::vector<std::string> Utf8ToGlyphs(const std::string& input);
-// If |input| was an array of glyphs, this returns the number of char to eat
-// before reaching the glyph at index |glyph_index|.
-int GlyphPosition(const std::string& input,
-                  size_t glyph_index,
-                  size_t start = 0);
-// Returns the number of glyphs in |input|.
-int GlyphCount(const std::string& input);
-
-// Properties from:
-// https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
-enum class WordBreakProperty {
-  ALetter,
-  CR,
-  Double_Quote,
-  Extend,
-  ExtendNumLet,
-  Format,
-  Hebrew_Letter,
-  Katakana,
-  LF,
-  MidLetter,
-  MidNum,
-  MidNumLet,
-  Newline,
-  Numeric,
-  Regional_Indicator,
-  Single_Quote,
-  WSegSpace,
-  ZWJ,
-};
-WordBreakProperty CodepointToWordBreakProperty(uint32_t codepoint);
-std::vector<WordBreakProperty> Utf8ToWordBreakProperty(
-    const std::string& input);
-
-bool IsWordBreakingCharacter(const std::string& input, size_t glyph_index);
 
 // Map every cells drawn by |input| to their corresponding Glyphs. Half-size
 // Glyphs takes one cell, full-size Glyphs take two cells.

@@ -1,4 +1,3 @@
-#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, EXPECT_TRUE, Test, TestInfo (ptr only), EXPECT_FALSE, TEST
 #include <ftxui/dom/elements.hpp>   // for yframe
 #include <ftxui/dom/node.hpp>       // for Render
 #include <ftxui/screen/screen.hpp>  // for Screen
@@ -11,6 +10,7 @@
 #include "ftxui/component/component_options.hpp"  // for RadioboxOption
 #include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::End, Event::Home, Event::Tab, Event::TabReverse, Event::PageDown, Event::PageUp, Event::ArrowUp
 #include "ftxui/util/ref.hpp"         // for Ref
+#include "gtest/gtest.h"  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, EXPECT_TRUE, Test, EXPECT_FALSE, TEST
 
 // NOLINTBEGIN
 namespace ftxui {

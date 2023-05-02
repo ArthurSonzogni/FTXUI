@@ -51,8 +51,9 @@ Component Checkbox(ConstStringRef label,
                    bool* checked,
                    Ref<CheckboxOption> option = CheckboxOption::Simple());
 
+Component Input(StringRef content, Ref<InputOption> option = {});
 Component Input(StringRef content,
-                ConstStringRef placeholder,
+                StringRef placeholder,
                 Ref<InputOption> option = {});
 
 Component Menu(ConstStringListRef entries,

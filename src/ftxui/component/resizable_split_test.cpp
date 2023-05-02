@@ -1,6 +1,6 @@
-#include <gtest/gtest.h>  // for AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, TestInfo (ptr only), TEST
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
+#include <string>  // for string
 
 #include "ftxui/component/component.hpp"  // for ResizableSplit, Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
@@ -9,6 +9,7 @@
 #include "ftxui/dom/elements.hpp"   // for Element, separatorDouble, text
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
+#include "gtest/gtest.h"  // for AssertionResult, Message, TestPartResult, Test, EXPECT_EQ, EXPECT_TRUE, TEST
 
 // NOLINTBEGIN
 namespace ftxui {
