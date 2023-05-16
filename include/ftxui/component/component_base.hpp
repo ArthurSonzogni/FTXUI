@@ -31,9 +31,9 @@ class ComponentBase {
 
   ComponentBase() = default;
 
-  // Deleted methods
+  // A component is not copiable.
   ComponentBase(const ComponentBase&) = delete;
-  void operator =(const ComponentBase&) = delete;
+  void operator=(const ComponentBase&) = delete;
 
   // Component hierarchy:
   ComponentBase* Parent() const;

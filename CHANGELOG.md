@@ -10,6 +10,7 @@ current (development)
 - Feature: Support `ResizableSplit` with customizable separator.
 - Breaking: MenuDirection enum is renamed Direction
 - Fix: Remove useless new line when using an alternative screen.
+- Breaking/Fix: Remove `ComponentBase` copy constructor/assignment.
 
 ### Dom
 - Feature: Add the dashed style for border and separator.
