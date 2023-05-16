@@ -29,6 +29,12 @@ class ComponentBase {
   // virtual Destructor.
   virtual ~ComponentBase();
 
+  ComponentBase() = default;
+
+  // A component is not copiable.
+  ComponentBase(const ComponentBase&) = delete;
+  void operator=(const ComponentBase&) = delete;
+
   // Component hierarchy:
   ComponentBase* Parent() const;
   Component& ChildAt(size_t i);
