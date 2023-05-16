@@ -29,6 +29,12 @@ class ComponentBase {
   // virtual Destructor.
   virtual ~ComponentBase();
 
+  ComponentBase() = default;
+
+  // Deleted methods
+  ComponentBase(const ComponentBase&) = delete;
+  void operator =(const ComponentBase&) = delete;
+
   // Component hierarchy:
   ComponentBase* Parent() const;
   Component& ChildAt(size_t i);
