@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.11)
 project(ftxui
   LANGUAGES CXX
   VERSION 4.0.0
+  DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
 option(FTXUI_BUILD_DOCS "Set to ON to build docs" ON)
