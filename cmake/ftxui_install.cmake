@@ -11,6 +11,7 @@ install(TARGETS screen dom component
 
 install(DIRECTORY include/ftxui DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
+# CMake package configuration for easy use of library in CMake
 include(CMakePackageConfigHelpers)
 configure_package_config_file(ftxui-config.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/ftxui-config.cmake
@@ -30,4 +31,13 @@ install(EXPORT ftxui-export
   FILE ftxui-config-version.cmake
   NAMESPACE ftxui::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+)
+
+# pkg-config file for easy use of library in build systems other than CMake
+configure_file(ftxui.pc.in
+  ${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc
+  @ONLY)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc
+  DESTINATION lib/pkgconfig
 )
