@@ -15,7 +15,7 @@ namespace ftxui {
 namespace {
 uint32_t Hash(const std::string s) {
   uint32_t hash = 0;
-  for (auto c : s) {
+  for (uint8_t c : s) {
     hash += c;
     hash *= 7;
   }
@@ -38,7 +38,7 @@ TEST(CanvasTest, GoldPoint) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 2143518726);
+  EXPECT_EQ(Hash(screen.ToString()), 2085952774U) << screen.ToString();
 }
 
 TEST(CanvasTest, GoldPointColor) {
@@ -53,7 +53,7 @@ TEST(CanvasTest, GoldPointColor) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 1264423298);
+  EXPECT_EQ(Hash(screen.ToString()), 2295070594U) << screen.ToString();
 }
 
 TEST(CanvasTest, GoldBlock) {
@@ -71,7 +71,7 @@ TEST(CanvasTest, GoldBlock) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 3826174883);
+  EXPECT_EQ(Hash(screen.ToString()), 2625314979U) << screen.ToString();
 }
 
 TEST(CanvasTest, GoldBlockColor) {
@@ -86,7 +86,7 @@ TEST(CanvasTest, GoldBlockColor) {
   });
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 3048712696);
+  EXPECT_EQ(Hash(screen.ToString()), 8392696U) << screen.ToString();
 }
 
 TEST(CanvasTest, GoldText) {
