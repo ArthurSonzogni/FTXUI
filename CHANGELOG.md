@@ -5,22 +5,31 @@ current (development)
 ---------------------
 
 ### Component
-- Feature: `input` is now multi-line.
-- Feature: `input` style can now be customized.
-- Feature: Support `ResizableSplit` with customizable separator.
 - Breaking: MenuDirection enum is renamed Direction
+- Breaking: GaugeDirection enum is renamed Direction
+- Breaking: Direction enum is renamed WidthOrHeight
+- Breaking: Remove `ComponentBase` copy constructor/assignment.
+- Feature: `input` is now supporting multiple lines.
+- Feature: `input` style is now customizeable.
+
+4.1.0
+-----
+
+### Component
+- Feature: Support `ResizableSplit` with customizable separator.
+- Fix: Support arrow keys in application mode
 - Fix: Remove useless new line when using an alternative screen.
-- Breaking/Fix: Remove `ComponentBase` copy constructor/assignment.
 
 ### Dom
 - Feature: Add the dashed style for border and separator.
 - Feature: Add colored borders.
 - Feature: Add `LinearGradient`!
 - Improvement: Color::Interpolate() uses gamma correction.
+- Fix: Check the `graph` area is positive.
 
-###
-- Breaking: Direction enum is renamed WidthOrHeight
-- Breaking: GaugeDirection enum is renamed Direction
+### Build/Install
+- Use globally set CMAKE_CXX_STANDARD if it is set.
+- Expose the pkg-config file.
 
 4.0.0
 -----
