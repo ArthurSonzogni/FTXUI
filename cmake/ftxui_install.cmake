@@ -7,6 +7,7 @@ include(CMakePackageConfigHelpers)
 
 # ------------------------------------------------------------------------------
 # Install the library and its public headers into the standard subdirectories
+# ------------------------------------------------------------------------------
 install(
   TARGETS screen dom component
   EXPORT ftxui-targets
@@ -21,6 +22,7 @@ install(
 
 # ------------------------------------------------------------------------------
 # Install the exported cmake targets for use in other CMake projects.
+# ------------------------------------------------------------------------------
 install(
   EXPORT ftxui-targets
   NAMESPACE ftxui::
@@ -30,6 +32,7 @@ install(
 # ------------------------------------------------------------------------------
 # Create and install the ftuxi-config.cmake and ftuxi-config-version.cmake files
 # needed to support users of find_package()
+# ------------------------------------------------------------------------------
 configure_package_config_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ftxui-config.cmake.in
   ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config.cmake
@@ -51,6 +54,7 @@ install(
 # ------------------------------------------------------------------------------
 # Create and install pkg-config file for easy use of library in build systems
 # other than CMake:
+# ------------------------------------------------------------------------------
 configure_file(ftxui.pc.in ${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc @ONLY)
 install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc
