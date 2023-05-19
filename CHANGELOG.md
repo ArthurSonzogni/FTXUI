@@ -1,25 +1,24 @@
 Changelog
 =========
 
-current (development) 
----------------------
+4.1.0
+-----
 
 ### Component
 - Feature: Support `ResizableSplit` with customizable separator.
-- Breaking: MenuDirection enum is renamed Direction
+- Fix: Support arrow keys in application mode
 - Fix: Remove useless new line when using an alternative screen.
 
 ### Dom
 - Feature: Add the dashed style for border and separator.
 - Feature: Add colored borders.
-- Feature: Customize with gradient color effect. Add the following decorators:
-  - `colorgrad`
-  - `bgcolorgrad`
+- Feature: Add `LinearGradient`!
 - Improvement: Color::Interpolate() uses gamma correction.
+- Fix: Check the `graph` area is positive.
 
-###
-- Breaking: Direction enum is renamed WidthOrHeight
-- Breaking: GaugeDirection enum is renamed Direction
+### Build/Install
+- Use globally set CMAKE_CXX_STANDARD if it is set.
+- Expose the pkg-config file.
 
 4.0.0
 -----
