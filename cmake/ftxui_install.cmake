@@ -4,7 +4,7 @@ endif()
 
 include(GNUInstallDirs)
 install(TARGETS screen dom component
-    EXPORT ftxui-export
+    EXPORT ftxui-targets
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
@@ -27,8 +27,7 @@ write_basic_package_version_file(
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ftxui-config.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
 )
-install(EXPORT ftxui-export
-  FILE ftxui-config-version.cmake
+install(EXPORT ftxui-targets
   NAMESPACE ftxui::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
 )
