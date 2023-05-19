@@ -32,7 +32,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
 
   // Fill in the two extent, if not provided.
   if (!gradient.stops.front().position) {
-    gradient.stops.front().position = 0;
+    gradient.stops.front().position = 0.f;
   }
   if (!gradient.stops.back().position) {
     gradient.stops.back().position = 1.f;
