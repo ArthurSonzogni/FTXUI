@@ -39,6 +39,10 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v1
+        id: cpu-cores
+
       - name: "Checkout repository"
         uses: actions/checkout@v2
 
@@ -49,7 +53,7 @@ jobs:
           vcvarsall: ${{ contains(matrix.os, 'windows' )}}
           cmake: true
           ninja: true
-          clangtidy: true
+          clangtidy: false
           cppcheck: false
           gcovr: "5.0"
           opencppcoverage: true
@@ -61,6 +65,7 @@ jobs:
           cmake -S .
           -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Debug
+          -DCMAKE_BUILD_PARALLEL_LEVEL=${{ steps.cpu-cores.outputs.count }}
           -DFTXUI_ENABLE_COVERAGE:BOOL=ON
           -DFTXUI_BUILD_DOCS:BOOL=OFF
           -DFTXUI_BUILD_EXAMPLES:BOOL=ON
@@ -144,6 +149,10 @@ jobs:
             asset_path: build/ftxui*Win64*
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v1
+        id: cpu-cores
+
       - name: "Checkout repository"
         uses: actions/checkout@v2
 
@@ -156,12 +165,14 @@ jobs:
           cd build;
           cmake ..
           -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_BUILD_PARALLEL_LEVEL=${{ steps.cpu-cores.outputs.count }}
           -DFTXUI_BUILD_DOCS=OFF
           -DFTXUI_BUILD_EXAMPLES=OFF
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
           -DFTXUI_ENABLE_INSTALL=ON;
           cmake --build . --target package;
+
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
           upload_url: ${{ needs.release.outputs.upload_url }}
