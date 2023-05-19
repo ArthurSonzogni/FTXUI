@@ -31,20 +31,20 @@ install(
 # Create and install the ftuxi-config.cmake and ftuxi-config-version.cmake files
 # needed to support users of find_package()
 configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/ftxui-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/ftxui-config.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ftxui-config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config.cmake
   INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/cmake
   PATH_VARS CMAKE_INSTALL_INCLUDEDIR
   )
 write_basic_package_version_file(
-  ftxui-config-version.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config-version.cmake
   VERSION ${PACKAGE_VERSION}
   COMPATIBILITY SameMajorVersion
   )
 install(
   FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/ftxui-config.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/ftxui-config-version.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config-version.cmake
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
   )
 
