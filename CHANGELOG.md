@@ -12,6 +12,9 @@ current (development)
 - Feature: `input` is now supporting multiple lines.
 - Feature: `input` style is now customizeable.
 
+### Build
+- Check version compatibility when using cmake find_package()
+
 4.1.0
 -----
 
