@@ -21,9 +21,11 @@ current (development)
 - Fix: Remove useless new line when using an alternative screen.
 
 ### Dom
-- Feature: Add the dashed style for border and separator.
+- Feature: Add the dashed style for border and separator:
+  - See `DASHED` enum, and  `separatorDashed()`, `borderDashed()` functions.
 - Feature: Add colored borders.
-- Feature: Add `LinearGradient`!
+  - See functions: `borderStyled(BorderStyle, Color)` and `borderStyled(Color)`.
+- Feature: Add `LinearGradient`. It can be used in `color` and `bgColor`.
 - Improvement: Color::Interpolate() uses gamma correction.
 - Fix: Check the `graph` area is positive.
 
