@@ -1,7 +1,13 @@
 Changelog
 =========
 
-4.1.0
+4.1.1
+-----
+
+### Build
+- Check version compatibility when using cmake find_package()
+
+4.1.0 (abandonned)
 -----
 
 ### Component
