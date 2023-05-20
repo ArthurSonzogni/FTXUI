@@ -57,10 +57,7 @@ target_link_libraries(ftxui-tests
 target_include_directories(ftxui-tests
   PRIVATE src
 )
-set_target_properties(ftxui-tests PROPERTIES
-  CXX_STANDARD 20
-  CXX_EXTENSIONS OFF
-)
+target_compile_features(ftxui-tests PRIVATE cxx_std_17)
 
 if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
   target_compile_definitions(ftxui-tests
