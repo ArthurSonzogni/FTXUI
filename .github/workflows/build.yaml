@@ -66,7 +66,8 @@ jobs:
           -DFTXUI_BUILD_EXAMPLES:BOOL=ON
           -DFTXUI_BUILD_TESTS:BOOL=ON
           -DFTXUI_BUILD_TESTS_FUZZER:BOOL=OFF
-          -DFTXUI_ENABLE_INSTALL:BOOL=ON ;
+          -DFTXUI_ENABLE_INSTALL:BOOL=ON
+          -DFTXUI_DEV_WARNINGS:BOOL=ON ;
 
       - name: "Build"
         run: >
@@ -160,7 +161,8 @@ jobs:
           -DFTXUI_BUILD_EXAMPLES=OFF
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
-          -DFTXUI_ENABLE_INSTALL=ON;
+          -DFTXUI_ENABLE_INSTALL=ON
+          -DFTXUI_DEV_WARNINGS=ON ;
           cmake --build . --target package;
       - uses: shogo82148/actions-upload-release-asset@v1
         with:
@@ -196,7 +198,8 @@ jobs:
           -DFTXUI_BUILD_EXAMPLES=ON
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
-          -DFTXUI_ENABLE_INSTALL=OFF;
+          -DFTXUI_ENABLE_INSTALL=OFF
+          -DFTXUI_DEV_WARNINGS=ON ;
           cmake --build . --target doc;
           cmake --build . ;
           rsync -amv
