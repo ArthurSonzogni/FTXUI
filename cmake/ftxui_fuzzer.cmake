@@ -14,10 +14,7 @@ function(fuzz source)
   target_link_libraries(${name} PRIVATE component)
   target_compile_options(${name} PRIVATE -fsanitize=fuzzer,address)
   target_link_libraries(${name} PRIVATE -fsanitize=fuzzer,address)
-  set_target_properties(${name} PROPERTIES
-    CXX_STANDARD 20
-    CXX_EXTENSIONS OFF
-  )
+  target_compile_features(${name} PRIVATE cxx_std_17)
 endfunction(fuzz)
 
 fuzz(terminal_input_parser_test_fuzzer)
