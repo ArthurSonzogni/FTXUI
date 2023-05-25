@@ -92,7 +92,6 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size);
 Component ResizableSplitRight(Component main, Component back, int* main_size);
 Component ResizableSplitTop(Component main, Component back, int* main_size);
 Component ResizableSplitBottom(Component main, Component back, int* main_size);
-Component ResizableSplit(ResizableSplitOption options);
 
 Component Renderer(Component child, std::function<Element()>);
 Component Renderer(std::function<Element()>);

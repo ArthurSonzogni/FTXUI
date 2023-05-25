@@ -1,8 +1,7 @@
 #include <algorithm>                              // for max, min
 #include <ftxui/component/component_options.hpp>  // for SliderOption
-#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <string>                   // for allocator
-#include <utility>                  // for move
+#include <string>                                 // for allocator
+#include <utility>                                // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/component.hpp"       // for Make, Slider
@@ -10,7 +9,7 @@
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
 #include "ftxui/component/screen_interactive.hpp"  // for Component
-#include "ftxui/dom/elements.hpp"  // for operator|, text, Element, xflex, hbox, color, underlined, reflect, Decorator, dim, vcenter, focus, nothing, select, yflex, gaugeDirection
+#include "ftxui/dom/elements.hpp"  // for operator|, text, GaugeDirection, Element, xflex, hbox, color, underlined, GaugeDirection::Down, GaugeDirection::Left, GaugeDirection::Right, GaugeDirection::Up, reflect, Decorator, dim, vcenter, yflex, gaugeDirection
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
 #include "ftxui/screen/util.hpp"   // for clamp
@@ -19,13 +18,13 @@
 namespace ftxui {
 
 namespace {
-Decorator flexDirection(Direction direction) {
+Decorator flexDirection(GaugeDirection direction) {
   switch (direction) {
-    case Direction::Up:
-    case Direction::Down:
+    case GaugeDirection::Up:
+    case GaugeDirection::Down:
       return yflex;
-    case Direction::Left:
-    case Direction::Right:
+    case GaugeDirection::Left:
+    case GaugeDirection::Right:
       return xflex;
   }
   return xflex;  // NOT_REACHED()
@@ -53,56 +52,56 @@ class SliderBase : public ComponentBase {
 
   void OnLeft() {
     switch (options_->direction) {
-      case Direction::Right:
+      case GaugeDirection::Right:
         value_() -= increment_();
         break;
-      case Direction::Left:
+      case GaugeDirection::Left:
         value_() += increment_();
         break;
-      case Direction::Up:
-      case Direction::Down:
+      case GaugeDirection::Up:
+      case GaugeDirection::Down:
         break;
     }
   }
 
   void OnRight() {
     switch (options_->direction) {
-      case Direction::Right:
+      case GaugeDirection::Right:
         value_() += increment_();
         break;
-      case Direction::Left:
+      case GaugeDirection::Left:
         value_() -= increment_();
         break;
-      case Direction::Up:
-      case Direction::Down:
+      case GaugeDirection::Up:
+      case GaugeDirection::Down:
         break;
     }
   }
 
   void OnUp() {
     switch (options_->direction) {
-      case Direction::Up:
+      case GaugeDirection::Up:
         value_() -= increment_();
         break;
-      case Direction::Down:
+      case GaugeDirection::Down:
         value_() += increment_();
         break;
-      case Direction::Left:
-      case Direction::Right:
+      case GaugeDirection::Left:
+      case GaugeDirection::Right:
         break;
     }
   }
 
   void OnDown() {
     switch (options_->direction) {
-      case Direction::Down:
+      case GaugeDirection::Down:
         value_() -= increment_();
         break;
-      case Direction::Up:
+      case GaugeDirection::Up:
         value_() += increment_();
         break;
-      case Direction::Left:
-      case Direction::Right:
+      case GaugeDirection::Left:
+      case GaugeDirection::Right:
         break;
     }
   }
@@ -154,25 +153,25 @@ class SliderBase : public ComponentBase {
 
     if (captured_mouse_) {
       switch (options_->direction) {
-        case Direction::Right: {
+        case GaugeDirection::Right: {
           value_() = min_() + (event.mouse().x - gauge_box_.x_min) *
                                   (max_() - min_()) /
                                   (gauge_box_.x_max - gauge_box_.x_min);
           break;
         }
-        case Direction::Left: {
+        case GaugeDirection::Left: {
           value_() = max_() - (event.mouse().x - gauge_box_.x_min) *
                                   (max_() - min_()) /
                                   (gauge_box_.x_max - gauge_box_.x_min);
           break;
         }
-        case Direction::Down: {
+        case GaugeDirection::Down: {
           value_() = min_() + (event.mouse().y - gauge_box_.y_min) *
                                   (max_() - min_()) /
                                   (gauge_box_.y_max - gauge_box_.y_min);
           break;
         }
-        case Direction::Up: {
+        case GaugeDirection::Up: {
           value_() = max_() - (event.mouse().y - gauge_box_.y_min) *
                                   (max_() - min_()) /
                                   (gauge_box_.y_max - gauge_box_.y_min);

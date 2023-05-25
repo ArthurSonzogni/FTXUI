@@ -1,17 +1,16 @@
-#include <algorithm>                // for max, fill_n, reverse
-#include <chrono>                   // for milliseconds
-#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <functional>               // for function
-#include <memory>                   // for allocator_traits<>::value_type, swap
-#include <string>                   // for operator+, string
-#include <utility>                  // for move
-#include <vector>                   // for vector, __alloc_traits<>::value_type
+#include <algorithm>   // for max, fill_n, reverse
+#include <chrono>      // for milliseconds
+#include <functional>  // for function
+#include <memory>      // for allocator_traits<>::value_type, swap
+#include <string>      // for operator+, string
+#include <utility>     // for move
+#include <vector>      // for vector, __alloc_traits<>::value_type
 
 #include "ftxui/component/animation.hpp"       // for Animator, Linear
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/component.hpp"  // for Make, Menu, MenuEntry, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
-#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, UnderlineOption, AnimatedColorOption, AnimatedColorsOption, EntryState
+#include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, MenuOption::Direction, UnderlineOption, AnimatedColorOption, AnimatedColorsOption, EntryState, MenuOption::Down, MenuOption::Left, MenuOption::Right, MenuOption::Up
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released, Mouse::WheelDown, Mouse::WheelUp, Mouse::None
 #include "ftxui/component/screen_interactive.hpp"  // for Component
@@ -37,25 +36,25 @@ Element DefaultOptionTransform(const EntryState& state) {
   return e;
 }
 
-bool IsInverted(Direction direction) {
+bool IsInverted(MenuOption::Direction direction) {
   switch (direction) {
-    case Direction::Up:
-    case Direction::Left:
+    case MenuOption::Direction::Up:
+    case MenuOption::Direction::Left:
       return true;
-    case Direction::Down:
-    case Direction::Right:
+    case MenuOption::Direction::Down:
+    case MenuOption::Direction::Right:
       return false;
   }
   return false;  // NOT_REACHED()
 }
 
-bool IsHorizontal(Direction direction) {
+bool IsHorizontal(MenuOption::Direction direction) {
   switch (direction) {
-    case Direction::Left:
-    case Direction::Right:
+    case MenuOption::Direction::Left:
+    case MenuOption::Direction::Right:
       return true;
-    case Direction::Down:
-    case Direction::Up:
+    case MenuOption::Direction::Down:
+    case MenuOption::Direction::Up:
       return false;
   }
   return false;  // NOT_REACHED()
@@ -179,56 +178,56 @@ class MenuBase : public ComponentBase {
 
   void OnUp() {
     switch (option_->direction) {
-      case Direction::Up:
+      case MenuOption::Direction::Up:
         (*selected_)++;
         break;
-      case Direction::Down:
+      case MenuOption::Direction::Down:
         (*selected_)--;
         break;
-      case Direction::Left:
-      case Direction::Right:
+      case MenuOption::Direction::Left:
+      case MenuOption::Direction::Right:
         break;
     }
   }
 
   void OnDown() {
     switch (option_->direction) {
-      case Direction::Up:
+      case MenuOption::Direction::Up:
         (*selected_)--;
         break;
-      case Direction::Down:
+      case MenuOption::Direction::Down:
         (*selected_)++;
         break;
-      case Direction::Left:
-      case Direction::Right:
+      case MenuOption::Direction::Left:
+      case MenuOption::Direction::Right:
         break;
     }
   }
 
   void OnLeft() {
     switch (option_->direction) {
-      case Direction::Left:
+      case MenuOption::Direction::Left:
         (*selected_)++;
         break;
-      case Direction::Right:
+      case MenuOption::Direction::Right:
         (*selected_)--;
         break;
-      case Direction::Down:
-      case Direction::Up:
+      case MenuOption::Direction::Down:
+      case MenuOption::Direction::Up:
         break;
     }
   }
 
   void OnRight() {
     switch (option_->direction) {
-      case Direction::Left:
+      case MenuOption::Direction::Left:
         (*selected_)--;
         break;
-      case Direction::Right:
+      case MenuOption::Direction::Right:
         (*selected_)++;
         break;
-      case Direction::Down:
-      case Direction::Up:
+      case MenuOption::Direction::Down:
+      case MenuOption::Direction::Up:
         break;
     }
   }

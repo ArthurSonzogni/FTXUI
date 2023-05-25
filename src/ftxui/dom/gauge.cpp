@@ -1,9 +1,8 @@
-#include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <memory>                   // for allocator, make_shared
-#include <string>                   // for string
+#include <memory>  // for allocator, make_shared
+#include <string>  // for string
 
-#include "ftxui/dom/elements.hpp"  // for Element, gauge, gaugeDirection, gaugeDown, gaugeLeft, gaugeRight, gaugeUp
-#include "ftxui/dom/node.hpp"         // for Node
+#include "ftxui/dom/elements.hpp"  // for GaugeDirection, Element, GaugeDirection::Down, GaugeDirection::Left, GaugeDirection::Right, GaugeDirection::Up, gauge, gaugeDirection, gaugeDown, gaugeLeft, gaugeRight, gaugeUp
+#include "ftxui/dom/node.hpp"      // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"    // for Screen, Pixel
@@ -41,7 +40,7 @@ static const std::string charset_vertical[10] = {
 
 class Gauge : public Node {
  public:
-  Gauge(float progress, Direction direction)
+  Gauge(float progress, GaugeDirection direction)
       : progress_(progress), direction_(direction) {
     // This handle NAN correctly:
     if (!(progress_ > 0.F)) {
@@ -54,15 +53,15 @@ class Gauge : public Node {
 
   void ComputeRequirement() override {
     switch (direction_) {
-      case Direction::Right:
-      case Direction::Left:
+      case GaugeDirection::Right:
+      case GaugeDirection::Left:
         requirement_.flex_grow_x = 1;
         requirement_.flex_grow_y = 0;
         requirement_.flex_shrink_x = 1;
         requirement_.flex_shrink_y = 0;
         break;
-      case Direction::Up:
-      case Direction::Down:
+      case GaugeDirection::Up:
+      case GaugeDirection::Down:
         requirement_.flex_grow_x = 0;
         requirement_.flex_grow_y = 1;
         requirement_.flex_shrink_x = 0;
@@ -75,16 +74,16 @@ class Gauge : public Node {
 
   void Render(Screen& screen) override {
     switch (direction_) {
-      case Direction::Right:
+      case GaugeDirection::Right:
         RenderHorizontal(screen, /*invert=*/false);
         break;
-      case Direction::Up:
+      case GaugeDirection::Up:
         RenderVertical(screen, /*invert=*/false);
         break;
-      case Direction::Left:
+      case GaugeDirection::Left:
         RenderHorizontal(screen, /*invert=*/true);
         break;
-      case Direction::Down:
+      case GaugeDirection::Down:
         RenderVertical(screen, /*invert=*/true);
         break;
     }
@@ -152,7 +151,7 @@ class Gauge : public Node {
 
  private:
   float progress_;
-  Direction direction_;
+  GaugeDirection direction_;
 };
 
 /// @brief Draw a high definition progress bar progressing in specified
@@ -160,7 +159,7 @@ class Gauge : public Node {
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 //  @param direction Direction of progress bars progression.
 /// @ingroup dom
-Element gaugeDirection(float progress, Direction direction) {
+Element gaugeDirection(float progress, GaugeDirection direction) {
   return std::make_shared<Gauge>(progress, direction);
 }
 
@@ -183,7 +182,7 @@ Element gaugeDirection(float progress, Direction direction) {
 /// └──────────────────────────────────────────────────────────────────────────┘
 /// ~~~
 Element gaugeRight(float progress) {
-  return gaugeDirection(progress, Direction::Right);
+  return gaugeDirection(progress, GaugeDirection::Right);
 }
 
 /// @brief Draw a high definition progress bar progressing from right to left.
@@ -205,7 +204,7 @@ Element gaugeRight(float progress) {
 /// └──────────────────────────────────────────────────────────────────────────┘
 /// ~~~
 Element gaugeLeft(float progress) {
-  return gaugeDirection(progress, Direction::Left);
+  return gaugeDirection(progress, GaugeDirection::Left);
 }
 
 /// @brief Draw a high definition progress bar progressing from bottom to top.
@@ -234,7 +233,7 @@ Element gaugeLeft(float progress) {
 ///  └─┘
 /// ~~~
 Element gaugeUp(float progress) {
-  return gaugeDirection(progress, Direction::Up);
+  return gaugeDirection(progress, GaugeDirection::Up);
 }
 
 /// @brief Draw a high definition progress bar progressing from top to bottom.
@@ -263,7 +262,7 @@ Element gaugeUp(float progress) {
 ///  └─┘
 /// ~~~
 Element gaugeDown(float progress) {
-  return gaugeDirection(progress, Direction::Down);
+  return gaugeDirection(progress, GaugeDirection::Down);
 }
 
 /// @brief Draw a high definition progress bar.

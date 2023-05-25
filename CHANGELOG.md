@@ -4,6 +4,9 @@ Changelog
 4.1.1
 -----
 
+### Component
+- Revert Feature: Support `ResizableSplit` with customizable separator.
+
 ### Build
 - Check version compatibility when using cmake find_package()
 
