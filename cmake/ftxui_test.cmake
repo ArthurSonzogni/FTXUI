@@ -57,8 +57,12 @@ target_link_libraries(ftxui-tests
 target_include_directories(ftxui-tests
   PRIVATE src
 )
-ftxui_set_options(ftxui-tests)
-target_compile_features(ftxui-tests PUBLIC cxx_std_20)
+target_compile_features(ftxui-tests PRIVATE cxx_std_20)
+
+if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+  target_compile_definitions(ftxui-tests
+    PRIVATE "FTXUI_MICROSOFT_TERMINAL_FALLBACK")
+endif()
 
 include(GoogleTest)
 gtest_discover_tests(ftxui-tests

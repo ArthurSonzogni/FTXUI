@@ -43,19 +43,7 @@ function(ftxui_set_options library)
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   )
 
-  # Play nicely if we are being consumed by another project
-  # and use their CMAKE_CXX_STANDARD. Otherwise, fall back to 17
-  # C++17 is used. We require fold expression at least.
-  if (DEFINED CMAKE_CXX_STANDARD)
-    set(CXX_STANDARD ${CMAKE_CXX_STANDARD})
-  else()
-    set(CXX_STANDARD 17)
-  endif()
-  
-  set_target_properties(${library} PROPERTIES
-    CXX_STANDARD ${CXX_STANDARD}
-    CXX_EXTENSIONS OFF
-  )
+  target_compile_features(${library} PUBLIC cxx_std_17)
 
   # Force Microsoft Visual Studio to decode sources files in UTF-8. This applies
   # to the library and the library users.
