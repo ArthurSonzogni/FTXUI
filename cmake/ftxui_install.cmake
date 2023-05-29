@@ -15,7 +15,7 @@ install(
 
 install(
   DIRECTORY include/ftxui
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
   )
 
 # ------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ install(
 install(
   EXPORT ftxui-targets
   NAMESPACE ftxui::
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/ftxui"
   )
 
 # ------------------------------------------------------------------------------
@@ -32,21 +32,21 @@ install(
 # needed to support users of find_package()
 # ------------------------------------------------------------------------------
 configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ftxui-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/ftxui/cmake
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/ftxui-config.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config.cmake"
+  INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/ftxui/cmake"
   PATH_VARS CMAKE_INSTALL_INCLUDEDIR
   )
 write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config-version.cmake
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config-version.cmake"
   VERSION ${PACKAGE_VERSION}
   COMPATIBILITY SameMajorVersion
   )
 install(
   FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config.cmake
-  ${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config-version.cmake
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake/ftxui-config-version.cmake"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/ftxui"
   )
 
 # ------------------------------------------------------------------------------
@@ -55,6 +55,6 @@ install(
 # ------------------------------------------------------------------------------
 configure_file(ftxui.pc.in ${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc @ONLY)
 install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc
+  FILES "${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc"
   DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
   )
