@@ -58,5 +58,5 @@ install(
 configure_file(ftxui.pc.in ${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc @ONLY)
 install(
   FILES ${CMAKE_CURRENT_BINARY_DIR}/ftxui.pc
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
   )
