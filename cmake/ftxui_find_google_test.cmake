@@ -27,7 +27,7 @@ set(BUILD_GMOCK OFF CACHE INTERNAL "")
 set(INSTALL_GTEST OFF CACHE INTERNAL "")
 set(gtest_force_shared_crt ON CACHE INTERNAL "")
 add_subdirectory(
-  ${googletest_SOURCE_DIR}
-  ${googletest_BINARY_DIR}
+  "${googletest_SOURCE_DIR}"
+  "${googletest_BINARY_DIR}"
   EXCLUDE_FROM_ALL
 )
