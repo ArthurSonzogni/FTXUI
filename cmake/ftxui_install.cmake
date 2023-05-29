@@ -11,8 +11,6 @@ include(CMakePackageConfigHelpers)
 install(
   TARGETS screen dom component
   EXPORT ftxui-targets
-  LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
   )
 
 install(
