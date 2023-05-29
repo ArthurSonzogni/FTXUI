@@ -9,17 +9,17 @@ current (development)
 - Breaking: GaugeDirection enum is renamed Direction
 - Breaking: Direction enum is renamed WidthOrHeight
 - Breaking: Remove `ComponentBase` copy constructor/assignment.
+- Feature: `ResizeableSplit` now support arbitrary element as a separator.
 - Feature: `input` is now supporting multiple lines.
 - Feature: `input` style is now customizeable.
 
 ### Build
 - Check version compatibility when using cmake find_package()
 
-4.1.0
+4.1.1
 -----
 
 ### Component
-- Feature: Support `ResizableSplit` with customizable separator.
 - Fix: Support arrow keys in application mode
 - Fix: Remove useless new line when using an alternative screen.
 
@@ -34,7 +34,12 @@ current (development)
 
 ### Build/Install
 - Use globally set CMAKE_CXX_STANDARD if it is set.
-- Expose the pkg-config file.
+- Expose the pkg-config file
+- Check version compatibility when using cmake find_package()
+
+4.1.0  (Abandonned)
+-----
+This version is abandonned and must not be used. It introduced a breaking change in the API.
 
 4.0.0
 -----
