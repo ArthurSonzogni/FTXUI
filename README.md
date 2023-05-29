@@ -310,28 +310,31 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 ## Project using FTXUI
 
 Feel free to add your projects here:
-- [json-tui](https://github.com/ArthurSonzogni/json-tui)
-- [git-tui](https://github.com/ArthurSonzogni/git-tui)
-- [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
-- [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier)
-- [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
-- [ltuiny](https://github.com/adrianoviana87/ltuiny)
-- [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
-- [Just-Fast](https://github.com/GiuseppeCesarano/just-fast)
-- [simpPRU](https://github.com/VedantParanjape/simpPRU)
-- [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
-- [hastur](https://github.com/robinlinden/hastur)
-- [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
-- [todoman](https://github.com/aaleino/todoman)
-- [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
-- [vantage](https://github.com/gokulmaxi/vantage)
-- [tabdeeli](https://github.com/typon/tabdeeli)
-- [tiles](https://github.com/tusharpm/tiles)
-- [cachyos-cli-installer](https://github.com/cachyos/new-cli-installer)
-- [beagle-config](https://github.com/SAtacker/beagle-config)
-- [turing_cmd](https://github.com/DanArmor/turing_cmd)
-- [StartUp](https://github.com/StubbornVegeta/StartUp)
-- [eCAL monitor](https://github.com/eclipse-ecal/ecal)
+
+| Project | Description | Stars |
+| --- | --- | --- |
+| [json-tui](https://github.com/ArthurSonzogni/json-tui) |  | ![json-tui stars](https://img.shields.io/github/stars/ArthurSonzogni/json-tui?style=social) |
+| [git-tui](https://github.com/ArthurSonzogni/git-tui) |  | ![git-tui stars](https://img.shields.io/github/stars/ArthurSonzogni/git-tui?style=social) |
+| [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui) |  | ![rgb-tui stars](https://img.shields.io/github/stars/ArthurSonzogni/rgb-tui?style=social) |
+| [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier) |  | ![stars](https://img.shields.io/github/stars/ArthurSonzogni/chrome-log-beautifier?style=social) |
+| [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU) |  | ![x86-64 CPU Architecture Simulation stars](https://img.shields.io/github/stars/AnisBdz/CPU?style=social) |
+| [ltuiny](https://github.com/adrianoviana87/ltuiny) |  | ![ltuiny stars](https://img.shields.io/github/stars/adrianoviana87/ltuiny?style=social) |
+| [i3-termdialogs](https://github.com/mibli/i3-termdialogs) |  | ![i3-termdialogs stars](https://img.shields.io/github/stars/mibli/i3-termdialogs?style=social) |
+| [Just-Fast](https://github.com/GiuseppeCesarano/just-fast) |  | ![Just-Fast stars](https://img.shields.io/github/stars/GiuseppeCesarano/just-fast?style=social) |
+| [simpPRU](https://github.com/VedantParanjape/simpPRU) |  | ![simpPRU stars](https://img.shields.io/github/stars/VedantParanjape/simpPRU?style=social) |
+| [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui) |  | ![Pigeon ROS TUI stars](https://img.shields.io/github/stars/PigeonSensei/Pigeon_ros_tui?style=social) |
+| [hastur](https://github.com/robinlinden/hastur) |  | ![hastur stars](https://img.shields.io/github/stars/robinlinden/hastur?style=social) |
+| [CryptoCalculator](https://github.com/brevis/CryptoCalculator) |  | ![CryptoCalculator stars](https://img.shields.io/github/stars/brevis/CryptoCalculator?style=social) |
+| [todoman](https://github.com/aaleino/todoman) |  | ![todoman stars](https://img.shields.io/github/stars/aaleino/todoman?style=social) |
+| [TimeAccumulator](https://github.com/asari555/TimeAccumulator) |  | ![TimeAccumulator stars](https://img.shields.io/github/stars/asari555/TimeAccumulator?style=social) |
+| [vantage](https://github.com/gokulmaxi/vantage) |  | ![vantage stars](https://img.shields.io/github/stars/gokulmaxi/vantage?style=social) |
+| [tabdeeli](https://github.com/typon/tabdeeli) |  | ![tabdeeli stars](https://img.shields.io/github/stars/typon/tabdeeli?style=social) |
+| [tiles](https://github.com/tusharpm/tiles) |  | ![tiles stars](https://img.shields.io/github/stars/tusharpm/tiles?style=social) |
+| [cachyos-cli-installer](https://github.com/cachyos/new-cli-installer) |  | ![cachyos-cli-installer stars](https://img.shields.io/github/stars/cachyos/new-cli-installer?style=social) |
+| [beagle-config](https://github.com/SAtacker/beagle-config) |  | ![beagle-config stars](https://img.shields.io/github/stars/SAtacker/beagle-config?style=social) |
+| [turing_cmd](https://github.com/DanArmor/turing_cmd) |  | ![turing_cmd stars](https://img.shields.io/github/stars/DanArmor/turing_cmd?style=social) |
+| [StartUp](https://github.com/StubbornVegeta/StartUp) |  | ![StartUp stars](https://img.shields.io/github/stars/StubbornVegeta/StartUp?style=social) |
+| [eCAL monitor](https://github.com/eclipse-ecal/ecal) |  | ![eCAL monitor stars](https://img.shields.io/github/stars/eclipse-ecal/ecal?style=social) |
 
 ## [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
