@@ -26,7 +26,7 @@ namespace ftxui {
 namespace {
 
 Element DefaultOptionTransform(const EntryState& state) {
-  std::string label = (state.active ? "> " : "  ") + state.label;  // NOLINT
+  const std::string& label = (state.active ? "> " : "  ") + state.label;  // NOLINT
   Element e = text(label);
   if (state.focused) {
     e = e | inverted;
@@ -114,6 +114,7 @@ class MenuBase : public ComponentBase {
     if (option_->elements_prefix) {
       elements.push_back(option_->elements_prefix());
     }
+    elements.reserve(size());
     for (int i = 0; i < size(); ++i) {
       if (i != 0 && option_->elements_infix) {
         elements.push_back(option_->elements_infix());
@@ -362,7 +363,10 @@ class MenuBase : public ComponentBase {
       animator_background_.clear();
       animator_foreground_.clear();
 
-      for (int i = 0; i < size(); ++i) {
+      const int len = size();
+      animator_background_.reserve(len);
+      animator_foreground_.reserve(len);
+      for (int i = 0; i < len; ++i) {
         animation_background_[i] = 0.F;
         animation_foreground_[i] = 0.F;
         animator_background_.emplace_back(&animation_background_[i], 0.F,

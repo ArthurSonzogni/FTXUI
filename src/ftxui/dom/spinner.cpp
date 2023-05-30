@@ -289,6 +289,7 @@ Element spinner(int charset_index, size_t image_index) {
   charset_index %= int(elements.size());
   image_index %= int(elements[charset_index].size());
   std::vector<Element> lines;
+  lines.reserve(elements[charset_index][image_index].size());
   for (const auto& it : elements[charset_index][image_index]) {
     lines.push_back(text(it));
   }

@@ -38,6 +38,7 @@ class GridBox : public Node {
       x_size = std::max(x_size, int(line.size()));
     }
     for (auto& line : lines_) {
+      line.reserve(size_t(x_size) - line.size());
       while (line.size() < size_t(x_size)) {
         line.push_back(filler());
       }

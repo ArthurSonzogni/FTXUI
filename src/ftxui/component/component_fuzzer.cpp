@@ -179,6 +179,7 @@ Component GeneratorComponent(const char*& data, size_t& size, int depth) {
 Components GeneratorComponents(const char*& data, size_t& size, int depth) {
   Components out;
   if (depth > 0) {
+    out.reserve(size);
     while (size && GeneratorInt(data, size) % 2) {
       out.push_back(GeneratorComponent(data, size, depth - 1));
     }

@@ -117,7 +117,7 @@ class InputBase : public ComponentBase {
     }
 
     Elements elements;
-    std::vector<std::string> lines = Split(*content_);
+    const std::vector<std::string>& lines = Split(*content_);
 
     int& cursor_position = option_->cursor_position();
     cursor_position = util::clamp(cursor_position, 0, (int)content_->size());
@@ -138,6 +138,7 @@ class InputBase : public ComponentBase {
       elements.push_back(text("") | focused);
     }
 
+    elements.reserve(lines.size());
     for (size_t i = 0; i < lines.size(); ++i) {
       const std::string& line = lines[i];
 
@@ -160,10 +161,10 @@ class InputBase : public ComponentBase {
       // The cursor is on this line.
       const int glyph_start = cursor_char_index;
       const int glyph_end = GlyphNext(line, glyph_start);
-      const std::string part_before_cursor = line.substr(0, glyph_start);
-      const std::string part_at_cursor =
+      const std::string& part_before_cursor = line.substr(0, glyph_start);
+      const std::string& part_at_cursor =
           line.substr(glyph_start, glyph_end - glyph_start);
-      const std::string part_after_cursor = line.substr(glyph_end);
+      const std::string& part_after_cursor = line.substr(glyph_end);
       auto element = hbox({
                          Text(part_before_cursor),
                          Text(part_at_cursor) | focused | reflect(cursor_box_),
