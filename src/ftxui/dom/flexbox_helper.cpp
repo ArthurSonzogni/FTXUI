@@ -88,6 +88,7 @@ struct Line {
 void SetX(Global& global, std::vector<Line> lines) {
   for (auto& line : lines) {
     std::vector<box_helper::Element> elements;
+    elements.reserve(line.blocks.size());
     for (auto* block : line.blocks) {
       box_helper::Element element;
       element.min_size = block->min_size_x;
@@ -117,6 +118,7 @@ void SetX(Global& global, std::vector<Line> lines) {
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void SetY(Global& g, std::vector<Line> lines) {
   std::vector<box_helper::Element> elements;
+  elements.reserve(lines.size());
   for (auto& line : lines) {
     box_helper::Element element;
     element.flex_shrink = line.blocks.front()->flex_shrink_y;
@@ -317,6 +319,7 @@ void Compute3(Global& global) {
   {
     Line line;
     int x = 0;
+    line.blocks.reserve(global.blocks.size());
     for (auto& block : global.blocks) {
       // Does it fit the end of the row?
       // No? Then we need to start a new one:

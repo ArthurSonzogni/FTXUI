@@ -33,6 +33,7 @@ class RadioboxBase : public ComponentBase {
     Clamp();
     Elements elements;
     const bool is_menu_focused = Focused();
+    elements.reserve(size());
     for (int i = 0; i < size(); ++i) {
       const bool is_focused = (focused_entry() == i) && is_menu_focused;
       const bool is_selected = (hovered_ == i);

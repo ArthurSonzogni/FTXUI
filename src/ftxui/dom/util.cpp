@@ -46,6 +46,7 @@ Decorator operator|(Decorator a, Decorator b) {
 /// @ingroup dom
 Elements operator|(Elements elements, Decorator decorator) {  // NOLINT
   Elements output;
+  output.reserve(elements.size());
   for (auto& it : elements) {
     output.push_back(std::move(it) | decorator);
   }

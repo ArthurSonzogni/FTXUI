@@ -68,6 +68,7 @@ class Flexbox : public Node {
 
   void Layout(flexbox_helper::Global& global,
               bool compute_requirement = false) {
+    global.blocks.reserve(children_.size());
     for (auto& child : children_) {
       flexbox_helper::Block block;
       block.min_size_x = child->requirement().min_x;

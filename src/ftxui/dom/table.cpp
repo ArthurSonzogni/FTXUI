@@ -44,9 +44,11 @@ Table::Table() {
 
 Table::Table(std::vector<std::vector<std::string>> input) {
   std::vector<std::vector<Element>> output;
+  output.reserve(input.size());
   for (auto& row : input) {
     output.emplace_back();
     auto& output_row = output.back();
+    output_row.reserve(row.size());
     for (auto& cell : row) {
       output_row.push_back(text(std::move(cell)));
     }

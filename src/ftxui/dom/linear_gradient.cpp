@@ -78,7 +78,7 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
   LinearGradientNormalized normalized;
   // NOLINTNEXTLINE
   normalized.angle = std::fmod(std::fmod(gradient.angle, 360.f) + 360.f, 360.f);
-  for (auto& stop : gradient.stops) {
+  for (const auto& stop : gradient.stops) {
     normalized.colors.push_back(stop.color);
     normalized.positions.push_back(stop.position.value());  // NOLINT
   }

@@ -98,6 +98,7 @@ class VerticalContainer : public ContainerBase {
 
   Element Render() override {
     Elements elements;
+    elements.reserve(children_.size());
     for (auto& it : children_) {
       elements.push_back(it->Render());
     }
@@ -180,6 +181,7 @@ class HorizontalContainer : public ContainerBase {
 
   Element Render() override {
     Elements elements;
+    elements.reserve(children_.size());
     for (auto& it : children_) {
       elements.push_back(it->Render());
     }

@@ -117,7 +117,7 @@ class InputBase : public ComponentBase {
     }
 
     Elements elements;
-    std::vector<std::string> lines = Split(*content_);
+    const std::vector<std::string> lines = Split(*content_);
 
     int& cursor_position = option_->cursor_position();
     cursor_position = util::clamp(cursor_position, 0, (int)content_->size());
@@ -138,6 +138,7 @@ class InputBase : public ComponentBase {
       elements.push_back(text("") | focused);
     }
 
+    elements.reserve(lines.size());
     for (size_t i = 0; i < lines.size(); ++i) {
       const std::string& line = lines[i];
 
