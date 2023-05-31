@@ -26,8 +26,8 @@ namespace ftxui {
 namespace {
 
 Element DefaultOptionTransform(const EntryState& state) {
-  const std::string& label = (state.active ? "> " : "  ") + state.label;  // NOLINT
-  Element e = text(label);
+  std::string label = (state.active ? "> " : "  ") + state.label;  // NOLINT
+  Element e = text(std::move(label));
   if (state.focused) {
     e = e | inverted;
   }
