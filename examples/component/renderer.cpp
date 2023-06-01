@@ -7,7 +7,7 @@
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, text, bold, border, center, color
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
   auto screen = ScreenInteractive::FitComponent();
 

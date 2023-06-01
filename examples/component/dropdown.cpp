@@ -5,7 +5,7 @@
 #include "ftxui/component/component.hpp"  // for Dropdown, Horizontal, Vertical
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   std::vector<std::string> entries = {

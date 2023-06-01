@@ -23,7 +23,7 @@ Element ColorString(int red, int green, int blue) {
   );
 }
 
-int main(int argc, const char* argv[]) {
+int main() {
   int red = 128;
   int green = 25;
   int blue = 100;

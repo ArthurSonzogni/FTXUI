@@ -14,7 +14,7 @@
 #include "ftxui/dom/canvas.hpp"                    // for Canvas
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   int mouse_x = 0;

@@ -9,7 +9,7 @@
 #include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
   auto screen = ScreenInteractive::Fullscreen();
 

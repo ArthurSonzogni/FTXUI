@@ -8,7 +8,7 @@
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, size, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   Component input_list = Container::Vertical({});

@@ -26,7 +26,7 @@ Component Empty() {
   return std::make_shared<ComponentBase>();
 }
 
-int main(int argc, const char* argv[]) {
+int main() {
   auto component =
       Collapsible("Collapsible 1",
                   Inner({

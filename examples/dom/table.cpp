@@ -8,7 +8,7 @@
 #include "ftxui/dom/node.hpp"  // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::White, ftxui
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   auto table = Table({

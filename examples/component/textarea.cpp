@@ -7,7 +7,7 @@
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for operator|, separator, text, Element, flex, vbox, border
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   std::string content_1;

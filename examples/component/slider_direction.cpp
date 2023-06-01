@@ -13,7 +13,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   auto screen = ScreenInteractive::TerminalOutput();
   std::array<int, 30> values;
   for (int i = 0; i < values.size(); ++i) {

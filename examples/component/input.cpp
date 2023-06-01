@@ -9,7 +9,7 @@
 #include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
 #include "ftxui/util/ref.hpp"  // for Ref
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   std::string first_name;

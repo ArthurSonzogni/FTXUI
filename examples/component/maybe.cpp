@@ -10,7 +10,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   std::vector<std::string> entries = {
       "entry 1",
       "entry 2",
