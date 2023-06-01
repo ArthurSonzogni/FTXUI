@@ -13,7 +13,7 @@ int main() {
 
   Component input_list = Container::Vertical({});
   std::vector<std::string> items(100, "");
-  for (int i = 0; i < items.size(); ++i) {
+  for (size_t i = 0; i < items.size(); ++i) {
     input_list->Add(Input(&(items[i]), "placeholder " + std::to_string(i)));
   }
 
