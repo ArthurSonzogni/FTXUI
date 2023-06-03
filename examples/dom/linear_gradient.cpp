@@ -6,7 +6,7 @@
 #include "ftxui/dom/node.hpp"  // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::DeepPink1, Color::DeepSkyBlue1, Color::Yellow, ftxui
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
   auto document = text("gradient") | center;
 

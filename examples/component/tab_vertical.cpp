@@ -10,7 +10,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   std::vector<std::string> tab_values{
       "tab_1",
       "tab_2",

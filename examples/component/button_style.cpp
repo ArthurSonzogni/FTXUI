@@ -10,7 +10,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   int value = 0;
   auto action = [&] { value++; };
   auto action_renderer =

@@ -6,7 +6,7 @@
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for Color, ftxui
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   int saturation = 255;

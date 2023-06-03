@@ -10,7 +10,7 @@
 using namespace ftxui;
 #include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
-int main(int argc, const char* argv[]) {
+int main() {
   std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();
 
   // Draw every columns

@@ -19,7 +19,7 @@ Component Instance(std::string label, Decorator focusCursor) {
   });
 };
 
-int main(int argc, const char* argv[]) {
+int main() {
   auto screen = ScreenInteractive::Fullscreen();
   screen.Loop(Container::Vertical({
       Instance("focus", focus),

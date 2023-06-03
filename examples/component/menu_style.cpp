@@ -30,7 +30,7 @@ Component HMenu3(std::vector<std::string>* entries, int* selected);
 Component HMenu4(std::vector<std::string>* entries, int* selected);
 Component HMenu5(std::vector<std::string>* entries, int* selected);
 
-int main(int argc, const char* argv[]) {
+int main() {
   auto screen = ScreenInteractive::TerminalOutput();
 
   std::vector<std::string> entries{

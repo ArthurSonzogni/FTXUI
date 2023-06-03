@@ -35,7 +35,7 @@ void Nested(std::string path) {
   screen.Loop(renderer);
 }
 
-int main(int argc, const char* argv[]) {
+int main() {
   auto screen = ScreenInteractive::FitComponent();
   auto button_quit = Button("Quit", screen.ExitLoopClosure());
   auto button_nested = Button("Nested", [] { Nested(""); });

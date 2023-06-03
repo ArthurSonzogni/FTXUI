@@ -10,7 +10,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   std::vector<std::string> toggle_1_entries = {
       "On",
       "Off",

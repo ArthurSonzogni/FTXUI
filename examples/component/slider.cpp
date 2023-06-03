@@ -4,7 +4,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   auto screen = ScreenInteractive::TerminalOutput();
   int value = 50;
   auto slider = Slider("Value:", &value, 0, 100, 1);
