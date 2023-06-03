@@ -31,7 +31,7 @@ Element make_grid() {
   return gridbox(rows);
 };
 
-int main(int argc, const char* argv[]) {
+int main() {
   float focus_x = 0.5f;
   float focus_y = 0.5f;
 

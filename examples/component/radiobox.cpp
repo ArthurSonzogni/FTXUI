@@ -7,7 +7,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   std::vector<std::string> radiobox_list = {
       "Use gcc",
       "Use clang",

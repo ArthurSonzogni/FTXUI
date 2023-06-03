@@ -9,7 +9,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   int value = 50;
 
   // The tree of components. This defines how to navigate using the keyboard.

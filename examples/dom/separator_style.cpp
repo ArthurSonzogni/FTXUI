@@ -6,7 +6,7 @@
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/box.hpp"    // for ftxui
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   auto document = vbox({

@@ -134,7 +134,7 @@ std::string Stringify(Event event) {
   return out;
 }
 
-int main(int argc, const char* argv[]) {
+int main() {
   auto screen = ScreenInteractive::TerminalOutput();
 
   std::vector<Event> keys;

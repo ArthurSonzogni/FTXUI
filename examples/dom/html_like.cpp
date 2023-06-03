@@ -9,7 +9,7 @@
 #include "ftxui/screen/box.hpp"    // for ftxui
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
   using namespace std::chrono_literals;
 

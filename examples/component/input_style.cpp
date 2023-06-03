@@ -10,7 +10,7 @@
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for operator|=, Element, bgcolor, operator|, separatorEmpty, color, borderEmpty, separator, text, center, dim, hbox, vbox, border, borderDouble, borderRounded
 
-int main(int argc, const char* argv[]) {
+int main() {
   using namespace ftxui;
 
   InputOption style_1 = InputOption::Default();

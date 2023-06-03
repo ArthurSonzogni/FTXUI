@@ -17,7 +17,7 @@ Component Window(std::string title, Component component) {
   });
 }
 
-int main(int argc, const char* argv[]) {
+int main() {
   int menu_selected[] = {0, 0, 0};
   std::vector<std::vector<std::string>> menu_entries = {
       {

@@ -11,7 +11,7 @@
 
 using namespace ftxui;
 
-int main(int argc, const char* argv[]) {
+int main() {
   int counter = 0;
   auto on_click = [&] { counter++; };
 

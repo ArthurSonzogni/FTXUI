@@ -24,7 +24,7 @@ MenuEntryOption Colored(ftxui::Color c) {
   return option;
 }
 
-int main(int argc, const char* argv[]) {
+int main() {
   auto screen = ScreenInteractive::TerminalOutput();
 
   int selected = 0;
