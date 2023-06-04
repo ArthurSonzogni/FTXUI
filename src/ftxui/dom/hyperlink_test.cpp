@@ -20,10 +20,10 @@ TEST(HyperlinkTest, Basic) {
   Screen screen(6*4, 1);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(0, 0).hyperlink, "https://a.com");
-  EXPECT_EQ(screen.PixelAt(5, 0).hyperlink, "https://a.com");
-  EXPECT_EQ(screen.PixelAt(6, 0).hyperlink, "https://b.com");
-  EXPECT_EQ(screen.PixelAt(11, 0).hyperlink, "https://b.com");
+  EXPECT_EQ(screen.PixelAt(0, 0).hyperlink, 1u);
+  EXPECT_EQ(screen.PixelAt(5, 0).hyperlink, 1u);
+  EXPECT_EQ(screen.PixelAt(6, 0).hyperlink, 2u);
+  EXPECT_EQ(screen.PixelAt(11, 0).hyperlink, 2u);
 
   std::string output = screen.ToString();
   EXPECT_EQ(

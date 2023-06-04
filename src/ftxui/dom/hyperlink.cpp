@@ -14,9 +14,10 @@ class Hyperlink : public NodeDecorator {
       : NodeDecorator(std::move(child)), link_(link) {}
 
   void Render(Screen& screen) override {
+    uint8_t hyperlink_id = screen.RegisterHyperlink(link_);
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).hyperlink = link_;
+        screen.PixelAt(x, y).hyperlink = hyperlink_id;
       }
     }
     NodeDecorator::Render(screen);

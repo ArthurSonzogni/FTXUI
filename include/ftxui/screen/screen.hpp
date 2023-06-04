@@ -20,9 +20,9 @@ struct Pixel {
   // like: a⃦, this can potentially contains multiple codepoitns.
   std::string character = " ";
 
-  // The hyperlink associated with the pixel. If empty, no hyperlink is
-  // associated.
-  std::string hyperlink = "";
+  // The hyperlink associated with the pixel.
+  // 0 is the default value, meaning no hyperlink.
+  uint8_t hyperlink = 0;
 
   // Colors:
   Color background_color = Color::Default;
@@ -103,6 +103,11 @@ class Screen {
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
+  // Store an hyperlink in the screen. Return the id of the hyperlink. The id is
+  // used to identify the hyperlink when the user click on it.
+  uint8_t RegisterHyperlink(std::string link);
+  const std::string& Hyperlink(uint8_t id) const;
+
   Box stencil;
 
  protected:
@@ -110,6 +115,7 @@ class Screen {
   int dimy_;
   std::vector<std::vector<Pixel>> pixels_;
   Cursor cursor_;
+  std::vector<std::string> hyperlinks_ = {""};
 };
 
 }  // namespace ftxui

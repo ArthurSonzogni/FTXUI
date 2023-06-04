@@ -50,19 +50,13 @@ void WindowsEmulateVT100Terminal() {
 #endif
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void UpdatePixelStyle(std::stringstream& ss,
+void UpdatePixelStyle(const Screen* screen,
+                      std::stringstream& ss,
                       Pixel& previous,
                       const Pixel& next) {
-  if (next == previous) {
-    return;
-  }
-
+  // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
   if (next.hyperlink != previous.hyperlink) {
-    if (next.hyperlink.empty()) {
-      ss << "\x1B]8;;\x1B\\";  // HYPERLINK_RESET
-    } else {
-      ss << "\x1B]8;;" << next.hyperlink << "\x1B\\";  // HYPERLINK_SET
-    }
+    ss << "\x1B]8;;" << screen->Hyperlink(next.hyperlink) << "\x1B\\";
   }
 
   if ((!next.bold && previous.bold) ||  //
@@ -443,20 +437,20 @@ std::string Screen::ToString() {
 
   for (int y = 0; y < dimy_; ++y) {
     if (y != 0) {
-      UpdatePixelStyle(ss, previous_pixel, final_pixel);
+      UpdatePixelStyle(this, ss, previous_pixel, final_pixel);
       ss << "\r\n";
     }
     bool previous_fullwidth = false;
     for (const auto& pixel : pixels_[y]) {
       if (!previous_fullwidth) {
-        UpdatePixelStyle(ss, previous_pixel, pixel);
+        UpdatePixelStyle(this, ss, previous_pixel, pixel);
         ss << pixel.character;
       }
       previous_fullwidth = (string_width(pixel.character) == 2);
     }
   }
 
-  UpdatePixelStyle(ss, previous_pixel, final_pixel);
+  UpdatePixelStyle(this, ss, previous_pixel, final_pixel);
 
   return ss.str();
 }
@@ -525,6 +519,10 @@ void Screen::Clear() {
   }
   cursor_.x = dimx_ - 1;
   cursor_.y = dimy_ - 1;
+
+  hyperlinks_ = {
+      "",
+  };
 }
 
 // clang-format off
@@ -553,8 +551,27 @@ void Screen::ApplyShader() {
     }
   }
 }
-
 // clang-format on
+
+uint8_t Screen::RegisterHyperlink(std::string link) {
+  for (size_t i = 0; i < hyperlinks_.size(); ++i) {
+    if (hyperlinks_[i] == link) {
+      return i;
+    }
+  }
+  if (hyperlinks_.size() == 255) {
+    return 0;
+  }
+  hyperlinks_.push_back(link);
+  return hyperlinks_.size() - 1;
+}
+
+const std::string& Screen::Hyperlink(uint8_t id) const {
+  if (id >= hyperlinks_.size()) {
+    return hyperlinks_[0];
+  }
+  return hyperlinks_[id];
+}
 
 }  // namespace ftxui
 
