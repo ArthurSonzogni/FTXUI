@@ -20,6 +20,10 @@ struct Pixel {
   // like: a⃦, this can potentially contains multiple codepoitns.
   std::string character = " ";
 
+  // The hyperlink associated with the pixel. If empty, no hyperlink is
+  // associated.
+  std::string hyperlink = "";
+
   // Colors:
   Color background_color = Color::Default;
   Color foreground_color = Color::Default;

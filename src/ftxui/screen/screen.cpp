@@ -57,6 +57,14 @@ void UpdatePixelStyle(std::stringstream& ss,
     return;
   }
 
+  if (next.hyperlink != previous.hyperlink) {
+    if (next.hyperlink.empty()) {
+      ss << "\x1B]8;;\x1B\\";  // HYPERLINK_RESET
+    } else {
+      ss << "\x1B]8;;" << next.hyperlink << "\x1B\\";  // HYPERLINK_SET
+    }
+  }
+
   if ((!next.bold && previous.bold) ||  //
       (!next.dim && previous.dim)) {
     ss << "\x1B[22m";  // BOLD_RESET and DIM_RESET
