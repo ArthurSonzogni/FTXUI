@@ -19,7 +19,8 @@ int main() {
       text("blink")              | blink                , text(" ") ,
       text("strikethrough")      | strikethrough        , text(" ") ,
       text("color")              | color(Color::Blue)   , text(" ") ,
-      text("bgcolor")            | bgcolor(Color::Blue) ,
+      text("bgcolor")            | bgcolor(Color::Blue) , text(" ") ,
+      text("hyperlink")          | hyperlink("https://github.com/ArthurSonzogni/FTXUI"),
     });
   // clang-format on
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));

@@ -1,6 +1,26 @@
 Changelog
 =========
 
+4.2
+---
+
+### Component
+
+### Dom
+- Feature: Add `hyperlink` decorator. For instance:
+  ```cpp
+  auto link = text("Click here") | hyperlink("https://github.com/FTXUI")
+  ```
+  See the [OSC 8 page](https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda).
+  FTXUI support proposed by @aaleino in [#662](https://github.com/ArthurSonzogni/FTXUI/issues/662).
+
+
+### Build
+- Check version compatibility when using cmake find_package()
+- Add `FTXUI_DEV_WARNING` options to turn on warnings when building FTXUI
+- Turn OFF by default `FTXUI_BUILD_DOCS`
+- Turn OFF by default `FTXUI_BUILD_EXAMPLE`
+
 4.1.1
 -----
 

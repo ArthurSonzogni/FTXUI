@@ -52,6 +52,7 @@ add_library(dom
   src/ftxui/dom/automerge.cpp
   src/ftxui/dom/blink.cpp
   src/ftxui/dom/bold.cpp
+  src/ftxui/dom/hyperlink.cpp
   src/ftxui/dom/border.cpp
   src/ftxui/dom/box_helper.cpp
   src/ftxui/dom/box_helper.hpp

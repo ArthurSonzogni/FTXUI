@@ -1,5 +1,6 @@
 #include <algorithm>   // for max, min
 #include <cstddef>     // for size_t
+#include <cstdint>     // for uint32_t
 #include <functional>  // for function
 #include <memory>      // for shared_ptr
 #include <string>      // for string, allocator
