@@ -61,9 +61,9 @@ A simple cross-platform C++ library for terminal based user interfaces!
         text("three") | border | flex,
       }),
 
-      gauge(0.25) | color(color::red),
-      gauge(0.50) | color(color::white),
-      gauge(0.75) | color(color::blue),
+      gauge(0.25) | color(Color::Red),
+      gauge(0.50) | color(Color::White),
+      gauge(0.75) | color(Color::Blue),
     });
 ~~~
 
