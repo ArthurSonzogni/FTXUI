@@ -341,27 +341,19 @@ class InputBase : public ComponentBase {
   }
 
   bool HandleReturn() {
-    int& cursor_position = option_->cursor_position();
-    content_->insert(cursor_position, "\n");
-    cursor_position++;
-    option_->on_change();
+    if (option_->multiline()) {
+      HandleCharacter("\n");
+    }
+    option_->on_enter();
     return true;
   }
 
   bool HandleCharacter(const std::string& character) {
-    if (character == "\n" && !option_->multiline()) {
-      option_->on_enter();
-      return false;
-    }
-
     int& cursor_position = option_->cursor_position();
     content_->insert(cursor_position, character);
     cursor_position += character.size();
     option_->on_change();
 
-    if (character == "\n") {
-      option_->on_enter();
-    }
     return true;
   }
 
@@ -369,6 +361,9 @@ class InputBase : public ComponentBase {
     int& cursor_position = option_->cursor_position();
     cursor_position = util::clamp(cursor_position, 0, (int)content_->size());
 
+    if (event == Event::Return) {
+      return HandleReturn();
+    }
     if (event.is_character()) {
       return HandleCharacter(event.character());
     }
@@ -404,9 +399,6 @@ class InputBase : public ComponentBase {
     }
     if (event == Event::ArrowRightCtrl) {
       return HandleRightCtrl();
-    }
-    if (event == Event::Return) {
-      return HandleReturn();
     }
 
     return false;

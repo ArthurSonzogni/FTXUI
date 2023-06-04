@@ -722,6 +722,18 @@ TEST(InputTest, MouseClickComplex) {
   EXPECT_EQ(option.cursor_position(), 17);
 }
 
+TEST(InputTest, OnEnter) {
+  std::string content;
+  auto option = InputOption();
+  bool on_enter_called = false;
+  option.on_enter = [&] { on_enter_called = true; };
+  Component input = Input(&content, &option);
+
+  EXPECT_FALSE(on_enter_called);
+  EXPECT_TRUE(input->OnEvent(Event::Return));
+  EXPECT_TRUE(on_enter_called);
+}
+
 }  // namespace ftxui
 
 // Copyright 2023 Arthur Sonzogni. All rights reserved.
