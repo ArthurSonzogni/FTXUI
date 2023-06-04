@@ -29,7 +29,7 @@ class Hyperlink : public NodeDecorator {
 };
 
 /// @brief Make the rendered area clickable using a web browser.
-///        The link will be opened when the user click on the element.
+///        The link will be opened when the user click on it.
 ///        This is supported only on a limited set of terminal emulator.
 ///        List: https://github.com/Alhadis/OSC8-Adoption/
 /// @param link The link
@@ -48,7 +48,7 @@ Element hyperlink(std::string link, Element child) {
 }
 
 /// @brief Decorate using an hyperlink.
-///        The link will be opened when the user click on the element.
+///        The link will be opened when the user click on it.
 ///        This is supported only on a limited set of terminal emulator.
 ///        List: https://github.com/Alhadis/OSC8-Adoption/
 /// @param link The link to redirect the users to.

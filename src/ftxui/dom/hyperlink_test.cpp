@@ -5,7 +5,6 @@
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen, Pixel
 
-// NOLINTBEGIN
 namespace ftxui {
 
 TEST(HyperlinkTest, Basic) {
@@ -38,8 +37,7 @@ TEST(HyperlinkTest, Basic) {
 }
 
 }  // namespace ftxui
-// NOLINTEND
 
-// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.

@@ -129,6 +129,7 @@ An element can be decorated using the functions:
   - `strikethrough`
   - `color`
   - `bgcolor`
+  - `hyperlink`
 
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2style_gallery_8cpp-example.html)
 
