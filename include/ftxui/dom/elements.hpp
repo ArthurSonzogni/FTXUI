@@ -109,6 +109,8 @@ Element bgcolor(const LinearGradient&, Element);
 Decorator focusPosition(int x, int y);
 Decorator focusPositionRelative(float x, float y);
 Element automerge(Element child);
+Decorator hyperlink(std::string link);
+Element hyperlink(std::string link, Element child);
 
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.
