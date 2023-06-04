@@ -1,10 +1,12 @@
+#include <cstdint>  // for uint8_t
 #include <memory>   // for make_shared
+#include <string>   // for string
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"  // for Element, Decorator, bgcolor, hyperlink
+#include "ftxui/dom/elements.hpp"        // for Element, Decorator, hyperlink
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"       // for Screen, Pixel
 
 namespace ftxui {
 

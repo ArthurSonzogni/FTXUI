@@ -1,9 +1,8 @@
 #include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
-#include <string>  // for allocator
+#include <string>  // for allocator, string
 
-#include "ftxui/dom/elements.hpp"  // for operator|, text, bgcolor, color, Element
+#include "ftxui/dom/elements.hpp"  // for text, hyperlink, operator|, Element, hbox
 #include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/color.hpp"   // for Color, Color::Red, Color::RedLight
 #include "ftxui/screen/screen.hpp"  // for Screen, Pixel
 
 // NOLINTBEGIN
@@ -17,7 +16,7 @@ TEST(HyperlinkTest, Basic) {
       text("text 4") | hyperlink("https://c.com"),
   });
 
-  Screen screen(6*4, 1);
+  Screen screen(6 * 4, 1);
   Render(screen, element);
 
   EXPECT_EQ(screen.PixelAt(0, 0).hyperlink, 1u);
@@ -26,17 +25,16 @@ TEST(HyperlinkTest, Basic) {
   EXPECT_EQ(screen.PixelAt(11, 0).hyperlink, 2u);
 
   std::string output = screen.ToString();
-  EXPECT_EQ(
-      output,
-      "\x1B]8;;https://a.com\x1B\\"
-      "text 1"
-      "\x1B]8;;https://b.com\x1B\\"
-      "text 2"
-      "\x1B]8;;\x1B\\"
-      "text 3"
-      "\x1B]8;;https://c.com\x1B\\"
-      "text 4"
-      "\x1B]8;;\x1B\\");
+  EXPECT_EQ(output,
+            "\x1B]8;;https://a.com\x1B\\"
+            "text 1"
+            "\x1B]8;;https://b.com\x1B\\"
+            "text 2"
+            "\x1B]8;;\x1B\\"
+            "text 3"
+            "\x1B]8;;https://c.com\x1B\\"
+            "text 4"
+            "\x1B]8;;\x1B\\");
 }
 
 }  // namespace ftxui

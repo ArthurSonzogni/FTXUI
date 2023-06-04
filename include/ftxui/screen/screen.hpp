@@ -1,8 +1,9 @@
 #ifndef FTXUI_SCREEN_SCREEN_HPP
 #define FTXUI_SCREEN_SCREEN_HPP
 
+#include <cstdint>  // for uint8_t
 #include <memory>
-#include <string>  // for string, allocator, basic_string
+#include <string>  // for string, basic_string, allocator
 #include <vector>  // for vector
 
 #include "ftxui/screen/box.hpp"       // for Box

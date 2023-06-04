@@ -1,6 +1,6 @@
-#include <stdint.h>    // for uint32_t
 #include <algorithm>   // for max, min
 #include <cstddef>     // for size_t
+#include <cstdint>     // for uint32_t
 #include <functional>  // for function
 #include <memory>   // for allocator, shared_ptr, allocator_traits<>::value_type
 #include <sstream>  // for basic_istream, stringstream
