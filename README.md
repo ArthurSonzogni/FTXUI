@@ -24,11 +24,11 @@
 
 </p>
 
-## FTXUI
+# FTXUI
 
 <i>Functional Terminal (X) User interface</i>
 
-A simple C++ library for terminal based user interfaces!
+A simple cross-platform C++ library for terminal based user interfaces!
 
 ## Feature
  * Functional style. Inspired by
@@ -40,7 +40,7 @@ A simple C++ library for terminal based user interfaces!
  * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
  * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
  * No dependencies
- * Cross platform: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
+ * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
  * Learn by [examples](#documentation), and [tutorials](#documentation)
  * Multiple packages: CMake [FetchContent](https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/) (preferred), vcpkg, pkgbuild, conan.
  * Good practises: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
@@ -52,34 +52,22 @@ A simple C++ library for terminal based user interfaces!
 - [Examples (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
 - [Build using CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
 
-## Operating systems
-
-This is expected to be cross platform. This supports / tests:
-- WebAssembly
-- Linux
-- MacOS
-- Windows
-
 ## Example
 ~~~cpp
-  vbox({
-    hbox({
-      text("left") | border,
-      text("middle") | border | flex,
-      text("right") | border,
-    }),
-    gauge(0.5) | border,
-  });
+    vbox({
+      hbox({
+        text("one") | border,
+        text("two") | border | flex,
+        text("three") | border | flex,
+      }),
+
+      gauge(0.25) | color(color::red),
+      gauge(0.50) | color(color::white),
+      gauge(0.75) | color(color::blue),
+    });
 ~~~
 
-~~~bash
-┌────┐┌───────────────────────────────────────────────────────────────┐┌─────┐
-│left││middle                                                         ││right│
-└────┘└───────────────────────────────────────────────────────────────┘└─────┘
-┌────────────────────────────────────────────────────────────────────────────┐
-│██████████████████████████████████████                                      │
-└────────────────────────────────────────────────────────────────────────────┘
-~~~
+![image](https://github.com/ArthurSonzogni/FTXUI/assets/4759106/569bf043-4e85-4245-aad5-2324572135c4)
 
 ## Short gallery
 
@@ -303,8 +291,8 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 </details>
 
-
-
+## Libraries for FTXUI
+- *Want to share a useful component using FTXUI? Feel free adding yours here*
 
 
 ## Project using FTXUI
@@ -333,7 +321,7 @@ Feel free to add your projects here:
 - [StartUp](https://github.com/StubbornVegeta/StartUp)
 - [eCAL monitor](https://github.com/eclipse-ecal/ecal)
 
-## [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
+### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
 Several games using the FTXUI have been made during the Game Jam:
 - [TermBreaker](https://github.com/ArthurSonzogni/termBreaker) [**[Play web version]**](https://arthursonzogni.com/TermBreaker/)
