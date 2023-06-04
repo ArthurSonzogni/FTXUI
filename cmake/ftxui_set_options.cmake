@@ -1,18 +1,16 @@
 find_program(CLANG_TIDY_EXE NAMES "clang-tidy" DOC "Path to clang-tidy executable" )
-if(NOT CLANG_TIDY_EXE)
-  message(STATUS "clang-tidy not found.")
-else()
-  message(STATUS "clang-tidy found: ${CLANG_TIDY_EXE}")
-endif()
 
 function(ftxui_set_options library)
-  message(STATUS "ftxui_set_options " ${library})
   set_target_properties(${library} PROPERTIES VERSION ${PROJECT_VERSION})
   if (NOT ${library} MATCHES "ftxui-*")
     set_target_properties(${library} PROPERTIES OUTPUT_NAME "ftxui-${library}")
   endif()
 
-  if(CLANG_TIDY_EXE AND FTXUI_CLANG_TIDY)
+  if (FTXUI_CLANG_TIDY)
+    if (NOT CLANG_TIDY_EXE)
+      message(FATAL_ERROR "clang-tidy requested but executable not found")
+    endif()
+
     set_target_properties(${library}
       PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-warnings-as-errors=*"
     )

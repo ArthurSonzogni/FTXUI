@@ -6,8 +6,9 @@ project(ftxui
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
-option(FTXUI_BUILD_DOCS "Set to ON to build docs" ON)
-option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
+option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
+option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" OFF)
+option(FTXUI_BUILD_DOCS "Set to ON to build docs" OFF)
 option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
@@ -26,6 +27,7 @@ else()
     ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} OFF)
 endif()
 
+include(cmake/ftxui_message.cmake)
 
 add_library(screen
   include/ftxui/screen/box.hpp
