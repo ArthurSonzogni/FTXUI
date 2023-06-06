@@ -97,7 +97,6 @@ struct MenuOption {
   // Observers:
   std::function<void()> on_change;  ///> Called when the selected entry changes.
   std::function<void()> on_enter;   ///> Called when the user presses enter.
-  Ref<int> focused_entry = 0;
 };
 
 /// @brief Option for the AnimatedButton component.

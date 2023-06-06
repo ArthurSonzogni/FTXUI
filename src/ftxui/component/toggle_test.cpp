@@ -154,8 +154,7 @@ TEST(ToggleTest, RemoveEntries) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
   auto option = MenuOption::Toggle();
-  option.focused_entry = &focused_entry;
-  auto toggle = Menu(&entries, &selected, option);
+  auto toggle = Menu(&entries, &selected, option, &focused_entry);
 
   EXPECT_EQ(selected, 0);
   EXPECT_EQ(focused_entry, 0);
