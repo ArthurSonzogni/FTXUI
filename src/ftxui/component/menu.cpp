@@ -67,15 +67,8 @@ bool IsHorizontal(Direction direction) {
 /// @ingroup component
 class MenuBase : public ComponentBase {
  public:
-  MenuBase(ConstStringListRef entries, int* selected, Ref<MenuOption> option, int *focused_entry)
-      : entries_(entries), selected_(selected), option_(std::move(option)) {
-    if (focused_entry) {
-      focused_entry_ = focused_entry;
-    } else {
-      focused_entry_unique_ = std::make_unique<int>(0);
-      focused_entry_ = focused_entry_unique_.get();
-    }
-  }
+  MenuBase(ConstStringListRef entries, int* selected, Ref<MenuOption> option)
+      : entries_(entries), selected_(selected), option_(std::move(option)) {}
 
   bool IsHorizontal() { return ftxui::IsHorizontal(option_->direction); }
   void OnChange() {
@@ -98,7 +91,7 @@ class MenuBase : public ComponentBase {
     *selected_ = util::clamp(*selected_, 0, size() - 1);
     selected_previous_ = util::clamp(selected_previous_, 0, size() - 1);
     selected_focus_ = util::clamp(selected_focus_, 0, size() - 1);
-    *focused_entry_ = util::clamp(*focused_entry_, 0, size() - 1);
+    focused_entry() = util::clamp(focused_entry(), 0, size() - 1);
   }
 
   void OnAnimation(animation::Params& params) override {
@@ -126,7 +119,7 @@ class MenuBase : public ComponentBase {
       if (i != 0 && option_->elements_infix) {
         elements.push_back(option_->elements_infix());
       }
-      const bool is_focused = (*focused_entry_ == i) && is_menu_focused;
+      const bool is_focused = (focused_entry() == i) && is_menu_focused;
       const bool is_selected = (*selected_ == i);
 
       const EntryState state = {
@@ -288,7 +281,7 @@ class MenuBase : public ComponentBase {
       *selected_ = util::clamp(*selected_, 0, size() - 1);
 
       if (*selected_ != old_selected) {
-        *focused_entry_ = *selected_;
+        focused_entry() = *selected_;
         SelectedTakeFocus();
         OnChange();
         return true;
@@ -322,7 +315,7 @@ class MenuBase : public ComponentBase {
       }
 
       TakeFocus();
-      *focused_entry_ = i;
+      focused_entry() = i;
       if (event.mouse().button == Mouse::Left &&
           event.mouse().motion == Mouse::Released) {
         if (*selected_ != i) {
@@ -387,7 +380,7 @@ class MenuBase : public ComponentBase {
 
     const bool is_menu_focused = Focused();
     for (int i = 0; i < size(); ++i) {
-      const bool is_focused = (*focused_entry_ == i) && is_menu_focused;
+      const bool is_focused = (focused_entry() == i) && is_menu_focused;
       const bool is_selected = (*selected_ == i);
       float target = is_selected ? 1.F : is_focused ? 0.5F : 0.F;  // NOLINT
       if (animator_background_[i].to() != target) {
@@ -453,6 +446,7 @@ class MenuBase : public ComponentBase {
   }
 
   bool Focusable() const final { return entries_.size(); }
+  int& focused_entry() { return option_->focused_entry(); }
   int size() const { return int(entries_.size()); }
   float FirstTarget() {
     if (boxes_.empty()) {
@@ -476,8 +470,6 @@ class MenuBase : public ComponentBase {
   int* selected_;
   int selected_previous_ = *selected_;
   int selected_focus_ = *selected_;
-  int *focused_entry_;
-  std::unique_ptr<int> focused_entry_unique_;
   Ref<MenuOption> option_;
 
   std::vector<Box> boxes_;
@@ -523,8 +515,8 @@ class MenuBase : public ComponentBase {
 /// ```
 Component Menu(ConstStringListRef entries,
                int* selected,
-               Ref<MenuOption> option, int *focused_entry) {
-  return Make<MenuBase>(entries, selected, std::move(option), focused_entry);
+               Ref<MenuOption> option) {
+  return Make<MenuBase>(entries, selected, std::move(option));
 }
 
 /// @brief An horizontal list of elements. The user can navigate through them.

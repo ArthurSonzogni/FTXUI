@@ -58,7 +58,7 @@ Component Input(StringRef content,
 
 Component Menu(ConstStringListRef entries,
                int* selected_,
-               Ref<MenuOption> = MenuOption::Vertical(), int *focused_entry = NULL);
+               Ref<MenuOption> = MenuOption::Vertical());
 Component MenuEntry(ConstStringRef label, Ref<MenuEntryOption> = {});
 
 Component Dropdown(ConstStringListRef entries, int* selected);
