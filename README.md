@@ -321,6 +321,7 @@ Feel free to add your projects here:
 - [turing_cmd](https://github.com/DanArmor/turing_cmd)
 - [StartUp](https://github.com/StubbornVegeta/StartUp)
 - [eCAL monitor](https://github.com/eclipse-ecal/ecal)
+- [Path Finder](https://github.com/Ruebled/Path_Finder)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
