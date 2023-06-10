@@ -303,6 +303,91 @@ TEST(RadioboxTest, RemoveEntries) {
   EXPECT_EQ(focused_entry, 1);
 }
 
+TEST(RadioboxTest, MultipleRadioboxSameOption) {
+  int radiobox_1_selected = 0;
+  int radiobox_2_selected = 0;
+  std::vector<std::string> menu_1_entries = {
+      "Ananas",
+      "Raspberry",
+      "Citrus",
+  };
+  std::vector<std::string> menu_2_entries = {
+      "Potatoes",
+      "Weat",
+      "Rise",
+  };
+
+  RadioboxOption option;
+
+  option.transform = [](const EntryState& state) {
+    std::string prefix =
+        (state.focused ? std::string("> ") : std::string("- ")) +  //
+        (state.active ? std::string("> ") : std::string("- ")) +   //
+        (state.state ? std::string("> ") : std::string("- "));
+    return text(prefix + state.label);
+  };
+
+  auto layout = Container::Vertical({
+      Radiobox(&menu_1_entries, &radiobox_1_selected, &option),
+      Radiobox(&menu_2_entries, &radiobox_2_selected, &option),
+  });
+
+  Screen screen(15, 7);
+  Render(screen, layout->Render());
+  EXPECT_EQ(screen.ToString(),
+            "> > > Ananas   \r\n"
+            "- - - Raspberry\r\n"
+            "- - - Citrus   \r\n"
+            "- > > Potatoes \r\n"
+            "- - - Weat     \r\n"
+            "- - - Rise     \r\n"
+            "               ");
+
+
+  EXPECT_TRUE(layout->OnEvent(Event::ArrowDown));
+  Render(screen, layout->Render());
+  EXPECT_EQ(screen.ToString(),
+            "- - > Ananas   \r\n"
+            "> > - Raspberry\r\n"
+            "- - - Citrus   \r\n"
+            "- > > Potatoes \r\n"
+            "- - - Weat     \r\n"
+            "- - - Rise     \r\n"
+            "               ");
+
+  EXPECT_TRUE(layout->OnEvent(Event::ArrowDown));
+  Render(screen, layout->Render());
+  EXPECT_EQ(screen.ToString(),
+            "- - > Ananas   \r\n"
+            "- - - Raspberry\r\n"
+            "> > - Citrus   \r\n"
+            "- > > Potatoes \r\n"
+            "- - - Weat     \r\n"
+            "- - - Rise     \r\n"
+            "               ");
+
+  EXPECT_TRUE(layout->OnEvent(Event::ArrowDown));
+  Render(screen, layout->Render());
+  EXPECT_EQ(screen.ToString(),
+            "- - > Ananas   \r\n"
+            "- - - Raspberry\r\n"
+            "- > - Citrus   \r\n"
+            "> > > Potatoes \r\n"
+            "- - - Weat     \r\n"
+            "- - - Rise     \r\n"
+            "               ");
+  EXPECT_TRUE(layout->OnEvent(Event::ArrowDown));
+  Render(screen, layout->Render());
+  EXPECT_EQ(screen.ToString(),
+            "- - > Ananas   \r\n"
+            "- - - Raspberry\r\n"
+            "- > - Citrus   \r\n"
+            "- - > Potatoes \r\n"
+            "> > - Weat     \r\n"
+            "- - - Rise     \r\n"
+            "               ");
+}
+
 }  // namespace ftxui
 // NOLINTEND
 

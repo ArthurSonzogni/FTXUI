@@ -70,7 +70,7 @@ class MenuBase : public ComponentBase {
  public:
   MenuBase(ConstStringListRef entries, int* selected, Ref<MenuOption> option)
       : entries_(entries), selected_(selected), option_(std::move(option)) {
-    set_focused_entry(0);
+    set_focused_entry(focused_entry());
   }
 
  private:
@@ -477,8 +477,8 @@ class MenuBase : public ComponentBase {
   }
 
   ConstStringListRef entries_;
-  int focused_entry_ = 0;
   int* selected_;
+  int focused_entry_ = *selected_;
   int selected_previous_ = *selected_;
   int selected_focus_ = *selected_;
   Ref<MenuOption> option_;

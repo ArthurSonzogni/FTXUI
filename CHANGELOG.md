@@ -9,9 +9,10 @@ current (development)
 - Breaking: GaugeDirection enum is renamed Direction
 - Breaking: Direction enum is renamed WidthOrHeight
 - Breaking: Remove `ComponentBase` copy constructor/assignment.
-- Breaking: MenuOption::focused_entry is no more bound both way. It is a
-  read-only variable.
-- BugFix: The same `MenuOption` can be used for multiple `Menu`.
+- Breaking: `MenuOption::focused_entry` and `RadioboxOption::focused_entry` are
+  no more bound both way. It is not a read-only variable with no effect when
+  written. The same MenuOption/RadioboxOption can now be referenced by the same
+  Menu/Radiobox.
 - Feature: `ResizeableSplit` now support arbitrary element as a separator.
 - Feature: `input` is now supporting multiple lines.
 - Feature: `input` style is now customizeable.

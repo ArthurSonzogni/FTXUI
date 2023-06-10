@@ -26,7 +26,9 @@ class RadioboxBase : public ComponentBase {
   RadioboxBase(ConstStringListRef entries,
                int* selected,
                Ref<RadioboxOption> option)
-      : entries_(entries), selected_(selected), option_(std::move(option)) {}
+      : entries_(entries), selected_(selected), option_(std::move(option)) {
+    set_focused_entry(focused_entry());
+  }
 
  private:
   Element Render() override {
@@ -96,7 +98,7 @@ class RadioboxBase : public ComponentBase {
       hovered_ = util::clamp(hovered_, 0, size() - 1);
 
       if (hovered_ != old_hovered) {
-        focused_entry() = hovered_;
+        set_focused_entry(hovered_);
         option_->on_change();
         return true;
       }
@@ -123,7 +125,7 @@ class RadioboxBase : public ComponentBase {
       }
 
       TakeFocus();
-      focused_entry() = i;
+      set_focused_entry(i);
       if (event.mouse().button == Mouse::Left &&
           event.mouse().motion == Mouse::Released) {
         if (*selected_ != i) {
@@ -163,17 +165,23 @@ class RadioboxBase : public ComponentBase {
   void Clamp() {
     boxes_.resize(size());
     *selected_ = util::clamp(*selected_, 0, size() - 1);
-    focused_entry() = util::clamp(focused_entry(), 0, size() - 1);
+    set_focused_entry(util::clamp(focused_entry(), 0, size() - 1));
     hovered_ = util::clamp(hovered_, 0, size() - 1);
   }
 
   bool Focusable() const final { return entries_.size(); }
-  int& focused_entry() { return option_->focused_entry(); }
   int size() const { return int(entries_.size()); }
+
+  int focused_entry() { return focused_entry_; }
+  void set_focused_entry(int value) {
+    focused_entry_ = value;
+    option_->focused_entry() = value;
+  }
 
   ConstStringListRef entries_;
   int* selected_;
   int hovered_ = *selected_;
+  int focused_entry_ = *selected_;
   std::vector<Box> boxes_;
   Box box_;
   Ref<RadioboxOption> option_;
