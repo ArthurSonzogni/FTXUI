@@ -1,3 +1,4 @@
+#include <iostream>
 #include <algorithm>                // for max, fill_n, reverse
 #include <chrono>                   // for milliseconds
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
@@ -68,8 +69,11 @@ bool IsHorizontal(Direction direction) {
 class MenuBase : public ComponentBase {
  public:
   MenuBase(ConstStringListRef entries, int* selected, Ref<MenuOption> option)
-      : entries_(entries), selected_(selected), option_(std::move(option)) {}
+      : entries_(entries), selected_(selected), option_(std::move(option)) {
+    set_focused_entry(0);
+  }
 
+ private:
   bool IsHorizontal() { return ftxui::IsHorizontal(option_->direction); }
   void OnChange() {
     if (option_->on_change) {
@@ -91,7 +95,7 @@ class MenuBase : public ComponentBase {
     *selected_ = util::clamp(*selected_, 0, size() - 1);
     selected_previous_ = util::clamp(selected_previous_, 0, size() - 1);
     selected_focus_ = util::clamp(selected_focus_, 0, size() - 1);
-    focused_entry() = util::clamp(focused_entry(), 0, size() - 1);
+    set_focused_entry(util::clamp(focused_entry(), 0, size() - 1));
   }
 
   void OnAnimation(animation::Params& params) override {
@@ -281,7 +285,7 @@ class MenuBase : public ComponentBase {
       *selected_ = util::clamp(*selected_, 0, size() - 1);
 
       if (*selected_ != old_selected) {
-        focused_entry() = *selected_;
+        set_focused_entry(*selected_);
         SelectedTakeFocus();
         OnChange();
         return true;
@@ -315,7 +319,7 @@ class MenuBase : public ComponentBase {
       }
 
       TakeFocus();
-      focused_entry() = i;
+      set_focused_entry(i);
       if (event.mouse().button == Mouse::Left &&
           event.mouse().motion == Mouse::Released) {
         if (*selected_ != i) {
@@ -446,8 +450,8 @@ class MenuBase : public ComponentBase {
   }
 
   bool Focusable() const final { return entries_.size(); }
-  int& focused_entry() { return option_->focused_entry(); }
   int size() const { return int(entries_.size()); }
+
   float FirstTarget() {
     if (boxes_.empty()) {
       return 0.F;
@@ -456,6 +460,7 @@ class MenuBase : public ComponentBase {
                                      : boxes_[*selected_].y_min - box_.y_min;
     return float(value);
   }
+
   float SecondTarget() {
     if (boxes_.empty()) {
       return 0.F;
@@ -465,8 +470,14 @@ class MenuBase : public ComponentBase {
     return float(value);
   }
 
- protected:
+  int focused_entry() { return focused_entry_; }
+  void set_focused_entry(int value) {
+    focused_entry_ = value;
+    option_->focused_entry() = value;
+  }
+
   ConstStringListRef entries_;
+  int focused_entry_ = 0;
   int* selected_;
   int selected_previous_ = *selected_;
   int selected_focus_ = *selected_;
