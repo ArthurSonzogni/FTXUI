@@ -303,32 +303,6 @@ InputOption InputOption::Spacious() {
   return option;
 }
 
-// static
-InputOption InputOption::Arthur() {
-  InputOption option;
-  option.transform = [](InputState state) {
-    state.element |= borderEmpty;
-    state.element |= color(Color::White);
-
-    if (state.is_placeholder) {
-      state.element |= dim;
-    }
-
-    if (state.focused) {
-      state.element |= bgcolor(Color::Black);
-    } else {
-      state.element |= bgcolor(LinearGradient(0, Color::Blue, Color::Red));
-    }
-
-    if (state.hovered) {
-      state.element |= bgcolor(Color::GrayDark);
-    }
-
-    return state.element;
-  };
-  return option;
-}
-
 }  // namespace ftxui
 
 // Copyright 2022 Arthur Sonzogni. All rights reserved.

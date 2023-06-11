@@ -152,8 +152,6 @@ struct InputOption {
   static InputOption Default();
   /// @brief A white on black style with high margins:
   static InputOption Spacious();
-  /// @brief A style with a border:
-  static InputOption Arthur();
 
   /// The content of the input when it's empty.
   StringRef placeholder = "";
