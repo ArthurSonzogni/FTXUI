@@ -49,6 +49,15 @@ Event Event::CursorReporting(std::string input, int x, int y) {
   return event;
 }
 
+// static
+Event Event::CustomTagged(int tag) {
+  Event event;
+  event.type_ = Type::Custom;
+  event.data_.custom_tag = tag;
+  return event;
+}
+
+
 // --- Arrow ---
 const Event Event::ArrowLeft = Event::Special("\x1B[D");          // NOLINT
 const Event Event::ArrowRight = Event::Special("\x1B[C");         // NOLINT
