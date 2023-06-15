@@ -35,24 +35,24 @@ Decorator flexDirection(Direction direction) {
 template <class T>
 class SliderBase : public ComponentBase {
  public:
-  explicit SliderBase(Ref<SliderOption<T>> options)
-      : value_(options->value),
-        min_(options->min),
-        max_(options->max),
-        increment_(options->increment),
+  explicit SliderBase(SliderOption<T> options)
+      : value_(options.value),
+        min_(options.min),
+        max_(options.max),
+        increment_(options.increment),
         options_(options) {}
 
   Element Render() override {
-    auto gauge_color = Focused() ? color(options_->color_active)
-                                 : color(options_->color_inactive);
+    auto gauge_color = Focused() ? color(options_.color_active)
+                                 : color(options_.color_inactive);
     const float percent = float(value_() - min_()) / float(max_() - min_());
-    return gaugeDirection(percent, options_->direction) |
-           flexDirection(options_->direction) | reflect(gauge_box_) |
+    return gaugeDirection(percent, options_.direction) |
+           flexDirection(options_.direction) | reflect(gauge_box_) |
            gauge_color;
   }
 
   void OnLeft() {
-    switch (options_->direction) {
+    switch (options_.direction) {
       case Direction::Right:
         value_() -= increment_();
         break;
@@ -66,7 +66,7 @@ class SliderBase : public ComponentBase {
   }
 
   void OnRight() {
-    switch (options_->direction) {
+    switch (options_.direction) {
       case Direction::Right:
         value_() += increment_();
         break;
@@ -80,7 +80,7 @@ class SliderBase : public ComponentBase {
   }
 
   void OnUp() {
-    switch (options_->direction) {
+    switch (options_.direction) {
       case Direction::Up:
         value_() -= increment_();
         break;
@@ -94,7 +94,7 @@ class SliderBase : public ComponentBase {
   }
 
   void OnDown() {
-    switch (options_->direction) {
+    switch (options_.direction) {
       case Direction::Down:
         value_() -= increment_();
         break;
@@ -153,7 +153,7 @@ class SliderBase : public ComponentBase {
     }
 
     if (captured_mouse_) {
-      switch (options_->direction) {
+      switch (options_.direction) {
         case Direction::Right: {
           value_() = min_() + (event.mouse().x - gauge_box_.x_min) *
                                   (max_() - min_()) /
@@ -192,7 +192,7 @@ class SliderBase : public ComponentBase {
   ConstRef<T> min_;
   ConstRef<T> max_;
   ConstRef<T> increment_;
-  Ref<SliderOption<T>> options_;
+  SliderOption<T> options_;
   Box gauge_box_;
   CapturedMouse captured_mouse_;
 };

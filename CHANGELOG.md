@@ -9,10 +9,23 @@ current (development)
 - Breaking: GaugeDirection enum is renamed Direction
 - Breaking: Direction enum is renamed WidthOrHeight
 - Breaking: Remove `ComponentBase` copy constructor/assignment.
+- Breaking: MenuOption::entries is renamed MenuOption::entries_option.
+- Breaking: Ref<XxxOption> becomes XxxOption in component constructors.
 - Feature: `ResizeableSplit` now support arbitrary element as a separator.
 - Feature: `input` is now supporting multiple lines.
 - Feature: `input` style is now customizeable.
 - Bugfix: Support F1-F5 from OS terminal.
+- Feature: Add struct based constructor:
+  ```cpp
+  Component Button(ButtonOption options);
+  Component Checkbox(CheckboxOption options);
+  Component Input(InputOption options);
+  Component Menu(MenuOption options);
+  Component MenuEntry(MenuEntryOption options);
+  Component Radiobox(RadioboxOption options);
+  Component Slider(SliderOption<T> options);
+  Component ResizableSplit(ResizableSplitOption options);
+  ```
 
 ### Dom
 - Feature: Add `hyperlink` decorator. For instance:

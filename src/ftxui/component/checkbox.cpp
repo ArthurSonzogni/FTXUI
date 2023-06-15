@@ -14,10 +14,9 @@
 namespace ftxui {
 
 namespace {
-class CheckboxBase : public ComponentBase {
+class CheckboxBase : public ComponentBase, public CheckboxOption {
  public:
-  CheckboxBase(ConstStringRef label, bool* state, Ref<CheckboxOption> option)
-      : label_(std::move(label)), state_(state), option_(std::move(option)) {}
+  CheckboxBase(CheckboxOption option) : CheckboxOption(std::move(option)) {}
 
  private:
   // Component implementation.
@@ -25,15 +24,14 @@ class CheckboxBase : public ComponentBase {
     const bool is_focused = Focused();
     const bool is_active = Active();
     auto focus_management = is_focused ? focus : is_active ? select : nothing;
-    auto state = EntryState{
-        *label_,
-        *state_,
+    auto entry_state = EntryState{
+        *label,
+        *checked,
         is_active,
         is_focused || hovered_,
     };
-    auto element =
-        (option_->transform ? option_->transform
-                            : CheckboxOption::Simple().transform)(state);
+    auto element = (transform ? transform : CheckboxOption::Simple().transform)(
+        entry_state);
     return element | focus_management | reflect(box_);
   }
 
@@ -48,8 +46,8 @@ class CheckboxBase : public ComponentBase {
 
     hovered_ = false;
     if (event == Event::Character(' ') || event == Event::Return) {
-      *state_ = !*state_;
-      option_->on_change();
+      *checked = !*checked;
+      on_change();
       TakeFocus();
       return true;
     }
@@ -69,8 +67,8 @@ class CheckboxBase : public ComponentBase {
 
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
-      *state_ = !*state_;
-      option_->on_change();
+      *checked = !*checked;
+      on_change();
       return true;
     }
 
@@ -79,10 +77,7 @@ class CheckboxBase : public ComponentBase {
 
   bool Focusable() const final { return true; }
 
-  ConstStringRef label_;
-  bool* const state_;
   bool hovered_ = false;
-  Ref<CheckboxOption> option_;
   Box box_;
 };
 }  // namespace
@@ -111,8 +106,10 @@ class CheckboxBase : public ComponentBase {
 /// ```
 Component Checkbox(ConstStringRef label,
                    bool* checked,
-                   Ref<CheckboxOption> option) {
-  return Make<CheckboxBase>(std::move(label), checked, std::move(option));
+                   CheckboxOption option) {
+  option.label = std::move(label);
+  option.checked = checked;
+  return Make<CheckboxBase>(std::move(option));
 }
 
 }  // namespace ftxui

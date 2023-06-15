@@ -72,6 +72,7 @@ struct AnimatedColorsOption {
 /// @brief Option for the MenuEntry component.
 /// @ingroup component
 struct MenuEntryOption {
+  ConstStringRef label = "MenuEntry";
   std::function<Element(const EntryState& state)> transform;
   AnimatedColorsOption animated_colors;
 };
@@ -86,9 +87,12 @@ struct MenuOption {
   static MenuOption VerticalAnimated();
   static MenuOption Toggle();
 
+  ConstStringListRef entries;  ///> The list of entries.
+  Ref<int> selected = 0;       ///> The index of the selected entry.
+
   // Style:
   UnderlineOption underline;
-  MenuEntryOption entries;
+  MenuEntryOption entries_option;
   Direction direction = Direction::Down;
   std::function<Element()> elements_prefix;
   std::function<Element()> elements_infix;
@@ -115,6 +119,9 @@ struct ButtonOption {
                                Color background_active,
                                Color foreground_active);
 
+  ConstStringRef label = "Button";
+  std::function<void()> on_click = [] {};
+
   // Style:
   std::function<Element(const EntryState&)> transform;
   AnimatedColorsOption animated_colors;
@@ -125,6 +132,10 @@ struct ButtonOption {
 struct CheckboxOption {
   // Standard constructors:
   static CheckboxOption Simple();
+
+  ConstStringRef label = "Checkbox";
+
+  Ref<bool> checked = false;
 
   // Style:
   std::function<Element(const EntryState&)> transform;
@@ -153,6 +164,9 @@ struct InputOption {
   /// @brief A white on black style with high margins:
   static InputOption Spacious();
 
+  /// The content of the input.
+  StringRef content = "";
+
   /// The content of the input when it's empty.
   StringRef placeholder = "";
 
@@ -175,6 +189,10 @@ struct InputOption {
 struct RadioboxOption {
   // Standard constructors:
   static RadioboxOption Simple();
+
+  // Content:
+  ConstStringListRef entries;
+  Ref<int> selected = 0;
 
   // Style:
   std::function<Element(const EntryState&)> transform;

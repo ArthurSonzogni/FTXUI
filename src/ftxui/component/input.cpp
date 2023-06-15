@@ -89,8 +89,7 @@ bool IsWordCharacter(const std::string& input, size_t iter) {
 class InputBase : public ComponentBase {
  public:
   // NOLINTNEXTLINE
-  InputBase(StringRef content, Ref<InputOption> option)
-      : content_(std::move(content)), option_(std::move(option)) {}
+  InputBase(InputOption option) : option_(std::move(option)) {}
 
  private:
   // Component implementation:
@@ -99,12 +98,12 @@ class InputBase : public ComponentBase {
     const auto focused =
         (is_focused || hovered_) ? focusCursorBarBlinking : select;
 
-    auto transform = option_->transform ? option_->transform
-                                        : InputOption::Default().transform;
+    auto transform = option_.transform ? option_.transform
+                                       : InputOption::Default().transform;
 
     // placeholder.
-    if (content_->empty()) {
-      auto element = text(option_->placeholder()) | xflex | frame;
+    if (option_.content->empty()) {
+      auto element = text(option_.placeholder()) | xflex | frame;
       if (is_focused) {
         element |= focus;
       }
@@ -117,10 +116,11 @@ class InputBase : public ComponentBase {
     }
 
     Elements elements;
-    const std::vector<std::string> lines = Split(*content_);
+    const std::vector<std::string> lines = Split(*option_.content);
 
-    int& cursor_position = option_->cursor_position();
-    cursor_position = util::clamp(cursor_position, 0, (int)content_->size());
+    int& cursor_position = option_.cursor_position();
+    cursor_position =
+        util::clamp(cursor_position, 0, (int)option_.content->size());
 
     // Find the line and index of the cursor.
     int cursor_line = 0;
@@ -183,7 +183,7 @@ class InputBase : public ComponentBase {
   }
 
   Element Text(const std::string& input) {
-    if (!option_->password()) {
+    if (!option_.password()) {
       return text(input);
     }
 
@@ -196,81 +196,81 @@ class InputBase : public ComponentBase {
   }
 
   bool HandleBackspace() {
-    int& cursor_position = option_->cursor_position();
+    int& cursor_position = option_.cursor_position();
     if (cursor_position == 0) {
       return false;
     }
-    const size_t start = GlyphPrevious(content_(), cursor_position);
+    const size_t start = GlyphPrevious(option_.content(), cursor_position);
     const size_t end = cursor_position;
-    content_->erase(start, end - start);
+    option_.content->erase(start, end - start);
     cursor_position = start;
     return true;
   }
 
   bool HandleDelete() {
-    int& cursor_position = option_->cursor_position();
-    if (cursor_position == (int)content_->size()) {
+    int& cursor_position = option_.cursor_position();
+    if (cursor_position == (int)option_.content->size()) {
       return false;
     }
     const size_t start = cursor_position;
-    const size_t end = GlyphNext(content_(), cursor_position);
-    content_->erase(start, end - start);
+    const size_t end = GlyphNext(option_.content(), cursor_position);
+    option_.content->erase(start, end - start);
     return true;
   }
 
   bool HandleArrowLeft() {
-    int& cursor_position = option_->cursor_position();
+    int& cursor_position = option_.cursor_position();
     if (cursor_position == 0) {
       return false;
     }
 
-    cursor_position = GlyphPrevious(content_(), cursor_position);
+    cursor_position = GlyphPrevious(option_.content(), cursor_position);
     return true;
   }
 
   bool HandleArrowRight() {
-    int& cursor_position = option_->cursor_position();
-    if (cursor_position == (int)content_->size()) {
+    int& cursor_position = option_.cursor_position();
+    if (cursor_position == (int)option_.content->size()) {
       return false;
     }
 
-    cursor_position = GlyphNext(content_(), cursor_position);
+    cursor_position = GlyphNext(option_.content(), cursor_position);
     return true;
   }
 
   size_t CursorColumn() {
-    int& cursor_position = option_->cursor_position();
+    int& cursor_position = option_.cursor_position();
     size_t iter = cursor_position;
     int width = 0;
     while (true) {
       if (iter == 0) {
         break;
       }
-      iter = GlyphPrevious(content_(), iter);
-      if (content_()[iter] == '\n') {
+      iter = GlyphPrevious(option_.content(), iter);
+      if (option_.content()[iter] == '\n') {
         break;
       }
-      width += GlyphWidth(content_(), iter);
+      width += GlyphWidth(option_.content(), iter);
     }
     return width;
   }
 
   // Move the cursor `columns` on the right, if possible.
   void MoveCursorColumn(int columns) {
-    int& cursor_position = option_->cursor_position();
+    int& cursor_position = option_.cursor_position();
     while (columns > 0) {
-      if (cursor_position == (int)content_().size() ||
-          content_()[cursor_position] == '\n') {
+      if (cursor_position == (int)option_.content().size() ||
+          option_.content()[cursor_position] == '\n') {
         return;
       }
 
-      columns -= GlyphWidth(content_(), cursor_position);
-      cursor_position = GlyphNext(content_(), cursor_position);
+      columns -= GlyphWidth(option_.content(), cursor_position);
+      cursor_position = GlyphNext(option_.content(), cursor_position);
     }
   }
 
   bool HandleArrowUp() {
-    int& cursor_position = option_->cursor_position();
+    int& cursor_position = option_.cursor_position();
     if (cursor_position == 0) {
       return false;
     }
@@ -282,19 +282,19 @@ class InputBase : public ComponentBase {
       if (cursor_position == 0) {
         return true;
       }
-      size_t previous = GlyphPrevious(content_(), cursor_position);
-      if (content_()[previous] == '\n') {
+      size_t previous = GlyphPrevious(option_.content(), cursor_position);
+      if (option_.content()[previous] == '\n') {
         break;
       }
       cursor_position = previous;
     }
-    cursor_position = GlyphPrevious(content_(), cursor_position);
+    cursor_position = GlyphPrevious(option_.content(), cursor_position);
     while (true) {
       if (cursor_position == 0) {
         break;
       }
-      size_t previous = GlyphPrevious(content_(), cursor_position);
-      if (content_()[previous] == '\n') {
+      size_t previous = GlyphPrevious(option_.content(), cursor_position);
+      if (option_.content()[previous] == '\n') {
         break;
       }
       cursor_position = previous;
@@ -305,8 +305,8 @@ class InputBase : public ComponentBase {
   }
 
   bool HandleArrowDown() {
-    int& cursor_position = option_->cursor_position();
-    if (cursor_position == (int)content_->size()) {
+    int& cursor_position = option_.cursor_position();
+    if (cursor_position == (int)option_.content->size()) {
       return false;
     }
 
@@ -314,52 +314,53 @@ class InputBase : public ComponentBase {
 
     // Move cursor at the beginning of the next line
     while (true) {
-      if (content_()[cursor_position] == '\n') {
+      if (option_.content()[cursor_position] == '\n') {
         break;
       }
-      cursor_position = GlyphNext(content_(), cursor_position);
-      if (cursor_position == (int)content_().size()) {
+      cursor_position = GlyphNext(option_.content(), cursor_position);
+      if (cursor_position == (int)option_.content().size()) {
         return true;
       }
     }
-    cursor_position = GlyphNext(content_(), cursor_position);
+    cursor_position = GlyphNext(option_.content(), cursor_position);
 
     MoveCursorColumn(columns);
     return true;
   }
 
   bool HandleHome() {
-    int& cursor_position = option_->cursor_position();
+    int& cursor_position = option_.cursor_position();
     cursor_position = 0;
     return true;
   }
 
   bool HandleEnd() {
-    int& cursor_position = option_->cursor_position();
-    cursor_position = content_->size();
+    int& cursor_position = option_.cursor_position();
+    cursor_position = option_.content->size();
     return true;
   }
 
   bool HandleReturn() {
-    if (option_->multiline()) {
+    if (option_.multiline()) {
       HandleCharacter("\n");
     }
-    option_->on_enter();
+    option_.on_enter();
     return true;
   }
 
   bool HandleCharacter(const std::string& character) {
-    int& cursor_position = option_->cursor_position();
-    content_->insert(cursor_position, character);
+    int& cursor_position = option_.cursor_position();
+    option_.content->insert(cursor_position, character);
     cursor_position += character.size();
-    option_->on_change();
+    option_.on_change();
 
     return true;
   }
 
   bool OnEvent(Event event) override {
-    int& cursor_position = option_->cursor_position();
-    cursor_position = util::clamp(cursor_position, 0, (int)content_->size());
+    int& cursor_position = option_.cursor_position();
+    cursor_position =
+        util::clamp(cursor_position, 0, (int)option_.content->size());
 
     if (event == Event::Return) {
       return HandleReturn();
@@ -405,23 +406,23 @@ class InputBase : public ComponentBase {
   }
 
   bool HandleLeftCtrl() {
-    int& cursor_position = option_->cursor_position();
+    int& cursor_position = option_.cursor_position();
     if (cursor_position == 0) {
       return false;
     }
 
     // Move left, as long as left it not a word.
     while (cursor_position) {
-      size_t previous = GlyphPrevious(content_(), cursor_position);
-      if (IsWordCharacter(content_(), previous)) {
+      size_t previous = GlyphPrevious(option_.content(), cursor_position);
+      if (IsWordCharacter(option_.content(), previous)) {
         break;
       }
       cursor_position = previous;
     }
     // Move left, as long as left is a word character:
     while (cursor_position) {
-      size_t previous = GlyphPrevious(content_(), cursor_position);
-      if (!IsWordCharacter(content_(), previous)) {
+      size_t previous = GlyphPrevious(option_.content(), cursor_position);
+      if (!IsWordCharacter(option_.content(), previous)) {
         break;
       }
       cursor_position = previous;
@@ -430,22 +431,22 @@ class InputBase : public ComponentBase {
   }
 
   bool HandleRightCtrl() {
-    int& cursor_position = option_->cursor_position();
-    if (cursor_position == (int)content_().size()) {
+    int& cursor_position = option_.cursor_position();
+    if (cursor_position == (int)option_.content().size()) {
       return false;
     }
 
     // Move right, until entering a word.
-    while (cursor_position < (int)content_().size()) {
-      cursor_position = GlyphNext(content_(), cursor_position);
-      if (IsWordCharacter(content_(), cursor_position)) {
+    while (cursor_position < (int)option_.content().size()) {
+      cursor_position = GlyphNext(option_.content(), cursor_position);
+      if (IsWordCharacter(option_.content(), cursor_position)) {
         break;
       }
     }
     // Move right, as long as right is a word character:
-    while (cursor_position < (int)content_().size()) {
-      size_t next = GlyphNext(content_(), cursor_position);
-      if (!IsWordCharacter(content_(), cursor_position)) {
+    while (cursor_position < (int)option_.content().size()) {
+      size_t next = GlyphNext(option_.content(), cursor_position);
+      if (!IsWordCharacter(option_.content(), cursor_position)) {
         break;
       }
       cursor_position = next;
@@ -469,14 +470,14 @@ class InputBase : public ComponentBase {
 
     TakeFocus();
 
-    if (content_->empty()) {
-      option_->cursor_position() = 0;
+    if (option_.content->empty()) {
+      option_.cursor_position() = 0;
       return true;
     }
 
     // Find the line and index of the cursor.
-    std::vector<std::string> lines = Split(*content_);
-    int& cursor_position = option_->cursor_position();
+    std::vector<std::string> lines = Split(*option_.content);
+    int& cursor_position = option_.cursor_position();
     int cursor_line = 0;
     int cursor_char_index = cursor_position;
     for (const auto& line : lines) {
@@ -513,22 +514,21 @@ class InputBase : public ComponentBase {
       cursor_position += lines[i].size() + 1;
     }
     while (new_cursor_column > 0) {
-      new_cursor_column -= GlyphWidth(content_(), cursor_position);
-      cursor_position = GlyphNext(content_(), cursor_position);
+      new_cursor_column -= GlyphWidth(option_.content(), cursor_position);
+      cursor_position = GlyphNext(option_.content(), cursor_position);
     }
 
-    option_->on_change();
+    option_.on_change();
     return true;
   }
 
   bool Focusable() const final { return true; }
 
   bool hovered_ = false;
-  StringRef content_;
 
   Box box_;
   Box cursor_box_;
-  Ref<InputOption> option_;
+  InputOption option_;
 };
 
 }  // namespace
@@ -545,7 +545,10 @@ class InputBase : public ComponentBase {
 /// auto screen = ScreenInteractive::FitComponent();
 /// std::string content= "";
 /// std::string placeholder = "placeholder";
-/// Component input = Input(&content, &placeholder);
+/// Component input = Input({
+///   .content = &content,
+///   .placeholder = &placeholder,
+/// })
 /// screen.Loop(input);
 /// ```
 ///
@@ -554,15 +557,64 @@ class InputBase : public ComponentBase {
 /// ```bash
 /// placeholder
 /// ```
-Component Input(StringRef content, Ref<InputOption> option) {
-  return Make<InputBase>(std::move(content), std::move(option));
+Component Input(InputOption option) {
+  return Make<InputBase>(std::move(option));
 }
 
-Component Input(StringRef content,
-                StringRef placeholder,
-                Ref<InputOption> option) {
-  option->placeholder = placeholder;
-  return Make<InputBase>(std::move(content), std::move(option));
+/// @brief An input box for editing text.
+/// @param content The editable content.
+/// @param option Additional optional parameters.
+/// @ingroup component
+/// @see InputBase
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::FitComponent();
+/// std::string content= "";
+/// std::string placeholder = "placeholder";
+/// Component input = Input(content, {
+///   .placeholder = &placeholder,
+///   .password = true,
+/// })
+/// screen.Loop(input);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// placeholder
+/// ```
+Component Input(StringRef content, InputOption option) {
+  option.content = content;
+  return Make<InputBase>(std::move(option));
+}
+
+/// @brief An input box for editing text.
+/// @param content The editable content.
+/// @param option Additional optional parameters.
+/// @ingroup component
+/// @see InputBase
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::FitComponent();
+/// std::string content= "";
+/// std::string placeholder = "placeholder";
+/// Component input = Input(content, placeholder);
+/// screen.Loop(input);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// placeholder
+/// ```
+Component Input(StringRef content, StringRef placeholder, InputOption option) {
+  option.content = content;
+  option.placeholder = placeholder;
+  return Make<InputBase>(std::move(option));
 }
 
 }  // namespace ftxui

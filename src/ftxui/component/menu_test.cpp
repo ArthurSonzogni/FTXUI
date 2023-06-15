@@ -23,9 +23,11 @@ TEST(MenuTest, RemoveEntries) {
   int focused_entry = 0;
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
-  MenuOption option;
-  option.focused_entry = &focused_entry;
-  auto menu = Menu(&entries, &selected, option);
+  auto menu = Menu({
+      .entries = &entries,
+      .selected = &selected,
+      .focused_entry = &focused_entry,
+  });
 
   EXPECT_EQ(selected, 0);
   EXPECT_EQ(focused_entry, 0);
@@ -52,10 +54,8 @@ TEST(MenuTest, DirectionDown) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
   MenuOption option;
-  auto menu = Menu(&entries, &selected, &option);
+  auto menu = Menu(&entries, &selected, {.direction = Direction::Down});
 
-  selected = 0;
-  option.direction = Direction::Down;
   Screen screen(4, 3);
   Render(screen, menu->Render());
   EXPECT_EQ(screen.ToString(),
@@ -80,9 +80,7 @@ TEST(MenuTest, DirectionDown) {
 TEST(MenuTest, DirectionsUp) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
-  MenuOption option;
-  auto menu = Menu(&entries, &selected, &option);
-  option.direction = Direction::Up;
+  auto menu = Menu(&entries, &selected, {.direction = Direction::Up});
   Screen screen(4, 3);
   Render(screen, menu->Render());
   EXPECT_EQ(screen.ToString(),
@@ -106,9 +104,7 @@ TEST(MenuTest, DirectionsUp) {
 TEST(MenuTest, DirectionsRight) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
-  MenuOption option;
-  auto menu = Menu(&entries, &selected, &option);
-  option.direction = Direction::Right;
+  auto menu = Menu(&entries, &selected, {.direction = Direction::Right});
   Screen screen(10, 1);
   Render(screen, menu->Render());
   EXPECT_EQ(screen.ToString(),
@@ -132,9 +128,7 @@ TEST(MenuTest, DirectionsRight) {
 TEST(MenuTest, DirectionsLeft) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
-  MenuOption option;
-  auto menu = Menu(&entries, &selected, &option);
-  option.direction = Direction::Left;
+  auto menu = Menu(&entries, &selected, {.direction = Direction::Left});
   Screen screen(10, 1);
   Render(screen, menu->Render());
   EXPECT_EQ(screen.ToString(),
@@ -158,8 +152,7 @@ TEST(MenuTest, DirectionsLeft) {
 TEST(MenuTest, AnimationsHorizontal) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
-  auto option = MenuOption::HorizontalAnimated();
-  auto menu = Menu(&entries, &selected, &option);
+  auto menu = Menu(&entries, &selected, MenuOption::HorizontalAnimated());
   {
     Screen screen(4, 3);
     Render(screen, menu->Render());
@@ -195,8 +188,7 @@ TEST(MenuTest, AnimationsHorizontal) {
 TEST(MenuTest, AnimationsVertical) {
   int selected = 0;
   std::vector<std::string> entries = {"1", "2", "3"};
-  auto option = MenuOption::VerticalAnimated();
-  auto menu = Menu(&entries, &selected, &option);
+  auto menu = Menu(&entries, &selected, MenuOption::VerticalAnimated());
   {
     Screen screen(10, 3);
     Render(screen, menu->Render());

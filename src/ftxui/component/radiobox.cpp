@@ -21,12 +21,9 @@ namespace {
 /// @brief A list of selectable element. One and only one can be selected at
 /// the same time.
 /// @ingroup component
-class RadioboxBase : public ComponentBase {
+class RadioboxBase : public ComponentBase, public RadioboxOption {
  public:
-  RadioboxBase(ConstStringListRef entries,
-               int* selected,
-               Ref<RadioboxOption> option)
-      : entries_(entries), selected_(selected), option_(std::move(option)) {}
+  RadioboxBase(RadioboxOption option) : RadioboxOption(option) {}
 
  private:
   Element Render() override {
@@ -41,14 +38,13 @@ class RadioboxBase : public ComponentBase {
                               : is_menu_focused ? focus
                                                 : select;
       auto state = EntryState{
-          entries_[i],
-          *selected_ == i,
+          entries[i],
+          selected() == i,
           is_selected,
           is_focused,
       };
       auto element =
-          (option_->transform ? option_->transform
-                              : RadioboxOption::Simple().transform)(state);
+          (transform ? transform : RadioboxOption::Simple().transform)(state);
 
       elements.push_back(element | focus_management | reflect(boxes_[i]));
     }
@@ -97,14 +93,14 @@ class RadioboxBase : public ComponentBase {
 
       if (hovered_ != old_hovered) {
         focused_entry() = hovered_;
-        option_->on_change();
+        on_change();
         return true;
       }
     }
 
     if (event == Event::Character(' ') || event == Event::Return) {
-      *selected_ = hovered_;
-      option_->on_change();
+      selected() = hovered_;
+      on_change();
       return true;
     }
 
@@ -126,9 +122,9 @@ class RadioboxBase : public ComponentBase {
       focused_entry() = i;
       if (event.mouse().button == Mouse::Left &&
           event.mouse().motion == Mouse::Released) {
-        if (*selected_ != i) {
-          *selected_ = i;
-          option_->on_change();
+        if (selected() != i) {
+          selected() = i;
+          on_change();
         }
 
         return true;
@@ -154,7 +150,7 @@ class RadioboxBase : public ComponentBase {
     hovered_ = util::clamp(hovered_, 0, size() - 1);
 
     if (hovered_ != old_hovered) {
-      option_->on_change();
+      on_change();
     }
 
     return true;
@@ -162,24 +158,53 @@ class RadioboxBase : public ComponentBase {
 
   void Clamp() {
     boxes_.resize(size());
-    *selected_ = util::clamp(*selected_, 0, size() - 1);
+    selected() = util::clamp(selected(), 0, size() - 1);
     focused_entry() = util::clamp(focused_entry(), 0, size() - 1);
     hovered_ = util::clamp(hovered_, 0, size() - 1);
   }
 
-  bool Focusable() const final { return entries_.size(); }
-  int& focused_entry() { return option_->focused_entry(); }
-  int size() const { return int(entries_.size()); }
+  bool Focusable() const final { return entries.size(); }
+  int size() const { return int(entries.size()); }
 
-  ConstStringListRef entries_;
-  int* selected_;
-  int hovered_ = *selected_;
+  int hovered_ = selected();
   std::vector<Box> boxes_;
   Box box_;
-  Ref<RadioboxOption> option_;
 };
 
 }  // namespace
+
+/// @brief A list of element, where only one can be selected.
+/// @param option The parameters
+/// @ingroup component
+/// @see RadioboxBase
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// std::vector<std::string> entries = {
+///     "entry 1",
+///     "entry 2",
+///     "entry 3",
+/// };
+/// int selected = 0;
+/// auto menu = Radiobox({
+///   .entries = entries,
+///   .selected = &selected,
+/// });
+/// screen.Loop(menu);
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// ◉ entry 1
+/// ○ entry 2
+/// ○ entry 3
+/// ```
+Component Radiobox(RadioboxOption option) {
+  return Make<RadioboxBase>(std::move(option));
+}
 
 /// @brief A list of element, where only one can be selected.
 /// @param entries The list of entries in the list.
@@ -211,8 +236,10 @@ class RadioboxBase : public ComponentBase {
 /// ```
 Component Radiobox(ConstStringListRef entries,
                    int* selected,
-                   Ref<RadioboxOption> option) {
-  return Make<RadioboxBase>(entries, selected, std::move(option));
+                   RadioboxOption option) {
+  option.entries = entries;
+  option.selected = selected;
+  return Make<RadioboxBase>(std::move(option));
 }
 
 }  // namespace ftxui
