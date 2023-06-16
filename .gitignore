@@ -1,0 +1,54 @@
+# Ignore all the files, except the ones we expect.
+*
+
+# Allowed top-level files:
+!.clang-format
+!.clang-tidy
+!.gitignore
+!CHANGELOG.md
+!CMakeLists.txt
+!LICENSE
+!README.md
+!codecov.yml
+!flake.lock
+!flake.nix
+!ftxui.pc.in
+!iwyu.imp
+
+# .github directory:
+!.github/**/*.yaml
+!.github/**/*.yml
+
+# cmake directory:
+!cmake/**/*.in
+!cmake/**/*.cmake
+
+# doc directory:
+!doc/**/Doxyfile.in
+!doc/**/*.txt
+!doc/**/*.css
+!doc/**/*.html
+!doc/**/*.xml
+!doc/**/*.md
+
+# examples directory:
+!examples/**/*.txt
+!examples/**/*.cpp
+!examples/**/*.hpp
+!examples/**/*.ipp
+!examples/**/*.html
+!examples/**/*.py
+!examples/**/*.js
+!examples/**/*.html.disabled
+
+# include directory:
+!include/ftxui/**/*.hpp
+!include/ftxui/**/*.cpp
+
+# src directory:
+!src/ftxui/**/*.hpp
+!src/ftxui/**/*.cpp
+
+# tools directory:
+!tools/**/*.sh
+!tools/**/*.cpp
