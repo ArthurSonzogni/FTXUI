@@ -23,7 +23,7 @@ namespace {
 /// @ingroup component
 class RadioboxBase : public ComponentBase, public RadioboxOption {
  public:
-  RadioboxBase(RadioboxOption option) : RadioboxOption(option) {}
+  explicit RadioboxBase(RadioboxOption option) : RadioboxOption(option) {}
 
  private:
   Element Render() override {

@@ -32,7 +32,7 @@ Element DefaultTransform(EntryState params) {  // NOLINT
 
 class ButtonBase : public ComponentBase, public ButtonOption {
  public:
-  ButtonBase(ButtonOption option) : ButtonOption(std::move(option)) {}
+  explicit ButtonBase(ButtonOption option) : ButtonOption(std::move(option)) {}
 
   // Component implementation:
   Element Render() override {
@@ -198,10 +198,11 @@ Component Button(ButtonOption option) {
 /// │Click to quit│
 /// └─────────────┘
 /// ```
+// NOLINTNEXTLINE
 Component Button(ConstStringRef label,
                  std::function<void()> on_click,
                  ButtonOption option) {
-  option.label = std::move(label);
+  option.label = label;
   option.on_click = std::move(on_click);
   return Make<ButtonBase>(std::move(option));
 }

@@ -16,7 +16,8 @@ namespace ftxui {
 namespace {
 class CheckboxBase : public ComponentBase, public CheckboxOption {
  public:
-  CheckboxBase(CheckboxOption option) : CheckboxOption(std::move(option)) {}
+  explicit CheckboxBase(CheckboxOption option)
+      : CheckboxOption(std::move(option)) {}
 
  private:
   // Component implementation.
@@ -104,8 +105,9 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 /// ```bash
 /// ☐ Make a sandwitch
 /// ```
+// NOLINTNEXTLINE
 Component Checkbox(ConstStringRef label, bool* checked, CheckboxOption option) {
-  option.label = std::move(label);
+  option.label = label;
   option.checked = checked;
   return Make<CheckboxBase>(std::move(option));
 }

@@ -92,6 +92,11 @@ class ConstStringRef {
     address_ = t.address_;
     return *this;
   }
+  ConstStringRef& operator=(ConstStringRef&& t) {
+    owned_ = std::move(t.owned_);
+    address_ = t.address_;
+    return *this;
+  }
   const std::string& operator()() const {
     return address_ ? *address_ : owned_;
   }

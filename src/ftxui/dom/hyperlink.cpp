@@ -13,10 +13,10 @@ namespace ftxui {
 class Hyperlink : public NodeDecorator {
  public:
   Hyperlink(Element child, std::string link)
-      : NodeDecorator(std::move(child)), link_(link) {}
+      : NodeDecorator(std::move(child)), link_(std::move(link)) {}
 
   void Render(Screen& screen) override {
-    uint8_t hyperlink_id = screen.RegisterHyperlink(link_);
+    const uint8_t hyperlink_id = screen.RegisterHyperlink(link_);
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
         screen.PixelAt(x, y).hyperlink = hyperlink_id;
@@ -44,7 +44,7 @@ class Hyperlink : public NodeDecorator {
 ///   hyperlink("https://github.com/ArthurSonzogni/FTXUI", "link");
 /// ```
 Element hyperlink(std::string link, Element child) {
-  return std::make_shared<Hyperlink>(std::move(child), link);
+  return std::make_shared<Hyperlink>(std::move(child), std::move(link));
 }
 
 /// @brief Decorate using an hyperlink.
@@ -61,6 +61,7 @@ Element hyperlink(std::string link, Element child) {
 /// Element document =
 ///   text("red") | hyperlink("https://github.com/Arthursonzogni/FTXUI");
 /// ```
+// NOLINTNEXTLINE
 Decorator hyperlink(std::string link) {
   return [link](Element child) { return hyperlink(link, std::move(child)); };
 }

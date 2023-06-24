@@ -67,7 +67,7 @@ bool IsHorizontal(Direction direction) {
 /// @ingroup component
 class MenuBase : public ComponentBase, public MenuOption {
  public:
-  MenuBase(MenuOption option) : MenuOption(std::move(option)) {}
+  explicit MenuBase(MenuOption option) : MenuOption(std::move(option)) {}
 
   bool IsHorizontal() { return ftxui::IsHorizontal(direction); }
   void OnChange() {
@@ -613,7 +613,8 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
 Component MenuEntry(MenuEntryOption option) {
   class Impl : public ComponentBase, public MenuEntryOption {
    public:
-    Impl(MenuEntryOption option) : MenuEntryOption(std::move(option)) {}
+    explicit Impl(MenuEntryOption option)
+        : MenuEntryOption(std::move(option)) {}
 
    private:
     Element Render() override {
