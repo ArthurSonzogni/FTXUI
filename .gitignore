@@ -1,5 +1,7 @@
 # Ignore all the files, except the ones we expect.
+# See https://jasonstitt.com/gitignore-whitelisting-patterns
 *
+!*/
 
 # Allowed top-level files:
 !.clang-format
@@ -42,13 +44,16 @@
 !examples/**/*.html.disabled
 
 # include directory:
+!include/ftxui/
 !include/ftxui/**/*.hpp
 !include/ftxui/**/*.cpp
 
 # src directory:
+!src/
 !src/ftxui/**/*.hpp
 !src/ftxui/**/*.cpp
 
 # tools directory:
+!tools/
 !tools/**/*.sh
 !tools/**/*.cpp
