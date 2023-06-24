@@ -12,6 +12,7 @@ current (development)
 - Feature: `ResizeableSplit` now support arbitrary element as a separator.
 - Feature: `input` is now supporting multiple lines.
 - Feature: `input` style is now customizeable.
+- Bugfix: Support F1-F5 from OS terminal.
 
 ### Dom
 - Feature: Add `hyperlink` decorator. For instance:
