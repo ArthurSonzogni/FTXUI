@@ -104,9 +104,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 /// ```bash
 /// ☐ Make a sandwitch
 /// ```
-Component Checkbox(ConstStringRef label,
-                   bool* checked,
-                   CheckboxOption option) {
+Component Checkbox(ConstStringRef label, bool* checked, CheckboxOption option) {
   option.label = std::move(label);
   option.checked = checked;
   return Make<CheckboxBase>(std::move(option));

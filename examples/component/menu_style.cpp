@@ -212,8 +212,8 @@ Component VMenu7(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu8(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries_option.animated_colors.foreground.Set(Color::Red, Color::White,
-                                                std::chrono::milliseconds(500));
+  option.entries_option.animated_colors.foreground.Set(
+      Color::Red, Color::White, std::chrono::milliseconds(500));
   return Menu(entries, selected, option);
 }
 

@@ -611,7 +611,7 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
 ///   entry 3
 /// ```
 Component MenuEntry(MenuEntryOption option) {
-  class Impl : public ComponentBase, public MenuEntryOption  {
+  class Impl : public ComponentBase, public MenuEntryOption {
    public:
     Impl(MenuEntryOption option) : MenuEntryOption(std::move(option)) {}
 
@@ -641,30 +641,28 @@ Component MenuEntry(MenuEntryOption option) {
       if (target == animator_background_.to()) {
         return;
       }
-      animator_background_ =
-          animation::Animator(&animation_background_, target,
-                              animated_colors.background.duration,
-                              animated_colors.background.function);
-      animator_foreground_ =
-          animation::Animator(&animation_foreground_, target,
-                              animated_colors.foreground.duration,
-                              animated_colors.foreground.function);
+      animator_background_ = animation::Animator(
+          &animation_background_, target, animated_colors.background.duration,
+          animated_colors.background.function);
+      animator_foreground_ = animation::Animator(
+          &animation_foreground_, target, animated_colors.foreground.duration,
+          animated_colors.foreground.function);
     }
 
     Decorator AnimatedColorStyle() {
       Decorator style = nothing;
       if (animated_colors.foreground.enabled) {
-        style = style | color(Color::Interpolate(
-                            animation_foreground_,
-                            animated_colors.foreground.inactive,
-                            animated_colors.foreground.active));
+        style = style |
+                color(Color::Interpolate(animation_foreground_,
+                                         animated_colors.foreground.inactive,
+                                         animated_colors.foreground.active));
       }
 
       if (animated_colors.background.enabled) {
-        style = style | bgcolor(Color::Interpolate(
-                            animation_background_,
-                            animated_colors.background.inactive,
-                            animated_colors.background.active));
+        style = style |
+                bgcolor(Color::Interpolate(animation_background_,
+                                           animated_colors.background.inactive,
+                                           animated_colors.background.active));
       }
       return style;
     }
