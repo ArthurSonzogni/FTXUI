@@ -5,6 +5,7 @@ Changelog
 ---
 
 ### Component
+- Bugfix: Support F1-F5 from OS terminal.
 
 ### Dom
 - Feature: Add `hyperlink` decorator. For instance:
