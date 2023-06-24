@@ -147,8 +147,6 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 }  // namespace
    //
 /// @brief Draw a button. Execute a function when clicked.
-/// @param label The label of the button.
-/// @param on_click The action to execute when clicked.
 /// @param option Additional optional parameters.
 /// @ingroup component
 /// @see ButtonBase

@@ -69,4 +69,6 @@ gtest_discover_tests(ftxui-tests
   DISCOVERY_TIMEOUT 600
 )
 
-set(CMAKE_CTEST_ARGUMENTS "--rerun-failed --output-on-failure")
+#set(CMAKE_CTEST_ARGUMENTS "--rerun-failed --output-on-failure")
+#set_tests_properties(gen_init_queries PROPERTIES FIXTURES_SETUP f_init_queries)
+#set_tests_properties(test PROPERTIES  FIXTURES_REQUIRED f_init_queries)
