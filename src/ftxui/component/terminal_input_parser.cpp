@@ -44,6 +44,13 @@ const std::map<std::string, std::string> g_uniformize = {
     {"\x1BOH", "\x1B[H"},  // HOME
     {"\x1BOF", "\x1B[F"},  // END
 
+    // Variations around the FN keys.
+    // See: https://github.com/ArthurSonzogni/FTXUI/issues/685
+    {"\x1B[[A", "\x1BOP"},    // F1
+    {"\x1B[[B", "\x1BOQ"},    // F2
+    {"\x1B[[C", "\x1BOR"},    // F3
+    {"\x1B[[D", "\x1BOS"},    // F4
+    {"\x1B[[E", "\x1B[15~"},  // F5
 };
 
 TerminalInputParser::TerminalInputParser(Sender<Task> out)
@@ -291,9 +298,16 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
       continue;
     }
 
-    if (Current() >= ' ' && Current() <= '~' && Current() != '<') {
+    // CSI is terminated by a character in the range 0x40–0x7E
+    // (ASCII @A–Z[\]^_`a–z{|}~),
+    if (Current() >= '@' && Current() <= '~' &&
+        // Note: I don't remember why we exclude '<'
+        Current() != '<' &&
+        // To handle F1-F4, we exclude '['.
+        Current() != '[') {
       arguments.push_back(argument);
       argument = 0;  // NOLINT
+
       switch (Current()) {
         case 'M':
           return ParseMouse(altered, true, std::move(arguments));

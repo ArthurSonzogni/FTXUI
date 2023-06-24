@@ -385,6 +385,13 @@ TEST(Event, Special) {
       {str("\x1B[23~"), Event::F11},
       {str("\x1B[24~"), Event::F12},
 
+      // Function keys for virtual terminal:
+      {str("\x1B[[A"), Event::F1},
+      {str("\x1B[[B"), Event::F2},
+      {str("\x1B[[C"), Event::F3},
+      {str("\x1B[[D"), Event::F4},
+      {str("\x1B[[E"), Event::F5},
+
       // Page up and down:
       {str("\x1B[5~"), Event::PageUp},
       {str("\x1B[6~"), Event::PageDown},
