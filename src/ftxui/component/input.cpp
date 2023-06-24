@@ -517,7 +517,6 @@ class InputBase : public ComponentBase, public InputOption {
 }  // namespace
 
 /// @brief An input box for editing text.
-/// @param content The editable content.
 /// @param option Additional optional parameters.
 /// @ingroup component
 /// @see InputBase
