@@ -132,6 +132,7 @@ add_library(component
   src/ftxui/component/terminal_input_parser.cpp
   src/ftxui/component/terminal_input_parser.hpp
   src/ftxui/component/util.cpp
+  src/ftxui/component/window.cpp
 )
 
 target_link_libraries(dom

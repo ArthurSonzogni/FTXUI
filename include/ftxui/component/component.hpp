@@ -40,6 +40,7 @@ Component Vertical(Components children, int* selector);
 Component Horizontal(Components children);
 Component Horizontal(Components children, int* selector);
 Component Tab(Components children, int* selector);
+Component Stacked(Components children);
 }  // namespace Container
 
 Component Button(ButtonOption options);
@@ -130,6 +131,8 @@ ComponentDecorator Hoverable(bool* hover);
 ComponentDecorator Hoverable(std::function<void()> on_enter,
                              std::function<void()> on_leave);
 ComponentDecorator Hoverable(std::function<void(bool)> on_change);
+
+Component Window(WindowOptions option);
 
 }  // namespace ftxui
 
