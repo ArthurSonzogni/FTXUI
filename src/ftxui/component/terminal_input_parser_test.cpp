@@ -392,6 +392,34 @@ TEST(Event, Special) {
       {str("\x1B[[D"), Event::F4},
       {str("\x1B[[E"), Event::F5},
 
+      // Function keys for xterm-r5, xterm-r6, rxvt
+      {str("\x1B[11~"), Event::F1},
+      {str("\x1B[12~"), Event::F2},
+      {str("\x1B[13~"), Event::F3},
+      {str("\x1B[14~"), Event::F4},
+
+      // Function keys for vt100
+      {str("\x1BOt"), Event::F5},
+      {str("\x1BOu"), Event::F6},
+      {str("\x1BOv"), Event::F7},
+      {str("\x1BOl"), Event::F8},
+      {str("\x1BOw"), Event::F9},
+      {str("\x1BOx"), Event::F10},
+
+      // Function keys for scoansi
+      {str("\x1B[M"), Event::F1},
+      {str("\x1B[N"), Event::F2},
+      {str("\x1B[O"), Event::F3},
+      {str("\x1B[P"), Event::F4},
+      {str("\x1B[Q"), Event::F5},
+      {str("\x1B[R"), Event::F6},
+      {str("\x1B[S"), Event::F7},
+      {str("\x1B[T"), Event::F8},
+      {str("\x1B[U"), Event::F9},
+      {str("\x1B[V"), Event::F10},
+      {str("\x1B[W"), Event::F11},
+      {str("\x1B[X"), Event::F12},
+
       // Page up and down:
       {str("\x1B[5~"), Event::PageUp},
       {str("\x1B[6~"), Event::PageDown},
