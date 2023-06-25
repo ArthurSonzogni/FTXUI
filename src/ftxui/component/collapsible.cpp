@@ -27,6 +27,7 @@ namespace ftxui {
 /// ▼ Show details
 /// <details component>
 ///  ```
+// NOLINTNEXTLINE
 Component Collapsible(ConstStringRef label, Component child, Ref<bool> show) {
   class Impl : public ComponentBase {
    public:
@@ -44,7 +45,7 @@ Component Collapsible(ConstStringRef label, Component child, Ref<bool> show) {
         return hbox({prefix, t});
       };
       Add(Container::Vertical({
-          Checkbox(std::move(label), show_.operator->(), opt),
+          Checkbox(label, show_.operator->(), opt),
           Maybe(std::move(child), show_.operator->()),
       }));
     }

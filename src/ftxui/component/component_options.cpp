@@ -48,7 +48,7 @@ void UnderlineOption::SetAnimationFunction(
 MenuOption MenuOption::Horizontal() {
   MenuOption option;
   option.direction = Direction::Right;
-  option.entries.transform = [](const EntryState& state) {
+  option.entries_option.transform = [](const EntryState& state) {
     Element e = text(state.label);
     if (state.focused) {
       e |= inverted;
@@ -76,7 +76,7 @@ MenuOption MenuOption::HorizontalAnimated() {
 // static
 MenuOption MenuOption::Vertical() {
   MenuOption option;
-  option.entries.transform = [](const EntryState& state) {
+  option.entries_option.transform = [](const EntryState& state) {
     Element e = text((state.active ? "> " : "  ") + state.label);  // NOLINT
     if (state.focused) {
       e |= inverted;
@@ -95,7 +95,7 @@ MenuOption MenuOption::Vertical() {
 // static
 MenuOption MenuOption::VerticalAnimated() {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](const EntryState& state) {
+  option.entries_option.transform = [](const EntryState& state) {
     Element e = text(state.label);
     if (state.focused) {
       e |= inverted;
@@ -124,9 +124,9 @@ MenuOption MenuOption::Toggle() {
 ButtonOption ButtonOption::Ascii() {
   ButtonOption option;
   option.transform = [](const EntryState& s) {
-    const std::string label = s.focused ? "[" + s.label + "]"  //
-                                        : " " + s.label + " ";
-    return text(label);
+    const std::string t = s.focused ? "[" + s.label + "]"  //
+                                    : " " + s.label + " ";
+    return text(t);
   };
   return option;
 }

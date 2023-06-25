@@ -21,7 +21,7 @@ int main() {
 
   MenuOption option;
   option.on_enter = screen.ExitLoopClosure();
-  auto menu = Menu(&entries, &selected, &option);
+  auto menu = Menu(&entries, &selected, option);
 
   screen.Loop(menu);
 

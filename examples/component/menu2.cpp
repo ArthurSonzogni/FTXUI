@@ -27,9 +27,9 @@ int main() {
   int left_menu_selected = 0;
   int right_menu_selected = 0;
   Component left_menu_ =
-      Menu(&left_menu_entries, &left_menu_selected, &menu_option);
+      Menu(&left_menu_entries, &left_menu_selected, menu_option);
   Component right_menu_ =
-      Menu(&right_menu_entries, &right_menu_selected, &menu_option);
+      Menu(&right_menu_entries, &right_menu_selected, menu_option);
 
   Component container = Container::Horizontal({
       left_menu_,

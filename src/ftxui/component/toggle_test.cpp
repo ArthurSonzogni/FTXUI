@@ -91,7 +91,7 @@ TEST(ToggleTest, OnChange) {
   auto option = MenuOption::Toggle();
   option.on_change = [&] { counter++; };
 
-  auto toggle = Menu(&entries, &selected, &option);
+  auto toggle = Menu(&entries, &selected, option);
 
   EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_EQ(counter, 0);
@@ -120,7 +120,7 @@ TEST(ToggleTest, OnEnter) {
 
   auto option = MenuOption::Toggle();
   option.on_enter = [&] { counter++; };
-  auto toggle = Menu(&entries, &selected, &option);
+  auto toggle = Menu(&entries, &selected, option);
 
   EXPECT_FALSE(toggle->OnEvent(Event::ArrowLeft));  // Reached far left.
   EXPECT_TRUE(toggle->OnEvent(Event::Return));

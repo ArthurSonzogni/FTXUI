@@ -1,5 +1,6 @@
 #include <cstdint>  // for size_t
 #include <iostream>  // for operator<<, stringstream, basic_ostream, flush, cout, ostream
+#include <limits>
 #include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
 #include <memory>   // for allocator, allocator_traits<>::value_type
 #include <sstream>  // IWYU pragma: keep
@@ -553,13 +554,13 @@ void Screen::ApplyShader() {
 }
 // clang-format on
 
-uint8_t Screen::RegisterHyperlink(std::string link) {
+uint8_t Screen::RegisterHyperlink(const std::string& link) {
   for (size_t i = 0; i < hyperlinks_.size(); ++i) {
     if (hyperlinks_[i] == link) {
       return i;
     }
   }
-  if (hyperlinks_.size() == 255) {
+  if (hyperlinks_.size() == std::numeric_limits<uint8_t>::max()) {
     return 0;
   }
   hyperlinks_.push_back(link);

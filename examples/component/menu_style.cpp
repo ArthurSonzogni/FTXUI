@@ -110,7 +110,7 @@ int main() {
 
 Component VMenu1(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](EntryState state) {
+  option.entries_option.transform = [](EntryState state) {
     state.label = (state.active ? "> " : "  ") + state.label;
     Element e = text(state.label);
     if (state.focused)
@@ -124,7 +124,7 @@ Component VMenu1(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu2(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](EntryState state) {
+  option.entries_option.transform = [](EntryState state) {
     state.label += (state.active ? " <" : "  ");
     Element e = hbox(filler(), text(state.label));
     if (state.focused)
@@ -138,7 +138,7 @@ Component VMenu2(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu3(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](EntryState state) {
+  option.entries_option.transform = [](EntryState state) {
     Element e = state.active ? text("[" + state.label + "]")
                              : text(" " + state.label + " ");
     if (state.focused)
@@ -155,7 +155,7 @@ Component VMenu3(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu4(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](EntryState state) {
+  option.entries_option.transform = [](EntryState state) {
     if (state.active && state.focused) {
       return text(state.label) | color(Color::Yellow) | bgcolor(Color::Black) |
              bold;
@@ -175,7 +175,7 @@ Component VMenu4(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu5(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.transform = [](EntryState state) {
+  option.entries_option.transform = [](EntryState state) {
     auto element = text(state.label);
     if (state.active && state.focused) {
       return element | borderDouble;
@@ -201,19 +201,19 @@ Component VMenu6(std::vector<std::string>* entries, int* selected) {
 
 Component VMenu7(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.animated_colors.foreground.enabled = true;
-  option.entries.animated_colors.background.enabled = true;
-  option.entries.animated_colors.background.active = Color::Red;
-  option.entries.animated_colors.background.inactive = Color::Black;
-  option.entries.animated_colors.foreground.active = Color::White;
-  option.entries.animated_colors.foreground.inactive = Color::Red;
+  option.entries_option.animated_colors.foreground.enabled = true;
+  option.entries_option.animated_colors.background.enabled = true;
+  option.entries_option.animated_colors.background.active = Color::Red;
+  option.entries_option.animated_colors.background.inactive = Color::Black;
+  option.entries_option.animated_colors.foreground.active = Color::White;
+  option.entries_option.animated_colors.foreground.inactive = Color::Red;
   return Menu(entries, selected, option);
 }
 
 Component VMenu8(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::Vertical();
-  option.entries.animated_colors.foreground.Set(Color::Red, Color::White,
-                                                std::chrono::milliseconds(500));
+  option.entries_option.animated_colors.foreground.Set(
+      Color::Red, Color::White, std::chrono::milliseconds(500));
   return Menu(entries, selected, option);
 }
 
@@ -240,7 +240,7 @@ Component HMenu5(std::vector<std::string>* entries, int* selected) {
   auto option = MenuOption::HorizontalAnimated();
   option.underline.SetAnimation(std::chrono::milliseconds(1500),
                                 animation::easing::ElasticOut);
-  option.entries.transform = [](EntryState state) {
+  option.entries_option.transform = [](EntryState state) {
     Element e = text(state.label) | hcenter | flex;
     if (state.active && state.focused)
       e = e | bold;
