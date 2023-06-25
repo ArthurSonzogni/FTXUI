@@ -47,9 +47,13 @@ const std::map<std::string, std::string> g_uniformize = {
     // Variations around the FN keys.
     // See: https://github.com/ArthurSonzogni/FTXUI/issues/685
     {"\x1B[[A", "\x1BOP"},    // F1
+    {"\x1B[11~", "\x1BOP"},   // F1
     {"\x1B[[B", "\x1BOQ"},    // F2
+    {"\x1B[12~", "\x1BOQ"},   // F2
     {"\x1B[[C", "\x1BOR"},    // F3
+    {"\x1B[13~", "\x1BOR"},   // F3
     {"\x1B[[D", "\x1BOS"},    // F4
+    {"\x1B[14~", "\x1BOS"},   // F4
     {"\x1B[[E", "\x1B[15~"},  // F5
 };
 
