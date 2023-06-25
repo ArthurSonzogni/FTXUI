@@ -45,12 +45,46 @@ const std::map<std::string, std::string> g_uniformize = {
     {"\x1BOF", "\x1B[F"}, // END
 
     // Variations around the FN keys.
+    // Internally, we are using:
+    // vt220, xterm-vt200, xterm-xf86-v44, xterm-new, mgt, screen
+    // See: https://invisible-island.net/xterm/xterm-function-keys.html
+
+    // For linux OS console (CTRL+ALT+FN), who do not belong to any
+    // real standard.
     // See: https://github.com/ArthurSonzogni/FTXUI/issues/685
     {"\x1B[[A", "\x1BOP"},    // F1
     {"\x1B[[B", "\x1BOQ"},    // F2
     {"\x1B[[C", "\x1BOR"},    // F3
     {"\x1B[[D", "\x1BOS"},    // F4
     {"\x1B[[E", "\x1B[15~"},  // F5
+
+    // xterm-r5, xterm-r6, rxvt
+    {"\x1B[11~", "\x1BOP"},  // F1
+    {"\x1B[12~", "\x1BOQ"},  // F2
+    {"\x1B[13~", "\x1BOR"},  // F3
+    {"\x1B[14~", "\x1BOS"},  // F4
+
+    // vt100
+    {"\x1BOt", "\x1B[15~"},  // F5
+    {"\x1BOu", "\x1B[17~"},  // F6
+    {"\x1BOv", "\x1B[18~"},  // F7
+    {"\x1BOl", "\x1B[19~"},  // F8
+    {"\x1BOw", "\x1B[20~"},  // F9
+    {"\x1BOx", "\x1B[21~"},  // F10
+
+    // scoansi
+    {"\x1B[M", "\x1BOP"},    // F1
+    {"\x1B[N", "\x1BOQ"},    // F2
+    {"\x1B[O", "\x1BOR"},    // F3
+    {"\x1B[P", "\x1BOS"},    // F4
+    {"\x1B[Q", "\x1B[15~"},  // F5
+    {"\x1B[R", "\x1B[17~"},  // F6
+    {"\x1B[S", "\x1B[18~"},  // F7
+    {"\x1B[T", "\x1B[19~"},  // F8
+    {"\x1B[U", "\x1B[20~"},  // F9
+    {"\x1B[V", "\x1B[21~"},  // F10
+    {"\x1B[W", "\x1B[23~"},  // F11
+    {"\x1B[X", "\x1B[24~"},  // F12
 };
 
 TerminalInputParser::TerminalInputParser(Sender<Task> out)
