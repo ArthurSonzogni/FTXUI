@@ -5,7 +5,6 @@
     <script src="https://cdn.jsdelivr.net/npm/xterm@4.18.0/lib/xterm.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-webgl@0.11.4/lib/xterm-addon-webgl.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.0/lib/xterm-addon-fit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-web-links@0.8.0/lib/xterm-addon-web-links.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.11.0/css/xterm.css"></link>
     <!--Add COOP/COEP via a ServiceWorker to use SharedArrayBuffer-->
     <script>
@@ -84,8 +83,8 @@
     const term_element = document.querySelector('#terminal');
     term.open(term_element);
 
-    term.loadAddon(new (WebglAddon.WebglAddon)());
-    term.loadAddon(new (WebLinksAddon.WebLinksAddon)());
+    const webgl_addon = new (WebglAddon.WebglAddon)();
+    term.loadAddon(webgl_addon);
 
     const onBinary = e => {
       for(c of e)
