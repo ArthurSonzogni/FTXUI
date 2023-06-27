@@ -29,6 +29,19 @@ static void BencharkBasic(benchmark::State& state) {
 }
 BENCHMARK(BencharkBasic)->DenseRange(0, 256, 16);
 
+static void BencharkText(benchmark::State& state) {
+  while (state.KeepRunning()) {
+    std::string content = "ＨＥＬＬＯ world ";
+    for(int i=0; i<state.range(0); ++i) {
+      content += content;
+    }
+    auto document = paragraph(content);
+    Screen screen(200,200);
+    Render(screen, document);
+  }
+}
+BENCHMARK(BencharkText)->DenseRange(0, 10, 1);
+
 }  // namespace ftxui
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.

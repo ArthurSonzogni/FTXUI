@@ -1480,7 +1480,7 @@ const std::array<WordBreakPropertyInterval, 1288> g_word_break_intervals = {{
 
 // Find a codepoint inside a sorted list of Interval.
 template <size_t N>
-bool Bisearch(uint32_t ucs, const std::array<Interval, N> table) {
+bool Bisearch(uint32_t ucs, const std::array<Interval, N>& table) {
   if (ucs < table.front().first || ucs > table.back().last) {  // NOLINT
     return false;
   }
@@ -1503,7 +1503,7 @@ bool Bisearch(uint32_t ucs, const std::array<Interval, N> table) {
 
 // Find a value inside a sorted list of Interval + property.
 template <class C, size_t N>
-bool Bisearch(uint32_t ucs, const std::array<C, N> table, C* out) {
+bool Bisearch(uint32_t ucs, const std::array<C, N>& table, C* out) {
   if (ucs < table.front().first || ucs > table.back().last) {  // NOLINT
     return false;
   }
