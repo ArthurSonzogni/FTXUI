@@ -70,7 +70,7 @@ void Flush() {
 }
 
 constexpr int timeout_milliseconds = 20;
-constexpr int timeout_microseconds = timeout_milliseconds * 1000;
+[[maybe_unused]] constexpr int timeout_microseconds = timeout_milliseconds * 1000;
 #if defined(_WIN32)
 
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
