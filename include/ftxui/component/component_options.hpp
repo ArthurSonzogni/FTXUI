@@ -230,7 +230,7 @@ struct SliderOption {
 struct WindowRenderState {
   Element inner;             /// < The element wrapped inside this window.
   const std::string& title;  /// < The title of the window.
-  bool active;               /// < Whether the entry is the active one.
+  bool active = false;       /// < Whether the window is the active one.
   bool drag = false;         /// < Whether the window is being dragged.
   bool resize = false;       /// < Whether the window is being resized.
   bool hover_left = false;   /// < Whether the resizeable left side is hovered.
