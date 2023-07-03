@@ -79,8 +79,8 @@ constexpr auto nostyle = [](Pixel& /*pixel*/) {};
 }  // namespace
 
 /// @brief Constructor.
-/// @param width the width of the canvas. A cell is a 2x8 braille dot.
-/// @param height the height of the canvas. A cell is a 2x8 braille dot.
+/// @param width the width of the canvas. A cell is a 2x4 braille dot.
+/// @param height the height of the canvas. A cell is a 2x4 braille dot.
 Canvas::Canvas(int width, int height)
     : width_(width),
       height_(height),
