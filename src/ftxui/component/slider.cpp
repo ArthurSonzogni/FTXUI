@@ -1,4 +1,5 @@
-#include <algorithm>                              // for max, min
+#include <algorithm>  // for max, min
+#include <cstdint>    // for uint8_t, uint16_t, uint32_t, uint64_t
 #include <ftxui/component/component_options.hpp>  // for SliderOption
 #include <string>                                 // for allocator
 #include <utility>                                // for move

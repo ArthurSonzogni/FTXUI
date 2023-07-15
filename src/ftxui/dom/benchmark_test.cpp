@@ -32,11 +32,11 @@ BENCHMARK(BencharkBasic)->DenseRange(0, 256, 16);
 static void BencharkText(benchmark::State& state) {
   while (state.KeepRunning()) {
     std::string content = "ＨＥＬＬＯ world ";
-    for(int i=0; i<state.range(0); ++i) {
+    for (int i = 0; i < state.range(0); ++i) {
       content += content;
     }
     auto document = paragraph(content);
-    Screen screen(200,200);
+    Screen screen(200, 200);
     Render(screen, document);
   }
 }
