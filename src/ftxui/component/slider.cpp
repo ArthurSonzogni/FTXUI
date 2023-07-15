@@ -135,24 +135,12 @@ class SliderBase : public ComponentBase {
   }
 
   bool OnMouseEvent(Event event) {
-    if (captured_mouse_ && event.mouse().motion == Mouse::Released) {
-      captured_mouse_ = nullptr;
-      return true;
-    }
-
-    if (gauge_box_.Contain(event.mouse().x, event.mouse().y) &&
-        CaptureMouse(event)) {
-      TakeFocus();
-    }
-
-    if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed &&
-        gauge_box_.Contain(event.mouse().x, event.mouse().y) &&
-        !captured_mouse_) {
-      captured_mouse_ = CaptureMouse(event);
-    }
-
     if (captured_mouse_) {
+      if (event.mouse().motion == Mouse::Released) {
+        captured_mouse_ = nullptr;
+        return true;
+      }
+
       switch (options_.direction) {
         case Direction::Right: {
           value_() = min_() + (event.mouse().x - gauge_box_.x_min) *
@@ -182,6 +170,23 @@ class SliderBase : public ComponentBase {
       value_() = std::max(min_(), std::min(max_(), value_()));
       return true;
     }
+
+    if (event.mouse().button != Mouse::Left ||
+        event.mouse().motion != Mouse::Pressed) {
+      return false;
+    }
+
+    if (!gauge_box_.Contain(event.mouse().x, event.mouse().y)) {
+      return false;
+    }
+
+    captured_mouse_ = CaptureMouse(event);
+
+    if (captured_mouse_) {
+      TakeFocus();
+      return true;
+    }
+
     return false;
   }
 
@@ -214,7 +219,9 @@ class SliderWithLabel : public ComponentBase {
       return false;
     }
 
-    if (!box_.Contain(event.mouse().x, event.mouse().y)) {
+    mouse_hover_ = box_.Contain(event.mouse().x, event.mouse().y);
+
+    if (!mouse_hover_) {
       return false;
     }
 
@@ -222,13 +229,13 @@ class SliderWithLabel : public ComponentBase {
       return false;
     }
 
-    TakeFocus();
     return true;
   }
 
   Element Render() override {
     auto focus_management = Focused() ? focus : Active() ? select : nothing;
-    auto gauge_color = Focused() ? color(Color::White) : color(Color::GrayDark);
+    auto gauge_color = (Focused() || mouse_hover_) ? color(Color::White)
+                                                   : color(Color::GrayDark);
     return hbox({
                text(label_()) | dim | vcenter,
                hbox({
@@ -242,6 +249,7 @@ class SliderWithLabel : public ComponentBase {
 
   ConstStringRef label_;
   Box box_;
+  bool mouse_hover_ = false;
 };
 
 /// @brief An horizontal slider.

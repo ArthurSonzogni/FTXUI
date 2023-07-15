@@ -53,8 +53,9 @@ TEST(SliderTest, Right) {
   });
   Screen screen(11, 1);
   Render(screen, slider->Render());
+  EXPECT_EQ(value, 50);
   EXPECT_TRUE(slider->OnEvent(MousePressed(3, 0)));
-  EXPECT_EQ(value, 30);
+  EXPECT_EQ(value, 50);
   EXPECT_TRUE(slider->OnEvent(MousePressed(9, 0)));
   EXPECT_EQ(value, 90);
   EXPECT_TRUE(slider->OnEvent(MousePressed(9, 2)));
@@ -76,8 +77,9 @@ TEST(SliderTest, Left) {
   });
   Screen screen(11, 1);
   Render(screen, slider->Render());
+  EXPECT_EQ(value, 50);
   EXPECT_TRUE(slider->OnEvent(MousePressed(3, 0)));
-  EXPECT_EQ(value, 70);
+  EXPECT_EQ(value, 50);
   EXPECT_TRUE(slider->OnEvent(MousePressed(9, 0)));
   EXPECT_EQ(value, 10);
   EXPECT_TRUE(slider->OnEvent(MousePressed(9, 2)));
@@ -99,8 +101,9 @@ TEST(SliderTest, Down) {
   });
   Screen screen(1, 11);
   Render(screen, slider->Render());
+  EXPECT_EQ(value, 50);
   EXPECT_TRUE(slider->OnEvent(MousePressed(0, 3)));
-  EXPECT_EQ(value, 30);
+  EXPECT_EQ(value, 50);
   EXPECT_TRUE(slider->OnEvent(MousePressed(0, 9)));
   EXPECT_EQ(value, 90);
   EXPECT_TRUE(slider->OnEvent(MousePressed(2, 9)));
@@ -122,8 +125,9 @@ TEST(SliderTest, Up) {
   });
   Screen screen(1, 11);
   Render(screen, slider->Render());
+  EXPECT_EQ(value, 50);
   EXPECT_TRUE(slider->OnEvent(MousePressed(0, 3)));
-  EXPECT_EQ(value, 70);
+  EXPECT_EQ(value, 50);
   EXPECT_TRUE(slider->OnEvent(MousePressed(0, 9)));
   EXPECT_EQ(value, 10);
   EXPECT_TRUE(slider->OnEvent(MousePressed(2, 9)));

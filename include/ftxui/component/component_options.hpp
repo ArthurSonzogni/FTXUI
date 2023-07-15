@@ -226,6 +226,39 @@ struct SliderOption {
   Color color_inactive = Color::GrayDark;
 };
 
+// Parameter pack used by `WindowOptions::render`.
+struct WindowRenderState {
+  Element inner;             /// < The element wrapped inside this window.
+  const std::string& title;  /// < The title of the window.
+  bool active = false;       /// < Whether the window is the active one.
+  bool drag = false;         /// < Whether the window is being dragged.
+  bool resize = false;       /// < Whether the window is being resized.
+  bool hover_left = false;   /// < Whether the resizeable left side is hovered.
+  bool hover_right = false;  /// < Whether the resizeable right side is hovered.
+  bool hover_top = false;    /// < Whether the resizeable top side is hovered.
+  bool hover_down = false;   /// < Whether the resizeable down side is hovered.
+};
+
+// @brief Option for the `Window` component.
+// @ingroup component
+struct WindowOptions {
+  Component inner;            /// < The component wrapped by this window.
+  ConstStringRef title = "";  /// < The title displayed by this window.
+
+  Ref<int> left = 0;     /// < The left side position of the window.
+  Ref<int> top = 0;      /// < The top side position of the window.
+  Ref<int> width = 20;   /// < The width of the window.
+  Ref<int> height = 10;  /// < The height of the window.
+
+  Ref<bool> resize_left = true;   /// < Can the left side be resized?
+  Ref<bool> resize_right = true;  /// < Can the right side be resized?
+  Ref<bool> resize_top = true;    /// < Can the top side be resized?
+  Ref<bool> resize_down = true;   /// < Can the down side be resized?
+
+  /// An optional function to customize how the window looks like:
+  std::function<Element(const WindowRenderState&)> render;
+};
+
 }  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP */
