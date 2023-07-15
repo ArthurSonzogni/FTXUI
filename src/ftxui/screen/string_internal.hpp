@@ -1,6 +1,8 @@
 #ifndef FTXUI_SCREEN_STRING_INTERNAL_HPP
 #define FTXUI_SCREEN_STRING_INTERNAL_HPP
 
+#include <cstdint>
+
 namespace ftxui {
 
 bool EatCodePoint(const std::string& input,

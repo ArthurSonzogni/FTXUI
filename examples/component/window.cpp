@@ -23,7 +23,6 @@ Component DummyWindowContent() {
 }
 
 int main() {
-
   int window_1_left = 20;
   int window_1_top = 10;
   int window_1_width = 40;
@@ -84,3 +83,7 @@ int main() {
 
   return EXIT_SUCCESS;
 }
+
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.

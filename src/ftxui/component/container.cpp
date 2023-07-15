@@ -235,7 +235,7 @@ class TabContainer : public ContainerBase {
   }
 };
 
-class StackedContainer : public ContainerBase{
+class StackedContainer : public ContainerBase {
  public:
   StackedContainer(Components children)
       : ContainerBase(std::move(children), nullptr) {}
@@ -273,8 +273,9 @@ class StackedContainer : public ContainerBase{
 
     // Find `child` and put it at the beginning without change the order of the
     // other children.
-    auto it = std::find_if(children_.begin(), children_.end(),
-                           [child](const Component& c) { return c.get() == child; });
+    auto it =
+        std::find_if(children_.begin(), children_.end(),
+                     [child](const Component& c) { return c.get() == child; });
     if (it == children_.end()) {
       return;
     }
@@ -408,7 +409,7 @@ Component Tab(Components children, int* selector) {
 /// When a component take focus, it is put at the front, without changing the
 /// relative order of the other elements.
 ///
-/// This should be used with the `Window` component. 
+/// This should be used with the `Window` component.
 ///
 /// @param children The list of components.
 /// @ingroup component
