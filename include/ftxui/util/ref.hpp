@@ -3,6 +3,7 @@
 
 #include <ftxui/screen/string.hpp>
 #include <string>
+#include <variant>
 
 namespace ftxui {
 
@@ -10,104 +11,89 @@ namespace ftxui {
 template <typename T>
 class ConstRef {
  public:
-  ConstRef() {}
-  ConstRef(T t) : owned_(t) {}
-  ConstRef(const T* t) : address_(t) {}
-  ConstRef(const ConstRef& t) : owned_(t.owned_), address_(t.address_) {}
-  ConstRef& operator=(const ConstRef& t) {
-    owned_ = t.owned_;
-    address_ = t.address_;
-    return *this;
-  }
-  const T& operator*() const { return address_ ? *address_ : owned_; }
-  const T& operator()() const { return address_ ? *address_ : owned_; }
-  const T* operator->() const { return address_ ? address_ : &owned_; }
+  ConstRef() = default;
+  ConstRef(const T& t) : variant_(t) {}
+  ConstRef(const T* t) : variant_(t) {}
+
+  // Make a "resetable" reference
+  ConstRef(const ConstRef<T>&) = default;
+  ConstRef<T>& operator=(ConstRef<T>&) = default;
+  ConstRef<T>& operator=(ConstRef<T>&&) = default;
+  ConstRef<T>& operator=(const ConstRef<T>&) = default;
+
+  // Accessors:
+  const T& operator()() const { return *Address(); }
+  const T& operator*() const { return *Address(); }
+  const T* operator->() const { return Address(); }
 
  private:
-  T owned_;
-  const T* address_ = nullptr;
+  std::variant<T, const T*> variant_ = T{};
+
+  const T* Address() const {
+    return std::holds_alternative<T>(variant_) ? &std::get<T>(variant_)
+                                               : std::get<const T*>(variant_);
+  }
 };
 
 /// @brief An adapter. Own or reference an mutable object.
 template <typename T>
 class Ref {
  public:
-  Ref() {}
-  Ref(const T& t) : owned_(t) {}
-  Ref(T&& t) : owned_(std::forward<T>(t)) {}
-  Ref(T* t) : owned_(), address_(t) {}
-  Ref(const Ref& t) : owned_(t.owned_), address_(t.address_) {}
-  Ref& operator=(const Ref& t) {
-    owned_ = t.owned_;
-    address_ = t.address_;
-    return *this;
-  }
-  T& operator*() { return address_ ? *address_ : owned_; }
-  T& operator()() { return address_ ? *address_ : owned_; }
-  T* operator->() { return address_ ? address_ : &owned_; }
+  Ref() = default;
+  Ref(const T& t) : variant_(t) {}
+  Ref(T&& t) : variant_(std::forward<T>(t)) {}
+  Ref(T* t) : variant_(t) {}
+
+  // Make a "resetable" reference
+  Ref(const Ref<T>&) = default;
+  Ref<T>& operator=(Ref<T>&) = default;
+  Ref<T>& operator=(Ref<T>&&) = default;
+  Ref<T>& operator=(const Ref<T>&) = default;
+
+  // Accessors:
+  T& operator()() { return *Address(); }
+  T& operator*() { return *Address(); }
+  T* operator->() { return Address(); }
+  const T& operator()() const { return *Address(); }
+  const T& operator*() const { return *Address(); }
+  const T* operator->() const { return Address(); }
 
  private:
-  T owned_;
-  T* address_ = nullptr;
+  std::variant<T, T*> variant_ = T{};
+
+  const T* Address() const {
+    return std::holds_alternative<T>(variant_) ? &std::get<T>(variant_)
+                                               : std::get<T*>(variant_);
+  }
+  T* Address() {
+    return std::holds_alternative<T>(variant_) ? &std::get<T>(variant_)
+                                               : std::get<T*>(variant_);
+  }
 };
 
 /// @brief An adapter. Own or reference a constant string. For convenience, this
 /// class convert multiple mutable string toward a shared representation.
-class StringRef {
+class StringRef : public Ref<std::string> {
  public:
-  StringRef(std::string* ref) : address_(ref) {}
-  StringRef(std::string ref) : owned_(std::move(ref)) {}
+  using Ref<std::string>::Ref;
+
   StringRef(const wchar_t* ref) : StringRef(to_string(std::wstring(ref))) {}
   StringRef(const char* ref) : StringRef(std::string(ref)) {}
-  StringRef(const StringRef& t) : owned_(t.owned_), address_(t.address_) {}
-  StringRef& operator=(const StringRef& t) {
-    owned_ = t.owned_;
-    address_ = t.address_;
-    return *this;
-  }
-  std::string& operator*() { return address_ ? *address_ : owned_; }
-  std::string& operator()() { return address_ ? *address_ : owned_; }
-  std::string* operator->() { return address_ ? address_ : &owned_; }
-
- private:
-  std::string owned_;
-  std::string* address_ = nullptr;
 };
 
 /// @brief An adapter. Own or reference a constant string. For convenience, this
 /// class convert multiple immutable string toward a shared representation.
-class ConstStringRef {
+class ConstStringRef : public ConstRef<std::string> {
  public:
-  ConstStringRef(const std::string* ref) : address_(ref) {}
-  ConstStringRef(const std::wstring* ref) : ConstStringRef(to_string(*ref)) {}
-  ConstStringRef(std::string ref) : owned_(std::move(ref)) {}
-  ConstStringRef(std::wstring ref) : ConstStringRef(to_string(ref)) {}
-  ConstStringRef(const wchar_t* ref) : ConstStringRef(std::wstring(ref)) {}
-  ConstStringRef(const char* ref)
-      : ConstStringRef(to_wstring(std::string(ref))) {}
-  ConstStringRef(const ConstStringRef& t)
-      : owned_(t.owned_), address_(t.address_) {}
-  ConstStringRef& operator=(const ConstStringRef& t) {
-    owned_ = t.owned_;
-    address_ = t.address_;
-    return *this;
-  }
-  ConstStringRef& operator=(ConstStringRef&& t) {
-    owned_ = std::move(t.owned_);
-    address_ = t.address_;
-    return *this;
-  }
-  const std::string& operator()() const {
-    return address_ ? *address_ : owned_;
-  }
-  const std::string& operator*() const { return address_ ? *address_ : owned_; }
-  const std::string* operator->() const {
-    return address_ ? address_ : &owned_;
-  }
+  using ConstRef<std::string>::ConstRef;
 
- private:
-  std::string owned_;
-  const std::string* address_ = nullptr;
+  ConstStringRef(const std::wstring* ref) : ConstStringRef(to_string(*ref)) {}
+  ConstStringRef(const std::wstring ref) : ConstStringRef(to_string(ref)) {}
+  ConstStringRef(const wchar_t* ref)
+      : ConstStringRef(to_string(std::wstring(ref))) {}
+  ConstStringRef(const char* ref) : ConstStringRef(std::string(ref)) {}
+
+  ConstStringRef& operator=(const ConstStringRef&) = default;
 };
 
 /// @brief An adapter. Reference a list of strings.
