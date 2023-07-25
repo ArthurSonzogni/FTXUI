@@ -8,7 +8,7 @@ function(example name)
   target_link_libraries(ftxui_example_${name} PUBLIC ${DIRECTORY_LIB})
   file(RELATIVE_PATH dir ${EXAMPLES_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
   set_property(GLOBAL APPEND PROPERTY FTXUI::EXAMPLES ${dir}/${name})
-  target_compile_features(ftxui_example_${name} PRIVATE cxx_std_17)
+  target_compile_features(ftxui_example_${name} PRIVATE cxx_std_20)
 endfunction(example)
 
 add_subdirectory(component)
