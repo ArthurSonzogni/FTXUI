@@ -5,7 +5,7 @@ Changelog
 ---
 
 ### Component
-- Bugfix: Support F1-F5 from OS terminal.
+- Bugfix: Support Fn keys for every terminal specifications.
 
 ### Dom
 - Feature: Add `hyperlink` decorator. For instance:
@@ -15,12 +15,12 @@ Changelog
   See the [OSC 8 page](https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda).
   FTXUI support proposed by @aaleino in [#662](https://github.com/ArthurSonzogni/FTXUI/issues/662).
 
+### Screen
+- Fix huge performance bug affecting some compilers about unicode bisection.
 
 ### Build
 - Check version compatibility when using cmake find_package()
-- Add `FTXUI_DEV_WARNING` options to turn on warnings when building FTXUI
-- Turn OFF by default `FTXUI_BUILD_DOCS`
-- Turn OFF by default `FTXUI_BUILD_EXAMPLE`
+- Fix missing includes for some gcc versions.
 
 4.1.1
 -----
