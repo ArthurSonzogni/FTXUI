@@ -428,9 +428,11 @@ Screen::Screen(int dimx, int dimy)
 #endif
 }
 
-/// Produce a std::string that can be used to print the Screen on the terminal.
-/// Don't forget to flush stdout. Alternatively, you can use Screen::Print();
-std::string Screen::ToString() {
+/// Produce a std::string that can be used to print the Screen on the
+/// terminal.
+/// @note Don't forget to flush stdout. Alternatively, you can use
+/// Screen::Print();
+std::string Screen::ToString() const {
   std::stringstream ss;
 
   Pixel previous_pixel;
@@ -456,21 +458,36 @@ std::string Screen::ToString() {
   return ss.str();
 }
 
-void Screen::Print() {
+// Print the Screen to the terminal.
+void Screen::Print() const {
   std::cout << ToString() << '\0' << std::flush;
 }
 
-/// @brief Access a character a given position.
-/// @param x The character position along the x-axis.
-/// @param y The character position along the y-axis.
+/// @brief Access a character in a cell at a given position.
+/// @param x The cell position along the x-axis.
+/// @param y The cell position along the y-axis.
 std::string& Screen::at(int x, int y) {
   return PixelAt(x, y).character;
 }
 
-/// @brief Access a Pixel at a given position.
-/// @param x The pixel position along the x-axis.
-/// @param y The pixel position along the y-axis.
+/// @brief Access a character in a cell at a given position.
+/// @param x The cell position along the x-axis.
+/// @param y The cell position along the y-axis.
+const std::string& Screen::at(int x, int y) const {
+  return PixelAt(x, y).character;
+}
+
+/// @brief Access a cell (Pixel) at a given position.
+/// @param x The cell position along the x-axis.
+/// @param y The cell position along the y-axis.
 Pixel& Screen::PixelAt(int x, int y) {
+  return stencil.Contain(x, y) ? pixels_[y][x] : dev_null_pixel();
+}
+
+/// @brief Access a cell (Pixel) at a given position.
+/// @param x The cell position along the x-axis.
+/// @param y The cell position along the y-axis.
+const Pixel& Screen::PixelAt(int x, int y) const {
   return stencil.Contain(x, y) ? pixels_[y][x] : dev_null_pixel();
 }
 

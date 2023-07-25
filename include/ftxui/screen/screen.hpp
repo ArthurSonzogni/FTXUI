@@ -66,13 +66,18 @@ class Screen {
   static Screen Create(Dimensions dimension);
   static Screen Create(Dimensions width, Dimensions height);
 
-  // Node write into the screen using Screen::at.
+  // Access a character in the grid at a given position.
   std::string& at(int x, int y);
-  Pixel& PixelAt(int x, int y);
+  const std::string& at(int x, int y) const;
 
-  // Convert the screen into a printable string in the terminal.
-  std::string ToString();
-  void Print();
+  // Access a cell (Pixel) in the grid at a given position.
+  Pixel& PixelAt(int x, int y);
+  const Pixel& PixelAt(int x, int y) const;
+
+  std::string ToString() const;
+
+  // Print the Screen on to the terminal.
+  void Print() const;
 
   // Get screen dimensions.
   int dimx() const { return dimx_; }
@@ -81,7 +86,7 @@ class Screen {
   // Move the terminal cursor n-lines up with n = dimy().
   std::string ResetPosition(bool clear = false) const;
 
-  // Fill with space.
+  // Fill the screen with space.
   void Clear();
 
   void ApplyShader();
