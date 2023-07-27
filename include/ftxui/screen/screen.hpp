@@ -12,10 +12,27 @@
 
 namespace ftxui {
 
+typedef union
+{
+    struct
+    {
+      uint8_t blink : 1;
+      uint8_t bold : 1;
+      uint8_t dim : 1;
+      uint8_t inverted : 1;
+      uint8_t underlined : 1;
+      uint8_t underlined_double : 1;
+      uint8_t strikethrough : 1;
+    } bit;
+    uint8_t all;
+} Style;
+
+
 /// @brief A unicode character and its associated style.
 /// @ingroup screen
 struct Pixel {
   bool operator==(const Pixel& other) const;
+  bool isSameStyle(const Pixel& other) const;
 
   // The graphemes stored into the pixel. To support combining characters,
   // like: a⃦, this can potentially contain multiple codepoints.
@@ -30,24 +47,14 @@ struct Pixel {
   Color foreground_color = Color::Default;
 
   // A bit field representing the style:
-  bool blink : 1;
-  bool bold : 1;
-  bool dim : 1;
-  bool inverted : 1;
-  bool underlined : 1;
-  bool underlined_double : 1;
-  bool strikethrough : 1;
+  Style style;
+  
   bool automerge : 1;
 
   Pixel()
-      : blink(false),
-        bold(false),
-        dim(false),
-        inverted(false),
-        underlined(false),
-        underlined_double(false),
-        strikethrough(false),
-        automerge(false) {}
+      : automerge(false) {
+        style.all = 0;
+  }
 };
 
 /// @brief Define how the Screen's dimensions should look like.

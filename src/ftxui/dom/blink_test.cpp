@@ -12,7 +12,7 @@ TEST(BlinkTest, Basic) {
   auto element = text("text") | blink;
   Screen screen(5, 1);
   Render(screen, element);
-  EXPECT_TRUE(screen.PixelAt(0, 0).blink);
+  EXPECT_TRUE(screen.PixelAt(0, 0).style.bit.blink);
 }
 
 }  // namespace ftxui

@@ -19,7 +19,7 @@ Element underlinedDouble(Element child) {
     void Render(Screen& screen) override {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).underlined_double = true;
+          screen.PixelAt(x, y).style.bit.underlined_double = true;
         }
       }
       Node::Render(screen);

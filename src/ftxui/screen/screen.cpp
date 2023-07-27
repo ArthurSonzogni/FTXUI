@@ -55,69 +55,97 @@ void UpdatePixelStyle(const Screen* screen,
                       std::stringstream& ss,
                       Pixel& previous,
                       const Pixel& next) {
+  
   // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
   if (next.hyperlink != previous.hyperlink) {
     ss << "\x1B]8;;" << screen->Hyperlink(next.hyperlink) << "\x1B\\";
   }
 
-  if ((!next.bold && previous.bold) ||  //
-      (!next.dim && previous.dim)) {
-    ss << "\x1B[22m";  // BOLD_RESET and DIM_RESET
-    // We might have wrongfully reset dim or bold because they share the same
-    // resetter. Take it into account so that the side effect will cause it to
-    // be set again below.
-    previous.bold = false;
-    previous.dim = false;
-  }
+  // This XOR lets us see what changed between the previous and next style
+  Style styleChanged;
+  styleChanged.all = static_cast<uint8_t>(next.style.all ^ previous.style.all);
 
-  if ((!next.underlined && previous.underlined) ||
-      (!next.underlined_double && previous.underlined_double)) {
-    // We might have wrongfully reset underlined or underlinedbold because they
-    // share the same resetter. Take it into account so that the side effect
-    // will cause it to be set again below.
-    ss << "\x1B[24m";  // UNDERLINED_RESET
-    previous.underlined = false;
-    previous.underlined_double = false;
-  }
+  // If anything changed in the style
+  if(styleChanged.all)
+  {
+    // This lets us get a bitfield at 1 when the style got turned off
+    Style styleTurnedOff;
+    styleTurnedOff.all = static_cast<uint8_t>(styleChanged.all & previous.style.all);
 
-  if (next.bold && !previous.bold) {
-    ss << "\x1B[1m";  // BOLD_SET
-  }
+    if( styleTurnedOff.bit.bold || styleTurnedOff.bit.dim )
+    {
+      ss << "\x1B[22m";  // BOLD_RESET and DIM_RESET
+      // We might have wrongfully reset dim or bold because they share the same
+      // resetter. Take it into account so that the side effect will cause it to
+      // be set again below.
+      previous.style.bit.bold = false;
+      previous.style.bit.dim = false;
+    }
 
-  if (next.dim && !previous.dim) {
-    ss << "\x1B[2m";  // DIM_SET
-  }
+    if( styleTurnedOff.bit.underlined || styleTurnedOff.bit.underlined_double )
+    {
+      // We might have wrongfully reset underlined or underlinedbold because they
+      // share the same resetter. Take it into account so that the side effect
+      // will cause it to be set again below.
+      ss << "\x1B[24m";  // UNDERLINED_RESET
+      previous.style.bit.underlined = false;
+      previous.style.bit.underlined_double = false;
+    }
 
-  if (next.underlined && !previous.underlined) {
-    ss << "\x1B[4m";  // UNDERLINED_SET
-  }
+    // We refresh our style changes as we may have changed some styles just above
+    styleChanged.all = (next.style.all ^ previous.style.all);
+    styleTurnedOff.all = (styleChanged.all & previous.style.all);
 
-  if (next.blink && !previous.blink) {
-    ss << "\x1B[5m";  // BLINK_SET
-  }
+    // This lets us get a bitfield at 1 when the style got turned on
+    Style styleTurnedOn;
+    styleTurnedOn.all = static_cast<uint8_t>(styleChanged.all & next.style.all);
 
-  if (!next.blink && previous.blink) {
-    ss << "\x1B[25m";  // BLINK_RESET
-  }
+    if( styleTurnedOn.bit.bold )
+    {
+      ss << "\x1B[1m";  // BOLD_SET
+    }
 
-  if (next.inverted && !previous.inverted) {
-    ss << "\x1B[7m";  // INVERTED_SET
-  }
+    if( styleTurnedOn.bit.dim )
+    {
+      ss << "\x1B[2m";  // DIM_SET
+    }
 
-  if (!next.inverted && previous.inverted) {
-    ss << "\x1B[27m";  // INVERTED_RESET
-  }
+    if( styleTurnedOn.bit.underlined )
+    {
+      ss << "\x1B[4m";  // UNDERLINED_SET
+    }
 
-  if (next.strikethrough && !previous.strikethrough) {
-    ss << "\x1B[9m";  // CROSSED_OUT
-  }
+    if( styleTurnedOn.bit.blink )
+    {
+      ss << "\x1B[5m";  // BLINK_SET
+    }
+    else if( styleTurnedOff.bit.blink)
+    {
+      ss << "\x1B[25m";  // BLINK_RESET
+    }
 
-  if (!next.strikethrough && previous.strikethrough) {
-    ss << "\x1B[29m";  // CROSSED_OUT_RESET
-  }
+    if( styleTurnedOn.bit.inverted )
+    {
+      ss << "\x1B[7m";  // INVERTED_SET
+    }
+    else if( styleTurnedOff.bit.inverted)
+    {
+      ss << "\x1B[27m";  // INVERTED_RESET
+    }
 
-  if (next.underlined_double && !previous.underlined_double) {
-    ss << "\x1B[21m";  // DOUBLE_UNDERLINED_SET
+    if( styleTurnedOn.bit.strikethrough )
+    {
+      ss << "\x1B[9m";  // CROSSED_OUT
+    }
+    else if( styleTurnedOff.bit.strikethrough)
+    {
+      ss << "\x1B[29m";  // CROSSED_OUT_RESET
+    }
+
+    if( styleTurnedOn.bit.underlined_double )
+    {
+      ss << "\x1B[21m";  // DOUBLE_UNDERLINED_SET
+    }
   }
 
   if (next.foreground_color != previous.foreground_color ||
@@ -377,12 +405,8 @@ bool Pixel::operator==(const Pixel& other) const {
   return character == other.character &&                //
          background_color == other.background_color &&  //
          foreground_color == other.foreground_color &&  //
-         blink == other.blink &&                        //
-         bold == other.bold &&                          //
-         dim == other.dim &&                            //
-         inverted == other.inverted &&                  //
-         underlined == other.underlined &&              //
-         automerge == other.automerge;                  //
+         automerge == other.automerge &&                //
+         style.all == other.style.all;                  //
 }
 
 /// A fixed dimension.

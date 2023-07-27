@@ -12,7 +12,7 @@ TEST(BoldTest, Basic) {
   auto element = text("text") | bold;
   Screen screen(5, 1);
   Render(screen, element);
-  EXPECT_TRUE(screen.PixelAt(0, 0).bold);
+  EXPECT_TRUE(screen.PixelAt(0, 0).style.bit.bold);
 }
 
 }  // namespace ftxui

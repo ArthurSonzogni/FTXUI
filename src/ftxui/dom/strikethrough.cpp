@@ -19,7 +19,7 @@ Element strikethrough(Element child) {
     void Render(Screen& screen) override {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).strikethrough = true;
+          screen.PixelAt(x, y).style.bit.strikethrough = true;
         }
       }
       Node::Render(screen);
