@@ -1,3 +1,4 @@
+#include <iostream>
 #include <benchmark/benchmark.h>
 
 #include "ftxui/dom/elements.hpp"  // for gauge, separator, operator|, text, Element, hbox, vbox, blink, border, inverted
@@ -43,9 +44,38 @@ static void BencharkText(benchmark::State& state) {
 }
 BENCHMARK(BencharkText)->DenseRange(0, 10, 1);
 
+static void BenchmarkStyle(benchmark::State& state) {
+  while (state.KeepRunning()) {
+    Elements elements;
+    for (int i = 0; i < state.range(0); ++i) {
+      elements.push_back(vbox({
+          text("Test") | bold,
+          text("Test") | dim,
+          text("Test") | inverted,
+          text("Test") | underlined,
+          text("Test") | underlinedDouble,
+          text("Test") | strikethrough,
+          text("Test") | color(Color::Red),
+          text("Test") | bgcolor(Color::Red),
+          text("Test") | blink,
+          text("Test") | automerge,
+      }));
+      elements.push_back(separator());
+    }
+    auto document = hbox(std::move(elements));
+    Screen screen(state.range(1), state.range(1));
+    Render(screen, document);
+  }
+}
+BENCHMARK(BenchmarkStyle)
+    ->ArgsProduct({
+        benchmark::CreateDenseRange(1, 10, 3),     // Number of elements.
+        benchmark::CreateDenseRange(10, 200, 20),  // Screen width.
+    });
+
 }  // namespace ftxui
 // NOLINTEND
 
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.l
+// the LICENSE file.
