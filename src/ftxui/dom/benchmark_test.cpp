@@ -27,6 +27,7 @@ static void BencharkBasic(benchmark::State& state) {
     auto root = gauge(1.0);
     Screen screen(80, state.range(0));
     Render(screen, root);
+    auto str = screen.ToString();
   }
 }
 BENCHMARK(BencharkBasic)->DenseRange(0, 256, 16);
@@ -40,6 +41,7 @@ static void BencharkText(benchmark::State& state) {
     auto document = paragraph(content);
     Screen screen(200, 200);
     Render(screen, document);
+    auto str = screen.ToString();
   }
 }
 BENCHMARK(BencharkText)->DenseRange(0, 10, 1);
@@ -65,6 +67,7 @@ static void BenchmarkStyle(benchmark::State& state) {
     auto document = hbox(std::move(elements));
     Screen screen(state.range(1), state.range(1));
     Render(screen, document);
+    auto str = screen.ToString();
   }
 }
 BENCHMARK(BenchmarkStyle)
