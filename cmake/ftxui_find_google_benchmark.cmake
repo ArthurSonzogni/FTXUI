@@ -13,7 +13,7 @@ include(FetchContent)
 
 FetchContent_Declare(googlebenchmark
   GIT_REPOSITORY "https://github.com/google/benchmark"
-  GIT_TAG        62937f91b5c763a8e119d0c20c67b87bde8eff1c 
+  GIT_TAG        "v1.8.2"
   GIT_PROGRESS   TRUE
 )
 
