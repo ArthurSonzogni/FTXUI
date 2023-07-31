@@ -32,7 +32,7 @@ int GlyphCount(const std::string& input);
 
 // Properties from:
 // https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
-enum class WordBreakProperty {
+enum class WordBreakProperty : int8_t {
   ALetter,
   CR,
   Double_Quote,
