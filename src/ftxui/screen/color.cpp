@@ -35,7 +35,7 @@ const std::array<const char*, 33> palette16code = {
 }  // namespace
 
 bool Color::operator==(const Color& rhs) const {
-  return color.all == rhs.color.all && type_ == rhs.type_;
+  return color.all == rhs.color.all;
 }
 
 bool Color::operator!=(const Color& rhs) const {
@@ -43,7 +43,7 @@ bool Color::operator!=(const Color& rhs) const {
 }
 
 std::string Color::Print(bool is_background_color) const {
-  switch (type_) {
+  switch (color.channel.type_) {
     case ColorType::Palette1:
       return is_background_color ? "49"s : "39"s;
 
@@ -72,17 +72,15 @@ Color::Color(Palette1 /*value*/) : Color() {}
 
 /// @brief Build a transparent using Palette16 colors.
 /// @ingroup screen
-Color::Color(Palette16 index) : type_(ColorType::Palette16) {
-    color.channel.red_ = index;
+Color::Color(Palette16 index) : color(index) {
 }
 
 /// @brief Build a transparent using Palette256 colors.
 /// @ingroup screen
-Color::Color(Palette256 index) : type_(ColorType::Palette256), color(index) {
+Color::Color(Palette256 index) : color(index) {
   if (Terminal::ColorSupport() >= Terminal::Color::Palette256) {
     return;
   }
-  type_ = ColorType::Palette16;
   color.channel.red_ = GetColorInfo(Color::Palette256(color.channel.red_)).index_16;
 }
 
@@ -94,7 +92,7 @@ Color::Color(Palette256 index) : type_(ColorType::Palette256), color(index) {
 /// @param blue The quantity of blue [0,255]
 /// @ingroup screen
 Color::Color(uint8_t red, uint8_t green, uint8_t blue)
-    : type_(ColorType::TrueColor), color(red, green, blue) {
+    : color(red, green, blue) {
   if (Terminal::ColorSupport() == Terminal::Color::TrueColor) {
     return;
   }
@@ -118,10 +116,10 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
   }
 
   if (Terminal::ColorSupport() == Terminal::Color::Palette256) {
-    type_ = ColorType::Palette256;
+    color.channel.type_ = ColorType::Palette256;
     color.channel.red_ = best;
   } else {
-    type_ = ColorType::Palette16;
+    color.channel.type_ = ColorType::Palette16;
     color.channel.red_ = GetColorInfo(Color::Palette256(best)).index_16;
   }
 }
@@ -172,8 +170,8 @@ Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
 
 // static
 Color Color::Interpolate(float t, const Color& a, const Color& b) {
-  if (a.type_ == ColorType::Palette1 ||  //
-      b.type_ == ColorType::Palette1) {
+  if (a.color.channel.type_ == ColorType::Palette1 ||  //
+      b.color.channel.type_ == ColorType::Palette1) {
     if (t < 0.5F) {  // NOLINT
       return a;
     } else {
@@ -183,7 +181,7 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
 
   auto get_color = [](const Color& color,  //
                       uint8_t* red, uint8_t* green, uint8_t* blue) {
-    switch (color.type_) {
+    switch (color.color.channel.type_) {
       case ColorType::Palette1: {
         return;
       }

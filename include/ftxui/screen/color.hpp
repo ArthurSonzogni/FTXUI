@@ -314,13 +314,12 @@ class Color {
     Palette256,
     TrueColor,
   };
-  ColorType type_ = ColorType::Palette1;
-
 
   typedef union ColorRGB
   {
     struct
     {
+      ColorType type_ = ColorType::Palette1;
       uint8_t red_ = 0;
       uint8_t green_ = 0;
       uint8_t blue_ = 0;
@@ -328,8 +327,10 @@ class Color {
     uint32_t all;
 
     ColorRGB() { all = 0; }
-    ColorRGB(uint8_t index) { channel.red_ = index; }
+    ColorRGB(Palette16 index) { channel.type_ = ColorType::Palette16; channel.red_ = index; }
+    ColorRGB(Palette256 index) { channel.type_ = ColorType::Palette16; channel.red_ = index; }
     ColorRGB(uint8_t red, uint8_t green, uint8_t blue) {
+      channel.type_ = ColorType::TrueColor;
       channel.red_ = red;
       channel.green_ = green;
       channel.blue_ = blue;
