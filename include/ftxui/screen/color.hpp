@@ -315,9 +315,28 @@ class Color {
     TrueColor,
   };
   ColorType type_ = ColorType::Palette1;
-  uint8_t red_ = 0;
-  uint8_t green_ = 0;
-  uint8_t blue_ = 0;
+
+
+  typedef union ColorRGB
+  {
+    struct
+    {
+      uint8_t red_ = 0;
+      uint8_t green_ = 0;
+      uint8_t blue_ = 0;
+    } channel;
+    uint32_t all;
+
+    ColorRGB() { all = 0; }
+    ColorRGB(uint8_t index) { channel.red_ = index; }
+    ColorRGB(uint8_t red, uint8_t green, uint8_t blue) {
+      channel.red_ = red;
+      channel.green_ = green;
+      channel.blue_ = blue;
+    }
+  } ColorRGB;
+
+  ColorRGB color;
 };
 
 inline namespace literals {
