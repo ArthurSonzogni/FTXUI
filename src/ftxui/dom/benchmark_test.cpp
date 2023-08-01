@@ -59,6 +59,9 @@ static void BenchmarkStyle(benchmark::State& state) {
           text("Test") | strikethrough,
           text("Test") | color(Color::Red),
           text("Test") | bgcolor(Color::Red),
+          text("Test") | color(Color::RGB(42, 87, 124)),
+          text("Test") | bgcolor(Color::RGB(42, 87, 124)),
+          text("Test") | color(Color::RGB(42, 87, 124)) | bgcolor(Color::RGB(172, 94, 212)),
           text("Test") | blink,
           text("Test") | automerge,
       }));
