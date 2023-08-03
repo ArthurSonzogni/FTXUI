@@ -35,6 +35,10 @@ current (development)
   See the [OSC 8 page](https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda).
   FTXUI support proposed by @aaleino in [#662](https://github.com/ArthurSonzogni/FTXUI/issues/662).
 
+### Screen
+- Breaking: `WordBreakProperty` becomes a uint8_t enum. This yields a 0.8%
+  performance improvement.
+
 
 ### Build
 - Check version compatibility when using cmake find_package()
