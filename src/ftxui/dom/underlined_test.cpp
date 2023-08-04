@@ -12,7 +12,7 @@ TEST(UnderlinedTest, Basic) {
   auto element = text("text") | underlined;
   Screen screen(5, 1);
   Render(screen, element);
-  EXPECT_TRUE(screen.PixelAt(0, 0).style.bit.underlined);
+  EXPECT_TRUE(screen.PixelAt(0, 0).underlined);
 }
 
 }  // namespace ftxui

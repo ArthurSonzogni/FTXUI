@@ -17,7 +17,7 @@ class Underlined : public NodeDecorator {
     Node::Render(screen);
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).style.bit.underlined = true;
+        screen.PixelAt(x, y).underlined = true;
       }
     }
   }

@@ -114,8 +114,8 @@ int main() {
     c.DrawText(mouse_x, mouse_y, "This is a piece of text with effects",
                [](Pixel& p) {
                  p.foreground_color = Color::Red;
-                 p.style.bit.underlined = true;
-                 p.style.bit.bold = true;
+                 p.underlined = true;
+                 p.bold = true;
                });
     return canvas(std::move(c));
   });

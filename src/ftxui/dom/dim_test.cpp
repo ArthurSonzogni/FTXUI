@@ -12,7 +12,7 @@ TEST(DimTest, Basic) {
   auto element = text("text") | dim;
   Screen screen(5, 1);
   Render(screen, element);
-  EXPECT_TRUE(screen.PixelAt(0, 0).style.bit.dim);
+  EXPECT_TRUE(screen.PixelAt(0, 0).dim);
 }
 
 }  // namespace ftxui

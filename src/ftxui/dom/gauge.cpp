@@ -115,7 +115,7 @@ class Gauge : public Node {
 
     if (invert) {
       for (int x = box_.x_min; x <= box_.x_max; x++) {
-        screen.PixelAt(x, y).style.bit.inverted ^= true;
+        screen.PixelAt(x, y).inverted ^= true;
       }
     }
   }
@@ -145,7 +145,7 @@ class Gauge : public Node {
 
     if (invert) {
       for (int y = box_.y_min; y <= box_.y_max; y++) {
-        screen.PixelAt(x, y).style.bit.inverted ^= true;
+        screen.PixelAt(x, y).inverted ^= true;
       }
     }
   }

@@ -15,7 +15,7 @@ int main() {
 
   c.DrawText(0, 0, "This is a canvas", [](Pixel& p) {
     p.foreground_color = Color::Red;
-    p.style.bit.underlined = true;
+    p.underlined = true;
   });
 
   // Triangle:
