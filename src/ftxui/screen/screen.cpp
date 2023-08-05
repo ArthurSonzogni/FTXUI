@@ -60,41 +60,38 @@ void UpdatePixelStyle(const Screen* screen,
     ss << "\x1B]8;;" << screen->Hyperlink(next.hyperlink) << "\x1B\\";
   }
 
-  if (previous._packed != next._packed) {
+  // Bold
+  if (next.bold != previous.bold || next.dim != previous.dim) {
+    ss << (next.bold  ? "\x1B[1m"     // BOLD_SET
+           : next.dim ? "\x1B[2m"     // DIM_SET
+                      : "\x1B[22m");  // BOLD_RESET and DIM_RESET
+  }
 
-    // Bold
-    if (next.bold != previous.bold || next.dim != previous.dim) {
-      ss << (next.bold  ? "\x1B[1m"     // BOLD_SET
-             : next.dim ? "\x1B[2m"     // DIM_SET
-                        : "\x1B[22m");  // BOLD_RESET and DIM_RESET
-    }
+  // Underline
+  if (next.underlined != previous.underlined ||
+      next.underlined_double != previous.underlined_double) {
+    ss << (next.underlined ? "\x1B[4m"  // UNDERLINED_SET
+           : next.underlined_double
+               ? "\x1B[21m"    // DUNDERLINED_SET
+               : "\x1B[24m");  // UNDERLINED_RESET && DUNDERLINED_RESET
+  }
 
-    // Underline
-    if (next.underlined != previous.underlined ||
-        next.underlined_double != previous.underlined_double) {
-      ss << (next.underlined ? "\x1B[4m"  // UNDERLINED_SET
-             : next.underlined_double
-                 ? "\x1B[21m"    // DUNDERLINED_SET
-                 : "\x1B[24m");  // UNDERLINED_RESET && DUNDERLINED_RESET
-    }
+  // Blink
+  if (next.blink != previous.blink) {
+    ss << (next.blink ? "\x1B[5m"     // BLINK_SET
+                      : "\x1B[25m");  // BLINK_RESET
+  }
 
-    // Blink
-    if (next.blink != previous.blink) {
-      ss << (next.blink ? "\x1B[5m"     // BLINK_SET
-                        : "\x1B[25m");  // BLINK_RESET
-    }
+  // Inverted
+  if (next.inverted != previous.inverted) {
+    ss << (next.inverted ? "\x1B[7m"     // INVERTED_SET
+                         : "\x1B[27m");  // INVERTED_RESET
+  }
 
-    // Inverted
-    if (next.inverted != previous.inverted) {
-      ss << (next.inverted ? "\x1B[7m"     // INVERTED_SET
-                           : "\x1B[27m");  // INVERTED_RESET
-    }
-
-    // StrikeThrough
-    if (next.strikethrough != previous.strikethrough) {
-      ss << (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
-                                : "\x1B[29m");  // CROSSED_OUT_RESET
-    }
+  // StrikeThrough
+  if (next.strikethrough != previous.strikethrough) {
+    ss << (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
+                              : "\x1B[29m");  // CROSSED_OUT_RESET
   }
 
   if (next.foreground_color != previous.foreground_color ||
@@ -350,13 +347,6 @@ bool ShouldAttemptAutoMerge(Pixel& pixel) {
 
 }  // namespace
 
-bool Pixel::operator==(const Pixel& other) const {
-  return character == other.character &&                //
-         background_color == other.background_color &&  //
-         foreground_color == other.foreground_color &&  //
-         _packed == other._packed;
-}
-
 /// A fixed dimension.
 /// @see Fit
 /// @see Full
@@ -387,7 +377,7 @@ Screen::Screen(int dimx, int dimy)
     : stencil{0, dimx - 1, 0, dimy - 1},
       dimx_(dimx),
       dimy_(dimy),
-      pixels_(dimy, std::vector<Pixel>(dimx)) {
+      pixels_(dimy, std::vector<Pixel>(dimx, Pixel{})) {
 #if defined(_WIN32)
   // The placement of this call is a bit weird, however we can assume that
   // anybody who instantiates a Screen object eventually wants to output
@@ -407,8 +397,8 @@ Screen::Screen(int dimx, int dimy)
 std::string Screen::ToString() const {
   std::stringstream ss;
 
-  Pixel previous_pixel;
-  const Pixel final_pixel;
+  Pixel previous_pixel{};
+  const Pixel final_pixel{};
 
   for (int y = 0; y < dimy_; ++y) {
     if (y != 0) {
@@ -504,7 +494,7 @@ std::string Screen::ResetPosition(bool clear) const {
 void Screen::Clear() {
   for (auto& line : pixels_) {
     for (auto& cell : line) {
-      cell = Pixel();
+      cell = Pixel{};
     }
   }
   cursor_.x = dimx_ - 1;

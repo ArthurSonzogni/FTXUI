@@ -15,23 +15,15 @@ namespace ftxui {
 /// @brief A unicode character and its associated style.
 /// @ingroup screen
 struct Pixel {
-  Pixel() : _packed(0) {}
-  bool operator==(const Pixel& other) const;
-
   // A bit field representing the style:
-  union {
-    struct {
-      bool blink : 1;
-      bool bold : 1;
-      bool dim : 1;
-      bool inverted : 1;
-      bool underlined : 1;
-      bool underlined_double : 1;
-      bool strikethrough : 1;
-      bool automerge : 1;
-    };
-    uint8_t _packed;  // Non public.
-  };
+  bool blink : 1;
+  bool bold : 1;
+  bool dim : 1;
+  bool inverted : 1;
+  bool underlined : 1;
+  bool underlined_double : 1;
+  bool strikethrough : 1;
+  bool automerge : 1;
 
   // The hyperlink associated with the pixel.
   // 0 is the default value, meaning no hyperlink.
