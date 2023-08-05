@@ -17,28 +17,16 @@ namespace ftxui {
 /// @ingroup screen
 class Color {
  public:
-  enum Palette1 : uint8_t;
-  enum Palette16 : uint8_t;
-  enum Palette256 : uint8_t;
-
-  Color();                  // Transparent.
-  Color(Palette1 index);    // Transparent.
-  Color(Palette16 index);   // Implicit conversion from index to Color.
-  Color(Palette256 index);  // Implicit conversion from index to Color.
-  Color(uint8_t red, uint8_t green, uint8_t blue);
-  static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
-  static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);
-  static Color Interpolate(float t, const Color& a, const Color& b);
 
   //---------------------------
   // List of colors:
   //---------------------------
   // clang-format off
-  enum Palette1 : uint8_t{
+  typedef enum {
     Default, // Transparent
-  };
+  } Palette1;
 
-  enum Palette16 : uint8_t {
+  typedef enum {
     Black        = 0,
     Red          = 1,
     Green        = 2,
@@ -55,9 +43,9 @@ class Color {
     MagentaLight = 13,
     CyanLight    = 14,
     White        = 15,
-  };
+  } Palette16;
 
-  enum Palette256 : uint8_t {
+  typedef enum {
     Aquamarine1        = 122,
     Aquamarine1Bis     = 86,
     Aquamarine3        = 79,
@@ -298,8 +286,18 @@ class Color {
     Yellow3Bis         = 184,
     Yellow4            = 100,
     Yellow4Bis         = 106,
-  };
+  } Palette256;
+
   // clang-format on
+
+  Color();                  // Transparent.
+  Color(Palette1 index);    // Transparent.
+  Color(Palette16 index);   // Implicit conversion from index to Color.
+  Color(Palette256 index);  // Implicit conversion from index to Color.
+  Color(uint8_t red, uint8_t green, uint8_t blue);
+  static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
+  static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);
+  static Color Interpolate(float t, const Color& a, const Color& b);
 
   // --- Operators ------
   bool operator==(const Color& rhs) const;
@@ -308,18 +306,18 @@ class Color {
   std::string Print(bool is_background_color) const;
 
  private:
-  enum class ColorType : uint8_t {
-    Palette1,
-    Palette16,
-    Palette256,
+  typedef enum {
+    ColorPalette1,
+    ColorPalette16,
+    ColorPalette256,
     TrueColor,
-  };
+  } ColorType;
 
   typedef union ColorRGB
   {
     struct
     {
-      ColorType type_ = ColorType::Palette1;
+      ColorType type_ = ColorType::ColorPalette1;
       uint8_t red_ = 0;
       uint8_t green_ = 0;
       uint8_t blue_ = 0;
@@ -327,8 +325,8 @@ class Color {
     uint32_t all;
 
     ColorRGB() { all = 0; }
-    ColorRGB(Palette16 index) { channel.type_ = ColorType::Palette16; channel.red_ = index; }
-    ColorRGB(Palette256 index) { channel.type_ = ColorType::Palette16; channel.red_ = index; }
+    ColorRGB(Palette16 index) { channel.type_ = ColorType::ColorPalette16; channel.red_ = index; }
+    ColorRGB(Palette256 index) { channel.type_ = ColorType::ColorPalette256; channel.red_ = index; }
     ColorRGB(uint8_t red, uint8_t green, uint8_t blue) {
       channel.type_ = ColorType::TrueColor;
       channel.red_ = red;

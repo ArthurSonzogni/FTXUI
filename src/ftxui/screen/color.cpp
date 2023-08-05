@@ -303,13 +303,13 @@ std::string nbrToString[] = {
 
 std::string Color::Print(bool is_background_color) const {
   switch (color.channel.type_) {
-    case ColorType::Palette1:
+    case ColorType::ColorPalette1:
       return is_background_color ? "49"s : "39"s;
 
-    case ColorType::Palette16:
+    case ColorType::ColorPalette16:
       return palette16code[2 * color.channel.red_ + is_background_color];  // NOLINT;
 
-    case ColorType::Palette256:
+    case ColorType::ColorPalette256:
       return (is_background_color ? "48;5;"s : "38;5;"s) + nbrToString[color.channel.red_];
 
     case ColorType::TrueColor:
@@ -375,10 +375,10 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
   }
 
   if (Terminal::ColorSupport() == Terminal::Color::Palette256) {
-    color.channel.type_ = ColorType::Palette256;
+    color.channel.type_ = ColorType::ColorPalette256;
     color.channel.red_ = best;
   } else {
-    color.channel.type_ = ColorType::Palette16;
+    color.channel.type_ = ColorType::ColorPalette16;
     color.channel.red_ = GetColorInfo(Color::Palette256(best)).index_16;
   }
 }
@@ -429,8 +429,8 @@ Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
 
 // static
 Color Color::Interpolate(float t, const Color& a, const Color& b) {
-  if (a.color.channel.type_ == ColorType::Palette1 ||  //
-      b.color.channel.type_ == ColorType::Palette1) {
+  if (a.color.channel.type_ == ColorType::ColorPalette1 ||  //
+      b.color.channel.type_ == ColorType::ColorPalette1) {
     if (t < 0.5F) {  // NOLINT
       return a;
     } else {
@@ -441,11 +441,11 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
   auto get_color = [](const Color& color,  //
                       uint8_t* red, uint8_t* green, uint8_t* blue) {
     switch (color.color.channel.type_) {
-      case ColorType::Palette1: {
+      case ColorType::ColorPalette1: {
         return;
       }
 
-      case ColorType::Palette16: {
+      case ColorType::ColorPalette16: {
         const ColorInfo info = GetColorInfo(Color::Palette16(color.color.channel.red_));
         *red = info.red;
         *green = info.green;
@@ -453,7 +453,7 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
         return;
       }
 
-      case ColorType::Palette256: {
+      case ColorType::ColorPalette256: {
         const ColorInfo info = GetColorInfo(Color::Palette256(color.color.channel.red_));
         *red = info.red;
         *green = info.green;
