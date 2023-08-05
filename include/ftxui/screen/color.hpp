@@ -105,7 +105,7 @@ class Color {
     DeepPink3          = 161,
     DeepPink3Bis       = 162,
     DeepPink4          = 125,
-    DeepPink4Bis          = 89,
+    DeepPink4Bis       = 89,
     DeepPink4Ter       = 53,
     DeepSkyBlue1       = 39,
     DeepSkyBlue2       = 38,
