@@ -60,64 +60,41 @@ void UpdatePixelStyle(const Screen* screen,
     ss << "\x1B]8;;" << screen->Hyperlink(next.hyperlink) << "\x1B\\";
   }
 
-  if ((!next.bold && previous.bold) ||  //
-      (!next.dim && previous.dim)) {
-    ss << "\x1B[22m";  // BOLD_RESET and DIM_RESET
-    // We might have wrongfully reset dim or bold because they share the same
-    // resetter. Take it into account so that the side effect will cause it to
-    // be set again below.
-    previous.bold = false;
-    previous.dim = false;
-  }
+  if (previous._packed != next._packed) {
 
-  if ((!next.underlined && previous.underlined) ||
-      (!next.underlined_double && previous.underlined_double)) {
-    // We might have wrongfully reset underlined or underlinedbold because they
-    // share the same resetter. Take it into account so that the side effect
-    // will cause it to be set again below.
-    ss << "\x1B[24m";  // UNDERLINED_RESET
-    previous.underlined = false;
-    previous.underlined_double = false;
-  }
+    // Bold
+    if (next.bold != previous.bold || next.dim != previous.dim) {
+      ss << (next.bold  ? "\x1B[1m"     // BOLD_SET
+             : next.dim ? "\x1B[2m"     // DIM_SET
+                        : "\x1B[22m");  // BOLD_RESET and DIM_RESET
+    }
 
-  if (next.bold && !previous.bold) {
-    ss << "\x1B[1m";  // BOLD_SET
-  }
+    // Underline
+    if (next.underlined != previous.underlined ||
+        next.underlined_double != previous.underlined_double) {
+      ss << (next.underlined ? "\x1B[4m"  // UNDERLINED_SET
+             : next.underlined_double
+                 ? "\x1B[21m"    // DUNDERLINED_SET
+                 : "\x1B[24m");  // UNDERLINED_RESET && DUNDERLINED_RESET
+    }
 
-  if (next.dim && !previous.dim) {
-    ss << "\x1B[2m";  // DIM_SET
-  }
+    // Blink
+    if (next.blink != previous.blink) {
+      ss << (next.blink ? "\x1B[5m"     // BLINK_SET
+                        : "\x1B[25m");  // BLINK_RESET
+    }
 
-  if (next.underlined && !previous.underlined) {
-    ss << "\x1B[4m";  // UNDERLINED_SET
-  }
+    // Inverted
+    if (next.inverted != previous.inverted) {
+      ss << (next.inverted ? "\x1B[7m"     // INVERTED_SET
+                           : "\x1B[27m");  // INVERTED_RESET
+    }
 
-  if (next.blink && !previous.blink) {
-    ss << "\x1B[5m";  // BLINK_SET
-  }
-
-  if (!next.blink && previous.blink) {
-    ss << "\x1B[25m";  // BLINK_RESET
-  }
-
-  if (next.inverted && !previous.inverted) {
-    ss << "\x1B[7m";  // INVERTED_SET
-  }
-
-  if (!next.inverted && previous.inverted) {
-    ss << "\x1B[27m";  // INVERTED_RESET
-  }
-
-  if (next.strikethrough && !previous.strikethrough) {
-    ss << "\x1B[9m";  // CROSSED_OUT
-  }
-
-  if (!next.strikethrough && previous.strikethrough) {
-    ss << "\x1B[29m";  // CROSSED_OUT_RESET
-  }
-
-  if (next.underlined_double && !previous.underlined_double) {
-    ss << "\x1B[21m";  // DOUBLE_UNDERLINED_SET
+    // StrikeThrough
+    if (next.strikethrough != previous.strikethrough) {
+      ss << (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
+                                : "\x1B[29m");  // CROSSED_OUT_RESET
+    }
   }
 
   if (next.foreground_color != previous.foreground_color ||
@@ -377,12 +354,7 @@ bool Pixel::operator==(const Pixel& other) const {
   return character == other.character &&                //
          background_color == other.background_color &&  //
          foreground_color == other.foreground_color &&  //
-         blink == other.blink &&                        //
-         bold == other.bold &&                          //
-         dim == other.dim &&                            //
-         inverted == other.inverted &&                  //
-         underlined == other.underlined &&              //
-         automerge == other.automerge;                  //
+         _packed == other._packed;
 }
 
 /// A fixed dimension.
