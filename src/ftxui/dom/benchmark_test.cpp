@@ -1,5 +1,5 @@
-#include <iostream>
 #include <benchmark/benchmark.h>
+#include <iostream>
 
 #include "ftxui/dom/elements.hpp"  // for gauge, separator, operator|, text, Element, hbox, vbox, blink, border, inverted
 #include "ftxui/dom/node.hpp"      // for Render
@@ -61,7 +61,8 @@ static void BenchmarkStyle(benchmark::State& state) {
           text("Test") | bgcolor(Color::Red),
           text("Test") | color(Color::RGB(42, 87, 124)),
           text("Test") | bgcolor(Color::RGB(42, 87, 124)),
-          text("Test") | color(Color::RGB(42, 87, 124)) | bgcolor(Color::RGB(172, 94, 212)),
+          text("Test") | color(Color::RGB(42, 87, 124)) |
+              bgcolor(Color::RGB(172, 94, 212)),
           text("Test") | blink,
           text("Test") | automerge,
       }));
