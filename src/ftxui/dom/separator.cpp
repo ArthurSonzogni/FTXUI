@@ -91,7 +91,7 @@ class SeparatorWithPixel : public SeparatorAuto {
   }
 
  private:
-  Pixel pixel_;
+  Pixel pixel_{};
 };
 
 /// @brief Draw a vertical or horizontal separation in between two other

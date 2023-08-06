@@ -40,7 +40,7 @@ namespace ftxui {
 namespace {
 
 Pixel& dev_null_pixel() {
-  static Pixel pixel;
+  static Pixel pixel{};
   return pixel;
 }
 

@@ -79,7 +79,7 @@ TEST(BorderTest, Styled) {
 }
 
 TEST(BorderTest, WithPixel) {
-  Pixel pixel;
+  Pixel pixel{};
   pixel.character = "o";
   auto element = text("text") | borderWith(pixel);
   Screen screen(5, 3);

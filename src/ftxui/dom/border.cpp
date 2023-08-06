@@ -129,7 +129,7 @@ class BorderPixel : public Node {
       : Node(std::move(children)), pixel_(std::move(pixel)) {}
 
  private:
-  Pixel pixel_;
+  Pixel pixel_{};
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
