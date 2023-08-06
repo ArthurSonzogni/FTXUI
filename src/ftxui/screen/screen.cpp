@@ -18,6 +18,23 @@
 #include <windows.h>
 #endif
 
+// Macro for hinting that an expression is likely to be false.
+#if !defined(FTXUI_UNLIKELY)
+#if defined(COMPILER_GCC) || defined(__clang__)
+#define FTXUI_UNLIKELY(x) __builtin_expect(!!(x), 0)
+#else
+#define FTXUI_UNLIKELY(x) (x)
+#endif  // defined(COMPILER_GCC)
+#endif  // !defined(FTXUI_UNLIKELY)
+
+#if !defined(FTXUI_LIKELY)
+#if defined(COMPILER_GCC) || defined(__clang__)
+#define FTXUI_LIKELY(x) __builtin_expect(!!(x), 1)
+#else
+#define FTXUI_LIKELY(x) (x)
+#endif  // defined(COMPILER_GCC)
+#endif  // !defined(FTXUI_LIKELY)
+
 namespace ftxui {
 
 namespace {
@@ -53,23 +70,23 @@ void WindowsEmulateVT100Terminal() {
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void UpdatePixelStyle(const Screen* screen,
                       std::stringstream& ss,
-                      Pixel& previous,
+                      const Pixel& previous,
                       const Pixel& next) {
   // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
-  if (next.hyperlink != previous.hyperlink) {
+  if (FTXUI_UNLIKELY(next.hyperlink != previous.hyperlink)) {
     ss << "\x1B]8;;" << screen->Hyperlink(next.hyperlink) << "\x1B\\";
   }
 
   // Bold
-  if (next.bold != previous.bold || next.dim != previous.dim) {
+  if (FTXUI_UNLIKELY(next.bold != previous.bold || next.dim != previous.dim)) {
     ss << (next.bold  ? "\x1B[1m"     // BOLD_SET
            : next.dim ? "\x1B[2m"     // DIM_SET
                       : "\x1B[22m");  // BOLD_RESET and DIM_RESET
   }
 
   // Underline
-  if (next.underlined != previous.underlined ||
-      next.underlined_double != previous.underlined_double) {
+  if (FTXUI_UNLIKELY(next.underlined != previous.underlined ||
+                     next.underlined_double != previous.underlined_double)) {
     ss << (next.underlined ? "\x1B[4m"  // UNDERLINED_SET
            : next.underlined_double
                ? "\x1B[21m"    // DUNDERLINED_SET
@@ -77,30 +94,28 @@ void UpdatePixelStyle(const Screen* screen,
   }
 
   // Blink
-  if (next.blink != previous.blink) {
+  if (FTXUI_UNLIKELY(next.blink != previous.blink)) {
     ss << (next.blink ? "\x1B[5m"     // BLINK_SET
                       : "\x1B[25m");  // BLINK_RESET
   }
 
   // Inverted
-  if (next.inverted != previous.inverted) {
+  if (FTXUI_UNLIKELY(next.inverted != previous.inverted)) {
     ss << (next.inverted ? "\x1B[7m"     // INVERTED_SET
                          : "\x1B[27m");  // INVERTED_RESET
   }
 
   // StrikeThrough
-  if (next.strikethrough != previous.strikethrough) {
+  if (FTXUI_UNLIKELY(next.strikethrough != previous.strikethrough)) {
     ss << (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
                               : "\x1B[29m");  // CROSSED_OUT_RESET
   }
 
-  if (next.foreground_color != previous.foreground_color ||
-      next.background_color != previous.background_color) {
+  if (FTXUI_UNLIKELY(next.foreground_color != previous.foreground_color ||
+                     next.background_color != previous.background_color)) {
     ss << "\x1B[" + next.foreground_color.Print(false) + "m";
     ss << "\x1B[" + next.background_color.Print(true) + "m";
   }
-
-  previous = next;
 }
 
 struct TileEncoding {
@@ -397,25 +412,31 @@ Screen::Screen(int dimx, int dimy)
 std::string Screen::ToString() const {
   std::stringstream ss;
 
-  Pixel previous_pixel{};
-  const Pixel final_pixel{};
+  const Pixel default_pixel{};
+  const Pixel* previous_pixel_ref = &default_pixel;
 
   for (int y = 0; y < dimy_; ++y) {
+    // New line in between two lines.
     if (y != 0) {
-      UpdatePixelStyle(this, ss, previous_pixel, final_pixel);
+      UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
+      previous_pixel_ref = &default_pixel;
       ss << "\r\n";
     }
+
+    // After printing a fullwith character, we need to skip the next cell.
     bool previous_fullwidth = false;
     for (const auto& pixel : pixels_[y]) {
       if (!previous_fullwidth) {
-        UpdatePixelStyle(this, ss, previous_pixel, pixel);
+        UpdatePixelStyle(this, ss, *previous_pixel_ref, pixel);
+        previous_pixel_ref = &pixel;
         ss << pixel.character;
       }
       previous_fullwidth = (string_width(pixel.character) == 2);
     }
   }
 
-  UpdatePixelStyle(this, ss, previous_pixel, final_pixel);
+  // Reset the style to default:
+  UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
 
   return ss.str();
 }
