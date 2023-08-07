@@ -89,9 +89,9 @@ void UpdatePixelStyle(const Screen* screen,
   // Underline
   if (FTXUI_UNLIKELY(next.underlined != prev.underlined ||
                      next.underlined_double != prev.underlined_double)) {
-    ss << "\x1B[24m";                                  // UNDERLINED_RESET_BOTH
-    ss << (next.underlined ? "\x1B[4m" : "");          // UNDERLINED_SET
-    ss << (next.underlined_double ? "\x1B[21m" : "");  // UNDERLINED_DOUBLE_SET
+    ss << (next.underlined          ? "\x1B[4m"     // UNDERLINE
+           : next.underlined_double ? "\x1B[21m"    // UNDERLINE_DOUBLE
+                                    : "\x1B[24m");  // UNDERLINE_RESET
   }
 
   // Blink
