@@ -91,7 +91,7 @@ Canvas::Canvas(int width, int height)
 /// @param y the y coordinate of the cell.
 Pixel Canvas::GetPixel(int x, int y) const {
   auto it = storage_.find(XY{x, y});
-  return (it == storage_.end()) ? Pixel{} : it->second.content;
+  return (it == storage_.end()) ? Pixel() : it->second.content;
 }
 
 /// @brief Draw a braille dot.

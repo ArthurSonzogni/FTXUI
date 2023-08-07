@@ -108,7 +108,7 @@ struct Canvas {
   };
   struct Cell {
     CellType type = kText;
-    Pixel content{};
+    Pixel content;
   };
   struct XY {
     int x;

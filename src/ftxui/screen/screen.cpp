@@ -40,7 +40,7 @@ namespace ftxui {
 namespace {
 
 Pixel& dev_null_pixel() {
-  static Pixel pixel{};
+  static Pixel pixel;
   return pixel;
 }
 
@@ -392,7 +392,7 @@ Screen::Screen(int dimx, int dimy)
     : stencil{0, dimx - 1, 0, dimy - 1},
       dimx_(dimx),
       dimy_(dimy),
-      pixels_(dimy, std::vector<Pixel>(dimx, Pixel{})) {
+      pixels_(dimy, std::vector<Pixel>(dimx)) {
 #if defined(_WIN32)
   // The placement of this call is a bit weird, however we can assume that
   // anybody who instantiates a Screen object eventually wants to output
@@ -412,7 +412,7 @@ Screen::Screen(int dimx, int dimy)
 std::string Screen::ToString() const {
   std::stringstream ss;
 
-  const Pixel default_pixel{};
+  const Pixel default_pixel;
   const Pixel* previous_pixel_ref = &default_pixel;
 
   for (int y = 0; y < dimy_; ++y) {
@@ -515,7 +515,7 @@ std::string Screen::ResetPosition(bool clear) const {
 void Screen::Clear() {
   for (auto& line : pixels_) {
     for (auto& cell : line) {
-      cell = Pixel{};
+      cell = Pixel();
     }
   }
   cursor_.x = dimx_ - 1;

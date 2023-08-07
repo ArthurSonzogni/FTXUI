@@ -6,6 +6,19 @@ project(ftxui
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
+    # Enable clang ubsan when in debug mode
+    if(CMAKE_BUILD_TYPE MATCHES Debug)
+        message("Adding ubsan!")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=integer")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=nullability")
+        set(CMAKE_EXE_LINKER_FLAGS
+            "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=implicit-conversion")
+        set(CMAKE_EXE_LINKER_FLAGS
+            "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=array-bounds")
+        add_compile_options(-fno-omit-frame-pointer)
+    endif()
+
 option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" OFF)
 option(FTXUI_BUILD_DOCS "Set to ON to build docs" OFF)

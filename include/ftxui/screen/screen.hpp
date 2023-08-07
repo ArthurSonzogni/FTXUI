@@ -15,6 +15,16 @@ namespace ftxui {
 /// @brief A unicode character and its associated style.
 /// @ingroup screen
 struct Pixel {
+  Pixel()
+      : blink{},
+        bold{},
+        dim{},
+        inverted{},
+        underlined{},
+        underlined_double{},
+        strikethrough{},
+        automerge{} {}
+
   // A bit field representing the style:
   bool blink : 1;
   bool bold : 1;

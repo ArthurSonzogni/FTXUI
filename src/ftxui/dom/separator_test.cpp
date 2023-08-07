@@ -107,7 +107,7 @@ TEST(SeparatorTest, Styled) {
 }
 
 TEST(SeparatorTest, WithPixel) {
-  Pixel pixel{};
+  Pixel pixel;
   pixel.character = "o";
   auto element = vbox({
       text("top"),
