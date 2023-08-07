@@ -237,7 +237,7 @@ class TabContainer : public ContainerBase {
 
 class StackedContainer : public ContainerBase {
  public:
-  StackedContainer(Components children)
+  explicit StackedContainer(Components children)
       : ContainerBase(std::move(children), nullptr) {}
 
  private:
@@ -252,7 +252,7 @@ class StackedContainer : public ContainerBase {
   }
 
   bool Focusable() const final {
-    for (auto& child : children_) {
+    for (const auto& child : children_) {
       if (child->Focusable()) {
         return true;
       }
@@ -261,13 +261,14 @@ class StackedContainer : public ContainerBase {
   }
 
   Component ActiveChild() final {
-    if (children_.size() == 0)
+    if (children_.empty()) {
       return nullptr;
+    }
     return children_[0];
   }
 
   void SetActiveChild(ComponentBase* child) final {
-    if (children_.size() == 0) {
+    if (children_.empty()) {
       return;
     }
 

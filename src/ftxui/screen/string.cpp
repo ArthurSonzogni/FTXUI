@@ -24,7 +24,7 @@ struct Interval {
 };
 
 // As of Unicode 13.0.0
-static constexpr std::array<Interval, 116> g_full_width_characters = {{
+constexpr std::array<Interval, 116> g_full_width_characters = {{
     {0x01100, 0x0115f}, {0x0231a, 0x0231b}, {0x02329, 0x0232a},
     {0x023e9, 0x023ec}, {0x023f0, 0x023f0}, {0x023f3, 0x023f3},
     {0x025fd, 0x025fe}, {0x02614, 0x02615}, {0x02648, 0x02653},
@@ -75,7 +75,7 @@ struct WordBreakPropertyInterval {
 
 // Properties from:
 // https://www.unicode.org/Public/UCD/latest/ucd/auxiliary/WordBreakProperty.txt
-static constexpr std::array<WordBreakPropertyInterval, 993>
+constexpr std::array<WordBreakPropertyInterval, 993>
     g_word_break_intervals = {{
         {0x0000A, 0x0000A, WBP::LF},
         {0x0000B, 0x0000C, WBP::Newline},
@@ -1090,7 +1090,7 @@ constexpr auto g_extend_characters{[]() constexpr {
   size_t index = 0;
   for (auto interval : g_word_break_intervals) {
     if (interval.property == WBP::Extend) {
-      result[index++] = {interval.first, interval.last};
+      result[index++] = {interval.first, interval.last};  // NOLINT
     }
   }
   return result;

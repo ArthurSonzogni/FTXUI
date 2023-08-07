@@ -91,7 +91,7 @@ Element DefaultRenderState(const WindowRenderState& state) {
   element = window(text(state.title), element);
   element |= clear_under;
 
-  Color color = Color::Red;
+  const Color color = Color::Red;
 
   element = std::make_shared<ResizeDecorator>(  //
       element,                                  //
@@ -107,7 +107,7 @@ Element DefaultRenderState(const WindowRenderState& state) {
 
 class WindowImpl : public ComponentBase, public WindowOptions {
  public:
-  WindowImpl(WindowOptions option) : WindowOptions(std::move(option)) {
+  explicit WindowImpl(WindowOptions option) : WindowOptions(std::move(option)) {
     if (!inner) {
       inner = Make<ComponentBase>();
     }
@@ -118,7 +118,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
   Element Render() final {
     auto element = ComponentBase::Render();
 
-    bool captureable =
+    const bool captureable =
         captured_mouse_ || ScreenInteractive::Active()->CaptureMouse();
 
     const WindowRenderState state = {

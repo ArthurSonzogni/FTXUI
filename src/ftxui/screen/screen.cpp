@@ -78,7 +78,7 @@ void UpdatePixelStyle(const Screen* screen,
   }
 
   // Bold
-  if (FTXUI_UNLIKELY(next.bold != prev.bold || next.dim != prev.dim)) {
+  if (FTXUI_UNLIKELY((next.bold ^ prev.bold) | (next.dim ^ prev.dim))) {
     // BOLD_AND_DIM_RESET:
     ss << ((prev.bold && !next.bold) || (prev.dim && !next.dim) ? "\x1B[22m"
                                                                 : "");

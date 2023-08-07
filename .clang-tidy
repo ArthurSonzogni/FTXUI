@@ -1,5 +1,6 @@
 ---
 Checks: "*,
+        -*-macro-usage,
         -*-magic-numbers,
         -*-narrowing-conversions
         -*-unnecessary-value-param,
@@ -22,7 +23,9 @@ Checks: "*,
         -readability-identifier-length,
         -readability-implicit-bool-conversion,
         -readability-non-const-parameter,
+        -readability-simplify-boolean-expr,
         -readability-static-accessed-through-instance,
+        -readability-use-anyofallof,
         -zircon-*,
 "
 WarningsAsErrors: ''
