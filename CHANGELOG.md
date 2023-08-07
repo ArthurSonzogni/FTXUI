@@ -38,6 +38,8 @@ current (development)
 ### Screen
 - Breaking: `WordBreakProperty` becomes a uint8_t enum. This yields a 0.8%
   performance improvement.
+- Breaking: Remove user defined Pixel constructor and equality operator.
+- Performance: 19% faster on benchmarks.
 
 
 ### Build

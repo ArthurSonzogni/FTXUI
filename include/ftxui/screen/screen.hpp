@@ -15,19 +15,15 @@ namespace ftxui {
 /// @brief A unicode character and its associated style.
 /// @ingroup screen
 struct Pixel {
-  bool operator==(const Pixel& other) const;
-
-  // The graphemes stored into the pixel. To support combining characters,
-  // like: a⃦, this can potentially contain multiple codepoints.
-  std::string character = " ";
-
-  // The hyperlink associated with the pixel.
-  // 0 is the default value, meaning no hyperlink.
-  uint8_t hyperlink = 0;
-
-  // Colors:
-  Color background_color = Color::Default;
-  Color foreground_color = Color::Default;
+  Pixel()
+      : blink(false),
+        bold(false),
+        dim(false),
+        inverted(false),
+        underlined(false),
+        underlined_double(false),
+        strikethrough(false),
+        automerge(false) {}
 
   // A bit field representing the style:
   bool blink : 1;
@@ -39,15 +35,17 @@ struct Pixel {
   bool strikethrough : 1;
   bool automerge : 1;
 
-  Pixel()
-      : blink(false),
-        bold(false),
-        dim(false),
-        inverted(false),
-        underlined(false),
-        underlined_double(false),
-        strikethrough(false),
-        automerge(false) {}
+  // The hyperlink associated with the pixel.
+  // 0 is the default value, meaning no hyperlink.
+  uint8_t hyperlink = 0;
+
+  // The graphemes stored into the pixel. To support combining characters,
+  // like: a⃦, this can potentially contain multiple codepoints.
+  std::string character = " ";
+
+  // Colors:
+  Color background_color = Color::Default;
+  Color foreground_color = Color::Default;
 };
 
 /// @brief Define how the Screen's dimensions should look like.

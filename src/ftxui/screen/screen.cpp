@@ -18,6 +18,23 @@
 #include <windows.h>
 #endif
 
+// Macro for hinting that an expression is likely to be false.
+#if !defined(FTXUI_UNLIKELY)
+#if defined(COMPILER_GCC) || defined(__clang__)
+#define FTXUI_UNLIKELY(x) __builtin_expect(!!(x), 0)
+#else
+#define FTXUI_UNLIKELY(x) (x)
+#endif  // defined(COMPILER_GCC)
+#endif  // !defined(FTXUI_UNLIKELY)
+
+#if !defined(FTXUI_LIKELY)
+#if defined(COMPILER_GCC) || defined(__clang__)
+#define FTXUI_LIKELY(x) __builtin_expect(!!(x), 1)
+#else
+#define FTXUI_LIKELY(x) (x)
+#endif  // defined(COMPILER_GCC)
+#endif  // !defined(FTXUI_LIKELY)
+
 namespace ftxui {
 
 namespace {
@@ -53,80 +70,53 @@ void WindowsEmulateVT100Terminal() {
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void UpdatePixelStyle(const Screen* screen,
                       std::stringstream& ss,
-                      Pixel& previous,
+                      const Pixel& prev,
                       const Pixel& next) {
   // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
-  if (next.hyperlink != previous.hyperlink) {
+  if (FTXUI_UNLIKELY(next.hyperlink != prev.hyperlink)) {
     ss << "\x1B]8;;" << screen->Hyperlink(next.hyperlink) << "\x1B\\";
   }
 
-  if ((!next.bold && previous.bold) ||  //
-      (!next.dim && previous.dim)) {
-    ss << "\x1B[22m";  // BOLD_RESET and DIM_RESET
-    // We might have wrongfully reset dim or bold because they share the same
-    // resetter. Take it into account so that the side effect will cause it to
-    // be set again below.
-    previous.bold = false;
-    previous.dim = false;
+  // Bold
+  if (FTXUI_UNLIKELY(next.bold != prev.bold || next.dim != prev.dim)) {
+    // BOLD_AND_DIM_RESET:
+    ss << ((prev.bold && !next.bold) || (prev.dim && !next.dim) ? "\x1B[22m"
+                                                                : "");
+    ss << (next.bold ? "\x1B[1m" : "");  // BOLD_SET
+    ss << (next.dim ? "\x1B[2m" : "");   // DIM_SET
   }
 
-  if ((!next.underlined && previous.underlined) ||
-      (!next.underlined_double && previous.underlined_double)) {
-    // We might have wrongfully reset underlined or underlinedbold because they
-    // share the same resetter. Take it into account so that the side effect
-    // will cause it to be set again below.
-    ss << "\x1B[24m";  // UNDERLINED_RESET
-    previous.underlined = false;
-    previous.underlined_double = false;
+  // Underline
+  if (FTXUI_UNLIKELY(next.underlined != prev.underlined ||
+                     next.underlined_double != prev.underlined_double)) {
+    ss << (next.underlined          ? "\x1B[4m"     // UNDERLINE
+           : next.underlined_double ? "\x1B[21m"    // UNDERLINE_DOUBLE
+                                    : "\x1B[24m");  // UNDERLINE_RESET
   }
 
-  if (next.bold && !previous.bold) {
-    ss << "\x1B[1m";  // BOLD_SET
+  // Blink
+  if (FTXUI_UNLIKELY(next.blink != prev.blink)) {
+    ss << (next.blink ? "\x1B[5m"     // BLINK_SET
+                      : "\x1B[25m");  // BLINK_RESET
   }
 
-  if (next.dim && !previous.dim) {
-    ss << "\x1B[2m";  // DIM_SET
+  // Inverted
+  if (FTXUI_UNLIKELY(next.inverted != prev.inverted)) {
+    ss << (next.inverted ? "\x1B[7m"     // INVERTED_SET
+                         : "\x1B[27m");  // INVERTED_RESET
   }
 
-  if (next.underlined && !previous.underlined) {
-    ss << "\x1B[4m";  // UNDERLINED_SET
+  // StrikeThrough
+  if (FTXUI_UNLIKELY(next.strikethrough != prev.strikethrough)) {
+    ss << (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
+                              : "\x1B[29m");  // CROSSED_OUT_RESET
   }
 
-  if (next.blink && !previous.blink) {
-    ss << "\x1B[5m";  // BLINK_SET
-  }
-
-  if (!next.blink && previous.blink) {
-    ss << "\x1B[25m";  // BLINK_RESET
-  }
-
-  if (next.inverted && !previous.inverted) {
-    ss << "\x1B[7m";  // INVERTED_SET
-  }
-
-  if (!next.inverted && previous.inverted) {
-    ss << "\x1B[27m";  // INVERTED_RESET
-  }
-
-  if (next.strikethrough && !previous.strikethrough) {
-    ss << "\x1B[9m";  // CROSSED_OUT
-  }
-
-  if (!next.strikethrough && previous.strikethrough) {
-    ss << "\x1B[29m";  // CROSSED_OUT_RESET
-  }
-
-  if (next.underlined_double && !previous.underlined_double) {
-    ss << "\x1B[21m";  // DOUBLE_UNDERLINED_SET
-  }
-
-  if (next.foreground_color != previous.foreground_color ||
-      next.background_color != previous.background_color) {
+  if (FTXUI_UNLIKELY(next.foreground_color != prev.foreground_color ||
+                     next.background_color != prev.background_color)) {
     ss << "\x1B[" + next.foreground_color.Print(false) + "m";
     ss << "\x1B[" + next.background_color.Print(true) + "m";
   }
-
-  previous = next;
 }
 
 struct TileEncoding {
@@ -373,18 +363,6 @@ bool ShouldAttemptAutoMerge(Pixel& pixel) {
 
 }  // namespace
 
-bool Pixel::operator==(const Pixel& other) const {
-  return character == other.character &&                //
-         background_color == other.background_color &&  //
-         foreground_color == other.foreground_color &&  //
-         blink == other.blink &&                        //
-         bold == other.bold &&                          //
-         dim == other.dim &&                            //
-         inverted == other.inverted &&                  //
-         underlined == other.underlined &&              //
-         automerge == other.automerge;                  //
-}
-
 /// A fixed dimension.
 /// @see Fit
 /// @see Full
@@ -435,25 +413,31 @@ Screen::Screen(int dimx, int dimy)
 std::string Screen::ToString() const {
   std::stringstream ss;
 
-  Pixel previous_pixel;
-  const Pixel final_pixel;
+  const Pixel default_pixel;
+  const Pixel* previous_pixel_ref = &default_pixel;
 
   for (int y = 0; y < dimy_; ++y) {
+    // New line in between two lines.
     if (y != 0) {
-      UpdatePixelStyle(this, ss, previous_pixel, final_pixel);
+      UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
+      previous_pixel_ref = &default_pixel;
       ss << "\r\n";
     }
+
+    // After printing a fullwith character, we need to skip the next cell.
     bool previous_fullwidth = false;
     for (const auto& pixel : pixels_[y]) {
       if (!previous_fullwidth) {
-        UpdatePixelStyle(this, ss, previous_pixel, pixel);
+        UpdatePixelStyle(this, ss, *previous_pixel_ref, pixel);
+        previous_pixel_ref = &pixel;
         ss << pixel.character;
       }
       previous_fullwidth = (string_width(pixel.character) == 2);
     }
   }
 
-  UpdatePixelStyle(this, ss, previous_pixel, final_pixel);
+  // Reset the style to default:
+  UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
 
   return ss.str();
 }
