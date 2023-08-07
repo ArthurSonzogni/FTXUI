@@ -16,14 +16,14 @@ namespace ftxui {
 /// @ingroup screen
 struct Pixel {
   Pixel()
-      : blink{},
-        bold{},
-        dim{},
-        inverted{},
-        underlined{},
-        underlined_double{},
-        strikethrough{},
-        automerge{} {}
+      : blink(false),
+        bold(false),
+        dim(false),
+        inverted(false),
+        underlined(false),
+        underlined_double(false),
+        strikethrough(false),
+        automerge(false) {}
 
   // A bit field representing the style:
   bool blink : 1;

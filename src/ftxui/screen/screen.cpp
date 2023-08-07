@@ -70,49 +70,50 @@ void WindowsEmulateVT100Terminal() {
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void UpdatePixelStyle(const Screen* screen,
                       std::stringstream& ss,
-                      const Pixel& previous,
+                      const Pixel& prev,
                       const Pixel& next) {
   // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
-  if (FTXUI_UNLIKELY(next.hyperlink != previous.hyperlink)) {
+  if (FTXUI_UNLIKELY(next.hyperlink != prev.hyperlink)) {
     ss << "\x1B]8;;" << screen->Hyperlink(next.hyperlink) << "\x1B\\";
   }
 
   // Bold
-  if (FTXUI_UNLIKELY(next.bold != previous.bold || next.dim != previous.dim)) {
-    ss << (next.bold  ? "\x1B[1m"     // BOLD_SET
-           : next.dim ? "\x1B[2m"     // DIM_SET
-                      : "\x1B[22m");  // BOLD_RESET and DIM_RESET
+  if (FTXUI_UNLIKELY(next.bold != prev.bold || next.dim != prev.dim)) {
+    // BOLD_AND_DIM_RESET:
+    ss << ((prev.bold && !next.bold) || (prev.dim && !next.dim) ? "\x1B[22m"
+                                                                : "");
+    ss << (next.bold ? "\x1B[1m" : "");  // BOLD_SET
+    ss << (next.dim ? "\x1B[2m" : "");   // DIM_SET
   }
 
   // Underline
-  if (FTXUI_UNLIKELY(next.underlined != previous.underlined ||
-                     next.underlined_double != previous.underlined_double)) {
-    ss << (next.underlined ? "\x1B[4m"  // UNDERLINED_SET
-           : next.underlined_double
-               ? "\x1B[21m"    // DUNDERLINED_SET
-               : "\x1B[24m");  // UNDERLINED_RESET && DUNDERLINED_RESET
+  if (FTXUI_UNLIKELY(next.underlined != prev.underlined ||
+                     next.underlined_double != prev.underlined_double)) {
+    ss << "\x1B[24m";                                  // UNDERLINED_RESET_BOTH
+    ss << (next.underlined ? "\x1B[4m" : "");          // UNDERLINED_SET
+    ss << (next.underlined_double ? "\x1B[21m" : "");  // UNDERLINED_DOUBLE_SET
   }
 
   // Blink
-  if (FTXUI_UNLIKELY(next.blink != previous.blink)) {
+  if (FTXUI_UNLIKELY(next.blink != prev.blink)) {
     ss << (next.blink ? "\x1B[5m"     // BLINK_SET
                       : "\x1B[25m");  // BLINK_RESET
   }
 
   // Inverted
-  if (FTXUI_UNLIKELY(next.inverted != previous.inverted)) {
+  if (FTXUI_UNLIKELY(next.inverted != prev.inverted)) {
     ss << (next.inverted ? "\x1B[7m"     // INVERTED_SET
                          : "\x1B[27m");  // INVERTED_RESET
   }
 
   // StrikeThrough
-  if (FTXUI_UNLIKELY(next.strikethrough != previous.strikethrough)) {
+  if (FTXUI_UNLIKELY(next.strikethrough != prev.strikethrough)) {
     ss << (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
                               : "\x1B[29m");  // CROSSED_OUT_RESET
   }
 
-  if (FTXUI_UNLIKELY(next.foreground_color != previous.foreground_color ||
-                     next.background_color != previous.background_color)) {
+  if (FTXUI_UNLIKELY(next.foreground_color != prev.foreground_color ||
+                     next.background_color != prev.background_color)) {
     ss << "\x1B[" + next.foreground_color.Print(false) + "m";
     ss << "\x1B[" + next.background_color.Print(true) + "m";
   }
