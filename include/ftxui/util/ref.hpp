@@ -12,13 +12,11 @@ template <typename T>
 class ConstRef {
  public:
   ConstRef() = default;
+  ConstRef(const ConstRef<T>&) = default;
   ConstRef(const T& t) : variant_(t) {}
   ConstRef(const T* t) : variant_(t) {}
 
   // Make a "resetable" reference
-  ConstRef(const ConstRef<T>&) = default;
-  ConstRef<T>& operator=(ConstRef<T>&) = default;
-  ConstRef<T>& operator=(ConstRef<T>&&) = default;
   ConstRef<T>& operator=(const ConstRef<T>&) = default;
 
   // Accessors:
@@ -40,14 +38,12 @@ template <typename T>
 class Ref {
  public:
   Ref() = default;
+  Ref(const Ref<T>&) = default;
   Ref(const T& t) : variant_(t) {}
   Ref(T&& t) : variant_(std::forward<T>(t)) {}
   Ref(T* t) : variant_(t) {}
 
   // Make a "resetable" reference
-  Ref(const Ref<T>&) = default;
-  Ref<T>& operator=(Ref<T>&) = default;
-  Ref<T>& operator=(Ref<T>&&) = default;
   Ref<T>& operator=(const Ref<T>&) = default;
 
   // Accessors:
