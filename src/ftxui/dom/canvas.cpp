@@ -849,15 +849,14 @@ class CanvasNodeBase : public Node {
 Element canvas(ConstRef<Canvas> canvas) {
   class Impl : public CanvasNodeBase {
    public:
-    // NOLINTNEXTLINE
-    explicit Impl(ConstRef<Canvas> canvas) : canvas_(std::move(canvas)) {
+    explicit Impl(ConstRef<Canvas> canvas) : canvas_(canvas) {
       requirement_.min_x = (canvas_->width() + 1) / 2;
       requirement_.min_y = (canvas_->height() + 3) / 4;
     }
     const Canvas& canvas() final { return *canvas_; }
     ConstRef<Canvas> canvas_;
   };
-  return std::make_shared<Impl>(std::move(canvas));
+  return std::make_shared<Impl>(canvas);
 }
 
 /// @brief Produce an element drawing a canvas of requested size.

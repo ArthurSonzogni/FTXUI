@@ -568,7 +568,7 @@ Component Input(InputOption option) {
 /// placeholder
 /// ```
 Component Input(StringRef content, InputOption option) {
-  option.content = content;
+  option.content = std::move(content);
   return Make<InputBase>(std::move(option));
 }
 
@@ -594,8 +594,8 @@ Component Input(StringRef content, InputOption option) {
 /// placeholder
 /// ```
 Component Input(StringRef content, StringRef placeholder, InputOption option) {
-  option.content = content;
-  option.placeholder = placeholder;
+  option.content = std::move(content);
+  option.placeholder = std::move(placeholder);
   return Make<InputBase>(std::move(option));
 }
 
