@@ -88,8 +88,6 @@ class ConstStringRef : public ConstRef<std::string> {
   ConstStringRef(const wchar_t* ref)
       : ConstStringRef(to_string(std::wstring(ref))) {}
   ConstStringRef(const char* ref) : ConstStringRef(std::string(ref)) {}
-
-  ConstStringRef& operator=(const ConstStringRef&) = default;
 };
 
 /// @brief An adapter. Reference a list of strings.
@@ -98,6 +96,8 @@ class ConstStringListRef {
   ConstStringListRef() = default;
   ConstStringListRef(const std::vector<std::string>* ref) : ref_(ref) {}
   ConstStringListRef(const std::vector<std::wstring>* ref) : ref_wide_(ref) {}
+  ConstStringListRef(const ConstStringListRef& other) = default;
+  ConstStringListRef& operator=(const ConstStringListRef& other) = default;
 
   size_t size() const {
     if (ref_) {

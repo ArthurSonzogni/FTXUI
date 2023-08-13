@@ -95,7 +95,7 @@ MenuEntryOption GeneratorMenuEntryOption(const char* data, size_t size) {
 MenuOption GeneratorMenuOption(const char* data, size_t size) {
   MenuOption option;
   option.underline = GeneratorUnderlineOption(data, size);
-  option.entries = GeneratorMenuEntryOption(data, size);
+  option.entries_option = GeneratorMenuEntryOption(data, size);
   option.direction = static_cast<Direction>(GeneratorInt(data, size) % 4);
   return option;
 }

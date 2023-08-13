@@ -224,11 +224,17 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
 
   // Gamma correction:
   // https://en.wikipedia.org/wiki/Gamma_correction
-  constexpr float gamma = 2.2f;
-  return Color::RGB(
-      uint8_t(pow(pow(a_r, gamma) * (1 - t) + pow(b_r, gamma) * t, 1 / gamma)),
-      uint8_t(pow(pow(a_g, gamma) * (1 - t) + pow(b_g, gamma) * t, 1 / gamma)),
-      uint8_t(pow(pow(a_b, gamma) * (1 - t) + pow(b_b, gamma) * t, 1 / gamma)));
+  auto interp = [](uint8_t a, uint8_t b, float t) {
+    constexpr float gamma = 2.2F;
+    const float a_f = powf(a, gamma);
+    const float b_f = powf(b, gamma);
+    const float c_f = a_f * (1.0F - t) +  //
+                      b_f * t;
+    return static_cast<uint8_t>(powf(c_f, 1.F / gamma));
+  };
+  return Color::RGB(interp(a_r, b_r, t),   //
+                    interp(a_g, b_g, t),   //
+                    interp(a_b, b_b, t));  //
 }
 
 inline namespace literals {

@@ -205,7 +205,8 @@ class SliderBase : public ComponentBase {
 
 class SliderWithLabel : public ComponentBase {
  public:
-  SliderWithLabel(ConstStringRef label, Component inner) : label_(label) {
+  SliderWithLabel(ConstStringRef label, Component inner)
+      : label_(std::move(label)) {
     Add(std::move(inner));
     SetActiveChild(ChildAt(0));
   }

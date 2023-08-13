@@ -17,7 +17,7 @@ namespace ftxui {
 namespace {
 
 struct LinearGradientNormalized {
-  float angle = 0.f;
+  float angle = 0.F;
   std::vector<Color> colors;
   std::vector<float> positions;  // Sorted.
 };
@@ -27,15 +27,18 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
   // Handle gradient of size 0.
   if (gradient.stops.empty()) {
     return LinearGradientNormalized{
-        0.f, {Color::Default, Color::Default}, {0.f, 1.f}};
+        0.F,
+        {Color::Default, Color::Default},
+        {0.F, 1.F},
+    };
   }
 
   // Fill in the two extent, if not provided.
   if (!gradient.stops.front().position) {
-    gradient.stops.front().position = 0.f;
+    gradient.stops.front().position = 0.F;
   }
   if (!gradient.stops.back().position) {
-    gradient.stops.back().position = 1.f;
+    gradient.stops.back().position = 1.F;
   }
 
   // Fill in the blank, by interpolating positions.
@@ -67,20 +70,22 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
   // If we don't being with zero, add a stop at zero.
   if (gradient.stops.front().position != 0) {
     gradient.stops.insert(gradient.stops.begin(),
-                          {gradient.stops.front().color, 0.f});
+                          {gradient.stops.front().color, 0.F});
   }
   // If we don't end with one, add a stop at one.
   if (gradient.stops.back().position != 1) {
-    gradient.stops.push_back({gradient.stops.back().color, 1.f});
+    gradient.stops.push_back({gradient.stops.back().color, 1.F});
   }
 
   // Normalize the angle.
   LinearGradientNormalized normalized;
-  // NOLINTNEXTLINE
-  normalized.angle = std::fmod(std::fmod(gradient.angle, 360.f) + 360.f, 360.f);
-  for (const auto& stop : gradient.stops) {
+  const float modulo = 360.F;
+  normalized.angle =
+      std::fmod(std::fmod(gradient.angle, modulo) + modulo, modulo);
+  for (auto& stop : gradient.stops) {
     normalized.colors.push_back(stop.color);
-    normalized.positions.push_back(stop.position.value());  // NOLINT
+    // NOLINTNEXTLINE
+    normalized.positions.push_back(stop.position.value());
   }
   return normalized;
 }
@@ -90,8 +95,8 @@ Color Interpolate(const LinearGradientNormalized& gradient, float t) {
   size_t i = 1;
   while (true) {
     if (i > gradient.positions.size()) {
-      // NOLINTNEXTLINE
-      return Color::Interpolate(0.5f, gradient.colors.back(),
+      const float half = 0.5F;
+      return Color::Interpolate(half, gradient.colors.back(),
                                 gradient.colors.back());
     }
     if (t <= gradient.positions[i]) {
@@ -122,7 +127,7 @@ class LinearGradientColor : public NodeDecorator {
 
  private:
   void Render(Screen& screen) override {
-    const float degtorad = 0.01745329251f;
+    const float degtorad = 0.01745329251F;
     const float dx = std::cos(gradient_.angle * degtorad);
     const float dy = std::sin(gradient_.angle * degtorad);
 
