@@ -10,7 +10,7 @@ current (development)
 - Breaking: Direction enum is renamed WidthOrHeight
 - Breaking: Remove `ComponentBase` copy constructor/assignment.
 - Breaking: MenuOption::entries is renamed MenuOption::entries_option.
-- Breaking: Ref<XxxOption> becomes XxxOption in component constructors.
+- Breaking: `Ref<{Component}Option>` becomes `{Component}Option` in component constructors.
 - Feature: `ResizeableSplit` now support arbitrary element as a separator.
 - Feature: `input` is now supporting multiple lines.
 - Feature: `input` style is now customizeable.
