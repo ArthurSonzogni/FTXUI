@@ -93,7 +93,7 @@ Element can become flexible using the the `flex` decorator.
 ![image](https://user-images.githubusercontent.com/4759106/147242524-7103b5d9-1a92-4e2d-ac70-b3d6740061e3.png)
   
   
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2gridbox_8cpp-example.htmlp) using gridbox:
+[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2gridbox_8cpp-example.html) using gridbox:
 
 ![image](https://user-images.githubusercontent.com/4759106/147242972-0db1f2e9-0790-496f-86e6-ed2c604f7a73.png)
 
