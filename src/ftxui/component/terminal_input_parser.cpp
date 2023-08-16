@@ -201,7 +201,7 @@ TerminalInputParser::Output TerminalInputParser::Parse() {
 // Then some sequences are illegal if it exist a shorter representation of the
 // same codepoint.
 TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
-  auto head = static_cast<unsigned char>(Current());
+  auto head = Current();
   unsigned char selector = 0b1000'0000;  // NOLINT
 
   // The non code-point part of the first byte.
@@ -234,7 +234,7 @@ TerminalInputParser::Output TerminalInputParser::ParseUTF8() {
     }
 
     // Invalid continuation byte.
-    head = static_cast<unsigned char>(Current());
+    head = Current();
     if ((head & 0b1100'0000) != 0b1000'0000) {  // NOLINT
       return DROP;
     }
@@ -322,7 +322,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
 
     if (Current() >= '0' && Current() <= '9') {
       argument *= 10;  // NOLINT
-      argument += int(Current() - '0');
+      argument += Current() - '0';
       continue;
     }
 
