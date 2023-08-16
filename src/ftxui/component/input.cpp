@@ -120,13 +120,14 @@ class InputBase : public ComponentBase, public InputOption {
     Elements elements;
     const std::vector<std::string> lines = Split(*content);
 
-    cursor_position() = util::clamp(cursor_position(), 0, (int)content->size());
+    cursor_position() =
+        util::clamp(cursor_position(), 0, static_cast<int>(content->size()));
 
     // Find the line and index of the cursor.
     int cursor_line = 0;
     int cursor_char_index = cursor_position();
     for (const auto& line : lines) {
-      if (cursor_char_index <= (int)line.size()) {
+      if (cursor_char_index <= static_cast<int>(line.size())) {
         break;
       }
 
@@ -149,7 +150,7 @@ class InputBase : public ComponentBase, public InputOption {
       }
 
       // The cursor is at the end of the line.
-      if (cursor_char_index >= (int)line.size()) {
+      if (cursor_char_index >= static_cast<int>(line.size())) {
         elements.push_back(hbox({
                                Text(line),
                                text(" ") | focused | reflect(cursor_box_),
@@ -207,7 +208,7 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleDelete() {
-    if (cursor_position() == (int)content->size()) {
+    if (cursor_position() == static_cast<int>(content->size())) {
       return false;
     }
     const size_t start = cursor_position();
@@ -226,7 +227,7 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleArrowRight() {
-    if (cursor_position() == (int)content->size()) {
+    if (cursor_position() == static_cast<int>(content->size())) {
       return false;
     }
 
@@ -253,7 +254,7 @@ class InputBase : public ComponentBase, public InputOption {
   // Move the cursor `columns` on the right, if possible.
   void MoveCursorColumn(int columns) {
     while (columns > 0) {
-      if (cursor_position() == (int)content().size() ||
+      if (cursor_position() == static_cast<int>(content().size()) ||
           content()[cursor_position()] == '\n') {
         return;
       }
@@ -298,7 +299,7 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleArrowDown() {
-    if (cursor_position() == (int)content->size()) {
+    if (cursor_position() == static_cast<int>(content->size())) {
       return false;
     }
 
@@ -310,7 +311,7 @@ class InputBase : public ComponentBase, public InputOption {
         break;
       }
       cursor_position() = GlyphNext(content(), cursor_position());
-      if (cursor_position() == (int)content().size()) {
+      if (cursor_position() == static_cast<int>(content().size())) {
         return true;
       }
     }
@@ -347,7 +348,8 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool OnEvent(Event event) override {
-    cursor_position() = util::clamp(cursor_position(), 0, (int)content->size());
+    cursor_position() =
+        util::clamp(cursor_position(), 0, static_cast<int>(content->size()));
 
     if (event == Event::Return) {
       return HandleReturn();
@@ -417,19 +419,19 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleRightCtrl() {
-    if (cursor_position() == (int)content().size()) {
+    if (cursor_position() == static_cast<int>(content().size())) {
       return false;
     }
 
     // Move right, until entering a word.
-    while (cursor_position() < (int)content().size()) {
+    while (cursor_position() < static_cast<int>(content().size())) {
       cursor_position() = GlyphNext(content(), cursor_position());
       if (IsWordCharacter(content(), cursor_position())) {
         break;
       }
     }
     // Move right, as long as right is a word character:
-    while (cursor_position() < (int)content().size()) {
+    while (cursor_position() < static_cast<int>(content().size())) {
       const size_t next = GlyphNext(content(), cursor_position());
       if (!IsWordCharacter(content(), cursor_position())) {
         break;
@@ -465,7 +467,7 @@ class InputBase : public ComponentBase, public InputOption {
     int cursor_line = 0;
     int cursor_char_index = cursor_position();
     for (const auto& line : lines) {
-      if (cursor_char_index <= (int)line.size()) {
+      if (cursor_char_index <= static_cast<int>(line.size())) {
         break;
       }
 
@@ -479,10 +481,11 @@ class InputBase : public ComponentBase, public InputOption {
     int new_cursor_line = cursor_line + event.mouse().y - cursor_box_.y_min;
 
     // Fix the new cursor position:
-    new_cursor_line = std::max(std::min(new_cursor_line, (int)lines.size()), 0);
+    new_cursor_line =
+        std::max(std::min(new_cursor_line, static_cast<int>(lines.size())), 0);
 
     const std::string empty_string;
-    const std::string& line = new_cursor_line < (int)lines.size()
+    const std::string& line = new_cursor_line < static_cast<int>(lines.size())
                                   ? lines[new_cursor_line]
                                   : empty_string;
     new_cursor_column = util::clamp(new_cursor_column, 0, string_width(line));

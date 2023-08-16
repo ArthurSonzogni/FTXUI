@@ -77,6 +77,7 @@ function(ftxui_set_options library)
       target_compile_options(${library} PRIVATE "-Wpedantic")
       target_compile_options(${library} PRIVATE "-Wshadow")
       target_compile_options(${library} PRIVATE "-Wunused")
+      target_compile_options(${library} PRIVATE "-Wold-style-cast")
     endif()
   endif()
 
