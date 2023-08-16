@@ -379,6 +379,26 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   };
 }
 
+/// @ingroup component
+/// @brief Set whether mouse is tracked and events reported.
+/// called outside of the main loop. E.g `ScreenInteractive::Loop(...)`.
+/// @param enable Whether to enable mouse event tracking.
+/// @note This muse be called outside of the main loop. E.g. before calling
+/// `ScreenInteractive::Loop`.
+/// @note Mouse tracking is enabled by default.
+/// @note Mouse tracking is only supported on terminals that supports it.
+///
+/// ### Example
+///
+/// ```cpp
+/// auto screen = ScreenInteractive::TerminalOutput();
+/// screen.TrackMouse(false);
+/// screen.Loop(component);
+/// ```
+void ScreenInteractive::TrackMouse(bool enable) {
+  track_mouse_ = enable;
+}
+
 void ScreenInteractive::Post(Task task) {
   // Task/Events sent toward inactive screen or screen waiting to become
   // inactive are dropped.
@@ -580,10 +600,12 @@ void ScreenInteractive::Install() {
       DECMode::kLineWrap,
   });
 
-  enable({DECMode::kMouseVt200});
-  enable({DECMode::kMouseAnyEvent});
-  enable({DECMode::kMouseUrxvtMode});
-  enable({DECMode::kMouseSgrExtMode});
+  if (track_mouse_) {
+    enable({DECMode::kMouseVt200});
+    enable({DECMode::kMouseAnyEvent});
+    enable({DECMode::kMouseUrxvtMode});
+    enable({DECMode::kMouseSgrExtMode});
+  }
 
   // After installing the new configuration, flush it to the terminal to
   // ensure it is fully applied:

@@ -26,6 +26,7 @@ current (development)
   Component Slider(SliderOption<T> options);
   Component ResizableSplit(ResizableSplitOption options);
   ```
+- Feature: Add `ScreenInteractive::TrackMouse(false)` disable mouse support.
 
 ### Dom
 - Feature: Add `hyperlink` decorator. For instance:
