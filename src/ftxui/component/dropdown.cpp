@@ -58,6 +58,18 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
       });
     }
 
+    bool OnEvent(ftxui::Event event) override
+    {
+      if (event == Event::Return && show_)
+      {
+        children_[0]->OnEvent(event);
+        checkbox_->TakeFocus();
+        show_ = false;
+        return true;
+      }
+      return children_[0]->OnEvent(event);
+    }
+
    private:
     ConstStringListRef entries_;
     bool show_ = false;
