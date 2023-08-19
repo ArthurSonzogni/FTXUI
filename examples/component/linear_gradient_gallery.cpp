@@ -22,8 +22,8 @@ int main() {
   std::string slider_end_text;
 
   auto slider_angle = Slider(&slider_angle_text, &angle, 0, 360);
-  auto slider_start = Slider(&slider_start_text, &start, 0.f, 1.f);
-  auto slider_end = Slider(&slider_end_text, &end, 0.f, 1.f);
+  auto slider_start = Slider(&slider_start_text, &start, 0.f, 1.f, 0.05f);
+  auto slider_end = Slider(&slider_end_text, &end, 0.f, 1.f, 0.05f);
 
   auto layout = Container::Vertical({
       slider_angle,
