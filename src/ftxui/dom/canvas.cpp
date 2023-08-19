@@ -849,7 +849,7 @@ class CanvasNodeBase : public Node {
 Element canvas(ConstRef<Canvas> canvas) {
   class Impl : public CanvasNodeBase {
    public:
-    explicit Impl(ConstRef<Canvas> canvas) : canvas_(canvas) {
+    explicit Impl(ConstRef<Canvas> canvas) : canvas_(std::move(canvas)) {
       requirement_.min_x = (canvas_->width() + 1) / 2;
       requirement_.min_y = (canvas_->height() + 3) / 4;
     }
