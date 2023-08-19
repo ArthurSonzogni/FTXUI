@@ -4,6 +4,9 @@ Changelog
 current (development) 
 ---------------------
 
+5.0.0
+-----
+
 ### Component
 - Breaking: MenuDirection enum is renamed Direction
 - Breaking: GaugeDirection enum is renamed Direction
