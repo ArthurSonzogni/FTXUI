@@ -58,16 +58,22 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
       });
     }
 
-    bool OnEvent(ftxui::Event event) override
-    {
-      if (event == Event::Return && show_)
-      {
-        children_[0]->OnEvent(event);
+    // Switch focus in between the checkbox and the radiobox when selecting it.
+    bool OnEvent(ftxui::Event event) override {
+      const bool show_old = show_;
+      const int selected_old = *selected_;
+      const bool handled = ComponentBase::OnEvent(event);
+
+      if (!show_old && show_) {
+        radiobox_->TakeFocus();
+      }
+
+      if (selected_old != *selected_) {
         checkbox_->TakeFocus();
         show_ = false;
-        return true;
       }
-      return children_[0]->OnEvent(event);
+
+      return handled;
     }
 
    private:
