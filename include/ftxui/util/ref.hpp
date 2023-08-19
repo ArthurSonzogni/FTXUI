@@ -13,8 +13,8 @@ class ConstRef {
  public:
   ConstRef() = default;
   ConstRef(const ConstRef<T>&) = default;
-  ConstRef(      ConstRef<T>&&) = default;
-  ConstRef(      T  t) : variant_( std::move(t) ) {}
+  ConstRef(ConstRef<T>&&) = default;
+  ConstRef(T t) : variant_(std::move(t)) {}
   ConstRef(const T* t) : variant_(t) {}
 
   // Make a "reseatable" reference
@@ -41,7 +41,7 @@ class Ref {
   Ref() = default;
   Ref(const Ref<T>&) = default;
   Ref(Ref<T>&&) = default;
-  Ref(T t) : variant_( std::move(t) ) {}
+  Ref(T t) : variant_(std::move(t)) {}
   Ref(T* t) : variant_(t) {}
 
   // Make a "reseatable" reference.
