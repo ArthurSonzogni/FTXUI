@@ -1,3 +1,6 @@
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, __shared_ptr_access, shared_ptr
 #include <string>  // for to_string, operator+
 
@@ -42,7 +45,3 @@ int main() {
 
   return 0;
 }
-
-// Copyright 2022 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

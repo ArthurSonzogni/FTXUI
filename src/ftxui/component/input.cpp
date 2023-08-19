@@ -1,3 +1,6 @@
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>   // for max, min
 #include <cstddef>     // for size_t
 #include <cstdint>     // for uint32_t
@@ -600,7 +603,3 @@ Component Input(StringRef content, StringRef placeholder, InputOption option) {
 }
 
 }  // namespace ftxui
-
-// Copyright 2022 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

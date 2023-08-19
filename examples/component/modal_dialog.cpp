@@ -1,3 +1,6 @@
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/component_options.hpp>  // for ButtonOption
 #include <ftxui/component/mouse.hpp>              // for ftxui
 #include <functional>                             // for function
@@ -77,7 +80,3 @@ int main(int argc, const char* argv[]) {
   screen.Loop(main_component);
   return 0;
 }
-
-// Copyright 2022 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

@@ -1,3 +1,6 @@
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSED file.
 #include <cmath>                   // for sin, cos
 #include <ftxui/dom/elements.hpp>  // for canvas, Element, separator, hbox, operator|, border
 #include <ftxui/screen/screen.hpp>  // for Pixel
@@ -257,7 +260,3 @@ int main() {
 
   return 0;
 }
-
-// Copyright 2021 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSED file.

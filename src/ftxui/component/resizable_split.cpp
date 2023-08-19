@@ -1,3 +1,6 @@
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/component_options.hpp>  // for ResizableSplitOption
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <ftxui/util/ref.hpp>       // for Ref
@@ -300,7 +303,3 @@ Component ResizableSplitBottom(Component main, Component back, int* main_size) {
 }
 
 }  // namespace ftxui
-
-// Copyright 2021 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

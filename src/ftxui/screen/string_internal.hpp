@@ -1,3 +1,6 @@
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_SCREEN_STRING_INTERNAL_HPP
 #define FTXUI_SCREEN_STRING_INTERNAL_HPP
 
@@ -60,7 +63,3 @@ bool IsWordBreakingCharacter(const std::string& input, size_t glyph_index);
 }  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_SCREEN_STRING_INTERNAL_HPP */
-
-// Copyright 2023 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

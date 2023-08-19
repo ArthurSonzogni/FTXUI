@@ -1,3 +1,6 @@
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_DOM_DIRECTION_HPP
 #define FTXUI_DOM_DIRECTION_HPP
 
@@ -11,7 +14,4 @@ enum class Direction {
 
 }  // namespace ftxui
 
-#endif  // FTXUI_DOM_DIRECTION_HPP
-// Copyright 2023 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
+#endif /* end of include guard: FTXUI_DOM_DIRECTION_HPP */

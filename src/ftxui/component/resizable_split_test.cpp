@@ -1,3 +1,6 @@
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 #include <string>  // for string
@@ -206,7 +209,3 @@ TEST(ResizableSplit, BasicBottomWithCustomSeparator) {
 
 }  // namespace ftxui
 // NOLINTEND
-
-// Copyright 2022 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

@@ -1,3 +1,6 @@
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cstdint>  // for uint8_t
 #include <memory>   // for make_shared
 #include <string>   // for string
@@ -67,7 +70,3 @@ Decorator hyperlink(std::string link) {
 }
 
 }  // namespace ftxui
-
-// Copyright 2023 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

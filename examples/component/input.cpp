@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <memory>  // for allocator, __shared_ptr_access
 #include <string>  // for char_traits, operator+, string, basic_string
 
@@ -43,7 +46,3 @@ int main() {
   auto screen = ScreenInteractive::TerminalOutput();
   screen.Loop(renderer);
 }
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

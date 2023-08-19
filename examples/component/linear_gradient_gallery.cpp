@@ -1,3 +1,6 @@
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/component_base.hpp>  // for ComponentBase, Component
 #include <ftxui/dom/elements.hpp>  // for operator|, Element, flex, bgcolor, text, vbox, center
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
@@ -50,7 +53,3 @@ int main() {
 
   screen.Loop(renderer);
 }
-
-// Copyright 2023 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

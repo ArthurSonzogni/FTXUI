@@ -1,3 +1,6 @@
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/component/component_options.hpp"
 
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
@@ -304,7 +307,3 @@ InputOption InputOption::Spacious() {
 }
 
 }  // namespace ftxui
-
-// Copyright 2022 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

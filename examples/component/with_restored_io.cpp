@@ -1,3 +1,6 @@
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cstdlib>   // for system, EXIT_SUCCESS
 #include <iostream>  // for operator<<, basic_ostream, basic_ostream::operator<<, cout, endl, flush, ostream, basic_ostream<>::__ostream_type, cin
 #include <memory>    // for shared_ptr, __shared_ptr_access, allocator
@@ -55,7 +58,3 @@ int main() {
   screen.Loop(renderer);
   return EXIT_SUCCESS;
 }
-
-// Copyright 2022 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

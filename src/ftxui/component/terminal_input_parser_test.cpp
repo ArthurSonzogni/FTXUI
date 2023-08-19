@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::Pressed, Mouse::Released, Mouse::Right
 #include <ftxui/component/task.hpp>   // for Task
 #include <initializer_list>           // for initializer_list
@@ -445,7 +448,3 @@ TEST(Event, Special) {
 
 }  // namespace ftxui
 // NOLINTEND
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

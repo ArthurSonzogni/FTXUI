@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for find_if
 #include <cassert>    // for assert
 #include <cstddef>    // for size_t
@@ -197,7 +200,3 @@ CapturedMouse ComponentBase::CaptureMouse(const Event& event) {  // NOLINT
 }
 
 }  // namespace ftxui
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

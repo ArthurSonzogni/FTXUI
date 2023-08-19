@@ -1,3 +1,6 @@
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cstddef>     // for size_t
 #include <functional>  // for function
 #include <memory>      // for __shared_ptr_access, allocator, shared_ptr
@@ -89,7 +92,3 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
 }
 
 }  // namespace ftxui
-
-// Copyright 2021 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

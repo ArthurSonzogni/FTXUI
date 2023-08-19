@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <stdlib.h>                // for EXIT_SUCCESS
 #include <ftxui/dom/elements.hpp>  // for text, operator|, vbox, border, Element, Fit, hbox
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
@@ -33,7 +36,3 @@ int main() {
   screen.Print();
   return EXIT_SUCCESS;
 }
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

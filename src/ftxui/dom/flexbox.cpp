@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for min, max
 #include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator_traits<>::value_type, make_shared
@@ -259,7 +262,3 @@ Element vflow(Elements children) {
 }
 
 }  // namespace ftxui
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

@@ -1,3 +1,6 @@
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>                      // for max, min, sort, copy
 #include <cmath>                          // for fmod, cos, sin
 #include <cstddef>                        // for size_t
@@ -293,7 +296,3 @@ Decorator bgcolor(const LinearGradient& gradient) {
 }
 
 }  // namespace ftxui
-
-// Copyright 2023 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

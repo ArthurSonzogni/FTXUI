@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <utility>  // for move
 
 #include "ftxui/component/event.hpp"
@@ -87,7 +90,3 @@ const Event Event::PageDown = Event::Special({27, 91, 54, 126});  // NOLINT
 const Event Event::Custom = Event::Special({0});                  // NOLINT
 
 }  // namespace ftxui
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

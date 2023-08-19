@@ -1,3 +1,6 @@
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for bgcolor, operator|, operator|=, text, center, Element
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
 #include <ftxui/screen/screen.hpp>        // for Full, Screen
@@ -20,7 +23,3 @@ int main() {
 
   return 0;
 }
-
-// Copyright 2023 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

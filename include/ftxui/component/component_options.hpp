@@ -1,3 +1,6 @@
+// Copyright 2021 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #ifndef FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP
 #define FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP
 
@@ -262,7 +265,3 @@ struct WindowOptions {
 }  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP */
-
-// Copyright 2021 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

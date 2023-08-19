@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>               // for max
 #include <array>                   // for array
 #include <ftxui/screen/color.hpp>  // for Color
@@ -497,7 +500,3 @@ Element window(Element title, Element content) {
                                   ROUNDED);
 }
 }  // namespace ftxui
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

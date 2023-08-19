@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <cstdint>  // for size_t
 #include <iostream>  // for operator<<, stringstream, basic_ostream, flush, cout, ostream
 #include <limits>
@@ -576,7 +579,3 @@ const std::string& Screen::Hyperlink(uint8_t id) const {
 }
 
 }  // namespace ftxui
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

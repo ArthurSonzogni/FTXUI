@@ -1,3 +1,6 @@
+// Copyright 2022 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>
 #include <ftxui/dom/elements.hpp>  // for Element, operator|, text, border
 #include <memory>  // for shared_ptr, allocator, __shared_ptr_access
@@ -41,7 +44,3 @@ TEST(ModalTest, Basic) {
 
 }  // namespace ftxui
 // NOLINTEND
-
-// Copyright 2022 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

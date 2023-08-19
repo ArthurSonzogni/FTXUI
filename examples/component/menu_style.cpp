@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <array>       // for array
 #include <chrono>      // for milliseconds
 #include <functional>  // for function
@@ -252,7 +255,3 @@ Component HMenu5(std::vector<std::string>* entries, int* selected) {
   option.underline.color_active = Color::Red;
   return Menu(entries, selected, option);
 }
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

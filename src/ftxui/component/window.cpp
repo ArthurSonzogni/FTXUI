@@ -1,3 +1,6 @@
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #define NOMINMAX
 #include <algorithm>
 #include <ftxui/component/component.hpp>
@@ -303,7 +306,3 @@ Component Window(WindowOptions option) {
 }
 
 };  // namespace ftxui
-
-// Copyright 2023 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

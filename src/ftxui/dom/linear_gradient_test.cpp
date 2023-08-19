@@ -1,3 +1,6 @@
+// Copyright 2023 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
 #include <memory>                         // for allocator_traits<>::value_type
@@ -86,7 +89,3 @@ TEST(ColorTest, GradientBackground) {
 
 }  // namespace ftxui
 // NOLINTEND
-
-// Copyright 2023 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

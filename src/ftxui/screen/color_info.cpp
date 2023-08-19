@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include "ftxui/screen/color_info.hpp"
 
 #include <array>
@@ -276,7 +279,3 @@ ColorInfo GetColorInfo(Color::Palette16 index) {
 // clang-format off
 
 }
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.

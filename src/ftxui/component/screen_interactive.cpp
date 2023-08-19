@@ -1,3 +1,6 @@
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
 #include <algorithm>  // for copy, max, min
 #include <array>      // for array
 #include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
@@ -838,7 +841,3 @@ void ScreenInteractive::Signal(int signal) {
 }
 
 }  // namespace ftxui.
-
-// Copyright 2020 Arthur Sonzogni. All rights reserved.
-// Use of this source code is governed by the MIT license that can be found in
-// the LICENSE file.
