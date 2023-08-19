@@ -44,7 +44,7 @@ class Ref {
   Ref(T t) : variant_( std::move(t) ) {}
   Ref(T* t) : variant_(t) {}
 
-  // Make a "re-seatable" reference
+  // Make a "reseatable" reference.
   Ref<T>& operator=(const Ref<T>&) = default;
 
   // Accessors:
