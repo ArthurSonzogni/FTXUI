@@ -31,6 +31,9 @@ class ScreenInteractive : public Screen {
   static ScreenInteractive FitComponent();
   static ScreenInteractive TerminalOutput();
 
+  // Options. Must be called before Loop().
+  void TrackMouse(bool enable = true);
+
   // Return the currently active screen, nullptr if none.
   static ScreenInteractive* Active();
 
@@ -83,6 +86,8 @@ class ScreenInteractive : public Screen {
                     int dimy,
                     Dimension dimension,
                     bool use_alternative_screen);
+
+  bool track_mouse_= true;
 
   Sender<Task> task_sender_;
   Receiver<Task> task_receiver_;
