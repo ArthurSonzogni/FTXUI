@@ -13,10 +13,11 @@ class ConstRef {
  public:
   ConstRef() = default;
   ConstRef(const ConstRef<T>&) = default;
-  ConstRef(const T& t) : variant_(t) {}
+  ConstRef(ConstRef<T>&&) = default;
+  ConstRef(T t) : variant_(std::move(t)) {}
   ConstRef(const T* t) : variant_(t) {}
 
-  // Make a "resetable" reference
+  // Make a "reseatable" reference
   ConstRef<T>& operator=(const ConstRef<T>&) = default;
 
   // Accessors:
@@ -39,11 +40,11 @@ class Ref {
  public:
   Ref() = default;
   Ref(const Ref<T>&) = default;
-  Ref(const T& t) : variant_(t) {}
-  Ref(T&& t) : variant_(std::forward<T>(t)) {}
+  Ref(Ref<T>&&) = default;
+  Ref(T t) : variant_(std::move(t)) {}
   Ref(T* t) : variant_(t) {}
 
-  // Make a "resetable" reference
+  // Make a "reseatable" reference.
   Ref<T>& operator=(const Ref<T>&) = default;
 
   // Accessors:
