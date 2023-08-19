@@ -15,6 +15,7 @@
 
 namespace ftxui {
 
+namespace {
 class HBox : public Node {
  public:
   explicit HBox(Elements children) : Node(std::move(children)) {}
@@ -64,6 +65,8 @@ class HBox : public Node {
     }
   }
 };
+
+}  // namespace
 
 /// @brief A container displaying elements horizontally one by one.
 /// @param children The elements in the container

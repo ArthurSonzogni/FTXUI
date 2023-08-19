@@ -9,6 +9,9 @@
 
 namespace ftxui {
 
+/// @brief An event corresponding to a given typed character.
+/// @param input The character typed by the user.
+/// @ingroup component
 // static
 Event Event::Character(std::string input) {
   Event event;
@@ -17,16 +20,26 @@ Event Event::Character(std::string input) {
   return event;
 }
 
+/// @brief An event corresponding to a given typed character.
+/// @param c The character typed by the user.
+/// @ingroup component
 // static
 Event Event::Character(char c) {
   return Event::Character(std::string{c});
 }
 
+/// @brief An event corresponding to a given typed character.
+/// @param c The character typed by the user.
+/// @ingroup component
 // static
 Event Event::Character(wchar_t c) {
   return Event::Character(to_string(std::wstring{c}));
 }
 
+/// @brief An event corresponding to a given typed character.
+/// @param input The sequence of character send by the terminal.
+/// @param mouse The mouse state.
+/// @ingroup component
 // static
 Event Event::Mouse(std::string input, struct Mouse mouse) {
   Event event;
@@ -36,6 +49,9 @@ Event Event::Mouse(std::string input, struct Mouse mouse) {
   return event;
 }
 
+/// @brief An custom event whose meaning is defined by the user of the library.
+/// @param input An arbitrary sequence of character defined by the developer.
+/// @ingroup component.
 // static
 Event Event::Special(std::string input) {
   Event event;
@@ -43,6 +59,7 @@ Event Event::Special(std::string input) {
   return event;
 }
 
+/// @internal
 // static
 Event Event::CursorReporting(std::string input, int x, int y) {
   Event event;

@@ -66,8 +66,6 @@ void function_not_flex(Requirement& r) {
   r.flex_shrink_y = 0;
 }
 
-}  // namespace
-
 class Flex : public Node {
  public:
   explicit Flex(FlexFunction f) : f_(f) {}
@@ -91,6 +89,8 @@ class Flex : public Node {
 
   FlexFunction f_;
 };
+
+}  // namespace
 
 /// @brief An element that will take expand proportionnally to the space left in
 /// a container.

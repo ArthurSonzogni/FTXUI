@@ -15,6 +15,10 @@
 
 namespace ftxui {
 
+/// @brief A dropdown menu.
+/// @ingroup component
+/// @param entries The list of entries to display.
+/// @param selected The index of the selected entry.
 Component Dropdown(ConstStringListRef entries, int* selected) {
   class Impl : public ComponentBase {
    public:

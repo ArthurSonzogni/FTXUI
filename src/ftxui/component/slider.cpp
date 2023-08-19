@@ -34,7 +34,6 @@ Decorator flexDirection(Direction direction) {
   }
   return xflex;  // NOT_REACHED()
 }
-}  // namespace
 
 template <class T>
 class SliderBase : public ComponentBase {
@@ -256,6 +255,7 @@ class SliderWithLabel : public ComponentBase {
   Box box_;
   bool mouse_hover_ = false;
 };
+}  // namespace
 
 /// @brief An horizontal slider.
 /// @param label The name of the slider.

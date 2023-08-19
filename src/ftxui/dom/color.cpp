@@ -12,6 +12,7 @@
 
 namespace ftxui {
 
+  namespace {
 class BgColor : public NodeDecorator {
  public:
   BgColor(Element child, Color color)
@@ -45,6 +46,7 @@ class FgColor : public NodeDecorator {
 
   Color color_;
 };
+}  // namespace
 
 /// @brief Set the foreground color of an element.
 /// @param color The color of the output element.

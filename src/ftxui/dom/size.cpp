@@ -13,6 +13,7 @@
 
 namespace ftxui {
 
+namespace {
 class Size : public Node {
  public:
   Size(Element child, WidthOrHeight direction, Constraint constraint, int value)
@@ -78,6 +79,7 @@ class Size : public Node {
   Constraint constraint_;
   int value_;
 };
+} // namespace
 
 /// @brief Apply a constraint on the size of an element.
 /// @param direction Whether the WIDTH of the HEIGHT of the element must be

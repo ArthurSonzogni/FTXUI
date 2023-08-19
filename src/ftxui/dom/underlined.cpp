@@ -12,6 +12,7 @@
 
 namespace ftxui {
 
+namespace {
 class Underlined : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
@@ -25,6 +26,7 @@ class Underlined : public NodeDecorator {
     }
   }
 };
+}  // namespace
 
 /// @brief Make the underlined element to be underlined.
 /// @ingroup dom

@@ -17,6 +17,7 @@
 
 namespace ftxui {
 
+namespace {
 using ftxui::Screen;
 
 class Text : public Node {
@@ -79,6 +80,8 @@ class VText : public Node {
   std::string text_;
   int width_ = 1;
 };
+
+}  // namespace
 
 /// @brief Display a piece of UTF8 encoded unicode text.
 /// @ingroup dom

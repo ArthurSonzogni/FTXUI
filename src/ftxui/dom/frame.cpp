@@ -15,8 +15,7 @@
 
 namespace ftxui {
 
-// -----------------------------------------------------------------------------
-
+namespace {
 class Select : public Node {
  public:
   explicit Select(Elements children) : Node(std::move(children)) {}
@@ -38,11 +37,6 @@ class Select : public Node {
   }
 };
 
-Element select(Element child) {
-  return std::make_shared<Select>(unpack(std::move(child)));
-}
-
-// -----------------------------------------------------------------------------
 
 class Focus : public Select {
  public:
@@ -82,12 +76,6 @@ class Focus : public Select {
 #endif
   }
 };
-
-Element focus(Element child) {
-  return std::make_shared<Focus>(unpack(std::move(child)));
-}
-
-// -----------------------------------------------------------------------------
 
 class Frame : public Node {
  public:
@@ -138,22 +126,6 @@ class Frame : public Node {
   bool y_frame_;
 };
 
-/// @brief Allow an element to be displayed inside a 'virtual' area. It size can
-/// be larger than its container. In this case only a smaller portion is
-/// displayed. The view is scrollable to make the focused element visible.
-/// @see focus
-Element frame(Element child) {
-  return std::make_shared<Frame>(unpack(std::move(child)), true, true);
-}
-
-Element xframe(Element child) {
-  return std::make_shared<Frame>(unpack(std::move(child)), true, false);
-}
-
-Element yframe(Element child) {
-  return std::make_shared<Frame>(unpack(std::move(child)), false, true);
-}
-
 class FocusCursor : public Focus {
  public:
   FocusCursor(Elements children, Screen::Cursor::Shape shape)
@@ -171,26 +143,128 @@ class FocusCursor : public Focus {
   Screen::Cursor::Shape shape_;
 };
 
+
+}  // namespace
+
+/// @brief Set the `child` to be the one selected among its siblings.
+/// @param child The element to be selected.
+/// @ingroup dom
+Element select(Element child) {
+  return std::make_shared<Select>(unpack(std::move(child)));
+}
+
+/// @brief Set the `child` to be the one in focus globally.
+/// @param child The element to be focused.
+/// @ingroup dom
+Element focus(Element child) {
+  return std::make_shared<Focus>(unpack(std::move(child)));
+}
+
+/// @brief Allow an element to be displayed inside a 'virtual' area. It size can
+/// be larger than its container. In this case only a smaller portion is
+/// displayed. The view is scrollable to make the focused element visible.
+/// @see frame
+/// @see xframe
+/// @see yframe
+Element frame(Element child) {
+  return std::make_shared<Frame>(unpack(std::move(child)), true, true);
+}
+
+/// @brief Same as `frame`, but only on the x-axis.
+/// @see frame
+/// @see xframe
+/// @see yframe
+Element xframe(Element child) {
+  return std::make_shared<Frame>(unpack(std::move(child)), true, false);
+}
+
+/// @brief Same as `frame`, but only on the y-axis.
+/// @see frame
+/// @see xframe
+/// @see yframe
+Element yframe(Element child) {
+  return std::make_shared<Frame>(unpack(std::move(child)), false, true);
+}
+
+/// @brief Same as `focus`, but set the cursor shape to be a still block.
+/// @see focus
+/// @see focusCursorBlock
+/// @see focusCursorBlockBlinking
+/// @see focusCursorBar
+/// @see focusCursorBarBlinking
+/// @see focusCursorUnderline
+/// @see focusCursorUnderlineBlinking
+/// @ingroup dom
 Element focusCursorBlock(Element child) {
   return std::make_shared<FocusCursor>(unpack(std::move(child)),
                                        Screen::Cursor::Block);
 }
+
+/// @brief Same as `focus`, but set the cursor shape to be a blinking block.
+/// @see focus
+/// @see focusCursorBlock
+/// @see focusCursorBlockBlinking
+/// @see focusCursorBar
+/// @see focusCursorBarBlinking
+/// @see focusCursorUnderline
+/// @see focusCursorUnderlineBlinking
+/// @ingroup dom
 Element focusCursorBlockBlinking(Element child) {
   return std::make_shared<FocusCursor>(unpack(std::move(child)),
                                        Screen::Cursor::BlockBlinking);
 }
+
+/// @brief Same as `focus`, but set the cursor shape to be a still block.
+/// @see focus
+/// @see focusCursorBlock
+/// @see focusCursorBlockBlinking
+/// @see focusCursorBar
+/// @see focusCursorBarBlinking
+/// @see focusCursorUnderline
+/// @see focusCursorUnderlineBlinking
+/// @ingroup dom
 Element focusCursorBar(Element child) {
   return std::make_shared<FocusCursor>(unpack(std::move(child)),
                                        Screen::Cursor::Bar);
 }
+
+/// @brief Same as `focus`, but set the cursor shape to be a blinking bar.
+/// @see focus
+/// @see focusCursorBlock
+/// @see focusCursorBlockBlinking
+/// @see focusCursorBar
+/// @see focusCursorBarBlinking
+/// @see focusCursorUnderline
+/// @see focusCursorUnderlineBlinking
+/// @ingroup dom
 Element focusCursorBarBlinking(Element child) {
   return std::make_shared<FocusCursor>(unpack(std::move(child)),
                                        Screen::Cursor::BarBlinking);
 }
+
+/// @brief Same as `focus`, but set the cursor shape to be a still underline.
+/// @see focus
+/// @see focusCursorBlock
+/// @see focusCursorBlockBlinking
+/// @see focusCursorBar
+/// @see focusCursorBarBlinking
+/// @see focusCursorUnderline
+/// @see focusCursorUnderlineBlinking
+/// @ingroup dom
 Element focusCursorUnderline(Element child) {
   return std::make_shared<FocusCursor>(unpack(std::move(child)),
                                        Screen::Cursor::Underline);
 }
+
+/// @brief Same as `focus`, but set the cursor shape to be a blinking underline.
+/// @see focus
+/// @see focusCursorBlock
+/// @see focusCursorBlockBlinking
+/// @see focusCursorBar
+/// @see focusCursorBarBlinking
+/// @see focusCursorUnderline
+/// @see focusCursorUnderlineBlinking
+/// @ingroup dom
 Element focusCursorUnderlineBlinking(Element child) {
   return std::make_shared<FocusCursor>(unpack(std::move(child)),
                                        Screen::Cursor::UnderlineBlinking);

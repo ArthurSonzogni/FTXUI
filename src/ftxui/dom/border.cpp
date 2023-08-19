@@ -18,6 +18,7 @@
 
 namespace ftxui {
 
+namespace {
 using Charset = std::array<std::string, 6>;  // NOLINT
 using Charsets = std::array<Charset, 6>;     // NOLINT
 // NOLINTNEXTLINE
@@ -190,6 +191,7 @@ class BorderPixel : public Node {
     }
   }
 };
+}  // namespace
 
 /// @brief Draw a border around the element.
 /// @ingroup dom

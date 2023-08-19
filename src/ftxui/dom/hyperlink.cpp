@@ -13,6 +13,7 @@
 
 namespace ftxui {
 
+namespace {
 class Hyperlink : public NodeDecorator {
  public:
   Hyperlink(Element child, std::string link)
@@ -30,6 +31,7 @@ class Hyperlink : public NodeDecorator {
 
   std::string link_;
 };
+}  // namespace
 
 /// @brief Make the rendered area clickable using a web browser.
 ///        The link will be opened when the user click on it.

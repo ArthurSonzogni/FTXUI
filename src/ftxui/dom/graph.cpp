@@ -15,6 +15,7 @@
 
 namespace ftxui {
 
+namespace {
 // NOLINTNEXTLINE
 static std::string charset[] =
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
@@ -62,6 +63,8 @@ class Graph : public Node {
  private:
   GraphFunction graph_function_;
 };
+
+}  // namespace
 
 /// @brief Draw a graph using a GraphFunction.
 /// @param graph_function the function to be called to get the data.

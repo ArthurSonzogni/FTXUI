@@ -31,7 +31,6 @@ int Integrate(std::vector<int>& elements) {
   }
   return accu;
 }
-}  // namespace
 
 class GridBox : public Node {
  public:
@@ -153,7 +152,8 @@ class GridBox : public Node {
   int y_size = 0;
   std::vector<Elements> lines_;
 };
-
+}  // namespace
+   //
 /// @brief A container displaying a grid of elements.
 /// @param lines A list of lines, each line being a list of elements.
 /// @return The container.

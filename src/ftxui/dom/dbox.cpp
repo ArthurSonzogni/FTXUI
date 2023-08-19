@@ -13,6 +13,7 @@
 
 namespace ftxui {
 
+  namespace {
 class DBox : public Node {
  public:
   explicit DBox(Elements children) : Node(std::move(children)) {}
@@ -47,6 +48,7 @@ class DBox : public Node {
     }
   }
 };
+}  // namespace
 
 /// @brief Stack several element on top of each other.
 /// @param children_ The input element.

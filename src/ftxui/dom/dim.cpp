@@ -12,6 +12,7 @@
 
 namespace ftxui {
 
+namespace {
 class Dim : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
@@ -25,6 +26,7 @@ class Dim : public NodeDecorator {
     }
   }
 };
+}  // namespace
 
 /// @brief Use a light font, for elements with less emphasis.
 /// @ingroup dom

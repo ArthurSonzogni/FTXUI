@@ -13,6 +13,7 @@
 
 namespace ftxui {
 
+namespace {
 // NOLINTNEXTLINE
 static const std::string charset_horizontal[11] = {
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
@@ -157,6 +158,8 @@ class Gauge : public Node {
   float progress_;
   Direction direction_;
 };
+
+}  // namespace ftxui
 
 /// @brief Draw a high definition progress bar progressing in specified
 /// direction.

@@ -288,9 +288,6 @@ void JustifyContent(Global& g, std::vector<Line> lines) {
     }
   }
 }
-}  // namespace
-
-namespace {
 
 void Compute1(Global& global);
 void Compute2(Global& global);

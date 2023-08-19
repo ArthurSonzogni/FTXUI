@@ -28,8 +28,6 @@ const Charsets charsets = {
     Charset{" ", " "},  // EMPTY
 };
 
-}  // namespace
-
 class Separator : public Node {
  public:
   explicit Separator(std::string value) : value_(std::move(value)) {}
@@ -96,6 +94,7 @@ class SeparatorWithPixel : public SeparatorAuto {
  private:
   Pixel pixel_;
 };
+}  // namespace
 
 /// @brief Draw a vertical or horizontal separation in between two other
 /// elements.

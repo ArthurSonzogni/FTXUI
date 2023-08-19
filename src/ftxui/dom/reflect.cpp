@@ -12,6 +12,7 @@
 #include "ftxui/screen/screen.hpp"    // for Screen
 
 namespace ftxui {
+namespace {
 
 // Helper class.
 class Reflect : public Node {
@@ -38,6 +39,7 @@ class Reflect : public Node {
  private:
   Box& reflected_box_;
 };
+}  // namespace
 
 Decorator reflect(Box& box) {
   return [&](Element child) -> Element {

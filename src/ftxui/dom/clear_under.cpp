@@ -12,6 +12,7 @@
 
 namespace ftxui {
 
+namespace {
 using ftxui::Screen;
 
 class ClearUnder : public NodeDecorator {
@@ -27,6 +28,7 @@ class ClearUnder : public NodeDecorator {
     Node::Render(screen);
   }
 };
+}  // namespace
 
 /// @brief Before drawing |child|, clear the pixels below. This is useful in
 //         combinaison with dbox.

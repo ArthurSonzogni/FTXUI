@@ -12,6 +12,7 @@
 
 namespace ftxui {
 
+namespace {
 class Bold : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
@@ -25,6 +26,7 @@ class Bold : public NodeDecorator {
     Node::Render(screen);
   }
 };
+}  // namespace
 
 /// @brief Use a bold font, for elements with more emphasis.
 /// @ingroup dom

@@ -12,6 +12,7 @@
 
 namespace ftxui {
 
+namespace {
 class Blink : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
@@ -25,6 +26,7 @@ class Blink : public NodeDecorator {
     }
   }
 };
+}  // namespace
 
 /// @brief The text drawn alternates in between visible and hidden.
 /// @ingroup dom

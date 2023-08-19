@@ -15,6 +15,7 @@
 
 namespace ftxui {
 
+namespace {
 class VBox : public Node {
  public:
   explicit VBox(Elements children) : Node(std::move(children)) {}
@@ -64,6 +65,7 @@ class VBox : public Node {
     }
   }
 };
+}  // namespace
 
 /// @brief A container displaying elements vertically one by one.
 /// @param children The elements in the container

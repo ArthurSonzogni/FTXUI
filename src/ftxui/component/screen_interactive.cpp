@@ -402,6 +402,9 @@ void ScreenInteractive::TrackMouse(bool enable) {
   track_mouse_ = enable;
 }
 
+/// @brief Add a task to the main loop. 
+/// It will be executed later, after every other scheduled tasks.
+/// @ingroup component
 void ScreenInteractive::Post(Task task) {
   // Task/Events sent toward inactive screen or screen waiting to become
   // inactive are dropped.
@@ -412,10 +415,15 @@ void ScreenInteractive::Post(Task task) {
   task_sender_->Send(std::move(task));
 }
 
+/// @brief Add an event to the main loop.
+/// It will be executed later, after every other scheduled events.
+/// @ingroup component
 void ScreenInteractive::PostEvent(Event event) {
   Post(event);
 }
 
+/// @brief Add a task to draw the screen one more time, until all the animations
+/// are done.
 void ScreenInteractive::RequestAnimationFrame() {
   if (animation_requested_) {
     return;
@@ -428,6 +436,10 @@ void ScreenInteractive::RequestAnimationFrame() {
   }
 }
 
+/// @brief Try to get the unique lock about behing able to capture the mouse.
+/// @return A unique lock if the mouse is not already captured, otherwise a
+/// null.
+/// @ingroup component
 CapturedMouse ScreenInteractive::CaptureMouse() {
   if (mouse_captured) {
     return nullptr;
@@ -437,15 +449,21 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
       [this] { mouse_captured = false; });
 }
 
+/// @brief Execute the main loop.
+/// @param component The component to draw.
+/// @ingroup component
 void ScreenInteractive::Loop(Component component) {  // NOLINT
   class Loop loop(this, std::move(component));
   loop.Run();
 }
 
+/// @brief Return whether the main loop has been quit.
+/// @ingroup component
 bool ScreenInteractive::HasQuitted() {
   return task_receiver_->HasQuitted();
 }
 
+// private
 void ScreenInteractive::PreMain() {
   // Suspend previously active screen:
   if (g_active_screen) {
@@ -467,6 +485,7 @@ void ScreenInteractive::PreMain() {
   previous_animation_time_ = animation::Clock::now();
 }
 
+// private
 void ScreenInteractive::PostMain() {
   // Put cursor position at the end of the drawing.
   ResetCursorPosition();
@@ -505,11 +524,13 @@ Closure ScreenInteractive::WithRestoredIO(Closure fn) {  // NOLINT
   };
 }
 
+/// @brief Return the currently active screen, or null if none.
 // static
 ScreenInteractive* ScreenInteractive::Active() {
   return g_active_screen;
 }
 
+// private
 void ScreenInteractive::Install() {
   frame_valid_ = false;
 
@@ -622,6 +643,7 @@ void ScreenInteractive::Install() {
       std::thread(&AnimationListener, &quit_, task_receiver_->MakeSender());
 }
 
+// private
 void ScreenInteractive::Uninstall() {
   ExitNow();
   event_listener_.join();
@@ -629,6 +651,7 @@ void ScreenInteractive::Uninstall() {
   OnExit();
 }
 
+// private
 // NOLINTNEXTLINE
 void ScreenInteractive::RunOnceBlocking(Component component) {
   ExecuteSignalHandlers();
@@ -639,6 +662,7 @@ void ScreenInteractive::RunOnceBlocking(Component component) {
   RunOnce(component);
 }
 
+// private
 void ScreenInteractive::RunOnce(Component component) {
   Task task;
   while (task_receiver_->ReceiveNonBlocking(&task)) {
@@ -648,6 +672,7 @@ void ScreenInteractive::RunOnce(Component component) {
   Draw(std::move(component));
 }
 
+// private
 void ScreenInteractive::HandleTask(Component component, Task& task) {
   // clang-format off
   std::visit([&](auto&& arg) {
@@ -699,6 +724,7 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
   // clang-format on
 }
 
+// private
 // NOLINTNEXTLINE
 void ScreenInteractive::Draw(Component component) {
   if (frame_valid_) {
@@ -793,24 +819,31 @@ void ScreenInteractive::Draw(Component component) {
   frame_valid_ = true;
 }
 
+// private
 void ScreenInteractive::ResetCursorPosition() {
   std::cout << reset_cursor_position;
   reset_cursor_position = "";
 }
 
+/// @brief Return a function to exit the main loop.
+/// @ingroup component
 Closure ScreenInteractive::ExitLoopClosure() {
   return [this] { Exit(); };
 }
 
+/// @brief Exit the main loop.
+/// @ingroup component
 void ScreenInteractive::Exit() {
   Post([this] { ExitNow(); });
 }
 
+// private:
 void ScreenInteractive::ExitNow() {
   quit_ = true;
   task_sender_.reset();
 }
 
+// private:
 void ScreenInteractive::Signal(int signal) {
   if (signal == SIGABRT) {
     OnExit();
