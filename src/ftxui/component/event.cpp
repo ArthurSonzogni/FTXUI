@@ -100,6 +100,7 @@ const Event Event::F10 = Event::Special("\x1B[21~");  // NOLINT
 const Event Event::F11 = Event::Special("\x1B[23~");  // NOLINT
 const Event Event::F12 = Event::Special("\x1B[24~");  // NOLINT
 
+const Event Event::Insert = Event::Special("\x1B[2~");            // NOLINT
 const Event Event::Home = Event::Special({27, 91, 72});           // NOLINT
 const Event Event::End = Event::Special({27, 91, 70});            // NOLINT
 const Event Event::PageUp = Event::Special({27, 91, 53, 126});    // NOLINT
