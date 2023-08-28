@@ -58,6 +58,7 @@ target_include_directories(ftxui-tests
   PRIVATE src
 )
 target_compile_features(ftxui-tests PRIVATE cxx_std_20)
+set_target_properties(ftxui-tests PROPERTIES UNITY_BUILD OFF)
 
 if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
   target_compile_definitions(ftxui-tests
