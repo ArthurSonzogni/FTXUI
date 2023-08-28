@@ -62,6 +62,8 @@ Component Input(StringRef content,
                 StringRef placeholder,
                 InputOption options = {});
 
+Component IpInput(StringRef content);
+
 Component Menu(MenuOption options);
 Component Menu(ConstStringListRef entries,
                int* selected_,
