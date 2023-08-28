@@ -58,6 +58,10 @@ target_include_directories(ftxui-tests
   PRIVATE src
 )
 target_compile_features(ftxui-tests PRIVATE cxx_std_20)
+
+# Disable unity build for tests. There are several files defining the same
+# function in different anonymous namespaces. This is not allowed in unity
+# builds, as it would result in multiple definitions of the same function.
 set_target_properties(ftxui-tests PROPERTIES UNITY_BUILD OFF)
 
 if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
