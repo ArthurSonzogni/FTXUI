@@ -8,6 +8,9 @@ current (development)
 - Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
   option. Added by @mingsheng13.
 
+### Build
+- Support for cmake's "unity/jumbo" builds. Fixed by @ClausKlein.
+
 5.0.0
 -----
 
