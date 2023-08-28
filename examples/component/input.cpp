@@ -20,7 +20,7 @@ int main() {
   std::string password;
 
   Component input_first_name = Input(&first_name, "first name");
-  Component input_last_name = Input(&last_name, "last name");
+  Component input_last_name = IpInput(&last_name);
 
   InputOption password_option;
   password_option.password = true;
