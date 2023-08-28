@@ -754,4 +754,32 @@ TEST(InputTest, OnEnter) {
   EXPECT_TRUE(on_enter_called);
 }
 
+TEST(InputTest, InsertMode) {
+  std::string content = "abc\nefg";
+  bool insert = true;
+  int cursor_position = 1;
+  Component input = Input({
+      .content = &content,
+      .insert = &insert,
+      .cursor_position = &cursor_position,
+  });
+
+  EXPECT_TRUE(insert);
+  EXPECT_TRUE(input->OnEvent(Event::Insert));
+  EXPECT_FALSE(insert);
+
+  EXPECT_EQ(content, "abc\nefg");
+  EXPECT_TRUE(input->OnEvent(Event::Character('x')));
+  EXPECT_EQ(content, "axc\nefg");
+  EXPECT_TRUE(input->OnEvent(Event::Character('y')));
+  EXPECT_EQ(content, "axy\nefg");
+  EXPECT_TRUE(input->OnEvent(Event::Character('z')));
+  EXPECT_EQ(content, "axyz\nefg");
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowDown));
+  EXPECT_EQ(content, "axyz\nefg");
+  EXPECT_TRUE(input->OnEvent(Event::Character('X')));
+  EXPECT_EQ(content, "axyz\nefgX");
+}
+
 }  // namespace ftxui

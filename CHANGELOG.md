@@ -4,6 +4,10 @@ Changelog
 current (development) 
 ---------------------
 
+### Component
+- Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
+  option. Added by @mingsheng13.
+
 5.0.0
 -----
 
