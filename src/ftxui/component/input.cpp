@@ -100,9 +100,9 @@ class InputBase : public ComponentBase, public InputOption {
   // Component implementation:
   Element Render() override {
     const bool is_focused = Focused();
-    const auto focused =
-        (overwrite() && (is_focused || hovered_)) ? focusCursorBlockBlinking
-        : (is_focused || hovered_) ? focusCursorBarBlinking : select;
+    const auto focused = (!is_focused && !hovered_) ? select
+                         : insert()                 ? focusCursorBarBlinking
+                                                    : focusCursorBlockBlinking;
 
     auto transform_func =
         transform ? transform : InputOption::Default().transform;
@@ -343,12 +343,10 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleCharacter(const std::string& character) {
-    if (overwrite()) {
-      content->replace(cursor_position(), character.size(), character);
+    if (!insert()) {
+      HandleDelete();
     }
-    else {
-      content->insert(cursor_position(), character);
-    }
+    content->insert(cursor_position(), character);
     cursor_position() += character.size();
     on_change();
     return true;
@@ -517,7 +515,7 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleInsert() {
-    overwrite() = !overwrite();
+    insert() = !insert();
     return true;
   }
 
