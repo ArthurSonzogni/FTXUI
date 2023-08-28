@@ -55,6 +55,7 @@ struct Event {
   static const Event TabReverse;
   static const Event F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12;
 
+  static const Event Insert;
   static const Event Home;
   static const Event End;
 
