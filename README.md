@@ -294,7 +294,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 ## Libraries for FTXUI
 - *Want to share a useful component using FTXUI? Feel free adding yours here*
-
+- [GridContainer](https://github.com/mingsheng13/grid-container-ftxui)
 
 ## Project using FTXUI
 
