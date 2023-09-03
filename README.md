@@ -325,6 +325,7 @@ Feel free to add your projects here:
 - [eCAL monitor](https://github.com/eclipse-ecal/ecal)
 - [Path Finder](https://github.com/Ruebled/Path_Finder)
 - [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
+- [resource-monitor](https://github.com/catalincd/resource-monitor)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
