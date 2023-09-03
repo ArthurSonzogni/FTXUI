@@ -324,7 +324,8 @@ Feel free to add your projects here:
 - [StartUp](https://github.com/StubbornVegeta/StartUp)
 - [eCAL monitor](https://github.com/eclipse-ecal/ecal)
 - [Path Finder](https://github.com/Ruebled/Path_Finder)
-- [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
+- [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)*
+- [ftxuiFileReader](https://github.com/J0sephDavis/ftxuiFileReader)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
