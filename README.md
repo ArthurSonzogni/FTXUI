@@ -326,6 +326,7 @@ Feel free to add your projects here:
 - [Path Finder](https://github.com/Ruebled/Path_Finder)
 - [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)*
 - [ftxuiFileReader](https://github.com/J0sephDavis/ftxuiFileReader)
+- [ftxui_CPUMeter](https://github.com/tzzzzzzzx/ftxui_CPUMeter)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
