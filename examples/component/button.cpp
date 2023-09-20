@@ -43,7 +43,7 @@ int main() {
       }) | flex,
       Container::Horizontal({
         Button("-10", [&] { value -= 10; }, ButtonStyle()),
-        Button("-10", [&] { value += 10; }, ButtonStyle()),
+        Button("+10", [&] { value += 10; }, ButtonStyle()),
       }) | flex,
     });
 
