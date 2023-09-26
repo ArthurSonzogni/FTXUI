@@ -47,7 +47,6 @@ Table::Table() {
   Initialize({});
 }
 
-
 /// @brief Create a table from a vector of vector of string.
 /// @param input The input data.
 /// @ingroup dom

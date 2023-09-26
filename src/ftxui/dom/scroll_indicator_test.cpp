@@ -26,6 +26,18 @@ Element MakeVerticalList(int focused_index, int n) {
   return vbox(std::move(list)) | vscroll_indicator | frame | border;
 }
 
+Element MakeHorizontalList(int focused_index, int n) {
+  Elements list;
+  for (int i = 0; i < n; ++i) {
+    auto element = text(std::to_string(i));
+    if (i == focused_index) {
+      element |= focus;
+    }
+    list.push_back(element);
+  }
+  return hbox(std::move(list)) | hscroll_indicator | frame | border;
+}
+
 std::string PrintVerticalList(int focused_index, int n) {
   auto element = MakeVerticalList(focused_index, n);
   Screen screen(6, 6);
@@ -33,9 +45,16 @@ std::string PrintVerticalList(int focused_index, int n) {
   return screen.ToString();
 }
 
+std::string PrintHorizontalList(int focused_index, int n) {
+  auto element = MakeHorizontalList(focused_index, n);
+  Screen screen(6, 4);
+  Render(screen, element);
+  return screen.ToString();
+}
+
 }  // namespace
 
-TEST(ScrollIndicator, Basic) {
+TEST(ScrollIndicator, BasicVertical) {
   EXPECT_EQ(PrintVerticalList(0, 10),
             "╭────╮\r\n"
             "│0  ┃│\r\n"
@@ -105,6 +124,56 @@ TEST(ScrollIndicator, Basic) {
             "│7   │\r\n"
             "│8  ┃│\r\n"
             "│9  ┃│\r\n"
+            "╰────╯");
+}
+
+TEST(ScrollIndicator, BasicHorizontal) {
+  EXPECT_EQ(PrintHorizontalList(0, 10),
+            "╭────╮\r\n"
+            "│0123│\r\n"
+            "│──  │\r\n"
+            "╰────╯");
+
+  EXPECT_EQ(PrintHorizontalList(1, 10),
+            "╭────╮\r\n"
+            "│0123│\r\n"
+            "│──  │\r\n"
+            "╰────╯");
+
+  EXPECT_EQ(PrintHorizontalList(2, 10),
+            "╭────╮\r\n"
+            "│1234│\r\n"
+            "│──  │\r\n"
+            "╰────╯");
+  EXPECT_EQ(PrintHorizontalList(3, 10),
+            "╭────╮\r\n"
+            "│2345│\r\n"
+            "│╶─╴ │\r\n"
+            "╰────╯");
+  EXPECT_EQ(PrintHorizontalList(4, 10),
+            "╭────╮\r\n"
+            "│3456│\r\n"
+            "│ ── │\r\n"
+            "╰────╯");
+  EXPECT_EQ(PrintHorizontalList(5, 10),
+            "╭────╮\r\n"
+            "│4567│\r\n"
+            "│ ╶─╴│\r\n"
+            "╰────╯");
+  EXPECT_EQ(PrintHorizontalList(6, 10),
+            "╭────╮\r\n"
+            "│5678│\r\n"
+            "│  ──│\r\n"
+            "╰────╯");
+  EXPECT_EQ(PrintHorizontalList(7, 10),
+            "╭────╮\r\n"
+            "│6789│\r\n"
+            "│  ──│\r\n"
+            "╰────╯");
+  EXPECT_EQ(PrintHorizontalList(8, 10),
+            "╭────╮\r\n"
+            "│6789│\r\n"
+            "│  ──│\r\n"
             "╰────╯");
 }
 
