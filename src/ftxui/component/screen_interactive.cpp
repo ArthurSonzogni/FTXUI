@@ -402,7 +402,7 @@ void ScreenInteractive::TrackMouse(bool enable) {
   track_mouse_ = enable;
 }
 
-/// @brief Add a task to the main loop. 
+/// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
 /// @ingroup component
 void ScreenInteractive::Post(Task task) {

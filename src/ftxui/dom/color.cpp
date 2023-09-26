@@ -12,7 +12,7 @@
 
 namespace ftxui {
 
-  namespace {
+namespace {
 class BgColor : public NodeDecorator {
  public:
   BgColor(Element child, Color color)

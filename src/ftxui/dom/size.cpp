@@ -79,7 +79,7 @@ class Size : public Node {
   Constraint constraint_;
   int value_;
 };
-} // namespace
+}  // namespace
 
 /// @brief Apply a constraint on the size of an element.
 /// @param direction Whether the WIDTH of the HEIGHT of the element must be
