@@ -13,7 +13,7 @@
 
 namespace ftxui {
 
-  namespace {
+namespace {
 class DBox : public Node {
  public:
   explicit DBox(Elements children) : Node(std::move(children)) {}

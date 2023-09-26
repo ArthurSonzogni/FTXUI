@@ -8,6 +8,11 @@ current (development)
 - Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
   option. Added by @mingsheng13.
 
+### Dom
+- Feature: Add `hscroll_indicator`. It display an horizontal indicator
+  reflecting the current scroll position. Proposed by @ibrahimnasson in
+  [issue 752](https://github.com/ArthurSonzogni/FTXUI/issues/752)
+
 ### Build
 - Support for cmake's "unity/jumbo" builds. Fixed by @ClausKlein.
 

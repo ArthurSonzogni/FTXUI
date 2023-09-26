@@ -33,19 +33,21 @@ ButtonOption ButtonStyle() {
 int main() {
   int value = 50;
 
-
   // The tree of components. This defines how to navigate using the keyboard.
-  auto buttons =
-    Container::Vertical({
+  auto buttons = Container::Vertical({
       Container::Horizontal({
-        Button("-1", [&] { value--; }, ButtonStyle()),
-        Button("+1", [&] { value++; }, ButtonStyle()),
+          Button(
+              "-1", [&] { value--; }, ButtonStyle()),
+          Button(
+              "+1", [&] { value++; }, ButtonStyle()),
       }) | flex,
       Container::Horizontal({
-        Button("-10", [&] { value -= 10; }, ButtonStyle()),
-        Button("+10", [&] { value += 10; }, ButtonStyle()),
+          Button(
+              "-10", [&] { value -= 10; }, ButtonStyle()),
+          Button(
+              "+10", [&] { value += 10; }, ButtonStyle()),
       }) | flex,
-    });
+  });
 
   // Modify the way to render them on screen:
   auto component = Renderer(buttons, [&] {
@@ -53,7 +55,8 @@ int main() {
                text("value = " + std::to_string(value)),
                separator(),
                buttons->Render() | flex,
-           }) | flex | border;
+           }) |
+           flex | border;
   });
 
   auto screen = ScreenInteractive::Fullscreen();

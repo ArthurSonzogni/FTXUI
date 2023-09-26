@@ -37,7 +37,6 @@ class Select : public Node {
   }
 };
 
-
 class Focus : public Select {
  public:
   using Select::Select;
@@ -142,7 +141,6 @@ class FocusCursor : public Focus {
   }
   Screen::Cursor::Shape shape_;
 };
-
 
 }  // namespace
 

@@ -164,4 +164,4 @@ TEST(StringTest, to_wstring) {
   EXPECT_EQ(to_wstring(std::string("🎅🎄")), L"🎅🎄");
 }
 
-}
+}  // namespace ftxui

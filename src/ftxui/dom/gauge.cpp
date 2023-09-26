@@ -159,7 +159,7 @@ class Gauge : public Node {
   Direction direction_;
 };
 
-}  // namespace ftxui
+}  // namespace
 
 /// @brief Draw a high definition progress bar progressing in specified
 /// direction.
