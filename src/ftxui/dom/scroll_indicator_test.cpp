@@ -136,7 +136,7 @@ TEST(ScrollIndicator, VerticalColorable) {
   //           "│1  ┃│\r\n"
   //           "│2   │\r\n"
   //           "│3   │\r\n"
-  //           "╰────╯");
+  //           "╰────╯"
 
   auto element = MakeVerticalList(0, 10) | color(Color::Red);
   Screen screen(6, 6);
@@ -154,7 +154,7 @@ TEST(ScrollIndicator, VerticalBackgroundColorable) {
   //           "│1  ┃│\r\n"
   //           "│2   │\r\n"
   //           "│3   │\r\n"
-  //           "╰────╯");
+  //           "╰────╯"
 
   auto element = MakeVerticalList(0, 10) | bgcolor(Color::Red);
   Screen screen(6, 6);
@@ -172,7 +172,7 @@ TEST(ScrollIndicator, VerticalFullColorable) {
   //           "│1  ┃│\r\n"
   //           "│2   │\r\n"
   //           "│3   │\r\n"
-  //           "╰────╯");
+  //           "╰────╯"
 
   auto element = MakeVerticalList(0, 10) | color(Color::Red) | bgcolor(Color::Red);
   Screen screen(6, 6);
@@ -230,6 +230,54 @@ TEST(ScrollIndicator, BasicHorizontal) {
             "│6789│\r\n"
             "│  ──│\r\n"
             "╰────╯");
+}
+
+TEST(ScrollIndicator, HorizontalColorable) {
+
+  // The list we generate looks like this
+  //           "╭────╮\r\n"
+  //           "│5678│\r\n"
+  //           "│  ──│\r\n"
+  //           "╰────╯"
+
+  auto element = MakeHorizontalList(6, 10) | color(Color::Red);
+  Screen screen(6, 4);
+  Render(screen, element);
+
+  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color::Red);
+  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color());
+}
+
+TEST(ScrollIndicator, HorizontalBackgroundColorable) {
+
+  // The list we generate looks like this
+  //           "╭────╮\r\n"
+  //           "│5678│\r\n"
+  //           "│  ──│\r\n"
+  //           "╰────╯"
+
+  auto element = MakeHorizontalList(6, 10) | bgcolor(Color::Red);
+  Screen screen(6, 4);
+  Render(screen, element);
+
+  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color());
+  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color::Red);
+}
+
+TEST(ScrollIndicator, HorizontalFullColorable) {
+
+  // The list we generate looks like this
+  //           "╭────╮\r\n"
+  //           "│5678│\r\n"
+  //           "│  ──│\r\n"
+  //           "╰────╯"
+
+  auto element = MakeHorizontalList(6, 10) | color(Color::Red) | bgcolor(Color::Red);
+  Screen screen(6, 4);
+  Render(screen, element);
+
+  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color::Red);
+  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color::Red);
 }
 
 namespace {
