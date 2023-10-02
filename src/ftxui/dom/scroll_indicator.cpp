@@ -64,7 +64,6 @@ Element vscroll_indicator(Element child) {
         const bool down = (start_y <= y_down) && (y_down <= start_y + size);
 
         const char* c = up ? (down ? "┃" : "╹") : (down ? "╻" : " ");  // NOLINT
-        screen.PixelAt(x, y) = Pixel();
         screen.PixelAt(x, y).character = c;
       }
     }
@@ -121,7 +120,6 @@ Element hscroll_indicator(Element child) {
 
         const char* c =
             left ? (right ? "─" : "╴") : (right ? "╶" : " ");  // NOLINT
-        screen.PixelAt(x, y) = Pixel();
         screen.PixelAt(x, y).character = c;
       }
     }
