@@ -1,0 +1,266 @@
+#include <chrono>
+#include <thread>
+#include <iostream>
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/screen/screen.hpp>
+#include <memory>
+#include <string>
+#include "ftxui/dom/canvas.hpp"
+#include "ftxui/screen/color.hpp"
+
+
+using namespace ftxui;
+using namespace std::chrono_literals;
+
+class Fireworks{
+
+public:
+
+    void goBoom();
+    void setDelay(int delayChoice);
+    void setCanvasSize(int width, int height);
+
+private:
+
+    //Variable Declaration
+    int canvas_width = 25;
+    int canvas_height = 25;
+    Canvas currentCanvas = Canvas(canvas_width, canvas_height);
+    std::string reset_position;
+    Element document;
+    Screen screen = Screen::Create(Dimension::Full(), Dimension::Full());
+    int time;
+    int timeSetting = 1;
+
+    //Functions
+    void setAnimation(int currentScreen);
+    void display();
+    void pause();
+    void refresh();
+
+};
+
+
+void Fireworks::goBoom() {
+
+    for(int i = 0; i < 10; i++) {
+        for (int j = 0; j < 9; j++) {
+
+            setAnimation(j);
+            refresh();
+            display();
+            pause();
+
+        }
+    }
+}
+
+void Fireworks::setAnimation(int currentScreen) {
+
+    int width_center = (canvas_width / 2);
+    int height_center = (canvas_height / 2);
+
+    // Horizontal Lines
+    int right_x1 = width_center+4;
+    int right_x2 = width_center+10;
+    int left_x1 = width_center-8;
+    int left_x2 = width_center-14;
+    int straight_y = height_center-2;
+
+    // Vertical Lines
+    int up_y1 = height_center-10;
+    int up_y2 = height_center-14;
+    int down_y1 = height_center+3;
+    int down_y2 = height_center+7;
+    int vert_x = width_center-2;
+
+    if (currentScreen == 0) {
+        //currentCanvas.DrawText(10, 10, "Boom!");
+        //Up Line (x, y-4)
+        currentCanvas.DrawPointLine(vert_x, canvas_height, vert_x, canvas_height+1, Color::White);
+    }
+    else if (currentScreen == 1) {
+        //currentCanvas.DrawText(10, 10, "Boom!");
+        //Up Line (x, y-4)
+        currentCanvas.DrawPointLine(vert_x, 0.84*canvas_height, vert_x, (0.84*canvas_height)+1, Color::White);
+    }
+    else if (currentScreen == 2) {
+        //currentCanvas.DrawText(10, 10, "Boom!");
+        //Up Line (x, y-4)
+        currentCanvas.DrawPointLine(vert_x, 0.68*canvas_height, vert_x, (0.68*canvas_height)+1, Color::White);
+    }
+    else if (currentScreen == 3) {
+        //currentCanvas.DrawText(10, 10, "Boom!");
+        //Up Line (x, y-4)
+        currentCanvas.DrawPointLine(vert_x, 0.55*canvas_height, vert_x, (0.55*canvas_height)+1, Color::White);
+    }
+
+    else if (currentScreen == 4) {
+
+        //Center
+        currentCanvas.DrawPointCircleFilled(width_center-2,height_center-2,4, Color::White);
+        //Right Line
+        currentCanvas.DrawPointLine(right_x1,straight_y,right_x2,straight_y,Color::Red);
+        //Left Line
+        currentCanvas.DrawPointLine(left_x1,straight_y,left_x2,straight_y,Color::Red);
+        //Up Line
+        currentCanvas.DrawPointLine(vert_x,up_y1,vert_x,up_y2,Color::Red);
+        //Down Line
+        currentCanvas.DrawPointLine(vert_x,down_y1,vert_x,down_y2,Color::Red);
+
+        //Up Right Line
+        currentCanvas.DrawPointLine(right_x1,up_y1,right_x2,up_y2,Color::Blue);
+        //Up Left Line
+        currentCanvas.DrawPointLine(left_x1,up_y1,left_x2,up_y2,Color::Blue);
+        //Down Right Line
+        currentCanvas.DrawPointLine(right_x1,down_y1,right_x2,down_y2,Color::Blue);
+        //Down Left Line
+        currentCanvas.DrawPointLine(left_x1,down_y1,left_x2,down_y2,Color::Blue);
+
+    }
+    else if (currentScreen == 5) {
+
+        //Center
+        currentCanvas.DrawPointCircle(width_center-2,height_center-2,4, Color::White);
+        //Right Line (x+2, y)
+        currentCanvas.DrawPointLine(right_x1+2,straight_y,right_x2+2,straight_y,Color::Blue);
+        //Left Line (x-2, y)
+        currentCanvas.DrawPointLine(left_x1-2,straight_y,left_x2-2,straight_y,Color::Blue);
+        //Up Line (x, y-1)
+        currentCanvas.DrawPointLine(vert_x,up_y1-1,vert_x,up_y2-1,Color::Blue);
+        //Down Line (x, y+1)
+        currentCanvas.DrawPointLine(vert_x,down_y1+1,vert_x,down_y2+1,Color::Blue);
+
+        //Up Right Line (x+2, y-1)
+        currentCanvas.DrawPointLine(right_x1+2,up_y1-1,right_x2+2,up_y2-1,Color::Red);
+        //Up Left Line (x-2, y-1)
+        currentCanvas.DrawPointLine(left_x1-2,up_y1-1,left_x2-2,up_y2-1,Color::Red);
+        //Down Right Line (x+2, y+1)
+        currentCanvas.DrawPointLine(right_x1+2,down_y1+1,right_x2+2,down_y2+1,Color::Red);
+        //Down Left Line (x-2, y+1)
+        currentCanvas.DrawPointLine(left_x1-2,down_y1+1,left_x2-2,down_y2+1,Color::Red);
+
+    }
+    else if (currentScreen == 6) {
+
+        //Right Line (x+4, y)
+        currentCanvas.DrawPointLine(right_x1+4,straight_y,right_x2+4,straight_y,Color::Red);
+        //Left Line (x-4, y)
+        currentCanvas.DrawPointLine(left_x1-4,straight_y,left_x2-4,straight_y,Color::Red);
+        //Up Line (x, y-2)
+        currentCanvas.DrawPointLine(vert_x,up_y1-2,vert_x,up_y2-2,Color::Red);
+        //Down Line (x, y+2)
+        currentCanvas.DrawPointLine(vert_x,down_y1+2,vert_x,down_y2+2,Color::Red);
+
+        //Up Right Line (x+4, y-2)
+        currentCanvas.DrawPointLine(right_x1+4,up_y1-2,right_x2+4,up_y2-2,Color::Blue);
+        //Up Left Line (x-4, y-2)
+        currentCanvas.DrawPointLine(left_x1-4,up_y1-2,left_x2-4,up_y2-2,Color::Blue);
+        //Down Right Line (x+4, y+2)
+        currentCanvas.DrawPointLine(right_x1+4,down_y1+2,right_x2+4,down_y2+2,Color::Blue);
+        //Down Left Line (x-4, y+2)
+        currentCanvas.DrawPointLine(left_x1-4,down_y1+2,left_x2-4,down_y2+2,Color::Blue);
+
+    }
+    else if (currentScreen == 7) {
+
+        //Center
+        currentCanvas.DrawPointCircle(width_center-2,height_center-2,4, Color::White);
+        //Right Line (x+6, y)
+        currentCanvas.DrawPointLine(right_x1+6,straight_y,right_x2+6,straight_y,Color::Blue);
+        //Left Line (x-6, y)
+        currentCanvas.DrawPointLine(left_x1-6,straight_y,left_x2-6,straight_y,Color::Blue);
+        //Up Line (x, y-3)
+        currentCanvas.DrawPointLine(vert_x,up_y1-3,vert_x,up_y2-3,Color::Blue);
+        //Down Line (x, y+3)
+        currentCanvas.DrawPointLine(vert_x,down_y1+3,vert_x,down_y2+3,Color::Blue);
+
+        //Up Right Line (x+6, y-3)
+        currentCanvas.DrawPointLine(right_x1+6,up_y1-3,right_x2+6,up_y2-3,Color::Red);
+        //Up Left Line (x-6, y-3)
+        currentCanvas.DrawPointLine(left_x1-6,up_y1-3,left_x2-6,up_y2-3,Color::Red);
+        //Down Right Line (x+6, y+3)
+        currentCanvas.DrawPointLine(right_x1+6,down_y1+3,right_x2+6,down_y2+3,Color::Red);
+        //Down Left Line (x-6, y+3)
+        currentCanvas.DrawPointLine(left_x1-6,down_y1+3,left_x2-6,down_y2+3,Color::Red);
+
+    }
+    else if (currentScreen == 8) {
+
+        //Right Line (x+8, y)
+        currentCanvas.DrawPointLine(right_x1 + 8, straight_y, right_x2 + 8, straight_y, Color::Red);
+        //Left Line (x-8, y)
+        currentCanvas.DrawPointLine(left_x1 - 8, straight_y, left_x2 - 8, straight_y, Color::Red);
+        //Up Line (x, y-4)
+        currentCanvas.DrawPointLine(vert_x, up_y1 - 4, vert_x, up_y2 - 4, Color::Red);
+        //Down Line (x, y+4)
+        currentCanvas.DrawPointLine(vert_x, down_y1 + 4, vert_x, down_y2 + 4, Color::Red);
+
+        //Up Right Line (x+8, y-4)
+        currentCanvas.DrawPointLine(right_x1 + 8, up_y1 - 4, right_x2 + 8, up_y2 - 4, Color::Blue);
+        //Up Left Line (x-8, y-4)
+        currentCanvas.DrawPointLine(left_x1 - 8, up_y1 - 4, left_x2 - 8, up_y2 - 4, Color::Blue);
+        //Down Right Line (x+8, y+4)
+        currentCanvas.DrawPointLine(right_x1 + 8, down_y1 + 4, right_x2 + 8, down_y2 + 4, Color::Blue);
+        //Down Left Line (x-8, y+4)
+        currentCanvas.DrawPointLine(left_x1 - 8, down_y1 + 4, left_x2 - 8, down_y2 + 4, Color::Blue);
+
+    }
+
+}
+
+void Fireworks::display(){
+
+    Render(screen, document);
+
+    std::cout << reset_position;
+
+    screen.Print();
+
+    reset_position = screen.ResetPosition();
+}
+
+void Fireworks::pause(){
+
+
+    switch (timeSetting){
+
+        case 1:
+            time = 100;
+            break;
+        case 2:
+            time = 500;
+            break;
+        case 3:
+            time = 1000;
+            break;
+        case 4:
+            time = 1500;
+            break;
+        case 5:
+            time = 2000;
+            break;
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(time));
+}
+
+void Fireworks::setDelay(int delayChoice){
+    timeSetting = delayChoice;
+}
+
+void Fireworks::refresh(){
+
+    document = hbox({
+                                    hbox(canvas(std::move(currentCanvas))) | border,
+                                    filler(),
+                            });
+    screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
+}
+
+void Fireworks::setCanvasSize(int width, int height) {
+    canvas_width = width;
+    canvas_height = height;
+    currentCanvas = Canvas(canvas_width, canvas_height);
+    refresh();
+}
