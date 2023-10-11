@@ -157,6 +157,11 @@ struct InputState {
                         /// < placeholder.
 };
 
+struct CharRange{
+  std::string start;
+  std::string stop;
+};
+
 /// @brief Option for the Input component.
 /// @ingroup component
 struct InputOption {
@@ -172,6 +177,9 @@ struct InputOption {
 
   /// The content of the input when it's empty.
   StringRef placeholder = "";
+
+  /// List of ranges of character we tolerate in this input.
+  std::vector<CharRange> validRanges;
 
   // Style:
   std::function<Element(InputState)> transform;

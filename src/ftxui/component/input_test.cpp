@@ -782,4 +782,51 @@ TEST(InputTest, InsertMode) {
   EXPECT_EQ(content, "axyz\nefgX");
 }
 
+TEST(InputTest, InsertFilteredDigits) {
+  std::string content;
+  int cursor_position = 0;
+  std::vector<CharRange> validRanges;
+
+  validRanges.push_back({"0", "9"});
+
+  Component input = Input(&content, {
+                                        .validRanges = validRanges,
+                                        .cursor_position = &cursor_position,
+                                    });
+
+  EXPECT_FALSE(input->OnEvent(Event::Character('a')));
+  EXPECT_FALSE(input->OnEvent(Event::Character('b')));
+  EXPECT_FALSE(input->OnEvent(Event::Character('c')));
+  EXPECT_EQ(content, "");
+
+  EXPECT_FALSE(input->OnEvent(Event::Character('a')));
+  EXPECT_TRUE(input->OnEvent(Event::Character('1')));
+  EXPECT_FALSE(input->OnEvent(Event::Character('c')));
+  EXPECT_EQ(content, "1");
+}
+
+TEST(InputTest, InsertFilteredChar) {
+  std::string content;
+  int cursor_position = 0;
+  std::vector<CharRange> validRanges;
+
+  validRanges.push_back({"A", "Z"});
+  validRanges.push_back({"a", "z"});
+
+  Component input = Input(&content, {
+                                        .validRanges = validRanges,
+                                        .cursor_position = &cursor_position,
+                                    });
+
+  EXPECT_TRUE(input->OnEvent(Event::Character('a')));
+  EXPECT_TRUE(input->OnEvent(Event::Character('b')));
+  EXPECT_TRUE(input->OnEvent(Event::Character('c')));
+  EXPECT_EQ(content, "abc");
+
+  EXPECT_TRUE(input->OnEvent(Event::Character('A')));
+  EXPECT_FALSE(input->OnEvent(Event::Character('1')));
+  EXPECT_TRUE(input->OnEvent(Event::Character('C')));
+  EXPECT_EQ(content, "abcAC");
+}
+
 }  // namespace ftxui
