@@ -32,7 +32,7 @@ class ScreenInteractive : public Screen {
   static ScreenInteractive FixedSize(int dimx, int dimy);
   static ScreenInteractive Fullscreen();
   static ScreenInteractive FitComponent();
-  static ScreenInteractive TerminalOutput();
+  static ScreenInteractive TerminalOutput(bool use_alternative_screen = true);
 
   // Options. Must be called before Loop().
   void TrackMouse(bool enable = true);
