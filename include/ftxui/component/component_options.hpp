@@ -175,9 +175,12 @@ struct InputOption {
 
   // Style:
   std::function<Element(InputState)> transform;
-  Ref<bool> password = false;  /// < Obscure the input content using '*'.
-  Ref<bool> multiline = true;  /// < Whether the input can be multiline.
-  Ref<bool> insert = true;     /// < Insert or overtype character mode.
+  /// < Obscure the input content using '*'.
+  Ref<bool> password = false;
+  /// < Whether the input can be multiline.
+  Ref<bool> multiline = true;
+  /// < Insert or overtype character mode.
+  Ref<bool> insert = true;
 
   /// Called when the content changes.
   std::function<void()> on_change = [] {};
