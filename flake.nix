@@ -8,9 +8,11 @@
 
   outputs = {self, nixpkgs, flake-utils}:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { inherit system; }; in
-      {
-        packages.ftxui = pkgs.stdenv.mkDerivation rec {
+    let pkgs = import nixpkgs { inherit system; }; in
+    let llvm = pkgs.llvmPackages_latest; in
+    {
+      packages = rec {
+        default = pkgs.stdenv.mkDerivation rec {
           pname = "ftxui";
           version = "v4.0.0";
           src = pkgs.fetchFromGitHub {
@@ -56,6 +58,19 @@
             platforms = pkgs.lib.platforms.all;
           };
         };
-      }
-    );
+
+        ftxui = default;
+      };
+
+      devShells = {
+        default = pkgs.mkShell {
+          nativeBuildInputs = [
+            pkgs.cmake
+            pkgs.clang-tools
+            llvm.clang
+          ];
+        };
+      };
+    }
+  );
 }
