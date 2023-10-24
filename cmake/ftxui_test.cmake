@@ -9,6 +9,7 @@ include(cmake/ftxui_find_google_test.cmake)
 add_executable(ftxui-tests
   src/ftxui/component/animation_test.cpp
   src/ftxui/component/button_test.cpp
+  src/ftxui/component/checkbox_test.cpp
   src/ftxui/component/collapsible_test.cpp
   src/ftxui/component/component_test.cpp
   src/ftxui/component/component_test.cpp
