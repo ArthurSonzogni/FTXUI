@@ -18,6 +18,7 @@ int main() {
   std::string first_name;
   std::string last_name;
   std::string password;
+  std::string phoneNumber;
 
   Component input_first_name = Input(&first_name, "first name");
   Component input_last_name = Input(&last_name, "last name");
@@ -26,10 +27,24 @@ int main() {
   password_option.password = true;
   Component input_password = Input(&password, "password", password_option);
 
+  Component input_phone_number = Input(&phoneNumber, "phone number") | CatchEvent([&](Event event){
+
+    if(event.is_character() == true)
+    {
+        if(std::isdigit(event.character().c_str()[0]) == false)
+        {
+            return true;
+        }
+    }
+
+    return false;
+  });
+
   auto component = Container::Vertical({
       input_first_name,
       input_last_name,
       input_password,
+      input_phone_number,
   });
 
   auto renderer = Renderer(component, [&] {
@@ -39,6 +54,7 @@ int main() {
                hbox(text(" First name : "), input_first_name->Render()),
                hbox(text(" Last name  : "), input_last_name->Render()),
                hbox(text(" Password   : "), input_password->Render()),
+               hbox(text(" Phone num  : "), input_phone_number->Render()),
            }) |
            border;
   });
