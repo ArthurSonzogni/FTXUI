@@ -23,6 +23,11 @@ struct Mouse {
     Pressed = 1,
   };
 
+  // Utility function to check the variations of the mouse state.
+  bool IsPressed(Button button = Left) const;
+  bool IsHeld(Button button = Left) const;
+  bool IsReleased(Button button = Left) const;
+
   // Button
   Button button = Button::None;
 
@@ -37,6 +42,9 @@ struct Mouse {
   // Coordinates:
   int x = 0;
   int y = 0;
+
+  // Previous mouse event, if any.
+  Mouse* previous = nullptr;
 };
 
 }  // namespace ftxui

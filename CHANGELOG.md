@@ -7,6 +7,26 @@ current (development)
 ### Component
 - Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
   option. Added by @mingsheng13.
+- Feature/Bugfix/Breaking change: `Mouse transition`:
+  This fixes: https://github.com/ArthurSonzogni/FTXUI/issues/773
+  Dragging the mouse with the left button pressed now avoids activating multiple
+  checkboxes.
+
+  Add support for detecting mouse press transition. Added:
+  ```cpp
+  // The previous mouse event.
+  Mouse Mouse::previous;
+
+  // Return whether the mouse transitionned from:
+  // released to pressed => IsPressed()
+  // pressed to pressed => IsHeld()
+  // pressed to released => IsReleased()
+  bool Mouse::IsPressed(Button button) const;
+  bool Mouse::IsHeld(Button button) const;
+  bool Mouse::IsReleased(Button button) const;
+  ```
+  A couple of components are now activated when the mouse is pressed,
+  as opposed to released.
 - Bugfix: `Input` `onchange` was not called on backspace or delete key.
   Fixed by @chrysante in chrysante in PR #776.
 
