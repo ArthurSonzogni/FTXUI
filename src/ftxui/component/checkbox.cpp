@@ -70,17 +70,10 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     }
 
     if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed &&
-        isMousePressed == false) {
+        event.mouse().motion == Mouse::Pressed) {
       *checked = !*checked;
-      isMousePressed = true;
       on_change();
       return true;
-    }
-
-    if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Released) {
-      isMousePressed = false;
     }
 
     return false;
@@ -88,7 +81,6 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 
   bool Focusable() const final { return true; }
 
-  bool isMousePressed = false;
   bool hovered_ = false;
   Box box_;
 };
