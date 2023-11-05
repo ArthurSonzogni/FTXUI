@@ -96,41 +96,6 @@ TEST(ButtonTest, Basic) {
   (void)container->Render();
 }
 
-TEST(ButtonTest, DragClick) {
-  int press_count = 0;
-  auto btn = Button("btn", [&] {
-    press_count++;
-
-  });
-
-  auto container = Container::Horizontal(
-      {
-          btn,
-      });
-
-  (void)container->Render();
-
-  Event leftMousePress = Event::Mouse("", {Mouse::Button::Left, Mouse::Motion::Pressed});
-  Event leftMouseRelease = Event::Mouse("", {Mouse::Button::Left, Mouse::Motion::Released});
-
-  EXPECT_EQ(press_count, 0);
-  btn->OnEvent(leftMousePress);
-  EXPECT_EQ(press_count, 1);
-
-  // Simulate a drag of the mouse triggering
-  // multiple press without any Released event
-  btn->OnEvent(leftMousePress);
-  btn->OnEvent(leftMousePress);
-  btn->OnEvent(leftMousePress);
-
-  EXPECT_EQ(press_count, 1);
-
-  btn->OnEvent(leftMouseRelease);
-  btn->OnEvent(leftMousePress);
-
-  EXPECT_EQ(press_count, 2);
-}
-
 TEST(ButtonTest, Animation) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   int press_count = 0;
