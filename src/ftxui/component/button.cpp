@@ -50,11 +50,6 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     auto focus_management = focused ? focus : active ? select : nothing;
-
-    if (focus_management == nothing) {
-      isMousePressed = false;
-    }
-
     const EntryState state = {
         *label,
         false,
@@ -130,16 +125,9 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed && isMousePressed == false) {
+        event.mouse().motion == Mouse::Pressed) {
       TakeFocus();
       OnClick();
-      isMousePressed = true;
-      return true;
-    }
-
-    if(event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Released) {
-      isMousePressed = false;
       return true;
     }
 
@@ -149,7 +137,6 @@ class ButtonBase : public ComponentBase, public ButtonOption {
   bool Focusable() const final { return true; }
 
  private:
-  bool isMousePressed = false;
   bool mouse_hover_ = false;
   Box box_;
   ButtonOption option_;
