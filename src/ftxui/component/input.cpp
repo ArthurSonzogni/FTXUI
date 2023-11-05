@@ -343,22 +343,6 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleCharacter(const std::string& character) {
-
-    bool foundValidRange = false;
-    for(CharRange range : validRanges)
-    {
-      if((character >= range.start) && (character <= range.stop))
-      {
-        foundValidRange = true;
-        break;
-      }
-    }
-
-    if((validRanges.size() > 0) && (foundValidRange == false))
-    {
-      return false;
-    }
-
     if (!insert() && cursor_position() < (int)content->size() &&
         content()[cursor_position()] != '\n') {
       HandleDelete();
