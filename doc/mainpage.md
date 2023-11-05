@@ -633,6 +633,26 @@ Produced by: `ftxui::Input()` from "ftxui/component/component.hpp"
 <script id="asciicast-223719" src="https://asciinema.org/a/223719.js" async></script>
 @endhtmlonly
 
+### Filtered input
+
+On can filter out the characters received by the input component, using
+`ftxui::CatchEvent`.
+
+```cpp
+std::string phone_number;
+Component input = Input(&phone_number, "phone number");
+
+// Filter out non-digit characters.
+input |= CatchEvent([&](Event event) {
+  return event.is_character() && !std::isdigit(event.character()[0]);
+});
+
+// Filter out characters past the 10th one.
+input |= CatchEvent([&](Event event) {
+  return event.is_character() && phone_number.size() >= 10;
+});
+```
+
 ## Menu {#component-menu}
 
 Defines a menu object. It contains a list of entries, one of them is selected.
