@@ -7,33 +7,30 @@
 namespace ftxui {
 
 namespace {
-bool IsDown(const Mouse& mouse, Mouse::Button button) {
-  return mouse.button == button && mouse.motion == Mouse::Pressed;
+bool IsDown(const Mouse* mouse, Mouse::Button btn) {
+  return mouse->button == btn && mouse->motion == Mouse::Pressed;
 }
 }  // namespace
 
-
 /// Return whether the mouse transitionned from released to pressed.
 /// This is useful to detect a click.
-/// @arg button The button to check.
-bool Mouse::IsPressed(Button button) const {
-  return IsDown(*this, button) &&
-         (!previous || !IsDown(*previous, button));
+/// @arg btn The button to check.
+bool Mouse::IsPressed(Button btn) const {
+  return IsDown(this, btn) && (!previous || !IsDown(previous, btn));
 }
 
 /// Return whether the mouse is currently held.
 /// This is useful to detect a drag.
-/// @arg button The button to check.
-bool Mouse::IsHeld(Button button) const {
-  return IsDown(*this, button) && previous && IsDown(*previous, button);
+/// @arg btn The button to check.
+bool Mouse::IsHeld(Button btn) const {
+  return IsDown(this, btn) && previous && IsDown(previous, btn);
 }
 
 /// Return whether the mouse transitionned from pressed to released.
 /// This is useful to detect a click.
-/// @arg button The button to check.
-bool Mouse::IsReleased(Button button) const {
-  return !IsDown(*this, button) &&
-         (previous && IsDown(*previous, button));
+/// @arg btn The button to check.
+bool Mouse::IsReleased(Button btn) const {
+  return !IsDown(this, btn) && (previous && IsDown(previous, btn));
 }
 
 }  // namespace ftxui

@@ -24,9 +24,9 @@ struct Mouse {
   };
 
   // Utility function to check the variations of the mouse state.
-  bool IsPressed(Button button = Left) const;
-  bool IsHeld(Button button = Left) const;
-  bool IsReleased(Button button = Left) const;
+  bool IsPressed(Button btn = Left) const;   // Released => Pressed.
+  bool IsHeld(Button btn = Left) const;      // Pressed => Pressed.
+  bool IsReleased(Button btn = Left) const;  // Pressed => Released.
 
   // Button
   Button button = Button::None;
