@@ -353,12 +353,22 @@ ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
 }
 
 // static
-ScreenInteractive ScreenInteractive::Fullscreen(bool use_alternative_screen) {
+ScreenInteractive ScreenInteractive::Fullscreen() {
   return {
       0,
       0,
       Dimension::Fullscreen,
-      use_alternative_screen,
+      true,
+  };
+}
+
+// static
+ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
+  return {
+      0,
+      0,
+      Dimension::Fullscreen,
+      false,
   };
 }
 
