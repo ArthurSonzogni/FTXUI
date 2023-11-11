@@ -7,6 +7,8 @@ current (development)
 ### Component
 - Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
   option. Added by @mingsheng13.
+- Bugfix: `Input` `onchange` was not called on backspace or delete key.
+  Fixed by @chrysante in chrysante in PR #776.
 
 ### Dom
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator
