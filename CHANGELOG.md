@@ -27,6 +27,9 @@ current (development)
   ```
   A couple of components are now activated when the mouse is pressed,
   as opposed to released.
+- Feature: Add `ScreenInteractive::FullscreenPrimaryScreen()`. This allows
+  displaying a fullscreen component on the primary screen, as opposed to the
+  alternate screen.
 - Bugfix: `Input` `onchange` was not called on backspace or delete key.
   Fixed by @chrysante in chrysante in PR #776.
 

@@ -352,16 +352,19 @@ ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
   };
 }
 
+/// @ingroup component
+/// Create a ScreenInteractive taking the full terminal size. This is using the
+/// alternate screen buffer to avoid messing with the terminal content.
+/// @note This is the same as `ScreenInteractive::FullscreenAlternateScreen()`
 // static
 ScreenInteractive ScreenInteractive::Fullscreen() {
-  return {
-      0,
-      0,
-      Dimension::Fullscreen,
-      true,
-  };
+  return FullscreenPrimaryScreen();
 }
 
+/// @ingroup component
+/// Create a ScreenInteractive taking the full terminal size. The primary screen
+/// buffer is being used. It means if the terminal is resized, the previous
+/// content might mess up with the terminal content.
 // static
 ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
   return {
@@ -369,6 +372,19 @@ ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
       0,
       Dimension::Fullscreen,
       false,
+  };
+}
+
+/// @ingroup component
+/// Create a ScreenInteractive taking the full terminal size. This is using the
+/// alternate screen buffer to avoid messing with the terminal content.
+// static
+ScreenInteractive ScreenInteractive::FullscreenAlternateScreen() {
+  return {
+      0,
+      0,
+      Dimension::Fullscreen,
+      true,
   };
 }
 
