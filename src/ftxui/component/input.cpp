@@ -466,8 +466,7 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    if (event.mouse().button != Mouse::Left ||
-        event.mouse().motion != Mouse::Pressed) {
+    if (!event.mouse().IsPressed()) {
       return false;
     }
 
