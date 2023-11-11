@@ -207,10 +207,11 @@ class InputBase : public ComponentBase, public InputOption {
     const size_t end = cursor_position();
     content->erase(start, end - start);
     cursor_position() = start;
+    on_change();
     return true;
   }
 
-  bool HandleDelete() {
+  bool DeleteImpl() {
     if (cursor_position() == (int)content->size()) {
       return false;
     }
@@ -218,6 +219,14 @@ class InputBase : public ComponentBase, public InputOption {
     const size_t end = GlyphNext(content(), cursor_position());
     content->erase(start, end - start);
     return true;
+  }
+
+  bool HandleDelete() {
+    if (DeleteImpl()) {
+      on_change();
+      return true;
+    }
+    return false;
   }
 
   bool HandleArrowLeft() {
@@ -345,7 +354,7 @@ class InputBase : public ComponentBase, public InputOption {
   bool HandleCharacter(const std::string& character) {
     if (!insert() && cursor_position() < (int)content->size() &&
         content()[cursor_position()] != '\n') {
-      HandleDelete();
+      DeleteImpl();
     }
     content->insert(cursor_position(), character);
     cursor_position() += character.size();
