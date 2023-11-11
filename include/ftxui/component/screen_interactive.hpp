@@ -112,6 +112,7 @@ class ScreenInteractive : public Screen {
 
   bool frame_valid_ = false;
 
+  Mouse latest_mouse_event_;
   friend class Loop;
 
  public:

@@ -42,8 +42,7 @@ class ResizableSplitBase : public ComponentBase {
       return true;
     }
 
-    if (event.mouse().button == Mouse::Left &&
-        event.mouse().motion == Mouse::Pressed &&
+    if (event.mouse().IsPressed() &&
         separator_box_.Contain(event.mouse().x, event.mouse().y) &&
         !captured_mouse_) {
       captured_mouse_ = CaptureMouse(event);

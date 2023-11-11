@@ -174,8 +174,7 @@ class SliderBase : public ComponentBase {
       return true;
     }
 
-    if (event.mouse().button != Mouse::Left ||
-        event.mouse().motion != Mouse::Pressed) {
+    if (!event.mouse().IsPressed()) {
       return false;
     }
 
