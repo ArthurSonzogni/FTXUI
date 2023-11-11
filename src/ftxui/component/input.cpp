@@ -210,7 +210,7 @@ class InputBase : public ComponentBase, public InputOption {
     on_change();
     return true;
   }
-    
+
   bool DeleteImpl() {
     if (cursor_position() == (int)content->size()) {
       return false;
