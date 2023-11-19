@@ -216,6 +216,8 @@ jobs:
           rsync -amv
           --include='*/'
           --include='*.html'
+          --include='*.css'
+          --include='*.mjs'
           --include='*.js'
           --include='*.wasm'
           --exclude='*'
