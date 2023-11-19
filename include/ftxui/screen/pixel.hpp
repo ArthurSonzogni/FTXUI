@@ -38,7 +38,7 @@ struct Pixel {
 
   // The graphemes stored into the pixel. To support combining characters,
   // like: a?, this can potentially contain multiple codepoints.
-  std::string character = " ";
+  std::string character = "";
 
   // Colors:
   Color background_color = Color::Default;
