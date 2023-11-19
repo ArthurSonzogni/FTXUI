@@ -34,14 +34,16 @@
 !doc/**/*.md
 
 # examples directory:
-!examples/**/*.txt
 !examples/**/*.cpp
+!examples/**/*.css
 !examples/**/*.hpp
-!examples/**/*.ipp
 !examples/**/*.html
-!examples/**/*.py
-!examples/**/*.js
 !examples/**/*.html.disabled
+!examples/**/*.ipp
+!examples/**/*.js
+!examples/**/*.mjs
+!examples/**/*.py
+!examples/**/*.txt
 
 # include directory:
 !include/ftxui/**/*.hpp
