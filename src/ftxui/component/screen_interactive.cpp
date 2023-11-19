@@ -358,7 +358,7 @@ ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
 /// @note This is the same as `ScreenInteractive::FullscreenAlternateScreen()`
 // static
 ScreenInteractive ScreenInteractive::Fullscreen() {
-  return FullscreenPrimaryScreen();
+  return FullscreenAlternateScreen();
 }
 
 /// @ingroup component
