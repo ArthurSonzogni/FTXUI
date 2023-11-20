@@ -34,6 +34,7 @@ struct Event {
   static Event Special(std::string);
   static Event Mouse(std::string, Mouse mouse);
   static Event CursorReporting(std::string, int x, int y);
+  static Event CustomTagged(int tag);
 
   // --- Arrow ---
   static const Event ArrowLeft;
@@ -78,8 +79,13 @@ struct Event {
 
   const std::string& input() const { return input_; }
 
-  bool operator==(const Event& other) const { return input_ == other.input_; }
+  bool operator==(const Event& other) const {
+    return type_ == Type::Custom && other.type_ == Type::Custom ? data_.custom_tag == other.data_.custom_tag : input_ == other.input_;
+  }
   bool operator!=(const Event& other) const { return !operator==(other); }
+
+  int is_custom(int tag) const { return type_ == Type::Custom && data_.custom_tag == tag; }
+  int is_custom() const { return type_ == Type::Custom; }
 
   //--- State section ----------------------------------------------------------
   ScreenInteractive* screen_ = nullptr;
@@ -92,6 +98,7 @@ struct Event {
     Character,
     Mouse,
     CursorReporting,
+    Custom,
   };
   Type type_ = Type::Unknown;
 
@@ -103,6 +110,7 @@ struct Event {
   union {
     struct Mouse mouse;
     struct Cursor cursor;
+    int custom_tag;
   } data_ = {};
 
   std::string input_;
