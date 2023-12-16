@@ -33,7 +33,8 @@ struct Event {
   static Event Character(wchar_t);
   static Event Special(std::string);
   static Event Mouse(std::string, Mouse mouse);
-  static Event CursorReporting(std::string, int x, int y);
+  static Event CursorPosition(std::string, int x, int y);  // Internal
+  static Event CursorShape(std::string, int shape);        // Internal
 
   // --- Arrow ---
   static const Event ArrowLeft;
@@ -66,20 +67,24 @@ struct Event {
   static const Event Custom;
 
   //--- Method section ---------------------------------------------------------
+  bool operator==(const Event& other) const { return input_ == other.input_; }
+  bool operator!=(const Event& other) const { return !operator==(other); }
+
+  const std::string& input() const { return input_; }
+
   bool is_character() const { return type_ == Type::Character; }
   std::string character() const { return input_; }
 
   bool is_mouse() const { return type_ == Type::Mouse; }
   struct Mouse& mouse() { return data_.mouse; }
 
-  bool is_cursor_reporting() const { return type_ == Type::CursorReporting; }
+  // --- Internal Method section -----------------------------------------------
+  bool is_cursor_position() const { return type_ == Type::CursorPosition; }
   int cursor_x() const { return data_.cursor.x; }
   int cursor_y() const { return data_.cursor.y; }
 
-  const std::string& input() const { return input_; }
-
-  bool operator==(const Event& other) const { return input_ == other.input_; }
-  bool operator!=(const Event& other) const { return !operator==(other); }
+  bool is_cursor_shape() const { return type_ == Type::CursorShape; }
+  int cursor_shape() const { return data_.cursor_shape; }
 
   //--- State section ----------------------------------------------------------
   ScreenInteractive* screen_ = nullptr;
@@ -91,7 +96,8 @@ struct Event {
     Unknown,
     Character,
     Mouse,
-    CursorReporting,
+    CursorPosition,
+    CursorShape,
   };
   Type type_ = Type::Unknown;
 
@@ -103,6 +109,7 @@ struct Event {
   union {
     struct Mouse mouse;
     struct Cursor cursor;
+    int cursor_shape;
   } data_ = {};
 
   std::string input_;

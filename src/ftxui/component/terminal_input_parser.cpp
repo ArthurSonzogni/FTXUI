@@ -150,10 +150,15 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       pending_.clear();
       return;
 
-    case CURSOR_REPORTING:
-      out_->Send(Event::CursorReporting(std::move(pending_),  // NOLINT
-                                        output.cursor.x,      // NOLINT
-                                        output.cursor.y));    // NOLINT
+    case CURSOR_POSITION:
+      out_->Send(Event::CursorPosition(std::move(pending_),  // NOLINT
+                                       output.cursor.x,      // NOLINT
+                                       output.cursor.y));    // NOLINT
+      pending_.clear();
+      return;
+
+    case CURSOR_SHAPE:
+      out_->Send(Event::CursorShape(std::move(pending_), output.cursor_shape));
       pending_.clear();
       return;
   }
@@ -286,6 +291,7 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
   }
 }
 
+// ESC P ... ESC BACKSLASH
 TerminalInputParser::Output TerminalInputParser::ParseDCS() {
   // Parse until the string terminator ST.
   while (true) {
@@ -303,6 +309,16 @@ TerminalInputParser::Output TerminalInputParser::ParseDCS() {
 
     if (Current() != '\\') {
       continue;
+    }
+
+    if (pending_.size() == 10 &&  //
+        pending_[2] == '1' &&     //
+        pending_[3] == '$' &&     //
+        pending_[4] == 'r' &&     //
+        true) {
+      Output output(CURSOR_SHAPE);
+      output.cursor_shape = pending_[5] - '0';
+      return output;
     }
 
     return SPECIAL;
@@ -351,7 +367,7 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
         case 'm':
           return ParseMouse(altered, false, std::move(arguments));
         case 'R':
-          return ParseCursorReporting(std::move(arguments));
+          return ParseCursorPosition(std::move(arguments));
         default:
           return SPECIAL;
       }
@@ -405,12 +421,12 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
 }
 
 // NOLINTNEXTLINE
-TerminalInputParser::Output TerminalInputParser::ParseCursorReporting(
+TerminalInputParser::Output TerminalInputParser::ParseCursorPosition(
     std::vector<int> arguments) {
   if (arguments.size() != 2) {
     return SPECIAL;
   }
-  Output output(CURSOR_REPORTING);
+  Output output(CURSOR_POSITION);
   output.cursor.y = arguments[0];  // NOLINT
   output.cursor.x = arguments[1];  // NOLINT
   return output;
