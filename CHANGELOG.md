@@ -32,6 +32,7 @@ current (development)
   alternate screen.
 - Bugfix: `Input` `onchange` was not called on backspace or delete key.
   Fixed by @chrysante in chrysante in PR #776.
+- Bugfix: Propertly restore cursor shape on exit. See #792.
 
 ### Dom
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator

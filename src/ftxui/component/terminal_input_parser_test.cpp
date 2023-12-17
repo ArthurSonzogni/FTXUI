@@ -146,7 +146,7 @@ TEST(Event, MouseReporting) {
 
   Task received;
   EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(std::get<Event>(received).is_cursor_reporting());
+  EXPECT_TRUE(std::get<Event>(received).is_cursor_position());
   EXPECT_EQ(42, std::get<Event>(received).cursor_x());
   EXPECT_EQ(12, std::get<Event>(received).cursor_y());
   EXPECT_FALSE(event_receiver->Receive(&received));
@@ -446,5 +446,28 @@ TEST(Event, Special) {
   }
 }
 
+TEST(Event, DeviceControlString) {
+  auto event_receiver = MakeReceiver<Task>();
+  {
+    auto parser = TerminalInputParser(event_receiver->MakeSender());
+    parser.Add(27);   // ESC
+    parser.Add(80);   // P
+    parser.Add(49);   // 1
+    parser.Add(36);   // $
+    parser.Add(114);  // r
+    parser.Add(49);   // 1
+    parser.Add(32);   // SP
+    parser.Add(113);  // q
+    parser.Add(27);   // ESC
+    parser.Add(92);   // (backslash)
+  }
+
+  Task received;
+  EXPECT_TRUE(event_receiver->Receive(&received));
+  EXPECT_TRUE(std::get<Event>(received).is_cursor_shape());
+  EXPECT_EQ(1, std::get<Event>(received).cursor_shape());
+  EXPECT_FALSE(event_receiver->Receive(&received));
+}
+
 }  // namespace ftxui
-// NOLINTEND
+   // NOLINTEND
