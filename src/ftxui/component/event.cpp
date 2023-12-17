@@ -49,6 +49,16 @@ Event Event::Mouse(std::string input, struct Mouse mouse) {
   return event;
 }
 
+/// @brief An event corresponding to a terminal DCS (Device Control String).
+// static
+Event Event::CursorShape(std::string input, int shape) {
+  Event event;
+  event.input_ = std::move(input);
+  event.type_ = Type::CursorShape;
+  event.data_.cursor_shape = shape;  // NOLINT
+  return event;
+}
+
 /// @brief An custom event whose meaning is defined by the user of the library.
 /// @param input An arbitrary sequence of character defined by the developer.
 /// @ingroup component.
@@ -61,10 +71,10 @@ Event Event::Special(std::string input) {
 
 /// @internal
 // static
-Event Event::CursorReporting(std::string input, int x, int y) {
+Event Event::CursorPosition(std::string input, int x, int y) {
   Event event;
   event.input_ = std::move(input);
-  event.type_ = Type::CursorReporting;
+  event.type_ = Type::CursorPosition;
   event.data_.cursor = {x, y};  // NOLINT
   return event;
 }

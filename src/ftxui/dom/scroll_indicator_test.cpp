@@ -8,8 +8,8 @@
 
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, operator|=, text, vbox, Elements, border, focus, frame, vscroll_indicator
 #include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"  // for Color, Color::Red
 #include "ftxui/screen/screen.hpp"  // for Screen
-#include "ftxui/screen/color.hpp"   // for Color, Color::Red
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -129,7 +129,6 @@ TEST(ScrollIndicator, BasicVertical) {
 }
 
 TEST(ScrollIndicator, VerticalColorable) {
-
   // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│0  ┃│\r\n"
@@ -147,7 +146,6 @@ TEST(ScrollIndicator, VerticalColorable) {
 }
 
 TEST(ScrollIndicator, VerticalBackgroundColorable) {
-
   // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│0  ┃│\r\n"
@@ -165,7 +163,6 @@ TEST(ScrollIndicator, VerticalBackgroundColorable) {
 }
 
 TEST(ScrollIndicator, VerticalFullColorable) {
-
   // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│0  ┃│\r\n"
@@ -174,7 +171,8 @@ TEST(ScrollIndicator, VerticalFullColorable) {
   //           "│3   │\r\n"
   //           "╰────╯"
 
-  auto element = MakeVerticalList(0, 10) | color(Color::Red) | bgcolor(Color::Red);
+  auto element =
+      MakeVerticalList(0, 10) | color(Color::Red) | bgcolor(Color::Red);
   Screen screen(6, 6);
   Render(screen, element);
 
@@ -233,7 +231,6 @@ TEST(ScrollIndicator, BasicHorizontal) {
 }
 
 TEST(ScrollIndicator, HorizontalColorable) {
-
   // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│5678│\r\n"
@@ -249,7 +246,6 @@ TEST(ScrollIndicator, HorizontalColorable) {
 }
 
 TEST(ScrollIndicator, HorizontalBackgroundColorable) {
-
   // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│5678│\r\n"
@@ -265,14 +261,14 @@ TEST(ScrollIndicator, HorizontalBackgroundColorable) {
 }
 
 TEST(ScrollIndicator, HorizontalFullColorable) {
-
   // The list we generate looks like this
   //           "╭────╮\r\n"
   //           "│5678│\r\n"
   //           "│  ──│\r\n"
   //           "╰────╯"
 
-  auto element = MakeHorizontalList(6, 10) | color(Color::Red) | bgcolor(Color::Red);
+  auto element =
+      MakeHorizontalList(6, 10) | color(Color::Red) | bgcolor(Color::Red);
   Screen screen(6, 4);
   Render(screen, element);
 

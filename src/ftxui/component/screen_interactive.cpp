@@ -253,7 +253,17 @@ void InstallSignalHandler(int sig) {
       [=] { std::ignore = std::signal(sig, old_signal_handler); });
 }
 
+// CSI: Control Sequence Introducer
 const std::string CSI = "\x1b[";  // NOLINT
+                                  //
+// DCS: Device Control String
+const std::string DCS = "\x1bP";  // NOLINT
+// ST: String Terminator
+const std::string ST = "\x1b\\";  // NOLINT
+
+// DECRQSS: Request Status String
+// DECSCUSR: Set Cursor Style
+const std::string DECRQSS_DECSCUSR = DCS + "$q q" + ST;  // NOLINT
 
 // DEC: Digital Equipment Corporation
 enum class DECMode {
@@ -566,6 +576,14 @@ void ScreenInteractive::Install() {
 
   on_exit_functions.push([this] { ExitLoopClosure()(); });
 
+  // Request the terminal to report the current cursor shape. We will restore it
+  // on exit.
+  std::cout << DECRQSS_DECSCUSR;
+  on_exit_functions.push([=] {
+    std::cout << "\033[?25h";  // Enable cursor.
+    std::cout << "\033[" + std::to_string(cursor_reset_shape_) + " q";
+  });
+
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
   for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
@@ -640,11 +658,6 @@ void ScreenInteractive::Install() {
     });
   }
 
-  on_exit_functions.push([=] {
-    std::cout << "\033[?25h";  // Enable cursor.
-    std::cout << "\033[?1 q";  // Cursor block blinking.
-  });
-
   disable({
       // DECMode::kCursor,
       DECMode::kLineWrap,
@@ -700,15 +713,21 @@ void ScreenInteractive::RunOnce(Component component) {
 
 // private
 void ScreenInteractive::HandleTask(Component component, Task& task) {
-  // clang-format off
-  std::visit([&](auto&& arg) {
-    using T = std::decay_t<decltype(arg)>;
+  std::visit(
+      [&](auto&& arg) {
+        using T = std::decay_t<decltype(arg)>;
 
+        // clang-format off
     // Handle Event.
     if constexpr (std::is_same_v<T, Event>) {
-      if (arg.is_cursor_reporting()) {
+      if (arg.is_cursor_position()) {
         cursor_x_ = arg.cursor_x();
         cursor_y_ = arg.cursor_y();
+        return;
+      }
+
+      if (arg.is_cursor_shape()) {
+        cursor_reset_shape_= arg.cursor_shape();
         return;
       }
 

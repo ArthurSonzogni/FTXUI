@@ -31,12 +31,13 @@ class TerminalInputParser {
     UNCOMPLETED,
     DROP,
     CHARACTER,
-    SPECIAL,
     MOUSE,
-    CURSOR_REPORTING,
+    CURSOR_POSITION,
+    CURSOR_SHAPE,
+    SPECIAL,
   };
 
-  struct CursorReporting {
+  struct CursorPosition {
     int x;
     int y;
   };
@@ -45,7 +46,8 @@ class TerminalInputParser {
     Type type;
     union {
       Mouse mouse;
-      CursorReporting cursor;
+      CursorPosition cursor;
+      int cursor_shape;
     };
 
     Output(Type t) : type(t) {}
@@ -59,7 +61,7 @@ class TerminalInputParser {
   Output ParseCSI();
   Output ParseOSC();
   Output ParseMouse(bool altered, bool pressed, std::vector<int> arguments);
-  Output ParseCursorReporting(std::vector<int> arguments);
+  Output ParseCursorPosition(std::vector<int> arguments);
 
   Sender<Task> out_;
   int position_ = -1;
