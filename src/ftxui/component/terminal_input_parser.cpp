@@ -410,13 +410,36 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
   (void)altered;
 
   Output output(MOUSE);
-  output.mouse.button = Mouse::Button((arguments[0] & 3) +          // NOLINT
-                                      ((arguments[0] & 64) >> 4));  // NOLINT
-  output.mouse.motion = Mouse::Motion(pressed);                     // NOLINT
-  output.mouse.shift = bool(arguments[0] & 4);                      // NOLINT
-  output.mouse.meta = bool(arguments[0] & 8);                       // NOLINT
-  output.mouse.x = arguments[1];                                    // NOLINT
-  output.mouse.y = arguments[2];                                    // NOLINT
+  output.mouse.motion = Mouse::Motion(pressed);  // NOLINT
+
+  // Bits value Modifer  Comment
+  // ---- ----- ------- ---------
+  // 0 1  1 2   button   0 = Left, 1 = Middle, 2 = Right, 3 = Release
+  // 2    4     Shift
+  // 3    8     Meta
+  // 4    16    Control
+  // 5    32    Move
+  // 6    64    Wheel
+
+  // clang-format off
+  const int button      = arguments[0] & (1 + 2); // NOLINT
+  const bool is_shift   = arguments[0] & 4;       // NOLINT
+  const bool is_meta    = arguments[0] & 8;       // NOLINT
+  const bool is_control = arguments[0] & 16;      // NOLINT
+  const bool is_move    = arguments[0] & 32;      // NOLINT
+  const bool is_wheel   = arguments[0] & 64;      // NOLINT
+  // clang-format on
+
+  output.mouse.motion = is_move ? Mouse::Moved : Mouse::Motion(pressed);
+  output.mouse.button = is_wheel ? Mouse::Button(Mouse::WheelUp + button)  //
+                                 : Mouse::Button(button);
+  output.mouse.shift = is_shift;
+  output.mouse.meta = is_meta;
+  output.mouse.control = is_control;
+  output.mouse.x = arguments[1];  // NOLINT
+  output.mouse.y = arguments[2];  // NOLINT
+
+  // Motion event.
   return output;
 }
 

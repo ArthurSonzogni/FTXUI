@@ -124,7 +124,8 @@ class ButtonBase : public ComponentBase, public ButtonOption {
       return false;
     }
 
-    if (event.mouse().IsPressed()) {
+    if (event.mouse().button == Mouse::Left &&
+        event.mouse().motion == Mouse::Pressed) {
       TakeFocus();
       OnClick();
       return true;

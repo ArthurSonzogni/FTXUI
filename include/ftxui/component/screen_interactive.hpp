@@ -117,7 +117,6 @@ class ScreenInteractive : public Screen {
   // The style of the cursor to restore on exit.
   int cursor_reset_shape_ = 1;
 
-  Mouse latest_mouse_event_;
   friend class Loop;
 
  public:

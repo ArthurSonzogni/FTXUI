@@ -225,7 +225,10 @@ class WindowImpl : public ComponentBase, public WindowOptions {
       return true;
     }
 
-    if (!event.mouse().IsPressed()) {
+    if (event.mouse().button != Mouse::Left) {
+      return true;
+    }
+    if (event.mouse().motion != Mouse::Pressed) {
       return true;
     }
 
