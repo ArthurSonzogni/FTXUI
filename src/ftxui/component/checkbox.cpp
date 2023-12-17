@@ -69,7 +69,8 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
       return false;
     }
 
-    if (event.mouse().IsPressed()) {
+    if (event.mouse().button == Mouse::Left &&
+        event.mouse().motion == Mouse::Pressed) {
       *checked = !*checked;
       on_change();
       return true;

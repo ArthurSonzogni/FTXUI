@@ -82,8 +82,7 @@ TEST(Event, MouseLeftClickPressed) {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
     parser.Add('\x1B');
     parser.Add('[');
-    parser.Add('3');
-    parser.Add('2');
+    parser.Add('0');
     parser.Add(';');
     parser.Add('1');
     parser.Add('2');
@@ -103,7 +102,7 @@ TEST(Event, MouseLeftClickPressed) {
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
-TEST(Event, MouseLeftClickReleased) {
+TEST(Event, MouseLeftMoved) {
   auto event_receiver = MakeReceiver<Task>();
   {
     auto parser = TerminalInputParser(event_receiver->MakeSender());
@@ -111,6 +110,32 @@ TEST(Event, MouseLeftClickReleased) {
     parser.Add('[');
     parser.Add('3');
     parser.Add('2');
+    parser.Add(';');
+    parser.Add('1');
+    parser.Add('2');
+    parser.Add(';');
+    parser.Add('4');
+    parser.Add('2');
+    parser.Add('M');
+  }
+
+  Task received;
+  EXPECT_TRUE(event_receiver->Receive(&received));
+  EXPECT_TRUE(std::get<Event>(received).is_mouse());
+  EXPECT_EQ(Mouse::Left, std::get<Event>(received).mouse().button);
+  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
+  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
+  EXPECT_EQ(std::get<Event>(received).mouse().motion, Mouse::Moved);
+  EXPECT_FALSE(event_receiver->Receive(&received));
+}
+
+TEST(Event, MouseLeftClickReleased) {
+  auto event_receiver = MakeReceiver<Task>();
+  {
+    auto parser = TerminalInputParser(event_receiver->MakeSender());
+    parser.Add('\x1B');
+    parser.Add('[');
+    parser.Add('0');
     parser.Add(';');
     parser.Add('1');
     parser.Add('2');

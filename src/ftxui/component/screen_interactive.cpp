@@ -734,17 +734,11 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
       if (arg.is_mouse()) {
         arg.mouse().x -= cursor_x_;
         arg.mouse().y -= cursor_y_;
-        arg.mouse().previous = &latest_mouse_event_;
       }
 
       arg.screen_ = this;
       component->OnEvent(arg);
       frame_valid_ = false;
-
-      if (arg.is_mouse()) {
-        latest_mouse_event_ = arg.mouse();
-        latest_mouse_event_.previous = nullptr;
-      }
       return;
     }
 

@@ -55,6 +55,9 @@ std::string Stringify(Event event) {
       case Mouse::Released:
         out += "_released";
         break;
+      case Mouse::Moved:
+        out += "_moved";
+        break;
     }
     if (event.mouse().control)
       out += "_control";
