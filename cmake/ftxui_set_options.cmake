@@ -45,7 +45,7 @@ function(ftxui_set_options library)
 
   # Force Microsoft Visual Studio to decode sources files in UTF-8. This applies
   # to the library and the library users.
-  if (MSVC)
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     target_compile_options(${library} PUBLIC "/utf-8")
   endif()
 
