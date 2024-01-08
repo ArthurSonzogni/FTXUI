@@ -328,6 +328,7 @@ Feel free to add your projects here:
 - [resource-monitor](https://github.com/catalincd/resource-monitor)
 - [ftxuiFileReader](https://github.com/J0sephDavis/ftxuiFileReader)
 - [ftxui_CPUMeter](https://github.com/tzzzzzzzx/ftxui_CPUMeter)
+- [Captain's log](https://github.com/nikoladucak/caps-log)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
