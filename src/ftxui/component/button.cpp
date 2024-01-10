@@ -98,10 +98,13 @@ class ButtonBase : public ComponentBase, public ButtonOption {
   }
 
   void OnClick() {
-    on_click();
     animation_background_ = 0.5F;  // NOLINT
     animation_foreground_ = 0.5F;  // NOLINT
     SetAnimationTarget(1.F);       // NOLINT
+
+    // TODO(arthursonzogni): Consider posting the task to the main loop, instead
+    // of invoking it immediately.
+    on_click(); // May delete this.
   }
 
   bool OnEvent(Event event) override {
@@ -110,7 +113,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     if (event == Event::Return) {
-      OnClick();
+      OnClick(); // May delete this.
       return true;
     }
     return false;
@@ -127,7 +130,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
       TakeFocus();
-      OnClick();
+      OnClick(); // May delete this.
       return true;
     }
 
