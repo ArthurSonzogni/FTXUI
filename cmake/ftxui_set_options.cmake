@@ -30,11 +30,6 @@ function(ftxui_set_options library)
     )
   endif()
 
-  target_include_directories(${library} SYSTEM
-    INTERFACE
-      $<INSTALL_INTERFACE:include>
-  )
-
   target_include_directories(${library}
     PRIVATE
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
