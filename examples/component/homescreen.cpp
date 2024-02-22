@@ -490,15 +490,24 @@ int main() {
       },
       &tab_index);
 
+  auto exit_button = Button(
+      "Exit", [&] { screen.Exit(); }, ButtonOption::Animated());
+
   auto main_container = Container::Vertical({
-      tab_selection,
-      tab_content,
+    Container::Horizontal({
+        tab_selection,
+        exit_button,
+    }),
+    tab_content,
   });
 
   auto main_renderer = Renderer(main_container, [&] {
     return vbox({
         text("FTXUI Demo") | bold | hcenter,
-        tab_selection->Render(),
+        hbox({
+            tab_selection->Render() | flex,
+            exit_button->Render(),
+        }),
         tab_content->Render() | flex,
     });
   });
