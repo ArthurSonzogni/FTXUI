@@ -19,10 +19,10 @@ namespace ftxui {
 /// @ingroup component
 /// @param entries The list of entries to display.
 /// @param selected The index of the selected entry.
-Component Dropdown(ConstStringListRef entries, int* selected) {
+Component Dropdown(ConstStringListRef entries, int* selected, DropdownOption option) {
   class Impl : public ComponentBase {
    public:
-    Impl(ConstStringListRef entries, int* selected)
+    Impl(ConstStringListRef entries, int* selected, DropdownOption dropDownOption)
         : entries_(entries), selected_(selected) {
       CheckboxOption option;
       option.transform = [](const EntryState& s) {
@@ -37,12 +37,18 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
         return hbox({prefix, t});
       };
       checkbox_ = Checkbox(&title_, &show_, option);
-      radiobox_ = Radiobox(entries_, selected_);
+
+      RadioboxOption radioboxOption;
+      radioboxOption.on_change = dropDownOption.on_change;
+
+      radiobox_ = Radiobox(entries_, selected_, radioboxOption);
 
       Add(Container::Vertical({
           checkbox_,
           Maybe(radiobox_, &show_),
       }));
+
+      border_ = dropDownOption.border;
     }
 
     Element Render() override {
@@ -50,17 +56,30 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
       title_ = entries_[static_cast<size_t>(*selected_)];
       if (show_) {
         const int max_height = 12;
-        return vbox({
+        auto element = vbox({
                    checkbox_->Render(),
                    separator(),
                    radiobox_->Render() | vscroll_indicator | frame |
                        size(HEIGHT, LESS_THAN, max_height),
-               }) |
-               border;
+               });
+        
+        if (border_)
+        {
+          element |= border;
+        }
+
+        return element;
+      }
+
+      auto element = checkbox_->Render();
+
+      if (border_)
+      {
+        element |= border;
       }
 
       return vbox({
-          checkbox_->Render() | border,
+          element,
           filler(),
       });
     }
@@ -86,13 +105,14 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
    private:
     ConstStringListRef entries_;
     bool show_ = false;
+    bool border_ = true;
     int* selected_;
     std::string title_;
     Component checkbox_;
     Component radiobox_;
   };
 
-  return Make<Impl>(entries, selected);
+  return Make<Impl>(entries, selected, option);
 }
 
 }  // namespace ftxui

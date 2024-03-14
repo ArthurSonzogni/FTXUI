@@ -30,12 +30,12 @@ int main() {
 
   auto layout = Container::Vertical({
       Container::Horizontal({
-          Dropdown(&entries, &selected_1),
+          Dropdown(&entries, &selected_1, { .on_change = [&] { selected_3 = selected_1; } } ), // Keep in sync with selected_3.
           Dropdown(&entries, &selected_2),
       }),
       Container::Horizontal({
-          Dropdown(&entries, &selected_3),
-          Dropdown(&entries, &selected_4),
+          Dropdown(&entries, &selected_3, { .border = false }),
+          Dropdown(&entries, &selected_4, { .border = false }),
       }),
   });
 

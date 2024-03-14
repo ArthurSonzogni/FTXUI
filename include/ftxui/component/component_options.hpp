@@ -148,6 +148,17 @@ struct CheckboxOption {
   std::function<void()> on_change = [] {};
 };
 
+/// @brief Option for the Dropdown component.
+/// @ingroup component
+struct DropdownOption {
+
+  bool border = true;
+
+  // Observer:
+  /// Called when the user change the state.
+  std::function<void()> on_change = [] {};
+};
+
 /// @brief Used to define style for the Input component.
 struct InputState {
   Element element;
