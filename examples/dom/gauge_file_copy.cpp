@@ -18,16 +18,16 @@ using namespace std::chrono_literals;
 
 const size_t CPVG_BLOCK_SIZE = (2 << 12) * (2 << 5);
 
-size_t cpvg(const char* src, const char* dst, size_t block_size = CPVG_BLOCK_SIZE)
+size_t cpvg(const char* src, const char* dst = "", size_t block_size = CPVG_BLOCK_SIZE)
 {
 	std::filesystem::path psrc(std::filesystem::canonical(src));
-	std::filesystem::path pdst(std::filesystem::canonical(dst));
+	std::filesystem::path pdst(std::filesystem::canonical(dst != "" ? dst : psrc.filename()));
 	std::string reset_position;
 
 	if(!exists(psrc) || block_size == 0)
 		return 0;
 
-	if(is_directory(pdst) && (pdst.filename() != psrc.filename()))
+	if(pdst.empty() || (is_directory(pdst) && (pdst.filename() != psrc.filename())))
 		pdst /= psrc.filename();
 
 
@@ -76,13 +76,13 @@ size_t cpvg(const char* src, const char* dst, size_t block_size = CPVG_BLOCK_SIZ
 
 int main(int argc, char** argv)
 {
-	if(argc < 3)
+	if(argc < 2)
 	{
-		fprintf(stderr, "Usage: %s SRC DST [BLK]\n", argv[0]);
+		fprintf(stderr, "Usage: %s SRC [DST] [BLK]\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 
-	exit(file_size(argv[1]) == cpvg(argv[1], argv[2], argc > 3 ? (size_t)strtouq(argv[3], NULL, 10) : CPVG_BLOCK_SIZE)
+	exit(file_size(argv[1]) == cpvg(argv[1], argc > 2 ? argv[2] : "", argc > 3 ? (size_t)strtouq(argv[3], NULL, 10) : CPVG_BLOCK_SIZE)
 	     ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 
