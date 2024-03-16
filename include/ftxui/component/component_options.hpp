@@ -151,7 +151,6 @@ struct CheckboxOption {
 /// @brief Option for the Dropdown component.
 /// @ingroup component
 struct DropdownOption {
-
   bool border = true;
 
   // Observer:

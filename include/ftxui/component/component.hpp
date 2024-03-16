@@ -74,7 +74,10 @@ Component Radiobox(ConstStringListRef entries,
                    int* selected_,
                    RadioboxOption options = {});
 
-Component Dropdown(ConstStringListRef entries, int* selected, DropdownOption options = {});
+Component Dropdown(ConstStringListRef entries,
+                   int* selected,
+                   DropdownOption options = {});
+                   
 Component Toggle(ConstStringListRef entries, int* selected);
 
 // General slider constructor:
