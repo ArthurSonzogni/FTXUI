@@ -148,15 +148,6 @@ struct CheckboxOption {
   std::function<void()> on_change = [] {};
 };
 
-/// @brief Option for the Dropdown component.
-/// @ingroup component
-struct DropdownOption {
-  bool border = true;
-
-  // Observer:
-  /// Called when the user change the state.
-  std::function<void()> on_change = [] {};
-};
 
 /// @brief Used to define style for the Input component.
 struct InputState {
@@ -271,6 +262,17 @@ struct WindowOptions {
 
   /// An optional function to customize how the window looks like:
   std::function<Element(const WindowRenderState&)> render;
+};
+
+/// @brief Option for the Dropdown component.
+/// @ingroup component
+/// A dropdown menu is a checkbox opening/closing a radiobox.
+struct DropdownOption {
+  Ref<bool> open = false;
+  CheckboxOption checkbox;
+  RadioboxOption radiobox;
+  std::function<Element(bool open, Element checkbox, Element radiobox)>
+      transform;
 };
 
 }  // namespace ftxui
