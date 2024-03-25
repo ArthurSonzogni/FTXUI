@@ -282,12 +282,26 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
       return ParseCSI();
     case ']':
       return ParseOSC();
-    default:
+
+    // Expecting 2 characters.
+    case ' ':
+    case '#':
+    case '%':
+    case '(':
+    case ')':
+    case '*':
+    case '+':
+    case 'O':
+    case 'N':
+    {
       if (!Eat()) {
         return UNCOMPLETED;
-      } else {
-        return SPECIAL;
       }
+      return SPECIAL;
+    }
+    // Expecting 1 character:
+    default:
+      return SPECIAL;
   }
 }
 

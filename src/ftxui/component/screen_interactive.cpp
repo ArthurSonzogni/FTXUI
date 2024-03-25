@@ -132,7 +132,6 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
 
 // Read char from the terminal.
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
-  (void)timeout_microseconds;
   auto parser = TerminalInputParser(std::move(out));
 
   char c;
@@ -638,13 +637,26 @@ void ScreenInteractive::Install() {
   tcgetattr(STDIN_FILENO, &terminal);
   on_exit_functions.push([=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
 
-  terminal.c_lflag &= ~ICANON;  // NOLINT Non canonique terminal.
-  terminal.c_lflag &= ~ECHO;    // NOLINT Do not print after a key press.
-  terminal.c_cc[VMIN] = 0;
-  terminal.c_cc[VTIME] = 0;
-  // auto oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-  // fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-  // on_exit_functions.push([=] { fcntl(STDIN_FILENO, F_GETFL, oldf); });
+  // Enabling raw terminal input mode
+  terminal.c_iflag &= ~IGNBRK;  // Ignore break condition
+  terminal.c_iflag &= ~BRKINT;  // Break causes input and output to be flushed
+  terminal.c_iflag &= ~PARMRK;  // Mark parity errors
+  terminal.c_iflag &= ~ISTRIP;  // Strip 8th bit off characters
+  terminal.c_iflag &= ~INLCR;   // Map NL to CR
+  terminal.c_iflag &= ~IGNCR;   // Ignore CR
+  terminal.c_iflag &= ~ICRNL;   // Map CR to NL
+  terminal.c_iflag &= ~IXON;    // Enable XON/XOFF flow control on output
+
+  terminal.c_lflag &= ~ECHO;    // Echo input characters
+  terminal.c_lflag &= ~ECHONL;  // Echo NL
+  terminal.c_lflag &= ~ICANON;  // Canonical mode
+  terminal.c_lflag &= ~ISIG;    // Enable signals
+  terminal.c_lflag &= ~IEXTEN;  // Enable extended input processing
+
+  terminal.c_cflag |= (CS8);  // 8 bits per byte
+  terminal.c_cc[VMIN] = 0;    // Minimum number of characters for non-canonical
+                              // read.
+  terminal.c_cc[VTIME] = 0;   // Timeout in deciseconds for non-canonical read.
 
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
@@ -745,7 +757,13 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
       }
 
       arg.screen_ = this;
-      component->OnEvent(arg);
+
+      const bool handled = component->OnEvent(arg);
+
+      if (!handled && (arg == Event::CtrlC)) {
+        Exit();
+      }
+
       frame_valid_ = false;
       return;
     }
