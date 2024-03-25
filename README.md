@@ -14,7 +14,7 @@
     <img src="https://codecov.io/gh/ArthurSonzogni/FTXUI/branch/master/graph/badge.svg?token=C41FdRpNVA"/>
   </a>
 
-  
+
   <br/>
   <a href="https://arthursonzogni.github.io/FTXUI/">Documentation</a> ·
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Report a Bug</a> ·
