@@ -841,20 +841,20 @@ void ScreenInteractive::Draw(Component component) {
 
   // Set cursor position for user using tools to insert CJK characters.
   {
-    const int dx = dimx_ - 1 - cursor_.x + int(dimx_ != terminal.dimx);
-    const int dy = dimy_ - 1 - cursor_.y;
+    int const dx = dimx_ - 1 - cursor_.x;
+    int const dy = dimy_ - 1 - cursor_.y;
 
     set_cursor_position.clear();
     reset_cursor_position.clear();
 
-    if (dx != 0) {
-        set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
-        reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
-    }
-
     if (dy != 0) {
         set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
         reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
+    }
+
+    if (dx != 0) {
+        set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
+        reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
     }
 
     if (cursor_.shape == Cursor::Hidden) {
