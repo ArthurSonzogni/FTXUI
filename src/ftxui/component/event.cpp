@@ -117,4 +117,6 @@ const Event Event::PageUp = Event::Special({27, 91, 53, 126});    // NOLINT
 const Event Event::PageDown = Event::Special({27, 91, 54, 126});  // NOLINT
 const Event Event::Custom = Event::Special({0});                  // NOLINT
 
+const Event Event::CtrlC = Event::Special("\x03"); // NOLINT
+
 }  // namespace ftxui

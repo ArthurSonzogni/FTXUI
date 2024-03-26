@@ -4,7 +4,7 @@
 #include <algorithm>  // for copy, max, min
 #include <array>      // for array
 #include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
-#include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
+#include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGSEGV, SIGTERM, __sighandler_t, size_t
 #include <cstdio>   // for fileno, stdin
 #include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
 #include <ftxui/screen/screen.hpp>  // for Pixel, Screen::Cursor, Screen, Screen::Cursor::Hidden
@@ -132,7 +132,6 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
 
 // Read char from the terminal.
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
-  (void)timeout_microseconds;
   auto parser = TerminalInputParser(std::move(out));
 
   char c;
@@ -207,7 +206,6 @@ void RecordSignal(int signal) {
     case SIGABRT:
     case SIGFPE:
     case SIGILL:
-    case SIGINT:
     case SIGSEGV:
     case SIGTERM:
       g_signal_exit_count++;
@@ -586,7 +584,7 @@ void ScreenInteractive::Install() {
 
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
-  for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
+  for (const int signal : {SIGTERM, SIGSEGV, SIGILL, SIGABRT, SIGFPE}) {
     InstallSignalHandler(signal);
   }
 
@@ -630,13 +628,12 @@ void ScreenInteractive::Install() {
   tcgetattr(STDIN_FILENO, &terminal);
   on_exit_functions.push([=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
 
-  terminal.c_lflag &= ~ICANON;  // NOLINT Non canonique terminal.
-  terminal.c_lflag &= ~ECHO;    // NOLINT Do not print after a key press.
+  // Enabling raw terminal input mode
+  terminal.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON); // NOLINT
+  terminal.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN); // NOLINT
+  terminal.c_cflag |= (CS8);
   terminal.c_cc[VMIN] = 0;
   terminal.c_cc[VTIME] = 0;
-  // auto oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-  // fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-  // on_exit_functions.push([=] { fcntl(STDIN_FILENO, F_GETFL, oldf); });
 
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
@@ -737,7 +734,11 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
       }
 
       arg.screen_ = this;
-      component->OnEvent(arg);
+
+      if (!component->OnEvent(arg) && (arg == Event::CtrlC)) {
+        ExitNow();
+      }
+
       frame_valid_ = false;
       return;
     }
@@ -841,13 +842,21 @@ void ScreenInteractive::Draw(Component component) {
 
   // Set cursor position for user using tools to insert CJK characters.
   {
-    const int dx = dimx_ - 1 - cursor_.x + int(dimx_ != terminal.dimx);
+    const int dx = dimx_ - 1 - cursor_.x;
     const int dy = dimy_ - 1 - cursor_.y;
 
-    set_cursor_position = "\x1B[" + std::to_string(dy) + "A" +  //
-                          "\x1B[" + std::to_string(dx) + "D";
-    reset_cursor_position = "\x1B[" + std::to_string(dy) + "B" +  //
-                            "\x1B[" + std::to_string(dx) + "C";
+    set_cursor_position.clear();
+    reset_cursor_position.clear();
+
+    if (dy != 0) {
+        set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
+        reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
+    }
+
+    if (dx != 0) {
+        set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
+        reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
+    }
 
     if (cursor_.shape == Cursor::Hidden) {
       set_cursor_position += "\033[?25l";
