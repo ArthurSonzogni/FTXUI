@@ -63,6 +63,8 @@ struct Event {
   static const Event PageUp;
   static const Event PageDown;
 
+  static const Event CtrlC;
+
   // --- Custom ---
   static const Event Custom;
 
