@@ -10,7 +10,7 @@
 #include <unordered_map>  // for unordered_map
 
 #include "ftxui/screen/color.hpp"   // for Color
-#include "ftxui/screen/screen.hpp"  // for Pixel
+#include "ftxui/screen/image.hpp"   // for Pixel, Image
 
 #ifdef DrawText
 // Workaround for WinUsr.h (via Windows.h) defining macros that break things.
@@ -94,6 +94,11 @@ struct Canvas {
   void DrawText(int x, int y, const std::string& value);
   void DrawText(int x, int y, const std::string& value, const Color& color);
   void DrawText(int x, int y, const std::string& value, const Stylizer& style);
+  
+  // Draw using directly pixels or images --------------------------------------
+  // Pixel/image coordinates correspond 1:1
+  void DrawPixel(int x, int y, const Pixel&);
+  void DrawImage(int x, int y, const Image&);
 
   // Decorator:
   // x is considered to be a multiple of 2.

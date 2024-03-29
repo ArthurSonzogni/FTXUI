@@ -817,6 +817,54 @@ void Canvas::DrawText(int x,
   }
 }
 
+/// @brief Directly draw a predefined pixel at the given coordinate
+/// @param x the x coordinate of the pixel.
+/// @param y the y coordinate of the pixel.
+/// @param p the pixel to draw.
+void Canvas::DrawPixel(int x,
+                      int y,
+                      const Pixel& p) {
+  Cell& cell = storage_[XY{x, y}];
+  cell.type = CellType::kText; // Epixu: should we add kCustom or something?
+  cell.content = p;
+}
+
+/// @brief Draw a predefined image, with top-left corner at the given coordinate
+///   You can supply negative coordinates to align the image however you like - 
+///   only the 'visible' portion will be drawn
+/// @param x the x coordinate corresponding to the top-left corner of the image.
+/// @param y the y coordinate corresponding to the top-left corner of the image.
+/// @param image the image to draw.
+void Canvas::DrawImage(int x,
+                      int y,
+                      const Image& image) {
+  Box crop = image.stencil;
+
+  if (x < 0) {
+    crop.x_min -= x;
+    x = 0;
+  }
+
+  if (y < 0) {
+    crop.y_min -= y;
+    y = 0;
+  }
+
+  if (crop.Area() == 0)
+    return;
+
+  const auto xend = x + crop.x_max - crop.x_min;
+  const auto yend = y + crop.y_max - crop.y_min;
+
+  for (int py = y; py < yend; ++py) {
+    for (int px = x; px < xend; ++px) {
+      Cell& cell = storage_[XY{px, py}];
+      cell.type = CellType::kText;  // Epixu: should we add kCustom or something?
+      cell.content = image.PixelAt(crop.x_min + px - x, crop.y_min + py - y);
+    }
+  }
+}
+
 /// @brief Modify a pixel at a given location.
 /// @param style a function that modifies the pixel.
 void Canvas::Style(int x, int y, const Stylizer& style) {

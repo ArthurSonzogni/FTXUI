@@ -39,6 +39,13 @@ bool Box::Contain(int x, int y) const {
          y_max >= y;
 }
 
+/// @return the are of the box
+/// @ingroup screen
+int Box::Area() const noexcept {
+  const auto area = (x_max - x_min) * (y_max - y_min);
+  return area < 0 ? 0 : area;
+}
+
 /// @return whether |other| is the same as |this|
 /// @ingroup screen
 bool Box::operator==(const Box& other) const {
