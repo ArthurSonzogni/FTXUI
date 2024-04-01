@@ -91,18 +91,19 @@ Component Dropdown(DropdownOption option) {
       }
 
       if (!transform) {
-        transform = [](bool _open, Element _checkbox, Element _radiobox) {
-          if (_open) {
+        transform = [](bool open, Element checkbox_element,
+                       Element radiobox_element) {
+          if (open) {
             const int max_height = 12;
             return vbox({
-                       _checkbox,
+                       checkbox_element,
                        separator(),
-                       _radiobox | vscroll_indicator | frame |
+                       radiobox_element | vscroll_indicator | frame |
                            size(HEIGHT, LESS_THAN, max_height),
                    }) |
                    border;
           }
-          return vbox({_checkbox, filler()}) | border;
+          return vbox({checkbox_element, filler()}) | border;
         };
       }
     }
