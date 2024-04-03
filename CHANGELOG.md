@@ -23,6 +23,7 @@ current (development)
 - Bugfix: `Input` `onchange` was not called on backspace or delete key.
   Fixed by @chrysante in chrysante in PR #776.
 - Bugfix: Propertly restore cursor shape on exit. See #792.
+- Bugfix: Fix cursor position in when in the last column. See #831.
 
 ### Dom
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator
