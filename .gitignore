@@ -1,6 +1,7 @@
 # Ignore all the files, except the ones we expect.
 # See https://jasonstitt.com/gitignore-whitelisting-patterns
 *
+!*/
 
 # Allowed top-level files:
 !.clang-format

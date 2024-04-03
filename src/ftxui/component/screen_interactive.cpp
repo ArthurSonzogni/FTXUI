@@ -841,8 +841,8 @@ void ScreenInteractive::Draw(Component component) {
 
   // Set cursor position for user using tools to insert CJK characters.
   {
-    int const dx = dimx_ - 1 - cursor_.x + int(dimx_ != terminal.dimx);
-    int const dy = dimy_ - 1 - cursor_.y;
+    const int dx = dimx_ - 1 - cursor_.x + int(dimx_ != terminal.dimx);
+    const int dy = dimy_ - 1 - cursor_.y;
 
     set_cursor_position.clear();
     reset_cursor_position.clear();
