@@ -148,7 +148,6 @@ struct CheckboxOption {
   std::function<void()> on_change = [] {};
 };
 
-
 /// @brief Used to define style for the Input component.
 struct InputState {
   Element element;

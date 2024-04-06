@@ -76,7 +76,7 @@ Component Radiobox(ConstStringListRef entries,
 
 Component Dropdown(ConstStringListRef entries, int* selected);
 Component Dropdown(DropdownOption options);
-                   
+
 Component Toggle(ConstStringListRef entries, int* selected);
 
 // General slider constructor:
