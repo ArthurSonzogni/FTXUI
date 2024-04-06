@@ -848,13 +848,13 @@ void ScreenInteractive::Draw(Component component) {
     reset_cursor_position.clear();
 
     if (dy != 0) {
-        set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
-        reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
+      set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
+      reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
     }
 
     if (dx != 0) {
-        set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
-        reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
+      set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
+      reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
     }
 
     if (cursor_.shape == Cursor::Hidden) {

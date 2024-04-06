@@ -7,6 +7,7 @@ current (development)
 ### Component
 - Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
   option. Added by @mingsheng13.
+- Feature: Add `DropdownOption` to configure the dropdown. See #826.
 - Bugfix/Breaking change: `Mouse transition`:
   - Detect when the mouse move, as opposed to being pressed.
     The Mouse::Moved motion was added.

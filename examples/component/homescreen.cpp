@@ -494,11 +494,11 @@ int main() {
       "Exit", [&] { screen.Exit(); }, ButtonOption::Animated());
 
   auto main_container = Container::Vertical({
-    Container::Horizontal({
-        tab_selection,
-        exit_button,
-    }),
-    tab_content,
+      Container::Horizontal({
+          tab_selection,
+          exit_button,
+      }),
+      tab_content,
   });
 
   auto main_renderer = Renderer(main_container, [&] {
