@@ -268,9 +268,13 @@ struct WindowOptions {
 /// @ingroup component
 /// A dropdown menu is a checkbox opening/closing a radiobox.
 struct DropdownOption {
+  /// Whether the dropdown is open or closed:
   Ref<bool> open = false;
+  // The options for the checkbox:
   CheckboxOption checkbox;
+  // The options for the radiobox:
   RadioboxOption radiobox;
+  // The transformation function:
   std::function<Element(bool open, Element checkbox, Element radiobox)>
       transform;
 };

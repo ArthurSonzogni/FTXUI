@@ -61,9 +61,44 @@ int main() {
           },
   });
 
+  auto dropdown_3 = Dropdown({
+      .radiobox =
+          {
+              .entries = &entries,
+              .transform =
+                  [](const EntryState& s) {
+                    auto t = text(s.label) | borderEmpty;
+                    if (s.active) {
+                      t |= bold;
+                    }
+                    if (s.focused) {
+                      t |= inverted;
+                    }
+                    return t;
+                  },
+          },
+      .transform =
+          [](bool open, Element checkbox, Element radiobox) {
+            checkbox |= borderEmpty;
+            if (open) {
+              return vbox({
+                  checkbox | inverted,
+                  radiobox | vscroll_indicator | frame |
+                      size(HEIGHT, LESS_THAN, 20) | bgcolor(Color::Red),
+                  filler(),
+              });
+            }
+            return vbox({
+                checkbox | bgcolor(Color::Red),
+                filler(),
+            });
+          },
+  });
+
   auto screen = ScreenInteractive::FitComponent();
   screen.Loop(Container::Horizontal({
       dropdown_1,
       dropdown_2,
+      dropdown_3,
   }));
 }
