@@ -491,7 +491,10 @@ int main() {
       &tab_index);
 
   auto main_container = Container::Vertical({
-      tab_selection,
+      Container::Horizontal({
+          tab_selection,
+          exit_button,
+      }),
       tab_content,
   });
 

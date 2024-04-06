@@ -20,79 +20,102 @@ namespace ftxui {
 /// @param entries The list of entries to display.
 /// @param selected The index of the selected entry.
 Component Dropdown(ConstStringListRef entries, int* selected) {
-  class Impl : public ComponentBase {
+  DropdownOption option;
+  option.radiobox.entries = entries;
+  option.radiobox.selected = selected;
+  return Dropdown(option);
+}
+
+/// @brief A dropdown menu.
+/// @ingroup component
+/// @param option The options for the dropdown.
+Component Dropdown(DropdownOption option) {
+  class Impl : public ComponentBase, public DropdownOption {
    public:
-    Impl(ConstStringListRef entries, int* selected)
-        : entries_(entries), selected_(selected) {
-      CheckboxOption option;
-      option.transform = [](const EntryState& s) {
-        auto prefix = text(s.state ? "↓ " : "→ ");  // NOLINT
-        auto t = text(s.label);
-        if (s.active) {
-          t |= bold;
-        }
-        if (s.focused) {
-          t |= inverted;
-        }
-        return hbox({prefix, t});
-      };
-      checkbox_ = Checkbox(&title_, &show_, option);
-      radiobox_ = Radiobox(entries_, selected_);
+    Impl(DropdownOption option) : DropdownOption(std::move(option)) {
+      FillDefault();
+      checkbox_ = Checkbox(checkbox);
+      radiobox_ = Radiobox(radiobox);
 
       Add(Container::Vertical({
           checkbox_,
-          Maybe(radiobox_, &show_),
+          Maybe(radiobox_, checkbox.checked),
       }));
     }
 
     Element Render() override {
-      *selected_ = util::clamp(*selected_, 0, int(entries_.size()) - 1);
-      title_ = entries_[static_cast<size_t>(*selected_)];
-      if (show_) {
-        const int max_height = 12;
-        return vbox({
-                   checkbox_->Render(),
-                   separator(),
-                   radiobox_->Render() | vscroll_indicator | frame |
-                       size(HEIGHT, LESS_THAN, max_height),
-               }) |
-               border;
-      }
+      radiobox.selected =
+          util::clamp(radiobox.selected(), 0, int(radiobox.entries.size()) - 1);
+      checkbox.label =
+          radiobox.entries[static_cast<size_t>(radiobox.selected())];
 
-      return vbox({
-          checkbox_->Render() | border,
-          filler(),
-      });
+      return transform(*open_, checkbox_->Render(), radiobox_->Render());
     }
 
     // Switch focus in between the checkbox and the radiobox when selecting it.
     bool OnEvent(ftxui::Event event) override {
-      const bool show_old = show_;
-      const int selected_old = *selected_;
+      const bool show_old = open_();
+      const int selected_old = selected_();
       const bool handled = ComponentBase::OnEvent(event);
 
-      if (!show_old && show_) {
+      if (!show_old && open_()) {
         radiobox_->TakeFocus();
       }
 
-      if (selected_old != *selected_) {
+      if (selected_old != selected_()) {
         checkbox_->TakeFocus();
-        show_ = false;
+        open_ = false;
       }
 
       return handled;
     }
 
+    void FillDefault() {
+      open_ = std::move(checkbox.checked);
+      selected_ = std::move(radiobox.selected);
+      checkbox.checked = &*open_;
+      radiobox.selected = &*selected_;
+
+      if (!checkbox.transform) {
+        checkbox.transform = [](const EntryState& s) {
+          auto prefix = text(s.state ? "↓ " : "→ ");  // NOLINT
+          auto t = text(s.label);
+          if (s.active) {
+            t |= bold;
+          }
+          if (s.focused) {
+            t |= inverted;
+          }
+          return hbox({prefix, t});
+        };
+      }
+
+      if (!transform) {
+        transform = [](bool open, Element checkbox_element,
+                       Element radiobox_element) {
+          if (open) {
+            const int max_height = 12;
+            return vbox({
+                       checkbox_element,
+                       separator(),
+                       radiobox_element | vscroll_indicator | frame |
+                           size(HEIGHT, LESS_THAN, max_height),
+                   }) |
+                   border;
+          }
+          return vbox({checkbox_element, filler()}) | border;
+        };
+      }
+    }
+
    private:
-    ConstStringListRef entries_;
-    bool show_ = false;
-    int* selected_;
-    std::string title_;
+    Ref<bool> open_;
+    Ref<int> selected_;
     Component checkbox_;
     Component radiobox_;
   };
 
-  return Make<Impl>(entries, selected);
+  return Make<Impl>(option);
 }
 
 }  // namespace ftxui
