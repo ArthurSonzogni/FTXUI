@@ -638,22 +638,27 @@ void ScreenInteractive::Install() {
   on_exit_functions.push([=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
 
   // Enabling raw terminal input mode
-  terminal.c_iflag &= ~IGNBRK;  // Ignore break condition
-  terminal.c_iflag &= ~BRKINT;  // Break causes input and output to be flushed
-  terminal.c_iflag &= ~PARMRK;  // Mark parity errors
-  terminal.c_iflag &= ~ISTRIP;  // Strip 8th bit off characters
-  terminal.c_iflag &= ~INLCR;   // Map NL to CR
-  terminal.c_iflag &= ~IGNCR;   // Ignore CR
-  terminal.c_iflag &= ~ICRNL;   // Map CR to NL
-  terminal.c_iflag &= ~IXON;    // Enable XON/XOFF flow control on output
+  terminal.c_iflag &= ~IGNBRK;  // Disable ignoring break condition
+  terminal.c_iflag &= ~BRKINT;  // Disable break causing input and output to be
+                                // flushed
+  terminal.c_iflag &= ~PARMRK;  // Disable marking parity errors.
+  terminal.c_iflag &= ~ISTRIP;  // Disable striping 8th bit off characters.
+  terminal.c_iflag &= ~INLCR;   // Disable mapping NL to CR.
+  terminal.c_iflag &= ~IGNCR;   // Disable ignoring CR.
+  terminal.c_iflag &= ~ICRNL;   // Disable mapping CR to NL.
+  terminal.c_iflag &= ~IXON;    // Disable XON/XOFF flow control on output
 
-  terminal.c_lflag &= ~ECHO;    // Echo input characters
-  terminal.c_lflag &= ~ECHONL;  // Echo NL
-  terminal.c_lflag &= ~ICANON;  // Canonical mode
-  terminal.c_lflag &= ~ISIG;    // Enable signals
-  terminal.c_lflag &= ~IEXTEN;  // Enable extended input processing
+  terminal.c_lflag &= ~ECHO;    // Disable echoing input characters.
+  terminal.c_lflag &= ~ECHONL;  // Disable echoing new line characters.
+  terminal.c_lflag &= ~ICANON;  // Disable Canonical mode.
+  terminal.c_lflag &= ~ISIG;    // Disable sending signal when hitting:
+                                // -     => DSUSP
+                                // - C-Z => SUSP
+                                // - C-C => INTR
+                                // - C-d => QUIT
+  terminal.c_lflag &= ~IEXTEN;  // Disable extended input processing
+  terminal.c_cflag |= (CS8);    // 8 bits per byte
 
-  terminal.c_cflag |= (CS8);  // 8 bits per byte
   terminal.c_cc[VMIN] = 0;    // Minimum number of characters for non-canonical
                               // read.
   terminal.c_cc[VTIME] = 0;   // Timeout in deciseconds for non-canonical read.
@@ -760,8 +765,12 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
       const bool handled = component->OnEvent(arg);
 
-      if (!handled && (arg == Event::CtrlC)) {
+      if (arg == Event::CtrlC) {
         Exit();
+      }
+      
+      if (arg == Event::CtrlZ) {
+        // How to handle SIGTSTP manually?
       }
 
       frame_valid_ = false;
