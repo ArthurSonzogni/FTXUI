@@ -91,9 +91,9 @@ Component Dropdown(DropdownOption option) {
       }
 
       if (!transform) {
-        transform = [](bool open, Element checkbox_element,
+        transform = [](bool is_open, Element checkbox_element,
                        Element radiobox_element) {
-          if (open) {
+          if (is_open) {
             const int max_height = 12;
             return vbox({
                        checkbox_element,
