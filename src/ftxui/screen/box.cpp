@@ -39,11 +39,10 @@ bool Box::Contain(int x, int y) const {
          y_max >= y;
 }
 
-/// @return the are of the box
+/// @return whether the box is empty.
 /// @ingroup screen
-int Box::Area() const noexcept {
-  const auto area = (x_max - x_min) * (y_max - y_min);
-  return area < 0 ? 0 : area;
+bool Box::IsEmpty() {
+  return x_min > x_max || y_min > y_max;
 }
 
 /// @return whether |other| is the same as |this|

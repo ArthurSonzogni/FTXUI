@@ -850,8 +850,9 @@ void Canvas::DrawImage(int x,
     y = 0;
   }
 
-  if (crop.Area() == 0)
+  if (crop.IsEmpty()) {
     return;
+  }
 
   const auto xend = x + crop.x_max - crop.x_min;
   const auto yend = y + crop.y_max - crop.y_min;
