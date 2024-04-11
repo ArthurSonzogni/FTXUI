@@ -34,6 +34,7 @@ add_library(screen
   include/ftxui/screen/color.hpp
   include/ftxui/screen/color_info.hpp
   include/ftxui/screen/image.hpp
+  include/ftxui/screen/pixel.hpp
   include/ftxui/screen/screen.hpp
   include/ftxui/screen/string.hpp
   src/ftxui/screen/box.cpp
