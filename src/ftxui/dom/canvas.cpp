@@ -810,7 +810,7 @@ void Canvas::DrawText(int x,
       continue;
     }
     Cell& cell = storage_[XY{x / 2, y / 4}];
-    cell.type = CellType::kText;
+    cell.type = CellType::kCell;
     cell.content.character = it;
     style(cell.content);
     x += 2;
@@ -821,11 +821,9 @@ void Canvas::DrawText(int x,
 /// @param x the x coordinate of the pixel.
 /// @param y the y coordinate of the pixel.
 /// @param p the pixel to draw.
-void Canvas::DrawPixel(int x,
-                      int y,
-                      const Pixel& p) {
-  Cell& cell = storage_[XY{x, y}];
-  cell.type = CellType::kText; // Epixu: should we add kCustom or something?
+void Canvas::DrawPixel(int x, int y, const Pixel& p) {
+  Cell& cell = storage_[XY{x / 2, y / 4}];
+  cell.type = CellType::kCell;
   cell.content = p;
 }
 
@@ -835,33 +833,22 @@ void Canvas::DrawPixel(int x,
 /// @param x the x coordinate corresponding to the top-left corner of the image.
 /// @param y the y coordinate corresponding to the top-left corner of the image.
 /// @param image the image to draw.
-void Canvas::DrawImage(int x,
-                      int y,
-                      const Image& image) {
-  Box crop = image.stencil;
+void Canvas::DrawImage(int x, int y, const Image& image) {
+  x /= 2;
+  y /= 4;
+  const int dx_begin = std::max(0, -x);
+  const int dy_begin = std::max(0, -y);
+  const int dx_end = std::min(image.dimx(), width_ - x);
+  const int dy_end = std::min(image.dimy(), height_ - y);
 
-  if (x < 0) {
-    crop.x_min -= x;
-    x = 0;
-  }
-
-  if (y < 0) {
-    crop.y_min -= y;
-    y = 0;
-  }
-
-  if (crop.IsEmpty()) {
-    return;
-  }
-
-  const auto xend = x + crop.x_max - crop.x_min;
-  const auto yend = y + crop.y_max - crop.y_min;
-
-  for (int py = y; py < yend; ++py) {
-    for (int px = x; px < xend; ++px) {
-      Cell& cell = storage_[XY{px, py}];
-      cell.type = CellType::kText;  // Epixu: should we add kCustom or something?
-      cell.content = image.PixelAt(crop.x_min + px - x, crop.y_min + py - y);
+  for (int dy = dy_begin; dy < dy_end; ++dy) {
+    for (int dx = dx_begin; dx < dx_end; ++dx) {
+      Cell& cell = storage_[XY{
+          x + dx,
+          y + dy,
+      }];
+      cell.type = CellType::kCell;
+      cell.content = image.PixelAt(dx, dy);
     }
   }
 }

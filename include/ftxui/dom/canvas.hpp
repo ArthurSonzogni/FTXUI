@@ -96,7 +96,8 @@ struct Canvas {
   void DrawText(int x, int y, const std::string& value, const Stylizer& style);
   
   // Draw using directly pixels or images --------------------------------------
-  // Pixel/image coordinates correspond 1:1
+  // x is considered to be a multiple of 2.
+  // y is considered to be a multiple of 4.
   void DrawPixel(int x, int y, const Pixel&);
   void DrawImage(int x, int y, const Image&);
 
@@ -109,15 +110,18 @@ struct Canvas {
   bool IsIn(int x, int y) const {
     return x >= 0 && x < width_ && y >= 0 && y < height_;
   }
+
   enum CellType {
-    kBraille,
-    kBlock,
-    kText,
+    kCell,     // Units of size 2x4
+    kBlock,    // Units of size 2x2
+    kBraille,  // Units of size 1x1
   };
+
   struct Cell {
-    CellType type = kText;
+    CellType type = kCell;
     Pixel content;
   };
+
   struct XY {
     int x;
     int y;
