@@ -23,10 +23,32 @@ class ResizableSplitBase : public ComponentBase {
  public:
   explicit ResizableSplitBase(ResizableSplitOption options)
       : options_(std::move(options)) {
-    Add(Container::Horizontal({
-        options_->main,
-        options_->back,
-    }));
+    switch (options_->direction()) {
+      case Direction::Left:
+        Add(Container::Horizontal({
+            options_->main,
+            options_->back,
+        }));
+        break;
+      case Direction::Right:
+        Add(Container::Horizontal({
+            options_->back,
+            options_->main,
+        }));
+        break;
+      case Direction::Up:
+        Add(Container::Vertical({
+            options_->main,
+            options_->back,
+        }));
+        break;
+      case Direction::Down:
+        Add(Container::Vertical({
+            options_->back,
+            options_->main,
+        }));
+        break;
+    }
   }
 
   bool OnEvent(Event event) final {
