@@ -73,7 +73,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
 
 #### DOM
 
-This module defines a hierarchical set of Element. An element manages layout and can be responsive to the terminal dimensions.
+This module defines a hierarchical set of Element. An Element manages layout and can be responsive to the terminal dimensions.
 
 They are declared in [<ftxui/dom/elements.hpp>](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
 )
@@ -199,7 +199,7 @@ Complex [examples](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/
 
 #### Component
 
-ftxui/component produces dynamic UI, reactive to the user's input. It defines a set of ftxui::Component. A component reacts to Events (keyboard, mouse, resize, ...) and Renders as an Element (see previous section). 
+ftxui/component produces dynamic UI, reactive to the user's input. It defines a set of ftxui::Component. A component reacts to Events (keyboard, mouse, resize, ...) and Renders as an Element (see previous section).
 
 Prebuilt components are declared in [<ftxui/component/component.hpp>](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
 
@@ -369,13 +369,15 @@ If you don't, FTXUI may be used from the following packages:
 - [Arch Linux PKGBUILD](https://aur.archlinux.org/packages/ftxui-git/).
 - [conan.io](https://conan.io/center/ftxui)
 - [openSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
+- 
+[![Packaging status](https://repology.org/badge/vertical-allrepos/ftxui.svg)](https://repology.org/project/ftxui/versions)
 
 If you choose to build and link FTXUI yourself, `ftxui-component` must be first in the linking order relative to the other FTXUI libraries, i.e.
 ```bash
 g++ . . . -lftxui-component -lftxui-dom -lftxui-screen . . .
 ```
 
-[![Packaging status](https://repology.org/badge/vertical-allrepos/ftxui.svg)](https://repology.org/project/ftxui/versions)
+
 
 ## Contributors
 
