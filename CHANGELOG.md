@@ -25,6 +25,7 @@ current (development)
   Fixed by @chrysante in chrysante in PR #776.
 - Bugfix: Propertly restore cursor shape on exit. See #792.
 - Bugfix: Fix cursor position in when in the last column. See #831.
+- Bugfix: Fix `ResizeableSplit` keyboard navigation. Fixed by #842.
 
 ### Dom
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator
