@@ -73,7 +73,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
 
 #### DOM
 
-This module defines a hierarchical set of Element. An element manages layout and can be responsive to the terminal dimensions.
+This module defines a hierarchical set of Element. An Element manages layout and can be responsive to the terminal dimensions.
 
 They are declared in [<ftxui/dom/elements.hpp>](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
 )
@@ -199,7 +199,7 @@ Complex [examples](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/
 
 #### Component
 
-The ftxui/component is needed when you want to produce dynamic UI, reactive to the user's input. It defines a set of ftxui::Component. A component reacts to Events (keyboard, mouse, resize, ...) and Render Element (see previous section).
+ftxui/component produces dynamic UI, reactive to the user's input. It defines a set of ftxui::Component. A component reacts to Events (keyboard, mouse, resize, ...) and Renders as an Element (see previous section).
 
 Prebuilt components are declared in [<ftxui/component/component.hpp>](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
 
@@ -293,7 +293,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 </details>
 
 ## Libraries for FTXUI
-- *Want to share a useful component using FTXUI? Feel free adding yours here*
+- *Want to share a useful Component for FTXUI? Feel free to add yours here*
 - [ftxui-grid-container](https://github.com/mingsheng13/grid-container-ftxui)
 - [ftxui-ip-input](https://github.com/mingsheng13/ip-input-ftxui)
 
@@ -346,10 +346,9 @@ Several games using the FTXUI have been made during the Game Jam:
 - [smoothlife](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/smoothlife.md)
 - [Consu](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/consu.md)
 
-## External package
+## Utilization
 
-It is **highly** recommended to use CMake FetchContent to depend on FTXUI. This
-way you can specify which commit you would like to depend on.
+It is **highly** recommended to use CMake FetchContent to depend on FTXUI so you may specify which commit you would like to depend on.
 ```cmake
 include(FetchContent)
 
@@ -365,13 +364,20 @@ if(NOT ftxui_POPULATED)
 endif()
 ```
 
-If you don't, the following packages have been created:
+If you don't, FTXUI may be used from the following packages:
 - [vcpkg](https://vcpkgx.com/details.html?package=ftxui)
 - [Arch Linux PKGBUILD](https://aur.archlinux.org/packages/ftxui-git/).
 - [conan.io](https://conan.io/center/ftxui)
 - [openSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
-
+- 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/ftxui.svg)](https://repology.org/project/ftxui/versions)
+
+If you choose to build and link FTXUI yourself, `ftxui-component` must be first in the linking order relative to the other FTXUI libraries, i.e.
+```bash
+g++ . . . -lftxui-component -lftxui-dom -lftxui-screen . . .
+```
+
+
 
 ## Contributors
 
