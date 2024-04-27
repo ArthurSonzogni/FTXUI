@@ -810,10 +810,46 @@ void Canvas::DrawText(int x,
       continue;
     }
     Cell& cell = storage_[XY{x / 2, y / 4}];
-    cell.type = CellType::kText;
+    cell.type = CellType::kCell;
     cell.content.character = it;
     style(cell.content);
     x += 2;
+  }
+}
+
+/// @brief Directly draw a predefined pixel at the given coordinate
+/// @param x the x coordinate of the pixel.
+/// @param y the y coordinate of the pixel.
+/// @param p the pixel to draw.
+void Canvas::DrawPixel(int x, int y, const Pixel& p) {
+  Cell& cell = storage_[XY{x / 2, y / 4}];
+  cell.type = CellType::kCell;
+  cell.content = p;
+}
+
+/// @brief Draw a predefined image, with top-left corner at the given coordinate
+///   You can supply negative coordinates to align the image however you like - 
+///   only the 'visible' portion will be drawn
+/// @param x the x coordinate corresponding to the top-left corner of the image.
+/// @param y the y coordinate corresponding to the top-left corner of the image.
+/// @param image the image to draw.
+void Canvas::DrawImage(int x, int y, const Image& image) {
+  x /= 2;
+  y /= 4;
+  const int dx_begin = std::max(0, -x);
+  const int dy_begin = std::max(0, -y);
+  const int dx_end = std::min(image.dimx(), width_ - x);
+  const int dy_end = std::min(image.dimy(), height_ - y);
+
+  for (int dy = dy_begin; dy < dy_end; ++dy) {
+    for (int dx = dx_begin; dx < dx_end; ++dx) {
+      Cell& cell = storage_[XY{
+          x + dx,
+          y + dy,
+      }];
+      cell.type = CellType::kCell;
+      cell.content = image.PixelAt(dx, dy);
+    }
   }
 }
 

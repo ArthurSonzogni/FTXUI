@@ -39,6 +39,12 @@ bool Box::Contain(int x, int y) const {
          y_max >= y;
 }
 
+/// @return whether the box is empty.
+/// @ingroup screen
+bool Box::IsEmpty() {
+  return x_min > x_max || y_min > y_max;
+}
+
 /// @return whether |other| is the same as |this|
 /// @ingroup screen
 bool Box::operator==(const Box& other) const {
