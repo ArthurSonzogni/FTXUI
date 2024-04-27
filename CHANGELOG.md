@@ -32,6 +32,9 @@ current (development)
   reflecting the current scroll position. Proposed by @ibrahimnasson in
   [issue 752](https://github.com/ArthurSonzogni/FTXUI/issues/752)
 
+### Screen
+- Feature: Add `Box::IsEmpty()`.
+
 ### Build
 - Support for cmake's "unity/jumbo" builds. Fixed by @ClausKlein.
 
