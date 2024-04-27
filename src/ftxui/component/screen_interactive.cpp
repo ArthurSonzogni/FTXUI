@@ -907,7 +907,7 @@ void ScreenInteractive::ExitNow() {
 // private:
 void ScreenInteractive::Signal(int signal) {
   if (signal == SIGABRT) {
-    OnExit();
+    Exit();
     return;
   }
 
