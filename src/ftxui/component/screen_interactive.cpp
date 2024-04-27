@@ -568,7 +568,15 @@ ScreenInteractive* ScreenInteractive::Active() {
 
 // private
 void ScreenInteractive::Install() {
+
   frame_valid_ = false;
+
+  // Flush the buffer for stdout to ensure whatever the user has printed before
+  // is fully applied before we start modifying the terminal configuration. This
+  // is important, because we are using two different channels (stdout vs
+  // termios/WinAPI) to communicate with the terminal emulator below. See
+  // https://github.com/ArthurSonzogni/FTXUI/issues/846
+  Flush();
 
   // After uninstalling the new configuration, flush it to the terminal to
   // ensure it is fully applied:
