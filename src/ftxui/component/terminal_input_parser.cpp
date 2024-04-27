@@ -169,16 +169,9 @@ TerminalInputParser::Output TerminalInputParser::Parse() {
   if (!Eat()) {
     return UNCOMPLETED;
   }
-
-  switch (Current()) {
-    case 24:  // CAN NOLINT
-    case 26:  // SUB NOLINT
-      return DROP;
-
-    case '\x1B':
-      return ParseESC();
-    default:
-      break;
+  
+  if (Current() == '\x1B') {
+    return ParseESC();
   }
 
   if (Current() < 32) {  // C0 NOLINT

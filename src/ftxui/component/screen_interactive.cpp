@@ -559,6 +559,19 @@ Closure ScreenInteractive::WithRestoredIO(Closure fn) {  // NOLINT
   };
 }
 
+
+/// @brief Force FTXUI to handle or not handle Ctrl-C, even if the component
+/// catches the Event::CtrlC.
+void ScreenInteractive::ForceHandleCtrlC(bool force) {
+  force_handle_ctrl_c_ = force;
+}
+
+/// @brief Force FTXUI to handle or not handle Ctrl-Z, even if the component
+/// catches the Event::CtrlZ.
+void ScreenInteractive::ForceHandleCtrlZ(bool force) {
+  force_handle_ctrl_z_ = force;
+}
+
 /// @brief Return the currently active screen, or null if none.
 // static
 ScreenInteractive* ScreenInteractive::Active() {
@@ -657,7 +670,7 @@ void ScreenInteractive::Install() {
                                 // - C-C => INTR
                                 // - C-d => QUIT
   terminal.c_lflag &= ~IEXTEN;  // Disable extended input processing
-  terminal.c_cflag |= (CS8);    // 8 bits per byte
+  terminal.c_cflag |= CS8;      // 8 bits per byte
 
   terminal.c_cc[VMIN] = 0;    // Minimum number of characters for non-canonical
                               // read.
@@ -765,14 +778,16 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
       const bool handled = component->OnEvent(arg);
 
-      if (arg == Event::CtrlC) {
-        Exit();
-      }
-      
-      if (arg == Event::CtrlZ) {
-        // How to handle SIGTSTP manually?
+      if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
+        RecordSignal(SIGABRT);
       }
 
+#if !defined(_WIN32)
+      if (arg == Event::CtrlZ && (!handled || force_handle_ctrl_z_)) {
+        RecordSignal(SIGTSTP);
+      }
+#endif
+      
       frame_valid_ = false;
       return;
     }
