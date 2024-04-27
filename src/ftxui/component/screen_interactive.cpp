@@ -559,7 +559,6 @@ Closure ScreenInteractive::WithRestoredIO(Closure fn) {  // NOLINT
   };
 }
 
-
 /// @brief Force FTXUI to handle or not handle Ctrl-C, even if the component
 /// catches the Event::CtrlC.
 void ScreenInteractive::ForceHandleCtrlC(bool force) {
@@ -580,7 +579,6 @@ ScreenInteractive* ScreenInteractive::Active() {
 
 // private
 void ScreenInteractive::Install() {
-
   frame_valid_ = false;
 
   // Flush the buffer for stdout to ensure whatever the user has printed before
@@ -672,9 +670,9 @@ void ScreenInteractive::Install() {
   terminal.c_lflag &= ~IEXTEN;  // Disable extended input processing
   terminal.c_cflag |= CS8;      // 8 bits per byte
 
-  terminal.c_cc[VMIN] = 0;    // Minimum number of characters for non-canonical
-                              // read.
-  terminal.c_cc[VTIME] = 0;   // Timeout in deciseconds for non-canonical read.
+  terminal.c_cc[VMIN] = 0;   // Minimum number of characters for non-canonical
+                             // read.
+  terminal.c_cc[VTIME] = 0;  // Timeout in deciseconds for non-canonical read.
 
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 

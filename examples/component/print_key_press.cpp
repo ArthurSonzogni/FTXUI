@@ -33,8 +33,8 @@ int main() {
 
   auto left_column = Renderer([&] {
     Elements children = {
-      text("Codes"),
-      separator(),
+        text("Codes"),
+        separator(),
     };
     for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
       children.push_back(text(Code(keys[i])));
@@ -44,8 +44,8 @@ int main() {
 
   auto right_column = Renderer([&] {
     Elements children = {
-      text("Event"),
-      separator(),
+        text("Event"),
+        separator(),
     };
     for (size_t i = std::max(0, (int)keys.size() - 20); i < keys.size(); ++i) {
       children.push_back(text(keys[i].DebugString()));

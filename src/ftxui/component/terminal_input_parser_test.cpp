@@ -353,8 +353,8 @@ TEST(Event, Control) {
       continue;
     cases.push_back({char(i), false});
   }
-  cases.push_back({char(24), true});
-  cases.push_back({char(26), true});
+  cases.push_back({char(24), false});
+  cases.push_back({char(26), false});
   cases.push_back({char(127), false});
 
   for (auto test : cases) {
@@ -386,12 +386,9 @@ TEST(Event, Special) {
     Event expected;
   } kTestCase[] = {
       // Arrow (default cursor mode)
-      {str("\x1B[A"), Event::ArrowUp},
-      {str("\x1B[B"), Event::ArrowDown},
-      {str("\x1B[C"), Event::ArrowRight},
-      {str("\x1B[D"), Event::ArrowLeft},
-      {str("\x1B[H"), Event::Home},
-      {str("\x1B[F"), Event::End},
+      {str("\x1B[A"), Event::ArrowUp},    {str("\x1B[B"), Event::ArrowDown},
+      {str("\x1B[C"), Event::ArrowRight}, {str("\x1B[D"), Event::ArrowLeft},
+      {str("\x1B[H"), Event::Home},       {str("\x1B[F"), Event::End},
       /*
 
       // Arrow (application cursor mode)

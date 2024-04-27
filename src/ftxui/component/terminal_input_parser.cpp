@@ -169,7 +169,7 @@ TerminalInputParser::Output TerminalInputParser::Parse() {
   if (!Eat()) {
     return UNCOMPLETED;
   }
-  
+
   if (Current() == '\x1B') {
     return ParseESC();
   }
@@ -285,8 +285,7 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
     case '*':
     case '+':
     case 'O':
-    case 'N':
-    {
+    case 'N': {
       if (!Eat()) {
         return UNCOMPLETED;
       }

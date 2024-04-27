@@ -59,12 +59,12 @@ class ScreenInteractive : public Screen {
   // temporarily uninstalled.
   Closure WithRestoredIO(Closure);
 
-  // FTXUI implements handlers for Ctrl-C and Ctrl-Z. By default, these handlers 
+  // FTXUI implements handlers for Ctrl-C and Ctrl-Z. By default, these handlers
   // are executed, even if the component catches the event. This avoid users
   // handling every event to be trapped in the application. However, in some
-  // cases, the application may want to handle these events itself. In this case,
-  // the application can force FTXUI to not handle these events by calling the
-  // following functions with force=true.
+  // cases, the application may want to handle these events itself. In this
+  // case, the application can force FTXUI to not handle these events by calling
+  // the following functions with force=true.
   void ForceHandleCtrlC(bool force);
   void ForceHandleCtrlZ(bool force);
 
