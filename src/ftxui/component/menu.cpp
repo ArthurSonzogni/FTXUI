@@ -131,8 +131,9 @@ class MenuBase : public ComponentBase, public MenuOption {
           is_focused,
       };
 
-      auto focus_management =
-          is_menu_focused && (selected_focus_ == i) ? focus : nothing;
+      auto focus_management = (selected_focus_ != i) ? nothing
+                              : is_menu_focused      ? focus
+                                                     : select;
 
       const Element element =
           (entries_option.transform ? entries_option.transform
