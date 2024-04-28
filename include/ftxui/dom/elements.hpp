@@ -80,7 +80,9 @@ Decorator borderStyled(BorderStyle);
 Decorator borderStyled(BorderStyle, Color);
 Decorator borderStyled(Color);
 Decorator borderWith(const Pixel&);
-Element window(Element title, Element content);
+Element window(Element title,
+               Element content,
+               BorderStyle border = ROUNDED);
 Element spinner(int charset_index, size_t image_index);
 Element paragraph(const std::string& text);
 Element paragraphAlignLeft(const std::string& text);

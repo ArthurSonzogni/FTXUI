@@ -479,6 +479,7 @@ Element borderEmpty(Element child) {
 /// @brief Draw window with a title and a border around the element.
 /// @param title The title of the window.
 /// @param content The element to be wrapped.
+/// @param border The style of the border. Default is ROUNDED.
 /// @ingroup dom
 /// @see border
 ///
@@ -487,6 +488,12 @@ Element borderEmpty(Element child) {
 /// ```cpp
 /// Element document = window(text("Title"),
 ///                           text("content")
+///                    );
+///
+/// // With specifying border
+/// Element document = window(text("Title"),
+///                           text("content"),
+///                           ROUNDED
 ///                    );
 /// ```
 ///
@@ -497,8 +504,8 @@ Element borderEmpty(Element child) {
 /// │content│
 /// └───────┘
 /// ```
-Element window(Element title, Element content) {
+Element window(Element title, Element content, BorderStyle border) {
   return std::make_shared<Border>(unpack(std::move(content), std::move(title)),
-                                  ROUNDED);
+                                  border);
 }
 }  // namespace ftxui
