@@ -10,8 +10,14 @@
 
 // Disable warning for shadowing variable, for every compilers. Indeed, there is
 // a static Event for every letter of the alphabet:
-#pragma GCC diagnostic ignored "-Wshadow"
+#ifdef __clang__
 #pragma clang diagnostic ignored "-Wshadow"
+#elif __GNUC__
+#pragma GCC diagnostic ignored "-Wshadow"
+#elif defined(_MSC_VER)
+#pragma warning(disable : 6244)
+#pragma warning(disable : 6246)
+#endif
 
 namespace ftxui {
 
