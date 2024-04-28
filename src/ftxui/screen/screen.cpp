@@ -391,9 +391,9 @@ Screen::Screen(int dimx, int dimy) : Image{dimx, dimy} {
 #if defined(_WIN32)
   // The placement of this call is a bit weird, however we can assume that
   // anybody who instantiates a Screen object eventually wants to output
-  // something to the console. If that is not the case, use an instance of Image instead.
-  // As we require UTF8 for all input/output operations we will just switch to
-  // UTF8 encoding here
+  // something to the console. If that is not the case, use an instance of Image
+  // instead. As we require UTF8 for all input/output operations we will just
+  // switch to UTF8 encoding here
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
   WindowsEmulateVT100Terminal();

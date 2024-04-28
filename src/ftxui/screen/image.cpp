@@ -10,17 +10,16 @@
 #include <utility>  // for pair
 
 #include "ftxui/screen/image.hpp"
-#include "ftxui/screen/string.hpp"    // for string_width
+#include "ftxui/screen/string.hpp"  // for string_width
 
 namespace ftxui {
 
-namespace
-{
-   Pixel& dev_null_pixel() {
-      static Pixel pixel;
-      return pixel;
-   }
+namespace {
+Pixel& dev_null_pixel() {
+  static Pixel pixel;
+  return pixel;
 }
+}  // namespace
 
 Image::Image(int dimx, int dimy)
     : stencil{0, dimx - 1, 0, dimy - 1},
