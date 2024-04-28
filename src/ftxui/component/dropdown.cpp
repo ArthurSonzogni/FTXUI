@@ -32,7 +32,7 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
 Component Dropdown(DropdownOption option) {
   class Impl : public ComponentBase, public DropdownOption {
    public:
-    Impl(DropdownOption option) : DropdownOption(std::move(option)) {
+    explicit Impl(DropdownOption option) : DropdownOption(std::move(option)) {
       FillDefault();
       checkbox_ = Checkbox(checkbox);
       radiobox_ = Radiobox(radiobox);
@@ -71,8 +71,8 @@ Component Dropdown(DropdownOption option) {
     }
 
     void FillDefault() {
-      open_ = std::move(checkbox.checked);
-      selected_ = std::move(radiobox.selected);
+      open_ = checkbox.checked;
+      selected_ = radiobox.selected;
       checkbox.checked = &*open_;
       radiobox.selected = &*selected_;
 

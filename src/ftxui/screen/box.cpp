@@ -41,7 +41,7 @@ bool Box::Contain(int x, int y) const {
 
 /// @return whether the box is empty.
 /// @ingroup screen
-bool Box::IsEmpty() {
+bool Box::IsEmpty() const {
   return x_min > x_max || y_min > y_max;
 }
 
