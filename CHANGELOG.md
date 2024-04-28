@@ -5,6 +5,14 @@ current (development)
 ---------------------
 
 ### Component
+- Feature: Add support for raw input. Allowing more keys to be detected.
+- Feature: Add `ScreenInteractive::ForceHandleCtrlC(false)` to allow component
+  to fully override the default `Ctrl+C` handler.
+- Feature: Add `ScreenInteractive::ForceHandleCtrlZ(false)` to allow component
+  to fully override the default `Ctrl+Z` handler.
+- Feature: Add `Mouse::WeelLeft` and `Mouse::WeelRight` events on supported
+  terminals.
+- Feature: Add `Event::DebugString()`.
 - Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
   option. Added by @mingsheng13.
 - Feature: Add `DropdownOption` to configure the dropdown. See #826.

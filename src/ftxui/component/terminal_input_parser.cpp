@@ -170,15 +170,8 @@ TerminalInputParser::Output TerminalInputParser::Parse() {
     return UNCOMPLETED;
   }
 
-  switch (Current()) {
-    case 24:  // CAN NOLINT
-    case 26:  // SUB NOLINT
-      return DROP;
-
-    case '\x1B':
-      return ParseESC();
-    default:
-      break;
+  if (Current() == '\x1B') {
+    return ParseESC();
   }
 
   if (Current() < 32) {  // C0 NOLINT
@@ -282,12 +275,25 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
       return ParseCSI();
     case ']':
       return ParseOSC();
-    default:
+
+    // Expecting 2 characters.
+    case ' ':
+    case '#':
+    case '%':
+    case '(':
+    case ')':
+    case '*':
+    case '+':
+    case 'O':
+    case 'N': {
       if (!Eat()) {
         return UNCOMPLETED;
-      } else {
-        return SPECIAL;
       }
+      return SPECIAL;
+    }
+    // Expecting 1 character:
+    default:
+      return SPECIAL;
   }
 }
 

@@ -828,7 +828,7 @@ void Canvas::DrawPixel(int x, int y, const Pixel& p) {
 }
 
 /// @brief Draw a predefined image, with top-left corner at the given coordinate
-///   You can supply negative coordinates to align the image however you like - 
+///   You can supply negative coordinates to align the image however you like -
 ///   only the 'visible' portion will be drawn
 /// @param x the x coordinate corresponding to the top-left corner of the image.
 /// @param y the y coordinate corresponding to the top-left corner of the image.

@@ -54,14 +54,44 @@ struct Event {
   static const Event Escape;
   static const Event Tab;
   static const Event TabReverse;
-  static const Event F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12;
 
+  // --- Navigation keys ---
   static const Event Insert;
   static const Event Home;
   static const Event End;
-
   static const Event PageUp;
   static const Event PageDown;
+
+  // --- Function keys ---
+  static const Event F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12;
+
+  // --- Control keys ---
+  static const Event a, A, CtrlA, AltA, CtrlAltA;
+  static const Event b, B, CtrlB, AltB, CtrlAltB;
+  static const Event c, C, CtrlC, AltC, CtrlAltC;
+  static const Event d, D, CtrlD, AltD, CtrlAltD;
+  static const Event e, E, CtrlE, AltE, CtrlAltE;
+  static const Event f, F, CtrlF, AltF, CtrlAltF;
+  static const Event g, G, CtrlG, AltG, CtrlAltG;
+  static const Event h, H, CtrlH, AltH, CtrlAltH;
+  static const Event i, I, CtrlI, AltI, CtrlAltI;
+  static const Event j, J, CtrlJ, AltJ, CtrlAltJ;
+  static const Event k, K, CtrlK, AltK, CtrlAltK;
+  static const Event l, L, CtrlL, AltL, CtrlAltL;
+  static const Event m, M, CtrlM, AltM, CtrlAltM;
+  static const Event n, N, CtrlN, AltN, CtrlAltN;
+  static const Event o, O, CtrlO, AltO, CtrlAltO;
+  static const Event p, P, CtrlP, AltP, CtrlAltP;
+  static const Event q, Q, CtrlQ, AltQ, CtrlAltQ;
+  static const Event r, R, CtrlR, AltR, CtrlAltR;
+  static const Event s, S, CtrlS, AltS, CtrlAltS;
+  static const Event t, T, CtrlT, AltT, CtrlAltT;
+  static const Event u, U, CtrlU, AltU, CtrlAltU;
+  static const Event v, V, CtrlV, AltV, CtrlAltV;
+  static const Event w, W, CtrlW, AltW, CtrlAltW;
+  static const Event x, X, CtrlX, AltX, CtrlAltX;
+  static const Event y, Y, CtrlY, AltY, CtrlAltY;
+  static const Event z, Z, CtrlZ, AltZ, CtrlAltZ;
 
   // --- Custom ---
   static const Event Custom;
@@ -69,6 +99,7 @@ struct Event {
   //--- Method section ---------------------------------------------------------
   bool operator==(const Event& other) const { return input_ == other.input_; }
   bool operator!=(const Event& other) const { return !operator==(other); }
+  bool operator<(const Event& other) const { return input_ < other.input_; }
 
   const std::string& input() const { return input_; }
 
@@ -85,6 +116,9 @@ struct Event {
 
   bool is_cursor_shape() const { return type_ == Type::CursorShape; }
   int cursor_shape() const { return data_.cursor_shape; }
+
+  // Debug
+  std::string DebugString() const;
 
   //--- State section ----------------------------------------------------------
   ScreenInteractive* screen_ = nullptr;

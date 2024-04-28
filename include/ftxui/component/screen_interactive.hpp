@@ -59,6 +59,15 @@ class ScreenInteractive : public Screen {
   // temporarily uninstalled.
   Closure WithRestoredIO(Closure);
 
+  // FTXUI implements handlers for Ctrl-C and Ctrl-Z. By default, these handlers
+  // are executed, even if the component catches the event. This avoid users
+  // handling every event to be trapped in the application. However, in some
+  // cases, the application may want to handle these events itself. In this
+  // case, the application can force FTXUI to not handle these events by calling
+  // the following functions with force=true.
+  void ForceHandleCtrlC(bool force);
+  void ForceHandleCtrlZ(bool force);
+
  private:
   void ExitNow();
 
@@ -113,6 +122,9 @@ class ScreenInteractive : public Screen {
   bool previous_frame_resized_ = false;
 
   bool frame_valid_ = false;
+
+  bool force_handle_ctrl_c_ = true;
+  bool force_handle_ctrl_z_ = true;
 
   // The style of the cursor to restore on exit.
   int cursor_reset_shape_ = 1;

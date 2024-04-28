@@ -132,7 +132,6 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
 
 // Read char from the terminal.
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
-  (void)timeout_microseconds;
   auto parser = TerminalInputParser(std::move(out));
 
   char c;
@@ -560,6 +559,18 @@ Closure ScreenInteractive::WithRestoredIO(Closure fn) {  // NOLINT
   };
 }
 
+/// @brief Force FTXUI to handle or not handle Ctrl-C, even if the component
+/// catches the Event::CtrlC.
+void ScreenInteractive::ForceHandleCtrlC(bool force) {
+  force_handle_ctrl_c_ = force;
+}
+
+/// @brief Force FTXUI to handle or not handle Ctrl-Z, even if the component
+/// catches the Event::CtrlZ.
+void ScreenInteractive::ForceHandleCtrlZ(bool force) {
+  force_handle_ctrl_z_ = force;
+}
+
 /// @brief Return the currently active screen, or null if none.
 // static
 ScreenInteractive* ScreenInteractive::Active() {
@@ -568,7 +579,6 @@ ScreenInteractive* ScreenInteractive::Active() {
 
 // private
 void ScreenInteractive::Install() {
-
   frame_valid_ = false;
 
   // Flush the buffer for stdout to ensure whatever the user has printed before
@@ -638,13 +648,31 @@ void ScreenInteractive::Install() {
   tcgetattr(STDIN_FILENO, &terminal);
   on_exit_functions.push([=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
 
-  terminal.c_lflag &= ~ICANON;  // NOLINT Non canonique terminal.
-  terminal.c_lflag &= ~ECHO;    // NOLINT Do not print after a key press.
-  terminal.c_cc[VMIN] = 0;
-  terminal.c_cc[VTIME] = 0;
-  // auto oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-  // fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-  // on_exit_functions.push([=] { fcntl(STDIN_FILENO, F_GETFL, oldf); });
+  // Enabling raw terminal input mode
+  terminal.c_iflag &= ~IGNBRK;  // Disable ignoring break condition
+  terminal.c_iflag &= ~BRKINT;  // Disable break causing input and output to be
+                                // flushed
+  terminal.c_iflag &= ~PARMRK;  // Disable marking parity errors.
+  terminal.c_iflag &= ~ISTRIP;  // Disable striping 8th bit off characters.
+  terminal.c_iflag &= ~INLCR;   // Disable mapping NL to CR.
+  terminal.c_iflag &= ~IGNCR;   // Disable ignoring CR.
+  terminal.c_iflag &= ~ICRNL;   // Disable mapping CR to NL.
+  terminal.c_iflag &= ~IXON;    // Disable XON/XOFF flow control on output
+
+  terminal.c_lflag &= ~ECHO;    // Disable echoing input characters.
+  terminal.c_lflag &= ~ECHONL;  // Disable echoing new line characters.
+  terminal.c_lflag &= ~ICANON;  // Disable Canonical mode.
+  terminal.c_lflag &= ~ISIG;    // Disable sending signal when hitting:
+                                // -     => DSUSP
+                                // - C-Z => SUSP
+                                // - C-C => INTR
+                                // - C-d => QUIT
+  terminal.c_lflag &= ~IEXTEN;  // Disable extended input processing
+  terminal.c_cflag |= CS8;      // 8 bits per byte
+
+  terminal.c_cc[VMIN] = 0;   // Minimum number of characters for non-canonical
+                             // read.
+  terminal.c_cc[VTIME] = 0;  // Timeout in deciseconds for non-canonical read.
 
   tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
 
@@ -720,6 +748,7 @@ void ScreenInteractive::RunOnce(Component component) {
 }
 
 // private
+// NOLINTNEXTLINE
 void ScreenInteractive::HandleTask(Component component, Task& task) {
   std::visit(
       [&](auto&& arg) {
@@ -745,7 +774,19 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
       }
 
       arg.screen_ = this;
-      component->OnEvent(arg);
+
+      const bool handled = component->OnEvent(arg);
+
+      if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
+        RecordSignal(SIGABRT);
+      }
+
+#if !defined(_WIN32)
+      if (arg == Event::CtrlZ && (!handled || force_handle_ctrl_z_)) {
+        RecordSignal(SIGTSTP);
+      }
+#endif
+      
       frame_valid_ = false;
       return;
     }
