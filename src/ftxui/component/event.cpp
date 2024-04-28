@@ -8,6 +8,11 @@
 #include "ftxui/component/mouse.hpp"  // for Mouse
 #include "ftxui/screen/string.hpp"    // for to_wstring
 
+// Disable warning for shadowing variable, for every compilers. Indeed, there is
+// a static Event for every letter of the alphabet:
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma clang diagnostic ignored "-Wshadow"
+
 namespace ftxui {
 
 /// @brief An event corresponding to a given typed character.
@@ -273,229 +278,183 @@ std::string Event::DebugString() const {
   return "";
 }
 
+// clang-format off
+// NOLINTBEGIN
+
 // --- Arrow ---
-const Event Event::ArrowLeft = Event::Special("\x1B[D");          // NOLINT
-const Event Event::ArrowRight = Event::Special("\x1B[C");         // NOLINT
-const Event Event::ArrowUp = Event::Special("\x1B[A");            // NOLINT
-const Event Event::ArrowDown = Event::Special("\x1B[B");          // NOLINT
-const Event Event::ArrowLeftCtrl = Event::Special("\x1B[1;5D");   // NOLINT
-const Event Event::ArrowRightCtrl = Event::Special("\x1B[1;5C");  // NOLINT
-const Event Event::ArrowUpCtrl = Event::Special("\x1B[1;5A");     // NOLINT
-const Event Event::ArrowDownCtrl = Event::Special("\x1B[1;5B");   // NOLINT
-const Event Event::Backspace = Event::Special({127});             // NOLINT
-const Event Event::Delete = Event::Special("\x1B[3~");            // NOLINT
-const Event Event::Escape = Event::Special("\x1B");               // NOLINT
-const Event Event::Return = Event::Special({10});                 // NOLINT
-const Event Event::Tab = Event::Special({9});                     // NOLINT
-const Event Event::TabReverse = Event::Special({27, 91, 90});     // NOLINT
+const Event Event::ArrowLeft      = Event::Special("\x1B[D");
+const Event Event::ArrowRight     = Event::Special("\x1B[C");
+const Event Event::ArrowUp        = Event::Special("\x1B[A");
+const Event Event::ArrowDown      = Event::Special("\x1B[B");
+const Event Event::ArrowLeftCtrl  = Event::Special("\x1B[1;5D");
+const Event Event::ArrowRightCtrl = Event::Special("\x1B[1;5C");
+const Event Event::ArrowUpCtrl    = Event::Special("\x1B[1;5A");
+const Event Event::ArrowDownCtrl  = Event::Special("\x1B[1;5B");
+const Event Event::Backspace      = Event::Special({127});
+const Event Event::Delete         = Event::Special("\x1B[3~");
+const Event Event::Escape         = Event::Special("\x1B");
+const Event Event::Return         = Event::Special({10});
+const Event Event::Tab            = Event::Special({9});
+const Event Event::TabReverse     = Event::Special({27, 91, 90});
 
 // See https://invisible-island.net/xterm/xterm-function-keys.html
 // We follow xterm-new / vterm-xf86-v4 / mgt / screen
-const Event Event::F1 = Event::Special("\x1BOP");     // NOLINT
-const Event Event::F2 = Event::Special("\x1BOQ");     // NOLINT
-const Event Event::F3 = Event::Special("\x1BOR");     // NOLINT
-const Event Event::F4 = Event::Special("\x1BOS");     // NOLINT
-const Event Event::F5 = Event::Special("\x1B[15~");   // NOLINT
-const Event Event::F6 = Event::Special("\x1B[17~");   // NOLINT
-const Event Event::F7 = Event::Special("\x1B[18~");   // NOLINT
-const Event Event::F8 = Event::Special("\x1B[19~");   // NOLINT
-const Event Event::F9 = Event::Special("\x1B[20~");   // NOLINT
-const Event Event::F10 = Event::Special("\x1B[21~");  // NOLINT
-const Event Event::F11 = Event::Special("\x1B[23~");  // NOLINT
-const Event Event::F12 = Event::Special("\x1B[24~");  // NOLINT
+const Event Event::F1  = Event::Special("\x1BOP");
+const Event Event::F2  = Event::Special("\x1BOQ");
+const Event Event::F3  = Event::Special("\x1BOR");
+const Event Event::F4  = Event::Special("\x1BOS");
+const Event Event::F5  = Event::Special("\x1B[15~");
+const Event Event::F6  = Event::Special("\x1B[17~");
+const Event Event::F7  = Event::Special("\x1B[18~");
+const Event Event::F8  = Event::Special("\x1B[19~");
+const Event Event::F9  = Event::Special("\x1B[20~");
+const Event Event::F10 = Event::Special("\x1B[21~");
+const Event Event::F11 = Event::Special("\x1B[23~");
+const Event Event::F12 = Event::Special("\x1B[24~");
 
-const Event Event::Insert = Event::Special("\x1B[2~");            // NOLINT
-const Event Event::Home = Event::Special({27, 91, 72});           // NOLINT
-const Event Event::End = Event::Special({27, 91, 70});            // NOLINT
-const Event Event::PageUp = Event::Special({27, 91, 53, 126});    // NOLINT
-const Event Event::PageDown = Event::Special({27, 91, 54, 126});  // NOLINT
-const Event Event::Custom = Event::Special({0});                  // NOLINT
-                                                                  //
-const Event Event::a = Event::Character("a");                     // NOLINT
-const Event Event::b = Event::Character("b");                     // NOLINT
-const Event Event::c = Event::Character("c");                     // NOLINT
-const Event Event::d = Event::Character("d");                     // NOLINT
-const Event Event::e = Event::Character("e");                     // NOLINT
-const Event Event::f = Event::Character("f");                     // NOLINT
-const Event Event::g = Event::Character("g");                     // NOLINT
-const Event Event::h = Event::Character("h");                     // NOLINT
-const Event Event::i = Event::Character("i");                     // NOLINT
-const Event Event::j = Event::Character("j");                     // NOLINT
-const Event Event::k = Event::Character("k");                     // NOLINT
-const Event Event::l = Event::Character("l");                     // NOLINT
-const Event Event::m = Event::Character("m");                     // NOLINT
-const Event Event::n = Event::Character("n");                     // NOLINT
-const Event Event::o = Event::Character("o");                     // NOLINT
-const Event Event::p = Event::Character("p");                     // NOLINT
-const Event Event::q = Event::Character("q");                     // NOLINT
-const Event Event::r = Event::Character("r");                     // NOLINT
-const Event Event::s = Event::Character("s");                     // NOLINT
-const Event Event::t = Event::Character("t");                     // NOLINT
-const Event Event::u = Event::Character("u");                     // NOLINT
-const Event Event::v = Event::Character("v");                     // NOLINT
-const Event Event::w = Event::Character("w");                     // NOLINT
-const Event Event::x = Event::Character("x");                     // NOLINT
-const Event Event::y = Event::Character("y");                     // NOLINT
-const Event Event::z = Event::Character("z");                     // NOLINT
+const Event Event::Insert   = Event::Special("\x1B[2~");
+const Event Event::Home     = Event::Special({27, 91, 72});
+const Event Event::End      = Event::Special({27, 91, 70});
+const Event Event::PageUp   = Event::Special({27, 91, 53, 126});
+const Event Event::PageDown = Event::Special({27, 91, 54, 126});
+const Event Event::Custom   = Event::Special({0});
 
-const Event Event::A = Event::Character("A");  // NOLINT
-const Event Event::B = Event::Character("B");  // NOLINT
-const Event Event::C = Event::Character("C");  // NOLINT
-const Event Event::D = Event::Character("D");  // NOLINT
-const Event Event::E = Event::Character("E");  // NOLINT
-const Event Event::F = Event::Character("F");  // NOLINT
-const Event Event::G = Event::Character("G");  // NOLINT
-const Event Event::H = Event::Character("H");  // NOLINT
-const Event Event::I = Event::Character("I");  // NOLINT
-const Event Event::J = Event::Character("J");  // NOLINT
-const Event Event::K = Event::Character("K");  // NOLINT
-const Event Event::L = Event::Character("L");  // NOLINT
-const Event Event::M = Event::Character("M");  // NOLINT
-const Event Event::N = Event::Character("N");  // NOLINT
-const Event Event::O = Event::Character("O");  // NOLINT
-const Event Event::P = Event::Character("P");  // NOLINT
-const Event Event::Q = Event::Character("Q");  // NOLINT
-const Event Event::R = Event::Character("R");  // NOLINT
-const Event Event::S = Event::Character("S");  // NOLINT
-const Event Event::T = Event::Character("T");  // NOLINT
-const Event Event::U = Event::Character("U");  // NOLINT
-const Event Event::V = Event::Character("V");  // NOLINT
-const Event Event::W = Event::Character("W");  // NOLINT
-const Event Event::X = Event::Character("X");  // NOLINT
-const Event Event::Y = Event::Character("Y");  // NOLINT
-const Event Event::Z = Event::Character("Z");  // NOLINT
+const Event Event::a = Event::Character("a");
+const Event Event::b = Event::Character("b");
+const Event Event::c = Event::Character("c");
+const Event Event::d = Event::Character("d");
+const Event Event::e = Event::Character("e");
+const Event Event::f = Event::Character("f");
+const Event Event::g = Event::Character("g");
+const Event Event::h = Event::Character("h");
+const Event Event::i = Event::Character("i");
+const Event Event::j = Event::Character("j");
+const Event Event::k = Event::Character("k");
+const Event Event::l = Event::Character("l");
+const Event Event::m = Event::Character("m");
+const Event Event::n = Event::Character("n");
+const Event Event::o = Event::Character("o");
+const Event Event::p = Event::Character("p");
+const Event Event::q = Event::Character("q");
+const Event Event::r = Event::Character("r");
+const Event Event::s = Event::Character("s");
+const Event Event::t = Event::Character("t");
+const Event Event::u = Event::Character("u");
+const Event Event::v = Event::Character("v");
+const Event Event::w = Event::Character("w");
+const Event Event::x = Event::Character("x");
+const Event Event::y = Event::Character("y");
+const Event Event::z = Event::Character("z");
 
-const Event Event::CtrlA = Event::Special("\x01");  // NOLINT
-const Event Event::CtrlB = Event::Special("\x02");  // NOLINT
-const Event Event::CtrlC = Event::Special("\x03");  // NOLINT
-const Event Event::CtrlD = Event::Special("\x04");  // NOLINT
-const Event Event::CtrlE = Event::Special("\x05");  // NOLINT
-const Event Event::CtrlF = Event::Special("\x06");  // NOLINT
-const Event Event::CtrlG = Event::Special("\x07");  // NOLINT
-const Event Event::CtrlH = Event::Special("\x08");  // NOLINT
-const Event Event::CtrlI = Event::Special("\x09");  // NOLINT
-const Event Event::CtrlJ = Event::Special("\x0a");  // NOLINT
-const Event Event::CtrlK = Event::Special("\x0b");  // NOLINT
-const Event Event::CtrlL = Event::Special("\x0c");  // NOLINT
-const Event Event::CtrlM = Event::Special("\x0d");  // NOLINT
-const Event Event::CtrlN = Event::Special("\x0e");  // NOLINT
-const Event Event::CtrlO = Event::Special("\x0f");  // NOLINT
-const Event Event::CtrlP = Event::Special("\x10");  // NOLINT
-const Event Event::CtrlQ = Event::Special("\x11");  // NOLINT
-const Event Event::CtrlR = Event::Special("\x12");  // NOLINT
-const Event Event::CtrlS = Event::Special("\x13");  // NOLINT
-const Event Event::CtrlT = Event::Special("\x14");  // NOLINT
-const Event Event::CtrlU = Event::Special("\x15");  // NOLINT
-const Event Event::CtrlV = Event::Special("\x16");  // NOLINT
-const Event Event::CtrlW = Event::Special("\x17");  // NOLINT
-const Event Event::CtrlX = Event::Special("\x18");  // NOLINT
-const Event Event::CtrlY = Event::Special("\x19");  // NOLINT
-const Event Event::CtrlZ = Event::Special("\x1a");  // NOLINT
+const Event Event::A = Event::Character("A");
+const Event Event::B = Event::Character("B");
+const Event Event::C = Event::Character("C");
+const Event Event::D = Event::Character("D");
+const Event Event::E = Event::Character("E");
+const Event Event::F = Event::Character("F");
+const Event Event::G = Event::Character("G");
+const Event Event::H = Event::Character("H");
+const Event Event::I = Event::Character("I");
+const Event Event::J = Event::Character("J");
+const Event Event::K = Event::Character("K");
+const Event Event::L = Event::Character("L");
+const Event Event::M = Event::Character("M");
+const Event Event::N = Event::Character("N");
+const Event Event::O = Event::Character("O");
+const Event Event::P = Event::Character("P");
+const Event Event::Q = Event::Character("Q");
+const Event Event::R = Event::Character("R");
+const Event Event::S = Event::Character("S");
+const Event Event::T = Event::Character("T");
+const Event Event::U = Event::Character("U");
+const Event Event::V = Event::Character("V");
+const Event Event::W = Event::Character("W");
+const Event Event::X = Event::Character("X");
+const Event Event::Y = Event::Character("Y");
+const Event Event::Z = Event::Character("Z");
 
-const Event Event::AltA = Event::Special(
-    "\x1b"
-    "a");  // NOLINT
-const Event Event::AltB = Event::Special(
-    "\x1b"
-    "b");  // NOLINT
-const Event Event::AltC = Event::Special(
-    "\x1b"
-    "c");  // NOLINT
-const Event Event::AltD = Event::Special(
-    "\x1b"
-    "d");  // NOLINT
-const Event Event::AltE = Event::Special(
-    "\x1b"
-    "e");  // NOLINT
-const Event Event::AltF = Event::Special(
-    "\x1b"
-    "f");  // NOLINT
-const Event Event::AltG = Event::Special(
-    "\x1b"
-    "g");  // NOLINT
-const Event Event::AltH = Event::Special(
-    "\x1b"
-    "h");  // NOLINT
-const Event Event::AltI = Event::Special(
-    "\x1b"
-    "i");  // NOLINT
-const Event Event::AltJ = Event::Special(
-    "\x1b"
-    "j");  // NOLINT
-const Event Event::AltK = Event::Special(
-    "\x1b"
-    "k");  // NOLINT
-const Event Event::AltL = Event::Special(
-    "\x1b"
-    "l");  // NOLINT
-const Event Event::AltM = Event::Special(
-    "\x1b"
-    "m");  // NOLINT
-const Event Event::AltN = Event::Special(
-    "\x1b"
-    "n");  // NOLINT
-const Event Event::AltO = Event::Special(
-    "\x1b"
-    "o");  // NOLINT
-const Event Event::AltP = Event::Special(
-    "\x1b"
-    "p");  // NOLINT
-const Event Event::AltQ = Event::Special(
-    "\x1b"
-    "q");  // NOLINT
-const Event Event::AltR = Event::Special(
-    "\x1b"
-    "r");  // NOLINT
-const Event Event::AltS = Event::Special(
-    "\x1b"
-    "s");  // NOLINT
-const Event Event::AltT = Event::Special(
-    "\x1b"
-    "t");  // NOLINT
-const Event Event::AltU = Event::Special(
-    "\x1b"
-    "u");  // NOLINT
-const Event Event::AltV = Event::Special(
-    "\x1b"
-    "v");  // NOLINT
-const Event Event::AltW = Event::Special(
-    "\x1b"
-    "w");  // NOLINT
-const Event Event::AltX = Event::Special(
-    "\x1b"
-    "x");  // NOLINT
-const Event Event::AltY = Event::Special(
-    "\x1b"
-    "y");  // NOLINT
-const Event Event::AltZ = Event::Special(
-    "\x1b"
-    "z");  // NOLINT
+const Event Event::CtrlA = Event::Special("\x01");
+const Event Event::CtrlB = Event::Special("\x02");
+const Event Event::CtrlC = Event::Special("\x03");
+const Event Event::CtrlD = Event::Special("\x04");
+const Event Event::CtrlE = Event::Special("\x05");
+const Event Event::CtrlF = Event::Special("\x06");
+const Event Event::CtrlG = Event::Special("\x07");
+const Event Event::CtrlH = Event::Special("\x08");
+const Event Event::CtrlI = Event::Special("\x09");
+const Event Event::CtrlJ = Event::Special("\x0a");
+const Event Event::CtrlK = Event::Special("\x0b");
+const Event Event::CtrlL = Event::Special("\x0c");
+const Event Event::CtrlM = Event::Special("\x0d");
+const Event Event::CtrlN = Event::Special("\x0e");
+const Event Event::CtrlO = Event::Special("\x0f");
+const Event Event::CtrlP = Event::Special("\x10");
+const Event Event::CtrlQ = Event::Special("\x11");
+const Event Event::CtrlR = Event::Special("\x12");
+const Event Event::CtrlS = Event::Special("\x13");
+const Event Event::CtrlT = Event::Special("\x14");
+const Event Event::CtrlU = Event::Special("\x15");
+const Event Event::CtrlV = Event::Special("\x16");
+const Event Event::CtrlW = Event::Special("\x17");
+const Event Event::CtrlX = Event::Special("\x18");
+const Event Event::CtrlY = Event::Special("\x19");
+const Event Event::CtrlZ = Event::Special("\x1a");
 
-const Event Event::CtrlAltA = Event::Special("\x1b\x01");  // NOLINT
-const Event Event::CtrlAltB = Event::Special("\x1b\x02");  // NOLINT
-const Event Event::CtrlAltC = Event::Special("\x1b\x03");  // NOLINT
-const Event Event::CtrlAltD = Event::Special("\x1b\x04");  // NOLINT
-const Event Event::CtrlAltE = Event::Special("\x1b\x05");  // NOLINT
-const Event Event::CtrlAltF = Event::Special("\x1b\x06");  // NOLINT
-const Event Event::CtrlAltG = Event::Special("\x1b\x07");  // NOLINT
-const Event Event::CtrlAltH = Event::Special("\x1b\x08");  // NOLINT
-const Event Event::CtrlAltI = Event::Special("\x1b\x09");  // NOLINT
-const Event Event::CtrlAltJ = Event::Special("\x1b\x0a");  // NOLINT
-const Event Event::CtrlAltK = Event::Special("\x1b\x0b");  // NOLINT
-const Event Event::CtrlAltL = Event::Special("\x1b\x0c");  // NOLINT
-const Event Event::CtrlAltM = Event::Special("\x1b\x0d");  // NOLINT
-const Event Event::CtrlAltN = Event::Special("\x1b\x0e");  // NOLINT
-const Event Event::CtrlAltO = Event::Special("\x1b\x0f");  // NOLINT
-const Event Event::CtrlAltP = Event::Special("\x1b\x10");  // NOLINT
-const Event Event::CtrlAltQ = Event::Special("\x1b\x11");  // NOLINT
-const Event Event::CtrlAltR = Event::Special("\x1b\x12");  // NOLINT
-const Event Event::CtrlAltS = Event::Special("\x1b\x13");  // NOLINT
-const Event Event::CtrlAltT = Event::Special("\x1b\x14");  // NOLINT
-const Event Event::CtrlAltU = Event::Special("\x1b\x15");  // NOLINT
-const Event Event::CtrlAltV = Event::Special("\x1b\x16");  // NOLINT
-const Event Event::CtrlAltW = Event::Special("\x1b\x17");  // NOLINT
-const Event Event::CtrlAltX = Event::Special("\x1b\x18");  // NOLINT
-const Event Event::CtrlAltY = Event::Special("\x1b\x19");  // NOLINT
-const Event Event::CtrlAltZ = Event::Special("\x1b\x1a");  // NOLINT
+const Event Event::AltA = Event::Special("\x1b""a");
+const Event Event::AltB = Event::Special("\x1b""b");
+const Event Event::AltC = Event::Special("\x1b""c");
+const Event Event::AltD = Event::Special("\x1b""d");
+const Event Event::AltE = Event::Special("\x1b""e");
+const Event Event::AltF = Event::Special("\x1b""f");
+const Event Event::AltG = Event::Special("\x1b""g");
+const Event Event::AltH = Event::Special("\x1b""h");
+const Event Event::AltI = Event::Special("\x1b""i");
+const Event Event::AltJ = Event::Special("\x1b""j");
+const Event Event::AltK = Event::Special("\x1b""k");
+const Event Event::AltL = Event::Special("\x1b""l");
+const Event Event::AltM = Event::Special("\x1b""m");
+const Event Event::AltN = Event::Special("\x1b""n");
+const Event Event::AltO = Event::Special("\x1b""o");
+const Event Event::AltP = Event::Special("\x1b""p");
+const Event Event::AltQ = Event::Special("\x1b""q");
+const Event Event::AltR = Event::Special("\x1b""r");
+const Event Event::AltS = Event::Special("\x1b""s");
+const Event Event::AltT = Event::Special("\x1b""t");
+const Event Event::AltU = Event::Special("\x1b""u");
+const Event Event::AltV = Event::Special("\x1b""v");
+const Event Event::AltW = Event::Special("\x1b""w");
+const Event Event::AltX = Event::Special("\x1b""x");
+const Event Event::AltY = Event::Special("\x1b""y");
+const Event Event::AltZ = Event::Special("\x1b""z");
+
+const Event Event::CtrlAltA = Event::Special("\x1b\x01");
+const Event Event::CtrlAltB = Event::Special("\x1b\x02");
+const Event Event::CtrlAltC = Event::Special("\x1b\x03");
+const Event Event::CtrlAltD = Event::Special("\x1b\x04");
+const Event Event::CtrlAltE = Event::Special("\x1b\x05");
+const Event Event::CtrlAltF = Event::Special("\x1b\x06");
+const Event Event::CtrlAltG = Event::Special("\x1b\x07");
+const Event Event::CtrlAltH = Event::Special("\x1b\x08");
+const Event Event::CtrlAltI = Event::Special("\x1b\x09");
+const Event Event::CtrlAltJ = Event::Special("\x1b\x0a");
+const Event Event::CtrlAltK = Event::Special("\x1b\x0b");
+const Event Event::CtrlAltL = Event::Special("\x1b\x0c");
+const Event Event::CtrlAltM = Event::Special("\x1b\x0d");
+const Event Event::CtrlAltN = Event::Special("\x1b\x0e");
+const Event Event::CtrlAltO = Event::Special("\x1b\x0f");
+const Event Event::CtrlAltP = Event::Special("\x1b\x10");
+const Event Event::CtrlAltQ = Event::Special("\x1b\x11");
+const Event Event::CtrlAltR = Event::Special("\x1b\x12");
+const Event Event::CtrlAltS = Event::Special("\x1b\x13");
+const Event Event::CtrlAltT = Event::Special("\x1b\x14");
+const Event Event::CtrlAltU = Event::Special("\x1b\x15");
+const Event Event::CtrlAltV = Event::Special("\x1b\x16");
+const Event Event::CtrlAltW = Event::Special("\x1b\x17");
+const Event Event::CtrlAltX = Event::Special("\x1b\x18");
+const Event Event::CtrlAltY = Event::Special("\x1b\x19");
+const Event Event::CtrlAltZ = Event::Special("\x1b\x1a");
+
+// NOLINTEND
+// clang-format on
 
 }  // namespace ftxui

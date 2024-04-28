@@ -748,6 +748,7 @@ void ScreenInteractive::RunOnce(Component component) {
 }
 
 // private
+// NOLINTNEXTLINE
 void ScreenInteractive::HandleTask(Component component, Task& task) {
   std::visit(
       [&](auto&& arg) {
