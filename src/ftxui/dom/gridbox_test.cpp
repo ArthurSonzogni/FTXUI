@@ -4,7 +4,6 @@
 #include <gtest/gtest.h>
 #include <algorithm>  // for remove
 #include <cstddef>    // for size_t
-#include <memory>     // for shared_ptr
 #include <string>     // for allocator, basic_string, string
 #include <vector>     // for vector
 

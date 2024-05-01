@@ -14,7 +14,6 @@
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
-#include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/terminal.hpp"
 #include "ftxui/util/ref.hpp"
 
@@ -80,9 +79,7 @@ Decorator borderStyled(BorderStyle);
 Decorator borderStyled(BorderStyle, Color);
 Decorator borderStyled(Color);
 Decorator borderWith(const Pixel&);
-Element window(Element title,
-               Element content,
-               BorderStyle border = ROUNDED);
+Element window(Element title, Element content, BorderStyle border = ROUNDED);
 Element spinner(int charset_index, size_t image_index);
 Element paragraph(const std::string& text);
 Element paragraphAlignLeft(const std::string& text);

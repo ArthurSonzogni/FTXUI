@@ -1,8 +1,7 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <algorithm>  // for max, min
-#include <cstdint>    // for uint8_t, uint16_t, uint32_t, uint64_t
+#include <algorithm>                              // for max, min
 #include <ftxui/component/component_options.hpp>  // for SliderOption
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <string>                   // for allocator

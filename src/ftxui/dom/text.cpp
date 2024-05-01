@@ -5,7 +5,6 @@
 #include <memory>     // for make_shared
 #include <string>     // for string, wstring
 #include <utility>    // for move
-#include <vector>     // for vector
 
 #include "ftxui/dom/deprecated.hpp"   // for text, vtext
 #include "ftxui/dom/elements.hpp"     // for Element, text, vtext

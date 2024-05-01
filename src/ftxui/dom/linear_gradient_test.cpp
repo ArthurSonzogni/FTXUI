@@ -3,7 +3,6 @@
 // the LICENSE file.
 #include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient::Stop, LinearGradient
-#include <memory>                         // for allocator_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for operator|, text, bgcolor, color, Element
 #include "ftxui/dom/node.hpp"      // for Render

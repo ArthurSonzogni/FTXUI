@@ -1,5 +1,4 @@
 #include <cmath>    // for sin, pow, sqrt, cos
-#include <ratio>    // for ratio
 #include <utility>  // for move
 
 #include "ftxui/component/animation.hpp"

@@ -2,7 +2,6 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <gtest/gtest.h>
-#include <memory>  // for allocator
 
 #include "ftxui/dom/elements.hpp"   // for gauge, gaugeUp
 #include "ftxui/dom/node.hpp"       // for Render

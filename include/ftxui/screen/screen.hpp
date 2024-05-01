@@ -5,11 +5,9 @@
 #define FTXUI_SCREEN_SCREEN_HPP
 
 #include <cstdint>  // for uint8_t
-#include <memory>
-#include <string>  // for string, basic_string, allocator
-#include <vector>  // for vector
+#include <string>   // for string, basic_string, allocator
+#include <vector>   // for vector
 
-#include "ftxui/screen/color.hpp"     // for Color, Color::Default
 #include "ftxui/screen/image.hpp"     // for Pixel, Image
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
 

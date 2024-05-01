@@ -10,7 +10,6 @@
 #include <ftxui/dom/elements.hpp>  // for Element, separator
 #include <ftxui/util/ref.hpp>      // for Ref, ConstRef, StringRef
 #include <functional>              // for function
-#include <optional>                // for optional
 #include <string>                  // for string
 
 #include "ftxui/component/component_base.hpp"  // for Component

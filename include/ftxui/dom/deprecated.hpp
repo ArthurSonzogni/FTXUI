@@ -4,7 +4,8 @@
 #ifndef FTXUI_DOM_DEPRECATED_HPP
 #define FTXUI_DOM_DEPRECATED_HPP
 
-#include "ftxui/dom/elements.hpp"
+#include <ftxui/dom/node.hpp>
+#include <string>
 
 namespace ftxui {
 Element text(std::wstring text);

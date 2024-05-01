@@ -35,7 +35,7 @@ int Integrate(std::vector<int>& elements) {
 class GridBox : public Node {
  public:
   explicit GridBox(std::vector<Elements> lines) : lines_(std::move(lines)) {
-    y_size = lines_.size();
+    y_size = static_cast<int>(lines_.size());
     for (const auto& line : lines_) {
       x_size = std::max(x_size, int(line.size()));
     }

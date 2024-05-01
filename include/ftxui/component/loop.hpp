@@ -24,11 +24,14 @@ class Loop {
   void RunOnceBlocking();
   void Run();
 
- private:
-  // This class is non copyable.
+  // This class is non copyable/movable.
+  Loop(const Loop&) = default;
+  Loop(Loop&&) = delete;
+  Loop& operator=(Loop&&) = delete;
   Loop(const ScreenInteractive&) = delete;
   Loop& operator=(const Loop&) = delete;
 
+ private:
   ScreenInteractive* screen_;
   Component component_;
 };

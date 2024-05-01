@@ -29,14 +29,16 @@ using Components = std::vector<Component>;
 /// @ingroup component
 class ComponentBase {
  public:
-  // virtual Destructor.
+  explicit ComponentBase(Components children)
+      : children_(std::move(children)) {}
   virtual ~ComponentBase();
-
   ComponentBase() = default;
 
-  // A component is not copiable.
+  // A component is not copyable/movable.
   ComponentBase(const ComponentBase&) = delete;
-  void operator=(const ComponentBase&) = delete;
+  ComponentBase(ComponentBase&&) = delete;
+  ComponentBase& operator=(const ComponentBase&) = delete;
+  ComponentBase& operator=(ComponentBase&&) = delete;
 
   // Component hierarchy:
   ComponentBase* Parent() const;

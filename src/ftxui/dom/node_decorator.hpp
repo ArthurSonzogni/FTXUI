@@ -15,7 +15,7 @@ struct Box;
 // Helper class.
 class NodeDecorator : public Node {
  public:
-  NodeDecorator(Element child) : Node(unpack(std::move(child))) {}
+  explicit NodeDecorator(Element child) : Node(unpack(std::move(child))) {}
   void ComputeRequirement() override;
   void SetBox(Box box) override;
 };

@@ -4,9 +4,8 @@
 #include <ftxui/dom/elements.hpp>   // for yframe
 #include <ftxui/dom/node.hpp>       // for Render
 #include <ftxui/screen/screen.hpp>  // for Screen
-#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for string, basic_string
-#include <vector>  // for vector
+#include <string>                   // for string, basic_string
+#include <vector>                   // for vector
 
 #include "ftxui/component/component.hpp"       // for Radiobox, operator|
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component

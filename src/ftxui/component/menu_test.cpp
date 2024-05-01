@@ -2,11 +2,9 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <gtest/gtest.h>  // for Test, EXPECT_EQ, Message, TestPartResult, TestInfo (ptr only), TEST
-#include <chrono>                   // for operator""s, chrono_literals
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
-#include <string>  // for string, basic_string
-#include <vector>  // for vector
+#include <string>                   // for string, basic_string
+#include <vector>                   // for vector
 
 #include "ftxui/component/animation.hpp"          // for Duration, Params
 #include "ftxui/component/component.hpp"          // for Menu

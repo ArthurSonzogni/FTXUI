@@ -3,7 +3,6 @@
 // the LICENSE file.
 #include <gtest/gtest.h>
 #include <ftxui/dom/elements.hpp>  // for Element, operator|, text, border
-#include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
 #include "ftxui/component/component.hpp"       // for Renderer, Modal
 #include "ftxui/component/component_base.hpp"  // for ComponentBase

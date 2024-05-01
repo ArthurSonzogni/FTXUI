@@ -4,7 +4,6 @@
 #include <functional>  // for function
 #include <utility>     // for move
 
-#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/component.hpp"       // for Make, Checkbox
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
@@ -137,7 +136,7 @@ Component Checkbox(CheckboxOption option) {
 /// ```
 // NOLINTNEXTLINE
 Component Checkbox(ConstStringRef label, bool* checked, CheckboxOption option) {
-  option.label = label;
+  option.label = std::move(label);
   option.checked = checked;
   return Make<CheckboxBase>(std::move(option));
 }

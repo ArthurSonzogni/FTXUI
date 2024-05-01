@@ -1,4 +1,3 @@
-#include <memory>  // for __shared_ptr_access, shared_ptr, allocator
 #include <string>  // for string
 
 #include "ftxui/component/component.hpp"       // for Collapsible, Renderer

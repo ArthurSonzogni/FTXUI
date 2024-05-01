@@ -4,7 +4,6 @@
 #ifndef FTXUI_DOM_TABLE
 #define FTXUI_DOM_TABLE
 
-#include <memory>
 #include <string>  // for string
 #include <vector>  // for vector
 
@@ -37,8 +36,8 @@ class TableSelection;
 class Table {
  public:
   Table();
-  Table(std::vector<std::vector<std::string>>);
-  Table(std::vector<std::vector<Element>>);
+  explicit Table(std::vector<std::vector<std::string>>);
+  explicit Table(std::vector<std::vector<Element>>);
   TableSelection SelectAll();
   TableSelection SelectCell(int column, int row);
   TableSelection SelectRow(int row_index);

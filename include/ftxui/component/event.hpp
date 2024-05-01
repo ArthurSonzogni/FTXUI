@@ -5,9 +5,7 @@
 #define FTXUI_COMPONENT_EVENT_HPP
 
 #include <ftxui/component/mouse.hpp>  // for Mouse
-#include <functional>
-#include <string>  // for string, operator==
-#include <vector>
+#include <string>                     // for string, operator==
 
 namespace ftxui {
 

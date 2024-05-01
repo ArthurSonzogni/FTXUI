@@ -4,8 +4,6 @@
 #ifndef FTXUI_SCREEN_IMAGE_HPP
 #define FTXUI_SCREEN_IMAGE_HPP
 
-#include <cstdint>  // for uint8_t
-#include <memory>
 #include <string>  // for string, basic_string, allocator
 #include <vector>  // for vector
 

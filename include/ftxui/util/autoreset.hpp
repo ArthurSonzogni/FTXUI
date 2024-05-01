@@ -16,6 +16,10 @@ class AutoReset {
       : variable_(variable), previous_value_(std::move(*variable)) {
     *variable_ = std::move(new_value);
   }
+  AutoReset(const AutoReset&) = delete;
+  AutoReset(AutoReset&&) = delete;
+  AutoReset& operator=(const AutoReset&) = delete;
+  AutoReset& operator=(AutoReset&&) = delete;
   ~AutoReset() { *variable_ = std::move(previous_value_); }
 
  private:

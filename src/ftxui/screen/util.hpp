@@ -4,8 +4,7 @@
 #ifndef FTXUI_SCREEN_UTIL_HPP
 #define FTXUI_SCREEN_UTIL_HPP
 
-namespace ftxui {
-namespace util {
+namespace ftxui::util {
 
 // Similar to std::clamp, but allow hi to be lower than lo.
 template <class T>
@@ -13,7 +12,6 @@ constexpr const T& clamp(const T& v, const T& lo, const T& hi) {
   return v < lo ? lo : hi < v ? hi : v;
 }
 
-}  // namespace util
-}  // namespace ftxui
+}  // namespace ftxui::util
 
 #endif /* end of include guard: FTXUI_SCREEN_UTIL_HPP */

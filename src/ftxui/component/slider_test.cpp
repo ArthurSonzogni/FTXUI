@@ -6,8 +6,7 @@
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <ftxui/dom/elements.hpp>   // for frame
-#include <memory>  // for shared_ptr, __shared_ptr_access, allocator
-#include <string>  // for string, to_string
+#include <string>                   // for string, to_string
 
 #include "ftxui/component/component.hpp"  // for Slider, Vertical, operator|=
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
