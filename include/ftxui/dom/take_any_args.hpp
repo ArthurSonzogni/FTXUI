@@ -5,7 +5,7 @@
 #define FTXUI_DOM_TAKE_ANY_ARGS_HPP
 
 // IWYU pragma: private, include "ftxui/dom/elements.hpp"
-#include <type_traits>
+#include <ftxui/dom/node.hpp>
 
 namespace ftxui {
 
@@ -19,8 +19,9 @@ inline void Merge(Elements& container, Element element) {
 
 template <>
 inline void Merge(Elements& container, Elements elements) {
-  for (auto& element : elements)
+  for (auto& element : elements) {
     container.push_back(std::move(element));
+  }
 }
 
 // Turn a set of arguments into a vector.

@@ -341,7 +341,7 @@ void Canvas::DrawPointEllipse(int x1,
   int dy = x * x;
   int err = dx + dy;
 
-  do {
+  do {  // NOLINT
     DrawPoint(x1 - x, y1 + y, true, s);
     DrawPoint(x1 + x, y1 + y, true, s);
     DrawPoint(x1 + x, y1 - y, true, s);
@@ -405,7 +405,7 @@ void Canvas::DrawPointEllipseFilled(int x1,
   int dy = x * x;
   int err = dx + dy;
 
-  do {
+  do {  // NOLINT
     for (int xx = x1 + x; xx <= x1 - x; ++xx) {
       DrawPoint(xx, y1 + y, true, s);
       DrawPoint(xx, y1 - y, true, s);
@@ -686,7 +686,7 @@ void Canvas::DrawBlockEllipse(int x1,
   int dy = x * x;
   int err = dx + dy;
 
-  do {
+  do {  // NOLINT
     DrawBlock(x1 - x, 2 * (y1 + y), true, s);
     DrawBlock(x1 + x, 2 * (y1 + y), true, s);
     DrawBlock(x1 + x, 2 * (y1 - y), true, s);
@@ -752,7 +752,7 @@ void Canvas::DrawBlockEllipseFilled(int x1,
   int dy = x * x;
   int err = dx + dy;
 
-  do {
+  do {  // NOLINT
     for (int xx = x1 + x; xx <= x1 - x; ++xx) {
       DrawBlock(xx, 2 * (y1 + y), true, s);
       DrawBlock(xx, 2 * (y1 - y), true, s);

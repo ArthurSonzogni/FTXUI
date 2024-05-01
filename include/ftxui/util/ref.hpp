@@ -15,10 +15,12 @@ template <typename T>
 class ConstRef {
  public:
   ConstRef() = default;
+  ConstRef(T t) : variant_(std::move(t)) {}  // NOLINT
+  ConstRef(const T* t) : variant_(t) {}      // NOLINT
+  ConstRef& operator=(ConstRef&&) noexcept = default;
   ConstRef(const ConstRef<T>&) = default;
-  ConstRef(ConstRef<T>&&) = default;
-  ConstRef(T t) : variant_(std::move(t)) {}
-  ConstRef(const T* t) : variant_(t) {}
+  ConstRef(ConstRef<T>&&) noexcept = default;
+  ~ConstRef() = default;
 
   // Make a "reseatable" reference
   ConstRef<T>& operator=(const ConstRef<T>&) = default;
@@ -42,10 +44,12 @@ template <typename T>
 class Ref {
  public:
   Ref() = default;
+  Ref(T t) : variant_(std::move(t)) {}  // NOLINT
+  Ref(T* t) : variant_(t) {}            // NOLINT
+  ~Ref() = default;
+  Ref& operator=(Ref&&) noexcept = default;
   Ref(const Ref<T>&) = default;
-  Ref(Ref<T>&&) = default;
-  Ref(T t) : variant_(std::move(t)) {}
-  Ref(T* t) : variant_(t) {}
+  Ref(Ref<T>&&) noexcept = default;
 
   // Make a "reseatable" reference.
   Ref<T>& operator=(const Ref<T>&) = default;
@@ -77,8 +81,10 @@ class StringRef : public Ref<std::string> {
  public:
   using Ref<std::string>::Ref;
 
-  StringRef(const wchar_t* ref) : StringRef(to_string(std::wstring(ref))) {}
-  StringRef(const char* ref) : StringRef(std::string(ref)) {}
+  StringRef(const wchar_t* ref)  // NOLINT
+      : StringRef(to_string(std::wstring(ref))) {}
+  StringRef(const char* ref)  // NOLINT
+      : StringRef(std::string(ref)) {}
 };
 
 /// @brief An adapter. Own or reference a constant string. For convenience, this
@@ -87,19 +93,27 @@ class ConstStringRef : public ConstRef<std::string> {
  public:
   using ConstRef<std::string>::ConstRef;
 
-  ConstStringRef(const std::wstring* ref) : ConstStringRef(to_string(*ref)) {}
-  ConstStringRef(const std::wstring ref) : ConstStringRef(to_string(ref)) {}
-  ConstStringRef(const wchar_t* ref)
+  ConstStringRef(const std::wstring* ref)  // NOLINT
+      : ConstStringRef(to_string(*ref)) {}
+  ConstStringRef(const std::wstring ref)  // NOLINT
+      : ConstStringRef(to_string(ref)) {}
+  ConstStringRef(const wchar_t* ref)  // NOLINT
       : ConstStringRef(to_string(std::wstring(ref))) {}
-  ConstStringRef(const char* ref) : ConstStringRef(std::string(ref)) {}
+  ConstStringRef(const char* ref)  // NOLINT
+      : ConstStringRef(std::string(ref)) {}
 };
 
 /// @brief An adapter. Reference a list of strings.
 class ConstStringListRef {
  public:
   ConstStringListRef() = default;
-  ConstStringListRef(const std::vector<std::string>* ref) : ref_(ref) {}
-  ConstStringListRef(const std::vector<std::wstring>* ref) : ref_wide_(ref) {}
+  ~ConstStringListRef() = default;
+  ConstStringListRef(ConstStringListRef&&) = delete;
+  ConstStringListRef& operator=(ConstStringListRef&&) = delete;
+  ConstStringListRef(const std::vector<std::string>* ref)  // NOLINT
+      : ref_(ref) {}
+  ConstStringListRef(const std::vector<std::wstring>* ref)  // NOLINT
+      : ref_wide_(ref) {}
   ConstStringListRef(const ConstStringListRef& other) = default;
   ConstStringListRef& operator=(const ConstStringListRef& other) = default;
 

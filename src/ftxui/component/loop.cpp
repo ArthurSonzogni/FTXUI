@@ -15,8 +15,8 @@ namespace ftxui {
 /// @see Component, ScreenInteractive.
 /// @see ScreenInteractive::Loop().
 /// @see ScreenInteractive::ExitLoop().
-/// @param screen The screen to use.
-/// @param component The component to run.
+/// @param[in] screen The screen to use.
+/// @param[in] component The component to run.
 // NOLINTNEXTLINE
 Loop::Loop(ScreenInteractive* screen, Component component)
     : screen_(screen), component_(std::move(component)) {

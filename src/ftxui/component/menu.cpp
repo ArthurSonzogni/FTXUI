@@ -5,13 +5,11 @@
 #include <chrono>                   // for milliseconds
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <functional>               // for function
-#include <memory>                   // for allocator_traits<>::value_type, swap
 #include <string>                   // for operator+, string
 #include <utility>                  // for move
 #include <vector>                   // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/component/animation.hpp"       // for Animator, Linear
-#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
+#include "ftxui/component/animation.hpp"  // for Animator, Linear
 #include "ftxui/component/component.hpp"  // for Make, Menu, MenuEntry, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, UnderlineOption, AnimatedColorOption, AnimatedColorsOption, EntryState
@@ -70,7 +68,7 @@ bool IsHorizontal(Direction direction) {
 /// @ingroup component
 class MenuBase : public ComponentBase, public MenuOption {
  public:
-  explicit MenuBase(MenuOption option) : MenuOption(std::move(option)) {}
+  explicit MenuBase(const MenuOption& option) : MenuOption(option) {}
 
   bool IsHorizontal() { return ftxui::IsHorizontal(direction); }
   void OnChange() {
@@ -547,7 +545,7 @@ Component Menu(MenuOption option) {
 Component Menu(ConstStringListRef entries, int* selected, MenuOption option) {
   option.entries = entries;
   option.selected = selected;
-  return Menu(std::move(option));
+  return Menu(option);
 }
 
 /// @brief An horizontal list of elements. The user can navigate through them.
@@ -586,7 +584,7 @@ Component Toggle(ConstStringListRef entries, int* selected) {
 ///   entry 3
 /// ```
 Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
-  option.label = label;
+  option.label = std::move(label);
   return MenuEntry(std::move(option));
 }
 

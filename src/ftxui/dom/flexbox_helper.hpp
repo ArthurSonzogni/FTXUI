@@ -7,8 +7,7 @@
 #include <vector>
 #include "ftxui/dom/flexbox_config.hpp"
 
-namespace ftxui {
-namespace flexbox_helper {
+namespace ftxui::flexbox_helper {
 
 struct Block {
   // Input:
@@ -20,8 +19,8 @@ struct Block {
   int flex_shrink_y = 0;
 
   // Output:
-  int line;
-  int line_position;
+  int line{};
+  int line_position{};
   int x = 0;
   int y = 0;
   int dim_x = 0;
@@ -38,7 +37,6 @@ struct Global {
 
 void Compute(Global& global);
 
-}  // namespace flexbox_helper
-}  // namespace ftxui
+}  // namespace ftxui::flexbox_helper
 
 #endif /* end of include guard: FTXUI_DOM_FLEXBOX_HELPER_HPP*/

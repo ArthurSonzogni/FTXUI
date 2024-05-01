@@ -1,9 +1,9 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <cstddef>     // for size_t
+#include <cstddef>  // for size_t
+#include <ftxui/component/event.hpp>
 #include <functional>  // for function
-#include <memory>      // for __shared_ptr_access, allocator, shared_ptr
 #include <string>      // for string
 
 #include "ftxui/component/component.hpp"  // for Maybe, Checkbox, Make, Radiobox, Vertical, Dropdown
@@ -96,14 +96,14 @@ Component Dropdown(DropdownOption option) {
           if (is_open) {
             const int max_height = 12;
             return vbox({
-                       checkbox_element,
+                       std::move(checkbox_element),
                        separator(),
-                       radiobox_element | vscroll_indicator | frame |
+                       std::move(radiobox_element) | vscroll_indicator | frame |
                            size(HEIGHT, LESS_THAN, max_height),
                    }) |
                    border;
           }
-          return vbox({checkbox_element, filler()}) | border;
+          return vbox({std::move(checkbox_element), filler()}) | border;
         };
       }
     }

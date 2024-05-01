@@ -4,7 +4,6 @@
 #include <algorithm>  // for max, min
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <utility>    // for move
-#include <vector>     // for __alloc_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for Element, unpack, Elements, focus, frame, select, xframe, yframe
 #include "ftxui/dom/node.hpp"  // for Node, Elements

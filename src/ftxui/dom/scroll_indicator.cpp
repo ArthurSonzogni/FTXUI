@@ -5,7 +5,6 @@
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <string>     // for string
 #include <utility>    // for move
-#include <vector>     // for __alloc_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for Element, vscroll_indicator, hscroll_indicator
 #include "ftxui/dom/node.hpp"            // for Node, Elements

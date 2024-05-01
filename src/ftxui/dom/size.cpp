@@ -4,7 +4,6 @@
 #include <algorithm>  // for min, max
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <utility>    // for move
-#include <vector>     // for __alloc_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for Constraint, WidthOrHeight, EQUAL, GREATER_THAN, LESS_THAN, WIDTH, unpack, Decorator, Element, size
 #include "ftxui/dom/node.hpp"      // for Node, Elements

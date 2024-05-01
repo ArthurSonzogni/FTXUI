@@ -2,8 +2,7 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <ftxui/dom/elements.hpp>  // for Element, text
-#include <memory>  // for shared_ptr, __shared_ptr_access, allocator
-#include <string>  // for string
+#include <string>                  // for string
 
 #include "ftxui/component/component.hpp"  // for Hoverable, Horizontal, operator|=, Renderer
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component

@@ -2,7 +2,6 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <cassert>
-#include <iostream>
 #include <vector>
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"
@@ -11,8 +10,9 @@ using namespace ftxui;
 namespace {
 
 bool GeneratorBool(const char*& data, size_t& size) {
-  if (size == 0)
+  if (size == 0) {
     return false;
+  }
 
   auto out = bool(data[0] % 2);
   data++;

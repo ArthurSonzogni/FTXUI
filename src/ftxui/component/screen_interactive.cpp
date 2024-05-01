@@ -248,7 +248,7 @@ void ExecuteSignalHandlers() {
 
 void InstallSignalHandler(int sig) {
   auto old_signal_handler = std::signal(sig, RecordSignal);
-  on_exit_functions.push(
+  on_exit_functions.emplace(
       [=] { std::ignore = std::signal(sig, old_signal_handler); });
 }
 
@@ -590,14 +590,14 @@ void ScreenInteractive::Install() {
 
   // After uninstalling the new configuration, flush it to the terminal to
   // ensure it is fully applied:
-  on_exit_functions.push([] { Flush(); });
+  on_exit_functions.emplace([] { Flush(); });
 
-  on_exit_functions.push([this] { ExitLoopClosure()(); });
+  on_exit_functions.emplace([this] { ExitLoopClosure()(); });
 
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
   std::cout << DECRQSS_DECSCUSR;
-  on_exit_functions.push([=] {
+  on_exit_functions.emplace([=] {
     std::cout << "\033[?25h";  // Enable cursor.
     std::cout << "\033[" + std::to_string(cursor_reset_shape_) + " q";
   });
@@ -646,7 +646,8 @@ void ScreenInteractive::Install() {
 
   struct termios terminal;  // NOLINT
   tcgetattr(STDIN_FILENO, &terminal);
-  on_exit_functions.push([=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
+  on_exit_functions.emplace(
+      [=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
 
   // Enabling raw terminal input mode
   terminal.c_iflag &= ~IGNBRK;  // Disable ignoring break condition
@@ -680,12 +681,12 @@ void ScreenInteractive::Install() {
 
   auto enable = [&](const std::vector<DECMode>& parameters) {
     std::cout << Set(parameters);
-    on_exit_functions.push([=] { std::cout << Reset(parameters); });
+    on_exit_functions.emplace([=] { std::cout << Reset(parameters); });
   };
 
   auto disable = [&](const std::vector<DECMode>& parameters) {
     std::cout << Reset(parameters);
-    on_exit_functions.push([=] { std::cout << Set(parameters); });
+    on_exit_functions.emplace([=] { std::cout << Set(parameters); });
   };
 
   if (use_alternative_screen_) {

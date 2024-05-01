@@ -5,8 +5,7 @@
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <ftxui/util/ref.hpp>       // for Ref
 #include <functional>               // for function
-#include <memory>   // for __shared_ptr_access, shared_ptr, allocator
-#include <utility>  // for move
+#include <utility>                  // for move
 
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/component.hpp"  // for Horizontal, Make, ResizableSplit, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop

@@ -27,6 +27,8 @@ else()
     ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} OFF)
 endif()
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 include(cmake/ftxui_message.cmake)
 
 add_library(screen

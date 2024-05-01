@@ -1,16 +1,9 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <cstdint>  // for size_t
-#include <iostream>  // for operator<<, stringstream, basic_ostream, flush, cout, ostream
-#include <limits>
-#include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
-#include <memory>   // for allocator, allocator_traits<>::value_type
 #include <sstream>  // IWYU pragma: keep
-#include <utility>  // for pair
 
 #include "ftxui/screen/image.hpp"
-#include "ftxui/screen/string.hpp"  // for string_width
 
 namespace ftxui {
 

@@ -3,7 +3,6 @@
 // the LICENSE file.
 #include <memory>   // for make_shared, __shared_ptr_access
 #include <utility>  // for move
-#include <vector>   // for __alloc_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"     // for Element, unpack, Decorator, reflect
 #include "ftxui/dom/node.hpp"         // for Node, Elements

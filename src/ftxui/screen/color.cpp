@@ -6,7 +6,6 @@
 #include <array>  // for array
 #include <cmath>
 #include <cstdint>
-#include <string_view>  // for literals
 
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
 #include "ftxui/screen/terminal.hpp"  // for ColorSupport, Color, Palette256, TrueColor

@@ -73,7 +73,7 @@ Table::Table(std::vector<std::vector<Element>> input) {
 
 // private
 void Table::Initialize(std::vector<std::vector<Element>> input) {
-  input_dim_y_ = input.size();
+  input_dim_y_ = static_cast<int>(input.size());
   input_dim_x_ = 0;
   for (auto& row : input) {
     input_dim_x_ = std::max(input_dim_x_, int(row.size()));
