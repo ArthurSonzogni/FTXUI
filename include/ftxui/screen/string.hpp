@@ -4,10 +4,10 @@
 #ifndef FTXUI_SCREEN_STRING_HPP
 #define FTXUI_SCREEN_STRING_HPP
 
-#include <stddef.h>  // for size_t
-#include <cstdint>   // for uint8_t
-#include <string>    // for string, wstring, to_string
-#include <vector>    // for vector
+#include <cstddef>  // for size_t
+#include <cstdint>  // for uint8_t
+#include <string>   // for string, wstring, to_string
+#include <vector>   // for vector
 
 namespace ftxui {
 std::string to_string(const std::wstring& s);

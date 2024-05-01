@@ -22,7 +22,7 @@ using Elements = std::vector<Element>;
 class Node {
  public:
   Node();
-  Node(Elements children);
+  explicit Node(Elements children);
   Node(const Node&) = delete;
   Node(const Node&&) = delete;
   Node& operator=(const Node&) = delete;

@@ -54,6 +54,10 @@ template<class T> Receiver<T> MakeReceiver();
 template <class T>
 class SenderImpl {
  public:
+  SenderImpl(const SenderImpl&) = delete;
+  SenderImpl(SenderImpl&&) = delete;
+  SenderImpl& operator=(const SenderImpl&) = delete;
+  SenderImpl& operator=(SenderImpl&&) = delete;
   void Send(T t) { receiver_->Receive(std::move(t)); }
   ~SenderImpl() { receiver_->ReleaseSender(); }
 
@@ -61,7 +65,7 @@ class SenderImpl {
 
  private:
   friend class ReceiverImpl<T>;
-  SenderImpl(ReceiverImpl<T>* consumer) : receiver_(consumer) {}
+  explicit SenderImpl(ReceiverImpl<T>* consumer) : receiver_(consumer) {}
   ReceiverImpl<T>* receiver_;
 };
 
@@ -73,15 +77,17 @@ class ReceiverImpl {
     senders_++;
     return std::unique_ptr<SenderImpl<T>>(new SenderImpl<T>(this));
   }
-  ReceiverImpl() { senders_ = 0; }
+  ReceiverImpl() = default;
 
   bool Receive(T* t) {
     while (senders_ || !queue_.empty()) {
       std::unique_lock<std::mutex> lock(mutex_);
-      if (queue_.empty())
+      if (queue_.empty()) {
         notifier_.wait(lock);
-      if (queue_.empty())
+      }
+      if (queue_.empty()) {
         continue;
+      }
       *t = std::move(queue_.front());
       queue_.pop();
       return true;
@@ -91,8 +97,9 @@ class ReceiverImpl {
 
   bool ReceiveNonBlocking(T* t) {
     std::unique_lock<std::mutex> lock(mutex_);
-    if (queue_.empty())
+    if (queue_.empty()) {
       return false;
+    }
     *t = queue_.front();
     queue_.pop();
     return true;
@@ -127,7 +134,7 @@ class ReceiverImpl {
   std::mutex mutex_;
   std::queue<T> queue_;
   std::condition_variable notifier_;
-  std::atomic<int> senders_;
+  std::atomic<int> senders_{0};
 };
 
 template <class T>

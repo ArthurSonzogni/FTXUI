@@ -5,6 +5,8 @@
 #define FTXUI_SCREEN_STRING_INTERNAL_HPP
 
 #include <cstdint>
+#include <string>
+#include <vector>
 
 namespace ftxui {
 

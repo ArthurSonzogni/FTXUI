@@ -6,8 +6,7 @@
 
 #include <vector>
 
-namespace ftxui {
-namespace box_helper {
+namespace ftxui::box_helper {
 
 struct Element {
   // Input:
@@ -21,7 +20,6 @@ struct Element {
 
 void Compute(std::vector<Element>* elements, int target_size);
 
-}  // namespace box_helper
-}  // namespace ftxui
+}  // namespace ftxui::box_helper
 
 #endif /* end of include guard: FTXUI_DOM_BOX_HELPER_HPP */

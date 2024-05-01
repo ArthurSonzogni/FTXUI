@@ -24,10 +24,12 @@ class Color {
   enum Palette16 : uint8_t;
   enum Palette256 : uint8_t;
 
+  // NOLINTBEGIN
   Color();                  // Transparent.
   Color(Palette1 index);    // Transparent.
   Color(Palette16 index);   // Implicit conversion from index to Color.
   Color(Palette256 index);  // Implicit conversion from index to Color.
+  // NOLINTEND
   Color(uint8_t red, uint8_t green, uint8_t blue);
   static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
   static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);

@@ -11,8 +11,9 @@ using namespace ftxui;
 namespace {
 
 bool GeneratorBool(const char*& data, size_t& size) {
-  if (size == 0)
+  if (size == 0) {
     return false;
+  }
 
   auto out = bool(data[0] % 2);
   data++;
