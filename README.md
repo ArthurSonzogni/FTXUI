@@ -43,7 +43,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
  * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
  * Learn by [examples](#documentation), and [tutorials](#documentation)
  * Multiple packages: CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred), vcpkg, pkgbuild, conan.
- * Good practises: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
+ * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
 ## Documentation
 
