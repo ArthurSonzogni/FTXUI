@@ -92,14 +92,14 @@ class Flex : public Node {
 
 }  // namespace
 
-/// @brief An element that will take expand proportionnally to the space left in
+/// @brief An element that will take expand proportionally to the space left in
 /// a container.
 /// @ingroup dom
 Element filler() {
   return std::make_shared<Flex>(function_flex);
 }
 
-/// @brief Make a child element to expand proportionnally to the space left in a
+/// @brief Make a child element to expand proportionally to the space left in a
 /// container.
 /// @ingroup dom
 ///
