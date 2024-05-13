@@ -44,6 +44,9 @@ current (development)
 ### Screen
 - Feature: Add `Box::IsEmpty()`.
 
+### Util
+- Feature: Support arbitrary `Adapter` for `ConstStringListRef`. See #843.
+
 ### Build
 - Support for cmake's "unity/jumbo" builds. Fixed by @ClausKlein.
 
