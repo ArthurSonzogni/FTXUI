@@ -46,25 +46,35 @@ Component Dropdown(DropdownOption option) {
     Element Render() override {
       radiobox.selected =
           util::clamp(radiobox.selected(), 0, int(radiobox.entries.size()) - 1);
-      checkbox.label =
-          radiobox.entries[static_cast<size_t>(radiobox.selected())];
+      title_ = radiobox.entries[selected_()];
 
       return transform(*open_, checkbox_->Render(), radiobox_->Render());
     }
 
     // Switch focus in between the checkbox and the radiobox when selecting it.
     bool OnEvent(ftxui::Event event) override {
-      const bool show_old = open_();
+      const bool open_old = open_();
       const int selected_old = selected_();
-      const bool handled = ComponentBase::OnEvent(event);
+      bool handled = ComponentBase::OnEvent(event);
 
-      if (!show_old && open_()) {
+      // Transfer focus to the radiobox when the dropdown is opened.
+      if (!open_old && open_()) {
         radiobox_->TakeFocus();
       }
 
-      if (selected_old != selected_()) {
-        checkbox_->TakeFocus();
-        open_ = false;
+      // Auto-close the dropdown when the user selects an item, even if the item
+      // it the same as the previous one.
+      if (open_old && open_()) {
+        const bool should_close = (selected_() != selected_old) ||     //
+                                  (event == Event::Return) ||          //
+                                  (event == Event::Character(' ')) ||  //
+                                  (event == Event::Escape);            //
+
+        if (should_close) {
+          checkbox_->TakeFocus();
+          open_ = false;
+          handled = true;
+        }
       }
 
       return handled;
@@ -75,6 +85,7 @@ Component Dropdown(DropdownOption option) {
       selected_ = radiobox.selected;
       checkbox.checked = &*open_;
       radiobox.selected = &*selected_;
+      checkbox.label = &title_;
 
       if (!checkbox.transform) {
         checkbox.transform = [](const EntryState& s) {
@@ -113,6 +124,7 @@ Component Dropdown(DropdownOption option) {
     Ref<int> selected_;
     Component checkbox_;
     Component radiobox_;
+    std::string title_;
   };
 
   return Make<Impl>(option);
