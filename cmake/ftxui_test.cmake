@@ -18,6 +18,7 @@ add_executable(ftxui-tests
   src/ftxui/component/menu_test.cpp
   src/ftxui/component/modal_test.cpp
   src/ftxui/component/radiobox_test.cpp
+  src/ftxui/util/ref_test.cpp
   src/ftxui/component/receiver_test.cpp
   src/ftxui/component/resizable_split_test.cpp
   src/ftxui/component/screen_interactive_test.cpp
