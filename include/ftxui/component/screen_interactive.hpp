@@ -109,7 +109,7 @@ class ScreenInteractive : public Screen {
   std::string set_cursor_position;
   std::string reset_cursor_position;
 
-  std::atomic<bool> quit_ = false;
+  std::atomic<bool> quit_{false};
   std::thread event_listener_;
   std::thread animation_listener_;
   bool animation_requested_ = false;
