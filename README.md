@@ -330,6 +330,7 @@ Feel free to add your projects here:
 - [ftxui_CPUMeter](https://github.com/tzzzzzzzx/ftxui_CPUMeter)
 - [Captain's log](https://github.com/nikoladucak/caps-log)
 - [FTowerX](https://github.com/MhmRhm/FTowerX)
+- [Caravan](https://github.com/r3w0p/caravan)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
