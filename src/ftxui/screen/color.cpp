@@ -148,10 +148,6 @@ Color Color::RGB(uint8_t red, uint8_t green, uint8_t blue) {
 /// @ingroup screen
 // static
 Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
-  if (s == 0) {
-    return {0, 0, 0};
-  }
-
   uint8_t region = h / 43;                                        // NOLINT
   uint8_t remainder = (h - (region * 43)) * 6;                    // NOLINT
   uint8_t p = (v * (255 - s)) >> 8;                               // NOLINT
