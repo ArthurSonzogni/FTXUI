@@ -303,6 +303,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 Feel free to add your projects here:
 - [json-tui](https://github.com/ArthurSonzogni/json-tui)
 - [git-tui](https://github.com/ArthurSonzogni/git-tui)
+- [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
 - [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
 - [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier)
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
