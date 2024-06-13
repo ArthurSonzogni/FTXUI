@@ -23,6 +23,7 @@ class ClearUnder : public NodeDecorator {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
         screen.PixelAt(x, y) = Pixel();
+        screen.PixelAt(x, y).character = " ";  // Consider the pixel written.
       }
     }
     Node::Render(screen);

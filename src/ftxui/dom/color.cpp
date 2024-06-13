@@ -19,9 +19,18 @@ class BgColor : public NodeDecorator {
       : NodeDecorator(std::move(child)), color_(color) {}
 
   void Render(Screen& screen) override {
-    for (int y = box_.y_min; y <= box_.y_max; ++y) {
-      for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).background_color = color_;
+    if (color_.IsOpaque()) {
+      for (int y = box_.y_min; y <= box_.y_max; ++y) {
+        for (int x = box_.x_min; x <= box_.x_max; ++x) {
+          screen.PixelAt(x, y).background_color = color_;
+        }
+      }
+    } else {
+      for (int y = box_.y_min; y <= box_.y_max; ++y) {
+        for (int x = box_.x_min; x <= box_.x_max; ++x) {
+          Color& color = screen.PixelAt(x, y).background_color;
+          color = Color::Blend(color, color_);
+        }
       }
     }
     NodeDecorator::Render(screen);
@@ -36,9 +45,18 @@ class FgColor : public NodeDecorator {
       : NodeDecorator(std::move(child)), color_(color) {}
 
   void Render(Screen& screen) override {
-    for (int y = box_.y_min; y <= box_.y_max; ++y) {
-      for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).foreground_color = color_;
+    if (color_.IsOpaque()) {
+      for (int y = box_.y_min; y <= box_.y_max; ++y) {
+        for (int x = box_.x_min; x <= box_.x_max; ++x) {
+          screen.PixelAt(x, y).foreground_color = color_;
+        }
+      }
+    } else {
+      for (int y = box_.y_min; y <= box_.y_max; ++y) {
+        for (int x = box_.x_min; x <= box_.x_max; ++x) {
+          Color& color = screen.PixelAt(x, y).foreground_color;
+          color = Color::Blend(color, color_);
+        }
       }
     }
     NodeDecorator::Render(screen);
@@ -46,6 +64,7 @@ class FgColor : public NodeDecorator {
 
   Color color_;
 };
+
 }  // namespace
 
 /// @brief Set the foreground color of an element.

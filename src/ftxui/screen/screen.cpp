@@ -423,7 +423,11 @@ std::string Screen::ToString() const {
       if (!previous_fullwidth) {
         UpdatePixelStyle(this, ss, *previous_pixel_ref, pixel);
         previous_pixel_ref = &pixel;
-        ss << pixel.character;
+        if (pixel.character.empty()) {
+          ss << " ";
+        } else {
+          ss << pixel.character;
+        }
       }
       previous_fullwidth = (string_width(pixel.character) == 2);
     }
