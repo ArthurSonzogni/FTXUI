@@ -29,10 +29,16 @@ class Color {
   Color(Palette16 index);   // Implicit conversion from index to Color.
   Color(Palette256 index);  // Implicit conversion from index to Color.
   // NOLINTEND
-  Color(uint8_t red, uint8_t green, uint8_t blue);
+  Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
   static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
   static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);
+  static Color RGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+  static Color HSVA(uint8_t hue,
+                    uint8_t saturation,
+                    uint8_t value,
+                    uint8_t alpha);
   static Color Interpolate(float t, const Color& a, const Color& b);
+  static Color Blend(const Color& lhs, const Color& rhs);
 
   //---------------------------
   // List of colors:
@@ -310,6 +316,7 @@ class Color {
   bool operator!=(const Color& rhs) const;
 
   std::string Print(bool is_background_color) const;
+  bool IsOpaque() const { return alpha_ == 255; }
 
  private:
   enum class ColorType : uint8_t {
@@ -322,6 +329,7 @@ class Color {
   uint8_t red_ = 0;
   uint8_t green_ = 0;
   uint8_t blue_ = 0;
+  uint8_t alpha_ = 0;
 };
 
 inline namespace literals {

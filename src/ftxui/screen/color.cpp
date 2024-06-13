@@ -73,13 +73,15 @@ Color::Color() = default;
 /// @ingroup screen
 Color::Color(Palette1 /*value*/) : Color() {}
 
-/// @brief Build a transparent using Palette16 colors.
+/// @brief Build a color using the Palette16 colors.
 /// @ingroup screen
-Color::Color(Palette16 index) : type_(ColorType::Palette16), red_(index) {}
+Color::Color(Palette16 index)
+    : type_(ColorType::Palette16), red_(index), alpha_(255) {}
 
-/// @brief Build a transparent using Palette256 colors.
+/// @brief Build a color using Palette256 colors.
 /// @ingroup screen
-Color::Color(Palette256 index) : type_(ColorType::Palette256), red_(index) {
+Color::Color(Palette256 index)
+    : type_(ColorType::Palette256), red_(index), alpha_(255) {
   if (Terminal::ColorSupport() >= Terminal::Color::Palette256) {
     return;
   }
@@ -93,9 +95,14 @@ Color::Color(Palette256 index) : type_(ColorType::Palette256), red_(index) {
 /// @param red The quantity of red [0,255]
 /// @param green The quantity of green [0,255]
 /// @param blue The quantity of blue [0,255]
+/// @param alpha The quantity of alpha [0,255]
 /// @ingroup screen
-Color::Color(uint8_t red, uint8_t green, uint8_t blue)
-    : type_(ColorType::TrueColor), red_(red), green_(green), blue_(blue) {
+Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
+    : type_(ColorType::TrueColor),
+      red_(red),
+      green_(green),
+      blue_(blue),
+      alpha_(alpha) {
   if (Terminal::ColorSupport() == Terminal::Color::TrueColor) {
     return;
   }
@@ -136,7 +143,49 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue)
 /// @ingroup screen
 // static
 Color Color::RGB(uint8_t red, uint8_t green, uint8_t blue) {
-  return {red, green, blue};
+  return RGBA(red, green, blue, 255);
+}
+
+/// @brief Build a Color from its RGBA representation.
+/// https://en.wikipedia.org/wiki/RGB_color_model
+/// @param red The quantity of red [0,255]
+/// @param green The quantity of green [0,255]
+/// @param blue The quantity of blue [0,255]
+/// @param alpha The quantity of alpha [0,255]
+/// @ingroup screen
+/// @see Color::RGB
+// static
+Color Color::RGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
+  return {red, green, blue, alpha};
+}
+
+/// @brief Build a Color from its HSV representation.
+/// https://en.wikipedia.org/wiki/HSL_and_HSV
+///
+/// @param h The hue of the color [0,255]
+/// @param s The "colorfulness" [0,255].
+/// @param v The "Lightness" [0,255]
+/// @param alpha The quantity of alpha [0,255]
+/// @ingroup screen
+// static
+Color Color::HSVA(uint8_t h, uint8_t s, uint8_t v, uint8_t alpha) {
+  uint8_t region = h / 43;                                        // NOLINT
+  uint8_t remainder = (h - (region * 43)) * 6;                    // NOLINT
+  uint8_t p = (v * (255 - s)) >> 8;                               // NOLINT
+  uint8_t q = (v * (255 - ((s * remainder) >> 8))) >> 8;          // NOLINT
+  uint8_t t = (v * (255 - ((s * (255 - remainder)) >> 8))) >> 8;  // NOLINT
+
+  // clang-format off
+  switch (region) {                     // NOLINT
+    case 0: return Color(v,t,p, alpha); // NOLINT
+    case 1: return Color(q,v,p, alpha); // NOLINT
+    case 2: return Color(p,v,t, alpha); // NOLINT
+    case 3: return Color(p,q,v, alpha); // NOLINT
+    case 4: return Color(t,p,v, alpha); // NOLINT
+    case 5: return Color(v,p,q, alpha); // NOLINT
+  }                                     // NOLINT
+  // clang-format on
+  return {0, 0, 0, alpha};
 }
 
 /// @brief Build a Color from its HSV representation.
@@ -148,23 +197,7 @@ Color Color::RGB(uint8_t red, uint8_t green, uint8_t blue) {
 /// @ingroup screen
 // static
 Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
-  uint8_t region = h / 43;                                        // NOLINT
-  uint8_t remainder = (h - (region * 43)) * 6;                    // NOLINT
-  uint8_t p = (v * (255 - s)) >> 8;                               // NOLINT
-  uint8_t q = (v * (255 - ((s * remainder) >> 8))) >> 8;          // NOLINT
-  uint8_t t = (v * (255 - ((s * (255 - remainder)) >> 8))) >> 8;  // NOLINT
-
-  // clang-format off
-  switch (region) {              // NOLINT
-    case 0: return Color(v,t,p); // NOLINT
-    case 1: return Color(q,v,p); // NOLINT
-    case 2: return Color(p,v,t); // NOLINT
-    case 3: return Color(p,q,v); // NOLINT
-    case 4: return Color(t,p,v); // NOLINT
-    case 5: return Color(v,p,q); // NOLINT
-  }                              // NOLINT
-  // clang-format on
-  return {0, 0, 0};
+  return HSVA(h, s, v, 255);
 }
 
 // static
@@ -233,6 +266,14 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
   return Color::RGB(interp(a_r, b_r),   //
                     interp(a_g, b_g),   //
                     interp(a_b, b_b));  //
+}
+
+/// @brief Blend two colors together using the alpha channel.
+// static
+Color Color::Blend(const Color& lhs, const Color& rhs) {
+  Color out = Interpolate(float(rhs.alpha_) / 255.F, lhs, rhs);
+  out.alpha_ = lhs.alpha_ + rhs.alpha_ - lhs.alpha_ * rhs.alpha_ / 255;
+  return out;
 }
 
 inline namespace literals {

@@ -43,6 +43,11 @@ current (development)
 
 ### Screen
 - Feature: Add `Box::IsEmpty()`.
+- Feature: Color transparency
+    - Add `Color::RGBA(r,g,b,a)`.
+    - Add `Color::HSVA(r,g,b,a)`.
+    - Add `Color::Blend(Color)`.
+    - Add `Color::IsOpaque()`
 
 ### Util
 - Feature: Support arbitrary `Adapter` for `ConstStringListRef`. See #843.
