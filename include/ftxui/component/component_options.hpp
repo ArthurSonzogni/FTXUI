@@ -280,3 +280,4 @@ struct DropdownOption {
 }  // namespace ftxui
 
 #endif /* end of include guard: FTXUI_COMPONENT_COMPONENT_OPTIONS_HPP */
+
