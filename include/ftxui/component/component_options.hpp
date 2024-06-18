@@ -227,6 +227,13 @@ struct SliderOption {
   Direction direction = Direction::Right;
   Color color_active = Color::White;
   Color color_inactive = Color::GrayDark;
+  
+   // Neue Methode zum Setzen der Farbe des Sliders
+  void setColor(const Color& active, const Color& inactive) {
+    color_active = active;
+    color_inactive = inactive;
+  }
+  
 };
 
 // Parameter pack used by `WindowOptions::render`.
