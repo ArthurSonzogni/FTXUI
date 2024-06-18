@@ -122,6 +122,20 @@ class Frame : public Node {
  private:
   bool x_frame_;
   bool y_frame_;
+  
+  // Neue Methode zur Messung der dynamischen Höhe
+  int measureContentHeight() {
+    // Logik zur Messung der Höhe des Inhalts
+    return 150; // Beispiel für eine dynamische Höhe
+  }
+  
+  void calculateLayout() {
+    // Berechnung der dynamischen Höhe basierend auf dem Inhalt
+    int dynamicHeight = measureContentHeight();
+    height = dynamicHeight;
+
+    
+  }
 };
 
 class FocusCursor : public Focus {
