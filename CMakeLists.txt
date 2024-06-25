@@ -7,7 +7,7 @@ project(ftxui
 )
 
 option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
-option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" OFF)
+option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" ON)
 option(FTXUI_BUILD_DOCS "Set to ON to build docs" OFF)
 option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
 option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
@@ -173,5 +173,21 @@ include(cmake/ftxui_export.cmake)
 include(cmake/ftxui_install.cmake)
 include(cmake/ftxui_package.cmake)
 
+# --- Find OpenCV and add as a dependency ---
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+target_link_libraries(screen
+  PUBLIC ${OpenCV_LIBS}
+)
+target_link_libraries(dom
+  PUBLIC ${OpenCV_LIBS}
+)
+target_link_libraries(component
+  PUBLIC ${OpenCV_LIBS}
+)
+
 add_subdirectory(examples)
 add_subdirectory(doc)
+
+

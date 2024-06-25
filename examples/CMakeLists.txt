@@ -14,6 +14,10 @@ endfunction(example)
 add_subdirectory(component)
 add_subdirectory(dom)
 
+# Add the pixelate example
+add_executable(pixelate ${CMAKE_CURRENT_SOURCE_DIR}/dom/pixelate.cpp)
+target_link_libraries(pixelate PRIVATE dom)
+
 if (EMSCRIPTEN)
   string(APPEND CMAKE_EXE_LINKER_FLAGS " -s ALLOW_MEMORY_GROWTH=1")
   target_link_options(component PUBLIC "SHELL: -s ALLOW_MEMORY_GROWTH=1")
