@@ -12,6 +12,8 @@
 #include "ftxui/screen/color.hpp"  // for Color
 #include "ftxui/screen/image.hpp"  // for Pixel, Image
 
+#include <opencv2/opencv.hpp> //for OpenCV
+
 #ifdef DrawText
 // Workaround for WinUsr.h (via Windows.h) defining macros that break things.
 // https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-drawtext
@@ -105,6 +107,10 @@ struct Canvas {
   // x is considered to be a multiple of 2.
   // y is considered to be a multiple of 4.
   void Style(int x, int y, const Stylizer& style);
+
+  static void DrawImageOnTerminal(const std::string& image_path, int width = 80, int height = 24);
+
+
 
  private:
   bool IsIn(int x, int y) const {

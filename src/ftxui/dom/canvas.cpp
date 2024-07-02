@@ -20,6 +20,7 @@
 #include "ftxui/screen/screen.hpp"    // for Pixel, Screen
 #include "ftxui/screen/string.hpp"    // for Utf8ToGlyphs
 #include "ftxui/util/ref.hpp"         // for ConstRef
+#include <opencv2/opencv.hpp>         // for OpenCV
 
 namespace ftxui {
 
@@ -860,6 +861,45 @@ void Canvas::Style(int x, int y, const Stylizer& style) {
     style(storage_[XY{x / 2, y / 4}].content);
   }
 }
+
+/**
+ * @brief Places Dots on Canvas and prints it on Terminal
+ * @param image_path absolute path to image
+ * @param width number of Pixels on x-axis
+ * @param height number of Pixels on y-axis
+ */
+
+void Canvas::DrawImageOnTerminal(const std::string& image_path, int width, int height) {
+  using namespace cv;
+
+  // read image via OpenCV
+  Mat image = imread(image_path, IMREAD_COLOR);
+  if (image.empty()) {
+    std::cerr << "Could not read the image: " << image_path << std::endl;
+    return;
+  }
+
+  // modify images dimensions
+  resize(image, image, Size(width, height));
+
+  Canvas c(width, height);
+
+  // transfer images pixels onto canvas
+  for (int y = 0; y < height; ++y) {
+    for (int x = 0; x < width; ++x) {
+        Vec3b color = image.at<Vec3b>(y, x);
+      c.DrawPoint(x, y, true, Color::RGB(color[2], color[1], color[0]));
+    }
+  }
+
+  // render canvas as element
+  auto document = canvas(&c);
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
+  Render(screen, document);
+  screen.Print();
+}
+
+
 
 namespace {
 
