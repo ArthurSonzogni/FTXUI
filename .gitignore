@@ -60,3 +60,8 @@ out/
 # tools directory:
 !tools/**/*.sh
 !tools/**/*.cpp
+
+# clion config dir
+.idea/
+# clion build dirs
+cmake-build-*
