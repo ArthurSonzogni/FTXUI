@@ -68,7 +68,7 @@ int main() {
                text("select_end " + std::to_string(selection.endx) + ";" + std::to_string(selection.endy)),
                text("textToCopy " + textToCopy)
            }) |
-           border | selected(selection);
+           border | selected(selection, textToCopy);
   });
 
 
@@ -76,17 +76,26 @@ int main() {
     if (event.is_mouse()) {
       auto& mouse = event.mouse();
       if (mouse.button == Mouse::Left) {
-        if (mouse.motion == Mouse::Pressed) {
+
+        if (mouse.motion == Mouse::Pressed)
+        {
           selection.startx = mouse.x;
           selection.starty = mouse.y;
-          selection.endx = mouse.x;
+          selection.endx = mouse.x-1;
           selection.endy = mouse.y;
-        } else if (mouse.motion == Mouse::Released) {
-          selection.endx = mouse.x;
+
+          // screen.PixelAt(mouse.x, mouse.y).blink = true;
+          // screen.PixelAt(mouse.x, mouse.y).character = "K";
+          textToCopy += screen.PixelAt(mouse.x, mouse.y).character;
+        }
+        else if (mouse.motion == Mouse::Released)
+        {
+          selection.endx = mouse.x-1;
           selection.endy = mouse.y;
         }
-        else if (mouse.motion == Mouse::Moved) {
-          selection.endx = mouse.x;
+        else if (mouse.motion == Mouse::Moved)
+        {
+          selection.endx = mouse.x-1;
           selection.endy = mouse.y;
         }
 
