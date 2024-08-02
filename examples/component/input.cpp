@@ -91,7 +91,7 @@ int main() {
         }
         else if (mouse.motion == Mouse::Released)
         {
-          selection.endx = mouse.x-1;
+          selection.endx = mouse.x;
           selection.endy = mouse.y;
         }
         else if (mouse.motion == Mouse::Moved)
