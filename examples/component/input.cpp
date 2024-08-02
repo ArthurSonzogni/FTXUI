@@ -71,6 +71,10 @@ int main() {
            border | selected(selection, textToCopy);
   });
 
+  // TODO: Make the textToCopy a callback called every times the selected text change
+  // TODO: Implement the double click on word to select the word
+  // TODO: Implement the double click and drag to select word by word (optional)
+  // TODO: Is there a way for me to embedd the catchEvent in the selected decorator?
 
   renderer |= CatchEvent([&](Event event) { 
     if (event.is_mouse()) {
@@ -83,10 +87,6 @@ int main() {
           selection.starty = mouse.y;
           selection.endx = mouse.x-1;
           selection.endy = mouse.y;
-
-          // screen.PixelAt(mouse.x, mouse.y).blink = true;
-          // screen.PixelAt(mouse.x, mouse.y).character = "K";
-          textToCopy += screen.PixelAt(mouse.x, mouse.y).character;
         }
         else if (mouse.motion == Mouse::Released)
         {
