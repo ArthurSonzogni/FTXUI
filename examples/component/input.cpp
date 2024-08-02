@@ -21,11 +21,7 @@ int main() {
   std::string last_name;
   std::string password;
   std::string phoneNumber;
-
-  int select_startx = -1;
-  int select_starty = -1;
-  int select_endx = -1;
-  int select_endy = -1;
+  Region selection;
   std::string textToCopy;
 
   auto screen = ScreenInteractive::TerminalOutput();
@@ -68,11 +64,11 @@ int main() {
                text("Hello " + first_name + " " + last_name),
                text("Your password is " + password),
                text("Your phone number is " + phoneNumber),
-               text("select_start " + std::to_string(select_startx) + ";" + std::to_string(select_starty)),
-               text("select_end " + std::to_string(select_endx) + ";" + std::to_string(select_endy)),
+               text("select_start " + std::to_string(selection.startx) + ";" + std::to_string(selection.starty)),
+               text("select_end " + std::to_string(selection.endx) + ";" + std::to_string(selection.endy)),
                text("textToCopy " + textToCopy)
            }) |
-           border | selected(select_startx, select_endx);
+           border | selected(selection);
   });
 
 
@@ -81,17 +77,17 @@ int main() {
       auto& mouse = event.mouse();
       if (mouse.button == Mouse::Left) {
         if (mouse.motion == Mouse::Pressed) {
-          select_startx = mouse.x;
-          select_starty = mouse.y;
-          select_endx = mouse.x;
-          select_endy = mouse.y;
+          selection.startx = mouse.x;
+          selection.starty = mouse.y;
+          selection.endx = mouse.x;
+          selection.endy = mouse.y;
         } else if (mouse.motion == Mouse::Released) {
-          select_endx = mouse.x;
-          select_endy = mouse.y;
+          selection.endx = mouse.x;
+          selection.endy = mouse.y;
         }
         else if (mouse.motion == Mouse::Moved) {
-          select_endx = mouse.x;
-          select_endy = mouse.y;
+          selection.endx = mouse.x;
+          selection.endy = mouse.y;
         }
 
         screen.PostEvent(Event::Custom);

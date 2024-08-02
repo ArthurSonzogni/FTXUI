@@ -33,6 +33,14 @@ enum BorderStyle {
   EMPTY,
 };
 
+typedef struct {
+
+  int startx;
+  int endx;
+  int starty;
+  int endy;
+} Region;
+
 // Pipe elements into decorator togethers.
 // For instance the next lines are equivalents:
 // -> text("ftxui") | bold | underlined
@@ -96,8 +104,8 @@ Element canvas(std::function<void(Canvas&)>);
 Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
-Element selected(int &start, int &end, Element);
-Decorator selected(int &start, int &end);
+Element selected(Region &selection, Element);
+Decorator selected(Region &selection);
 Element underlined(Element);
 Element underlinedDouble(Element);
 Element blink(Element);

@@ -16,21 +16,20 @@ namespace {
 class Selected : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
-  Selected(Element child, int &start, int &end)
-      : NodeDecorator(std::move(child)), startx_(start), endx_(end) {}
+  Selected(Element child, Region &selection)
+      : NodeDecorator(std::move(child)), selection_(selection) {}
 
   void Render(Screen& screen) override {
     Node::Render(screen);
-    for (int y = box_.y_min; y <= box_.y_max; ++y) {
-      for (int x = startx_; x <= endx_; ++x) {
+    for (int y = selection_.starty; y <= selection_.endy; ++y) {
+      for (int x = selection_.startx; x <= selection_.endx; ++x) {
         screen.PixelAt(x, y).inverted ^= true;
       }
     }
   }
 
 private:
-  int &startx_;
-  int &endx_;
+  Region &selection_;
 };
 }  // namespace
 
@@ -38,12 +37,12 @@ private:
 /// colors.
 /// @ingroup dom
 
-Element selected(int &start, int &end, Element child) {
-  return std::make_shared<Selected>(std::move(child), start, end);
+Element selected(Region &selection, Element child) {
+  return std::make_shared<Selected>(std::move(child), selection);
 }
 
-Decorator selected(int &start, int &end) {
-  return [&start, &end](Element child) { return selected(start, end, std::move(child)); };
+Decorator selected(Region &selection) {
+  return [&selection](Element child) { return selected(selection, std::move(child)); };
 }
 
 }  // namespace ftxui
