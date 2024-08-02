@@ -22,8 +22,8 @@ class Selected : public NodeDecorator {
   void Render(Screen& screen) override {
     Node::Render(screen);
     destination_ = "";
-    for (int y = selection_.starty; y <= selection_.endy; ++y) {
-      for (int x = selection_.startx; x <= selection_.endx; ++x) {
+    for (int y = std::min(selection_.starty, selection_.endy); y <= std::max(selection_.starty, selection_.endy); ++y) {
+      for (int x = std::min(selection_.startx, selection_.endx); x <= std::max(selection_.startx, selection_.endx)-1; ++x) {
         screen.PixelAt(x, y).inverted ^= true;
         destination_ += screen.PixelAt(x, y).character;
       }
