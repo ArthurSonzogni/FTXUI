@@ -82,7 +82,7 @@ add_library(dom
   src/ftxui/dom/gridbox.cpp
   src/ftxui/dom/hbox.cpp
   src/ftxui/dom/inverted.cpp
-  src/ftxui/dom/selected.cpp
+  src/ftxui/dom/selectable.cpp
   src/ftxui/dom/linear_gradient.cpp
   src/ftxui/dom/node.cpp
   src/ftxui/dom/node_decorator.cpp

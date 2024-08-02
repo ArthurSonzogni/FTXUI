@@ -68,52 +68,18 @@ int main() {
                text("select_end " + std::to_string(selection.endx) + ";" + std::to_string(selection.endy)),
                text("textToCopy " + textToCopy)
            }) |
-           border | selected(selection, [&textToCopy](std::string selected){textToCopy = selected;});
+           border | selectable([&textToCopy](std::string txtSelected){textToCopy = txtSelected;});
   });
 
-  // TODO: Is there a way for me to embedd the catchEvent in the selected decorator? At a minimum move the function in the selected.cpp file and add doc to call it
   // TODO: Implement the double click on word to select the word
   // TODO: Implement the double click and drag to select word by word (optional)
+  // TODO: Implement the tripple click to select an entire line 
+  // TODO: Call onSelectionChange_ only when the selection indeed did change, not at every render?
   // TODO: Add a "selectable" flag in the pixel class and take it into account when selecting things
 
   renderer |= CatchEvent([&](Event event) { 
-    if (event.is_mouse()) {
-      auto& mouse = event.mouse();
-      if (mouse.button == Mouse::Left) {
 
-        if (mouse.motion == Mouse::Pressed)
-        {
-          selection.startx = mouse.x;
-          selection.starty = mouse.y;
-          selection.endx = mouse.x;
-          selection.endy = mouse.y;
-        }
-        else if (mouse.motion == Mouse::Released)
-        {
-          selection.endx = mouse.x;
-          selection.endy = mouse.y;
-        }
-        else if (mouse.motion == Mouse::Moved)
-        {
-          selection.endx = mouse.x;
-          selection.endy = mouse.y;
-        }
-
-        screen.PostEvent(Event::Custom);
-        return true;
-      }
-    }
-
-    // if (event == Event::SpecialKey("Ctrl+Shift+C")) {
-    //   textToCopy = "Kikoo!";
-    //   //clip::set_text(text_to_copy);  // Set the clipboard content
-
-    //   screen.PostEvent(Event::Custom);
-
-    //   return true;
-    // }
-
-    return false;    
+    return selectableCatchEvent(event);    
   });
 
   screen.Loop(renderer);

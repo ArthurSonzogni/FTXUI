@@ -16,6 +16,7 @@
 #include "ftxui/screen/color.hpp"
 #include "ftxui/screen/terminal.hpp"
 #include "ftxui/util/ref.hpp"
+#include "ftxui/component/event.hpp"
 
 namespace ftxui {
 class Node;
@@ -104,8 +105,9 @@ Element canvas(std::function<void(Canvas&)>);
 Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
-Element selected(Region &selection, std::function<void(const std::string)> onSelectionChange, Element);
-Decorator selected(Region &selection, std::function<void(const std::string)> onSelectionChange);
+Element selectable(std::function<void(const std::string)> onSelectionChange, Element);
+Decorator selectable(std::function<void(const std::string)> onSelectionChange);
+bool selectableCatchEvent(Event event);
 Element underlined(Element);
 Element underlinedDouble(Element);
 Element blink(Element);
