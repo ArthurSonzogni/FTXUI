@@ -35,10 +35,10 @@ enum BorderStyle {
 
 typedef struct {
 
-  int startx;
-  int endx;
-  int starty;
-  int endy;
+  uint16_t startx = 0;
+  uint16_t endx = 0;
+  uint16_t starty = 0;
+  uint16_t endy = 0;
 } Region;
 
 // Pipe elements into decorator togethers.
