@@ -40,6 +40,7 @@ typedef struct {
   uint16_t endx = 0;
   uint16_t starty = 0;
   uint16_t endy = 0;
+  bool changed = false;
 } Region;
 
 // Pipe elements into decorator togethers.

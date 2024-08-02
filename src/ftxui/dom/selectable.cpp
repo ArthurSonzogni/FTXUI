@@ -12,7 +12,7 @@
 
 namespace ftxui {
 
-Region newSelection;
+Region selectedRegion;
 
 namespace {
 class Selectable : public NodeDecorator {
@@ -24,14 +24,17 @@ class Selectable : public NodeDecorator {
   void Render(Screen& screen) override {
     Node::Render(screen);
     std::string selectedText = "";
-    for (int y = std::min(newSelection.starty, newSelection.endy); y <= std::max(newSelection.starty, newSelection.endy); ++y) {
-      for (int x = std::min(newSelection.startx, newSelection.endx); x <= std::max(newSelection.startx, newSelection.endx)-1; ++x) {
+    for (int y = std::min(selectedRegion.starty, selectedRegion.endy); y <= std::max(selectedRegion.starty, selectedRegion.endy); ++y) {
+      for (int x = std::min(selectedRegion.startx, selectedRegion.endx); x <= std::max(selectedRegion.startx, selectedRegion.endx)-1; ++x) {
         screen.PixelAt(x, y).inverted ^= true;
         selectedText += screen.PixelAt(x, y).character;
       }
     }
 
-    onSelectionChange_(selectedText);
+    if(selectedRegion.changed == true) {
+      selectedRegion.changed = false;;
+      onSelectionChange_(selectedText);
+    }
   }
 
 private:
@@ -58,16 +61,19 @@ bool selectableCatchEvent(Event event) {
       if (mouse.button == Mouse::Left) {
 
         if (mouse.motion == Mouse::Pressed) {
-          newSelection.startx = mouse.x;
-          newSelection.starty = mouse.y;
-          newSelection.endx = mouse.x;
-          newSelection.endy = mouse.y;
+          selectedRegion.startx = mouse.x;
+          selectedRegion.starty = mouse.y;
+          selectedRegion.endx = mouse.x;
+          selectedRegion.endy = mouse.y;
+          selectedRegion.changed = true;
         } else if (mouse.motion == Mouse::Released) {
-          newSelection.endx = mouse.x;
-          newSelection.endy = mouse.y;
+          selectedRegion.endx = mouse.x;
+          selectedRegion.endy = mouse.y;
+          selectedRegion.changed = true;
         } else if (mouse.motion == Mouse::Moved) {
-          newSelection.endx = mouse.x;
-          newSelection.endy = mouse.y;
+          selectedRegion.endx = mouse.x;
+          selectedRegion.endy = mouse.y;
+          selectedRegion.changed = true;
         }
 
         return true;

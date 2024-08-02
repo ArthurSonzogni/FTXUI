@@ -74,7 +74,6 @@ int main() {
   // TODO: Implement the double click on word to select the word
   // TODO: Implement the double click and drag to select word by word (optional)
   // TODO: Implement the tripple click to select an entire line 
-  // TODO: Call onSelectionChange_ only when the selection indeed did change, not at every render?
   // TODO: Add a "selectable" flag in the pixel class and take it into account when selecting things
 
   renderer |= CatchEvent([&](Event event) { 
