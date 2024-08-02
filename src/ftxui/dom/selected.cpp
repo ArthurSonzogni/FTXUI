@@ -16,26 +16,24 @@ namespace {
 class Selected : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
-  Selected(Element child, Region &selection, std::string &destination, std::function<void(const std::string)> onSelectionChange)
-      : NodeDecorator(std::move(child)), selection_(selection), destination_(destination), onSelectionChange_(onSelectionChange) {}
+  Selected(Element child, Region &selection, std::function<void(const std::string)> onSelectionChange)
+      : NodeDecorator(std::move(child)), selection_(selection), onSelectionChange_(onSelectionChange) {}
 
   void Render(Screen& screen) override {
     Node::Render(screen);
-    destination_ = "";
-    std::string textToCopy = "";
+    std::string selectedText = "";
     for (int y = std::min(selection_.starty, selection_.endy); y <= std::max(selection_.starty, selection_.endy); ++y) {
       for (int x = std::min(selection_.startx, selection_.endx); x <= std::max(selection_.startx, selection_.endx)-1; ++x) {
         screen.PixelAt(x, y).inverted ^= true;
-        textToCopy += screen.PixelAt(x, y).character;
+        selectedText += screen.PixelAt(x, y).character;
       }
     }
 
-    onSelectionChange_(textToCopy);
+    onSelectionChange_(selectedText);
   }
 
 private:
   Region &selection_;
-  std::string &destination_;
   std::function<void(const std::string)> onSelectionChange_;
 };
 }  // namespace
@@ -44,12 +42,12 @@ private:
 /// colors.
 /// @ingroup dom
 
-Element selected(Region &selection, std::string &destination, std::function<void(const std::string)> onSelectionChange, Element child) {
-  return std::make_shared<Selected>(std::move(child), selection, destination, onSelectionChange);
+Element selected(Region &selection, std::function<void(const std::string)> onSelectionChange, Element child) {
+  return std::make_shared<Selected>(std::move(child), selection, onSelectionChange);
 }
 
-Decorator selected(Region &selection, std::string &destination, std::function<void(const std::string)> onSelectionChange) {
-  return [&selection, &destination, onSelectionChange](Element child) { return selected(selection, destination, onSelectionChange, std::move(child)); };
+Decorator selected(Region &selection, std::function<void(const std::string)> onSelectionChange) {
+  return [&selection, onSelectionChange](Element child) { return selected(selection, onSelectionChange, std::move(child)); };
 }
 
 }  // namespace ftxui
