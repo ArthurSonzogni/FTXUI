@@ -96,6 +96,8 @@ Element canvas(std::function<void(Canvas&)>);
 Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
+Element selected(int &start, int &end, Element);
+Decorator selected(int &start, int &end);
 Element underlined(Element);
 Element underlinedDouble(Element);
 Element blink(Element);

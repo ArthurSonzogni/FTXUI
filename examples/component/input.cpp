@@ -12,6 +12,7 @@
 #include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
 #include "ftxui/util/ref.hpp"  // for Ref
 
+
 int main() {
   using namespace ftxui;
 
@@ -20,6 +21,14 @@ int main() {
   std::string last_name;
   std::string password;
   std::string phoneNumber;
+
+  int select_startx = -1;
+  int select_starty = -1;
+  int select_endx = -1;
+  int select_endy = -1;
+  std::string textToCopy;
+
+  auto screen = ScreenInteractive::TerminalOutput();
 
   // The basic input components:
   Component input_first_name = Input(&first_name, "first name");
@@ -59,10 +68,48 @@ int main() {
                text("Hello " + first_name + " " + last_name),
                text("Your password is " + password),
                text("Your phone number is " + phoneNumber),
+               text("select_start " + std::to_string(select_startx) + ";" + std::to_string(select_starty)),
+               text("select_end " + std::to_string(select_endx) + ";" + std::to_string(select_endy)),
+               text("textToCopy " + textToCopy)
            }) |
-           border;
+           border | selected(select_startx, select_endx);
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+
+  renderer |= CatchEvent([&](Event event) { 
+    if (event.is_mouse()) {
+      auto& mouse = event.mouse();
+      if (mouse.button == Mouse::Left) {
+        if (mouse.motion == Mouse::Pressed) {
+          select_startx = mouse.x;
+          select_starty = mouse.y;
+          select_endx = mouse.x;
+          select_endy = mouse.y;
+        } else if (mouse.motion == Mouse::Released) {
+          select_endx = mouse.x;
+          select_endy = mouse.y;
+        }
+        else if (mouse.motion == Mouse::Moved) {
+          select_endx = mouse.x;
+          select_endy = mouse.y;
+        }
+
+        screen.PostEvent(Event::Custom);
+        return true;
+      }
+    }
+
+    // if (event == Event::SpecialKey("Ctrl+Shift+C")) {
+    //   textToCopy = "Kikoo!";
+    //   //clip::set_text(text_to_copy);  // Set the clipboard content
+
+    //   screen.PostEvent(Event::Custom);
+
+    //   return true;
+    // }
+
+    return false;    
+  });
+
   screen.Loop(renderer);
 }
