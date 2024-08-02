@@ -333,6 +333,7 @@ Feel free to add your projects here:
 - [FTowerX](https://github.com/MhmRhm/FTowerX)
 - [Caravan](https://github.com/r3w0p/caravan)
 - [Step-Writer](https://github.com/BrianAnakPintar/step-writer)
+- [XJ music](https://github.com/xjmusic/xjmusic)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
