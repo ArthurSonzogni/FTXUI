@@ -68,11 +68,11 @@ int main() {
                text("select_end " + std::to_string(selection.endx) + ";" + std::to_string(selection.endy)),
                text("textToCopy " + textToCopy)
            }) |
-           border | selected(selection, textToCopy);
+           border | selected(selection, textToCopy, [&textToCopy](std::string selected){textToCopy = selected;});
   });
 
   // TODO: Make the textToCopy a callback called every times the selected text change
-  // TODO: Is there a way for me to embedd the catchEvent in the selected decorator?
+  // TODO: Is there a way for me to embedd the catchEvent in the selected decorator? At a minimum move the function in the selected.cpp file and add doc to call it
   // TODO: Implement the double click on word to select the word
   // TODO: Implement the double click and drag to select word by word (optional)
   // TODO: Add a "selectable" flag in the pixel class and take it into account when selecting things

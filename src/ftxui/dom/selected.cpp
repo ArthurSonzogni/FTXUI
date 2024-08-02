@@ -16,23 +16,27 @@ namespace {
 class Selected : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
-  Selected(Element child, Region &selection, std::string &destination)
-      : NodeDecorator(std::move(child)), selection_(selection), destination_(destination) {}
+  Selected(Element child, Region &selection, std::string &destination, std::function<void(const std::string)> onSelectionChange)
+      : NodeDecorator(std::move(child)), selection_(selection), destination_(destination), onSelectionChange_(onSelectionChange) {}
 
   void Render(Screen& screen) override {
     Node::Render(screen);
     destination_ = "";
+    std::string textToCopy = "";
     for (int y = std::min(selection_.starty, selection_.endy); y <= std::max(selection_.starty, selection_.endy); ++y) {
       for (int x = std::min(selection_.startx, selection_.endx); x <= std::max(selection_.startx, selection_.endx)-1; ++x) {
         screen.PixelAt(x, y).inverted ^= true;
-        destination_ += screen.PixelAt(x, y).character;
+        textToCopy += screen.PixelAt(x, y).character;
       }
     }
+
+    onSelectionChange_(textToCopy);
   }
 
 private:
   Region &selection_;
   std::string &destination_;
+  std::function<void(const std::string)> onSelectionChange_;
 };
 }  // namespace
 
@@ -40,12 +44,12 @@ private:
 /// colors.
 /// @ingroup dom
 
-Element selected(Region &selection, std::string &destination, Element child) {
-  return std::make_shared<Selected>(std::move(child), selection, destination);
+Element selected(Region &selection, std::string &destination, std::function<void(const std::string)> onSelectionChange, Element child) {
+  return std::make_shared<Selected>(std::move(child), selection, destination, onSelectionChange);
 }
 
-Decorator selected(Region &selection, std::string &destination) {
-  return [&selection, &destination](Element child) { return selected(selection, destination, std::move(child)); };
+Decorator selected(Region &selection, std::string &destination, std::function<void(const std::string)> onSelectionChange) {
+  return [&selection, &destination, onSelectionChange](Element child) { return selected(selection, destination, onSelectionChange, std::move(child)); };
 }
 
 }  // namespace ftxui
