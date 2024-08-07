@@ -16,6 +16,7 @@
 #include "ftxui/screen/color.hpp"
 #include "ftxui/screen/terminal.hpp"
 #include "ftxui/util/ref.hpp"
+#include "ftxui/component/event.hpp"
 
 namespace ftxui {
 class Node;
@@ -32,6 +33,15 @@ enum BorderStyle {
   ROUNDED,
   EMPTY,
 };
+
+typedef struct {
+
+  uint16_t startx = 0;
+  uint16_t endx = 0;
+  uint16_t starty = 0;
+  uint16_t endy = 0;
+  bool changed = false;
+} Region;
 
 // Pipe elements into decorator togethers.
 // For instance the next lines are equivalents:
@@ -96,6 +106,9 @@ Element canvas(std::function<void(Canvas&)>);
 Element bold(Element);
 Element dim(Element);
 Element inverted(Element);
+Element selectable(std::function<void(const std::string)> onSelectionChange, Element);
+Decorator selectable(std::function<void(const std::string)> onSelectionChange);
+bool selectableCatchEvent(Event event);
 Element underlined(Element);
 Element underlinedDouble(Element);
 Element blink(Element);
