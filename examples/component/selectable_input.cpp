@@ -12,6 +12,7 @@
 #include "ftxui/dom/elements.hpp"  // for text, hbox, separator, Element, operator|, vbox, border
 #include "ftxui/util/ref.hpp"  // for Ref
 
+
 int main() {
   using namespace ftxui;
 
@@ -20,6 +21,10 @@ int main() {
   std::string last_name;
   std::string password;
   std::string phoneNumber;
+  Region selection;
+  std::string textToCopy;
+
+  auto screen = ScreenInteractive::TerminalOutput();
 
   // The basic input components:
   Component input_first_name = Input(&first_name, "first name");
@@ -59,10 +64,22 @@ int main() {
                text("Hello " + first_name + " " + last_name),
                text("Your password is " + password),
                text("Your phone number is " + phoneNumber),
+               text("select_start " + std::to_string(selection.startx) + ";" + std::to_string(selection.starty)),
+               text("select_end " + std::to_string(selection.endx) + ";" + std::to_string(selection.endy)),
+               text("textToCopy " + textToCopy)
            }) |
-           border;
+           border | selectable([&textToCopy](std::string txtSelected){textToCopy = txtSelected;});
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  // TODO: Implement the double click on word to select the word
+  // TODO: Implement the double click and drag to select word by word (optional)
+  // TODO: Implement the tripple click to select an entire line 
+  // TODO: Add a "selectable" flag in the pixel class and take it into account when selecting things
+
+  renderer |= CatchEvent([&](Event event) { 
+
+    return selectableCatchEvent(event);    
+  });
+
   screen.Loop(renderer);
 }
