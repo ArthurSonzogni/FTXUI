@@ -75,8 +75,6 @@ bool selectableCatchEvent(Event event) {
           selectedRegion.endy = mouse.y;
           selectedRegion.changed = true;
         }
-
-        return true;
       }
     }
 
