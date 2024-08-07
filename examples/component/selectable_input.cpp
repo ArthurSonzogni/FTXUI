@@ -71,11 +71,6 @@ int main() {
            border | selectable([&textToCopy](std::string txtSelected){textToCopy = txtSelected;});
   });
 
-  // TODO: Implement the double click on word to select the word
-  // TODO: Implement the double click and drag to select word by word (optional)
-  // TODO: Implement the tripple click to select an entire line 
-  // TODO: Add a "selectable" flag in the pixel class and take it into account when selecting things
-
   renderer |= CatchEvent([&](Event event) { 
 
     return selectableCatchEvent(event);    
