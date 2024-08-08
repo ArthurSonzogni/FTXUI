@@ -49,6 +49,10 @@ function(ftxui_set_options library)
     target_compile_options(${library} PUBLIC "/utf-8")
   endif()
 
+  if(UNIX)
+    target_compile_options(${library} PRIVATE "-fPIC")
+  endif()
+
   # Add as many warning as possible:
   if (WIN32)
     if (MSVC)
