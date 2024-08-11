@@ -49,6 +49,12 @@ function(ftxui_set_options library)
     target_compile_options(${library} PUBLIC "/utf-8")
   endif()
 
+  # CMake does automatically add -fPIC when linking a shared library, but it
+  # does not add it when linking a static library. This is a problem when the 
+  # static library is later linked into a shared library. 
+  # Doing it helps some users.
+  set_property(TARGET ${library} PROPERTY POSITION_INDEPENDENT_CODE ON)
+
   # Add as many warning as possible:
   if (WIN32)
     if (MSVC)
