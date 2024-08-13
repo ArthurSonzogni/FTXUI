@@ -38,6 +38,7 @@ class Table {
   Table();
   explicit Table(std::vector<std::vector<std::string>>);
   explicit Table(std::vector<std::vector<Element>>);
+  Table(std::initializer_list<std::vector<std::string>> init);
   TableSelection SelectAll();
   TableSelection SelectCell(int column, int row);
   TableSelection SelectRow(int row_index);
