@@ -71,6 +71,22 @@ Table::Table(std::vector<std::vector<Element>> input) {
   Initialize(std::move(input));
 }
 
+// @brief Create a table from a list of list of string.
+// @param init The input data.
+// @ingroup dom
+Table::Table(std::initializer_list<std::vector<std::string>> init) {
+  std::vector<std::vector<Element>> input;
+  for (const auto& row : init) {
+    std::vector<Element> output_row;
+    output_row.reserve(row.size());
+    for (const auto& cell : row) {
+      output_row.push_back(text(cell));
+    }
+    input.push_back(std::move(output_row));
+  }
+  Initialize(std::move(input));
+}
+
 // private
 void Table::Initialize(std::vector<std::vector<Element>> input) {
   input_dim_y_ = static_cast<int>(input.size());

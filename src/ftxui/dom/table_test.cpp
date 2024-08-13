@@ -733,5 +733,17 @@ TEST(TableTest, Merge) {
       screen.ToString());
 }
 
+TEST(TableTest, Issue912) {
+  Table({
+      {"a"},
+  });
+  Table({
+      {"a", "b"},
+  });
+  Table({
+      {"a", "b", "c"},
+  });
+}
+
 }  // namespace ftxui
 // NOLINTEND
