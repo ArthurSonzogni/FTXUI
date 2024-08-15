@@ -334,6 +334,7 @@ Feel free to add your projects here:
 - [Caravan](https://github.com/r3w0p/caravan)
 - [Step-Writer](https://github.com/BrianAnakPintar/step-writer)
 - [XJ music](https://github.com/xjmusic/xjmusic)
+- [UDP chat](https://github.com/Sergeydigl3/udp-chat-tui)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
