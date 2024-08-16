@@ -603,7 +603,7 @@ void ScreenInteractive::Install() {
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
   std::cout << DECRQSS_DECSCUSR;
-  on_exit_functions.emplace([cursor_reset_shape_ = cursor_reset_shape_] {
+  on_exit_functions.emplace([this] {
     std::cout << "\033[?25h";  // Enable cursor.
     std::cout << "\033[" + std::to_string(cursor_reset_shape_) + " q";
   });
