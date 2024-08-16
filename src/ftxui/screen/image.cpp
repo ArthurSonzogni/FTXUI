@@ -2,8 +2,11 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <sstream>  // IWYU pragma: keep
+#include <string>
+#include <vector>
 
 #include "ftxui/screen/image.hpp"
+#include "ftxui/screen/pixel.hpp"
 
 namespace ftxui {
 

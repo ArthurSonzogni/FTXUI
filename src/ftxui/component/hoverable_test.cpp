@@ -69,10 +69,10 @@ TEST(HoverableTest, BasicCallback) {
   int on_enter_2 = 0;
   int on_leave_1 = 0;
   int on_leave_2 = 0;
-  auto c1 = Hoverable(
-      BasicComponent(), [&] { on_enter_1++; }, [&] { on_leave_1++; });
-  auto c2 = Hoverable(
-      BasicComponent(), [&] { on_enter_2++; }, [&] { on_leave_2++; });
+  auto c1 =
+      Hoverable(BasicComponent(), [&] { on_enter_1++; }, [&] { on_leave_1++; });
+  auto c2 =
+      Hoverable(BasicComponent(), [&] { on_enter_2++; }, [&] { on_leave_2++; });
   auto layout = Container::Horizontal({c1, c2});
   auto screen = Screen(8, 2);
   Render(screen, layout->Render());

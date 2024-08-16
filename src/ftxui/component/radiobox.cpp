@@ -204,6 +204,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
 /// ○ entry 2
 /// ○ entry 3
 /// ```
+/// NOLINTNEXTLINE
 Component Radiobox(RadioboxOption option) {
   return Make<RadioboxBase>(std::move(option));
 }
@@ -239,7 +240,7 @@ Component Radiobox(RadioboxOption option) {
 Component Radiobox(ConstStringListRef entries,
                    int* selected,
                    RadioboxOption option) {
-  option.entries = entries;
+  option.entries = std::move(entries);
   option.selected = selected;
   return Make<RadioboxBase>(std::move(option));
 }

@@ -6,14 +6,12 @@
 #include <array>  // for array
 #include <cmath>
 #include <cstdint>
+#include <string>
 
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
 #include "ftxui/screen/terminal.hpp"  // for ColorSupport, Color, Palette256, TrueColor
 
 namespace ftxui {
-
-using namespace std::literals;
-
 namespace {
 const std::array<const char*, 33> palette16code = {
     "30", "40",   //
@@ -46,22 +44,30 @@ bool Color::operator!=(const Color& rhs) const {
 }
 
 std::string Color::Print(bool is_background_color) const {
-  switch (type_) {
-    case ColorType::Palette1:
-      return is_background_color ? "49"s : "39"s;
-
-    case ColorType::Palette16:
-      return palette16code[2 * red_ + is_background_color];  // NOLINT;
-
-    case ColorType::Palette256:
-      return (is_background_color ? "48;5;"s : "38;5;"s) + std::to_string(red_);
-
-    case ColorType::TrueColor:
-    default:
-      return (is_background_color ? "48;2;"s : "38;2;"s)  //
-             + std::to_string(red_) + ";"                 //
-             + std::to_string(green_) + ";"               //
-             + std::to_string(blue_);                     //
+  if (is_background_color) {
+    switch (type_) {
+      case ColorType::Palette1:
+        return "49";
+      case ColorType::Palette16:
+        return palette16code[2 * red_ + 1];  // NOLINT
+      case ColorType::Palette256:
+        return "48;5;" + std::to_string(red_);
+      case ColorType::TrueColor:
+        return "48;2;" + std::to_string(red_) + ";" + std::to_string(green_) +
+               ";" + std::to_string(blue_);
+    }
+  } else {
+    switch (type_) {
+      case ColorType::Palette1:
+        return "39";
+      case ColorType::Palette16:
+        return palette16code[2 * red_];  // NOLINT
+      case ColorType::Palette256:
+        return "38;5;" + std::to_string(red_);
+      case ColorType::TrueColor:
+        return "38;2;" + std::to_string(red_) + ";" + std::to_string(green_) +
+               ";" + std::to_string(blue_);
+    }
   }
 }
 

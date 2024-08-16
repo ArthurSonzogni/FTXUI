@@ -5,8 +5,14 @@
 #include <algorithm>
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
+#include <ftxui/component/component_options.hpp>
 #include <ftxui/component/screen_interactive.hpp>  // for ScreenInteractive
-#include "ftxui/dom/node_decorator.hpp"            // for NodeDecorator
+#include <memory>
+#include <utility>
+#include "ftxui/dom/elements.hpp"  // for text, window, hbox, vbox, size, clear_under, reflect, emptyElement
+#include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
+#include "ftxui/screen/color.hpp"        // for Color
+#include "ftxui/screen/screen.hpp"       // for Screen
 
 namespace ftxui {
 
@@ -206,7 +212,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
       }
 
       // Clamp the window size.
-      width() = std::max<int>(width(), title().size() + 2);
+      width() = std::max<int>(width(), static_cast<int>(title().size() + 2));
       height() = std::max<int>(height(), 2);
 
       return true;

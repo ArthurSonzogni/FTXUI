@@ -1,34 +1,38 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#include "ftxui/component/screen_interactive.hpp"
 #include <algorithm>  // for copy, max, min
 #include <array>      // for array
+#include <atomic>
 #include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
 #include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
-#include <cstdio>   // for fileno, stdin
+#include <cstdint>
+#include <cstdio>                    // for fileno, stdin
 #include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
 #include <ftxui/screen/screen.hpp>  // for Pixel, Screen::Cursor, Screen, Screen::Cursor::Hidden
 #include <functional>        // for function
 #include <initializer_list>  // for initializer_list
 #include <iostream>  // for cout, ostream, operator<<, basic_ostream, endl, flush
-#include <stack>     // for stack
-#include <thread>    // for thread, sleep_for
-#include <tuple>     // for _Swallow_assign, ignore
+#include <memory>
+#include <stack>  // for stack
+#include <string>
+#include <thread>       // for thread, sleep_for
+#include <tuple>        // for _Swallow_assign, ignore
 #include <type_traits>  // for decay_t
 #include <utility>      // for move, swap
 #include <variant>      // for visit, variant
 #include <vector>       // for vector
-
 #include "ftxui/component/animation.hpp"  // for TimePoint, Clock, Duration, Params, RequestAnimationFrame
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/loop.hpp"            // for Loop
 #include "ftxui/component/receiver.hpp"  // for ReceiverImpl, Sender, MakeReceiver, SenderImpl, Receiver
-#include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
 #include "ftxui/dom/requirement.hpp"                  // for Requirement
+#include "ftxui/screen/pixel.hpp"                     // for Pixel
 #include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
 
 #if defined(_WIN32)
@@ -42,6 +46,7 @@
 #error Must be compiled in UNICODE mode
 #endif
 #else
+#include <bits/types/struct_timeval.h>
 #include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set, timeval
 #include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
 #include <unistd.h>  // for STDIN_FILENO, read
@@ -213,11 +218,11 @@ void RecordSignal(int signal) {
       break;
 
 #if !defined(_WIN32)
-    case SIGTSTP:
+    case SIGTSTP:  // NOLINT
       g_signal_stop_count++;
       break;
 
-    case SIGWINCH:
+    case SIGWINCH:  // NOLINT
       g_signal_resize_count++;
       break;
 #endif
@@ -265,7 +270,7 @@ const std::string ST = "\x1b\\";  // NOLINT
 const std::string DECRQSS_DECSCUSR = DCS + "$q q" + ST;  // NOLINT
 
 // DEC: Digital Equipment Corporation
-enum class DECMode {
+enum class DECMode : std::uint16_t {
   kLineWrap = 7,
   kCursor = 25,
 
@@ -284,7 +289,7 @@ enum class DECMode {
 };
 
 // Device Status Report (DSR) {
-enum class DSRMode {
+enum class DSRMode : std::uint8_t {
   kCursor = 6,
 };
 
@@ -543,7 +548,8 @@ void ScreenInteractive::PostMain() {
     // On final exit, keep the current drawing and reset cursor position one
     // line after it.
     if (!use_alternative_screen_) {
-      std::cout << std::endl;
+      std::cout << '\n';
+      std::cout << std::flush;
     }
   }
 }
@@ -597,7 +603,7 @@ void ScreenInteractive::Install() {
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
   std::cout << DECRQSS_DECSCUSR;
-  on_exit_functions.emplace([=] {
+  on_exit_functions.emplace([cursor_reset_shape_ = cursor_reset_shape_] {
     std::cout << "\033[?25h";  // Enable cursor.
     std::cout << "\033[" + std::to_string(cursor_reset_shape_) + " q";
   });

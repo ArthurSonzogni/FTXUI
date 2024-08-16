@@ -1,9 +1,8 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <ftxui/component/captured_mouse.hpp>  // for CapturedMouse
-#include <functional>                          // for function
-#include <utility>                             // for move
+#include <functional>  // for function
+#include <utility>     // for move
 
 #include "ftxui/component/component.hpp"  // for ComponentDecorator, Hoverable, Make
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
