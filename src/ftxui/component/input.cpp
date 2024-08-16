@@ -5,13 +5,11 @@
 #include <cstddef>     // for size_t
 #include <cstdint>     // for uint32_t
 #include <functional>  // for function
-#include <memory>   // for allocator, shared_ptr, allocator_traits<>::value_type
-#include <sstream>  // for basic_istream, stringstream
-#include <string>   // for string, basic_string, operator==, getline
-#include <utility>  // for move
-#include <vector>   // for vector
+#include <sstream>     // for basic_istream, stringstream
+#include <string>      // for string, basic_string, operator==, getline
+#include <utility>     // for move
+#include <vector>      // for vector
 
-#include "ftxui/component/captured_mouse.hpp"     // for CapturedMouse
 #include "ftxui/component/component.hpp"          // for Make, Input
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
@@ -134,7 +132,7 @@ class InputBase : public ComponentBase, public InputOption {
         break;
       }
 
-      cursor_char_index -= line.size() + 1;
+      cursor_char_index -= static_cast<int>(line.size() + 1);
       cursor_line++;
     }
 
@@ -164,7 +162,7 @@ class InputBase : public ComponentBase, public InputOption {
 
       // The cursor is on this line.
       const int glyph_start = cursor_char_index;
-      const int glyph_end = GlyphNext(line, glyph_start);
+      const int glyph_end = static_cast<int>(GlyphNext(line, glyph_start));
       const std::string part_before_cursor = line.substr(0, glyph_start);
       const std::string part_at_cursor =
           line.substr(glyph_start, glyph_end - glyph_start);
@@ -206,7 +204,7 @@ class InputBase : public ComponentBase, public InputOption {
     const size_t start = GlyphPrevious(content(), cursor_position());
     const size_t end = cursor_position();
     content->erase(start, end - start);
-    cursor_position() = start;
+    cursor_position() = static_cast<int>(start);
     on_change();
     return true;
   }
@@ -234,7 +232,8 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    cursor_position() = GlyphPrevious(content(), cursor_position());
+    cursor_position() =
+        static_cast<int>(GlyphPrevious(content(), cursor_position()));
     return true;
   }
 
@@ -243,7 +242,8 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    cursor_position() = GlyphNext(content(), cursor_position());
+    cursor_position() =
+        static_cast<int>(GlyphNext(content(), cursor_position()));
     return true;
   }
 
@@ -258,7 +258,7 @@ class InputBase : public ComponentBase, public InputOption {
       if (content()[iter] == '\n') {
         break;
       }
-      width += GlyphWidth(content(), iter);
+      width += static_cast<int>(GlyphWidth(content(), iter));
     }
     return width;
   }
@@ -271,8 +271,9 @@ class InputBase : public ComponentBase, public InputOption {
         return;
       }
 
-      columns -= GlyphWidth(content(), cursor_position());
-      cursor_position() = GlyphNext(content(), cursor_position());
+      columns -= static_cast<int>(GlyphWidth(content(), cursor_position()));
+      cursor_position() =
+          static_cast<int>(GlyphNext(content(), cursor_position()));
     }
   }
 
@@ -292,9 +293,10 @@ class InputBase : public ComponentBase, public InputOption {
       if (content()[previous] == '\n') {
         break;
       }
-      cursor_position() = previous;
+      cursor_position() = static_cast<int>(previous);
     }
-    cursor_position() = GlyphPrevious(content(), cursor_position());
+    cursor_position() =
+        static_cast<int>(GlyphPrevious(content(), cursor_position()));
     while (true) {
       if (cursor_position() == 0) {
         break;
@@ -303,10 +305,10 @@ class InputBase : public ComponentBase, public InputOption {
       if (content()[previous] == '\n') {
         break;
       }
-      cursor_position() = previous;
+      cursor_position() = static_cast<int>(previous);
     }
 
-    MoveCursorColumn(columns);
+    MoveCursorColumn(static_cast<int>(columns));
     return true;
   }
 
@@ -322,14 +324,16 @@ class InputBase : public ComponentBase, public InputOption {
       if (content()[cursor_position()] == '\n') {
         break;
       }
-      cursor_position() = GlyphNext(content(), cursor_position());
+      cursor_position() =
+          static_cast<int>(GlyphNext(content(), cursor_position()));
       if (cursor_position() == (int)content().size()) {
         return true;
       }
     }
-    cursor_position() = GlyphNext(content(), cursor_position());
+    cursor_position() =
+        static_cast<int>(GlyphNext(content(), cursor_position()));
 
-    MoveCursorColumn(columns);
+    MoveCursorColumn(static_cast<int>(columns));
     return true;
   }
 
@@ -339,7 +343,7 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleEnd() {
-    cursor_position() = content->size();
+    cursor_position() = static_cast<int>(content->size());
     return true;
   }
 
@@ -357,7 +361,7 @@ class InputBase : public ComponentBase, public InputOption {
       DeleteImpl();
     }
     content->insert(cursor_position(), character);
-    cursor_position() += character.size();
+    cursor_position() += static_cast<int>(character.size());
     on_change();
     return true;
   }
@@ -421,7 +425,7 @@ class InputBase : public ComponentBase, public InputOption {
       if (IsWordCharacter(content(), previous)) {
         break;
       }
-      cursor_position() = previous;
+      cursor_position() = static_cast<int>(previous);
     }
     // Move left, as long as left is a word character:
     while (cursor_position()) {
@@ -429,7 +433,7 @@ class InputBase : public ComponentBase, public InputOption {
       if (!IsWordCharacter(content(), previous)) {
         break;
       }
-      cursor_position() = previous;
+      cursor_position() = static_cast<int>(previous);
     }
     return true;
   }
@@ -441,7 +445,8 @@ class InputBase : public ComponentBase, public InputOption {
 
     // Move right, until entering a word.
     while (cursor_position() < (int)content().size()) {
-      cursor_position() = GlyphNext(content(), cursor_position());
+      cursor_position() =
+          static_cast<int>(GlyphNext(content(), cursor_position()));
       if (IsWordCharacter(content(), cursor_position())) {
         break;
       }
@@ -452,7 +457,7 @@ class InputBase : public ComponentBase, public InputOption {
       if (!IsWordCharacter(content(), cursor_position())) {
         break;
       }
-      cursor_position() = next;
+      cursor_position() = static_cast<int>(next);
     }
 
     return true;
@@ -489,7 +494,7 @@ class InputBase : public ComponentBase, public InputOption {
         break;
       }
 
-      cursor_char_index -= line.size() + 1;
+      cursor_char_index -= static_cast<int>(line.size() + 1);
       cursor_line++;
     }
     const int cursor_column =
@@ -515,11 +520,13 @@ class InputBase : public ComponentBase, public InputOption {
     // Convert back the new_cursor_{line,column} toward cursor_position:
     cursor_position() = 0;
     for (int i = 0; i < new_cursor_line; ++i) {
-      cursor_position() += lines[i].size() + 1;
+      cursor_position() += static_cast<int>(lines[i].size() + 1);
     }
     while (new_cursor_column > 0) {
-      new_cursor_column -= GlyphWidth(content(), cursor_position());
-      cursor_position() = GlyphNext(content(), cursor_position());
+      new_cursor_column -=
+          static_cast<int>(GlyphWidth(content(), cursor_position()));
+      cursor_position() =
+          static_cast<int>(GlyphNext(content(), cursor_position()));
     }
 
     on_change();

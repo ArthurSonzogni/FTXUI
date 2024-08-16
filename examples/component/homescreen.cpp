@@ -490,6 +490,9 @@ int main() {
       },
       &tab_index);
 
+  auto exit_button =
+      Button("Exit", [&] { screen.Exit(); }, ButtonOption::Animated());
+
   auto main_container = Container::Vertical({
       Container::Horizontal({
           tab_selection,

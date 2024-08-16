@@ -16,6 +16,7 @@
 #include <cstdint>  // for uint32_t, uint8_t, uint16_t, int32_t
 #include <string>   // for string, basic_string, wstring
 #include <tuple>    // for _Swallow_assign, ignore
+#include <vector>
 
 #include "ftxui/screen/deprecated.hpp"       // for wchar_width, wstring_width
 #include "ftxui/screen/string_internal.hpp"  // for WordBreakProperty, EatCodePoint, CodepointToWordBreakProperty, GlyphCount, GlyphIterate, GlyphNext, GlyphPrevious, IsCombining, IsControl, IsFullWidth, Utf8ToWordBreakProperty
@@ -1355,7 +1356,6 @@ int string_width(const std::string& input) {
 
 std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
   std::vector<std::string> out;
-  const std::string current;
   out.reserve(input.size());
   size_t start = 0;
   size_t end = 0;

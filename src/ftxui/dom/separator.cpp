@@ -11,6 +11,7 @@
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/color.hpp"     // for Color
+#include "ftxui/screen/pixel.hpp"     // for Pixel
 #include "ftxui/screen/screen.hpp"    // for Pixel, Screen
 
 namespace ftxui {
@@ -63,7 +64,8 @@ class SeparatorAuto : public Node {
     const bool is_column = (box_.x_max == box_.x_min);
     const bool is_line = (box_.y_min == box_.y_max);
 
-    const std::string c = charsets[style_][int(is_line && !is_column)];
+    const std::string c =
+        charsets[style_][int(is_line && !is_column)];  // NOLINT
 
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {

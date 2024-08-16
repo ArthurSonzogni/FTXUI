@@ -8,12 +8,12 @@
 #include <optional>  // for optional, nullopt
 #include <string>    // for basic_string, string
 #include <utility>   // for move
-#include <vector>    // for __alloc_traits<>::value_type
 
 #include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, BorderStyle, ROUNDED, borderStyled, Elements, DASHED, DOUBLE, EMPTY, HEAVY, LIGHT, border, borderDashed, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, borderWith, window
 #include "ftxui/dom/node.hpp"      // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/pixel.hpp"     // for Pixel
 #include "ftxui/screen/screen.hpp"    // for Pixel, Screen
 
 namespace ftxui {
@@ -38,7 +38,8 @@ class Border : public Node {
          BorderStyle style,
          std::optional<Color> foreground_color = std::nullopt)
       : Node(std::move(children)),
-        charset_(simple_border_charset[style]),
+        charset_(simple_border_charset[style])  // NOLINT
+        ,
         foreground_color_(foreground_color) {}  // NOLINT
 
   const Charset& charset_;  // NOLINT

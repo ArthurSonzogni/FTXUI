@@ -6,6 +6,7 @@
 #include <algorithm>  // for max
 #include <memory>   // for allocator, shared_ptr, allocator_traits<>::value_type
 #include <utility>  // for move, swap
+#include <vector>   // for vector
 
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, text, separatorCharacter, Elements, BorderStyle, Decorator, emptyElement, size, gridbox, EQUAL, flex, flex_shrink, HEIGHT, WIDTH
 

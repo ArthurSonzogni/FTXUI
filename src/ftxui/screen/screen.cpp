@@ -1,13 +1,16 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <cstdint>  // for size_t
+#include <cstddef>  // for size_t
+#include <cstdint>
 #include <iostream>  // for operator<<, stringstream, basic_ostream, flush, cout, ostream
 #include <limits>
 #include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
 #include <sstream>  // IWYU pragma: keep
 #include <utility>  // for pair
 
+#include "ftxui/screen/image.hpp"  // for Image
+#include "ftxui/screen/pixel.hpp"  // for Pixel
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"    // for string_width
 #include "ftxui/screen/terminal.hpp"  // for Dimensions, Size
@@ -117,11 +120,11 @@ void UpdatePixelStyle(const Screen* screen,
 }
 
 struct TileEncoding {
-  uint8_t left : 2;
-  uint8_t top : 2;
-  uint8_t right : 2;
-  uint8_t down : 2;
-  uint8_t round : 1;
+  std::uint8_t left : 2;
+  std::uint8_t top : 2;
+  std::uint8_t right : 2;
+  std::uint8_t down : 2;
+  std::uint8_t round : 1;
 
   // clang-format off
   bool operator<(const TileEncoding& other) const {
@@ -521,20 +524,20 @@ void Screen::ApplyShader() {
 }
 // clang-format on
 
-uint8_t Screen::RegisterHyperlink(const std::string& link) {
-  for (size_t i = 0; i < hyperlinks_.size(); ++i) {
+std::uint8_t Screen::RegisterHyperlink(const std::string& link) {
+  for (std::size_t i = 0; i < hyperlinks_.size(); ++i) {
     if (hyperlinks_[i] == link) {
       return i;
     }
   }
-  if (hyperlinks_.size() == std::numeric_limits<uint8_t>::max()) {
+  if (hyperlinks_.size() == std::numeric_limits<std::uint8_t>::max()) {
     return 0;
   }
   hyperlinks_.push_back(link);
   return hyperlinks_.size() - 1;
 }
 
-const std::string& Screen::Hyperlink(uint8_t id) const {
+const std::string& Screen::Hyperlink(std::uint8_t id) const {
   if (id >= hyperlinks_.size()) {
     return hyperlinks_[0];
   }

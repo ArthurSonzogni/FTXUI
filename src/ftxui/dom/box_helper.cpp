@@ -4,6 +4,7 @@
 #include "ftxui/dom/box_helper.hpp"
 
 #include <algorithm>  // for max
+#include <vector>     // for vector
 
 namespace ftxui::box_helper {
 

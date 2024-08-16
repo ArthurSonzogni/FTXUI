@@ -2,13 +2,16 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <algorithm>  // for max
+#include <cstddef>    // for size_t
 #include <memory>     // for __shared_ptr_access, shared_ptr, make_shared
 #include <utility>    // for move
+#include <vector>
 
 #include "ftxui/dom/elements.hpp"     // for Element, Elements, dbox
 #include "ftxui/dom/node.hpp"         // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/pixel.hpp"     // for Pixel
 
 namespace ftxui {
 
@@ -49,12 +52,13 @@ class DBox : public Node {
 
   void Render(Screen& screen) override {
     if (children_.size() <= 1) {
-      return Node::Render(screen);
+      Node::Render(screen);
+      return;
     }
 
     const int width = box_.x_max - box_.x_min + 1;
     const int height = box_.y_max - box_.y_min + 1;
-    std::vector<Pixel> pixels(size_t(width * height));
+    std::vector<Pixel> pixels(std::size_t(width * height));
 
     for (auto& child : children_) {
       child->Render(screen);
@@ -67,7 +71,7 @@ class DBox : public Node {
           acc->background_color =
               Color::Blend(acc->background_color, pixel.background_color);
           acc->automerge = pixel.automerge || acc->automerge;
-          if (pixel.character == "") {
+          if (pixel.character.empty()) {
             acc->foreground_color =
                 Color::Blend(acc->foreground_color, pixel.background_color);
           } else {
@@ -82,7 +86,7 @@ class DBox : public Node {
             acc->character = pixel.character;
             acc->foreground_color = pixel.foreground_color;
           }
-          ++acc;
+          ++acc;  // NOLINT
 
           pixel = Pixel();
         }
@@ -93,7 +97,7 @@ class DBox : public Node {
     Pixel* acc = pixels.data();
     for (int x = 0; x < width; ++x) {
       for (int y = 0; y < height; ++y) {
-        screen.PixelAt(x + box_.x_min, y + box_.y_min) = *acc++;
+        screen.PixelAt(x + box_.x_min, y + box_.y_min) = *acc++;  // NOLINT
       }
     }
   }

@@ -49,4 +49,4 @@ struct Pixel {
 
 }  // namespace ftxui
 
-#endif // FTXUI_SCREEN_PIXEL_HPP
+#endif  // FTXUI_SCREEN_PIXEL_HPP

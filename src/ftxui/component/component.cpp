@@ -5,6 +5,7 @@
 #include <cassert>    // for assert
 #include <cstddef>    // for size_t
 #include <iterator>   // for begin, end
+#include <memory>     // for unique_ptr, make_unique
 #include <utility>    // for move
 #include <vector>     // for vector, __alloc_traits<>::value_type
 

@@ -9,7 +9,7 @@
 #include <map>
 #include <memory>   // for unique_ptr, allocator
 #include <utility>  // for move
-
+#include <vector>
 #include "ftxui/component/event.hpp"  // for Event
 #include "ftxui/component/task.hpp"   // for Task
 
