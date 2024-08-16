@@ -27,6 +27,7 @@ Checks: "*,
         -readability-simplify-boolean-expr,
         -readability-static-accessed-through-instance,
         -readability-use-anyofallof,
+        -readability-avoid-nested-conditional-operator,
         -zircon-*,
 "
 WarningsAsErrors: ''

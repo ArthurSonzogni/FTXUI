@@ -8,6 +8,7 @@
 #include <cstdint>                 // for uint8_t
 #include <cstdlib>                 // for abs
 #include <ftxui/screen/color.hpp>  // for Color
+#include <functional>              // for function
 #include <map>                     // for map
 #include <memory>                  // for make_shared
 #include <utility>                 // for move, pair
@@ -17,6 +18,8 @@
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/image.hpp"     // for Image
+#include "ftxui/screen/pixel.hpp"     // for Pixel
 #include "ftxui/screen/screen.hpp"    // for Pixel, Screen
 #include "ftxui/screen/string.hpp"    // for Utf8ToGlyphs
 #include "ftxui/util/ref.hpp"         // for ConstRef
@@ -28,7 +31,7 @@ namespace {
 // Base UTF8 pattern:
 // 11100010 10100000 10000000 // empty
 
-// Pattern for the individuel dots:
+// Pattern for the individual dots:
 // ┌──────┬───────┐
 // │dot1  │ dot4  │
 // ├──────┼───────┤

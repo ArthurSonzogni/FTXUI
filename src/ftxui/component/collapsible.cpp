@@ -47,7 +47,7 @@ Component Collapsible(ConstStringRef label, Component child, Ref<bool> show) {
         return hbox({prefix, t});
       };
       Add(Container::Vertical({
-          Checkbox(label, show_.operator->(), opt),
+          Checkbox(std::move(label), show_.operator->(), opt),
           Maybe(std::move(child), show_.operator->()),
       }));
     }

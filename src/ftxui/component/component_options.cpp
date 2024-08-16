@@ -3,12 +3,11 @@
 // the LICENSE file.
 #include "ftxui/component/component_options.hpp"
 
-#include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
 #include <ftxui/screen/color.hpp>  // for Color, Color::White, Color::Black, Color::GrayDark, Color::Blue, Color::GrayLight, Color::Red
 #include <memory>                  // for shared_ptr
 #include <utility>                 // for move
-
 #include "ftxui/component/animation.hpp"  // for Function, Duration
+#include "ftxui/dom/direction.hpp"
 #include "ftxui/dom/elements.hpp"  // for operator|=, Element, text, bgcolor, inverted, bold, dim, operator|, color, borderEmpty, hbox, automerge, border, borderLight
 
 namespace ftxui {

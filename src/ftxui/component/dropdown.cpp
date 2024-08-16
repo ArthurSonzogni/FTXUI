@@ -1,11 +1,11 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <cstddef>  // for size_t
 #include <ftxui/component/event.hpp>
 #include <functional>  // for function
 #include <string>      // for string
 
+#include <utility>
 #include "ftxui/component/component.hpp"  // for Maybe, Checkbox, Make, Radiobox, Vertical, Dropdown
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
@@ -21,7 +21,7 @@ namespace ftxui {
 /// @param selected The index of the selected entry.
 Component Dropdown(ConstStringListRef entries, int* selected) {
   DropdownOption option;
-  option.radiobox.entries = entries;
+  option.radiobox.entries = std::move(entries);
   option.radiobox.selected = selected;
   return Dropdown(option);
 }
@@ -29,6 +29,7 @@ Component Dropdown(ConstStringListRef entries, int* selected) {
 /// @brief A dropdown menu.
 /// @ingroup component
 /// @param option The options for the dropdown.
+// NOLINTNEXTLINE
 Component Dropdown(DropdownOption option) {
   class Impl : public ComponentBase, public DropdownOption {
    public:

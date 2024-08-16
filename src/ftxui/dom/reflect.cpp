@@ -32,7 +32,7 @@ class Reflect : public Node {
 
   void Render(Screen& screen) final {
     reflected_box_ = Box::Intersection(screen.stencil, reflected_box_);
-    return Node::Render(screen);
+    Node::Render(screen);
   }
 
  private:

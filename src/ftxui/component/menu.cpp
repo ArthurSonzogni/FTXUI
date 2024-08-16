@@ -511,6 +511,7 @@ class MenuBase : public ComponentBase, public MenuOption {
 ///   entry 2
 ///   entry 3
 /// ```
+// NOLINTNEXTLINE
 Component Menu(MenuOption option) {
   return Make<MenuBase>(std::move(option));
 }
@@ -543,7 +544,7 @@ Component Menu(MenuOption option) {
 ///   entry 3
 /// ```
 Component Menu(ConstStringListRef entries, int* selected, MenuOption option) {
-  option.entries = entries;
+  option.entries = std::move(entries);
   option.selected = selected;
   return Menu(option);
 }
@@ -554,7 +555,7 @@ Component Menu(ConstStringListRef entries, int* selected, MenuOption option) {
 /// See also |Menu|.
 /// @ingroup component
 Component Toggle(ConstStringListRef entries, int* selected) {
-  return Menu(entries, selected, MenuOption::Toggle());
+  return Menu(std::move(entries), selected, MenuOption::Toggle());
 }
 
 /// @brief A specific menu entry. They can be put into a Container::Vertical to
