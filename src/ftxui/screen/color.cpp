@@ -69,6 +69,8 @@ std::string Color::Print(bool is_background_color) const {
                ";" + std::to_string(blue_);
     }
   }
+  // NOTREACHED();
+  return "";
 }
 
 /// @brief Build a transparent color.
