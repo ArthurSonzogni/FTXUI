@@ -2,8 +2,6 @@ name: Build
 
 on:
   create:
-    tags:
-      -v*
   push:
     branches:
       - main
@@ -28,10 +26,11 @@ jobs:
             compiler: llvm
             gcov_executable: "llvm-cov gcov"
 
-          - name: MacOS clang
-            os: macos-latest
-            compiler: llvm
-            gcov_executable: "llvm-cov gcov"
+          # https://github.com/aminya/setup-cpp/issues/246
+          #- name: MacOS clang
+            #os: macos-latest
+            #compiler: llvm
+            #gcov_executable: "llvm-cov gcov"
 
           - name: Windows MSVC
             os: windows-latest
@@ -44,7 +43,7 @@ jobs:
         id: cpu-cores
 
       - name: "Checkout repository"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: "Setup Cpp"
         uses: aminya/setup-cpp@v1
@@ -79,11 +78,16 @@ jobs:
           cmake
           --build ./build
 
-      - name: Unix - Test and coverage
+      - name: Unix - Test
         if: runner.os != 'Windows'
         working-directory: ./build
         run: >
           ctest -C Debug --rerun-failed --output-on-failure;
+
+      - name: Unix - coverage
+        if: runner.os != 'Windows'
+        working-directory: ./build
+        run: >
           gcovr
           -j ${{env.nproc}}
           --delete
@@ -155,7 +159,7 @@ jobs:
         id: cpu-cores
 
       - name: "Checkout repository"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: "Install cmake"
         uses: lukka/get-cmake@latest
@@ -186,7 +190,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: "Install cmake"
         uses: lukka/get-cmake@latest

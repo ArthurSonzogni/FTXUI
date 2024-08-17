@@ -46,7 +46,6 @@
 #error Must be compiled in UNICODE mode
 #endif
 #else
-#include <bits/types/struct_timeval.h>
 #include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set, timeval
 #include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
 #include <unistd.h>  // for STDIN_FILENO, read
@@ -163,7 +162,7 @@ void ftxui_on_resize(int columns, int rows) {
 #else  // POSIX (Linux & Mac)
 
 int CheckStdinReady(int usec_timeout) {
-  timeval tv = {0, usec_timeout};
+  timeval tv = {0, usec_timeout};  // NOLINT
   fd_set fds;
   FD_ZERO(&fds);                                          // NOLINT
   FD_SET(STDIN_FILENO, &fds);                             // NOLINT
