@@ -93,7 +93,7 @@ class ResizeDecorator : public NodeDecorator {
 
 Element DefaultRenderState(const WindowRenderState& state) {
   Element element = state.inner;
-  if (state.active) {
+  if (!state.active) {
     element |= dim;
   }
 
