@@ -296,6 +296,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 - *Want to share a useful Component for FTXUI? Feel free to add yours here*
 - [ftxui-grid-container](https://github.com/mingsheng13/grid-container-ftxui)
 - [ftxui-ip-input](https://github.com/mingsheng13/ip-input-ftxui)
+- [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): For Image Display.
 
 
 ## Project using FTXUI
