@@ -56,8 +56,6 @@ int main() {
   // Tweak how the component tree is rendered:
   auto renderer = Renderer(component, [&] {
 
-    textToCopy = screen.getSelection();
-
     return vbox({
                hbox(text(" First name : "), input_first_name->Render()),
                hbox(text(" Last name  : ") | selectable(), input_last_name->Render()),
@@ -67,17 +65,10 @@ int main() {
                text("Hello " + first_name + " " + last_name),
                text("Your password is " + password),
                text("Your phone number is " + phoneNumber),
-              //  text("select_start " + std::to_string(selection.startx) + ";" + std::to_string(selection.starty)),
-              //  text("select_end " + std::to_string(selection.endx) + ";" + std::to_string(selection.endy)),
-               text("textToCopy is " + textToCopy)
+               text("Selected test is " + screen.getSelection())
            }) |
-           border;    // | selectable([&textToCopy](std::string txtSelected){textToCopy = txtSelected;})
+           border;
   });
-
-  // renderer |= CatchEvent([&](Event event) { 
-
-  //   return selectableCatchEvent(event);    
-  // });
 
   screen.Loop(renderer);
 }
