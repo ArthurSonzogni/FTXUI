@@ -32,7 +32,6 @@ typedef struct {
   uint16_t endx = 0;
   uint16_t starty = 0;
   uint16_t endy = 0;
-  bool changed = false;
 } Region;
 
 class ScreenInteractive : public Screen {
@@ -77,6 +76,8 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlC(bool force);
   void ForceHandleCtrlZ(bool force);
 
+  std::string getSelection(void);
+
  private:
   void ExitNow();
 
@@ -92,7 +93,7 @@ class ScreenInteractive : public Screen {
 
   void HandleTask(Component component, Task& task);
   bool selectableCatchEvent(Event event);
-  std::string getSelection(void);
+  void refreshSelection(void);
   void Draw(Component component);
   void ResetCursorPosition();
 

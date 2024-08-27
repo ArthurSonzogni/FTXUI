@@ -116,9 +116,6 @@ Element hyperlink(std::string link, Element child);
 Element selectable(Element child);
 Decorator selectable(void);
 
-// -- Selection --
-std::string getSelection(void);
-
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.
 Element hbox(Elements);
