@@ -139,6 +139,7 @@ class ScreenInteractive : public Screen {
   bool force_handle_ctrl_z_ = true;
 
   Region selectedRegion;
+  std::string selectedText;
 
   // The style of the cursor to restore on exit.
   int cursor_reset_shape_ = 1;

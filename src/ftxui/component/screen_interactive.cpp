@@ -357,7 +357,8 @@ ScreenInteractive::ScreenInteractive(int dimx,
                                      bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
-      use_alternative_screen_(use_alternative_screen) {
+      use_alternative_screen_(use_alternative_screen),
+      selectedText("") {
   task_receiver_ = MakeReceiver<Task>();
 }
 
@@ -853,15 +854,15 @@ bool ScreenInteractive::selectableCatchEvent(Event event) {
         selectedRegion.starty = mouse.y;
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        refreshSelection();
+        // refreshSelection();
       } else if (mouse.motion == Mouse::Released) {
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        refreshSelection();
+        // refreshSelection();
       } else if (mouse.motion == Mouse::Moved) {
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        refreshSelection();
+        // refreshSelection();
       }
     }
   }
@@ -871,16 +872,26 @@ bool ScreenInteractive::selectableCatchEvent(Event event) {
 
 void ScreenInteractive::refreshSelection(void) {
 
+  selectedText = "";
+
   for (int y = std::min(selectedRegion.starty, selectedRegion.endy); y <= std::max(selectedRegion.starty, selectedRegion.endy); ++y) {
     for (int x = std::min(selectedRegion.startx, selectedRegion.endx); x <= std::max(selectedRegion.startx, selectedRegion.endx)-1; ++x) {
-      PixelAt(x, y).inverted ^= true;
-      //selectedText += PixelAt(x, y).character;
+      if(PixelAt(x, y).selectable == true)
+      {
+        PixelAt(x, y).inverted ^= true;
+        selectedText += PixelAt(x, y).character;
+      }
     }
   }
 }
 
 std::string ScreenInteractive::getSelection(void) {
-    return "Kikoo";
+
+    // std::ofstream MyFile("debug.log", std::ios_base::app);
+  // MyFile << "Top dog!" << std::endl;
+  // MyFile.close();
+  
+    return selectedText;
 }
 
 // private
@@ -959,6 +970,8 @@ void ScreenInteractive::Draw(Component component) {
   previous_frame_resized_ = resized;
 
   Render(*this, document);
+
+  refreshSelection();
 
   // Set cursor position for user using tools to insert CJK characters.
   {
