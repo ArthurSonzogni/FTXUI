@@ -841,10 +841,6 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
 bool ScreenInteractive::selectableCatchEvent(Event event) {
 
-  // std::ofstream MyFile("debug.log", std::ios_base::app);
-  // MyFile << "Top dog!" << std::endl;
-  // MyFile.close();
-
   if (event.is_mouse()) {
     auto& mouse = event.mouse();
     if (mouse.button == Mouse::Left) {
@@ -854,15 +850,12 @@ bool ScreenInteractive::selectableCatchEvent(Event event) {
         selectedRegion.starty = mouse.y;
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        // refreshSelection();
       } else if (mouse.motion == Mouse::Released) {
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        // refreshSelection();
       } else if (mouse.motion == Mouse::Moved) {
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        // refreshSelection();
       }
     }
   }
@@ -887,10 +880,6 @@ void ScreenInteractive::refreshSelection(void) {
 
 std::string ScreenInteractive::getSelection(void) {
 
-    // std::ofstream MyFile("debug.log", std::ios_base::app);
-  // MyFile << "Top dog!" << std::endl;
-  // MyFile.close();
-  
     return selectedText;
 }
 
