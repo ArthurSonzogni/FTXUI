@@ -55,6 +55,9 @@ int main() {
 
   // Tweak how the component tree is rendered:
   auto renderer = Renderer(component, [&] {
+
+    textToCopy = screen.getSelection();
+
     return vbox({
                hbox(text(" First name : "), input_first_name->Render()),
                hbox(text(" Last name  : ") | selectable(), input_last_name->Render()),

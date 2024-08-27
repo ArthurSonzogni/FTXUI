@@ -853,15 +853,15 @@ bool ScreenInteractive::selectableCatchEvent(Event event) {
         selectedRegion.starty = mouse.y;
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        selectedRegion.changed = true;
+        refreshSelection();
       } else if (mouse.motion == Mouse::Released) {
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        selectedRegion.changed = true;
+        refreshSelection();
       } else if (mouse.motion == Mouse::Moved) {
         selectedRegion.endx = mouse.x;
         selectedRegion.endy = mouse.y;
-        selectedRegion.changed = true;
+        refreshSelection();
       }
     }
   }
@@ -869,8 +869,18 @@ bool ScreenInteractive::selectableCatchEvent(Event event) {
   return false;
 }
 
+void ScreenInteractive::refreshSelection(void) {
+
+  for (int y = std::min(selectedRegion.starty, selectedRegion.endy); y <= std::max(selectedRegion.starty, selectedRegion.endy); ++y) {
+    for (int x = std::min(selectedRegion.startx, selectedRegion.endx); x <= std::max(selectedRegion.startx, selectedRegion.endx)-1; ++x) {
+      PixelAt(x, y).inverted ^= true;
+      //selectedText += PixelAt(x, y).character;
+    }
+  }
+}
+
 std::string ScreenInteractive::getSelection(void) {
-    return "Selection";
+    return "Kikoo";
 }
 
 // private
