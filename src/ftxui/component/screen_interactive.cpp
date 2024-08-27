@@ -35,6 +35,12 @@
 #include "ftxui/screen/pixel.hpp"                     // for Pixel
 #include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
 
+
+
+#include <iostream>
+#include <fstream>
+
+
 #if defined(_WIN32)
 #define DEFINE_CONSOLEV2_PROPERTIES
 #define WIN32_LEAN_AND_MEAN
@@ -781,7 +787,15 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
       arg.screen_ = this;
 
-      const bool handled = component->OnEvent(arg);
+      bool handled = component->OnEvent(arg);
+
+      if(handled == false)
+      {
+          if(selectableCatchEvent(arg))
+          {
+            handled = true;
+          }
+      }
 
       if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
         RecordSignal(SIGABRT);
@@ -822,6 +836,41 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
   },
   task);
   // clang-format on
+}
+
+bool ScreenInteractive::selectableCatchEvent(Event event) {
+
+  // std::ofstream MyFile("debug.log", std::ios_base::app);
+  // MyFile << "Top dog!" << std::endl;
+  // MyFile.close();
+
+  if (event.is_mouse()) {
+    auto& mouse = event.mouse();
+    if (mouse.button == Mouse::Left) {
+
+      if (mouse.motion == Mouse::Pressed) {
+        selectedRegion.startx = mouse.x;
+        selectedRegion.starty = mouse.y;
+        selectedRegion.endx = mouse.x;
+        selectedRegion.endy = mouse.y;
+        selectedRegion.changed = true;
+      } else if (mouse.motion == Mouse::Released) {
+        selectedRegion.endx = mouse.x;
+        selectedRegion.endy = mouse.y;
+        selectedRegion.changed = true;
+      } else if (mouse.motion == Mouse::Moved) {
+        selectedRegion.endx = mouse.x;
+        selectedRegion.endy = mouse.y;
+        selectedRegion.changed = true;
+      }
+    }
+  }
+
+  return false;
+}
+
+std::string ScreenInteractive::getSelection(void) {
+    return "Selection";
 }
 
 // private
