@@ -35,12 +35,6 @@
 #include "ftxui/screen/pixel.hpp"                     // for Pixel
 #include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
 
-
-
-#include <iostream>
-#include <fstream>
-
-
 #if defined(_WIN32)
 #define DEFINE_CONSOLEV2_PROPERTIES
 #define WIN32_LEAN_AND_MEAN
@@ -839,6 +833,7 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
   // clang-format on
 }
 
+// private
 bool ScreenInteractive::selectableCatchEvent(Event event) {
 
   if (event.is_mouse()) {
