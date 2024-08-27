@@ -69,7 +69,7 @@ int main() {
                text("Your phone number is " + phoneNumber),
               //  text("select_start " + std::to_string(selection.startx) + ";" + std::to_string(selection.starty)),
               //  text("select_end " + std::to_string(selection.endx) + ";" + std::to_string(selection.endy)),
-               text("textToCopy " + textToCopy)
+               text("textToCopy is " + textToCopy)
            }) |
            border;    // | selectable([&textToCopy](std::string txtSelected){textToCopy = txtSelected;})
   });
