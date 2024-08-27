@@ -1,6 +1,6 @@
 #include "ftxui/dom/elements.hpp"  // for Element, Decorator
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
-
+#include "ftxui/component/event.hpp"           // for Event
 
 
 namespace ftxui {
@@ -16,7 +16,7 @@ class Selectable : public NodeDecorator {
 
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-            screen.PixelAt(x, y).inverted = true;
+            screen.PixelAt(x, y).selectable = true;
         }
     }
 

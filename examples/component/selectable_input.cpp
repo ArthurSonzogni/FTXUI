@@ -59,7 +59,7 @@ int main() {
                hbox(text(" First name : "), input_first_name->Render()),
                hbox(text(" Last name  : ") | selectable(), input_last_name->Render()),
                hbox(text(" Password   : "), input_password->Render()),
-               hbox(text(" Phone num  : "), input_phone_number->Render()),
+               hbox(text(" Phone num  : "), input_phone_number->Render()) | selectable(),
                separator(),
                text("Hello " + first_name + " " + last_name),
                text("Your password is " + password),
