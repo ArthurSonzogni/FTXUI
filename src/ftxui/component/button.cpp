@@ -53,6 +53,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
         false,
         active,
         focused_or_hover,
+        -1,
     };
 
     auto element = (transform ? transform : DefaultTransform)  //

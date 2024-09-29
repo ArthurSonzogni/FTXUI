@@ -44,6 +44,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
           selected() == i,
           is_selected,
           is_focused,
+          i,
       };
       auto element =
           (transform ? transform : RadioboxOption::Simple().transform)(state);

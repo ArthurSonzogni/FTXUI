@@ -226,5 +226,52 @@ TEST(MenuTest, AnimationsVertical) {
   }
 }
 
+TEST(MenuTest, EntryIndex) {
+  int selected = 0;
+  std::vector<std::string> entries = {"0", "1", "2"};
+
+  auto option = MenuOption::Vertical();
+  option.entries = &entries;
+  option.selected = &selected;
+  option.entries_option.transform = [&](const EntryState& state) {
+    int curidx = std::stoi(state.label);
+    EXPECT_EQ(state.index, curidx);
+    return text(state.label);
+  };
+  auto menu = Menu(option);
+  menu->OnEvent(Event::ArrowDown);
+  menu->OnEvent(Event::ArrowDown);
+  menu->OnEvent(Event::Return);
+  entries.resize(2);
+  (void)menu->Render();
+}
+
+TEST(MenuTest, MenuEntryIndex) {
+  int selected = 0;
+
+  MenuEntryOption option;
+  option.transform = [&](const EntryState& state) {
+    int curidx = std::stoi(state.label);
+    EXPECT_EQ(state.index, curidx);
+    return text(state.label);
+  };
+  auto menu = Container::Vertical(
+      {
+          MenuEntry("0", option),
+          MenuEntry("1", option),
+          MenuEntry("2", option),
+      },
+      &selected);
+
+  menu->OnEvent(Event::ArrowDown);
+  menu->OnEvent(Event::ArrowDown);
+  menu->OnEvent(Event::Return);
+  for(int idx = 0; idx < menu->ChildCount(); idx++)
+  {
+    auto child = menu->ChildAt(idx);
+    EXPECT_EQ(menu->IndexOf(&(*child)), idx);  
+  }
+}
+
 }  // namespace ftxui
 // NOLINTEND

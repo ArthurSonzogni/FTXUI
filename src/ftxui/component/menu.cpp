@@ -127,6 +127,7 @@ class MenuBase : public ComponentBase, public MenuOption {
           false,
           is_selected,
           is_focused,
+          i,
       };
 
       auto focus_management = (selected_focus_ != i) ? nothing
@@ -630,6 +631,7 @@ Component MenuEntry(MenuEntryOption option) {
           false,
           hovered_,
           focused,
+          Parent()->IndexOf(this),
       };
 
       const Element element =

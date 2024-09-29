@@ -51,6 +51,18 @@ size_t ComponentBase::ChildCount() const {
   return children_.size();
 }
 
+/// @brief Return index of child or -1 if not found.
+/// @ingroup component
+int ComponentBase::IndexOf(ComponentBase* child) const {
+  int index = 0;
+  for (Component c : children_) {
+    if (&(*c) == child)
+      return index;
+    index++;
+  }
+  return -1;
+}
+
 /// @brief Add a child.
 /// @@param child The child to be attached.
 /// @ingroup component
