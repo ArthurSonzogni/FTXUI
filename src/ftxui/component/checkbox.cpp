@@ -28,11 +28,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     const bool is_active = Active();
     auto focus_management = is_focused ? focus : is_active ? select : nothing;
     auto entry_state = EntryState{
-        *label,
-        *checked,
-        is_active,
-        is_focused || hovered_,
-        -1,
+        *label, *checked, is_active, is_focused || hovered_, -1,
     };
     auto element = (transform ? transform : CheckboxOption::Simple().transform)(
         entry_state);
