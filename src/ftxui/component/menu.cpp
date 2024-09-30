@@ -123,11 +123,7 @@ class MenuBase : public ComponentBase, public MenuOption {
       const bool is_selected = (selected() == i);
 
       const EntryState state = {
-          entries[i],
-          false,
-          is_selected,
-          is_focused,
-          i,
+          entries[i], false, is_selected, is_focused, i,
       };
 
       auto focus_management = (selected_focus_ != i) ? nothing
@@ -626,12 +622,8 @@ Component MenuEntry(MenuEntryOption option) {
       const bool focused = Focused();
       UpdateAnimationTarget();
 
-      const EntryState state = {
-          label(),
-          false,
-          hovered_,
-          focused,
-          Parent()->IndexOf(this),
+      const EntryState state{
+          label(), false, hovered_, focused, Index(),
       };
 
       const Element element =

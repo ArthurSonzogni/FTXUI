@@ -266,10 +266,8 @@ TEST(MenuTest, MenuEntryIndex) {
   menu->OnEvent(Event::ArrowDown);
   menu->OnEvent(Event::ArrowDown);
   menu->OnEvent(Event::Return);
-  for(int idx = 0; idx < menu->ChildCount(); idx++)
-  {
-    auto child = menu->ChildAt(idx);
-    EXPECT_EQ(menu->IndexOf(&(*child)), idx);  
+  for (int index = 0; index < menu->ChildCount(); index++) {
+    EXPECT_EQ(menu->ChildAt(index)->Index(), index);
   }
 }
 

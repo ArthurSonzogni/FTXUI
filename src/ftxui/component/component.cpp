@@ -53,14 +53,18 @@ size_t ComponentBase::ChildCount() const {
 
 /// @brief Return index of child or -1 if not found.
 /// @ingroup component
-int ComponentBase::IndexOf(ComponentBase* child) const {
+int ComponentBase::Index() const {
+  if (parent_ == nullptr) {
+    return -1;
+  }
   int index = 0;
-  for (Component c : children_) {
-    if (&(*c) == child)
+  for (const Component& child : parent_->children_) {
+    if (child.get() == this) {
       return index;
+    }
     index++;
   }
-  return -1;
+  return -1;  // Not reached.
 }
 
 /// @brief Add a child.
