@@ -48,11 +48,8 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     auto focus_management = focused ? focus : active ? select : nothing;
-    const EntryState state = {
-        *label,
-        false,
-        active,
-        focused_or_hover,
+    const EntryState state{
+        *label, false, active, focused_or_hover, Index(),
     };
 
     auto element = (transform ? transform : DefaultTransform)  //

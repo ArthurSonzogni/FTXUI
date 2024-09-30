@@ -44,6 +44,7 @@ class ComponentBase {
   ComponentBase* Parent() const;
   Component& ChildAt(size_t i);
   size_t ChildCount() const;
+  int Index() const;
   void Add(Component children);
   void Detach();
   void DetachAllChildren();

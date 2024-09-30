@@ -51,6 +51,22 @@ size_t ComponentBase::ChildCount() const {
   return children_.size();
 }
 
+/// @brief Return index of the component in its parent. -1 if no parent.
+/// @ingroup component
+int ComponentBase::Index() const {
+  if (parent_ == nullptr) {
+    return -1;
+  }
+  int index = 0;
+  for (const Component& child : parent_->children_) {
+    if (child.get() == this) {
+      return index;
+    }
+    index++;
+  }
+  return -1;  // Not reached.
+}
+
 /// @brief Add a child.
 /// @@param child The child to be attached.
 /// @ingroup component

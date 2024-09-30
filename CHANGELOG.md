@@ -35,6 +35,10 @@ current (development)
 - Bugfix: Fix cursor position in when in the last column. See #831.
 - Bugfix: Fix `ResizeableSplit` keyboard navigation. Fixed by #842.
 - Bugfix: Fix `Menu` focus. See #841
+- Feature: Add `ComponentBase::Index()`. This allows to get the index of a
+  component in its parent. See #932
+- Feature: Add `EntryState::index`. This allows to get the index of a menu entry.
+  See #932
 
 ### Dom
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator

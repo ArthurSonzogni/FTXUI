@@ -40,10 +40,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
                               : is_menu_focused ? focus
                                                 : select;
       auto state = EntryState{
-          entries[i],
-          selected() == i,
-          is_selected,
-          is_focused,
+          entries[i], selected() == i, is_selected, is_focused, i,
       };
       auto element =
           (transform ? transform : RadioboxOption::Simple().transform)(state);
