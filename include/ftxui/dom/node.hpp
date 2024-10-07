@@ -52,6 +52,12 @@ class Node {
   };
   virtual void Check(Status* status);
 
+  // Selection.
+  // Propagated from Parents to Children.
+  virtual void Select(Box selected_area) {
+    // TODO: Implement this.
+  }
+
  protected:
   Elements children_;
   Requirement requirement_;

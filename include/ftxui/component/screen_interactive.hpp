@@ -26,6 +26,13 @@ struct Event;
 using Component = std::shared_ptr<ComponentBase>;
 class ScreenInteractivePrivate;
 
+typedef struct {
+  uint16_t startx = 0;
+  uint16_t endx = 0;
+  uint16_t starty = 0;
+  uint16_t endy = 0;
+} Region;
+
 class ScreenInteractive : public Screen {
  public:
   // Constructors:
@@ -68,6 +75,8 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlC(bool force);
   void ForceHandleCtrlZ(bool force);
 
+  std::string GetSelection();
+
  private:
   void ExitNow();
 
@@ -82,6 +91,8 @@ class ScreenInteractive : public Screen {
   void RunOnceBlocking(Component component);
 
   void HandleTask(Component component, Task& task);
+  bool HandleSelection(Event event);
+  void RefreshSelection();
   void Draw(Component component);
   void ResetCursorPosition();
 
@@ -125,6 +136,11 @@ class ScreenInteractive : public Screen {
 
   bool force_handle_ctrl_c_ = true;
   bool force_handle_ctrl_z_ = true;
+
+  bool selection_enabled = false;
+  CapturedMouse selection_pending;
+  Region selection_region;
+  std::string selection_text;
 
   // The style of the cursor to restore on exit.
   int cursor_reset_shape_ = 1;

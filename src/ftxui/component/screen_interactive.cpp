@@ -351,7 +351,8 @@ ScreenInteractive::ScreenInteractive(int dimx,
                                      bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
-      use_alternative_screen_(use_alternative_screen) {
+      use_alternative_screen_(use_alternative_screen),
+      selection_text("") {
   task_receiver_ = MakeReceiver<Task>();
 }
 
@@ -781,7 +782,9 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
       arg.screen_ = this;
 
-      const bool handled = component->OnEvent(arg);
+      bool handled = component->OnEvent(arg);
+
+      handled = handled || HandleSelection(arg);
 
       if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
         RecordSignal(SIGABRT);
@@ -822,6 +825,80 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
   },
   task);
   // clang-format on
+}
+
+// private
+bool ScreenInteractive::HandleSelection(Event event) {
+  if (!event.is_mouse()) {
+    return false;
+  }
+
+  auto& mouse = event.mouse();
+  if (mouse.button != Mouse::Left) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Pressed) {
+    selection_pending = CaptureMouse();
+    if (!selection_pending) {
+      return false;
+    }
+    selection_enabled = true;
+    selection_region.startx = mouse.x;
+    selection_region.starty = mouse.y;
+    selection_region.endx = mouse.x;
+    selection_region.endy = mouse.y;
+    return true;
+  }
+
+  if (!selection_pending) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Moved) {
+    selection_region.endx = mouse.x;
+    selection_region.endy = mouse.y;
+    return true;
+  }
+
+  if (mouse.motion == Mouse::Released) {
+    selection_region.endx = mouse.x;
+    selection_region.endy = mouse.y;
+    selection_pending = nullptr;
+
+    if (selection_region.startx == selection_region.endx &&
+        selection_region.starty == selection_region.endy) {
+      selection_enabled = false;
+      return true;
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+void ScreenInteractive::RefreshSelection() {
+  if (!selection_enabled) {
+    return;
+  }
+  selection_text = "";
+
+  for (int y = std::min(selection_region.starty, selection_region.endy);
+       y <= std::max(selection_region.starty, selection_region.endy); ++y) {
+    for (int x = std::min(selection_region.startx, selection_region.endx);
+         x <= std::max(selection_region.startx, selection_region.endx) - 1;
+         ++x) {
+      if (PixelAt(x, y).selectable == true) {
+        PixelAt(x, y).inverted ^= true;
+        selection_text += PixelAt(x, y).character;
+      }
+    }
+  }
+}
+
+std::string ScreenInteractive::GetSelection() {
+  return selection_text;
 }
 
 // private
@@ -893,6 +970,8 @@ void ScreenInteractive::Draw(Component component) {
   previous_frame_resized_ = resized;
 
   Render(*this, document);
+
+  RefreshSelection();
 
   // Set cursor position for user using tools to insert CJK characters.
   {
