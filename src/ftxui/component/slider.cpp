@@ -256,6 +256,185 @@ class SliderWithLabel : public ComponentBase {
   Box box_;
   bool mouse_hover_ = false;
 };
+
+template <class T>
+class SliderWithCallback : public ComponentBase {
+public:
+  explicit SliderWithCallback(SliderWithCallbackOption<T> options)
+      : callback_(options.callback), min_(options.min), max_(options.max),
+        increment_(options.increment), options_(options) {
+    SetValue(options.value());
+  }
+
+  Element Render() override {
+    auto gauge_color = Focused() ? color(options_.color_active)
+                                 : color(options_.color_inactive);
+    const float percent = float(value_() - min_()) / float(max_() - min_());
+    return gaugeDirection(percent, options_.direction) |
+           flexDirection(options_.direction) | reflect(gauge_box_) |
+           gauge_color;
+  }
+
+  void OnLeft() {
+    switch (options_.direction) {
+    case Direction::Right:
+      SetValue(value_() - increment_());
+      break;
+    case Direction::Left:
+      SetValue(value_() + increment_());
+      break;
+    case Direction::Up:
+    case Direction::Down:
+      break;
+    }
+  }
+
+  void OnRight() {
+    switch (options_.direction) {
+    case Direction::Right:
+      SetValue(value_() + increment_());
+      break;
+    case Direction::Left:
+      SetValue(value_() - increment_());
+      break;
+    case Direction::Up:
+    case Direction::Down:
+      break;
+    }
+  }
+
+  void OnUp() {
+    switch (options_.direction) {
+    case Direction::Up:
+      SetValue(value_() - increment_());
+      break;
+    case Direction::Down:
+      SetValue(value_() + increment_());
+      break;
+    case Direction::Left:
+    case Direction::Right:
+      break;
+    }
+  }
+
+  void OnDown() {
+    switch (options_.direction) {
+    case Direction::Down:
+      SetValue(value_() - increment_());
+      break;
+    case Direction::Up:
+      SetValue(value_() + increment_());
+      break;
+    case Direction::Left:
+    case Direction::Right:
+      break;
+    }
+  }
+
+  bool OnEvent(Event event) final {
+    if (event.is_mouse()) {
+      return OnMouseEvent(event);
+    }
+
+    T old_value = value_();
+    if (event == Event::ArrowLeft || event == Event::Character('h')) {
+      OnLeft();
+    }
+    if (event == Event::ArrowRight || event == Event::Character('l')) {
+      OnRight();
+    }
+    if (event == Event::ArrowUp || event == Event::Character('k')) {
+      OnDown();
+    }
+    if (event == Event::ArrowDown || event == Event::Character('j')) {
+      OnUp();
+    }
+
+    SetValue(util::clamp(value_(), min_(), max_()));
+    if (old_value != value_()) {
+      return true;
+    }
+
+    return ComponentBase::OnEvent(event);
+  }
+
+  bool OnMouseEvent(Event event) {
+    if (captured_mouse_) {
+      if (event.mouse().motion == Mouse::Released) {
+        captured_mouse_ = nullptr;
+        return true;
+      }
+
+      switch (options_.direction) {
+      case Direction::Right: {
+        SetValue(min_() + (event.mouse().x - gauge_box_.x_min) *
+                              (max_() - min_()) /
+                              (gauge_box_.x_max - gauge_box_.x_min));
+
+        break;
+      }
+      case Direction::Left: {
+        SetValue(max_() - (event.mouse().x - gauge_box_.x_min) *
+                              (max_() - min_()) /
+                              (gauge_box_.x_max - gauge_box_.x_min));
+        break;
+      }
+      case Direction::Down: {
+        SetValue(min_() + (event.mouse().y - gauge_box_.y_min) *
+                              (max_() - min_()) /
+                              (gauge_box_.y_max - gauge_box_.y_min));
+        break;
+      }
+      case Direction::Up: {
+        SetValue(max_() - (event.mouse().y - gauge_box_.y_min) *
+                              (max_() - min_()) /
+                              (gauge_box_.y_max - gauge_box_.y_min));
+        break;
+      }
+      }
+
+      SetValue(std::max(min_(), std::min(max_(), value_())));
+      return true;
+    }
+
+    if (event.mouse().button != Mouse::Left) {
+      return false;
+    }
+    if (event.mouse().motion != Mouse::Pressed) {
+      return false;
+    }
+
+    if (!gauge_box_.Contain(event.mouse().x, event.mouse().y)) {
+      return false;
+    }
+
+    captured_mouse_ = CaptureMouse(event);
+
+    if (captured_mouse_) {
+      TakeFocus();
+      return true;
+    }
+
+    return false;
+  }
+
+  bool Focusable() const final { return true; }
+
+  void SetValue(Ref<T> val) {
+    value_() = val();
+    callback_(value_());
+  }
+
+private:
+  std::function<void(T)> callback_;
+  Ref<T> value_;
+  ConstRef<T> min_;
+  ConstRef<T> max_;
+  ConstRef<T> increment_;
+  SliderWithCallbackOption<T> options_;
+  Box gauge_box_;
+  CapturedMouse captured_mouse_;
+};
 }  // namespace
 
 /// @brief An horizontal slider.
@@ -340,6 +519,12 @@ template <typename T>
 Component Slider(SliderOption<T> options) {
   return Make<SliderBase<T>>(options);
 }
+
+template <typename T>
+Component Slider(SliderWithCallbackOption<T> options) {
+  return Make<SliderWithCallback<T>>(options);
+};
+
 template Component Slider(SliderOption<int8_t>);
 template Component Slider(SliderOption<int16_t>);
 template Component Slider(SliderOption<int32_t>);

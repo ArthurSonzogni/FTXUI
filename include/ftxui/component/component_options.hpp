@@ -230,6 +230,20 @@ struct SliderOption {
   Color color_inactive = Color::GrayDark;
 };
 
+// @brief Option for the `SliderWithCallback` component.
+// @ingroup component
+template <typename T>
+struct SliderWithCallbackOption {
+  std::function<void(T)> callback;
+  Ref<T> value;
+  ConstRef<T> min = T(0);
+  ConstRef<T> max = T(100);
+  ConstRef<T> increment = (max() - min()) / 20;
+  Direction direction = Direction::Right;
+  Color color_active = Color::White;
+  Color color_inactive = Color::GrayDark;
+};
+
 // Parameter pack used by `WindowOptions::render`.
 struct WindowRenderState {
   Element inner;             ///< The element wrapped inside this window.
