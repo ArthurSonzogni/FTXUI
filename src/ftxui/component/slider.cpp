@@ -421,7 +421,7 @@ public:
   bool Focusable() const final { return true; }
 
   void SetValue(Ref<T> val) {
-    value_() = val();
+    value_() = util::clamp(val(), min_(), max_());
     callback_(value_());
   }
 
