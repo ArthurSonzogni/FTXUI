@@ -39,6 +39,8 @@ current (development)
   component in its parent. See #932
 - Feature: Add `EntryState::index`. This allows to get the index of a menu entry.
   See #932
+- Feature: Add `SliderOption::on_change`. This allows to set a callback when the
+  slider value changes. See #938.
 
 ### Dom
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator

@@ -228,6 +228,7 @@ struct SliderOption {
   Direction direction = Direction::Right;
   Color color_active = Color::White;
   Color color_inactive = Color::GrayDark;
+  std::function<void()> on_change;  ///> Called when `value` is updated.
 };
 
 // Parameter pack used by `WindowOptions::render`.
