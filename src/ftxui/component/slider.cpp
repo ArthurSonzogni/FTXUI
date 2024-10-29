@@ -35,76 +35,72 @@ Decorator flexDirection(Direction direction) {
 }
 
 template <class T>
-class SliderBase : public ComponentBase {
-public:
-  explicit SliderBase(SliderOption<T> options)
-      : callback_(options.callback), min_(options.min), max_(options.max),
-        increment_(options.increment), options_(options) {
-    SetValue(options.value());
-  }
+class SliderBase : public SliderOption<T>, public ComponentBase {
+ public:
+  explicit SliderBase(SliderOption<T> options) : SliderOption<T>(options) {}
 
   Element Render() override {
-    auto gauge_color = Focused() ? color(options_.color_active)
-                                 : color(options_.color_inactive);
-    const float percent = float(value_() - min_()) / float(max_() - min_());
-    return gaugeDirection(percent, options_.direction) |
-           flexDirection(options_.direction) | reflect(gauge_box_) |
-           gauge_color;
+    auto gauge_color =
+        Focused() ? color(this->color_active) : color(this->color_inactive);
+    const float percent =
+        float(this->value() - this->min()) / float(this->max() - this->min());
+    return gaugeDirection(percent, this->direction) |
+           flexDirection(this->direction) | reflect(gauge_box_) | gauge_color;
   }
 
   void OnLeft() {
-    switch (options_.direction) {
-    case Direction::Right:
-      SetValue(value_() - increment_());
-      break;
-    case Direction::Left:
-      SetValue(value_() + increment_());
-      break;
-    case Direction::Up:
-    case Direction::Down:
-      break;
+    switch (this->direction) {
+      case Direction::Right:
+        this->value() -= this->increment();
+        break;
+      case Direction::Left:
+        this->value() += this->increment();
+        break;
+      case Direction::Up:
+      case Direction::Down:
+        break;
     }
   }
 
   void OnRight() {
-    switch (options_.direction) {
-    case Direction::Right:
-      SetValue(value_() + increment_());
-      break;
-    case Direction::Left:
-      SetValue(value_() - increment_());
-      break;
-    case Direction::Up:
-    case Direction::Down:
-      break;
+    switch (this->direction) {
+      case Direction::Right:
+        this->value() += this->increment();
+        break;
+      case Direction::Left:
+        this->value() -= this->increment();
+        break;
+      case Direction::Up:
+      case Direction::Down:
+        break;
     }
   }
 
   void OnUp() {
-    switch (options_.direction) {
-    case Direction::Up:
-      SetValue(value_() - increment_());
-      break;
-    case Direction::Down:
-      SetValue(value_() + increment_());
-      break;
-    case Direction::Left:
-    case Direction::Right:
-      break;
+    switch (this->direction) {
+      case Direction::Up:
+        this->value() -= this->increment();
+        break;
+      case Direction::Down:
+        this->value() += this->increment();
+        break;
+      case Direction::Left:
+      case Direction::Right:
+        break;
     }
   }
 
   void OnDown() {
-    switch (options_.direction) {
-    case Direction::Down:
-      SetValue(value_() - increment_());
-      break;
-    case Direction::Up:
-      SetValue(value_() + increment_());
-      break;
-    case Direction::Left:
-    case Direction::Right:
-      break;
+    switch (this->direction) {
+      case Direction::Down:
+        this->value() += this->increment();
+        break;
+      case Direction::Up:
+        this->value() -= this->increment();
+        break;
+      case Direction::Left:
+      case Direction::Right:
+        break;
     }
   }
 
@@ -113,7 +109,7 @@ public:
       return OnMouseEvent(event);
     }
 
-    T old_value = value_();
+    T old_value = this->value();
     if (event == Event::ArrowLeft || event == Event::Character('h')) {
       OnLeft();
     }
@@ -127,8 +123,11 @@ public:
       OnUp();
     }
 
-    SetValue(util::clamp(value_(), min_(), max_()));
-    if (old_value != value_()) {
+    this->value() = std::max(this->min(), std::min(this->max(), this->value()));
+    if (old_value != this->value()) {
+      if (this->on_change) {
+        this->on_change();
+      }
       return true;
     }
 
@@ -142,35 +141,45 @@ public:
         return true;
       }
 
-      switch (options_.direction) {
-      case Direction::Right: {
-        SetValue(min_() + (event.mouse().x - gauge_box_.x_min) *
-                              (max_() - min_()) /
-                              (gauge_box_.x_max - gauge_box_.x_min));
+      T old_value = this->value();
+      switch (this->direction) {
+        case Direction::Right: {
+          this->value() =
+              this->min() + (event.mouse().x - gauge_box_.x_min) *
+                                (this->max() - this->min()) /
+                                (gauge_box_.x_max - gauge_box_.x_min);
 
-        break;
-      }
-      case Direction::Left: {
-        SetValue(max_() - (event.mouse().x - gauge_box_.x_min) *
-                              (max_() - min_()) /
-                              (gauge_box_.x_max - gauge_box_.x_min));
-        break;
-      }
-      case Direction::Down: {
-        SetValue(min_() + (event.mouse().y - gauge_box_.y_min) *
-                              (max_() - min_()) /
-                              (gauge_box_.y_max - gauge_box_.y_min));
-        break;
-      }
-      case Direction::Up: {
-        SetValue(max_() - (event.mouse().y - gauge_box_.y_min) *
-                              (max_() - min_()) /
-                              (gauge_box_.y_max - gauge_box_.y_min));
-        break;
-      }
+          break;
+        }
+        case Direction::Left: {
+          this->value() =
+              this->max() - (event.mouse().x - gauge_box_.x_min) *
+                                (this->max() - this->min()) /
+                                (gauge_box_.x_max - gauge_box_.x_min);
+          break;
+        }
+        case Direction::Down: {
+          this->value() =
+              this->min() + (event.mouse().y - gauge_box_.y_min) *
+                                (this->max() - this->min()) /
+                                (gauge_box_.y_max - gauge_box_.y_min);
+          break;
+        }
+        case Direction::Up: {
+          this->value() =
+              this->max() - (event.mouse().y - gauge_box_.y_min) *
+                                (this->max() - this->min()) /
+                                (gauge_box_.y_max - gauge_box_.y_min);
+          break;
+        }
       }
 
-      SetValue(std::max(min_(), std::min(max_(), value_())));
+      this->value() =
+          std::max(this->min(), std::min(this->max(), this->value()));
+
+      if (old_value != this->value() && this->on_change) {
+        this->on_change();
+      }
       return true;
     }
 
@@ -197,24 +206,10 @@ public:
 
   bool Focusable() const final { return true; }
 
-  void SetValue(Ref<T> val) {
-    value_() = util::clamp(val(), min_(), max_());
-    if (callback_ != nullptr) {
-      callback_(value_());
-    }
-  }
-
-private:
-  std::function<void(T)> callback_;
-  Ref<T> value_;
-  ConstRef<T> min_;
-  ConstRef<T> max_;
-  ConstRef<T> increment_;
-  SliderOption<T> options_;
+ private:
   Box gauge_box_;
   CapturedMouse captured_mouse_;
 };
-
 
 class SliderWithLabel : public ComponentBase {
  public:

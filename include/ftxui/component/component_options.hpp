@@ -222,13 +222,13 @@ struct ResizableSplitOption {
 template <typename T>
 struct SliderOption {
   Ref<T> value;
-  std::function<void(T)> callback = nullptr;
   ConstRef<T> min = T(0);
   ConstRef<T> max = T(100);
   ConstRef<T> increment = (max() - min()) / 20;
   Direction direction = Direction::Right;
   Color color_active = Color::White;
   Color color_inactive = Color::GrayDark;
+  std::function<void()> on_change;  ///> Called when `value` is updated.
 };
 
 // Parameter pack used by `WindowOptions::render`.
