@@ -35,6 +35,8 @@ current (development)
 - Bugfix: Fix cursor position in when in the last column. See #831.
 - Bugfix: Fix `ResizeableSplit` keyboard navigation. Fixed by #842.
 - Bugfix: Fix `Menu` focus. See #841
+- Feature: Add `SliderOption::on_change`. This allows to set a callback when the
+  slider value changes. See #938.
 
 ### Dom
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator
