@@ -10,6 +10,7 @@
 
 #include "ftxui/screen/image.hpp"     // for Pixel, Image
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
+#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 
 namespace ftxui {
 
@@ -61,6 +62,11 @@ class Screen : public Image {
 
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
+
+  bool selection_enabled = false;
+  CapturedMouse selection_pending;
+  Box selection_region;
+  std::string selection_text;
 
   // Store an hyperlink in the screen. Return the id of the hyperlink. The id is
   // used to identify the hyperlink when the user click on it.

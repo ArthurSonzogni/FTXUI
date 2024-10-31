@@ -351,8 +351,7 @@ ScreenInteractive::ScreenInteractive(int dimx,
                                      bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
-      use_alternative_screen_(use_alternative_screen),
-      selection_text("") {
+      use_alternative_screen_(use_alternative_screen) {
   task_receiver_ = MakeReceiver<Task>();
 }
 
@@ -844,10 +843,10 @@ bool ScreenInteractive::HandleSelection(Event event) {
       return false;
     }
     selection_enabled = true;
-    selection_region.startx = mouse.x;
-    selection_region.starty = mouse.y;
-    selection_region.endx = mouse.x;
-    selection_region.endy = mouse.y;
+    selection_region.x_min = mouse.x;
+    selection_region.y_min = mouse.y;
+    selection_region.x_max = mouse.x;
+    selection_region.y_max = mouse.y;
     return true;
   }
 
@@ -856,18 +855,18 @@ bool ScreenInteractive::HandleSelection(Event event) {
   }
 
   if (mouse.motion == Mouse::Moved) {
-    selection_region.endx = mouse.x;
-    selection_region.endy = mouse.y;
+    selection_region.x_max = mouse.x;
+    selection_region.y_max = mouse.y;
     return true;
   }
 
   if (mouse.motion == Mouse::Released) {
-    selection_region.endx = mouse.x;
-    selection_region.endy = mouse.y;
+    selection_region.x_max = mouse.x;
+    selection_region.y_max = mouse.y;
     selection_pending = nullptr;
 
-    if (selection_region.startx == selection_region.endx &&
-        selection_region.starty == selection_region.endy) {
+    if (selection_region.x_min == selection_region.x_max &&
+        selection_region.y_min == selection_region.y_max) {
       selection_enabled = false;
       return true;
     }
@@ -884,10 +883,10 @@ void ScreenInteractive::RefreshSelection() {
   }
   selection_text = "";
 
-  for (int y = std::min(selection_region.starty, selection_region.endy);
-       y <= std::max(selection_region.starty, selection_region.endy); ++y) {
-    for (int x = std::min(selection_region.startx, selection_region.endx);
-         x <= std::max(selection_region.startx, selection_region.endx) - 1;
+  for (int y = std::min(selection_region.y_min, selection_region.y_max);
+       y <= std::max(selection_region.y_min, selection_region.y_max); ++y) {
+    for (int x = std::min(selection_region.x_min, selection_region.x_max);
+         x <= std::max(selection_region.x_min, selection_region.x_max) - 1;
          ++x) {
       if (PixelAt(x, y).selectable == true) {
         PixelAt(x, y).inverted ^= true;
