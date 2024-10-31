@@ -41,7 +41,30 @@ class Text : public Node {
       if (cell == "\n") {
         continue;
       }
-      screen.PixelAt(x, y).character = cell;
+      Pixel &currentPixel = screen.PixelAt(x, y);
+      currentPixel.character = cell;
+      
+      if(currentPixel.selectable == true)
+      {
+        if(screen.selection_region.Contain(x, y)) {
+          currentPixel.inverted ^= true;
+          screen.selection_text += currentPixel.character;
+        }
+        else if((x >= screen.selection_region.x_min) && (x >= screen.selection_region.x_max) &&
+                (y >= screen.selection_region.y_min) && (y < screen.selection_region.y_max))
+        {
+          currentPixel.inverted ^= true;
+          screen.selection_text += currentPixel.character;
+        }
+        else if((x <= screen.selection_region.x_min) && (x <= screen.selection_region.x_max) &&
+                (y > screen.selection_region.y_min) && (y <= screen.selection_region.y_max))
+        {
+          currentPixel.inverted ^= true;
+          screen.selection_text += currentPixel.character;
+        }
+
+      }
+
       ++x;
     }
   }

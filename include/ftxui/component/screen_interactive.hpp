@@ -68,6 +68,8 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlC(bool force);
   void ForceHandleCtrlZ(bool force);
 
+  std::string GetSelection();
+
  private:
   void ExitNow();
 
@@ -82,6 +84,8 @@ class ScreenInteractive : public Screen {
   void RunOnceBlocking(Component component);
 
   void HandleTask(Component component, Task& task);
+  bool HandleSelection(Event event);
+  void RefreshSelection();
   void Draw(Component component);
   void ResetCursorPosition();
 

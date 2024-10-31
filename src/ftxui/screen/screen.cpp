@@ -389,7 +389,9 @@ Screen Screen::Create(Dimensions dimension) {
   return {dimension.dimx, dimension.dimy};
 }
 
-Screen::Screen(int dimx, int dimy) : Image{dimx, dimy} {
+Screen::Screen(int dimx, int dimy) :
+      Image{dimx, dimy},
+      selection_text("") {
 #if defined(_WIN32)
   // The placement of this call is a bit weird, however we can assume that
   // anybody who instantiates a Screen object eventually wants to output

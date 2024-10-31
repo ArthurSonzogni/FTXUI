@@ -781,7 +781,9 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
       arg.screen_ = this;
 
-      const bool handled = component->OnEvent(arg);
+      bool handled = component->OnEvent(arg);
+
+      handled = handled || HandleSelection(arg);
 
       if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
         RecordSignal(SIGABRT);
@@ -822,6 +824,67 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
   },
   task);
   // clang-format on
+}
+
+// private
+bool ScreenInteractive::HandleSelection(Event event) {
+  if (!event.is_mouse()) {
+    return false;
+  }
+
+  auto& mouse = event.mouse();
+  if (mouse.button != Mouse::Left) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Pressed) {
+    selection_pending = CaptureMouse();
+    if (!selection_pending) {
+      return false;
+    }
+    selection_enabled = true;
+    mouse_selection_region.x_min = mouse.x;
+    mouse_selection_region.y_min = mouse.y;
+    mouse_selection_region.x_max = mouse.x;
+    mouse_selection_region.y_max = mouse.y;
+
+    selection_region = mouse_selection_region.Clean();
+    return true;
+  }
+
+  if (!selection_pending) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Moved) {
+    mouse_selection_region.x_max = mouse.x;
+    mouse_selection_region.y_max = mouse.y;
+
+    selection_region = mouse_selection_region.Clean();
+    return true;
+  }
+
+  if (mouse.motion == Mouse::Released) {
+    mouse_selection_region.x_max = mouse.x;
+    mouse_selection_region.y_max = mouse.y;
+    selection_pending = nullptr;
+
+    selection_region = mouse_selection_region.Clean();
+
+    if (mouse_selection_region.x_min == mouse_selection_region.x_max &&
+        mouse_selection_region.y_min == mouse_selection_region.y_max) {
+      selection_enabled = false;
+      return true;
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+std::string ScreenInteractive::GetSelection() {
+  return selection_text;
 }
 
 // private
@@ -891,6 +954,9 @@ void ScreenInteractive::Draw(Component component) {
   }
 #endif
   previous_frame_resized_ = resized;
+
+  // Clear selection text.
+  selection_text = "";
 
   Render(*this, document);
 
