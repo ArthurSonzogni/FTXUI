@@ -337,6 +337,9 @@ Feel free to add your projects here:
 - [XJ music](https://github.com/xjmusic/xjmusic)
 - [UDP chat](https://github.com/Sergeydigl3/udp-chat-tui)
 - [2048-cpp](https://github.com/Chessom/2048-cpp)
+- [Memory game](https://github.com/mikolajlubiak/memory)
+- [Terminal Animation](https://github.com/mikolajlubiak/terminal_animation)
+
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
