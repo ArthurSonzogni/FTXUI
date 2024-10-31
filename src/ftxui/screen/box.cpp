@@ -39,6 +39,24 @@ bool Box::Contain(int x, int y) const {
          y_max >= y;
 }
 
+/// @return a copy of box with the x_min <= x_max and y_min <= y_max.
+/// @ingroup screen
+Box Box::Clean() const {
+  Box newBox = *this;
+
+  if(newBox.x_min > newBox.x_max)
+  {
+    std::swap(newBox.x_min, newBox.x_max);
+  }
+
+  if(newBox.y_min > newBox.y_max)
+  {
+    std::swap(newBox.y_min, newBox.y_max);
+  }
+
+  return newBox;
+}
+
 /// @return whether the box is empty.
 /// @ingroup screen
 bool Box::IsEmpty() const {

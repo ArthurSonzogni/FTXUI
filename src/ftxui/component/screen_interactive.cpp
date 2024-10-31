@@ -843,10 +843,12 @@ bool ScreenInteractive::HandleSelection(Event event) {
       return false;
     }
     selection_enabled = true;
-    selection_region.x_min = mouse.x;
-    selection_region.y_min = mouse.y;
-    selection_region.x_max = mouse.x;
-    selection_region.y_max = mouse.y;
+    mouse_selection_region.x_min = mouse.x;
+    mouse_selection_region.y_min = mouse.y;
+    mouse_selection_region.x_max = mouse.x;
+    mouse_selection_region.y_max = mouse.y;
+
+    selection_region = mouse_selection_region.Clean();
     return true;
   }
 
@@ -855,18 +857,22 @@ bool ScreenInteractive::HandleSelection(Event event) {
   }
 
   if (mouse.motion == Mouse::Moved) {
-    selection_region.x_max = mouse.x;
-    selection_region.y_max = mouse.y;
+    mouse_selection_region.x_max = mouse.x;
+    mouse_selection_region.y_max = mouse.y;
+
+    selection_region = mouse_selection_region.Clean();
     return true;
   }
 
   if (mouse.motion == Mouse::Released) {
-    selection_region.x_max = mouse.x;
-    selection_region.y_max = mouse.y;
+    mouse_selection_region.x_max = mouse.x;
+    mouse_selection_region.y_max = mouse.y;
     selection_pending = nullptr;
 
-    if (selection_region.x_min == selection_region.x_max &&
-        selection_region.y_min == selection_region.y_max) {
+    selection_region = mouse_selection_region.Clean();
+
+    if (mouse_selection_region.x_min == mouse_selection_region.x_max &&
+        mouse_selection_region.y_min == mouse_selection_region.y_max) {
       selection_enabled = false;
       return true;
     }
