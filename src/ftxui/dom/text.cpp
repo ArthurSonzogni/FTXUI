@@ -42,10 +42,15 @@ class Text : public Node {
         continue;
       }
       screen.PixelAt(x, y).character = cell;
-
       if(screen.PixelAt(x, y).selectable == true)
       {
         if(screen.selection_region.Contain(x, y)) {
+          screen.PixelAt(x, y).inverted ^= true;
+          screen.selection_text += screen.PixelAt(x, y).character;
+        }
+        else if(screen.selection_region.x_min <= x && screen.selection_region.x_max <= x &&
+                screen.selection_region.y_min <= y && screen.selection_region.y_max > y)
+        {
           screen.PixelAt(x, y).inverted ^= true;
           screen.selection_text += screen.PixelAt(x, y).character;
         }
