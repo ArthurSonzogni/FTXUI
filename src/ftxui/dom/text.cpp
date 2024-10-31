@@ -50,14 +50,14 @@ class Text : public Node {
           currentPixel.inverted ^= true;
           screen.selection_text += currentPixel.character;
         }
-        else if(screen.selection_region.x_min <= x && screen.selection_region.x_max <= x &&
-                screen.selection_region.y_min <= y && screen.selection_region.y_max > y)
+        else if((x >= screen.selection_region.x_min) && (x >= screen.selection_region.x_max) &&
+                (y >= screen.selection_region.y_min) && (y < screen.selection_region.y_max))
         {
           currentPixel.inverted ^= true;
           screen.selection_text += currentPixel.character;
         }
-        else if(screen.selection_region.x_min >= x && screen.selection_region.x_max >= x &&
-                screen.selection_region.y_min < y && screen.selection_region.y_max >= y)
+        else if((x <= screen.selection_region.x_min) && (x <= screen.selection_region.x_max) &&
+                (y > screen.selection_region.y_min) && (y <= screen.selection_region.y_max))
         {
           currentPixel.inverted ^= true;
           screen.selection_text += currentPixel.character;
