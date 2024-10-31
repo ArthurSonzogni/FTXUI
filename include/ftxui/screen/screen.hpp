@@ -65,6 +65,7 @@ class Screen : public Image {
 
   bool selection_enabled = false;
   CapturedMouse selection_pending;
+  Box mouse_selection_region;
   Box selection_region;
   std::string selection_text;
 
