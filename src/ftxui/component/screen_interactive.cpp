@@ -877,25 +877,6 @@ bool ScreenInteractive::HandleSelection(Event event) {
   return false;
 }
 
-void ScreenInteractive::RefreshSelection() {
-  if (!selection_enabled) {
-    return;
-  }
-  selection_text = "";
-
-  for (int y = std::min(selection_region.y_min, selection_region.y_max);
-       y <= std::max(selection_region.y_min, selection_region.y_max); ++y) {
-    for (int x = std::min(selection_region.x_min, selection_region.x_max);
-         x <= std::max(selection_region.x_min, selection_region.x_max) - 1;
-         ++x) {
-      if (PixelAt(x, y).selectable == true) {
-        PixelAt(x, y).inverted ^= true;
-        selection_text += PixelAt(x, y).character;
-      }
-    }
-  }
-}
-
 std::string ScreenInteractive::GetSelection() {
   return selection_text;
 }
@@ -975,9 +956,10 @@ void ScreenInteractive::Draw(Component component) {
 #endif
   previous_frame_resized_ = resized;
 
-  Render(*this, document);
+  // Clear selection text.
+  selection_text = "";
 
-  RefreshSelection();
+  Render(*this, document);
 
   // Set cursor position for user using tools to insert CJK characters.
   {
