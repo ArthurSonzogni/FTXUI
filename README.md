@@ -339,6 +339,7 @@ Feel free to add your projects here:
 - [2048-cpp](https://github.com/Chessom/2048-cpp)
 - [Memory game](https://github.com/mikolajlubiak/memory)
 - [Terminal Animation](https://github.com/mikolajlubiak/terminal_animation)
+- [pciex](https://github.com/s0nx/pciex)
 
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
