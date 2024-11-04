@@ -90,7 +90,7 @@ Element& operator|=(Element& e, Decorator d) {
 /// The minimal dimension that will fit the given element.
 /// @see Fixed
 /// @see Full
-Dimensions Dimension::Fit(Element& e) {
+Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
   const Dimensions fullsize = Dimension::Full();
   Box box;
   box.x_min = 0;
@@ -106,7 +106,9 @@ Dimensions Dimension::Fit(Element& e) {
 
     // Don't give the element more space than it needs:
     box.x_max = std::min(box.x_max, e->requirement().min_x);
-    box.y_max = std::min(box.y_max, e->requirement().min_y);
+    box.y_max = extend_beyond_screen
+                ? e->requirement().min_y // can exceed size in Y if extend_beyond_screen==true
+                : std::min(box.y_max, e->requirement().min_y);
 
     e->SetBox(box);
     status.need_iteration = false;
@@ -116,10 +118,12 @@ Dimensions Dimension::Fit(Element& e) {
     if (!status.need_iteration) {
       break;
     }
-    // Increase the size of the box until it fits, but not more than the with of
+    // Increase the size of the box until it fits, but not more than the size of
     // the terminal emulator:
     box.x_max = std::min(e->requirement().min_x, fullsize.dimx);
-    box.y_max = std::min(e->requirement().min_y, fullsize.dimy);
+    box.y_max = extend_beyond_screen
+                ? e->requirement().min_y  // can exceed size in Y if extend_beyond_screen==true
+                : std::min(e->requirement().min_y, fullsize.dimy);
   }
 
   return {

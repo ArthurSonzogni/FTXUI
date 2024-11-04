@@ -183,7 +183,7 @@ Element align_right(Element);
 Element nothing(Element element);
 
 namespace Dimension {
-Dimensions Fit(Element&);
+Dimensions Fit(Element&, bool extend_beyond_screen = false);
 }  // namespace Dimension
 
 }  // namespace ftxui
