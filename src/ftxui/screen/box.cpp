@@ -47,11 +47,13 @@ Box Box::Clean() const {
   if(newBox.x_min > newBox.x_max)
   {
     std::swap(newBox.x_min, newBox.x_max);
+    newBox.isXInverted = true;
   }
 
   if(newBox.y_min > newBox.y_max)
   {
     std::swap(newBox.y_min, newBox.y_max);
+    newBox.isYInverted = true;
   }
 
   return newBox;

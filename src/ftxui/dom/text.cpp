@@ -34,6 +34,17 @@ class Text : public Node {
     if (y > box_.y_max) {
       return;
     }
+
+    // Get the selection start point
+    int selection_start_x = !screen.selection_region.isXInverted ? screen.selection_region.x_min : screen.selection_region.x_max;
+    int selection_start_y = !screen.selection_region.isYInverted ? screen.selection_region.y_min : screen.selection_region.y_max;
+    bool selectedWidget = false;
+
+    if(box_.Contain(selection_start_x, selection_start_y))
+    {
+      selectedWidget = true;
+    }
+
     for (const auto& cell : Utf8ToGlyphs(text_)) {
       if (x > box_.x_max) {
         return;
@@ -44,7 +55,7 @@ class Text : public Node {
       Pixel &currentPixel = screen.PixelAt(x, y);
       currentPixel.character = cell;
       
-      if(currentPixel.selectable == true)
+      if((selectedWidget == true) && (currentPixel.selectable == true))
       {
         if(screen.selection_region.Contain(x, y)) {
           currentPixel.inverted ^= true;
@@ -53,12 +64,14 @@ class Text : public Node {
         else if((x >= screen.selection_region.x_min) && (x >= screen.selection_region.x_max) &&
                 (y >= screen.selection_region.y_min) && (y < screen.selection_region.y_max))
         {
+          // Wrap around selection on the right
           currentPixel.inverted ^= true;
           screen.selection_text += currentPixel.character;
         }
         else if((x <= screen.selection_region.x_min) && (x <= screen.selection_region.x_max) &&
                 (y > screen.selection_region.y_min) && (y <= screen.selection_region.y_max))
         {
+          // Wrap around selection on the left
           currentPixel.inverted ^= true;
           screen.selection_text += currentPixel.character;
         }
