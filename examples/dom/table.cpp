@@ -55,7 +55,8 @@ int main() {
   content.DecorateCellsAlternateRow(color(Color::White), 3, 2);
 
   auto document = table.Render();
-  auto screen = Screen::Create(Dimension::Fit(document));
+  auto screen =
+      Screen::Create(Dimension::Fit(document, /*extend_beyond_screen=*/true));
   Render(screen, document);
   screen.Print();
   std::cout << std::endl;
