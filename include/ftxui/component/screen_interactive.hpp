@@ -121,6 +121,7 @@ class ScreenInteractive : public Screen {
   bool mouse_captured = false;
   bool previous_frame_resized_ = false;
 
+  bool validated_ = false;
   bool frame_valid_ = false;
 
   bool force_handle_ctrl_c_ = true;

@@ -858,6 +858,14 @@ void ScreenInteractive::Draw(Component component) {
   ResetCursorPosition();
   std::cout << ResetPosition(/*clear=*/resized);
 
+  // clear terminal output if non-fullscreen interactive screen dimx decreases
+#if !defined(_WIN32)
+  if ((dimx < dimx_) && validated_ && !use_alternative_screen_) {
+    std::cout << "\033[J";
+    std::cout << "\033[H";
+  }
+#endif
+
   // Resize the screen if needed.
   if (resized) {
     dimx_ = dimx;
