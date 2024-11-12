@@ -932,6 +932,7 @@ void ScreenInteractive::Draw(Component component) {
   std::cout << ToString() << set_cursor_position;
   Flush();
   Clear();
+  validated_ = true;
   frame_valid_ = true;
 }
 
