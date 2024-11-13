@@ -28,6 +28,29 @@ class Text : public Node {
     requirement_.min_y = 1;
   }
 
+  void Selection(Box selection, std::vector<Box>* selected) override {
+    if (Box::Intersection(selection, box_).IsEmpty()) {
+      return;
+    }
+
+    const bool xmin_satured =
+        selection.y_min < box_.y_min || selection.x_min < box_.x_min;
+    const bool xmax_satured =
+        selection.y_max > box_.y_max || selection.x_max > box_.x_max;
+
+    selection_start_ = xmin_satured ? box_.x_min : selection.x_min;
+    selection_end_ = xmax_satured ? box_.x_max : selection.x_max;
+
+    has_selection = true;
+
+    Box out;
+    out.x_min = selection_start_;
+    out.x_max = selection_end_;
+    out.y_min = box_.y_min;
+    out.y_max = box_.y_max;
+    selected->push_back(out);
+  }
+  
   void Render(Screen& screen) override {
     int x = box_.x_min;
     const int y = box_.y_min;
@@ -35,55 +58,33 @@ class Text : public Node {
       return;
     }
 
-    // Get the selection start point
-    int selection_start_x = !screen.selection_region.isXInverted ? screen.selection_region.x_min : screen.selection_region.x_max;
-    int selection_start_y = !screen.selection_region.isYInverted ? screen.selection_region.y_min : screen.selection_region.y_max;
-    bool selectedWidget = false;
-
-    if(box_.Contain(selection_start_x, selection_start_y))
-    {
-      selectedWidget = true;
-    }
-
     for (const auto& cell : Utf8ToGlyphs(text_)) {
       if (x > box_.x_max) {
-        return;
+        break;
       }
       if (cell == "\n") {
         continue;
       }
-      Pixel &currentPixel = screen.PixelAt(x, y);
-      currentPixel.character = cell;
-      
-      if((selectedWidget == true) && (currentPixel.selectable == true))
-      {
-        if(screen.selection_region.Contain(x, y)) {
-          currentPixel.inverted ^= true;
-          screen.selection_text += currentPixel.character;
-        }
-        else if((x >= screen.selection_region.x_min) && (x >= screen.selection_region.x_max) &&
-                (y >= screen.selection_region.y_min) && (y < screen.selection_region.y_max))
-        {
-          // Wrap around selection on the right
-          currentPixel.inverted ^= true;
-          screen.selection_text += currentPixel.character;
-        }
-        else if((x <= screen.selection_region.x_min) && (x <= screen.selection_region.x_max) &&
-                (y > screen.selection_region.y_min) && (y <= screen.selection_region.y_max))
-        {
-          // Wrap around selection on the left
-          currentPixel.inverted ^= true;
-          screen.selection_text += currentPixel.character;
-        }
-
-      }
+      screen.PixelAt(x, y).character = cell;
 
       ++x;
+    }
+
+    if (!has_selection) {
+      return;
+    }
+
+    // Invert the selection
+    for(int x = selection_start_; x <= selection_end_; x++) {
+      screen.PixelAt(x, y).inverted = true;
     }
   }
 
  private:
   std::string text_;
+  bool has_selection = false;
+  int selection_start_ = 0;
+  int selection_end_ = 10;
 };
 
 class VText : public Node {

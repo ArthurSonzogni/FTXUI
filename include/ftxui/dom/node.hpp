@@ -4,6 +4,7 @@
 #ifndef FTXUI_DOM_NODE_HPP
 #define FTXUI_DOM_NODE_HPP
 
+#include <list>    // for list
 #include <memory>  // for shared_ptr
 #include <vector>  // for vector
 
@@ -40,7 +41,11 @@ class Node {
   //         Propagated from Parents to Children.
   virtual void SetBox(Box box);
 
-  // Step 3: Draw this element.
+  // Step 3: (optional) Selection
+  //         Propagated from Parents to Children.
+  virtual void Selection(Box selection, std::vector<Box>* selected);
+
+  // Step 4: Draw this element.
   virtual void Render(Screen& screen);
 
   // Layout may not resolve within a single iteration for some elements. This
@@ -52,11 +57,6 @@ class Node {
   };
   virtual void Check(Status* status);
 
-  // Selection.
-  // Propagated from Parents to Children.
-  virtual void Select(Box selected_area) {
-    // TODO: Implement this.
-  }
 
  protected:
   Elements children_;
@@ -66,6 +66,7 @@ class Node {
 
 void Render(Screen& screen, const Element& element);
 void Render(Screen& screen, Node* node);
+void Render(Screen& screen, Node* node, Box selection);
 
 }  // namespace ftxui
 
