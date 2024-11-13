@@ -68,7 +68,9 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlC(bool force);
   void ForceHandleCtrlZ(bool force);
 
-  std::string GetSelection();
+  // Selection API.
+  //void OnSelectionChange(std::function<void(std::
+  //void ClearSelection();
 
  private:
   void ExitNow();
@@ -132,6 +134,11 @@ class ScreenInteractive : public Screen {
 
   // The style of the cursor to restore on exit.
   int cursor_reset_shape_ = 1;
+
+  // Selection API:
+  bool selection_enabled_ = false;
+  CapturedMouse selection_pending_;
+  Box selection_box_;
 
   friend class Loop;
 

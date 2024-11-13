@@ -838,53 +838,36 @@ bool ScreenInteractive::HandleSelection(Event event) {
   }
 
   if (mouse.motion == Mouse::Pressed) {
-    selection_pending = CaptureMouse();
-    if (!selection_pending) {
+    selection_pending_ = CaptureMouse();
+    if (!selection_pending_) {
       return false;
     }
-    selection_enabled = true;
-    mouse_selection_region.x_min = mouse.x;
-    mouse_selection_region.y_min = mouse.y;
-    mouse_selection_region.x_max = mouse.x;
-    mouse_selection_region.y_max = mouse.y;
-
-    selection_region = mouse_selection_region.Clean();
+    selection_enabled_ = true;
+    selection_box_.x_min = mouse.x;
+    selection_box_.y_min = mouse.y;
+    selection_box_.x_max = mouse.x;
+    selection_box_.y_max = mouse.y;
     return true;
   }
 
-  if (!selection_pending) {
+  if (!selection_pending_) {
     return false;
   }
 
   if (mouse.motion == Mouse::Moved) {
-    mouse_selection_region.x_max = mouse.x;
-    mouse_selection_region.y_max = mouse.y;
-
-    selection_region = mouse_selection_region.Clean();
+    selection_box_.x_max = mouse.x;
+    selection_box_.y_max = mouse.y;
     return true;
   }
 
-  if (mouse.motion == Mouse::Released) {
-    mouse_selection_region.x_max = mouse.x;
-    mouse_selection_region.y_max = mouse.y;
-    selection_pending = nullptr;
-
-    selection_region = mouse_selection_region.Clean();
-
-    if (mouse_selection_region.x_min == mouse_selection_region.x_max &&
-        mouse_selection_region.y_min == mouse_selection_region.y_max) {
-      selection_enabled = false;
-      return true;
-    }
-
-    return true;
+  if (mouse.motion != Mouse::Released) {
+    return false;
   }
 
-  return false;
-}
-
-std::string ScreenInteractive::GetSelection() {
-  return selection_text;
+  selection_box_.x_max = mouse.x;
+  selection_box_.y_max = mouse.y;
+  selection_pending_ = nullptr;
+  return true;
 }
 
 // private
@@ -962,10 +945,7 @@ void ScreenInteractive::Draw(Component component) {
 #endif
   previous_frame_resized_ = resized;
 
-  // Clear selection text.
-  selection_text = "";
-
-  Render(*this, document);
+  Render(*this, document.get(), selection_box_);
 
   // Set cursor position for user using tools to insert CJK characters.
   {

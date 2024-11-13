@@ -63,12 +63,6 @@ class Screen : public Image {
   Cursor cursor() const { return cursor_; }
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
-  bool selection_enabled = false;
-  CapturedMouse selection_pending;
-  Box mouse_selection_region;
-  Box selection_region;
-  std::string selection_text;
-
   // Store an hyperlink in the screen. Return the id of the hyperlink. The id is
   // used to identify the hyperlink when the user click on it.
   uint8_t RegisterHyperlink(const std::string& link);

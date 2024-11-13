@@ -1,3 +1,4 @@
+#include <iostream>
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
@@ -27,6 +28,20 @@ void Node::SetBox(Box box) {
   box_ = box;
 }
 
+/// @brief Compute the selection of an element.
+/// @ingroup dom
+void Node::Selection(Box selection, std::vector<Box>* selected) {
+  // If this Node box_ doesn't intersect with the selection, then no selection.
+  if (Box::Intersection(selection, box_).IsEmpty()) {
+    return;
+  }
+
+  // By default we defer the selection to the children.
+  for (auto& child : children_) {
+    child->Selection(selection, selected);
+  }
+}
+
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Node::Render(Screen& screen) {
@@ -45,12 +60,16 @@ void Node::Check(Status* status) {
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, const Element& element) {
-  Render(screen, element.get());
+  Render(screen, element.get(), Box{0, 0, -1, -1});
 }
 
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, Node* node) {
+  Render(screen, node, Box{0, 0, -1, -1});
+}
+
+void Render(Screen& screen, Node* node, Box selection) {
   Box box;
   box.x_min = 0;
   box.y_min = 0;
@@ -73,11 +92,15 @@ void Render(Screen& screen, Node* node) {
     node->Check(&status);
   }
 
-  // Step 3: Draw the element.
+  // Step 3: Selection
+  std::vector<Box> selected;
+  node->Selection(selection, &selected);
+
+  // Step 4: Draw the element.
   screen.stencil = box;
   node->Render(screen);
 
-  // Step 4: Apply shaders
+  // Step 5: Apply shaders
   screen.ApplyShader();
 }
 
