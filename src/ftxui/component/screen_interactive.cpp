@@ -858,15 +858,12 @@ void ScreenInteractive::Draw(Component component) {
   ResetCursorPosition();
   std::cout << ResetPosition(/*clear=*/resized);
 
-  // clear terminal output if screen dimx decreases
-  // only on primary screen
-  // only on POSIX systems (linux/macos)
-#if !defined(_WIN32)
-  if ((dimx < dimx_) && validated_ && !use_alternative_screen_) {
-    std::cout << "\033[J";  // clear
+  // If the terminal width decrease, the terminal emulator will start wrapping
+  // lines and make the display dirty. We should clear it completely.
+  if ((dimx < dimx_) && !use_alternative_screen_) {
+    std::cout << "\033[J";  // clear terminal output
     std::cout << "\033[H";  // move cursor to home position
   }
-#endif
 
   // Resize the screen if needed.
   if (resized) {
@@ -934,7 +931,6 @@ void ScreenInteractive::Draw(Component component) {
   std::cout << ToString() << set_cursor_position;
   Flush();
   Clear();
-  validated_ = true;
   frame_valid_ = true;
 }
 
