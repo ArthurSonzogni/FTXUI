@@ -267,7 +267,7 @@ Decorator borderStyled(BorderStyle style, Color foreground_color) {
   };
 }
 
-/// @brief Draw a light border around the element.
+/// @brief Draw a dashed border around the element.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
@@ -302,7 +302,7 @@ Element borderDashed(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), DASHED);
 }
 
-/// @brief Draw a dashed border around the element.
+/// @brief Draw a light border around the element.
 /// @ingroup dom
 /// @see border
 /// @see borderLight
