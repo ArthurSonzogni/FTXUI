@@ -67,16 +67,13 @@ class Text : public Node {
       }
       screen.PixelAt(x, y).character = cell;
 
+      if (has_selection) {
+        if((x >= selection_start_) && (x <= selection_end_)) {
+          screen.PixelAt(x, y).inverted = true;
+        }
+      }
+
       ++x;
-    }
-
-    if (!has_selection) {
-      return;
-    }
-
-    // Invert the selection
-    for(int x = selection_start_; x <= selection_end_; x++) {
-      screen.PixelAt(x, y).inverted = true;
     }
   }
 
