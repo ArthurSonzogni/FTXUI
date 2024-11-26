@@ -72,15 +72,15 @@ class HBox : public Node {
       return;
     }
 
-    const bool xmin_satured =
+    const bool xmin_saturated =
         selection.y_min < box_.y_min || selection.x_min < box_.x_min;
-    const bool xmax_satured =
+    const bool xmax_saturated =
         selection.y_max > box_.y_max || selection.x_max > box_.x_max;
 
-    if (xmin_satured) {
+    if (xmin_saturated) {
       selection.x_min = box_.x_min;
     }
-    if (xmax_satured) {
+    if (xmax_saturated) {
       selection.x_max = box_.x_max;
     }
 
