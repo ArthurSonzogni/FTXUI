@@ -72,14 +72,14 @@ class VBox : public Node {
       return;
     }
 
-    const bool ymin_satured =
+    const bool ymin_saturated =
       selection.x_min < box_.x_min || selection.y_min < box_.y_min;
-    const bool ymax_satured =
+    const bool ymax_saturated =
       selection.x_max > box_.x_max || selection.y_max > box_.y_max;
-    if (ymin_satured) {
+    if (ymin_saturated) {
       selection.y_min = box_.y_min;
     }
-    if (ymax_satured) {
+    if (ymax_saturated) {
       selection.y_max = box_.y_max;
     }
     

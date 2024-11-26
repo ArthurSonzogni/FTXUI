@@ -33,13 +33,13 @@ class Text : public Node {
       return;
     }
 
-    const bool xmin_satured =
+    const bool xmin_saturated =
         selection.y_min < box_.y_min || selection.x_min < box_.x_min;
-    const bool xmax_satured =
+    const bool xmax_saturated =
         selection.y_max > box_.y_max || selection.x_max > box_.x_max;
 
-    selection_start_ = xmin_satured ? box_.x_min : selection.x_min;
-    selection_end_ = xmax_satured ? box_.x_max : selection.x_max;
+    selection_start_ = xmin_saturated ? box_.x_min : selection.x_min;
+    selection_end_ = xmax_saturated ? box_.x_max : selection.x_max;
 
     has_selection = true;
 
