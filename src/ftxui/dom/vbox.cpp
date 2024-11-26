@@ -76,11 +76,12 @@ class VBox : public Node {
       selection.x_min < box_.x_min || selection.y_min < box_.y_min;
     const bool ymax_saturated =
       selection.x_max > box_.x_max || selection.y_max > box_.y_max;
+
     if (ymin_saturated) {
-      selection.y_min = box_.y_min;
+      selection.y_min = std::min(box_.y_min, selection.y_min);
     }
     if (ymax_saturated) {
-      selection.y_max = box_.y_max;
+      selection.y_max = std::max(box_.y_max, selection.y_max);
     }
     
     for (auto& child : children_) {
