@@ -94,7 +94,21 @@ void Render(Screen& screen, Node* node, Box selection) {
 
   // Step 3: Selection
   std::vector<Box> selected;
-  node->Selection(selection, &selected);
+
+  Box selectionCleaned = selection;
+  if(selection.x_min > selection.x_max)
+  {
+    selectionCleaned.x_min = selection.x_max;
+    selectionCleaned.x_max = selection.x_min;
+  }
+  
+  if(selection.y_min > selection.y_max)
+  {
+    selectionCleaned.y_min = selection.y_max;
+    selectionCleaned.y_max = selection.y_min;
+  }
+
+  node->Selection(selectionCleaned, &selected);
 
   // Step 4: Draw the element.
   screen.stencil = box;
