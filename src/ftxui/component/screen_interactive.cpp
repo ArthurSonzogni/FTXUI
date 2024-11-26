@@ -837,37 +837,31 @@ bool ScreenInteractive::HandleSelection(Event event) {
     return false;
   }
 
-  if (mouse.motion == Mouse::Pressed) {
-    selection_pending_ = CaptureMouse();
-    if (!selection_pending_) {
-      return false;
-    }
-    selection_enabled_ = true;
-    selection_box_.x_min = mouse.x;
-    selection_box_.y_min = mouse.y;
-    selection_box_.x_max = mouse.x;
-    selection_box_.y_max = mouse.y;
-    return true;
+  if(mouse.motion == Mouse::Pressed) {
+      selection_pending_ = CaptureMouse();
+      if (!selection_pending_) {
+        return false;
+      }
+      selection_enabled_ = true;
+      selection_box_.x_min = mouse.x;
+      selection_box_.y_min = mouse.y;
+      selection_box_.x_max = mouse.x;
+      selection_box_.y_max = mouse.y;
+      return true;
+  }
+  else if((mouse.motion == Mouse::Moved) && (selection_pending_)) {
+      selection_box_.x_max = mouse.x;
+      selection_box_.y_max = mouse.y;
+      return true;
+  }
+  else if((mouse.motion == Mouse::Released) && (selection_pending_)) {
+      selection_box_.x_max = mouse.x;
+      selection_box_.y_max = mouse.y;
+      selection_pending_ = nullptr;
+      return true;
   }
 
-  if (!selection_pending_) {
-    return false;
-  }
-
-  if (mouse.motion == Mouse::Moved) {
-    selection_box_.x_max = mouse.x;
-    selection_box_.y_max = mouse.y;
-    return true;
-  }
-
-  if (mouse.motion != Mouse::Released) {
-    return false;
-  }
-
-  selection_box_.x_max = mouse.x;
-  selection_box_.y_max = mouse.y;
-  selection_pending_ = nullptr;
-  return true;
+  return false;
 }
 
 // private
