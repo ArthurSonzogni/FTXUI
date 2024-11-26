@@ -78,10 +78,10 @@ class HBox : public Node {
         selection.y_max > box_.y_max || selection.x_max > box_.x_max;
 
     if (xmin_saturated) {
-      selection.x_min = box_.x_min;
+      selection.x_min = std::min(box_.x_min, selection.x_min);
     }
     if (xmax_saturated) {
-      selection.x_max = box_.x_max;
+      selection.x_max = std::max(box_.x_max, selection.x_max);
     }
 
     for (auto& child : children_) {
