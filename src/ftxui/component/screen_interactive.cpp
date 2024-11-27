@@ -858,6 +858,13 @@ void ScreenInteractive::Draw(Component component) {
   ResetCursorPosition();
   std::cout << ResetPosition(/*clear=*/resized);
 
+  // If the terminal width decrease, the terminal emulator will start wrapping
+  // lines and make the display dirty. We should clear it completely.
+  if ((dimx < dimx_) && !use_alternative_screen_) {
+    std::cout << "\033[J";  // clear terminal output
+    std::cout << "\033[H";  // move cursor to home position
+  }
+
   // Resize the screen if needed.
   if (resized) {
     dimx_ = dimx;
