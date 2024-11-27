@@ -340,6 +340,7 @@ Feel free to add your projects here:
 - [Memory game](https://github.com/mikolajlubiak/memory)
 - [Terminal Animation](https://github.com/mikolajlubiak/terminal_animation)
 - [pciex](https://github.com/s0nx/pciex)
+- [Fallout terminal hacking](https://github.com/gshigin/yet-another-fallout-terminal-hacking-game)
 
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
