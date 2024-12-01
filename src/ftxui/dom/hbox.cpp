@@ -65,27 +65,16 @@ class HBox : public Node {
     }
   }
 
-  void Selection(Box selection, std::vector<Box>* selected) override {
+  void Select(Selection& selection) override {
     // If this Node box_ doesn't intersect with the selection, then no
     // selection.
-    if (Box::Intersection(selection, box_).IsEmpty()) {
+    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }
 
-    const bool xmin_saturated =
-        selection.y_min < box_.y_min || selection.x_min < box_.x_min;
-    const bool xmax_saturated =
-        selection.y_max > box_.y_max || selection.x_max > box_.x_max;
-
-    if (xmin_saturated) {
-      selection.x_min = std::min(box_.x_min, selection.x_min);
-    }
-    if (xmax_saturated) {
-      selection.x_max = std::max(box_.x_max, selection.x_max);
-    }
-
+    Selection selection_saturated = selection.SaturateHorizontal(box_);
     for (auto& child : children_) {
-      child->Selection(selection, selected);
+      child->Select(selection_saturated);
     }
   }
 };

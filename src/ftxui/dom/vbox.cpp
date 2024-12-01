@@ -65,27 +65,17 @@ class VBox : public Node {
     }
   }
 
-  void Selection(Box selection, std::vector<Box>* selected) override {
+  void Select(Selection& selection) override {
     // If this Node box_ doesn't intersect with the selection, then no
     // selection.
-    if (Box::Intersection(selection, box_).IsEmpty()) {
+    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }
 
-    const bool ymin_saturated =
-      selection.x_min < box_.x_min || selection.y_min < box_.y_min;
-    const bool ymax_saturated =
-      selection.x_max > box_.x_max || selection.y_max > box_.y_max;
+    Selection selection_saturated = selection.SaturateVertical(box_);
 
-    if (ymin_saturated) {
-      selection.y_min = std::min(box_.y_min, selection.y_min);
-    }
-    if (ymax_saturated) {
-      selection.y_max = std::max(box_.y_max, selection.y_max);
-    }
-    
     for (auto& child : children_) {
-      child->Selection(selection, selected);
+      child->Select(selection_saturated);
     }
   }
 };
