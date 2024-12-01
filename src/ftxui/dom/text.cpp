@@ -40,7 +40,7 @@ class Text : public Node {
     selection_start_ = selection_saturated.GetBox().x_min;
     selection_end_ = selection_saturated.GetBox().x_max;
   }
-  
+
   void Render(Screen& screen) override {
     int x = box_.x_min;
     const int y = box_.y_min;
@@ -58,7 +58,7 @@ class Text : public Node {
       screen.PixelAt(x, y).character = cell;
 
       if (has_selection) {
-        if((x >= selection_start_) && (x <= selection_end_)) {
+        if ((x >= selection_start_) && (x <= selection_end_)) {
           screen.PixelAt(x, y).inverted = true;
         }
       }

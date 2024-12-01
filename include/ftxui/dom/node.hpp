@@ -4,7 +4,6 @@
 #ifndef FTXUI_DOM_NODE_HPP
 #define FTXUI_DOM_NODE_HPP
 
-#include <list>    // for list
 #include <memory>  // for shared_ptr
 #include <vector>  // for vector
 
@@ -57,7 +56,6 @@ class Node {
     bool need_iteration = false;
   };
   virtual void Check(Status* status);
-
 
  protected:
   Elements children_;

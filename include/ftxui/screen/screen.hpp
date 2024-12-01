@@ -10,7 +10,6 @@
 
 #include "ftxui/screen/image.hpp"     // for Pixel, Image
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
-#include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 
 namespace ftxui {
 

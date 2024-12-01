@@ -18,7 +18,6 @@ class Selection {
   Selection SaturateHorizontal(Box box);
   Selection SaturateVertical(Box box);
 
-
  private:
   Selection* const parent_ = nullptr;
   const int start_x_;
