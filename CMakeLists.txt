@@ -89,7 +89,6 @@ add_library(dom
   src/ftxui/dom/paragraph.cpp
   src/ftxui/dom/reflect.cpp
   src/ftxui/dom/scroll_indicator.cpp
-  src/ftxui/dom/selectable.cpp
   src/ftxui/dom/selection.cpp
   src/ftxui/dom/separator.cpp
   src/ftxui/dom/size.cpp
