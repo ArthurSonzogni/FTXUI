@@ -9,6 +9,7 @@
 #include <vector>  // for vector
 
 #include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/dom/selection.hpp"    // for Selection
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"
 
@@ -43,7 +44,7 @@ class Node {
 
   // Step 3: (optional) Selection
   //         Propagated from Parents to Children.
-  virtual void Selection(Box selection, std::vector<Box>* selected);
+  virtual void Select(Selection& selection);
 
   // Step 4: Draw this element.
   virtual void Render(Screen& screen);
@@ -66,7 +67,7 @@ class Node {
 
 void Render(Screen& screen, const Element& element);
 void Render(Screen& screen, Node* node);
-void Render(Screen& screen, Node* node, Box selection);
+void Render(Screen& screen, Node* node, Selection& selection);
 
 }  // namespace ftxui
 

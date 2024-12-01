@@ -30,15 +30,15 @@ void Node::SetBox(Box box) {
 
 /// @brief Compute the selection of an element.
 /// @ingroup dom
-void Node::Selection(Box selection, std::vector<Box>* selected) {
+void Node::Select(Selection& selection) {
   // If this Node box_ doesn't intersect with the selection, then no selection.
-  if (Box::Intersection(selection, box_).IsEmpty()) {
+  if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
     return;
   }
 
   // By default we defer the selection to the children.
   for (auto& child : children_) {
-    child->Selection(selection, selected);
+    child->Select(selection);
   }
 }
 
@@ -60,16 +60,18 @@ void Node::Check(Status* status) {
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, const Element& element) {
-  Render(screen, element.get(), Box{0, 0, -1, -1});
+  Selection selection(0, 0, -1, -1);
+  Render(screen, element.get(), selection);
 }
 
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, Node* node) {
-  Render(screen, node, Box{0, 0, -1, -1});
+  Selection selection(0, 0, -1, -1);
+  Render(screen, node, selection);
 }
 
-void Render(Screen& screen, Node* node, Box selection) {
+void Render(Screen& screen, Node* node, Selection& selection) {
   Box box;
   box.x_min = 0;
   box.y_min = 0;
@@ -93,22 +95,7 @@ void Render(Screen& screen, Node* node, Box selection) {
   }
 
   // Step 3: Selection
-  std::vector<Box> selected;
-
-  Box selectionCleaned = selection;
-  if(selection.x_min > selection.x_max)
-  {
-    selectionCleaned.x_min = selection.x_max;
-    selectionCleaned.x_max = selection.x_min;
-  }
-  
-  if(selection.y_min > selection.y_max)
-  {
-    selectionCleaned.y_min = selection.y_max;
-    selectionCleaned.y_max = selection.y_min;
-  }
-
-  node->Selection(selectionCleaned, &selected);
+  node->Select(selection);
 
   // Step 4: Draw the element.
   screen.stencil = box;

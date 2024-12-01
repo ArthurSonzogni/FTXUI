@@ -26,29 +26,19 @@ class Text : public Node {
   void ComputeRequirement() override {
     requirement_.min_x = string_width(text_);
     requirement_.min_y = 1;
+    has_selection = false;
   }
 
-  void Selection(Box selection, std::vector<Box>* selected) override {
-    if (Box::Intersection(selection, box_).IsEmpty()) {
+  void Select(Selection& selection) override {
+    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
       return;
     }
 
-    const bool xmin_saturated =
-        selection.y_min < box_.y_min || selection.x_min < box_.x_min;
-    const bool xmax_saturated =
-        selection.y_max > box_.y_max || selection.x_max > box_.x_max;
-
-    selection_start_ = xmin_saturated ? box_.x_min : selection.x_min;
-    selection_end_ = xmax_saturated ? box_.x_max : selection.x_max;
+    Selection selection_saturated = selection.SaturateHorizontal(box_);
 
     has_selection = true;
-
-    Box out;
-    out.x_min = selection_start_;
-    out.x_max = selection_end_;
-    out.y_min = box_.y_min;
-    out.y_max = box_.y_max;
-    selected->push_back(out);
+    selection_start_ = selection_saturated.GetBox().x_min;
+    selection_end_ = selection_saturated.GetBox().x_max;
   }
   
   void Render(Screen& screen) override {

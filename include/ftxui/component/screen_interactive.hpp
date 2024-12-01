@@ -138,7 +138,10 @@ class ScreenInteractive : public Screen {
   // Selection API:
   bool selection_enabled_ = false;
   CapturedMouse selection_pending_;
-  Box selection_box_;
+  int selection_start_x_ = 0;
+  int selection_start_y_ = 0;
+  int selection_end_x_ = 0;
+  int selection_end_y_ = 0;
 
   friend class Loop;
 

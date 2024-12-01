@@ -837,28 +837,29 @@ bool ScreenInteractive::HandleSelection(Event event) {
     return false;
   }
 
-  if(mouse.motion == Mouse::Pressed) {
-      selection_pending_ = CaptureMouse();
-      if (!selection_pending_) {
-        return false;
-      }
-      selection_enabled_ = true;
-      selection_box_.x_min = mouse.x;
-      selection_box_.y_min = mouse.y;
-      selection_box_.x_max = mouse.x;
-      selection_box_.y_max = mouse.y;
-      return true;
+  if (mouse.motion == Mouse::Pressed) {
+    selection_pending_ = CaptureMouse();
+    selection_start_x_ = mouse.x;
+    selection_start_y_ = mouse.y;
+    selection_end_x_ = mouse.x;
+    selection_end_y_ = mouse.y;
   }
-  else if((mouse.motion == Mouse::Moved) && (selection_pending_)) {
-      selection_box_.x_max = mouse.x;
-      selection_box_.y_max = mouse.y;
-      return true;
+
+  if (!selection_pending_) {
+    return false;
   }
-  else if((mouse.motion == Mouse::Released) && (selection_pending_)) {
-      selection_box_.x_max = mouse.x;
-      selection_box_.y_max = mouse.y;
-      selection_pending_ = nullptr;
+
+  if (mouse.motion == Mouse::Moved) {
+      selection_end_x_ = mouse.x;
+      selection_end_y_ = mouse.y;
       return true;
+    }
+
+  if (mouse.motion == Mouse::Released) {
+    selection_pending_ = nullptr;
+    selection_end_x_ = mouse.x;
+    selection_end_y_ = mouse.y;
+    return true;
   }
 
   return false;
@@ -939,7 +940,9 @@ void ScreenInteractive::Draw(Component component) {
 #endif
   previous_frame_resized_ = resized;
 
-  Render(*this, document.get(), selection_box_);
+  Selection selection(selection_start_x_, selection_start_y_,  //
+                      selection_end_x_, selection_end_y_);
+  Render(*this, document.get(), selection);
 
   // Set cursor position for user using tools to insert CJK characters.
   {
