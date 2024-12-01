@@ -850,10 +850,10 @@ bool ScreenInteractive::HandleSelection(Event event) {
   }
 
   if (mouse.motion == Mouse::Moved) {
-      selection_end_x_ = mouse.x;
-      selection_end_y_ = mouse.y;
-      return true;
-    }
+    selection_end_x_ = mouse.x;
+    selection_end_y_ = mouse.y;
+    return true;
+  }
 
   if (mouse.motion == Mouse::Released) {
     selection_pending_ = nullptr;

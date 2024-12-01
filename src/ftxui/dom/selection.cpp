@@ -39,7 +39,7 @@ Selection Selection::SaturateHorizontal(Box box) {
   int start_y = start_y_;
   int end_x = end_x_;
   int end_y = end_y_;
-  
+
   const bool start_outside = !box.Contain(start_x, start_y);
   const bool end_outside = !box.Contain(end_x, end_y);
   const bool properly_ordered =
@@ -75,11 +75,11 @@ Selection Selection::SaturateVertical(Box box) {
   int start_y = start_y_;
   int end_x = end_x_;
   int end_y = end_y_;
-  
+
   const bool start_outside = !box.Contain(start_x, start_y);
   const bool end_outside = !box.Contain(end_x, end_y);
   const bool properly_ordered =
-    start_y < end_y || (start_y == end_y && start_x <= end_x);
+      start_y < end_y || (start_y == end_y && start_x <= end_x);
 
   if (properly_ordered) {
     if (start_outside) {

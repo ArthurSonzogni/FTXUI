@@ -69,8 +69,7 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlZ(bool force);
 
   // Selection API.
-  //void OnSelectionChange(std::function<void(std::
-  //void ClearSelection();
+  // TODO: Implement somethings here.
 
  private:
   void ExitNow();
