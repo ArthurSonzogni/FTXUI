@@ -15,6 +15,7 @@
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/dom/selection.hpp"             // for SelectionOption
 #include "ftxui/component/task.hpp"            // for Task, Closure
 #include "ftxui/screen/screen.hpp"             // for Screen
 
@@ -70,7 +71,7 @@ class ScreenInteractive : public Screen {
 
   // Selection API.
   std::string GetSelectedContent(Component component);
-  void onSelectionModified(std::function<void(void)> callback);
+  void setSelectionOptions(SelectionOption option);
 
  private:
   void ExitNow();
@@ -143,7 +144,7 @@ class ScreenInteractive : public Screen {
   int selection_end_x_ = 0;
   int selection_end_y_ = 0;
   bool selection_changed = false;
-  std::function<void(void)> selection_changed_callback_ = nullptr;
+  SelectionOption selection_options_ = SelectionOption::Simple();
 
   friend class Loop;
 

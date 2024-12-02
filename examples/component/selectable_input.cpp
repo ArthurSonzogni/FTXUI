@@ -73,9 +73,14 @@ int main() {
     });
   });
 
-  screen.onSelectionModified([&] {
-    selectionChangeCounter++;
-    selection = screen.GetSelectedContent(renderer);
+  screen.setSelectionOptions({
+    .transform = [](Pixel& pixel) {
+      pixel.underlined_double = true;
+    },
+    .on_change = [&] {
+      selectionChangeCounter++;
+      selection = screen.GetSelectedContent(renderer);
+    }
   });
 
   screen.Loop(renderer);

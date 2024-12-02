@@ -580,18 +580,14 @@ void ScreenInteractive::ForceHandleCtrlZ(bool force) {
 std::string ScreenInteractive::GetSelectedContent(Component component)
 {
   Selection selection(selection_start_x_, selection_start_y_,  //
-                    selection_end_x_, selection_end_y_);
+                    selection_end_x_, selection_end_y_, selection_options_);
 
   return GetNodeSelectedContent(*this, component->Render().get(), selection);
 }
 
-/// @brief Sets a callback on modifications of the selection
-/// This callback is called when the start of end of the selection moved.
-/// Not when the content/characters inside of the selection change.
-/// @param callback The function to callback on modifications of the selection.
-void ScreenInteractive::onSelectionModified(std::function<void(void)> callback)
+void ScreenInteractive::setSelectionOptions(SelectionOption option)
 {
-  selection_changed_callback_ = std::move(callback);
+  selection_options_ = std::move(option);
 }
 
 /// @brief Return the currently active screen, or null if none.
@@ -970,12 +966,12 @@ void ScreenInteractive::Draw(Component component) {
   previous_frame_resized_ = resized;
 
   Selection selection(selection_start_x_, selection_start_y_,  //
-                      selection_end_x_, selection_end_y_);
+                      selection_end_x_, selection_end_y_, selection_options_);
   Render(*this, document.get(), selection);
 
-  if((selection_changed == true) && (selection_changed_callback_ != nullptr))
+  if(selection_changed == true)
   {
-    selection_changed_callback_();
+    selection_options_.on_change();
   }
 
   // Set cursor position for user using tools to insert CJK characters.
