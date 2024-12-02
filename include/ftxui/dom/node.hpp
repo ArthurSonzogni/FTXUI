@@ -48,6 +48,8 @@ class Node {
   // Step 4: Draw this element.
   virtual void Render(Screen& screen);
 
+  virtual std::string GetSelectedContent(Selection& selection);
+
   // Layout may not resolve within a single iteration for some elements. This
   // allows them to request additionnal iterations. This signal must be
   // forwarded to children at least once.
@@ -66,6 +68,7 @@ class Node {
 void Render(Screen& screen, const Element& element);
 void Render(Screen& screen, Node* node);
 void Render(Screen& screen, Node* node, Selection& selection);
+std::string GetNodeSelectedContent(Screen& screen, Node* node, Selection& selection);
 
 }  // namespace ftxui
 

@@ -27,18 +27,16 @@ Element LoremIpsum() {
 
 int main() {
   auto screen = ScreenInteractive::TerminalOutput();
-  int counter = 0;
-
-  screen.onSelectionModified([&]{
-    counter++;
-  });
+  int selectionChangeCounter = 0;
+  std::string selection = "";
 
   auto quit = Button("Quit", screen.ExitLoopClosure());
 
   // The components:
   auto renderer = Renderer(quit, [&] {
     return vbox({
-        text("Select: " + std::to_string(counter)),
+        text("Select changed: " + std::to_string(selectionChangeCounter) + " times"),
+        text("Currently selected: " + selection),
         window(text("Horizontal split"), hbox({
                                              LoremIpsum(),
                                              separator(),
@@ -73,6 +71,11 @@ int main() {
                })),
         quit->Render(),
     });
+  });
+
+  screen.onSelectionModified([&] {
+    selectionChangeCounter++;
+    selection = screen.GetSelectedContent(renderer);
   });
 
   screen.Loop(renderer);

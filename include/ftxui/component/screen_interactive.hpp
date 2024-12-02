@@ -69,8 +69,7 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlZ(bool force);
 
   // Selection API.
-  // TODO: Implement somethings here.
-  std::string GetSelectedContent(void);
+  std::string GetSelectedContent(Component component);
   void onSelectionModified(std::function<void(void)> callback);
 
  private:

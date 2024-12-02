@@ -577,9 +577,12 @@ void ScreenInteractive::ForceHandleCtrlZ(bool force) {
 }
 
 /// @brief Returns the content of the current selection
-std::string ScreenInteractive::GetSelectedContent(void)
+std::string ScreenInteractive::GetSelectedContent(Component component)
 {
+  Selection selection(selection_start_x_, selection_start_y_,  //
+                    selection_end_x_, selection_end_y_);
 
+  return GetNodeSelectedContent(*this, component->Render().get(), selection);
 }
 
 /// @brief Sets a callback on modifications of the selection
