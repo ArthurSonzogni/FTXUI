@@ -27,12 +27,18 @@ Element LoremIpsum() {
 
 int main() {
   auto screen = ScreenInteractive::TerminalOutput();
+  int counter = 0;
+
+  screen.onSelectionModified([&]{
+    counter++;
+  });
 
   auto quit = Button("Quit", screen.ExitLoopClosure());
 
   // The components:
   auto renderer = Renderer(quit, [&] {
     return vbox({
+        text("Select: " + std::to_string(counter)),
         window(text("Horizontal split"), hbox({
                                              LoremIpsum(),
                                              separator(),
