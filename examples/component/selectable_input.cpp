@@ -47,7 +47,7 @@ int main() {
         window(text("Vertical split"), vbox({
                                            LoremIpsum(),
                                            separator(),
-                                           LoremIpsum(),
+                                           LoremIpsum() | unselectable,
                                            separator(),
                                            LoremIpsum(),
                                        })),
