@@ -57,6 +57,17 @@ void Node::Check(Status* status) {
   status->need_iteration |= (status->iteration == 0);
 }
 
+std::string Node::GetSelectedContent(Selection& selection) {
+
+  std::string content;
+
+  for (auto& child : children_) {
+    content += child->GetSelectedContent(selection);
+  }
+
+  return content;
+}
+
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, const Element& element) {
@@ -103,6 +114,37 @@ void Render(Screen& screen, Node* node, Selection& selection) {
 
   // Step 5: Apply shaders
   screen.ApplyShader();
+}
+
+std::string GetNodeSelectedContent(Screen& screen, Node* node, Selection& selection) {
+
+  Box box;
+  box.x_min = 0;
+  box.y_min = 0;
+  box.x_max = screen.dimx() - 1;
+  box.y_max = screen.dimy() - 1;
+
+  Node::Status status;
+  node->Check(&status);
+  const int max_iterations = 20;
+  while (status.need_iteration && status.iteration < max_iterations) {
+    // Step 1: Find what dimension this elements wants to be.
+    node->ComputeRequirement();
+
+    // Step 2: Assign a dimension to the element.
+    node->SetBox(box);
+
+    // Check if the element needs another iteration of the layout algorithm.
+    status.need_iteration = false;
+    status.iteration++;
+    node->Check(&status);
+  }
+
+  // Step 3: Selection
+  node->Select(selection);
+
+  // Step 4: get the selected content.
+  return node->GetSelectedContent(selection);
 }
 
 }  // namespace ftxui

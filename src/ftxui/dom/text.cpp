@@ -44,6 +44,7 @@ class Text : public Node {
   void Render(Screen& screen) override {
     int x = box_.x_min;
     const int y = box_.y_min;
+
     if (y > box_.y_max) {
       return;
     }
@@ -65,6 +66,29 @@ class Text : public Node {
 
       ++x;
     }
+  }
+
+  std::string GetSelectedContent(Selection& selection) {
+    int x = box_.x_min;
+    std::string selected_text = "";
+
+    if (has_selection == false) {
+      return "";
+    }
+
+    for (const auto& cell : Utf8ToGlyphs(text_)) {
+      if (x > box_.x_max) {
+        break;
+      }
+
+      if ((x >= selection_start_) && (x <= selection_end_)) {
+        selected_text += cell;
+      }
+
+      ++x;
+    }
+
+    return selected_text;
   }
 
  private:
