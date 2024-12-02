@@ -39,6 +39,8 @@ class Text : public Node {
     has_selection = true;
     selection_start_ = selection_saturated.GetBox().x_min;
     selection_end_ = selection_saturated.GetBox().x_max;
+
+    selectionTransform = selection.GetOption().transform;
   }
 
   void Render(Screen& screen) override {
@@ -60,7 +62,7 @@ class Text : public Node {
 
       if (has_selection) {
         if ((x >= selection_start_) && (x <= selection_end_)) {
-          screen.PixelAt(x, y).inverted = true;
+          selectionTransform(screen.PixelAt(x, y));
         }
       }
 
@@ -96,6 +98,7 @@ class Text : public Node {
   bool has_selection = false;
   int selection_start_ = 0;
   int selection_end_ = 10;
+  std::function<void(Pixel& pixel)> selectionTransform;
 };
 
 class VText : public Node {

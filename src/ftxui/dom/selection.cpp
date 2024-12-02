@@ -26,11 +26,12 @@ class Unselectable : public NodeDecorator {
 /// @param start_y The y coordinate of the start of the selection.
 /// @param end_x The x coordinate of the end of the selection.
 /// @param end_y The y coordinate of the end of the selection.
-Selection::Selection(int start_x, int start_y, int end_x, int end_y)
+Selection::Selection(int start_x, int start_y, int end_x, int end_y, SelectionOption option)
     : start_x_(start_x),
       start_y_(start_y),
       end_x_(end_x),
       end_y_(end_y),
+      option(option),
       box_{
           std::min(start_x, end_x),
           std::max(start_x, end_x),
@@ -42,6 +43,12 @@ Selection::Selection(int start_x, int start_y, int end_x, int end_y)
 /// @return The box of the selection.
 const Box& Selection::GetBox() const {
   return box_;
+}
+
+/// @brief Get the options of the selection.
+/// @return The options of the selection.
+const SelectionOption& Selection::GetOption() const {
+  return option;
 }
 
 /// @brief Saturate the selection to be inside the box.
@@ -77,7 +84,7 @@ Selection Selection::SaturateHorizontal(Box box) {
       end_y = box.y_min;
     }
   }
-  return Selection(start_x, start_y, end_x, end_y);
+  return Selection(start_x, start_y, end_x, end_y, option);
 }
 
 /// @brief Saturate the selection to be inside the box.
@@ -114,7 +121,7 @@ Selection Selection::SaturateVertical(Box box) {
       end_y = box.y_min;
     }
   }
-  return Selection(start_x, start_y, end_x, end_y);
+  return Selection(start_x, start_y, end_x, end_y, option);
 }
 
 /// @brief Add a filter that will invert the foreground and the background
@@ -122,6 +129,18 @@ Selection Selection::SaturateVertical(Box box) {
 /// @ingroup dom
 Element unselectable(Element child) {
   return std::make_shared<Unselectable>(std::move(child));
+}
+
+/// @brief Create a SelectionOption, inverting the selection.
+/// @ingroup component
+// static
+SelectionOption SelectionOption::Simple() {
+  SelectionOption option;
+  option.transform = [](Pixel& pixel) {
+
+    pixel.inverted = true;
+  };
+  return option;
 }
 
 }  // namespace ftxui
