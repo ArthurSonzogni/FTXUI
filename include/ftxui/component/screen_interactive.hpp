@@ -70,6 +70,8 @@ class ScreenInteractive : public Screen {
 
   // Selection API.
   // TODO: Implement somethings here.
+  std::string GetSelectedContent(void);
+  void onSelectionModified(std::function<void(void)> callback);
 
  private:
   void ExitNow();
@@ -141,6 +143,8 @@ class ScreenInteractive : public Screen {
   int selection_start_y_ = 0;
   int selection_end_x_ = 0;
   int selection_end_y_ = 0;
+  bool selection_changed = false;
+  std::function<void(void)> selection_changed_callback_ = nullptr;
 
   friend class Loop;
 

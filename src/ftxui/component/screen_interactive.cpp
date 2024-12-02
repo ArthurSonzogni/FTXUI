@@ -576,6 +576,21 @@ void ScreenInteractive::ForceHandleCtrlZ(bool force) {
   force_handle_ctrl_z_ = force;
 }
 
+/// @brief Returns the content of the current selection
+std::string ScreenInteractive::GetSelectedContent(void)
+{
+
+}
+
+/// @brief Sets a callback on modifications of the selection
+/// This callback is called when the start of end of the selection moved.
+/// Not when the content/characters inside of the selection change.
+/// @param callback The function to callback on modifications of the selection.
+void ScreenInteractive::onSelectionModified(std::function<void(void)> callback)
+{
+  selection_changed_callback_ = std::move(callback);
+}
+
 /// @brief Return the currently active screen, or null if none.
 // static
 ScreenInteractive* ScreenInteractive::Active() {
@@ -828,6 +843,8 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
 // private
 bool ScreenInteractive::HandleSelection(Event event) {
+  selection_changed = false;
+
   if (!event.is_mouse()) {
     return false;
   }
@@ -843,6 +860,8 @@ bool ScreenInteractive::HandleSelection(Event event) {
     selection_start_y_ = mouse.y;
     selection_end_x_ = mouse.x;
     selection_end_y_ = mouse.y;
+
+    selection_changed = true;
   }
 
   if (!selection_pending_) {
@@ -850,8 +869,13 @@ bool ScreenInteractive::HandleSelection(Event event) {
   }
 
   if (mouse.motion == Mouse::Moved) {
-    selection_end_x_ = mouse.x;
-    selection_end_y_ = mouse.y;
+    if((mouse.x != selection_end_x_) || (mouse.y != selection_end_y_)) {
+      selection_end_x_ = mouse.x;
+      selection_end_y_ = mouse.y;
+
+      selection_changed = true;
+    }
+
     return true;
   }
 
@@ -859,6 +883,8 @@ bool ScreenInteractive::HandleSelection(Event event) {
     selection_pending_ = nullptr;
     selection_end_x_ = mouse.x;
     selection_end_y_ = mouse.y;
+
+    selection_changed = true;
     return true;
   }
 
@@ -943,6 +969,11 @@ void ScreenInteractive::Draw(Component component) {
   Selection selection(selection_start_x_, selection_start_y_,  //
                       selection_end_x_, selection_end_y_);
   Render(*this, document.get(), selection);
+
+  if((selection_changed == true) && (selection_changed_callback_ != nullptr))
+  {
+    selection_changed_callback_();
+  }
 
   // Set cursor position for user using tools to insert CJK characters.
   {
