@@ -5,7 +5,21 @@
 #include "ftxui/dom/selection.hpp"  // for Selection
 #include <algorithm>                // for max, min
 
+#include "ftxui/dom/elements.hpp"        // for Element, inverted
+#include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
+
 namespace ftxui {
+
+namespace {
+class Unselectable : public NodeDecorator {
+ public:
+  using NodeDecorator::NodeDecorator;
+
+  void Select(Selection& selection) override {
+    // Overwrite the select method to do nothing.
+  }
+};
+}  // namespace
 
 /// @brief Create a selection.
 /// @param start_x The x coordinate of the start of the selection.
@@ -101,6 +115,13 @@ Selection Selection::SaturateVertical(Box box) {
     }
   }
   return Selection(start_x, start_y, end_x, end_y);
+}
+
+/// @brief Add a filter that will invert the foreground and the background
+/// colors.
+/// @ingroup dom
+Element unselectable(Element child) {
+  return std::make_shared<Unselectable>(std::move(child));
 }
 
 }  // namespace ftxui
