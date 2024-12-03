@@ -153,6 +153,38 @@ TEST(SelectionTest, VBoxSaturatedSelection) {
 }
 
 
+TEST(SelectionTest, HBoxSelection) {
+
+  auto component = Renderer([&] {
+      return hbox({ text("Lorem ipsum dolor"),
+                    text("Ut enim ad minim")});
+  });
+
+  auto screen = ScreenInteractive::FixedSize(40, 1);
+
+  Selection selection(2, 0, 20, 0);
+
+  Render(screen, component->Render().get(), selection);
+
+  EXPECT_EQ(screen.ToString(), "Lo\x1B[7mrem ipsum dolorUt e\x1B[27mnim ad minim       ");
+}
+
+TEST(SelectionTest, HBoxSaturatedSelection) {
+
+  auto component = Renderer([&] {
+      return hbox({ text("Lorem ipsum dolor"),
+                    text("Ut enim ad minim"),
+                    text("Duis aute irure")});
+  });
+
+  auto screen = ScreenInteractive::FixedSize(60, 1);
+
+  Selection selection(2, 0, 35, 0);
+
+  Render(screen, component->Render().get(), selection);
+
+  EXPECT_EQ(screen.ToString(), "Lo\x1B[7mrem ipsum dolorUt enim ad minimDui\x1B[27ms aute irure            ");
+}
 
 }  // namespace ftxui
 // NOLINTEND
