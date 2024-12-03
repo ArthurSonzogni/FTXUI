@@ -19,7 +19,10 @@ struct SelectionOption {
   static SelectionOption Simple();
 
   // Style:
-  std::function<void(Pixel& pixel)> transform ;
+  std::function<void(Pixel& pixel)> transform = [](Pixel& pixel) {
+
+    pixel.inverted = true;
+  };
 
   // Observers:
   /// Called when the selection changed.
