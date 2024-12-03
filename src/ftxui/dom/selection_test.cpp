@@ -44,18 +44,38 @@ Event MouseReleased(int x, int y) {
 }  // namespace
 
 
-TEST(SelectionTest, BasicSelection) {
+TEST(SelectionTest, DefaultSelection) {
+
+  auto component = Renderer([&] {
+      return text("Lorem ipsum dolor");
+  });
+
+  auto screen = ScreenInteractive::FixedSize(20, 1);
+
+  Loop loop(&screen, component);
+
+  loop.RunOnce();
+  screen.PostEvent(MousePressed(3, 1));
+  loop.RunOnce();
+  screen.PostEvent(MouseReleased(10, 1));
+  loop.RunOnce();
+
+  EXPECT_STREQ(screen.GetSelectedContent(component).c_str(), "rem ipsu");
+}
+
+TEST(SelectionTest, CallbackSelection) {
 
   int selectionChangeCounter = 0;
 
   auto component = Renderer([&] {
       return text("Lorem ipsum dolor");
   });
+
   auto screen = ScreenInteractive::FixedSize(20, 1);
 
   screen.setSelectionOptions({
     .transform = [](Pixel& pixel) {
-      pixel.inverted = true;
+      pixel.underlined_double = true;
     },
     .on_change = [&] {
       selectionChangeCounter++;
@@ -72,12 +92,32 @@ TEST(SelectionTest, BasicSelection) {
 
   EXPECT_EQ(selectionChangeCounter, 2);
 
-  Render(screen, component->Render());
-
-  EXPECT_EQ(screen.ToString(), "\x1B[7mL\x1B[27morem ipsum dolor   ");
-
   EXPECT_STREQ(screen.GetSelectedContent(component).c_str(), "rem ipsu");
 }
+
+TEST(SelectionTest, StyleSelection) {
+
+  int selectionChangeCounter = 0;
+
+  auto component = Renderer([&] {
+      return text("Lorem ipsum dolor");
+  });
+
+  auto screen = ScreenInteractive::FixedSize(20, 1);
+
+  Selection selection(2, 0, 9, 0, {
+    .transform = [](Pixel& pixel) {
+      pixel.underlined_double = true;
+    },
+    .on_change = [&] {
+    }
+  });
+
+  Render(screen, component->Render().get(), selection);
+
+  EXPECT_EQ(screen.ToString(), "Lo\x1B[21mrem ipsu\x1B[24mm dolor   ");
+}
+
 
 
 }  // namespace ftxui
