@@ -119,6 +119,40 @@ TEST(SelectionTest, StyleSelection) {
 }
 
 
+TEST(SelectionTest, VBoxSelection) {
+
+  auto component = Renderer([&] {
+      return vbox({ text("Lorem ipsum dolor"),
+                    text("Ut enim ad minim")});
+  });
+
+  auto screen = ScreenInteractive::FixedSize(20, 2);
+
+  Selection selection(2, 0, 2, 1);
+
+  Render(screen, component->Render().get(), selection);
+
+  EXPECT_EQ(screen.ToString(), "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n\x1B[7mUt \x1B[27menim ad minim    ");
+}
+
+TEST(SelectionTest, VBoxSaturatedSelection) {
+
+  auto component = Renderer([&] {
+      return vbox({ text("Lorem ipsum dolor"),
+                    text("Ut enim ad minim"),
+                    text("Duis aute irure")});
+  });
+
+  auto screen = ScreenInteractive::FixedSize(20, 3);
+
+  Selection selection(2, 0, 2, 2);
+
+  Render(screen, component->Render().get(), selection);
+
+  EXPECT_EQ(screen.ToString(), "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n\x1B[7mUt enim ad minim\x1B[27m    \r\n\x1B[7mDui\x1B[27ms aute irure     ");
+}
+
+
 
 }  // namespace ftxui
 // NOLINTEND
