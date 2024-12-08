@@ -15,6 +15,7 @@
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/dom/selection.hpp"             // for SelectionOption
 #include "ftxui/component/task.hpp"            // for Task, Closure
 #include "ftxui/screen/screen.hpp"             // for Screen
 
@@ -68,6 +69,10 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlC(bool force);
   void ForceHandleCtrlZ(bool force);
 
+  // Selection API.
+  std::string GetSelectedContent(Component component);
+  void setSelectionOptions(SelectionOption option);
+
  private:
   void ExitNow();
 
@@ -82,6 +87,8 @@ class ScreenInteractive : public Screen {
   void RunOnceBlocking(Component component);
 
   void HandleTask(Component component, Task& task);
+  bool HandleSelection(Event event);
+  void RefreshSelection();
   void Draw(Component component);
   void ResetCursorPosition();
 
@@ -128,6 +135,16 @@ class ScreenInteractive : public Screen {
 
   // The style of the cursor to restore on exit.
   int cursor_reset_shape_ = 1;
+
+  // Selection API:
+  bool selection_enabled_ = false;
+  CapturedMouse selection_pending_;
+  int selection_start_x_ = 0;
+  int selection_start_y_ = 0;
+  int selection_end_x_ = 0;
+  int selection_end_y_ = 0;
+  bool selection_changed = false;
+  SelectionOption selection_options_ = SelectionOption::Simple();
 
   friend class Loop;
 

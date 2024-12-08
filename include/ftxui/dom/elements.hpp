@@ -113,6 +113,7 @@ Decorator focusPositionRelative(float x, float y);
 Element automerge(Element child);
 Decorator hyperlink(std::string link);
 Element hyperlink(std::string link, Element child);
+Element unselectable(Element child);
 
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.
