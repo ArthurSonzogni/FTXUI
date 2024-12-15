@@ -576,6 +576,20 @@ void ScreenInteractive::ForceHandleCtrlZ(bool force) {
   force_handle_ctrl_z_ = force;
 }
 
+/// @brief Returns the content of the current selection
+std::string ScreenInteractive::GetSelectedContent(Component component)
+{
+  Selection selection(selection_start_x_, selection_start_y_,  //
+                    selection_end_x_, selection_end_y_, selection_options_);
+
+  return GetNodeSelectedContent(*this, component->Render().get(), selection);
+}
+
+void ScreenInteractive::setSelectionOptions(SelectionOption option)
+{
+  selection_options_ = std::move(option);
+}
+
 /// @brief Return the currently active screen, or null if none.
 // static
 ScreenInteractive* ScreenInteractive::Active() {
@@ -781,7 +795,9 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
       arg.screen_ = this;
 
-      const bool handled = component->OnEvent(arg);
+      bool handled = component->OnEvent(arg);
+
+      handled = handled || HandleSelection(arg);
 
       if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
         RecordSignal(SIGABRT);
@@ -822,6 +838,56 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
   },
   task);
   // clang-format on
+}
+
+// private
+bool ScreenInteractive::HandleSelection(Event event) {
+  selection_changed = false;
+
+  if (!event.is_mouse()) {
+    return false;
+  }
+
+  auto& mouse = event.mouse();
+  if (mouse.button != Mouse::Left) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Pressed) {
+    selection_pending_ = CaptureMouse();
+    selection_start_x_ = mouse.x;
+    selection_start_y_ = mouse.y;
+    selection_end_x_ = mouse.x;
+    selection_end_y_ = mouse.y;
+
+    selection_changed = true;
+  }
+
+  if (!selection_pending_) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Moved) {
+    if((mouse.x != selection_end_x_) || (mouse.y != selection_end_y_)) {
+      selection_end_x_ = mouse.x;
+      selection_end_y_ = mouse.y;
+
+      selection_changed = true;
+    }
+
+    return true;
+  }
+
+  if (mouse.motion == Mouse::Released) {
+    selection_pending_ = nullptr;
+    selection_end_x_ = mouse.x;
+    selection_end_y_ = mouse.y;
+
+    selection_changed = true;
+    return true;
+  }
+
+  return false;
 }
 
 // private
@@ -899,7 +965,14 @@ void ScreenInteractive::Draw(Component component) {
 #endif
   previous_frame_resized_ = resized;
 
-  Render(*this, document);
+  Selection selection(selection_start_x_, selection_start_y_,  //
+                      selection_end_x_, selection_end_y_, selection_options_);
+  Render(*this, document.get(), selection);
+
+  if(selection_changed == true)
+  {
+    selection_options_.on_change();
+  }
 
   // Set cursor position for user using tools to insert CJK characters.
   {

@@ -64,6 +64,20 @@ class VBox : public Node {
       y = box.y_max + 1;
     }
   }
+
+  void Select(Selection& selection) override {
+    // If this Node box_ doesn't intersect with the selection, then no
+    // selection.
+    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
+      return;
+    }
+
+    Selection selection_saturated = selection.SaturateVertical(box_);
+
+    for (auto& child : children_) {
+      child->Select(selection_saturated);
+    }
+  }
 };
 }  // namespace
 

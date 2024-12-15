@@ -26,28 +26,79 @@ class Text : public Node {
   void ComputeRequirement() override {
     requirement_.min_x = string_width(text_);
     requirement_.min_y = 1;
+    has_selection = false;
+  }
+
+  void Select(Selection& selection) override {
+    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
+      return;
+    }
+
+    Selection selection_saturated = selection.SaturateHorizontal(box_);
+
+    has_selection = true;
+    selection_start_ = selection_saturated.GetBox().x_min;
+    selection_end_ = selection_saturated.GetBox().x_max;
+
+    selectionTransform = selection.GetOption().transform;
   }
 
   void Render(Screen& screen) override {
     int x = box_.x_min;
     const int y = box_.y_min;
+
     if (y > box_.y_max) {
       return;
     }
+
     for (const auto& cell : Utf8ToGlyphs(text_)) {
       if (x > box_.x_max) {
-        return;
+        break;
       }
       if (cell == "\n") {
         continue;
       }
       screen.PixelAt(x, y).character = cell;
+
+      if (has_selection) {
+        if ((x >= selection_start_) && (x <= selection_end_)) {
+          selectionTransform(screen.PixelAt(x, y));
+        }
+      }
+
       ++x;
     }
   }
 
+  std::string GetSelectedContent(Selection& selection) {
+    int x = box_.x_min;
+    std::string selected_text = "";
+
+    if (has_selection == false) {
+      return "";
+    }
+
+    for (const auto& cell : Utf8ToGlyphs(text_)) {
+      if (x > box_.x_max) {
+        break;
+      }
+
+      if ((x >= selection_start_) && (x <= selection_end_)) {
+        selected_text += cell;
+      }
+
+      ++x;
+    }
+
+    return selected_text;
+  }
+
  private:
   std::string text_;
+  bool has_selection = false;
+  int selection_start_ = 0;
+  int selection_end_ = 10;
+  std::function<void(Pixel& pixel)> selectionTransform;
 };
 
 class VText : public Node {
