@@ -341,6 +341,7 @@ Feel free to add your projects here:
 - [pciex](https://github.com/s0nx/pciex)
 - [Fallout terminal hacking](https://github.com/gshigin/yet-another-fallout-terminal-hacking-game)
 - [Lazylist](https://github.com/zhuyongqi9/lazylist)
+- [TUISIC](https://github.com/Dark-Kernel/tuisic)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
