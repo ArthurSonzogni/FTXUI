@@ -19,6 +19,7 @@ class ContainerBase : public ComponentBase {
  public:
   ContainerBase(Components children, int* selector)
       : selector_(selector ? selector : &selected_) {
+    selectorState_ = selector_;
     for (Component& child : children) {
       Add(std::move(child));
     }
@@ -34,6 +35,8 @@ class ContainerBase : public ComponentBase {
       return false;
     }
 
+    ManageSelector();
+
     if (ActiveChild() && ActiveChild()->OnEvent(event)) {
       return true;
     }
@@ -42,7 +45,7 @@ class ContainerBase : public ComponentBase {
   }
 
   Component ActiveChild() override {
-    if (children_.empty()) {
+    if (children_.empty() || !selector_) {
       return nullptr;
     }
 
@@ -50,6 +53,7 @@ class ContainerBase : public ComponentBase {
   }
 
   void SetActiveChild(ComponentBase* child) override {
+    selector_ = selectorState_;  // in case of a mouse event
     for (size_t i = 0; i < children_.size(); ++i) {
       if (children_[i].get() == child) {
         *selector_ = static_cast<int>(i);
@@ -67,6 +71,7 @@ class ContainerBase : public ComponentBase {
   }
 
   int selected_ = 0;
+  int* selectorState_ = nullptr;
   int* selector_ = nullptr;
 
   void MoveSelector(int dir) {
@@ -92,6 +97,17 @@ class ContainerBase : public ComponentBase {
       }
     }
   }
+
+  void ManageSelector() {
+    if (selector_) {
+      selectorState_ = selector_;
+    }
+    if (!Active()) {
+      selector_ = nullptr;
+      return;
+    }
+    selector_ = selectorState_;
+  }
 };
 
 class VerticalContainer : public ContainerBase {
@@ -99,6 +115,7 @@ class VerticalContainer : public ContainerBase {
   using ContainerBase::ContainerBase;
 
   Element Render() override {
+    ManageSelector();
     Elements elements;
     elements.reserve(children_.size());
     for (auto& it : children_) {
@@ -182,6 +199,7 @@ class HorizontalContainer : public ContainerBase {
   using ContainerBase::ContainerBase;
 
   Element Render() override {
+    ManageSelector();
     Elements elements;
     elements.reserve(children_.size());
     for (auto& it : children_) {
@@ -333,7 +351,7 @@ Component Vertical(Components children) {
 ///   children_2,
 ///   children_3,
 ///   children_4,
-/// });
+/// }, &selected_children);
 /// ```
 Component Vertical(Components children, int* selector) {
   return std::make_shared<VerticalContainer>(std::move(children), selector);
@@ -354,7 +372,7 @@ Component Vertical(Components children, int* selector) {
 ///   children_2,
 ///   children_3,
 ///   children_4,
-/// }, &selected_children);
+/// });
 /// ```
 Component Horizontal(Components children) {
   return Horizontal(std::move(children), nullptr);
