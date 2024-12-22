@@ -39,8 +39,6 @@ class Text : public Node {
     has_selection = true;
     selection_start_ = selection_saturated.GetBox().x_min;
     selection_end_ = selection_saturated.GetBox().x_max;
-
-    selectionTransform = selection.GetOption().transform;
   }
 
   void Render(Screen& screen) override {
@@ -61,6 +59,7 @@ class Text : public Node {
       screen.PixelAt(x, y).character = cell;
 
       if (has_selection) {
+        auto selectionTransform = screen.GetSelectionStyle();
         if ((x >= selection_start_) && (x <= selection_end_)) {
           selectionTransform(screen.PixelAt(x, y));
         }

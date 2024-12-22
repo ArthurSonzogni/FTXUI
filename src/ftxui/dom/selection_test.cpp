@@ -4,15 +4,14 @@
 #include <gtest/gtest.h>
 #include <csignal>  // for raise, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM
 
-#include "ftxui/dom/elements.hpp"  // for text
-#include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/screen.hpp"  // for Screen
-#include "ftxui/component/event.hpp"           // for Event
-#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include "ftxui/component/component.hpp"       // for Input, Renderer, Vertical
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/component.hpp"  // for Input, Renderer, Vertical
+#include "ftxui/component/event.hpp"      // for Event
 #include "ftxui/component/loop.hpp"       // for Loop
-
+#include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
+#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/dom/elements.hpp"   // for text
+#include "ftxui/dom/node.hpp"       // for Render
+#include "ftxui/screen/screen.hpp"  // for Screen
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -43,12 +42,8 @@ Event MouseReleased(int x, int y) {
 }
 }  // namespace
 
-
 TEST(SelectionTest, DefaultSelection) {
-
-  auto component = Renderer([&] {
-      return text("Lorem ipsum dolor");
-  });
+  auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
 
   auto screen = ScreenInteractive::FixedSize(20, 1);
 
@@ -64,23 +59,11 @@ TEST(SelectionTest, DefaultSelection) {
 }
 
 TEST(SelectionTest, CallbackSelection) {
-
   int selectionChangeCounter = 0;
 
-  auto component = Renderer([&] {
-      return text("Lorem ipsum dolor");
-  });
+  auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
 
   auto screen = ScreenInteractive::FixedSize(20, 1);
-
-  screen.setSelectionOptions({
-    .transform = [](Pixel& pixel) {
-      pixel.underlined_double = true;
-    },
-    .on_change = [&] {
-      selectionChangeCounter++;
-    }
-  });
 
   Loop loop(&screen, component);
 
@@ -96,34 +79,22 @@ TEST(SelectionTest, CallbackSelection) {
 }
 
 TEST(SelectionTest, StyleSelection) {
-
   int selectionChangeCounter = 0;
 
-  auto component = Renderer([&] {
-      return text("Lorem ipsum dolor");
-  });
+  auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
 
   auto screen = ScreenInteractive::FixedSize(20, 1);
 
-  Selection selection(2, 0, 9, 0, {
-    .transform = [](Pixel& pixel) {
-      pixel.underlined_double = true;
-    },
-    .on_change = [&] {
-    }
-  });
+  Selection selection(2, 0, 9, 0);
 
   Render(screen, component->Render().get(), selection);
 
   EXPECT_EQ(screen.ToString(), "Lo\x1B[21mrem ipsu\x1B[24mm dolor   ");
 }
 
-
 TEST(SelectionTest, VBoxSelection) {
-
   auto component = Renderer([&] {
-      return vbox({ text("Lorem ipsum dolor"),
-                    text("Ut enim ad minim")});
+    return vbox({text("Lorem ipsum dolor"), text("Ut enim ad minim")});
   });
 
   auto screen = ScreenInteractive::FixedSize(20, 2);
@@ -132,15 +103,15 @@ TEST(SelectionTest, VBoxSelection) {
 
   Render(screen, component->Render().get(), selection);
 
-  EXPECT_EQ(screen.ToString(), "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n\x1B[7mUt \x1B[27menim ad minim    ");
+  EXPECT_EQ(screen.ToString(),
+            "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n\x1B[7mUt \x1B[27menim ad "
+            "minim    ");
 }
 
 TEST(SelectionTest, VBoxSaturatedSelection) {
-
   auto component = Renderer([&] {
-      return vbox({ text("Lorem ipsum dolor"),
-                    text("Ut enim ad minim"),
-                    text("Duis aute irure")});
+    return vbox({text("Lorem ipsum dolor"), text("Ut enim ad minim"),
+                 text("Duis aute irure")});
   });
 
   auto screen = ScreenInteractive::FixedSize(20, 3);
@@ -149,15 +120,14 @@ TEST(SelectionTest, VBoxSaturatedSelection) {
 
   Render(screen, component->Render().get(), selection);
 
-  EXPECT_EQ(screen.ToString(), "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n\x1B[7mUt enim ad minim\x1B[27m    \r\n\x1B[7mDui\x1B[27ms aute irure     ");
+  EXPECT_EQ(screen.ToString(),
+            "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n\x1B[7mUt enim ad "
+            "minim\x1B[27m    \r\n\x1B[7mDui\x1B[27ms aute irure     ");
 }
 
-
 TEST(SelectionTest, HBoxSelection) {
-
   auto component = Renderer([&] {
-      return hbox({ text("Lorem ipsum dolor"),
-                    text("Ut enim ad minim")});
+    return hbox({text("Lorem ipsum dolor"), text("Ut enim ad minim")});
   });
 
   auto screen = ScreenInteractive::FixedSize(40, 1);
@@ -166,15 +136,14 @@ TEST(SelectionTest, HBoxSelection) {
 
   Render(screen, component->Render().get(), selection);
 
-  EXPECT_EQ(screen.ToString(), "Lo\x1B[7mrem ipsum dolorUt e\x1B[27mnim ad minim       ");
+  EXPECT_EQ(screen.ToString(),
+            "Lo\x1B[7mrem ipsum dolorUt e\x1B[27mnim ad minim       ");
 }
 
 TEST(SelectionTest, HBoxSaturatedSelection) {
-
   auto component = Renderer([&] {
-      return hbox({ text("Lorem ipsum dolor"),
-                    text("Ut enim ad minim"),
-                    text("Duis aute irure")});
+    return hbox({text("Lorem ipsum dolor"), text("Ut enim ad minim"),
+                 text("Duis aute irure")});
   });
 
   auto screen = ScreenInteractive::FixedSize(60, 1);
@@ -183,7 +152,9 @@ TEST(SelectionTest, HBoxSaturatedSelection) {
 
   Render(screen, component->Render().get(), selection);
 
-  EXPECT_EQ(screen.ToString(), "Lo\x1B[7mrem ipsum dolorUt enim ad minimDui\x1B[27ms aute irure            ");
+  EXPECT_EQ(screen.ToString(),
+            "Lo\x1B[7mrem ipsum dolorUt enim ad minimDui\x1B[27ms aute irure   "
+            "         ");
 }
 
 }  // namespace ftxui

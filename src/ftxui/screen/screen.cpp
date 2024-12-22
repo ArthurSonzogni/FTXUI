@@ -544,4 +544,16 @@ const std::string& Screen::Hyperlink(std::uint8_t id) const {
   return hyperlinks_[id];
 }
 
+/// @brief Return the current selection style.
+/// @see SetSelectionStyle
+const Screen::SelectionStyle& Screen::GetSelectionStyle() const {
+  return selection_style_;
+}
+
+/// @brief Set the current selection style.
+/// @see GetSelectionStyle
+void Screen::SetSelectionStyle(SelectionStyle decorator) {
+  selection_style_ = decorator;
+}
+
 }  // namespace ftxui

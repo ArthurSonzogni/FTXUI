@@ -71,7 +71,6 @@ class ScreenInteractive : public Screen {
 
   // Selection API.
   std::string GetSelectedContent(Component component);
-  void setSelectionOptions(SelectionOption option);
 
  private:
   void ExitNow();
@@ -137,14 +136,12 @@ class ScreenInteractive : public Screen {
   int cursor_reset_shape_ = 1;
 
   // Selection API:
-  bool selection_enabled_ = false;
   CapturedMouse selection_pending_;
   int selection_start_x_ = 0;
   int selection_start_y_ = 0;
   int selection_end_x_ = 0;
   int selection_end_y_ = 0;
   bool selection_changed = false;
-  SelectionOption selection_options_ = SelectionOption::Simple();
 
   friend class Loop;
 

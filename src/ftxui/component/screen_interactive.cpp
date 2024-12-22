@@ -577,17 +577,11 @@ void ScreenInteractive::ForceHandleCtrlZ(bool force) {
 }
 
 /// @brief Returns the content of the current selection
-std::string ScreenInteractive::GetSelectedContent(Component component)
-{
+std::string ScreenInteractive::GetSelectedContent(Component component) {
   Selection selection(selection_start_x_, selection_start_y_,  //
-                    selection_end_x_, selection_end_y_, selection_options_);
+                      selection_end_x_, selection_end_y_);
 
   return GetNodeSelectedContent(*this, component->Render().get(), selection);
-}
-
-void ScreenInteractive::setSelectionOptions(SelectionOption option)
-{
-  selection_options_ = std::move(option);
 }
 
 /// @brief Return the currently active screen, or null if none.
@@ -966,13 +960,8 @@ void ScreenInteractive::Draw(Component component) {
   previous_frame_resized_ = resized;
 
   Selection selection(selection_start_x_, selection_start_y_,  //
-                      selection_end_x_, selection_end_y_, selection_options_);
+                      selection_end_x_, selection_end_y_);
   Render(*this, document.get(), selection);
-
-  if(selection_changed == true)
-  {
-    selection_options_.on_change();
-  }
 
   // Set cursor position for user using tools to insert CJK characters.
   {
