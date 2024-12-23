@@ -577,11 +577,15 @@ void ScreenInteractive::ForceHandleCtrlZ(bool force) {
 }
 
 /// @brief Returns the content of the current selection
-std::string ScreenInteractive::GetSelectedContent(Component component) {
-  Selection selection(selection_start_x_, selection_start_y_,  //
-                      selection_end_x_, selection_end_y_);
+std::string ScreenInteractive::SelectionAsString() {
+  if (!selection_) {
+    return "";
+  }
+  return selection_->GetParts();
+}
 
-  return GetNodeSelectedContent(*this, component->Render().get(), selection);
+void ScreenInteractive::SelectionOnChange(std::function<void()> callback) {
+  selection_on_change_ = std::move(callback);
 }
 
 /// @brief Return the currently active screen, or null if none.
@@ -759,6 +763,14 @@ void ScreenInteractive::RunOnce(Component component) {
     ExecuteSignalHandlers();
   }
   Draw(std::move(component));
+
+  if (selection_data_previous_ != selection_data_) {
+    selection_data_previous_ = selection_data_;
+    if (selection_on_change_) {
+      selection_on_change_();
+      Post(Event::Custom);
+    }
+  }
 }
 
 // private
@@ -791,7 +803,7 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
       bool handled = component->OnEvent(arg);
 
-      handled = handled || HandleSelection(arg);
+      handled = HandleSelection(handled, arg);
 
       if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
         RecordSignal(SIGABRT);
@@ -835,8 +847,13 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 }
 
 // private
-bool ScreenInteractive::HandleSelection(Event event) {
-  selection_changed = false;
+bool ScreenInteractive::HandleSelection(bool handled, Event event) {
+  if (handled) {
+    selection_pending_ = nullptr;
+    selection_data_.empty = false;
+    selection_ = nullptr;
+    return true;
+  }
 
   if (!event.is_mouse()) {
     return false;
@@ -849,12 +866,11 @@ bool ScreenInteractive::HandleSelection(Event event) {
 
   if (mouse.motion == Mouse::Pressed) {
     selection_pending_ = CaptureMouse();
-    selection_start_x_ = mouse.x;
-    selection_start_y_ = mouse.y;
-    selection_end_x_ = mouse.x;
-    selection_end_y_ = mouse.y;
-
-    selection_changed = true;
+    selection_data_.start_x = mouse.x;
+    selection_data_.start_y = mouse.y;
+    selection_data_.end_x = mouse.x;
+    selection_data_.end_y = mouse.y;
+    return false;
   }
 
   if (!selection_pending_) {
@@ -862,11 +878,11 @@ bool ScreenInteractive::HandleSelection(Event event) {
   }
 
   if (mouse.motion == Mouse::Moved) {
-    if((mouse.x != selection_end_x_) || (mouse.y != selection_end_y_)) {
-      selection_end_x_ = mouse.x;
-      selection_end_y_ = mouse.y;
-
-      selection_changed = true;
+    if ((mouse.x != selection_data_.end_x) ||
+        (mouse.y != selection_data_.end_y)) {
+      selection_data_.end_x = mouse.x;
+      selection_data_.end_y = mouse.y;
+      selection_data_.empty = false;
     }
 
     return true;
@@ -874,10 +890,9 @@ bool ScreenInteractive::HandleSelection(Event event) {
 
   if (mouse.motion == Mouse::Released) {
     selection_pending_ = nullptr;
-    selection_end_x_ = mouse.x;
-    selection_end_y_ = mouse.y;
-
-    selection_changed = true;
+    selection_data_.end_x = mouse.x;
+    selection_data_.end_y = mouse.y;
+    selection_data_.empty = false;
     return true;
   }
 
@@ -959,9 +974,12 @@ void ScreenInteractive::Draw(Component component) {
 #endif
   previous_frame_resized_ = resized;
 
-  Selection selection(selection_start_x_, selection_start_y_,  //
-                      selection_end_x_, selection_end_y_);
-  Render(*this, document.get(), selection);
+  selection_ = selection_data_.empty
+                   ? std::make_unique<Selection>()
+                   : std::make_unique<Selection>(
+                         selection_data_.start_x, selection_data_.start_y,  //
+                         selection_data_.end_x, selection_data_.end_y);
+  Render(*this, document.get(), *selection_);
 
   // Set cursor position for user using tools to insert CJK characters.
   {
@@ -1048,6 +1066,23 @@ void ScreenInteractive::Signal(int signal) {
     return;
   }
 #endif
+}
+
+bool ScreenInteractive::SelectionData::operator==(
+    const ScreenInteractive::SelectionData& other) const {
+  if (empty && other.empty) {
+    return true;
+  }
+  if (empty || other.empty) {
+    return false;
+  }
+  return start_x == other.start_x && start_y == other.start_y &&
+         end_x == other.end_x && end_y == other.end_y;
+}
+
+bool ScreenInteractive::SelectionData::operator!=(
+    const ScreenInteractive::SelectionData& other) const {
+  return !(*this == other);
 }
 
 }  // namespace ftxui.

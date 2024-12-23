@@ -15,8 +15,8 @@
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/event.hpp"           // for Event
-#include "ftxui/dom/selection.hpp"             // for SelectionOption
 #include "ftxui/component/task.hpp"            // for Task, Closure
+#include "ftxui/dom/selection.hpp"             // for SelectionOption
 #include "ftxui/screen/screen.hpp"             // for Screen
 
 namespace ftxui {
@@ -70,7 +70,8 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlZ(bool force);
 
   // Selection API.
-  std::string GetSelectedContent(Component component);
+  std::string SelectionAsString();
+  void SelectionOnChange(std::function<void()> callback);
 
  private:
   void ExitNow();
@@ -86,7 +87,7 @@ class ScreenInteractive : public Screen {
   void RunOnceBlocking(Component component);
 
   void HandleTask(Component component, Task& task);
-  bool HandleSelection(Event event);
+  bool HandleSelection(bool handled, Event event);
   void RefreshSelection();
   void Draw(Component component);
   void ResetCursorPosition();
@@ -137,11 +138,19 @@ class ScreenInteractive : public Screen {
 
   // Selection API:
   CapturedMouse selection_pending_;
-  int selection_start_x_ = 0;
-  int selection_start_y_ = 0;
-  int selection_end_x_ = 0;
-  int selection_end_y_ = 0;
-  bool selection_changed = false;
+  struct SelectionData {
+    int start_x = -1;
+    int start_y = -1;
+    int end_x = -2;
+    int end_y = -2;
+    bool empty = true;
+    bool operator==(const SelectionData& other) const;
+    bool operator!=(const SelectionData& other) const;
+  };
+  SelectionData selection_data_;
+  SelectionData selection_data_previous_;
+  std::unique_ptr<Selection> selection_;
+  std::function<void()> selection_on_change_;
 
   friend class Loop;
 

@@ -21,6 +21,9 @@ class Unselectable : public NodeDecorator {
 };
 }  // namespace
 
+/// @brief Create an empty selection.
+Selection::Selection() : empty_(true) {}
+
 /// @brief Create a selection.
 /// @param start_x The x coordinate of the start of the selection.
 /// @param start_y The y coordinate of the start of the selection.
@@ -36,7 +39,26 @@ Selection::Selection(int start_x, int start_y, int end_x, int end_y)
           std::max(start_x, end_x),
           std::min(start_y, end_y),
           std::max(start_y, end_y),
-      } {}
+      },
+      empty_(false) {}
+
+Selection::Selection(int start_x,
+                     int start_y,
+                     int end_x,
+                     int end_y,
+                     Selection* parent)
+    : start_x_(start_x),
+      start_y_(start_y),
+      end_x_(end_x),
+      end_y_(end_y),
+      box_{
+          std::min(start_x, end_x),
+          std::max(start_x, end_x),
+          std::min(start_y, end_y),
+          std::max(start_y, end_y),
+      },
+      parent_(parent),
+      empty_(false) {}
 
 /// @brief Get the box of the selection.
 /// @return The box of the selection.
@@ -77,7 +99,7 @@ Selection Selection::SaturateHorizontal(Box box) {
       end_y = box.y_min;
     }
   }
-  return Selection(start_x, start_y, end_x, end_y);
+  return Selection(start_x, start_y, end_x, end_y, parent_);
 }
 
 /// @brief Saturate the selection to be inside the box.
@@ -114,7 +136,33 @@ Selection Selection::SaturateVertical(Box box) {
       end_y = box.y_min;
     }
   }
-  return Selection(start_x, start_y, end_x, end_y);
+  return Selection(start_x, start_y, end_x, end_y, parent_);
+}
+
+void Selection::AddPart(const std::string& part, int y, int left, int right) {
+  if (parent_ != this) {
+    return parent_->AddPart(part, y, left, right);
+  }
+  [&] {
+    if (parts_.str().empty()) {
+      parts_ << "[" + part + "]";
+      return;
+    }
+
+    if (y_ != y) {
+      parts_ << '\n' << part;
+      return;
+    }
+
+    if (x_ == left + 1) {
+      parts_ << "|" << part;
+      return;
+    }
+
+    parts_ << "-" << part;
+  }();
+  y_ = y;
+  x_ = right;
 }
 
 }  // namespace ftxui

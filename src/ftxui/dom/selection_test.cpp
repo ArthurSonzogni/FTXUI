@@ -40,56 +40,118 @@ Event MouseReleased(int x, int y) {
   mouse.y = y;
   return Event::Mouse("jjj", mouse);
 }
+
+Event MouseMove(int x, int y) {
+  Mouse mouse;
+  mouse.button = Mouse::Left;
+  mouse.motion = Mouse::Moved;
+  mouse.shift = false;
+  mouse.meta = false;
+  mouse.control = false;
+  mouse.x = x;
+  mouse.y = y;
+  return Event::Mouse("jjj", mouse);
+}
+
 }  // namespace
 
 TEST(SelectionTest, DefaultSelection) {
   auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
-
   auto screen = ScreenInteractive::FixedSize(20, 1);
-
+  EXPECT_EQ(screen.SelectionAsString(), "");
   Loop loop(&screen, component);
-
-  loop.RunOnce();
   screen.PostEvent(MousePressed(3, 1));
-  loop.RunOnce();
   screen.PostEvent(MouseReleased(10, 1));
   loop.RunOnce();
 
-  EXPECT_STREQ(screen.GetSelectedContent(component).c_str(), "rem ipsu");
+  EXPECT_EQ(screen.SelectionAsString(), "rem ipsu");
 }
 
-TEST(SelectionTest, CallbackSelection) {
+TEST(SelectionTest, SelectionOnChange) {
   int selectionChangeCounter = 0;
-
   auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
-
   auto screen = ScreenInteractive::FixedSize(20, 1);
+  screen.SelectionOnChange([&] { selectionChangeCounter++; });
 
   Loop loop(&screen, component);
-
   loop.RunOnce();
+  EXPECT_EQ(selectionChangeCounter, 0);
+
   screen.PostEvent(MousePressed(3, 1));
   loop.RunOnce();
-  screen.PostEvent(MouseReleased(10, 1));
-  loop.RunOnce();
+  EXPECT_EQ(selectionChangeCounter, 0);
 
+  screen.PostEvent(MouseMove(5, 1));
+  loop.RunOnce();
+  EXPECT_EQ(selectionChangeCounter, 1);
+
+  screen.PostEvent(MouseMove(7, 1));
+  loop.RunOnce();
   EXPECT_EQ(selectionChangeCounter, 2);
 
-  EXPECT_STREQ(screen.GetSelectedContent(component).c_str(), "rem ipsu");
+  screen.PostEvent(MouseReleased(10, 1));
+  loop.RunOnce();
+  EXPECT_EQ(selectionChangeCounter, 3);
+
+  screen.PostEvent(MouseMove(10, 1));
+  loop.RunOnce();
+  EXPECT_EQ(selectionChangeCounter, 3);
+
+  EXPECT_EQ(screen.SelectionAsString(), "rem ipsu");
+}
+
+// Check that submitting multiple mouse events quickly doesn't trigger multiple
+// selection change events.
+TEST(SelectionTest, SelectionOnChangeSquashedEvents) {
+  int selectionChangeCounter = 0;
+  auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
+  auto screen = ScreenInteractive::FixedSize(20, 1);
+  screen.SelectionOnChange([&] { selectionChangeCounter++; });
+
+  Loop loop(&screen, component);
+  loop.RunOnce();
+  EXPECT_EQ(selectionChangeCounter, 0);
+
+  screen.PostEvent(MousePressed(3, 1));
+  screen.PostEvent(MouseMove(5, 1));
+  screen.PostEvent(MouseMove(7, 1));
+  loop.RunOnce();
+  EXPECT_EQ(selectionChangeCounter, 1);
+
+  screen.PostEvent(MouseReleased(10, 1));
+  screen.PostEvent(MouseMove(10, 1));
+  loop.RunOnce();
+  EXPECT_EQ(selectionChangeCounter, 2);
+
+  EXPECT_EQ(screen.SelectionAsString(), "rem ipsu");
 }
 
 TEST(SelectionTest, StyleSelection) {
   int selectionChangeCounter = 0;
 
-  auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
+  auto element = hbox({
+      text("Lorem "),
+      text("ipsum") | selectionColor(Color::Red),
+      text(" dolor"),
+  });
 
   auto screen = ScreenInteractive::FixedSize(20, 1);
-
   Selection selection(2, 0, 9, 0);
 
-  Render(screen, component->Render().get(), selection);
+  Render(screen, element.get(), selection);
+  for (int i = 0; i < 20; i++) {
+    if (i >= 2 && i <= 9) {
+      EXPECT_EQ(screen.PixelAt(i, 0).inverted, true);
+    } else {
+      EXPECT_EQ(screen.PixelAt(i, 0).inverted, false);
+    }
 
-  EXPECT_EQ(screen.ToString(), "Lo\x1B[21mrem ipsu\x1B[24mm dolor   ");
+    if (i >= 6 && i <= 9) {
+      EXPECT_EQ(screen.PixelAt(i, 0).foreground_color, Color::Red);
+    } else {
+      EXPECT_EQ(screen.PixelAt(i, 0).foreground_color, Color::Default);
+    }
+  }
 }
 
 TEST(SelectionTest, VBoxSelection) {

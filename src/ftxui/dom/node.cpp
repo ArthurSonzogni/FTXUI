@@ -58,7 +58,6 @@ void Node::Check(Status* status) {
 }
 
 std::string Node::GetSelectedContent(Selection& selection) {
-
   std::string content;
 
   for (auto& child : children_) {
@@ -71,14 +70,14 @@ std::string Node::GetSelectedContent(Selection& selection) {
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, const Element& element) {
-  Selection selection(0, 0, -1, -1);
+  Selection selection;
   Render(screen, element.get(), selection);
 }
 
 /// @brief Display an element on a ftxui::Screen.
 /// @ingroup dom
 void Render(Screen& screen, Node* node) {
-  Selection selection(0, 0, -1, -1);
+  Selection selection;
   Render(screen, node, selection);
 }
 
@@ -106,7 +105,9 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   }
 
   // Step 3: Selection
-  node->Select(selection);
+  if (!selection.IsEmpty()) {
+    node->Select(selection);
+  }
 
   // Step 4: Draw the element.
   screen.stencil = box;
@@ -116,8 +117,9 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   screen.ApplyShader();
 }
 
-std::string GetNodeSelectedContent(Screen& screen, Node* node, Selection& selection) {
-
+std::string GetNodeSelectedContent(Screen& screen,
+                                   Node* node,
+                                   Selection& selection) {
   Box box;
   box.x_min = 0;
   box.y_min = 0;

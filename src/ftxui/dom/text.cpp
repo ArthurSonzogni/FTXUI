@@ -3,8 +3,9 @@
 // the LICENSE file.
 #include <algorithm>  // for min
 #include <memory>     // for make_shared
-#include <string>     // for string, wstring
-#include <utility>    // for move
+#include <sstream>
+#include <string>   // for string, wstring
+#include <utility>  // for move
 
 #include "ftxui/dom/deprecated.hpp"   // for text, vtext
 #include "ftxui/dom/elements.hpp"     // for Element, text, vtext
@@ -39,6 +40,19 @@ class Text : public Node {
     has_selection = true;
     selection_start_ = selection_saturated.GetBox().x_min;
     selection_end_ = selection_saturated.GetBox().x_max;
+
+    std::stringstream ss;
+    int x = box_.x_min;
+    for (const auto& cell : Utf8ToGlyphs(text_)) {
+      if (cell == "\n") {
+        continue;
+      }
+      if (selection_start_ <= x && x <= selection_end_) {
+        ss << cell;
+      }
+      x++;
+    }
+    selection.AddPart(ss.str(), box_.y_min, selection_start_, selection_end_);
   }
 
   void Render(Screen& screen) override {
@@ -69,34 +83,11 @@ class Text : public Node {
     }
   }
 
-  std::string GetSelectedContent(Selection& selection) {
-    int x = box_.x_min;
-    std::string selected_text = "";
-
-    if (has_selection == false) {
-      return "";
-    }
-
-    for (const auto& cell : Utf8ToGlyphs(text_)) {
-      if (x > box_.x_max) {
-        break;
-      }
-
-      if ((x >= selection_start_) && (x <= selection_end_)) {
-        selected_text += cell;
-      }
-
-      ++x;
-    }
-
-    return selected_text;
-  }
-
  private:
   std::string text_;
   bool has_selection = false;
   int selection_start_ = 0;
-  int selection_end_ = 10;
+  int selection_end_ = -1;
   std::function<void(Pixel& pixel)> selectionTransform;
 };
 

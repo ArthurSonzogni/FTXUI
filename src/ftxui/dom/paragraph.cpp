@@ -20,6 +20,18 @@ Elements Split(const std::string& the_text) {
   }
   return output;
 }
+
+Element Split(const std::string& paragraph,
+              std::function<Element(std::string)> f) {
+  Elements output;
+  std::stringstream ss(paragraph);
+  std::string line;
+  while (std::getline(ss, line, '\n')) {
+    output.push_back(f(line));
+  }
+  return vbox(std::move(output));
+}
+
 }  // namespace
 
 /// @brief Return an element drawing the paragraph on multiple lines.
@@ -34,18 +46,22 @@ Element paragraph(const std::string& the_text) {
 /// @ingroup dom
 /// @see flexbox.
 Element paragraphAlignLeft(const std::string& the_text) {
-  static const auto config = FlexboxConfig().SetGap(1, 0);
-  return flexbox(Split(the_text), config);
-}
+  return Split(the_text, [](const std::string& line) {
+    static const auto config = FlexboxConfig().SetGap(1, 0);
+    return flexbox(Split(line), config);
+  });
+};
 
 /// @brief Return an element drawing the paragraph on multiple lines, aligned on
 /// the right.
 /// @ingroup dom
 /// @see flexbox.
 Element paragraphAlignRight(const std::string& the_text) {
-  static const auto config =
-      FlexboxConfig().SetGap(1, 0).Set(FlexboxConfig::JustifyContent::FlexEnd);
-  return flexbox(Split(the_text), config);
+  return Split(the_text, [](const std::string& line) {
+    static const auto config = FlexboxConfig().SetGap(1, 0).Set(
+        FlexboxConfig::JustifyContent::FlexEnd);
+    return flexbox(Split(line), config);
+  });
 }
 
 /// @brief Return an element drawing the paragraph on multiple lines, aligned on
@@ -53,9 +69,11 @@ Element paragraphAlignRight(const std::string& the_text) {
 /// @ingroup dom
 /// @see flexbox.
 Element paragraphAlignCenter(const std::string& the_text) {
-  static const auto config =
-      FlexboxConfig().SetGap(1, 0).Set(FlexboxConfig::JustifyContent::Center);
-  return flexbox(Split(the_text), config);
+  return Split(the_text, [](const std::string& line) {
+    static const auto config =
+        FlexboxConfig().SetGap(1, 0).Set(FlexboxConfig::JustifyContent::Center);
+    return flexbox(Split(line), config);
+  });
 }
 
 /// @brief Return an element drawing the paragraph on multiple lines, aligned
@@ -64,11 +82,13 @@ Element paragraphAlignCenter(const std::string& the_text) {
 /// @ingroup dom
 /// @see flexbox.
 Element paragraphAlignJustify(const std::string& the_text) {
-  static const auto config = FlexboxConfig().SetGap(1, 0).Set(
-      FlexboxConfig::JustifyContent::SpaceBetween);
-  Elements words = Split(the_text);
-  words.push_back(text("") | xflex);
-  return flexbox(std::move(words), config);
+  return Split(the_text, [](const std::string& line) {
+    static const auto config = FlexboxConfig().SetGap(1, 0).Set(
+        FlexboxConfig::JustifyContent::SpaceBetween);
+    Elements words = Split(line);
+    words.push_back(text("") | xflex);
+    return flexbox(std::move(words), config);
+  });
 }
 
 }  // namespace ftxui

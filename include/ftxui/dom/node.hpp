@@ -68,7 +68,9 @@ class Node {
 void Render(Screen& screen, const Element& element);
 void Render(Screen& screen, Node* node);
 void Render(Screen& screen, Node* node, Selection& selection);
-std::string GetNodeSelectedContent(Screen& screen, Node* node, Selection& selection);
+std::string GetNodeSelectedContent(Screen& screen,
+                                   Node* node,
+                                   Selection& selection);
 
 }  // namespace ftxui
 
