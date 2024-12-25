@@ -145,7 +145,7 @@ void Selection::AddPart(const std::string& part, int y, int left, int right) {
   }
   [&] {
     if (parts_.str().empty()) {
-      parts_ << "[" + part + "]";
+      parts_ << part;
       return;
     }
 
@@ -155,11 +155,11 @@ void Selection::AddPart(const std::string& part, int y, int left, int right) {
     }
 
     if (x_ == left + 1) {
-      parts_ << "|" << part;
+      parts_ << part;
       return;
     }
 
-    parts_ << "-" << part;
+    parts_ << part;
   }();
   y_ = y;
   x_ = right;

@@ -26,7 +26,7 @@ Event MousePressed(int x, int y) {
   mouse.control = false;
   mouse.x = x;
   mouse.y = y;
-  return Event::Mouse("jjj", mouse);
+  return Event::Mouse("", mouse);
 }
 
 Event MouseReleased(int x, int y) {
@@ -38,7 +38,7 @@ Event MouseReleased(int x, int y) {
   mouse.control = false;
   mouse.x = x;
   mouse.y = y;
-  return Event::Mouse("jjj", mouse);
+  return Event::Mouse("", mouse);
 }
 
 Event MouseMove(int x, int y) {
@@ -50,7 +50,7 @@ Event MouseMove(int x, int y) {
   mouse.control = false;
   mouse.x = x;
   mouse.y = y;
-  return Event::Mouse("jjj", mouse);
+  return Event::Mouse("", mouse);
 }
 
 }  // namespace
@@ -155,65 +155,66 @@ TEST(SelectionTest, StyleSelection) {
 }
 
 TEST(SelectionTest, VBoxSelection) {
-  auto component = Renderer([&] {
-    return vbox({text("Lorem ipsum dolor"), text("Ut enim ad minim")});
+  auto element = vbox({
+      text("Lorem ipsum dolor"),
+      text("Ut enim ad minim"),
   });
 
   auto screen = ScreenInteractive::FixedSize(20, 2);
 
   Selection selection(2, 0, 2, 1);
+  Render(screen, element.get(), selection);
 
-  Render(screen, component->Render().get(), selection);
-
+  EXPECT_EQ(selection.GetParts(), "rem ipsum dolor\nUt ");
   EXPECT_EQ(screen.ToString(),
-            "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n\x1B[7mUt \x1B[27menim ad "
-            "minim    ");
+            "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n"
+            "\x1B[7mUt \x1B[27menim ad minim    ");
 }
 
 TEST(SelectionTest, VBoxSaturatedSelection) {
-  auto component = Renderer([&] {
-    return vbox({text("Lorem ipsum dolor"), text("Ut enim ad minim"),
-                 text("Duis aute irure")});
+  auto element = vbox({
+      text("Lorem ipsum dolor"),
+      text("Ut enim ad minim"),
+      text("Duis aute irure"),
   });
 
   auto screen = ScreenInteractive::FixedSize(20, 3);
-
   Selection selection(2, 0, 2, 2);
-
-  Render(screen, component->Render().get(), selection);
+  Render(screen, element.get(), selection);
+  EXPECT_EQ(selection.GetParts(), "rem ipsum dolor\nUt enim ad minim\nDui");
 
   EXPECT_EQ(screen.ToString(),
-            "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n\x1B[7mUt enim ad "
-            "minim\x1B[27m    \r\n\x1B[7mDui\x1B[27ms aute irure     ");
+            "Lo\x1B[7mrem ipsum dolor\x1B[27m   \r\n"
+            "\x1B[7mUt enim ad minim\x1B[27m    \r\n"
+            "\x1B[7mDui\x1B[27ms aute irure     ");
 }
 
 TEST(SelectionTest, HBoxSelection) {
-  auto component = Renderer([&] {
-    return hbox({text("Lorem ipsum dolor"), text("Ut enim ad minim")});
+  auto element = hbox({
+      text("Lorem ipsum dolor"),
+      text("Ut enim ad minim"),
   });
 
   auto screen = ScreenInteractive::FixedSize(40, 1);
-
   Selection selection(2, 0, 20, 0);
-
-  Render(screen, component->Render().get(), selection);
-
+  Render(screen, element.get(), selection);
+  EXPECT_EQ(selection.GetParts(), "rem ipsum dolorUt e");
   EXPECT_EQ(screen.ToString(),
             "Lo\x1B[7mrem ipsum dolorUt e\x1B[27mnim ad minim       ");
 }
 
 TEST(SelectionTest, HBoxSaturatedSelection) {
-  auto component = Renderer([&] {
-    return hbox({text("Lorem ipsum dolor"), text("Ut enim ad minim"),
-                 text("Duis aute irure")});
+  auto element = hbox({
+      text("Lorem ipsum dolor"),
+      text("Ut enim ad minim"),
+      text("Duis aute irure"),
   });
 
   auto screen = ScreenInteractive::FixedSize(60, 1);
 
   Selection selection(2, 0, 35, 0);
-
-  Render(screen, component->Render().get(), selection);
-
+  Render(screen, element.get(), selection);
+  EXPECT_EQ(selection.GetParts(), "rem ipsum dolorUt enim ad minimDui");
   EXPECT_EQ(screen.ToString(),
             "Lo\x1B[7mrem ipsum dolorUt enim ad minimDui\x1B[27ms aute irure   "
             "         ");
