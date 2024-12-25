@@ -80,6 +80,7 @@ class Flex : public Node {
   }
 
   void SetBox(Box box) override {
+    Node::SetBox(box);
     if (children_.empty()) {
       return;
     }
