@@ -6,9 +6,7 @@ import xterm_addon_fit   from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.
 if ("serviceWorker" in navigator && !window.crossOriginIsolated) {
   const url_sw = new URL("./sw.js", location.href);
   const registration = await navigator.serviceWorker.register(url_sw);
-  if (registration.active && !navigator.serviceWorker.controller) {
-    window.location.reload(); // Reload to ensure the COOP/COEP headers are set.
-  }
+  window.location.reload(); // Reload to ensure the COOP/COEP headers are set.
 } 
 
 const example_list = "@EXAMPLES@".split(";");
