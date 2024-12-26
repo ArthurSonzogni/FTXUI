@@ -104,7 +104,7 @@ class Flexbox : public Node {
     Layout(global, true);
 
     // Reset:
-    requirement_.selection = Requirement::Selection::NORMAL;
+    requirement_.is_selected = false;
     requirement_.selected_box = Box();
     requirement_.min_x = 0;
     requirement_.min_y = 0;
@@ -130,10 +130,11 @@ class Flexbox : public Node {
 
     // Find the selection:
     for (size_t i = 0; i < children_.size(); ++i) {
-      if (requirement_.selection >= children_[i]->requirement().selection) {
+      if (requirement_.is_selected ||
+          !children_[i]->requirement().is_selected) {
         continue;
       }
-      requirement_.selection = children_[i]->requirement().selection;
+      requirement_.is_selected = true;
       Box selected_box = children_[i]->requirement().selected_box;
 
       // Shift |selected_box| according to its position inside this component:
