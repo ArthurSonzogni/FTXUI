@@ -27,7 +27,7 @@ class Select : public Node {
     selected_box.y_min = 0;
     selected_box.x_max = requirement_.min_x - 1;
     selected_box.y_max = requirement_.min_y - 1;
-    requirement_.selection = Requirement::SELECTED;
+    requirement_.is_selected = true;
   }
 
   void SetBox(Box box) override {
@@ -42,7 +42,6 @@ class Focus : public Select {
 
   void ComputeRequirement() override {
     Select::ComputeRequirement();
-    requirement_.selection = Requirement::FOCUSED;
   }
 
   void Render(Screen& screen) override {

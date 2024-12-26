@@ -19,7 +19,10 @@ namespace {
 class HBox : public Node {
  public:
   explicit HBox(Elements children) : Node(std::move(children)) {}
+  explicit HBox(Elements children, int index)
+      : Node(std::move(children)), index_(index) {}
 
+ private:
   void ComputeRequirement() override {
     requirement_.min_x = 0;
     requirement_.min_y = 0;
@@ -27,11 +30,11 @@ class HBox : public Node {
     requirement_.flex_grow_y = 0;
     requirement_.flex_shrink_x = 0;
     requirement_.flex_shrink_y = 0;
-    requirement_.selection = Requirement::NORMAL;
+    requirement_.is_selected = false;
     for (auto& child : children_) {
       child->ComputeRequirement();
-      if (requirement_.selection < child->requirement().selection) {
-        requirement_.selection = child->requirement().selection;
+      if (children_[index_] == child && child->requirement().is_selected) {
+        requirement_.is_selected = true;
         requirement_.selected_box = child->requirement().selected_box;
         requirement_.selected_box.x_min += requirement_.min_x;
         requirement_.selected_box.x_max += requirement_.min_x;
@@ -77,6 +80,7 @@ class HBox : public Node {
       child->Select(selection_saturated);
     }
   }
+  int index_ = 0;
 };
 
 }  // namespace
@@ -95,6 +99,10 @@ class HBox : public Node {
 /// ```
 Element hbox(Elements children) {
   return std::make_shared<HBox>(std::move(children));
+}
+
+Element hbox(Elements children, int index) {
+  return std::make_shared<HBox>(std::move(children), index);
 }
 
 }  // namespace ftxui
