@@ -107,7 +107,7 @@ class VerticalContainer : public ContainerBase {
     if (elements.empty()) {
       return text("Empty container") | reflect(box_);
     }
-    return vbox(std::move(elements)) | reflect(box_);
+    return vbox(std::move(elements), *selector_) | reflect(box_);
   }
 
   bool EventHandler(Event event) override {
@@ -191,7 +191,7 @@ class HorizontalContainer : public ContainerBase {
     if (elements.empty()) {
       return text("Empty container");
     }
-    return hbox(std::move(elements));
+    return hbox(std::move(elements), *selector_);
   }
 
   bool EventHandler(Event event) override {
@@ -334,7 +334,7 @@ Component Vertical(Components children) {
 ///   children_2,
 ///   children_3,
 ///   children_4,
-/// });
+/// }, &selected_children);
 /// ```
 Component Vertical(Components children, int* selector) {
   return std::make_shared<VerticalContainer>(std::move(children), selector);
@@ -355,7 +355,7 @@ Component Vertical(Components children, int* selector) {
 ///   children_2,
 ///   children_3,
 ///   children_4,
-/// }, &selected_children);
+/// });
 /// ```
 Component Horizontal(Components children) {
   return Horizontal(std::move(children), nullptr);

@@ -36,7 +36,7 @@ Decorator focusPositionRelative(float x, float y) {
 
     void ComputeRequirement() override {
       NodeDecorator::ComputeRequirement();
-      requirement_.selection = Requirement::Selection::NORMAL;
+      requirement_.is_selected = false;
 
       Box& box = requirement_.selected_box;
       box.x_min = int(float(requirement_.min_x) * x_);
@@ -75,7 +75,7 @@ Decorator focusPosition(int x, int y) {
 
     void ComputeRequirement() override {
       NodeDecorator::ComputeRequirement();
-      requirement_.selection = Requirement::Selection::NORMAL;
+      requirement_.is_selected = false;
 
       Box& box = requirement_.selected_box;
       box.x_min = x_;

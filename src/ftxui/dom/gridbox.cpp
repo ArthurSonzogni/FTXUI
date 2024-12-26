@@ -76,13 +76,14 @@ class GridBox : public Node {
     requirement_.min_y = Integrate(size_y);
 
     // Forward the selected/focused child state:
-    requirement_.selection = Requirement::NORMAL;
+    requirement_.is_selected = false;
     for (int x = 0; x < x_size; ++x) {
       for (int y = 0; y < y_size; ++y) {
-        if (requirement_.selection >= lines_[y][x]->requirement().selection) {
+        if (requirement_.is_selected ||
+            !lines_[y][x]->requirement().is_selected) {
           continue;
         }
-        requirement_.selection = lines_[y][x]->requirement().selection;
+        requirement_.is_selected = true;
         requirement_.selected_box = lines_[y][x]->requirement().selected_box;
         requirement_.selected_box.x_min += size_x[x];
         requirement_.selected_box.x_max += size_x[x];
