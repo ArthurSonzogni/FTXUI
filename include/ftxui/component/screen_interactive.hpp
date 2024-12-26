@@ -70,8 +70,8 @@ class ScreenInteractive : public Screen {
   void ForceHandleCtrlZ(bool force);
 
   // Selection API.
-  std::string SelectionAsString();
-  void SelectionOnChange(std::function<void()> callback);
+  std::string GetSelection();
+  void SelectionChange(std::function<void()> callback);
 
  private:
   void ExitNow();

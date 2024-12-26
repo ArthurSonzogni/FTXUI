@@ -577,14 +577,14 @@ void ScreenInteractive::ForceHandleCtrlZ(bool force) {
 }
 
 /// @brief Returns the content of the current selection
-std::string ScreenInteractive::SelectionAsString() {
+std::string ScreenInteractive::GetSelection() {
   if (!selection_) {
     return "";
   }
   return selection_->GetParts();
 }
 
-void ScreenInteractive::SelectionOnChange(std::function<void()> callback) {
+void ScreenInteractive::SelectionChange(std::function<void()> callback) {
   selection_on_change_ = std::move(callback);
 }
 

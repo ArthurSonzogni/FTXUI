@@ -14,12 +14,10 @@ using namespace ftxui;
 
 Element LoremIpsum() {
   return vbox({
-      text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
-           "eiusmod tempor incididunt ut labore et dolore magna aliqua."),
-      text("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris "
-           "nisi ut aliquip ex ea commodo consequat."),
-      text("Duis aute irure dolor in reprehenderit in voluptate velit esse "
-           "cillum dolore eu fugiat nulla pariatur."),
+      text("FTXUI: A powerful library for building user interfaces."),
+      text("Enjoy a rich set of components and a declarative style."),
+      text("Create beautiful and responsive UIs with minimal effort."),
+      text("Join the community and experience the power of FTXUI."),
   });
 }
 
@@ -31,9 +29,9 @@ int main() {
 
   int selection_change_counter = 0;
   std::string selection_content = "";
-  screen.SelectionOnChange([&] {
+  screen.SelectionChange([&] {
     selection_change_counter++;
-    selection_content = screen.SelectionAsString();
+    selection_content = screen.GetSelection();
   });
 
   // The components:
@@ -42,7 +40,7 @@ int main() {
         text("Select changed: " + std::to_string(selection_change_counter) +
              " times"),
         text("Currently selected: "),
-        paragraph(selection_content) | frame | border | xflex |
+        paragraph(selection_content) | vscroll_indicator | frame | border |
             size(HEIGHT, EQUAL, 10),
         window(text("Horizontal split"), hbox({
                                              LoremIpsum(),
@@ -58,7 +56,7 @@ int main() {
                                            separator(),
                                            LoremIpsum(),
                                        })),
-        window(text("Grid split"),
+        window(text("Grid split with different style"),
                vbox({
                    hbox({
                        LoremIpsum(),

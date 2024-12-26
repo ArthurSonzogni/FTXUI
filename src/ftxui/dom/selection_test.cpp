@@ -58,20 +58,20 @@ Event MouseMove(int x, int y) {
 TEST(SelectionTest, DefaultSelection) {
   auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
   auto screen = ScreenInteractive::FixedSize(20, 1);
-  EXPECT_EQ(screen.SelectionAsString(), "");
+  EXPECT_EQ(screen.GetSelection(), "");
   Loop loop(&screen, component);
   screen.PostEvent(MousePressed(3, 1));
   screen.PostEvent(MouseReleased(10, 1));
   loop.RunOnce();
 
-  EXPECT_EQ(screen.SelectionAsString(), "rem ipsu");
+  EXPECT_EQ(screen.GetSelection(), "rem ipsu");
 }
 
-TEST(SelectionTest, SelectionOnChange) {
+TEST(SelectionTest, SelectionChange) {
   int selectionChangeCounter = 0;
   auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
   auto screen = ScreenInteractive::FixedSize(20, 1);
-  screen.SelectionOnChange([&] { selectionChangeCounter++; });
+  screen.SelectionChange([&] { selectionChangeCounter++; });
 
   Loop loop(&screen, component);
   loop.RunOnce();
@@ -97,7 +97,7 @@ TEST(SelectionTest, SelectionOnChange) {
   loop.RunOnce();
   EXPECT_EQ(selectionChangeCounter, 3);
 
-  EXPECT_EQ(screen.SelectionAsString(), "rem ipsu");
+  EXPECT_EQ(screen.GetSelection(), "rem ipsu");
 }
 
 // Check that submitting multiple mouse events quickly doesn't trigger multiple
@@ -106,7 +106,7 @@ TEST(SelectionTest, SelectionOnChangeSquashedEvents) {
   int selectionChangeCounter = 0;
   auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
   auto screen = ScreenInteractive::FixedSize(20, 1);
-  screen.SelectionOnChange([&] { selectionChangeCounter++; });
+  screen.SelectionChange([&] { selectionChangeCounter++; });
 
   Loop loop(&screen, component);
   loop.RunOnce();
@@ -123,7 +123,7 @@ TEST(SelectionTest, SelectionOnChangeSquashedEvents) {
   loop.RunOnce();
   EXPECT_EQ(selectionChangeCounter, 2);
 
-  EXPECT_EQ(screen.SelectionAsString(), "rem ipsu");
+  EXPECT_EQ(screen.GetSelection(), "rem ipsu");
 }
 
 TEST(SelectionTest, StyleSelection) {
