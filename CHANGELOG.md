@@ -16,6 +16,9 @@ current (development)
 - Feature: Add support for `Input`'s insert mode. Add `InputOption::insert`
   option. Added by @mingsheng13.
 - Feature: Add `DropdownOption` to configure the dropdown. See #826.
+- Feature: Add support for Selection. Thanks @clement-roblot. See #926.
+  - See `ScreenInteractive::GetSelection()`.
+  - See `ScreenInteractive::SelectionChange(...)` listener.
 - Bugfix/Breaking change: `Mouse transition`:
   - Detect when the mouse move, as opposed to being pressed.
     The Mouse::Moved motion was added.
@@ -49,6 +52,12 @@ current (development)
 - Feature: Add `extend_beyond_screen` option to `Dimension::Fit(..)`, allowing
   the element to be larger than the screen. Proposed by @LordWhiro. See #572 and
   #949.
+- Feature: Add support for Selection. Thanks @clement-roblot. See #926.
+  - See `selectionColor` decorator.
+  - See `selectionBackgroundColor` decorator.
+  - See `selectionForegroundColor` decorator.
+  - See `selectionStyle(style)` decorator.
+  - See `selectionStyleReset` decorator.
 
 ### Screen
 - Feature: Add `Box::IsEmpty()`.

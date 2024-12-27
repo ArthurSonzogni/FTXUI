@@ -113,6 +113,11 @@ Decorator focusPositionRelative(float x, float y);
 Element automerge(Element child);
 Decorator hyperlink(std::string link);
 Element hyperlink(std::string link, Element child);
+Element selectionStyleReset(Element);
+Decorator selectionColor(Color foreground);
+Decorator selectionBackgroundColor(Color foreground);
+Decorator selectionForegroundColor(Color foreground);
+Decorator selectionStyle(std::function<void(Pixel&)> style);
 
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.

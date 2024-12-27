@@ -97,7 +97,25 @@ int main() {
   });
   sliders = Wrap("Slider", sliders);
 
-  // -- Layout -----------------------------------------------------------------
+  // A large text:
+  auto lorel_ipsum = Renderer([] {
+    return vbox({
+        text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "),
+        text("Sed do eiusmod tempor incididunt ut labore et dolore magna "
+             "aliqua. "),
+        text("Ut enim ad minim veniam, quis nostrud exercitation ullamco "
+             "laboris nisi ut aliquip ex ea commodo consequat. "),
+        text("Duis aute irure dolor in reprehenderit in voluptate velit esse "
+             "cillum dolore eu fugiat nulla pariatur. "),
+        text("Excepteur sint occaecat cupidatat non proident, sunt in culpa "
+             "qui officia deserunt mollit anim id est laborum. "),
+
+    });
+  });
+  lorel_ipsum = Wrap("Lorel Ipsum", lorel_ipsum);
+
+  // -- Layout
+  // -----------------------------------------------------------------
   auto layout = Container::Vertical({
       menu,
       toggle,
@@ -106,6 +124,7 @@ int main() {
       input,
       sliders,
       button,
+      lorel_ipsum,
   });
 
   auto component = Renderer(layout, [&] {
@@ -123,6 +142,8 @@ int main() {
                sliders->Render(),
                separator(),
                button->Render(),
+               separator(),
+               lorel_ipsum->Render(),
            }) |
            xflex | size(WIDTH, GREATER_THAN, 40) | border;
   });

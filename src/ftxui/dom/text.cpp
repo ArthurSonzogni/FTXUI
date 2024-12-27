@@ -3,8 +3,9 @@
 // the LICENSE file.
 #include <algorithm>  // for min
 #include <memory>     // for make_shared
-#include <string>     // for string, wstring
-#include <utility>    // for move
+#include <sstream>
+#include <string>   // for string, wstring
+#include <utility>  // for move
 
 #include "ftxui/dom/deprecated.hpp"   // for text, vtext
 #include "ftxui/dom/elements.hpp"     // for Element, text, vtext
@@ -26,28 +27,68 @@ class Text : public Node {
   void ComputeRequirement() override {
     requirement_.min_x = string_width(text_);
     requirement_.min_y = 1;
+    has_selection = false;
+  }
+
+  void Select(Selection& selection) override {
+    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
+      return;
+    }
+
+    Selection selection_saturated = selection.SaturateHorizontal(box_);
+
+    has_selection = true;
+    selection_start_ = selection_saturated.GetBox().x_min;
+    selection_end_ = selection_saturated.GetBox().x_max;
+
+    std::stringstream ss;
+    int x = box_.x_min;
+    for (const auto& cell : Utf8ToGlyphs(text_)) {
+      if (cell == "\n") {
+        continue;
+      }
+      if (selection_start_ <= x && x <= selection_end_) {
+        ss << cell;
+      }
+      x++;
+    }
+    selection.AddPart(ss.str(), box_.y_min, selection_start_, selection_end_);
   }
 
   void Render(Screen& screen) override {
     int x = box_.x_min;
     const int y = box_.y_min;
+
     if (y > box_.y_max) {
       return;
     }
+
     for (const auto& cell : Utf8ToGlyphs(text_)) {
       if (x > box_.x_max) {
-        return;
+        break;
       }
       if (cell == "\n") {
         continue;
       }
       screen.PixelAt(x, y).character = cell;
+
+      if (has_selection) {
+        auto selectionTransform = screen.GetSelectionStyle();
+        if ((x >= selection_start_) && (x <= selection_end_)) {
+          selectionTransform(screen.PixelAt(x, y));
+        }
+      }
+
       ++x;
     }
   }
 
  private:
   std::string text_;
+  bool has_selection = false;
+  int selection_start_ = 0;
+  int selection_end_ = -1;
+  std::function<void(Pixel& pixel)> selectionTransform;
 };
 
 class VText : public Node {

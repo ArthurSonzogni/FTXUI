@@ -163,6 +163,7 @@ class VerticalContainer : public ContainerBase {
       return false;
     }
 
+    int old_selected = *selector_;
     if (event.mouse().button == Mouse::WheelUp) {
       MoveSelector(-1);
     }
@@ -171,7 +172,7 @@ class VerticalContainer : public ContainerBase {
     }
     *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
 
-    return true;
+    return old_selected != *selector_;
   }
 
   Box box_;

@@ -4,12 +4,14 @@
 #ifndef FTXUI_SCREEN_SCREEN_HPP
 #define FTXUI_SCREEN_SCREEN_HPP
 
-#include <cstdint>  // for uint8_t
-#include <string>   // for string, basic_string, allocator
-#include <vector>   // for vector
+#include <cstdint>     // for uint8_t
+#include <functional>  // for function
+#include <string>      // for string, basic_string, allocator
+#include <vector>      // for vector
 
 #include "ftxui/screen/image.hpp"     // for Pixel, Image
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
+#include "ftxui/util/autoreset.hpp"   // for AutoReset
 
 namespace ftxui {
 
@@ -67,9 +69,18 @@ class Screen : public Image {
   uint8_t RegisterHyperlink(const std::string& link);
   const std::string& Hyperlink(uint8_t id) const;
 
+  using SelectionStyle = std::function<void(Pixel&)>;
+  const SelectionStyle& GetSelectionStyle() const;
+  void SetSelectionStyle(SelectionStyle decorator);
+
  protected:
   Cursor cursor_;
   std::vector<std::string> hyperlinks_ = {""};
+
+  // The current selection style. This is overridden by various dom elements.
+  SelectionStyle selection_style_ = [](Pixel& pixel) {
+    pixel.inverted ^= true;
+  };
 };
 
 }  // namespace ftxui
