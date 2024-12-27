@@ -34,19 +34,13 @@ class Select : public Node {
     Node::SetBox(box);
     children_[0]->SetBox(box);
   }
-};
-
-class Focus : public Select {
- public:
-  using Select::Select;
 
   void ComputeRequirement() override {
     Select::ComputeRequirement();
   }
 
   void Render(Screen& screen) override {
-    Select::Render(screen);
-
+    Node::Render(screen);
     // Setting the cursor to the right position allow folks using CJK (China,
     // Japanese, Korean, ...) characters to see their [input method editor]
     // displayed at the right location. See [issue].
@@ -123,10 +117,10 @@ class Frame : public Node {
   bool y_frame_;
 };
 
-class FocusCursor : public Focus {
+class FocusCursor : public Select {
  public:
   FocusCursor(Elements children, Screen::Cursor::Shape shape)
-      : Focus(std::move(children)), shape_(shape) {}
+      : Select(std::move(children)), shape_(shape) {}
 
  private:
   void Render(Screen& screen) override {
@@ -147,13 +141,6 @@ class FocusCursor : public Focus {
 /// @ingroup dom
 Element select(Element child) {
   return std::make_shared<Select>(unpack(std::move(child)));
-}
-
-/// @brief Set the `child` to be the one in focus globally.
-/// @param child The element to be focused.
-/// @ingroup dom
-Element focus(Element child) {
-  return std::make_shared<Focus>(unpack(std::move(child)));
 }
 
 /// @brief Allow an element to be displayed inside a 'virtual' area. It size can

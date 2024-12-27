@@ -109,7 +109,7 @@ class InputBase : public ComponentBase, public InputOption {
     if (content->empty()) {
       auto element = text(placeholder()) | xflex | frame;
       if (is_focused) {
-        element |= focus;
+        element |= select;
       }
 
       return transform_func({
