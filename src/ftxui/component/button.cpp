@@ -47,7 +47,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
       SetAnimationTarget(target);
     }
 
-    auto focus_management = focused ? focus : active ? select : nothing;
+    auto focus_management = (focused || active) ? select : nothing;
     const EntryState state{
         *label, false, active, focused_or_hover, Index(),
     };

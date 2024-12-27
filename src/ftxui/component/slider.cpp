@@ -243,7 +243,7 @@ class SliderWithLabel : public ComponentBase {
   }
 
   Element Render() override {
-    auto focus_management = Focused() ? focus : Active() ? select : nothing;
+    auto focus_management = (Focused() || Active()) ? select : nothing;
     auto gauge_color = (Focused() || mouse_hover_) ? color(Color::White)
                                                    : color(Color::GrayDark);
     return hbox({

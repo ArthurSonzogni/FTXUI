@@ -162,7 +162,6 @@ Decorator size(WidthOrHeight, Constraint, int value);
 Element frame(Element);
 Element xframe(Element);
 Element yframe(Element);
-Element focus(Element);
 Element select(Element);
 
 // --- Cursor ---
