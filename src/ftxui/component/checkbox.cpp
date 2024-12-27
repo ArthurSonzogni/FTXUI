@@ -26,7 +26,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
   Element Render() override {
     const bool is_focused = Focused();
     const bool is_active = Active();
-    auto focus_management = is_focused ? focus : is_active ? select : nothing;
+    auto focus_management = (is_focused || is_active) ? select : nothing;
     auto entry_state = EntryState{
         *label, *checked, is_active, is_focused || hovered_, -1,
     };
