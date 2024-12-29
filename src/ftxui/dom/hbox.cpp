@@ -19,7 +19,8 @@ namespace {
 class HBox : public Node {
  public:
   explicit HBox(Elements children) : Node(std::move(children)) {}
-  explicit HBox(Elements children, int index) : Node(std::move(children)), index_(index) {}
+  explicit HBox(Elements children, int index)
+      : Node(std::move(children)), index_(index) {}
 
   void ComputeRequirement() override {
     requirement_.min_x = 0;
@@ -31,7 +32,8 @@ class HBox : public Node {
     requirement_.is_selected = false;
     for (auto& child : children_) {
       child->ComputeRequirement();
-      if (children_[index_] == child && child->requirement().is_selected) {
+      if ((index_ < 0 && child->requirement().is_selected) ||
+          children_[index_] == child) {
         requirement_.is_selected = true;
         requirement_.selected_box = child->requirement().selected_box;
         requirement_.selected_box.x_min += requirement_.min_x;
@@ -67,7 +69,7 @@ class HBox : public Node {
   }
 
  private:
-  int index_ = 0;
+  int index_ = -1;
 };
 
 }  // namespace
