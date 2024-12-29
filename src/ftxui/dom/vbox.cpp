@@ -33,7 +33,8 @@ class VBox : public Node {
     requirement_.is_selected = false;
     for (auto& child : children_) {
       child->ComputeRequirement();
-      if (children_[index_] == child && child->requirement().is_selected) {
+      if ((index_ < 0 && child->requirement().is_selected) ||
+          children_[index_] == child) {
         requirement_.is_selected = true;
         requirement_.selected_box = child->requirement().selected_box;
         requirement_.selected_box.y_min += requirement_.min_y;
@@ -82,7 +83,7 @@ class VBox : public Node {
     }
   }
 
-  int index_ = 0;
+  int index_ = -1;
 };
 }  // namespace
 
