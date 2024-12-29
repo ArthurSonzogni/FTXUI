@@ -88,7 +88,6 @@ class Text : public Node {
   bool has_selection = false;
   int selection_start_ = 0;
   int selection_end_ = -1;
-  std::function<void(Pixel& pixel)> selectionTransform;
 };
 
 class VText : public Node {
