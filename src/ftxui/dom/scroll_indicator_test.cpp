@@ -5,7 +5,7 @@
 #include <string>   // for allocator, to_string, string
 #include <utility>  // for move
 
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, operator|=, text, vbox, Elements, border, focus, frame, vscroll_indicator
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, operator|=, text, vbox, Elements, border, select, frame, vscroll_indicator
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
 #include "ftxui/screen/screen.hpp"  // for Screen
@@ -19,7 +19,7 @@ Element MakeVerticalList(int focused_index, int n) {
   for (int i = 0; i < n; ++i) {
     auto element = text(std::to_string(i));
     if (i == focused_index) {
-      element |= focus;
+      element |= select;
     }
     list.push_back(element);
   }
@@ -31,7 +31,7 @@ Element MakeHorizontalList(int focused_index, int n) {
   for (int i = 0; i < n; ++i) {
     auto element = text(std::to_string(i));
     if (i == focused_index) {
-      element |= focus;
+      element |= select;
     }
     list.push_back(element);
   }

@@ -7,7 +7,7 @@
 #include <string>     // for allocator, basic_string, string
 #include <vector>     // for vector
 
-#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, Elements, flex_grow, flex_shrink, vtext, gridbox, vbox, focus, operator|=, border, frame
+#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, Elements, flex_grow, flex_shrink, vtext, gridbox, vbox, select, operator|=, border, frame
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
 
@@ -603,7 +603,7 @@ TEST(GridboxTest, Focus) {
       {cell("1"), cell("2"), cell("3"), cell("4")},
       {cell("5"), cell("6"), cell("7"), cell("8")},
       {cell("9"), cell("10"), cell("11"), cell("12")},
-      {cell("13"), cell("14") | focus, cell("15"), cell("16")},
+      {cell("13"), cell("14") | select, cell("15"), cell("16")},
       {cell("17"), cell("18"), cell("19"), cell("20")},
   });
 
