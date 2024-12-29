@@ -20,7 +20,7 @@ class SelectionStyleReset : public NodeDecorator {
 
   void Render(Screen& screen) final {
     auto old_style = screen.GetSelectionStyle();
-    screen.SetSelectionStyle([](Pixel& pixel) {});
+    screen.SetSelectionStyle([](Pixel&) {});
     NodeDecorator::Render(screen);
     screen.SetSelectionStyle(old_style);
   }

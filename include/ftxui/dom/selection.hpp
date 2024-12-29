@@ -31,13 +31,13 @@ class Selection {
  private:
   Selection(int start_x, int start_y, int end_x, int end_y, Selection* parent);
 
-  Selection* const parent_ = this;
-  const bool empty_ = true;
   const int start_x_ = 0;
   const int start_y_ = 0;
   const int end_x_ = 0;
   const int end_y_ = 0;
   const Box box_ = {};
+  Selection* const parent_ = this;
+  const bool empty_ = true;
   std::stringstream parts_;
 
   // The position of the last inserted part.

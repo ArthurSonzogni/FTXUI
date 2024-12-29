@@ -15,7 +15,7 @@ class Unselectable : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
 
-  void Select(Selection& selection) override {
+  void Select(Selection&) override {
     // Overwrite the select method to do nothing.
   }
 };
