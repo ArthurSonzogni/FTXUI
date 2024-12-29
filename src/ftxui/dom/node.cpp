@@ -88,6 +88,31 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   box.x_max = screen.dimx() - 1;
   box.y_max = screen.dimy() - 1;
 
+  // Setting the cursor to the right position allow folks using CJK (China,
+  // Japanese, Korean, ...) characters to see their [input method editor]
+  // displayed at the right location. See [issue].
+  //
+  // [input method editor]:
+  // https://en.wikipedia.org/wiki/Input_method
+  //
+  // [issue]:
+  // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
+  //
+  // Unfortunately, Microsoft terminal do not handle properly hidding the
+  // cursor. Instead the character under the cursor is hidden, which is a big
+  // problem. As a result, we can't enable setting cursor to the right
+  // location. It will be displayed at the bottom right corner.
+  // See:
+  // https://github.com/microsoft/terminal/issues/1203
+  // https://github.com/microsoft/terminal/issues/3093
+#if !defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+  screen.SetCursor(Screen::Cursor{
+      box.x_min,
+      box.y_min,
+      Screen::Cursor::Shape::Hidden,
+  });
+#endif
+
   Node::Status status;
   node->Check(&status);
   const int max_iterations = 20;

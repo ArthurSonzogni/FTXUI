@@ -6,11 +6,11 @@
 #include <utility>    // for move
 
 #include "ftxui/dom/elements.hpp"  // for Element, unpack, Elements, focus, frame, select, xframe, yframe
-#include "ftxui/dom/node.hpp"  // for Node, Elements
-#include "ftxui/dom/requirement.hpp"  // for Requirement, Requirement::FOCUSED, Requirement::SELECTED
-#include "ftxui/screen/box.hpp"      // for Box
-#include "ftxui/screen/screen.hpp"   // for Screen, Screen::Cursor
-#include "ftxui/util/autoreset.hpp"  // for AutoReset
+#include "ftxui/dom/node.hpp"         // for Node, Elements
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/screen.hpp"    // for Screen, Screen::Cursor
+#include "ftxui/util/autoreset.hpp"   // for AutoReset
 
 namespace ftxui {
 
@@ -33,38 +33,6 @@ class Select : public Node {
   void SetBox(Box box) override {
     Node::SetBox(box);
     children_[0]->SetBox(box);
-  }
-
-  void ComputeRequirement() override {
-    Select::ComputeRequirement();
-  }
-
-  void Render(Screen& screen) override {
-    Node::Render(screen);
-    // Setting the cursor to the right position allow folks using CJK (China,
-    // Japanese, Korean, ...) characters to see their [input method editor]
-    // displayed at the right location. See [issue].
-    //
-    // [input method editor]:
-    // https://en.wikipedia.org/wiki/Input_method
-    //
-    // [issue]:
-    // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
-    //
-    // Unfortunately, Microsoft terminal do not handle properly hidding the
-    // cursor. Instead the character under the cursor is hidden, which is a big
-    // problem. As a result, we can't enable setting cursor to the right
-    // location. It will be displayed at the bottom right corner.
-    // See:
-    // https://github.com/microsoft/terminal/issues/1203
-    // https://github.com/microsoft/terminal/issues/3093
-#if !defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    screen.SetCursor(Screen::Cursor{
-        box_.x_min,
-        box_.y_min,
-        Screen::Cursor::Shape::Hidden,
-    });
-#endif
   }
 };
 
