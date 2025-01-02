@@ -692,7 +692,6 @@ Component MenuEntry(MenuEntryOption option) {
       animator_foreground_.OnAnimation(params);
     }
 
-    MenuEntryOption option_;
     Box box_;
     bool hovered_ = false;
 
