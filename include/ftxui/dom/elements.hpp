@@ -163,7 +163,7 @@ Element frame(Element);
 Element xframe(Element);
 Element yframe(Element);
 Element focus(Element);
-//Element select(Element e); // Deprecated - Alias for focus.
+Element select(Element e); // Deprecated - Alias for focus.
 
 // --- Cursor ---
 // Those are similar to `focus`, but also change the shape of the cursor.
