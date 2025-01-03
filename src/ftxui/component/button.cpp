@@ -47,14 +47,16 @@ class ButtonBase : public ComponentBase, public ButtonOption {
       SetAnimationTarget(target);
     }
 
-    auto focus_management = (focused || active) ? select : nothing;
     const EntryState state{
         *label, false, active, focused_or_hover, Index(),
     };
 
     auto element = (transform ? transform : DefaultTransform)  //
         (state);
-    return element | AnimatedColorStyle() | focus_management | reflect(box_);
+    element |= AnimatedColorStyle();
+    element |= focus;
+    element |= reflect(box_);
+    return element;
   }
 
   Decorator AnimatedColorStyle() {

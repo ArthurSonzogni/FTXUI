@@ -443,7 +443,7 @@ TEST(FlexboxTest, Focus) {
                       paragraph("4 -"),
                       paragraph("5 -"),
                       paragraph("6 -"),
-                      paragraph("7 -") | select,
+                      paragraph("7 -") | focus,
                       paragraph("8 -"),
                       paragraph("9 -"),
                   }) |

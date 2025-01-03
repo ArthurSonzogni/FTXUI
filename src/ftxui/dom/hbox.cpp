@@ -31,10 +31,11 @@ class HBox : public Node {
     requirement_.flex_shrink_x = 0;
     requirement_.flex_shrink_y = 0;
     requirement_.is_selected = false;
+    int index = 0;
     for (auto& child : children_) {
       child->ComputeRequirement();
-      if ((index_ < 0 && child->requirement().is_selected) ||
-          children_[index_] == child) {
+      if (child->requirement().is_selected &&
+          (!requirement_.is_selected || index_ == index)) {
         requirement_.is_selected = true;
         requirement_.selected_box = child->requirement().selected_box;
         requirement_.selected_box.x_min += requirement_.min_x;
@@ -43,6 +44,7 @@ class HBox : public Node {
       requirement_.min_x += child->requirement().min_x;
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
+      index++;
     }
   }
 
