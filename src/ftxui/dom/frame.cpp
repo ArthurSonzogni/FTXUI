@@ -22,12 +22,12 @@ class Focus : public Node {
   void ComputeRequirement() override {
     Node::ComputeRequirement();
     requirement_ = children_[0]->requirement();
-    auto& selected_box = requirement_.selected_box;
-    selected_box.x_min = 0;
-    selected_box.y_min = 0;
-    selected_box.x_max = requirement_.min_x - 1;
-    selected_box.y_max = requirement_.min_y - 1;
-    requirement_.is_selected = true;
+    auto& focused_box = requirement_.focused_box;
+    focused_box.x_min = 0;
+    focused_box.y_min = 0;
+    focused_box.x_max = requirement_.min_x - 1;
+    focused_box.y_max = requirement_.min_y - 1;
+    requirement_.is_focused = true;
   }
 
   void SetBox(Box box) override {
@@ -48,14 +48,14 @@ class Frame : public Node {
 
   void SetBox(Box box) override {
     Node::SetBox(box);
-    auto& selected_box = requirement_.selected_box;
+    auto& focused_box = requirement_.focused_box;
     Box children_box = box;
 
     if (x_frame_) {
       const int external_dimx = box.x_max - box.x_min;
       const int internal_dimx = std::max(requirement_.min_x, external_dimx);
-      const int focused_dimx = selected_box.x_max - selected_box.x_min;
-      int dx = selected_box.x_min - external_dimx / 2 + focused_dimx / 2;
+      const int focused_dimx = focused_box.x_max - focused_box.x_min;
+      int dx = focused_box.x_min - external_dimx / 2 + focused_dimx / 2;
       dx = std::max(0, std::min(internal_dimx - external_dimx - 1, dx));
       children_box.x_min = box.x_min - dx;
       children_box.x_max = box.x_min + internal_dimx - dx;
@@ -64,8 +64,8 @@ class Frame : public Node {
     if (y_frame_) {
       const int external_dimy = box.y_max - box.y_min;
       const int internal_dimy = std::max(requirement_.min_y, external_dimy);
-      const int focused_dimy = selected_box.y_max - selected_box.y_min;
-      int dy = selected_box.y_min - external_dimy / 2 + focused_dimy / 2;
+      const int focused_dimy = focused_box.y_max - focused_box.y_min;
+      int dy = focused_box.y_min - external_dimy / 2 + focused_dimy / 2;
       dy = std::max(0, std::min(internal_dimy - external_dimy - 1, dy));
       children_box.y_min = box.y_min - dy;
       children_box.y_max = box.y_min + internal_dimy - dy;
@@ -104,16 +104,16 @@ class FocusCursor : public Focus {
 
 }  // namespace
 
-/// @brief Set the `child` to be the one selected among its siblings.
-/// @param child The element to be selected.
+/// @brief Set the `child` to be the one focused among its siblings.
+/// @param child The element to be focused.
 /// @ingroup dom
 Element focus(Element child) {
   return std::make_shared<Focus>(unpack(std::move(child)));
 }
 
 /// @deprecated Use `focus` instead.
-/// @brief Set the `child` to be the one selected among its siblings.
-/// @param child The element to be selected.
+/// @brief Set the `child` to be the one focused among its siblings.
+/// @param child The element to be focused.
 Element select(Element e) {
   return focus(std::move(e));
 }
