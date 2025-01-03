@@ -58,6 +58,8 @@ current (development)
   - See `selectionForegroundColor` decorator.
   - See `selectionStyle(style)` decorator.
   - See `selectionStyleReset` decorator.
+- Breaking change: Change how "focus"/"select" are handled. This fixes the
+  behavior.
 
 ### Screen
 - Feature: Add `Box::IsEmpty()`.

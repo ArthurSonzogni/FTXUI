@@ -19,7 +19,7 @@ Element MakeVerticalList(int focused_index, int n) {
   for (int i = 0; i < n; ++i) {
     auto element = text(std::to_string(i));
     if (i == focused_index) {
-      element |= select;
+      element |= focus;
     }
     list.push_back(element);
   }
@@ -31,7 +31,7 @@ Element MakeHorizontalList(int focused_index, int n) {
   for (int i = 0; i < n; ++i) {
     auto element = text(std::to_string(i));
     if (i == focused_index) {
-      element |= select;
+      element |= focus;
     }
     list.push_back(element);
   }
