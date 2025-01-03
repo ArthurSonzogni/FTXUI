@@ -27,7 +27,7 @@ class DBox : public Node {
     requirement_.flex_grow_y = 0;
     requirement_.flex_shrink_x = 0;
     requirement_.flex_shrink_y = 0;
-    requirement_.is_selected = false;
+    requirement_.is_focused = false;
     for (auto& child : children_) {
       child->ComputeRequirement();
       requirement_.min_x =
@@ -35,9 +35,9 @@ class DBox : public Node {
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
 
-      if (!requirement_.is_selected && child->requirement().is_selected) {
-        requirement_.is_selected = true;
-        requirement_.selected_box = child->requirement().selected_box;
+      if (!requirement_.is_focused && child->requirement().is_focused) {
+        requirement_.is_focused = true;
+        requirement_.focused_box = child->requirement().focused_box;
       }
     }
   }

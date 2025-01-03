@@ -75,20 +75,20 @@ class GridBox : public Node {
     requirement_.min_x = Integrate(size_x);
     requirement_.min_y = Integrate(size_y);
 
-    // Forward the selected/focused child state:
-    requirement_.is_selected = false;
+    // Forward the focused/focused child state:
+    requirement_.is_focused = false;
     for (int x = 0; x < x_size; ++x) {
       for (int y = 0; y < y_size; ++y) {
-        if (requirement_.is_selected ||
-            !lines_[y][x]->requirement().is_selected) {
+        if (requirement_.is_focused ||
+            !lines_[y][x]->requirement().is_focused) {
           continue;
         }
-        requirement_.is_selected = true;
-        requirement_.selected_box = lines_[y][x]->requirement().selected_box;
-        requirement_.selected_box.x_min += size_x[x];
-        requirement_.selected_box.x_max += size_x[x];
-        requirement_.selected_box.y_min += size_y[y];
-        requirement_.selected_box.y_max += size_y[y];
+        requirement_.is_focused = true;
+        requirement_.focused_box = lines_[y][x]->requirement().focused_box;
+        requirement_.focused_box.x_min += size_x[x];
+        requirement_.focused_box.x_max += size_x[x];
+        requirement_.focused_box.y_min += size_y[y];
+        requirement_.focused_box.y_max += size_y[y];
       }
     }
   }

@@ -20,8 +20,8 @@ struct Requirement {
   int flex_shrink_y = 0;
 
   // Focus management to support the frame/focus/select element.
-  bool is_selected = false;
-  Box selected_box;
+  bool is_focused = false;
+  Box focused_box;
 };
 
 }  // namespace ftxui

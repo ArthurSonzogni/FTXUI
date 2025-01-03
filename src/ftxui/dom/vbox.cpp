@@ -30,16 +30,16 @@ class VBox : public Node {
     requirement_.flex_grow_y = 0;
     requirement_.flex_shrink_x = 0;
     requirement_.flex_shrink_y = 0;
-    requirement_.is_selected = false;
+    requirement_.is_focused = false;
     int index = 0;
     for (auto& child : children_) {
       child->ComputeRequirement();
-      if (child->requirement().is_selected &&
-          (!requirement_.is_selected || index_ == index)) {
-        requirement_.is_selected = true;
-        requirement_.selected_box = child->requirement().selected_box;
-        requirement_.selected_box.y_min += requirement_.min_y;
-        requirement_.selected_box.y_max += requirement_.min_y;
+      if (child->requirement().is_focused &&
+          (!requirement_.is_focused || index_ == index)) {
+        requirement_.is_focused = true;
+        requirement_.focused_box = child->requirement().focused_box;
+        requirement_.focused_box.y_min += requirement_.min_y;
+        requirement_.focused_box.y_max += requirement_.min_y;
       }
       requirement_.min_y += child->requirement().min_y;
       requirement_.min_x =
