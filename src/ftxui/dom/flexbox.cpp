@@ -104,8 +104,8 @@ class Flexbox : public Node {
     Layout(global, true);
 
     // Reset:
-    requirement_.is_selected = false;
-    requirement_.selected_box = Box();
+    requirement_.is_focused = false;
+    requirement_.focused_box = Box();
     requirement_.min_x = 0;
     requirement_.min_y = 0;
 
@@ -130,20 +130,20 @@ class Flexbox : public Node {
 
     // Find the selection:
     for (size_t i = 0; i < children_.size(); ++i) {
-      if (requirement_.is_selected ||
-          !children_[i]->requirement().is_selected) {
+      if (requirement_.is_focused ||
+          !children_[i]->requirement().is_focused) {
         continue;
       }
-      requirement_.is_selected = true;
-      Box selected_box = children_[i]->requirement().selected_box;
+      requirement_.is_focused = true;
+      Box focused_box = children_[i]->requirement().focused_box;
 
-      // Shift |selected_box| according to its position inside this component:
+      // Shift |focused_box| according to its position inside this component:
       auto& b = global.blocks[i];
-      selected_box.x_min += b.x;
-      selected_box.y_min += b.y;
-      selected_box.x_max += b.x;
-      selected_box.y_max += b.y;
-      requirement_.selected_box = Box::Intersection(selected_box, box);
+      focused_box.x_min += b.x;
+      focused_box.y_min += b.y;
+      focused_box.x_max += b.x;
+      focused_box.y_max += b.y;
+      requirement_.focused_box = Box::Intersection(focused_box, box);
     }
   }
 

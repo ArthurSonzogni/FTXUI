@@ -54,10 +54,10 @@ class Border : public Node {
       requirement_.min_x =
           std::max(requirement_.min_x, children_[1]->requirement().min_x + 2);
     }
-    requirement_.selected_box.x_min++;
-    requirement_.selected_box.x_max++;
-    requirement_.selected_box.y_min++;
-    requirement_.selected_box.y_max++;
+    requirement_.focused_box.x_min++;
+    requirement_.focused_box.x_max++;
+    requirement_.focused_box.y_min++;
+    requirement_.focused_box.y_max++;
   }
 
   void SetBox(Box box) override {
@@ -145,10 +145,10 @@ class BorderPixel : public Node {
       requirement_.min_x =
           std::max(requirement_.min_x, children_[1]->requirement().min_x + 2);
     }
-    requirement_.selected_box.x_min++;
-    requirement_.selected_box.x_max++;
-    requirement_.selected_box.y_min++;
-    requirement_.selected_box.y_max++;
+    requirement_.focused_box.x_min++;
+    requirement_.focused_box.x_max++;
+    requirement_.focused_box.y_min++;
+    requirement_.focused_box.y_max++;
   }
 
   void SetBox(Box box) override {
