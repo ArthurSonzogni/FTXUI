@@ -49,6 +49,8 @@ current (development)
 - Feature: Add `extend_beyond_screen` option to `Dimension::Fit(..)`, allowing
   the element to be larger than the screen. Proposed by @LordWhiro. See #572 and
   #949.
+- Breaking change: Change how "focus"/"select" are handled. This fixes the
+  behavior.
 
 ### Screen
 - Feature: Add `Box::IsEmpty()`.

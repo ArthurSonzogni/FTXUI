@@ -15,9 +15,9 @@
 namespace ftxui {
 
 namespace {
-class Select : public Node {
+class Focus : public Node {
  public:
-  explicit Select(Elements children) : Node(std::move(children)) {}
+  explicit Focus(Elements children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -85,14 +85,14 @@ class Frame : public Node {
   bool y_frame_;
 };
 
-class FocusCursor : public Select {
+class FocusCursor : public Focus {
  public:
   FocusCursor(Elements children, Screen::Cursor::Shape shape)
-      : Select(std::move(children)), shape_(shape) {}
+      : Focus(std::move(children)), shape_(shape) {}
 
  private:
   void Render(Screen& screen) override {
-    Select::Render(screen);  // NOLINT
+    Focus::Render(screen);  // NOLINT
     screen.SetCursor(Screen::Cursor{
         box_.x_min,
         box_.y_min,
@@ -107,8 +107,16 @@ class FocusCursor : public Select {
 /// @brief Set the `child` to be the one selected among its siblings.
 /// @param child The element to be selected.
 /// @ingroup dom
-Element select(Element child) {
-  return std::make_shared<Select>(unpack(std::move(child)));
+Element focus(Element child) {
+  return std::make_shared<Focus>(unpack(std::move(child)));
+}
+
+/// @deprecated Use `focus` instead.
+/// @brief Set the `child` to be the one selected among its siblings.
+/// @param child The element to be selected.
+Element select(Element e);
+Element select(Element e) {
+  return focus(std::move(e));
 }
 
 /// @brief Allow an element to be displayed inside a 'virtual' area. It size can
