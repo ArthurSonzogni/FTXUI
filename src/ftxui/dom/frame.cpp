@@ -114,7 +114,6 @@ Element focus(Element child) {
 /// @deprecated Use `focus` instead.
 /// @brief Set the `child` to be the one selected among its siblings.
 /// @param child The element to be selected.
-Element select(Element e);
 Element select(Element e) {
   return focus(std::move(e));
 }
