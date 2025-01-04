@@ -92,16 +92,16 @@ class Flexbox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
     }
-    flexbox_helper::Global global;
-    global.config = config_normalized_;
+    global_ = flexbox_helper::Global();
+    global_.config = config_normalized_;
     if (IsColumnOriented()) {
-      global.size_x = 100000;  // NOLINT
-      global.size_y = asked_;
+      global_.size_x = 100000;  // NOLINT
+      global_.size_y = asked_;
     } else {
-      global.size_x = asked_;
-      global.size_y = 100000;  // NOLINT
+      global_.size_x = asked_;
+      global_.size_y = 100000;  // NOLINT
     }
-    Layout(global, true);
+    Layout(global_, true);
 
     // Reset:
     requirement_.selection = Requirement::Selection::NORMAL;
@@ -109,17 +109,17 @@ class Flexbox : public Node {
     requirement_.min_x = 0;
     requirement_.min_y = 0;
 
-    if (global.blocks.empty()) {
+    if (global_.blocks.empty()) {
       return;
     }
 
     // Compute the union of all the blocks:
     Box box;
-    box.x_min = global.blocks[0].x;
-    box.y_min = global.blocks[0].y;
-    box.x_max = global.blocks[0].x + global.blocks[0].dim_x;
-    box.y_max = global.blocks[0].y + global.blocks[0].dim_y;
-    for (auto& b : global.blocks) {
+    box.x_min = global_.blocks[0].x;
+    box.y_min = global_.blocks[0].y;
+    box.x_max = global_.blocks[0].x + global_.blocks[0].dim_x;
+    box.y_max = global_.blocks[0].y + global_.blocks[0].dim_y;
+    for (auto& b : global_.blocks) {
       box.x_min = std::min(box.x_min, b.x);
       box.y_min = std::min(box.y_min, b.y);
       box.x_max = std::max(box.x_max, b.x + b.dim_x);
@@ -137,7 +137,7 @@ class Flexbox : public Node {
       Box selected_box = children_[i]->requirement().selected_box;
 
       // Shift |selected_box| according to its position inside this component:
-      auto& b = global.blocks[i];
+      auto& b = global_.blocks[i];
       selected_box.x_min += b.x;
       selected_box.y_min += b.y;
       selected_box.x_max += b.x;
@@ -177,6 +177,42 @@ class Flexbox : public Node {
     }
   }
 
+  void Select(Selection& selection) override {
+    // If this Node box_ doesn't intersect with the selection, then no
+    // selection.
+    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
+      return;
+    }
+
+    Selection selection_lines = IsColumnOriented()
+                                    ? selection.SaturateVertical(box_)
+                                    : selection.SaturateHorizontal(box_);
+
+    size_t i = 0;
+    for (auto& line : global_.lines) {
+      Box box;
+      box.x_min = box_.x_min + line.x;
+      box.x_max = box_.x_min + line.x + line.dim_x - 1;
+      box.y_min = box_.y_min + line.y;
+      box.y_max = box_.y_min + line.y + line.dim_y - 1;
+
+      // If the line box doesn't intersect with the selection, then no
+      // selection.
+      if (Box::Intersection(selection.GetBox(), box).IsEmpty()) {
+        continue;
+      }
+
+      Selection selection_line =
+          IsColumnOriented() ? selection_lines.SaturateHorizontal(box)
+                             : selection_lines.SaturateVertical(box);
+
+      for (auto& block : line.blocks) {
+        children_[i]->Select(selection_line);
+        i++;
+      }
+    }
+  }
+
   void Check(Status* status) override {
     for (auto& child : children_) {
       child->Check(status);
@@ -194,6 +230,7 @@ class Flexbox : public Node {
   bool need_iteration_ = true;
   const FlexboxConfig config_;
   const FlexboxConfig config_normalized_;
+  flexbox_helper::Global global_;
 };
 
 }  // namespace
