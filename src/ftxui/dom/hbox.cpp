@@ -84,7 +84,7 @@ class HBox : public Node {
     }
   }
 
-  int index_ = -1;  
+  int index_ = -1;
 };
 
 }  // namespace

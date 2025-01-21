@@ -65,7 +65,8 @@ class Border : public Node {
     if (children_.size() == 2) {
       Box title_box;
       title_box.x_min = box.x_min + 1;
-      title_box.x_max = std::min(box.x_max - 1, box.x_min + children_[1]->requirement().min_x);
+      title_box.x_max = std::min(box.x_max - 1,
+                                 box.x_min + children_[1]->requirement().min_x);
       title_box.y_min = box.y_min;
       title_box.y_max = box.y_min;
       children_[1]->SetBox(title_box);
