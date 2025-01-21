@@ -121,6 +121,9 @@ Decorator selectionStyle(std::function<void(Pixel&)> style);
 
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.
+// The extra `int` argument is used to select the `focus` element among the
+// children. The `focus` element is the one that will be visible when the
+// element is inside a `frame`.
 Element hbox(Elements);
 Element hbox(Elements, int);
 Element vbox(Elements);
@@ -163,7 +166,7 @@ Element frame(Element);
 Element xframe(Element);
 Element yframe(Element);
 Element focus(Element);
-Element select(Element e); // Deprecated - Alias for focus.
+Element select(Element e);  // Deprecated - Alias for focus.
 
 // --- Cursor ---
 // Those are similar to `focus`, but also change the shape of the cursor.

@@ -130,8 +130,7 @@ class Flexbox : public Node {
 
     // Find the selection:
     for (size_t i = 0; i < children_.size(); ++i) {
-      if (requirement_.is_focused ||
-          !children_[i]->requirement().is_focused) {
+      if (requirement_.is_focused || !children_[i]->requirement().is_focused) {
         continue;
       }
       requirement_.is_focused = true;
