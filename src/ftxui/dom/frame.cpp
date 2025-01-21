@@ -91,13 +91,9 @@ class FocusCursor : public Focus {
       : Focus(std::move(children)), shape_(shape) {}
 
  private:
-  void Render(Screen& screen) override {
-    Focus::Render(screen);  // NOLINT
-    screen.SetCursor(Screen::Cursor{
-        box_.x_min,
-        box_.y_min,
-        shape_,
-    });
+  void ComputeRequirement() override {
+    Focus::ComputeRequirement();  // NOLINT
+    requirement_.cursor_shape = shape_;
   }
   Screen::Cursor::Shape shape_;
 };
