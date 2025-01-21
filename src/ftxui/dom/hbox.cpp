@@ -31,6 +31,7 @@ class HBox : public Node {
     requirement_.flex_shrink_x = 0;
     requirement_.flex_shrink_y = 0;
     requirement_.is_focused = false;
+    requirement_.cursor_shape = Screen::Cursor::Shape::Hidden;
     int index = 0;
     for (auto& child : children_) {
       child->ComputeRequirement();
@@ -40,6 +41,7 @@ class HBox : public Node {
         requirement_.focused_box = child->requirement().focused_box;
         requirement_.focused_box.x_min += requirement_.min_x;
         requirement_.focused_box.x_max += requirement_.min_x;
+        requirement_.cursor_shape = child->requirement().cursor_shape;
       }
       requirement_.min_x += child->requirement().min_x;
       requirement_.min_y =

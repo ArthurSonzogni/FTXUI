@@ -5,6 +5,7 @@
 #define FTXUI_DOM_REQUIREMENT_HPP
 
 #include "ftxui/screen/box.hpp"
+#include "ftxui/screen/screen.hpp"
 
 namespace ftxui {
 
@@ -22,6 +23,7 @@ struct Requirement {
   // Focus management to support the frame/focus/select element.
   bool is_focused = false;
   Box focused_box;
+  Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
 };
 
 }  // namespace ftxui

@@ -134,53 +134,52 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
     return ComponentBase::OnEvent(event);
   }
 
+  bool OnCapturedMouseEvent(Event event) {
+    if (event.mouse().motion == Mouse::Released) {
+      captured_mouse_ = nullptr;
+      return true;
+    }
+
+    T old_value = this->value();
+    switch (this->direction) {
+      case Direction::Right: {
+        this->value() = this->min() + (event.mouse().x - gauge_box_.x_min) *
+                                          (this->max() - this->min()) /
+                                          (gauge_box_.x_max - gauge_box_.x_min);
+
+        break;
+      }
+      case Direction::Left: {
+        this->value() = this->max() - (event.mouse().x - gauge_box_.x_min) *
+                                          (this->max() - this->min()) /
+                                          (gauge_box_.x_max - gauge_box_.x_min);
+        break;
+      }
+      case Direction::Down: {
+        this->value() = this->min() + (event.mouse().y - gauge_box_.y_min) *
+                                          (this->max() - this->min()) /
+                                          (gauge_box_.y_max - gauge_box_.y_min);
+        break;
+      }
+      case Direction::Up: {
+        this->value() = this->max() - (event.mouse().y - gauge_box_.y_min) *
+                                          (this->max() - this->min()) /
+                                          (gauge_box_.y_max - gauge_box_.y_min);
+        break;
+      }
+    }
+
+    this->value() = std::max(this->min(), std::min(this->max(), this->value()));
+
+    if (old_value != this->value() && this->on_change) {
+      this->on_change();
+    }
+    return true;
+  }
+
   bool OnMouseEvent(Event event) {
     if (captured_mouse_) {
-      if (event.mouse().motion == Mouse::Released) {
-        captured_mouse_ = nullptr;
-        return true;
-      }
-
-      T old_value = this->value();
-      switch (this->direction) {
-        case Direction::Right: {
-          this->value() =
-              this->min() + (event.mouse().x - gauge_box_.x_min) *
-                                (this->max() - this->min()) /
-                                (gauge_box_.x_max - gauge_box_.x_min);
-
-          break;
-        }
-        case Direction::Left: {
-          this->value() =
-              this->max() - (event.mouse().x - gauge_box_.x_min) *
-                                (this->max() - this->min()) /
-                                (gauge_box_.x_max - gauge_box_.x_min);
-          break;
-        }
-        case Direction::Down: {
-          this->value() =
-              this->min() + (event.mouse().y - gauge_box_.y_min) *
-                                (this->max() - this->min()) /
-                                (gauge_box_.y_max - gauge_box_.y_min);
-          break;
-        }
-        case Direction::Up: {
-          this->value() =
-              this->max() - (event.mouse().y - gauge_box_.y_min) *
-                                (this->max() - this->min()) /
-                                (gauge_box_.y_max - gauge_box_.y_min);
-          break;
-        }
-      }
-
-      this->value() =
-          std::max(this->min(), std::min(this->max(), this->value()));
-
-      if (old_value != this->value() && this->on_change) {
-        this->on_change();
-      }
-      return true;
+      return OnCapturedMouseEvent(event);
     }
 
     if (event.mouse().button != Mouse::Left) {
@@ -198,7 +197,7 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
 
     if (captured_mouse_) {
       TakeFocus();
-      return true;
+      return OnCapturedMouseEvent(event);
     }
 
     return false;

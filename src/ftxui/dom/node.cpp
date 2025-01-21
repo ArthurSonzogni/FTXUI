@@ -88,31 +88,6 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   box.x_max = screen.dimx() - 1;
   box.y_max = screen.dimy() - 1;
 
-  // Setting the cursor to the right position allow folks using CJK (China,
-  // Japanese, Korean, ...) characters to see their [input method editor]
-  // displayed at the right location. See [issue].
-  //
-  // [input method editor]:
-  // https://en.wikipedia.org/wiki/Input_method
-  //
-  // [issue]:
-  // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
-  //
-  // Unfortunately, Microsoft terminal do not handle properly hidding the
-  // cursor. Instead the character under the cursor is hidden, which is a big
-  // problem. As a result, we can't enable setting cursor to the right
-  // location. It will be displayed at the bottom right corner.
-  // See:
-  // https://github.com/microsoft/terminal/issues/1203
-  // https://github.com/microsoft/terminal/issues/3093
-#if !defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-  screen.SetCursor(Screen::Cursor{
-      box.x_min,
-      box.y_min,
-      Screen::Cursor::Shape::Hidden,
-  });
-#endif
-
   Node::Status status;
   node->Check(&status);
   const int max_iterations = 20;
@@ -133,6 +108,40 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   if (!selection.IsEmpty()) {
     node->Select(selection);
   }
+
+  // Setting the cursor to the right position allow folks using CJK (China,
+  // Japanese, Korean, ...) characters to see their [input method editor]
+  // displayed at the right location. See [issue].
+  //
+  // [input method editor]:
+  // https://en.wikipedia.org/wiki/Input_method
+  //
+  // [issue]:
+  // https://github.com/ArthurSonzogni/FTXUI/issues/2#issuecomment-505282355
+  //
+  // Unfortunately, Microsoft terminal do not handle properly hiding the
+  // cursor. Instead the character under the cursor is hidden, which is a big
+  // problem. As a result, we can't enable setting cursor to the right
+  // location. It will be displayed at the bottom right corner.
+  // See:
+  // https://github.com/microsoft/terminal/issues/1203
+  // https://github.com/microsoft/terminal/issues/3093
+  const Requirement requirement = node->requirement();
+  int cursor_x = requirement.focused_box.x_max;
+  int cursor_y = requirement.focused_box.y_max;
+  if (!requirement.is_focused
+#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
+      || requirement.cursor_shape == Screen::Cursor::Shape::Hidden
+#endif
+  ) {
+    cursor_x = box.x_max;
+    cursor_y = box.y_max;
+  }
+  screen.SetCursor(Screen::Cursor{
+      cursor_x,
+      cursor_y,
+      requirement.cursor_shape,
+  });
 
   // Step 4: Draw the element.
   screen.stencil = box;
