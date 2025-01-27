@@ -343,6 +343,7 @@ Feel free to add your projects here:
 - [Lazylist](https://github.com/zhuyongqi9/lazylist)
 - [TUISIC](https://github.com/Dark-Kernel/tuisic)
 - [inLimbo](https://github.com/nots1dd/inLimbo)
+- [BestEdrOfTheMarket](https://github.com/Xacone/BestEdrOfTheMarket)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
