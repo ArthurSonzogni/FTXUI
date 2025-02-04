@@ -441,6 +441,11 @@ void ScreenInteractive::TrackMouse(bool enable) {
   track_mouse_ = enable;
 }
 
+/// @brief Set cursor shape on exit of main loop
+void ScreenInteractive::SetCursorReset(Screen::Cursor::Shape shape) {
+  cursor_reset_shape_ = shape;
+}
+
 /// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
 /// @ingroup component
