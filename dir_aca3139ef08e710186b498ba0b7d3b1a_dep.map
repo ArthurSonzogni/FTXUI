@@ -1,0 +1,18 @@
+<map id="src/ftxui" name="src/ftxui">
+<area shape="rect" id="node2" href="dir_591e152ed8a369b957ed274cdb7355d5.html" title="component" alt="" coords="38,63,133,88"/>
+<area shape="rect" id="node3" href="dir_8b052a5e35b6e4510790af7766fda6cf.html" title="dom" alt="" coords="37,136,88,161"/>
+<area shape="poly" id="edge2" href="dir_000001_000005.html" alt="" coords="84,89,73,124,68,122,79,88"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000001_000005.html" title="1" alt="" coords="75,114,85,129"/>
+<area shape="rect" id="node4" href="dir_3f4db74392b369be141833a3ebdcb6a2.html" title="screen" alt="" coords="113,136,178,161"/>
+<area shape="poly" id="edge1" href="dir_000001_000010.html" alt="" coords="97,87,129,124,125,127,93,90"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000001_000010.html" title="6" alt="" coords="126,109,135,124"/>
+<area shape="rect" id="node5" href="dir_d44c64559bbebec7f509842c48db8b23.html" title="include" alt="" coords="111,209,180,235"/>
+<area shape="poly" id="edge3" href="dir_000001_000008.html" alt="" coords="127,86,163,104,180,118,193,135,201,159,193,184,179,202,175,199,188,181,195,159,188,137,176,122,160,109,124,90"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000001_000008.html" title="161" alt="" coords="173,197,198,212"/>
+<area shape="poly" id="edge4" href="dir_000005_000008.html" alt="" coords="78,159,123,198,120,202,74,163"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000005_000008.html" title="169" alt="" coords="111,184,136,198"/>
+<area shape="poly" id="edge5" href="dir_000010_000008.html" alt="" coords="148,162,148,196,143,196,143,162"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000010_000008.html" title="16" alt="" coords="145,184,162,198"/>
+<area shape="rect" id="clust2" href="dir_aca3139ef08e710186b498ba0b7d3b1a.html" alt="" coords="27,52,219,172"/>
+<area shape="rect" id="clust1" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html" title="src" alt="" coords="16,16,229,183"/>
+</map>
