@@ -97,7 +97,11 @@ Color Interpolate(const LinearGradientNormalized& gradient, float t) {
   // Find the right color in the gradient's stops.
   size_t i = 1;
   while (true) {
-    if (i > gradient.positions.size()) {
+    // Note that `t` might be slightly greater than 1.0 due to floating point
+    // precision. This is why we need to handle the case where `t` is greater
+    // than the last stop's position.
+    // See https://github.com/ArthurSonzogni/FTXUI/issues/998
+    if (i >= gradient.positions.size()) {
       const float half = 0.5F;
       return Color::Interpolate(half, gradient.colors.back(),
                                 gradient.colors.back());

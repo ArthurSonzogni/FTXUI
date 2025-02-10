@@ -13,6 +13,7 @@ add_executable(ftxui-tests
   src/ftxui/component/component_test.cpp
   src/ftxui/component/component_test.cpp
   src/ftxui/component/container_test.cpp
+  src/ftxui/component/dropdown_test.cpp
   src/ftxui/component/hoverable_test.cpp
   src/ftxui/component/input_test.cpp
   src/ftxui/component/menu_test.cpp

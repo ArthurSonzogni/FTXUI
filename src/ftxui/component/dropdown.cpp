@@ -47,7 +47,11 @@ Component Dropdown(DropdownOption option) {
     Element Render() override {
       radiobox.selected =
           util::clamp(radiobox.selected(), 0, int(radiobox.entries.size()) - 1);
-      title_ = radiobox.entries[selected_()];
+      selected_ = util::clamp(selected_(), 0, int(radiobox.entries.size()) - 1);
+
+      if (selected_() >= 0) {
+        title_ = radiobox.entries[selected_()];
+      }
 
       return transform(*open_, checkbox_->Render(), radiobox_->Render());
     }

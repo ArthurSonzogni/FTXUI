@@ -44,6 +44,9 @@ current (development)
   See #932
 - Feature: Add `SliderOption::on_change`. This allows to set a callback when the
   slider value changes. See #938.
+- Bugfix: Handle `Dropdown` with no entries.
+- Bugfix: Fix crash in `LinearGradient` due to float precision and an off-by-one
+          mistake. See #998.
 
 ### Dom
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator
