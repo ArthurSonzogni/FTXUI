@@ -129,6 +129,7 @@ Element hbox(Elements, int);
 Element vbox(Elements);
 Element vbox(Elements, int);
 Element dbox(Elements);
+Element dbox(Elements, int);
 Element flexbox(Elements, FlexboxConfig config = FlexboxConfig());
 Element gridbox(std::vector<Elements> lines);
 

@@ -49,13 +49,7 @@ class GridBox : public Node {
   }
 
   void ComputeRequirement() override {
-    requirement_.min_x = 0;
-    requirement_.min_y = 0;
-    requirement_.flex_grow_x = 0;
-    requirement_.flex_grow_y = 0;
-    requirement_.flex_shrink_x = 0;
-    requirement_.flex_shrink_y = 0;
-
+    requirement_ = Requirement{};
     for (auto& line : lines_) {
       for (auto& cell : line) {
         cell->ComputeRequirement();
@@ -76,19 +70,14 @@ class GridBox : public Node {
     requirement_.min_y = Integrate(size_y);
 
     // Forward the focused/focused child state:
-    requirement_.is_focused = false;
     for (int x = 0; x < x_size; ++x) {
       for (int y = 0; y < y_size; ++y) {
-        if (requirement_.is_focused ||
-            !lines_[y][x]->requirement().is_focused) {
+        if (requirement_.focused.enabled ||
+            !lines_[y][x]->requirement().focused.enabled) {
           continue;
         }
-        requirement_.is_focused = true;
-        requirement_.focused_box = lines_[y][x]->requirement().focused_box;
-        requirement_.focused_box.x_min += size_x[x];
-        requirement_.focused_box.x_max += size_x[x];
-        requirement_.focused_box.y_min += size_y[y];
-        requirement_.focused_box.y_max += size_y[y];
+        requirement_.focused = lines_[y][x]->requirement().focused;
+        requirement_.focused.box.Shift(size_x[x], size_y[y]);
       }
     }
   }

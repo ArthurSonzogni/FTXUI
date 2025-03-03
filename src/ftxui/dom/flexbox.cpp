@@ -89,6 +89,7 @@ class Flexbox : public Node {
   }
 
   void ComputeRequirement() override {
+    requirement_ = Requirement{};
     for (auto& child : children_) {
       child->ComputeRequirement();
     }
@@ -102,12 +103,6 @@ class Flexbox : public Node {
       global.size_y = 100000;  // NOLINT
     }
     Layout(global, true);
-
-    // Reset:
-    requirement_.is_focused = false;
-    requirement_.focused_box = Box();
-    requirement_.min_x = 0;
-    requirement_.min_y = 0;
 
     if (global.blocks.empty()) {
       return;
@@ -130,19 +125,16 @@ class Flexbox : public Node {
 
     // Find the selection:
     for (size_t i = 0; i < children_.size(); ++i) {
-      if (requirement_.is_focused || !children_[i]->requirement().is_focused) {
+      if (requirement_.focused.enabled || !children_[i]->requirement().focused.enabled) {
         continue;
       }
-      requirement_.is_focused = true;
-      Box focused_box = children_[i]->requirement().focused_box;
-
-      // Shift |focused_box| according to its position inside this component:
+      requirement_.focused.enabled = true;
+      requirement_.focused.box = children_[i]->requirement().focused.box;
+      // Shift |focused.box| according to its position inside this component:
       auto& b = global.blocks[i];
-      focused_box.x_min += b.x;
-      focused_box.y_min += b.y;
-      focused_box.x_max += b.x;
-      focused_box.y_max += b.y;
-      requirement_.focused_box = Box::Intersection(focused_box, box);
+      requirement_.focused.box.Shift(b.x, b.y);
+      requirement_.focused.box =
+          Box::Intersection(requirement_.focused.box, box);
     }
   }
 

@@ -59,6 +59,8 @@ class Node {
   };
   virtual void Check(Status* status);
 
+  friend void Render(Screen& screen, Node* node, Selection& selection);
+
  protected:
   Elements children_;
   Requirement requirement_;

@@ -30,6 +30,17 @@ Box Box::Union(Box a, Box b) {
   };
 }
 
+/// Shift the box by (x,y).
+/// @param x horizontal shift.
+/// @param y vertical shift.
+/// @ingroup screen
+void Box::Shift(int x, int y) {
+  x_min += x;
+  x_max += x;
+  y_min += y;
+  y_max += y;
+}
+
 /// @return whether (x,y) is contained inside the box.
 /// @ingroup screen
 bool Box::Contain(int x, int y) const {
