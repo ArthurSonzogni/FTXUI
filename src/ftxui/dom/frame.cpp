@@ -22,12 +22,12 @@ class Focus : public Node {
   void ComputeRequirement() override {
     Node::ComputeRequirement();
     requirement_ = children_[0]->requirement();
-    auto& focused_box = requirement_.focused_box;
-    focused_box.x_min = 0;
-    focused_box.y_min = 0;
-    focused_box.x_max = requirement_.min_x - 1;
-    focused_box.y_max = requirement_.min_y - 1;
-    requirement_.is_focused = true;
+    requirement_.focused.enabled = true;
+    requirement_.focused.node = this;
+    requirement_.focused.box.x_min = 0;
+    requirement_.focused.box.y_min = 0;
+    requirement_.focused.box.x_max = requirement_.min_x - 1;
+    requirement_.focused.box.y_max = requirement_.min_y - 1;
   }
 
   void SetBox(Box box) override {
@@ -41,14 +41,9 @@ class Frame : public Node {
   Frame(Elements children, bool x_frame, bool y_frame)
       : Node(std::move(children)), x_frame_(x_frame), y_frame_(y_frame) {}
 
-  void ComputeRequirement() override {
-    Node::ComputeRequirement();
-    requirement_ = children_[0]->requirement();
-  }
-
   void SetBox(Box box) override {
     Node::SetBox(box);
-    auto& focused_box = requirement_.focused_box;
+    auto& focused_box = requirement_.focused.box;
     Box children_box = box;
 
     if (x_frame_) {
@@ -93,7 +88,7 @@ class FocusCursor : public Focus {
  private:
   void ComputeRequirement() override {
     Focus::ComputeRequirement();  // NOLINT
-    requirement_.cursor_shape = shape_;
+    requirement_.focused.cursor_shape = shape_;
   }
   Screen::Cursor::Shape shape_;
 };

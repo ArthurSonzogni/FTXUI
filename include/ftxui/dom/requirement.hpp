@@ -8,6 +8,7 @@
 #include "ftxui/screen/screen.hpp"
 
 namespace ftxui {
+class Node;
 
 struct Requirement {
   // The required size to fully draw the element.
@@ -21,9 +22,13 @@ struct Requirement {
   int flex_shrink_y = 0;
 
   // Focus management to support the frame/focus/select element.
-  bool is_focused = false;
-  Box focused_box;
-  Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
+  struct Focused {
+    bool enabled = false;
+    Box box;
+    Node* node = nullptr;
+    Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
+  };
+  Focused focused;
 };
 
 }  // namespace ftxui

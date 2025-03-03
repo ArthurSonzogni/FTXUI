@@ -70,7 +70,6 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
         event.mouse().motion == Mouse::Pressed) {
       *checked = !*checked;
       on_change();
-      TakeFocus();
       return true;
     }
 

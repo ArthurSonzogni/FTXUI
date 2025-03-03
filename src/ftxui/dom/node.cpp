@@ -1,4 +1,3 @@
-#include <iostream>
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
@@ -7,6 +6,7 @@
 
 #include "ftxui/dom/node.hpp"
 #include "ftxui/screen/screen.hpp"  // for Screen
+#include "ftxui/screen/util.hpp"    // for clamp
 
 namespace ftxui {
 
@@ -17,8 +17,23 @@ Node::~Node() = default;
 /// @brief Compute how much space an elements needs.
 /// @ingroup dom
 void Node::ComputeRequirement() {
-  for (auto& child : children_) {
+  if (children_.empty()) {
+    return;
+  }
+  for(auto& child : children_) {
     child->ComputeRequirement();
+  }
+
+  // By default, the requirement is the one of the first child.
+  requirement_ = children_[0]->requirement();
+
+  // Propagate the focused requirement.
+  for(size_t i = 1; i < children_.size(); ++i) {
+    children_[i]->ComputeRequirement();
+    if (!requirement_.focused.enabled &&
+        children_[i]->requirement().focused.enabled) {
+      requirement_.focused = children_[i]->requirement().focused;
+    }
   }
 }
 
@@ -126,22 +141,17 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   // See:
   // https://github.com/microsoft/terminal/issues/1203
   // https://github.com/microsoft/terminal/issues/3093
-  const Requirement requirement = node->requirement();
-  int cursor_x = requirement.focused_box.x_max;
-  int cursor_y = requirement.focused_box.y_max;
-  if (!requirement.is_focused
+  if (node->requirement().focused.enabled
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-      || requirement.cursor_shape == Screen::Cursor::Shape::Hidden
+      || node->requirement().focused.cursor_shape == Screen::Cursor::Shape::Hidden
 #endif
   ) {
-    cursor_x = box.x_max;
-    cursor_y = box.y_max;
+    screen.SetCursor(Screen::Cursor{
+        node->requirement().focused.node->box_.x_max,
+        node->requirement().focused.node->box_.y_max,
+        node->requirement().focused.cursor_shape,
+    });
   }
-  screen.SetCursor(Screen::Cursor{
-      cursor_x,
-      cursor_y,
-      requirement.cursor_shape,
-  });
 
   // Step 4: Draw the element.
   screen.stencil = box;

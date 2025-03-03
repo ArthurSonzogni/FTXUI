@@ -24,29 +24,25 @@ class HBox : public Node {
 
  private:
   void ComputeRequirement() override {
-    requirement_.min_x = 0;
-    requirement_.min_y = 0;
-    requirement_.flex_grow_x = 0;
-    requirement_.flex_grow_y = 0;
-    requirement_.flex_shrink_x = 0;
-    requirement_.flex_shrink_y = 0;
-    requirement_.is_focused = false;
-    requirement_.cursor_shape = Screen::Cursor::Shape::Hidden;
-    int index = 0;
+    requirement_ = Requirement{};
+
+    int index = -1;
     for (auto& child : children_) {
+      ++index;
+
       child->ComputeRequirement();
-      if (child->requirement().is_focused &&
-          (!requirement_.is_focused || index_ == index)) {
-        requirement_.is_focused = true;
-        requirement_.focused_box = child->requirement().focused_box;
-        requirement_.focused_box.x_min += requirement_.min_x;
-        requirement_.focused_box.x_max += requirement_.min_x;
-        requirement_.cursor_shape = child->requirement().cursor_shape;
+
+      // Propagate the focused requirement.
+      if (child->requirement().focused.enabled) {
+        if (index_ == index || !requirement_.focused.enabled) {
+          requirement_.focused = child->requirement().focused;
+          requirement_.focused.box.Shift(requirement_.min_x, 0);
+        }
       }
+
+      // Extend the min_x and min_y to contain all the children
       requirement_.min_x += child->requirement().min_x;
-      requirement_.min_y =
-          std::max(requirement_.min_y, child->requirement().min_y);
-      index++;
+      requirement_.min_y = std::max(requirement_.min_y, child->requirement().min_y);
     }
   }
 

@@ -110,42 +110,50 @@ class ResizableSplitBase : public ComponentBase {
   }
 
   Element RenderLeft() {
-    return hbox({
-               options_->main->Render() |
-                   size(WIDTH, EQUAL, options_->main_size()),
-               options_->separator_func() | reflect(separator_box_),
-               options_->back->Render() | xflex,
-           }) |
+    return hbox(
+               {
+                   options_->main->Render() |
+                       size(WIDTH, EQUAL, options_->main_size()),
+                   options_->separator_func() | reflect(separator_box_),
+                   options_->back->Render() | xflex,
+               },
+               ActiveChild() == options_->main ? 0 : 2) |
            reflect(box_);
   }
 
   Element RenderRight() {
-    return hbox({
-               options_->back->Render() | xflex,
-               options_->separator_func() | reflect(separator_box_),
-               options_->main->Render() |
-                   size(WIDTH, EQUAL, options_->main_size()),
-           }) |
+    return hbox(
+               {
+                   options_->back->Render() | xflex,
+                   options_->separator_func() | reflect(separator_box_),
+                   options_->main->Render() |
+                       size(WIDTH, EQUAL, options_->main_size()),
+               },
+               ActiveChild() == options_->main ? 2 : 0) |
            reflect(box_);
   }
 
   Element RenderTop() {
-    return vbox({
-               options_->main->Render() |
-                   size(HEIGHT, EQUAL, options_->main_size()),
-               options_->separator_func() | reflect(separator_box_),
-               options_->back->Render() | yflex,
-           }) |
+    return vbox(
+               {
+                   options_->main->Render() |
+                       size(HEIGHT, EQUAL, options_->main_size()),
+                   options_->separator_func() | reflect(separator_box_),
+                   options_->back->Render() | yflex,
+               },
+               ActiveChild() == options_->main ? 0 : 2) |
            reflect(box_);
   }
 
   Element RenderBottom() {
-    return vbox({
-               options_->back->Render() | yflex,
-               options_->separator_func() | reflect(separator_box_),
-               options_->main->Render() |
-                   size(HEIGHT, EQUAL, options_->main_size()),
-           }) |
+    return vbox(
+               {
+                   options_->back->Render() | yflex,
+                   options_->separator_func() | reflect(separator_box_),
+                   options_->main->Render() |
+                       size(HEIGHT, EQUAL, options_->main_size()),
+               },
+               ActiveChild() == options_->main ? 2 : 0) |
            reflect(box_);
   }
 
