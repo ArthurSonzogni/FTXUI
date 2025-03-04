@@ -54,7 +54,9 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     auto element = (transform ? transform : DefaultTransform)  //
         (state);
     element |= AnimatedColorStyle();
-    element |= focus;
+    if (focused) {
+      element |= focus;
+    }
     element |= reflect(box_);
     return element;
   }

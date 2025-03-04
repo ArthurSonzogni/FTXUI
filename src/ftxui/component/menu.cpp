@@ -129,7 +129,9 @@ class MenuBase : public ComponentBase, public MenuOption {
       Element element = (entries_option.transform ? entries_option.transform
                                                   : DefaultOptionTransform)  //
           (state);
-      element |= focus;
+      if (is_menu_focused) {
+        element |= focus;
+      }
       element |= AnimatedColorStyle(i);
       element |= reflect(boxes_[i]);
       elements.push_back(element);
@@ -621,16 +623,20 @@ Component MenuEntry(MenuEntryOption option) {
 
    private:
     Element Render() override {
-      const bool focused = Focused();
+      const bool is_focused = Focused();
       UpdateAnimationTarget();
 
       const EntryState state{
-          label(), false, hovered_, focused, Index(),
+          label(), false, hovered_, is_focused, Index(),
       };
 
-      const Element element =
+      Element element =
           (transform ? transform : DefaultOptionTransform)  //
           (state);
+
+      if (is_focused) {
+        element |= focus;
+      }
 
       return element | AnimatedColorStyle() | reflect(box_);
     }

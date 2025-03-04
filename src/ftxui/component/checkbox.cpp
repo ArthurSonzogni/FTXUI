@@ -31,7 +31,9 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     };
     auto element = (transform ? transform : CheckboxOption::Simple().transform)(
         entry_state);
-    element |= focus;
+    if (is_focused) {
+      element |= focus;
+    }
     element |= reflect(box_);
     return element;
   }

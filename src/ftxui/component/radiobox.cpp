@@ -42,7 +42,11 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
       auto element =
           (transform ? transform : RadioboxOption::Simple().transform)(state);
 
-      elements.push_back(element | focus | reflect(boxes_[i]));
+      if (is_menu_focused) {
+        element |= focus;
+      }
+
+      elements.push_back(element | reflect(boxes_[i]));
     }
     return vbox(std::move(elements), hovered_) | reflect(box_);
   }

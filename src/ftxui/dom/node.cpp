@@ -151,6 +151,12 @@ void Render(Screen& screen, Node* node, Selection& selection) {
         node->requirement().focused.node->box_.y_max,
         node->requirement().focused.cursor_shape,
     });
+  } else {
+    screen.SetCursor(Screen::Cursor{
+        screen.dimx() - 1,
+        screen.dimy() - 1,
+        Screen::Cursor::Shape::Hidden,
+    });
   }
 
   // Step 4: Draw the element.

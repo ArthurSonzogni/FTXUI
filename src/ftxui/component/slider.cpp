@@ -244,15 +244,20 @@ class SliderWithLabel : public ComponentBase {
   Element Render() override {
     auto gauge_color = (Focused() || mouse_hover_) ? color(Color::White)
                                                    : color(Color::GrayDark);
-    return hbox({
-               text(label_()) | dim | vcenter,
-               hbox({
-                   text("["),
-                   ComponentBase::Render() | underlined,
-                   text("]"),
-               }) | xflex,
-           }) |
-           gauge_color | xflex | reflect(box_) | focus;
+    auto element = hbox({
+                       text(label_()) | dim | vcenter,
+                       hbox({
+                           text("["),
+                           ComponentBase::Render() | underlined,
+                           text("]"),
+                       }) | xflex,
+                   }) |
+                   gauge_color | xflex | reflect(box_);
+
+    if (Focused()) {
+      element |= focus;
+    }
+    return element;
   }
 
   ConstStringRef label_;
