@@ -45,7 +45,7 @@ Component Dropdown(DropdownOption option) {
     }
 
     Element Render() override {
-      radiobox.selected =
+      selected_ =
           util::clamp(radiobox.selected(), 0, int(radiobox.entries.size()) - 1);
       selected_ = util::clamp(selected_(), 0, int(radiobox.entries.size()) - 1);
 
@@ -70,10 +70,13 @@ Component Dropdown(DropdownOption option) {
       // Auto-close the dropdown when the user selects an item, even if the item
       // it the same as the previous one.
       if (open_old && open_()) {
-        const bool should_close = (selected_() != selected_old) ||     //
-                                  (event == Event::Return) ||          //
-                                  (event == Event::Character(' ')) ||  //
-                                  (event == Event::Escape);            //
+        const bool should_close =
+            (selected_() != selected_old) ||     //
+            (event == Event::Return) ||          //
+            (event == Event::Character(' ')) ||  //
+            (event == Event::Escape) ||          //
+            (event.is_mouse() && event.mouse().button == Mouse::Left &&
+             event.mouse().motion == Mouse::Pressed);
 
         if (should_close) {
           checkbox_->TakeFocus();
