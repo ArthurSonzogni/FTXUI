@@ -33,19 +33,16 @@ class HBox : public Node {
       child->ComputeRequirement();
 
       // Propagate the focused requirement.
-      bool update_focus = (index_ < 0)
-                              ? (child->requirement().focused.enabled &&
-                                 !requirement_.focused.enabled)
-                              : index_ == index;
-      if (update_focus) {
-        requirement_.focused = child->requirement().focused;
-        requirement_.focused.box.Shift(requirement_.min_x, 0);
+      if (child->requirement().focused.enabled) {
+        if (index_ == index || !requirement_.focused.enabled) {
+          requirement_.focused = child->requirement().focused;
+          requirement_.focused.box.Shift(requirement_.min_x, 0);
+        }
       }
 
       // Extend the min_x and min_y to contain all the children
       requirement_.min_x += child->requirement().min_x;
-      requirement_.min_y =
-          std::max(requirement_.min_y, child->requirement().min_y);
+      requirement_.min_y = std::max(requirement_.min_y, child->requirement().min_y);
     }
   }
 

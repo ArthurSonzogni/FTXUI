@@ -164,15 +164,12 @@ class InputBase : public ComponentBase, public InputOption {
       const std::string part_at_cursor =
           line.substr(glyph_start, glyph_end - glyph_start);
       const std::string part_after_cursor = line.substr(glyph_end);
-      auto element =
-          hbox(
-              {
-                  Text(part_before_cursor),
-                  Text(part_at_cursor) | focused | reflect(cursor_box_),
-                  Text(part_after_cursor),
-              },
-              1) |
-          xflex;
+      auto element = hbox({
+                         Text(part_before_cursor),
+                         Text(part_at_cursor) | focused | reflect(cursor_box_),
+                         Text(part_after_cursor),
+                     }, 1) |
+                     xflex;
       elements.push_back(element);
     }
 
