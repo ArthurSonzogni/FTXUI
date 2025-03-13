@@ -14,6 +14,7 @@ struct Box {
 
   static auto Intersection(Box a, Box b) -> Box;
   static auto Union(Box a, Box b) -> Box;
+  void Shift(int x, int y);
   bool Contain(int x, int y) const;
   bool IsEmpty() const;
   bool operator==(const Box& other) const;

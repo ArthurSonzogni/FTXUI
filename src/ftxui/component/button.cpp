@@ -47,14 +47,18 @@ class ButtonBase : public ComponentBase, public ButtonOption {
       SetAnimationTarget(target);
     }
 
-    auto focus_management = focused ? focus : active ? select : nothing;
     const EntryState state{
         *label, false, active, focused_or_hover, Index(),
     };
 
     auto element = (transform ? transform : DefaultTransform)  //
         (state);
-    return element | AnimatedColorStyle() | focus_management | reflect(box_);
+    element |= AnimatedColorStyle();
+    if (focused) {
+      element |= focus;
+    }
+    element |= reflect(box_);
+    return element;
   }
 
   Decorator AnimatedColorStyle() {
@@ -124,7 +128,6 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
-      TakeFocus();
       OnClick();  // May delete this.
       return true;
     }

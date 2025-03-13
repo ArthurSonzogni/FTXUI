@@ -19,23 +19,30 @@ namespace {
 class HBox : public Node {
  public:
   explicit HBox(Elements children) : Node(std::move(children)) {}
+  explicit HBox(Elements children, int index)
+      : Node(std::move(children)), index_(index) {}
 
+ private:
   void ComputeRequirement() override {
-    requirement_.min_x = 0;
-    requirement_.min_y = 0;
-    requirement_.flex_grow_x = 0;
-    requirement_.flex_grow_y = 0;
-    requirement_.flex_shrink_x = 0;
-    requirement_.flex_shrink_y = 0;
-    requirement_.selection = Requirement::NORMAL;
+    requirement_ = Requirement{};
+
+    int index = -1;
     for (auto& child : children_) {
+      ++index;
+
       child->ComputeRequirement();
-      if (requirement_.selection < child->requirement().selection) {
-        requirement_.selection = child->requirement().selection;
-        requirement_.selected_box = child->requirement().selected_box;
-        requirement_.selected_box.x_min += requirement_.min_x;
-        requirement_.selected_box.x_max += requirement_.min_x;
+
+      // Propagate the focused requirement.
+      bool update_focus = (index_ < 0)
+                              ? (child->requirement().focused.enabled &&
+                                 !requirement_.focused.enabled)
+                              : index_ == index;
+      if (update_focus) {
+        requirement_.focused = child->requirement().focused;
+        requirement_.focused.box.Shift(requirement_.min_x, 0);
       }
+
+      // Extend the min_x and min_y to contain all the children
       requirement_.min_x += child->requirement().min_x;
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
@@ -77,6 +84,8 @@ class HBox : public Node {
       child->Select(selection_saturated);
     }
   }
+
+  int index_ = -1;
 };
 
 }  // namespace
@@ -95,6 +104,10 @@ class HBox : public Node {
 /// ```
 Element hbox(Elements children) {
   return std::make_shared<HBox>(std::move(children));
+}
+
+Element hbox(Elements children, int index) {
+  return std::make_shared<HBox>(std::move(children), index);
 }
 
 }  // namespace ftxui

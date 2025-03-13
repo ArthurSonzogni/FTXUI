@@ -19,23 +19,30 @@ namespace {
 class VBox : public Node {
  public:
   explicit VBox(Elements children) : Node(std::move(children)) {}
+  explicit VBox(Elements children, int index)
+      : Node(std::move(children)), index_(index) {}
 
+ private:
   void ComputeRequirement() override {
-    requirement_.min_x = 0;
-    requirement_.min_y = 0;
-    requirement_.flex_grow_x = 0;
-    requirement_.flex_grow_y = 0;
-    requirement_.flex_shrink_x = 0;
-    requirement_.flex_shrink_y = 0;
-    requirement_.selection = Requirement::NORMAL;
+    requirement_ = Requirement{};
+
+    int index = -1;
     for (auto& child : children_) {
+      index++;
+
       child->ComputeRequirement();
-      if (requirement_.selection < child->requirement().selection) {
-        requirement_.selection = child->requirement().selection;
-        requirement_.selected_box = child->requirement().selected_box;
-        requirement_.selected_box.y_min += requirement_.min_y;
-        requirement_.selected_box.y_max += requirement_.min_y;
+
+      // Propagate the focused requirement.
+      bool update_focus = (index_ < 0)
+                              ? (child->requirement().focused.enabled &&
+                                 !requirement_.focused.enabled)
+                              : index_ == index;
+      if (update_focus) {
+        requirement_.focused = child->requirement().focused;
+        requirement_.focused.box.Shift(0, requirement_.min_y);
       }
+
+      // Extend the min_x and min_y to contain all the children
       requirement_.min_y += child->requirement().min_y;
       requirement_.min_x =
           std::max(requirement_.min_x, child->requirement().min_x);
@@ -78,6 +85,8 @@ class VBox : public Node {
       child->Select(selection_saturated);
     }
   }
+
+  int index_ = -1;
 };
 }  // namespace
 
@@ -96,6 +105,10 @@ class VBox : public Node {
 /// ```
 Element vbox(Elements children) {
   return std::make_shared<VBox>(std::move(children));
+}
+
+Element vbox(Elements children, int index) {
+  return std::make_shared<VBox>(std::move(children), index);
 }
 
 }  // namespace ftxui

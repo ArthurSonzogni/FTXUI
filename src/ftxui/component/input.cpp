@@ -98,7 +98,7 @@ class InputBase : public ComponentBase, public InputOption {
   // Component implementation:
   Element Render() override {
     const bool is_focused = Focused();
-    const auto focused = (!is_focused && !hovered_) ? select
+    const auto focused = (!is_focused && !hovered_) ? nothing
                          : insert()                 ? focusCursorBarBlinking
                                                     : focusCursorBlockBlinking;
 
@@ -108,15 +108,12 @@ class InputBase : public ComponentBase, public InputOption {
     // placeholder.
     if (content->empty()) {
       auto element = text(placeholder()) | xflex | frame;
-      if (is_focused) {
-        element |= focus;
-      }
 
       return transform_func({
                  std::move(element), hovered_, is_focused,
                  true  // placeholder
              }) |
-             reflect(box_);
+             focus | reflect(box_);
     }
 
     Elements elements;
@@ -167,16 +164,19 @@ class InputBase : public ComponentBase, public InputOption {
       const std::string part_at_cursor =
           line.substr(glyph_start, glyph_end - glyph_start);
       const std::string part_after_cursor = line.substr(glyph_end);
-      auto element = hbox({
-                         Text(part_before_cursor),
-                         Text(part_at_cursor) | focused | reflect(cursor_box_),
-                         Text(part_after_cursor),
-                     }) |
-                     xflex;
+      auto element =
+          hbox(
+              {
+                  Text(part_before_cursor),
+                  Text(part_at_cursor) | focused | reflect(cursor_box_),
+                  Text(part_after_cursor),
+              },
+              1) |
+          xflex;
       elements.push_back(element);
     }
 
-    auto element = vbox(std::move(elements)) | frame;
+    auto element = vbox(std::move(elements), cursor_line) | frame;
     return transform_func({
                std::move(element), hovered_, is_focused,
                false  // placeholder
