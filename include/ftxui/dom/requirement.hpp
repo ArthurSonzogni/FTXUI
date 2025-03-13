@@ -27,8 +27,12 @@ struct Requirement {
     Box box;
     Node* node = nullptr;
     Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
+
+    // Internal for interactions with components.
+    bool component_active = false;
   };
   Focused focused;
+
 };
 
 }  // namespace ftxui

@@ -24,8 +24,8 @@ Component Maybe(Component child, std::function<bool()> show) {
     explicit Impl(std::function<bool()> show) : show_(std::move(show)) {}
 
    private:
-    Element Render() override {
-      return show_() ? ComponentBase::Render() : std::make_unique<Node>();
+    Element OnRender() override {
+      return show_() ? ComponentBase::OnRender() : std::make_unique<Node>();
     }
     bool Focusable() const override {
       return show_() && ComponentBase::Focusable();

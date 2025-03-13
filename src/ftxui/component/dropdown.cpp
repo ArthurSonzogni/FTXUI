@@ -44,7 +44,7 @@ Component Dropdown(DropdownOption option) {
       }));
     }
 
-    Element Render() override {
+    Element OnRender() override {
       selected_ =
           util::clamp(radiobox.selected(), 0, int(radiobox.entries.size()) - 1);
       selected_ = util::clamp(selected_(), 0, int(radiobox.entries.size()) - 1);

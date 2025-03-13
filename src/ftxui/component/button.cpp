@@ -37,7 +37,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
   explicit ButtonBase(ButtonOption option) : ButtonOption(std::move(option)) {}
 
   // Component implementation:
-  Element Render() override {
+  Element OnRender() override {
     const bool active = Active();
     const bool focused = Focused();
     const bool focused_or_hover = focused || mouse_hover_;
@@ -54,9 +54,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     auto element = (transform ? transform : DefaultTransform)  //
         (state);
     element |= AnimatedColorStyle();
-    if (focused) {
-      element |= focus;
-    }
+    element |= focus;
     element |= reflect(box_);
     return element;
   }

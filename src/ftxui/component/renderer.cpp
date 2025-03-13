@@ -31,7 +31,7 @@ Component Renderer(std::function<Element()> render) {
    public:
     explicit Impl(std::function<Element()> render)
         : render_(std::move(render)) {}
-    Element Render() override { return render_(); }
+    Element OnRender() override { return render_(); }
     std::function<Element()> render_;
   };
 
@@ -88,7 +88,7 @@ Component Renderer(std::function<Element(bool)> render) {
         : render_(std::move(render)) {}
 
    private:
-    Element Render() override { return render_(Focused()) | reflect(box_); }
+    Element OnRender() override { return render_(Focused()) | reflect(box_); }
     bool Focusable() const override { return true; }
     bool OnEvent(Event event) override {
       if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {

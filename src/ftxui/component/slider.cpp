@@ -39,7 +39,7 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
  public:
   explicit SliderBase(SliderOption<T> options) : SliderOption<T>(options) {}
 
-  Element Render() override {
+  Element OnRender() override {
     auto gauge_color =
         Focused() ? color(this->color_active) : color(this->color_inactive);
     const float percent =
@@ -241,7 +241,7 @@ class SliderWithLabel : public ComponentBase {
     return true;
   }
 
-  Element Render() override {
+  Element OnRender() override {
     auto gauge_color = (Focused() || mouse_hover_) ? color(Color::White)
                                                    : color(Color::GrayDark);
     auto element = hbox({
@@ -254,9 +254,7 @@ class SliderWithLabel : public ComponentBase {
                    }) |
                    gauge_color | xflex | reflect(box_);
 
-    if (Focused()) {
-      element |= focus;
-    }
+    element |= focus;
     return element;
   }
 

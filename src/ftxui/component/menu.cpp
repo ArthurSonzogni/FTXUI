@@ -105,7 +105,7 @@ class MenuBase : public ComponentBase, public MenuOption {
     }
   }
 
-  Element Render() override {
+  Element OnRender() override {
     Clamp();
     UpdateAnimationTarget();
 
@@ -129,9 +129,7 @@ class MenuBase : public ComponentBase, public MenuOption {
       Element element = (entries_option.transform ? entries_option.transform
                                                   : DefaultOptionTransform)  //
           (state);
-      if (is_menu_focused) {
-        element |= focus;
-      }
+      element |= focus;
       element |= AnimatedColorStyle(i);
       element |= reflect(boxes_[i]);
       elements.push_back(element);
@@ -622,7 +620,7 @@ Component MenuEntry(MenuEntryOption option) {
         : MenuEntryOption(std::move(option)) {}
 
    private:
-    Element Render() override {
+    Element OnRender() override {
       const bool is_focused = Focused();
       UpdateAnimationTarget();
 

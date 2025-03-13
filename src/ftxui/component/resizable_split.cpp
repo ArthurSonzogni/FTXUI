@@ -98,7 +98,7 @@ class ResizableSplitBase : public ComponentBase {
     return false;
   }
 
-  Element Render() final {
+  Element OnRender() final {
     switch (options_->direction()) {
       case Direction::Left:
         return RenderLeft();

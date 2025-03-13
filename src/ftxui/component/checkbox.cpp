@@ -23,7 +23,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 
  private:
   // Component implementation.
-  Element Render() override {
+  Element OnRender() override {
     const bool is_focused = Focused();
     const bool is_active = Active();
     auto entry_state = EntryState{
@@ -31,9 +31,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     };
     auto element = (transform ? transform : CheckboxOption::Simple().transform)(
         entry_state);
-    if (is_focused) {
-      element |= focus;
-    }
+    element |= focus;
     element |= reflect(box_);
     return element;
   }

@@ -49,8 +49,8 @@ Component Hoverable(Component component, bool* hover) {
     }
 
    private:
-    Element Render() override {
-      return ComponentBase::Render() | reflect(box_);
+    Element OnRender() override {
+      return ComponentBase::OnRender() | reflect(box_);
     }
 
     bool OnEvent(Event event) override {
@@ -98,8 +98,8 @@ Component Hoverable(Component component,
     }
 
    private:
-    Element Render() override {
-      return ComponentBase::Render() | reflect(box_);
+    Element OnRender() override {
+      return ComponentBase::OnRender() | reflect(box_);
     }
 
     bool OnEvent(Event event) override {

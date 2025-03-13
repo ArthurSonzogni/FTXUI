@@ -124,7 +124,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
   }
 
  private:
-  Element Render() final {
+  Element OnRender() final {
     auto element = ComponentBase::Render();
 
     const bool captureable =

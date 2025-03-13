@@ -29,7 +29,6 @@ void Node::ComputeRequirement() {
 
   // Propagate the focused requirement.
   for(size_t i = 1; i < children_.size(); ++i) {
-    children_[i]->ComputeRequirement();
     if (!requirement_.focused.enabled &&
         children_[i]->requirement().focused.enabled) {
       requirement_.focused = children_[i]->requirement().focused;

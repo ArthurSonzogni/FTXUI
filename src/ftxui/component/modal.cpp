@@ -26,7 +26,7 @@ Component Modal(Component main, Component modal, const bool* show_modal) {
     }
 
    private:
-    Element Render() override {
+    Element OnRender() override {
       selector_ = *show_modal_;
       auto document = main_->Render();
       if (*show_modal_) {

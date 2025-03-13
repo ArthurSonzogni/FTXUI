@@ -5,6 +5,7 @@
 #define FTXUI_DOM_BOX_HELPER_HPP
 
 #include <vector>
+#include "ftxui/dom/requirement.hpp"
 
 namespace ftxui::box_helper {
 
@@ -19,6 +20,10 @@ struct Element {
 };
 
 void Compute(std::vector<Element>* elements, int target_size);
+bool Accept(const Requirement::Focused& previous,
+            const Requirement::Focused& next,
+            int box_index,
+            int focused_index);
 
 }  // namespace ftxui::box_helper
 
