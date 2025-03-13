@@ -344,6 +344,8 @@ Feel free to add your projects here:
 - [TUISIC](https://github.com/Dark-Kernel/tuisic)
 - [inLimbo](https://github.com/nots1dd/inLimbo)
 - [BestEdrOfTheMarket](https://github.com/Xacone/BestEdrOfTheMarket)
+- [terminal-rain](https://github.com/Oakamoore/terminal-rain)
+- [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
 - [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
