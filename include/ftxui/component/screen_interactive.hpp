@@ -40,6 +40,8 @@ class ScreenInteractive : public Screen {
   // Options. Must be called before Loop().
   void TrackMouse(bool enable = true);
 
+  void SetCursorReset(Screen::Cursor::Shape shape);
+
   // Return the currently active screen, nullptr if none.
   static ScreenInteractive* Active();
 
