@@ -41,7 +41,9 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
       };
       auto element =
           (transform ? transform : RadioboxOption::Simple().transform)(state);
-      element |= focus;
+      if (is_selected) {
+        element |= focus;
+      }
       elements.push_back(element | reflect(boxes_[i]));
     }
     return vbox(std::move(elements), hovered_) | reflect(box_);

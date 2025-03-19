@@ -38,8 +38,10 @@ class DBox : public Node {
       }
 
       // Extend the min_x and min_y to contain all the children
-      requirement_.min_x = std::max(requirement_.min_x, child->requirement().min_x);
-      requirement_.min_y = std::max(requirement_.min_y, child->requirement().min_y);
+      requirement_.min_x =
+          std::max(requirement_.min_x, child->requirement().min_x);
+      requirement_.min_y =
+          std::max(requirement_.min_y, child->requirement().min_y);
     }
   }
 
@@ -114,15 +116,6 @@ class DBox : public Node {
 /// @ingroup dom
 Element dbox(Elements children_) {
   return std::make_shared<DBox>(std::move(children_));
-}
-
-/// @brief Stack several element on top of each other.
-/// @param children_ The input element.
-/// @param index The index of the focused element.
-/// @return The right aligned element.
-/// @ingroup dom
-Element dbox(Elements children_, int index) {
-  return std::make_shared<DBox>(std::move(children_), index);
 }
 
 }  // namespace ftxui

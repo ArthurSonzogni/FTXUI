@@ -168,7 +168,7 @@ class InputBase : public ComponentBase, public InputOption {
                          Text(part_before_cursor),
                          Text(part_at_cursor) | focused | reflect(cursor_box_),
                          Text(part_after_cursor),
-                     }, 1) |
+                     }) |
                      xflex;
       elements.push_back(element);
     }

@@ -49,7 +49,7 @@ Component Dropdown(DropdownOption option) {
           util::clamp(radiobox.selected(), 0, int(radiobox.entries.size()) - 1);
       selected_ = util::clamp(selected_(), 0, int(radiobox.entries.size()) - 1);
 
-      if (selected_() >= 0) {
+      if (selected_() >= 0 && selected_() < int(radiobox.entries.size())) {
         title_ = radiobox.entries[selected_()];
       }
 

@@ -107,7 +107,7 @@ class VerticalContainer : public ContainerBase {
     if (elements.empty()) {
       return text("Empty container") | reflect(box_);
     }
-    return vbox(std::move(elements), *selector_) | reflect(box_);
+    return vbox(std::move(elements)) | reflect(box_);
   }
 
   bool EventHandler(Event event) override {
@@ -191,7 +191,7 @@ class HorizontalContainer : public ContainerBase {
     if (elements.empty()) {
       return text("Empty container");
     }
-    return hbox(std::move(elements), *selector_);
+    return hbox(std::move(elements));
   }
 
   bool EventHandler(Event event) override {

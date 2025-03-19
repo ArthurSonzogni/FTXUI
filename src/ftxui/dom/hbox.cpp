@@ -19,22 +19,16 @@ namespace {
 class HBox : public Node {
  public:
   explicit HBox(Elements children) : Node(std::move(children)) {}
-  explicit HBox(Elements children, int index)
-      : Node(std::move(children)), index_(index) {}
 
  private:
   void ComputeRequirement() override {
     requirement_ = Requirement{};
 
-    int index = -1;
     for (auto& child : children_) {
-      ++index;
-
       child->ComputeRequirement();
 
       // Propagate the focused requirement.
-      if (box_helper::Accept(requirement_.focused, child->requirement().focused,
-                             index_, index)) {
+      if (requirement_.focused.Prefer(child->requirement().focused)) {
         requirement_.focused = child->requirement().focused;
         requirement_.focused.box.Shift(requirement_.min_x, 0);
       }
@@ -81,8 +75,6 @@ class HBox : public Node {
       child->Select(selection_saturated);
     }
   }
-
-  int index_ = -1;
 };
 
 }  // namespace
@@ -101,10 +93,6 @@ class HBox : public Node {
 /// ```
 Element hbox(Elements children) {
   return std::make_shared<HBox>(std::move(children));
-}
-
-Element hbox(Elements children, int index) {
-  return std::make_shared<HBox>(std::move(children), index);
 }
 
 }  // namespace ftxui

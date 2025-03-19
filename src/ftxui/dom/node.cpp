@@ -20,7 +20,7 @@ void Node::ComputeRequirement() {
   if (children_.empty()) {
     return;
   }
-  for(auto& child : children_) {
+  for (auto& child : children_) {
     child->ComputeRequirement();
   }
 
@@ -28,7 +28,7 @@ void Node::ComputeRequirement() {
   requirement_ = children_[0]->requirement();
 
   // Propagate the focused requirement.
-  for(size_t i = 1; i < children_.size(); ++i) {
+  for (size_t i = 1; i < children_.size(); ++i) {
     if (!requirement_.focused.enabled &&
         children_[i]->requirement().focused.enabled) {
       requirement_.focused = children_[i]->requirement().focused;
@@ -142,7 +142,8 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   // https://github.com/microsoft/terminal/issues/3093
   if (node->requirement().focused.enabled
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-      || node->requirement().focused.cursor_shape == Screen::Cursor::Shape::Hidden
+      ||
+      node->requirement().focused.cursor_shape == Screen::Cursor::Shape::Hidden
 #endif
   ) {
     screen.SetCursor(Screen::Cursor{

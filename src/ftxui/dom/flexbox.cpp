@@ -125,16 +125,14 @@ class Flexbox : public Node {
 
     // Find the selection:
     for (size_t i = 0; i < children_.size(); ++i) {
-      if (requirement_.focused.enabled || !children_[i]->requirement().focused.enabled) {
-        continue;
+      if (requirement_.focused.Prefer(children_[i]->requirement().focused)) {
+        requirement_.focused = children_[i]->requirement().focused;
+        // Shift |focused.box| according to its position inside this component:
+        auto& b = global.blocks[i];
+        requirement_.focused.box.Shift(b.x, b.y);
+        requirement_.focused.box =
+            Box::Intersection(requirement_.focused.box, box);
       }
-      requirement_.focused.enabled = true;
-      requirement_.focused.box = children_[i]->requirement().focused.box;
-      // Shift |focused.box| according to its position inside this component:
-      auto& b = global.blocks[i];
-      requirement_.focused.box.Shift(b.x, b.y);
-      requirement_.focused.box =
-          Box::Intersection(requirement_.focused.box, box);
     }
   }
 

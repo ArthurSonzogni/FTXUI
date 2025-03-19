@@ -129,7 +129,9 @@ class MenuBase : public ComponentBase, public MenuOption {
       Element element = (entries_option.transform ? entries_option.transform
                                                   : DefaultOptionTransform)  //
           (state);
-      element |= focus;
+      if (selected_focus_ == i) {
+        element |= focus;
+      }
       element |= AnimatedColorStyle(i);
       element |= reflect(boxes_[i]);
       elements.push_back(element);
@@ -151,24 +153,20 @@ class MenuBase : public ComponentBase, public MenuOption {
     }
 
     if (IsHorizontal()) {
-      return vbox(
-                 {
-                     bar | xflex,
-                     separatorHSelector(first_, second_,  //
-                                        underline.color_active,
-                                        underline.color_inactive),
-                 },
-                 0) |
+      return vbox({
+                 bar | xflex,
+                 separatorHSelector(first_, second_,  //
+                                    underline.color_active,
+                                    underline.color_inactive),
+             }) |
              reflect(box_);
     } else {
-      return hbox(
-                 {
-                     separatorVSelector(first_, second_,  //
-                                        underline.color_active,
-                                        underline.color_inactive),
-                     bar | yflex,
-                 },
-                 0) |
+      return hbox({
+                 separatorVSelector(first_, second_,  //
+                                    underline.color_active,
+                                    underline.color_inactive),
+                 bar | yflex,
+             }) |
              reflect(box_);
     }
   }
@@ -628,8 +626,7 @@ Component MenuEntry(MenuEntryOption option) {
           label(), false, hovered_, is_focused, Index(),
       };
 
-      Element element =
-          (transform ? transform : DefaultOptionTransform)  //
+      Element element = (transform ? transform : DefaultOptionTransform)  //
           (state);
 
       if (is_focused) {

@@ -50,10 +50,6 @@ class ResizableSplitBase : public ComponentBase {
     }
   }
 
-  bool IsMainActive() const {
-    return options_->main->Parent()->ActiveChild() == options_->main;
-  }
-
   bool OnEvent(Event event) final {
     if (event.is_mouse()) {
       return OnMouseEvent(std::move(event));
@@ -114,50 +110,42 @@ class ResizableSplitBase : public ComponentBase {
   }
 
   Element RenderLeft() {
-    return hbox(
-               {
-                   options_->main->Render() |
-                       size(WIDTH, EQUAL, options_->main_size()),
-                   options_->separator_func() | reflect(separator_box_),
-                   options_->back->Render() | xflex,
-               },
-               IsMainActive() ? 0 : 2) |
+    return hbox({
+               options_->main->Render() |
+                   size(WIDTH, EQUAL, options_->main_size()),
+               options_->separator_func() | reflect(separator_box_),
+               options_->back->Render() | xflex,
+           }) |
            reflect(box_);
   }
 
   Element RenderRight() {
-    return hbox(
-               {
-                   options_->back->Render() | xflex,
-                   options_->separator_func() | reflect(separator_box_),
-                   options_->main->Render() |
-                       size(WIDTH, EQUAL, options_->main_size()),
-               },
-               IsMainActive() ? 2 : 0) |
+    return hbox({
+               options_->back->Render() | xflex,
+               options_->separator_func() | reflect(separator_box_),
+               options_->main->Render() |
+                   size(WIDTH, EQUAL, options_->main_size()),
+           }) |
            reflect(box_);
   }
 
   Element RenderTop() {
-    return vbox(
-               {
-                   options_->main->Render() |
-                       size(HEIGHT, EQUAL, options_->main_size()),
-                   options_->separator_func() | reflect(separator_box_),
-                   options_->back->Render() | yflex,
-               },
-               IsMainActive() ? 0 : 2) |
+    return vbox({
+               options_->main->Render() |
+                   size(HEIGHT, EQUAL, options_->main_size()),
+               options_->separator_func() | reflect(separator_box_),
+               options_->back->Render() | yflex,
+           }) |
            reflect(box_);
   }
 
   Element RenderBottom() {
-    return vbox(
-               {
-                   options_->back->Render() | yflex,
-                   options_->separator_func() | reflect(separator_box_),
-                   options_->main->Render() |
-                       size(HEIGHT, EQUAL, options_->main_size()),
-               },
-               ActiveChild() == options_->main ? 2 : 0) |
+    return vbox({
+               options_->back->Render() | yflex,
+               options_->separator_func() | reflect(separator_box_),
+               options_->main->Render() |
+                   size(HEIGHT, EQUAL, options_->main_size()),
+           }) |
            reflect(box_);
   }
 

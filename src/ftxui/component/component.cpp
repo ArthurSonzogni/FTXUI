@@ -126,6 +126,7 @@ Element ComponentBase::Render() {
         : Node({std::move(child)}), active_(active) {}
 
     void SetBox(Box box) override {
+      Node::SetBox(box);
       children_[0]->SetBox(box);
     }
 

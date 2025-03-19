@@ -20,11 +20,6 @@ struct Element {
 };
 
 void Compute(std::vector<Element>* elements, int target_size);
-bool Accept(const Requirement::Focused& previous,
-            const Requirement::Focused& next,
-            int box_index,
-            int focused_index);
-
 }  // namespace ftxui::box_helper
 
 #endif /* end of include guard: FTXUI_DOM_BOX_HELPER_HPP */

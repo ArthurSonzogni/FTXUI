@@ -3,8 +3,8 @@
 // the LICENSE file.
 #include "ftxui/dom/box_helper.hpp"
 
-#include <algorithm>                  // for max
-#include <vector>                     // for vector
+#include <algorithm>  // for max
+#include <vector>     // for vector
 
 namespace ftxui::box_helper {
 
@@ -87,29 +87,6 @@ void Compute(std::vector<Element>* elements, int target_size) {
     ComputeShrinkHard(elements, extra_space + flex_shrink_size,
                       size - flex_shrink_size);
   }
-}
-
-bool Accept(const Requirement::Focused& previous,
-            const Requirement::Focused& next,
-            int box_index,
-            int focused_index) {
-  if (!next.enabled) {
-    return false;
-  }
-
-  if (!previous.enabled) {
-    return true;
-  }
-
-  if (box_index == -1) {
-    return box_index == focused_index;
-  }
-
-  if (next.component_active && !previous.component_active) {
-    return true;
-  }
-
-  return false;
 }
 
 }  // namespace ftxui::box_helper
