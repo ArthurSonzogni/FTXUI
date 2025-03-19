@@ -28,7 +28,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
       : RadioboxOption(option) {}
 
  private:
-  Element Render() override {
+  Element OnRender() override {
     Clamp();
     Elements elements;
     const bool is_menu_focused = Focused();
@@ -36,18 +36,17 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
     for (int i = 0; i < size(); ++i) {
       const bool is_focused = (focused_entry() == i) && is_menu_focused;
       const bool is_selected = (hovered_ == i);
-      auto focus_management = !is_selected      ? nothing
-                              : is_menu_focused ? focus
-                                                : select;
       auto state = EntryState{
           entries[i], selected() == i, is_selected, is_focused, i,
       };
       auto element =
           (transform ? transform : RadioboxOption::Simple().transform)(state);
-
-      elements.push_back(element | focus_management | reflect(boxes_[i]));
+      if (is_selected) {
+        element |= focus;
+      }
+      elements.push_back(element | reflect(boxes_[i]));
     }
-    return vbox(std::move(elements)) | reflect(box_);
+    return vbox(std::move(elements), hovered_) | reflect(box_);
   }
 
   // NOLINTNEXTLINE(readability-function-cognitive-complexity)

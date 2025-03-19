@@ -20,22 +20,20 @@ class HBox : public Node {
  public:
   explicit HBox(Elements children) : Node(std::move(children)) {}
 
+ private:
   void ComputeRequirement() override {
-    requirement_.min_x = 0;
-    requirement_.min_y = 0;
-    requirement_.flex_grow_x = 0;
-    requirement_.flex_grow_y = 0;
-    requirement_.flex_shrink_x = 0;
-    requirement_.flex_shrink_y = 0;
-    requirement_.selection = Requirement::NORMAL;
+    requirement_ = Requirement{};
+
     for (auto& child : children_) {
       child->ComputeRequirement();
-      if (requirement_.selection < child->requirement().selection) {
-        requirement_.selection = child->requirement().selection;
-        requirement_.selected_box = child->requirement().selected_box;
-        requirement_.selected_box.x_min += requirement_.min_x;
-        requirement_.selected_box.x_max += requirement_.min_x;
+
+      // Propagate the focused requirement.
+      if (requirement_.focused.Prefer(child->requirement().focused)) {
+        requirement_.focused = child->requirement().focused;
+        requirement_.focused.box.Shift(requirement_.min_x, 0);
       }
+
+      // Extend the min_x and min_y to contain all the children
       requirement_.min_x += child->requirement().min_x;
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);

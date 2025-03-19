@@ -5,6 +5,7 @@
 #define FTXUI_DOM_BOX_HELPER_HPP
 
 #include <vector>
+#include "ftxui/dom/requirement.hpp"
 
 namespace ftxui::box_helper {
 
@@ -19,7 +20,6 @@ struct Element {
 };
 
 void Compute(std::vector<Element>* elements, int target_size);
-
 }  // namespace ftxui::box_helper
 
 #endif /* end of include guard: FTXUI_DOM_BOX_HELPER_HPP */

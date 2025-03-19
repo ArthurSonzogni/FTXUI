@@ -36,13 +36,12 @@ Decorator focusPositionRelative(float x, float y) {
 
     void ComputeRequirement() override {
       NodeDecorator::ComputeRequirement();
-      requirement_.selection = Requirement::Selection::NORMAL;
-
-      Box& box = requirement_.selected_box;
-      box.x_min = int(float(requirement_.min_x) * x_);
-      box.y_min = int(float(requirement_.min_y) * y_);
-      box.x_max = int(float(requirement_.min_x) * x_);
-      box.y_max = int(float(requirement_.min_y) * y_);
+      requirement_.focused.enabled = false;
+      requirement_.focused.node = this;
+      requirement_.focused.box.x_min = int(float(requirement_.min_x) * x_);
+      requirement_.focused.box.y_min = int(float(requirement_.min_y) * y_);
+      requirement_.focused.box.x_max = int(float(requirement_.min_x) * x_);
+      requirement_.focused.box.y_max = int(float(requirement_.min_y) * y_);
     }
 
    private:
@@ -75,9 +74,9 @@ Decorator focusPosition(int x, int y) {
 
     void ComputeRequirement() override {
       NodeDecorator::ComputeRequirement();
-      requirement_.selection = Requirement::Selection::NORMAL;
+      requirement_.focused.enabled = false;
 
-      Box& box = requirement_.selected_box;
+      Box& box = requirement_.focused.box;
       box.x_min = x_;
       box.y_min = y_;
       box.x_max = x_;

@@ -5,8 +5,10 @@
 #define FTXUI_DOM_REQUIREMENT_HPP
 
 #include "ftxui/screen/box.hpp"
+#include "ftxui/screen/screen.hpp"
 
 namespace ftxui {
+class Node;
 
 struct Requirement {
   // The required size to fully draw the element.
@@ -20,13 +22,28 @@ struct Requirement {
   int flex_shrink_y = 0;
 
   // Focus management to support the frame/focus/select element.
-  enum Selection {
-    NORMAL = 0,
-    SELECTED = 1,
-    FOCUSED = 2,
+  struct Focused {
+    bool enabled = false;
+    Box box;
+    Node* node = nullptr;
+    Screen::Cursor::Shape cursor_shape = Screen::Cursor::Shape::Hidden;
+
+    // Internal for interactions with components.
+    bool component_active = false;
+
+    // Return whether this requirement should be preferred over the other.
+    bool Prefer(const Focused& other) const {
+      if (!other.enabled) {
+        return false;
+      }
+      if (!enabled) {
+        return true;
+      }
+
+      return other.component_active && !component_active;
+    }
   };
-  Selection selection = NORMAL;
-  Box selected_box;
+  Focused focused;
 };
 
 }  // namespace ftxui

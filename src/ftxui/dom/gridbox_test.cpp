@@ -7,7 +7,7 @@
 #include <string>     // for allocator, basic_string, string
 #include <vector>     // for vector
 
-#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, Elements, flex_grow, flex_shrink, vtext, gridbox, vbox, focus, operator|=, border, frame
+#include "ftxui/dom/elements.hpp"  // for text, operator|, Element, flex, Elements, flex_grow, flex_shrink, vtext, gridbox, vbox, select, operator|=, border, frame
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
 

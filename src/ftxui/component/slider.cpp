@@ -39,7 +39,7 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
  public:
   explicit SliderBase(SliderOption<T> options) : SliderOption<T>(options) {}
 
-  Element Render() override {
+  Element OnRender() override {
     auto gauge_color =
         Focused() ? color(this->color_active) : color(this->color_inactive);
     const float percent =
@@ -134,53 +134,52 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
     return ComponentBase::OnEvent(event);
   }
 
+  bool OnCapturedMouseEvent(Event event) {
+    if (event.mouse().motion == Mouse::Released) {
+      captured_mouse_ = nullptr;
+      return true;
+    }
+
+    T old_value = this->value();
+    switch (this->direction) {
+      case Direction::Right: {
+        this->value() = this->min() + (event.mouse().x - gauge_box_.x_min) *
+                                          (this->max() - this->min()) /
+                                          (gauge_box_.x_max - gauge_box_.x_min);
+
+        break;
+      }
+      case Direction::Left: {
+        this->value() = this->max() - (event.mouse().x - gauge_box_.x_min) *
+                                          (this->max() - this->min()) /
+                                          (gauge_box_.x_max - gauge_box_.x_min);
+        break;
+      }
+      case Direction::Down: {
+        this->value() = this->min() + (event.mouse().y - gauge_box_.y_min) *
+                                          (this->max() - this->min()) /
+                                          (gauge_box_.y_max - gauge_box_.y_min);
+        break;
+      }
+      case Direction::Up: {
+        this->value() = this->max() - (event.mouse().y - gauge_box_.y_min) *
+                                          (this->max() - this->min()) /
+                                          (gauge_box_.y_max - gauge_box_.y_min);
+        break;
+      }
+    }
+
+    this->value() = std::max(this->min(), std::min(this->max(), this->value()));
+
+    if (old_value != this->value() && this->on_change) {
+      this->on_change();
+    }
+    return true;
+  }
+
   bool OnMouseEvent(Event event) {
     if (captured_mouse_) {
-      if (event.mouse().motion == Mouse::Released) {
-        captured_mouse_ = nullptr;
-        return true;
-      }
-
-      T old_value = this->value();
-      switch (this->direction) {
-        case Direction::Right: {
-          this->value() =
-              this->min() + (event.mouse().x - gauge_box_.x_min) *
-                                (this->max() - this->min()) /
-                                (gauge_box_.x_max - gauge_box_.x_min);
-
-          break;
-        }
-        case Direction::Left: {
-          this->value() =
-              this->max() - (event.mouse().x - gauge_box_.x_min) *
-                                (this->max() - this->min()) /
-                                (gauge_box_.x_max - gauge_box_.x_min);
-          break;
-        }
-        case Direction::Down: {
-          this->value() =
-              this->min() + (event.mouse().y - gauge_box_.y_min) *
-                                (this->max() - this->min()) /
-                                (gauge_box_.y_max - gauge_box_.y_min);
-          break;
-        }
-        case Direction::Up: {
-          this->value() =
-              this->max() - (event.mouse().y - gauge_box_.y_min) *
-                                (this->max() - this->min()) /
-                                (gauge_box_.y_max - gauge_box_.y_min);
-          break;
-        }
-      }
-
-      this->value() =
-          std::max(this->min(), std::min(this->max(), this->value()));
-
-      if (old_value != this->value() && this->on_change) {
-        this->on_change();
-      }
-      return true;
+      return OnCapturedMouseEvent(event);
     }
 
     if (event.mouse().button != Mouse::Left) {
@@ -198,7 +197,7 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
 
     if (captured_mouse_) {
       TakeFocus();
-      return true;
+      return OnCapturedMouseEvent(event);
     }
 
     return false;
@@ -242,19 +241,21 @@ class SliderWithLabel : public ComponentBase {
     return true;
   }
 
-  Element Render() override {
-    auto focus_management = Focused() ? focus : Active() ? select : nothing;
+  Element OnRender() override {
     auto gauge_color = (Focused() || mouse_hover_) ? color(Color::White)
                                                    : color(Color::GrayDark);
-    return hbox({
-               text(label_()) | dim | vcenter,
-               hbox({
-                   text("["),
-                   ComponentBase::Render() | underlined,
-                   text("]"),
-               }) | xflex,
-           }) |
-           gauge_color | xflex | reflect(box_) | focus_management;
+    auto element = hbox({
+                       text(label_()) | dim | vcenter,
+                       hbox({
+                           text("["),
+                           ComponentBase::Render() | underlined,
+                           text("]"),
+                       }) | xflex,
+                   }) |
+                   gauge_color | xflex | reflect(box_);
+
+    element |= focus;
+    return element;
   }
 
   ConstStringRef label_;

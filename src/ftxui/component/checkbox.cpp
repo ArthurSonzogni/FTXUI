@@ -23,16 +23,17 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 
  private:
   // Component implementation.
-  Element Render() override {
+  Element OnRender() override {
     const bool is_focused = Focused();
     const bool is_active = Active();
-    auto focus_management = is_focused ? focus : is_active ? select : nothing;
     auto entry_state = EntryState{
         *label, *checked, is_active, is_focused || hovered_, -1,
     };
     auto element = (transform ? transform : CheckboxOption::Simple().transform)(
         entry_state);
-    return element | focus_management | reflect(box_);
+    element |= focus;
+    element |= reflect(box_);
+    return element;
   }
 
   bool OnEvent(Event event) override {
@@ -69,7 +70,6 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
         event.mouse().motion == Mouse::Pressed) {
       *checked = !*checked;
       on_change();
-      TakeFocus();
       return true;
     }
 

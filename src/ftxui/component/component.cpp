@@ -15,6 +15,7 @@
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"                  // for text, Element
+#include "ftxui/dom/node.hpp"                      // for Node, Elements
 
 namespace ftxui::animation {
 class Params;
@@ -103,10 +104,46 @@ void ComponentBase::DetachAllChildren() {
 }
 
 /// @brief Draw the component.
-/// Build a ftxui::Element to be drawn on the ftxi::Screen representing this
-/// ftxui::ComponentBase.
+/// Build a ftxui::Element to be drawn on the ftxui::Screen representing this
+/// ftxui::ComponentBase. Please override OnRender() to modify the rendering.
 /// @ingroup component
 Element ComponentBase::Render() {
+  // Some users might call `ComponentBase::Render()` from
+  // `T::OnRender()`. To avoid infinite recursion, we use a flag.
+  if (in_render) {
+    return ComponentBase::OnRender();
+  }
+
+  in_render = true;
+  Element element = OnRender();
+  in_render = false;
+
+  class Wrapper : public Node {
+   public:
+    bool active_ = false;
+
+    Wrapper(Element child, bool active)
+        : Node({std::move(child)}), active_(active) {}
+
+    void SetBox(Box box) override {
+      Node::SetBox(box);
+      children_[0]->SetBox(box);
+    }
+
+    void ComputeRequirement() override {
+      Node::ComputeRequirement();
+      requirement_.focused.component_active = active_;
+    }
+  };
+
+  return std::make_shared<Wrapper>(std::move(element), Active());
+}
+
+/// @brief Draw the component.
+/// Build a ftxui::Element to be drawn on the ftxi::Screen representing this
+/// ftxui::ComponentBase. This function is means to be overridden.
+/// @ingroup component
+Element ComponentBase::OnRender() {
   if (children_.size() == 1) {
     return children_.front()->Render();
   }

@@ -105,7 +105,7 @@ class MenuBase : public ComponentBase, public MenuOption {
     }
   }
 
-  Element Render() override {
+  Element OnRender() override {
     Clamp();
     UpdateAnimationTarget();
 
@@ -126,16 +126,15 @@ class MenuBase : public ComponentBase, public MenuOption {
           entries[i], false, is_selected, is_focused, i,
       };
 
-      auto focus_management = (selected_focus_ != i) ? nothing
-                              : is_menu_focused      ? focus
-                                                     : select;
-
-      const Element element =
-          (entries_option.transform ? entries_option.transform
-                                    : DefaultOptionTransform)  //
+      Element element = (entries_option.transform ? entries_option.transform
+                                                  : DefaultOptionTransform)  //
           (state);
-      elements.push_back(element | AnimatedColorStyle(i) | reflect(boxes_[i]) |
-                         focus_management);
+      if (selected_focus_ == i) {
+        element |= focus;
+      }
+      element |= AnimatedColorStyle(i);
+      element |= reflect(boxes_[i]);
+      elements.push_back(element);
     }
     if (elements_postfix) {
       elements.push_back(elements_postfix());
@@ -145,8 +144,9 @@ class MenuBase : public ComponentBase, public MenuOption {
       std::reverse(elements.begin(), elements.end());
     }
 
-    const Element bar =
-        IsHorizontal() ? hbox(std::move(elements)) : vbox(std::move(elements));
+    const Element bar = IsHorizontal()
+                            ? hbox(std::move(elements), selected_focus_)
+                            : vbox(std::move(elements), selected_focus_);
 
     if (!underline.enabled) {
       return bar | reflect(box_);
@@ -618,20 +618,22 @@ Component MenuEntry(MenuEntryOption option) {
         : MenuEntryOption(std::move(option)) {}
 
    private:
-    Element Render() override {
-      const bool focused = Focused();
+    Element OnRender() override {
+      const bool is_focused = Focused();
       UpdateAnimationTarget();
 
       const EntryState state{
-          label(), false, hovered_, focused, Index(),
+          label(), false, hovered_, is_focused, Index(),
       };
 
-      const Element element =
-          (transform ? transform : DefaultOptionTransform)  //
+      Element element = (transform ? transform : DefaultOptionTransform)  //
           (state);
 
-      auto focus_management = focused ? select : nothing;
-      return element | AnimatedColorStyle() | focus_management | reflect(box_);
+      if (is_focused) {
+        element |= focus;
+      }
+
+      return element | AnimatedColorStyle() | reflect(box_);
     }
 
     void UpdateAnimationTarget() {
