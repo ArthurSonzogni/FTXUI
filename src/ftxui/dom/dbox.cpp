@@ -19,22 +19,16 @@ namespace {
 class DBox : public Node {
  public:
   explicit DBox(Elements children) : Node(std::move(children)) {}
-  explicit DBox(Elements children, int index)
-      : Node(std::move(children)), index_(index) {}
 
   void ComputeRequirement() override {
     requirement_ = Requirement{};
-    int index = -1;
     for (auto& child : children_) {
-      ++index;
 
       child->ComputeRequirement();
 
       // Propagate the focused requirement.
-      if (child->requirement().focused.enabled) {
-        if (index_ == index || !requirement_.focused.enabled) {
-          requirement_.focused = child->requirement().focused;
-        }
+      if (requirement_.focused.Prefer(*child->requirement().focused)) {
+        requirement_.focused = child->requirement().focused;
       }
 
       // Extend the min_x and min_y to contain all the children
@@ -104,9 +98,6 @@ class DBox : public Node {
       }
     }
   }
-
- private:
-  int index_ = 0;
 };
 }  // namespace
 
