@@ -27,7 +27,7 @@ class DBox : public Node {
       child->ComputeRequirement();
 
       // Propagate the focused requirement.
-      if (requirement_.focused.Prefer(*child->requirement().focused)) {
+      if (requirement_.focused.Prefer(child->requirement().focused)) {
         requirement_.focused = child->requirement().focused;
       }
 
