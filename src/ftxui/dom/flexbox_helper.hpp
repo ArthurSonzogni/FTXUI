@@ -9,6 +9,7 @@
 
 namespace ftxui::flexbox_helper {
 
+// A block is a rectangle in the flexbox.
 struct Block {
   // Input:
   int min_size_x = 0;
@@ -28,12 +29,23 @@ struct Block {
   bool overflow = false;
 };
 
+// A line is a row of blocks.
+struct Line {
+  std::vector<Block*> blocks;
+  int x = 0;
+  int y = 0;
+  int dim_x = 0;
+  int dim_y = 0;
+};
+
 struct Global {
   std::vector<Block> blocks;
+  std::vector<Line> lines;
   FlexboxConfig config;
   int size_x;
   int size_y;
 };
+
 
 void Compute(Global& global);
 

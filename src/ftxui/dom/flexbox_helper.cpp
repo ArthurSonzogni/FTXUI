@@ -68,12 +68,19 @@ void SymmetryXY(Global& g) {
     std::swap(b.x, b.y);
     std::swap(b.dim_x, b.dim_y);
   }
+  for (auto& l : g.lines) {
+    std::swap(l.x, l.y);
+    std::swap(l.dim_x, l.dim_y);
+  }
 }
 
 void SymmetryX(Global& g) {
   SymmetryX(g.config);
   for (auto& b : g.blocks) {
     b.x = g.size_x - b.x - b.dim_x;
+  }
+  for (auto& l : g.lines) {
+    l.x = g.size_x - l.x - l.dim_x;
   }
 }
 
@@ -82,14 +89,13 @@ void SymmetryY(Global& g) {
   for (auto& b : g.blocks) {
     b.y = g.size_y - b.y - b.dim_y;
   }
+  for (auto& l : g.lines) {
+    l.y = g.size_y - l.y - l.dim_y;
+  }
 }
 
-struct Line {
-  std::vector<Block*> blocks;
-};
-
-void SetX(Global& global, std::vector<Line> lines) {
-  for (auto& line : lines) {
+void SetX(Global& global) {
+  for (auto& line : global.lines) {
     std::vector<box_helper::Element> elements;
     elements.reserve(line.blocks.size());
     for (auto* block : line.blocks) {
@@ -110,19 +116,24 @@ void SetX(Global& global, std::vector<Line> lines) {
 
     int x = 0;
     for (size_t i = 0; i < line.blocks.size(); ++i) {
-      line.blocks[i]->dim_x = elements[i].size;
       line.blocks[i]->x = x;
+      line.blocks[i]->dim_x = elements[i].size;
       x += elements[i].size;
       x += global.config.gap_x;
     }
   }
+
+  for (auto& line : global.lines) {
+    line.x = 0;
+    line.dim_x = global.size_x;
+  }
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void SetY(Global& g, std::vector<Line> lines) {
+void SetY(Global& g) {
   std::vector<box_helper::Element> elements;
-  elements.reserve(lines.size());
-  for (auto& line : lines) {
+  elements.reserve(g.lines.size());
+  for (auto& line : g.lines) {
     box_helper::Element element;
     element.flex_shrink = line.blocks.front()->flex_shrink_y;
     element.flex_grow = line.blocks.front()->flex_grow_y;
@@ -202,9 +213,9 @@ void SetY(Global& g, std::vector<Line> lines) {
   }
 
   // [Align items]
-  for (size_t i = 0; i < lines.size(); ++i) {
+  for (size_t i = 0; i < g.lines.size(); ++i) {
     auto& element = elements[i];
-    for (auto* block : lines[i].blocks) {
+    for (auto* block : g.lines[i].blocks) {
       const bool stretch =
           block->flex_grow_y != 0 ||
           g.config.align_content == FlexboxConfig::AlignContent::Stretch;
@@ -237,10 +248,16 @@ void SetY(Global& g, std::vector<Line> lines) {
       }
     }
   }
+
+  ys.push_back(g.size_y);
+  for (size_t i = 0; i < g.lines.size(); ++i) {
+    g.lines[i].y = ys[i];
+    g.lines[i].dim_y = ys[i + 1] - ys[i];
+  }
 }
 
-void JustifyContent(Global& g, std::vector<Line> lines) {
-  for (auto& line : lines) {
+void JustifyContent(Global& g) {
+  for (auto& line : g.lines) {
     Block* last = line.blocks.back();
     int remaining_space = g.size_x - last->x - last->dim_x;
     switch (g.config.justify_content) {
@@ -315,38 +332,36 @@ void Compute2(Global& global) {
 
 void Compute3(Global& global) {
   // Step 1: Lay out every elements into rows:
-  std::vector<Line> lines;
   {
     Line line;
     int x = 0;
-    line.blocks.reserve(global.blocks.size());
     for (auto& block : global.blocks) {
       // Does it fit the end of the row?
       // No? Then we need to start a new one:
       if (x + block.min_size_x > global.size_x) {
         x = 0;
         if (!line.blocks.empty()) {
-          lines.push_back(std::move(line));
+          global.lines.push_back(std::move(line));
         }
         line = Line();
       }
 
-      block.line = static_cast<int>(lines.size());
+      block.line = static_cast<int>(global.lines.size());
       block.line_position = static_cast<int>(line.blocks.size());
       line.blocks.push_back(&block);
       x += block.min_size_x + global.config.gap_x;
     }
     if (!line.blocks.empty()) {
-      lines.push_back(std::move(line));
+      global.lines.push_back(std::move(line));
     }
   }
 
   // Step 2: Set positions on the X axis.
-  SetX(global, lines);
-  JustifyContent(global, lines);  // Distribute remaining space.
+  SetX(global);
+  JustifyContent(global);  // Distribute remaining space.
 
   // Step 3: Set positions on the Y axis.
-  SetY(global, lines);
+  SetY(global);
 }
 
 }  // namespace
