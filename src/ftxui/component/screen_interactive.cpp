@@ -850,7 +850,7 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 bool ScreenInteractive::HandleSelection(bool handled, Event event) {
   if (handled) {
     selection_pending_ = nullptr;
-    selection_data_.empty = false;
+    selection_data_.empty = true;
     selection_ = nullptr;
     return true;
   }
