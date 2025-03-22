@@ -553,7 +553,7 @@ const Screen::SelectionStyle& Screen::GetSelectionStyle() const {
 /// @brief Set the current selection style.
 /// @see GetSelectionStyle
 void Screen::SetSelectionStyle(SelectionStyle decorator) {
-  selection_style_ = decorator;
+  selection_style_ = std::move(decorator);
 }
 
 }  // namespace ftxui

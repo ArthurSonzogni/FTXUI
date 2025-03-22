@@ -4,8 +4,9 @@
 
 #include "ftxui/dom/selection.hpp"  // for Selection
 #include <algorithm>                // for max, min
+#include <string>                   // for string
+#include <tuple>                    // for ignore
 
-#include "ftxui/dom/elements.hpp"        // for Element, inverted
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 
 namespace ftxui {
@@ -15,14 +16,15 @@ class Unselectable : public NodeDecorator {
  public:
   using NodeDecorator::NodeDecorator;
 
-  void Select(Selection&) override {
+  void Select(Selection& ignored) override {
+    std::ignore = ignored;
     // Overwrite the select method to do nothing.
   }
 };
 }  // namespace
 
 /// @brief Create an empty selection.
-Selection::Selection() : empty_(true) {}
+Selection::Selection() = default;
 
 /// @brief Create a selection.
 /// @param start_x The x coordinate of the start of the selection.
@@ -99,7 +101,9 @@ Selection Selection::SaturateHorizontal(Box box) {
       end_y = box.y_min;
     }
   }
-  return Selection(start_x, start_y, end_x, end_y, parent_);
+  return {
+      start_x, start_y, end_x, end_y, parent_,
+  };
 }
 
 /// @brief Saturate the selection to be inside the box.
@@ -136,12 +140,13 @@ Selection Selection::SaturateVertical(Box box) {
       end_y = box.y_min;
     }
   }
-  return Selection(start_x, start_y, end_x, end_y, parent_);
+  return {start_x, start_y, end_x, end_y, parent_};
 }
 
 void Selection::AddPart(const std::string& part, int y, int left, int right) {
   if (parent_ != this) {
-    return parent_->AddPart(part, y, left, right);
+    parent_->AddPart(part, y, left, right);
+    return;
   }
   [&] {
     if (parts_.str().empty()) {

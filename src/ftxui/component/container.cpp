@@ -163,7 +163,7 @@ class VerticalContainer : public ContainerBase {
       return false;
     }
 
-    int old_selected = *selector_;
+    const int old_selected = *selector_;
     if (event.mouse().button == Mouse::WheelUp) {
       MoveSelector(-1);
     }

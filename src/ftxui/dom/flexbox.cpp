@@ -4,6 +4,7 @@
 #include <algorithm>  // for min, max
 #include <cstddef>    // for size_t
 #include <memory>  // for __shared_ptr_access, shared_ptr, allocator_traits<>::value_type, make_shared
+#include <tuple>   // for ignore
 #include <utility>  // for move, swap
 #include <vector>   // for vector
 
@@ -12,6 +13,7 @@
 #include "ftxui/dom/flexbox_helper.hpp"  // for Block, Global, Compute
 #include "ftxui/dom/node.hpp"            // for Node, Elements, Node::Status
 #include "ftxui/dom/requirement.hpp"     // for Requirement
+#include "ftxui/dom/selection.hpp"       // for Selection
 #include "ftxui/screen/box.hpp"          // for Box
 
 namespace ftxui {
@@ -192,9 +194,9 @@ class Flexbox : public Node {
         continue;
       }
 
-      Selection selection_line =
-          IsColumnOriented() ? selection_lines.SaturateHorizontal(box)
-                             : selection_lines.SaturateVertical(box);
+      Selection selection_line = IsColumnOriented()
+                                     ? selection_lines.SaturateHorizontal(box)
+                                     : selection_lines.SaturateVertical(box);
 
       for (auto& block : line.blocks) {
         std::ignore = block;

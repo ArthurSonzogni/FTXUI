@@ -1,14 +1,15 @@
 // Copyright 2024 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <memory>   // for make_shared
-#include <utility>  // for move
+#include <functional>  // for function
+#include <memory>      // for make_shared
+#include <utility>     // for move
 
 #include "ftxui/dom/elements.hpp"  // for Element, Decorator, bgcolor, color
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
-#include "ftxui/screen/box.hpp"          // for Box
 #include "ftxui/screen/color.hpp"        // for Color
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/pixel.hpp"        // for Pixel
+#include "ftxui/screen/screen.hpp"       // for Screen
 
 namespace ftxui {
 
@@ -16,7 +17,8 @@ namespace {
 
 class SelectionStyleReset : public NodeDecorator {
  public:
-  SelectionStyleReset(Element child) : NodeDecorator(std::move(child)) {}
+  explicit SelectionStyleReset(Element child)
+      : NodeDecorator(std::move(child)) {}
 
   void Render(Screen& screen) final {
     auto old_style = screen.GetSelectionStyle();
@@ -28,7 +30,7 @@ class SelectionStyleReset : public NodeDecorator {
 
 class SelectionStyle : public NodeDecorator {
  public:
-  SelectionStyle(Element child, std::function<void(Pixel&)> style)
+  SelectionStyle(Element child, const std::function<void(Pixel&)>& style)
       : NodeDecorator(std::move(child)), style_(style) {}
 
   void Render(Screen& screen) final {
@@ -80,6 +82,7 @@ Decorator selectionColor(Color foreground) {
 /// @brief Set the style of an element when selected.
 /// @param style The style to be applied.
 /// Note that the style is applied on top of the existing style.
+// NOLINTNEXTLINE
 Decorator selectionStyle(std::function<void(Pixel&)> style) {
   return [style](Element child) -> Element {
     return std::make_shared<SelectionStyle>(std::move(child), style);

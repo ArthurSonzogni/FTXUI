@@ -23,7 +23,6 @@ class DBox : public Node {
   void ComputeRequirement() override {
     requirement_ = Requirement{};
     for (auto& child : children_) {
-
       child->ComputeRequirement();
 
       // Propagate the focused requirement.

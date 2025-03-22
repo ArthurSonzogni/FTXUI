@@ -16,7 +16,6 @@
 #include "ftxui/dom/elements.hpp"  // for operator|, text, Element, xflex, hbox, color, underlined, reflect, Decorator, dim, vcenter, focus, nothing, select, yflex, gaugeDirection
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
-#include "ftxui/screen/util.hpp"   // for clamp
 #include "ftxui/util/ref.hpp"      // for ConstRef, Ref, ConstStringRef
 
 namespace ftxui {

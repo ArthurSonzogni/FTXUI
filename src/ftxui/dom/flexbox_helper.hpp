@@ -46,7 +46,6 @@ struct Global {
   int size_y;
 };
 
-
 void Compute(Global& global);
 
 }  // namespace ftxui::flexbox_helper

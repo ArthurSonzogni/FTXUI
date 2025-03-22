@@ -16,6 +16,7 @@
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"                  // for text, Element
 #include "ftxui/dom/node.hpp"                      // for Node, Elements
+#include "ftxui/screen/box.hpp"                    // for Box
 
 namespace ftxui::animation {
 class Params;

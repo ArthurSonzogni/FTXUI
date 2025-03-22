@@ -11,6 +11,7 @@
 #include "ftxui/dom/elements.hpp"     // for Element, text, vtext
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/dom/selection.hpp"    // for Selection
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"    // for Pixel, Screen
 #include "ftxui/screen/string.hpp"  // for string_width, Utf8ToGlyphs, to_string
@@ -35,7 +36,7 @@ class Text : public Node {
       return;
     }
 
-    Selection selection_saturated = selection.SaturateHorizontal(box_);
+    const Selection selection_saturated = selection.SaturateHorizontal(box_);
 
     has_selection = true;
     selection_start_ = selection_saturated.GetBox().x_min;

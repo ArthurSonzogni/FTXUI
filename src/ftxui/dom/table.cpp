@@ -3,7 +3,8 @@
 // the LICENSE file.
 #include "ftxui/dom/table.hpp"
 
-#include <algorithm>  // for max
+#include <algorithm>         // for max
+#include <initializer_list>  // for initializer_list
 #include <memory>   // for allocator, shared_ptr, allocator_traits<>::value_type
 #include <utility>  // for move, swap
 #include <vector>   // for vector

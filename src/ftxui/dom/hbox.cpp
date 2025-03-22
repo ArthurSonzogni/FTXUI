@@ -11,8 +11,8 @@
 #include "ftxui/dom/elements.hpp"     // for Element, Elements, hbox
 #include "ftxui/dom/node.hpp"         // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/dom/selection.hpp"    // for Selection
 #include "ftxui/screen/box.hpp"       // for Box
-
 namespace ftxui {
 
 namespace {

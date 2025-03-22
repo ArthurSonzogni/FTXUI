@@ -2,11 +2,13 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <ftxui/screen/box.hpp>  // for Box
-#include <utility>               // for move
+#include <string>
+#include <utility>  // for move
 
+#include <cstddef>
 #include "ftxui/dom/node.hpp"
+#include "ftxui/dom/selection.hpp"  // for Selection
 #include "ftxui/screen/screen.hpp"  // for Screen
-#include "ftxui/screen/util.hpp"    // for clamp
 
 namespace ftxui {
 
