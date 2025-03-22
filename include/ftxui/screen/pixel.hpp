@@ -17,6 +17,7 @@ struct Pixel {
       : blink(false),
         bold(false),
         dim(false),
+        italic(false),
         inverted(false),
         underlined(false),
         underlined_double(false),
@@ -27,6 +28,7 @@ struct Pixel {
   bool blink : 1;
   bool bold : 1;
   bool dim : 1;
+  bool italic : 1;
   bool inverted : 1;
   bool underlined : 1;
   bool underlined_double : 1;

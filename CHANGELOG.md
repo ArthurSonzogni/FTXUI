@@ -49,6 +49,14 @@ current (development)
           mistake. See #998.
 
 ### Dom
+- Feature: Add `italic` decorator. For instance:
+  ```cpp
+  auto italic_text = text("Italic text") | italic;
+  ```
+  ```cpp
+  auto italic_text = italic(text("Italic text"));
+  ```
+  Proposed by @kenReneris in #1009.
 - Feature: Add `hscroll_indicator`. It display an horizontal indicator
   reflecting the current scroll position. Proposed by @ibrahimnasson in
   [issue 752](https://github.com/ArthurSonzogni/FTXUI/issues/752)

@@ -39,6 +39,7 @@ add_executable(ftxui-tests
   src/ftxui/dom/gridbox_test.cpp
   src/ftxui/dom/hbox_test.cpp
   src/ftxui/dom/hyperlink_test.cpp
+  src/ftxui/dom/italic_test.cpp
   src/ftxui/dom/linear_gradient_test.cpp
   src/ftxui/dom/scroll_indicator_test.cpp
   src/ftxui/dom/selection_test.cpp

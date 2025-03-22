@@ -109,6 +109,7 @@ Element can become flexible using the the `flex` decorator.
 
 An element can be decorated using the functions:
   - `bold`
+  - `italic`
   - `dim`
   - `inverted`
   - `underlined`

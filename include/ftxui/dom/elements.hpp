@@ -95,6 +95,7 @@ Element canvas(std::function<void(Canvas&)>);
 // -- Decorator ---
 Element bold(Element);
 Element dim(Element);
+Element italic(Element);
 Element inverted(Element);
 Element underlined(Element);
 Element underlinedDouble(Element);

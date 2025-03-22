@@ -123,8 +123,8 @@ The project is comprised of 3 modules:
 
 This is the visual element of the program. It defines a `ftxui::Screen`, which
 is a grid of `ftxui::Pixel`. A Pixel represents a Unicode character and its
-associated style (bold, colors, etc.). The screen can be printed as a string
-using `ftxui::Screen::ToString()`. The following example highlights this
+associated style (bold, italic, colors, etc.). The screen can be printed as a
+string using `ftxui::Screen::ToString()`. The following example highlights this
 process:
 
 ```cpp
@@ -476,10 +476,11 @@ See [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/linea
 
 ## Style {#dom-style}
 In addition to colored text and colored backgrounds. Many terminals support text
-effects such as: `bold`, `dim`, `underlined`, `inverted`, `blink`.
+effects such as: `bold`, `italic`, `dim`, `underlined`, `inverted`, `blink`.
 
 ```cpp
 Element bold(Element);
+Element italic(Element);
 Element dim(Element);
 Element inverted(Element);
 Element underlined(Element);
