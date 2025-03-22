@@ -83,7 +83,7 @@ void UpdatePixelStyle(const Screen* screen,
     ss << ((prev.bold && !next.bold) || (prev.dim && !next.dim) ? "\x1B[22m"
                                                                 : "");
     ss << (next.bold ? "\x1B[1m" : "");  // BOLD_SET
-    ss << (next.dim ? "\x1B[2m" : "");   // DIM_SET    
+    ss << (next.dim ? "\x1B[2m" : "");   // DIM_SET
   }
 
   // Underline

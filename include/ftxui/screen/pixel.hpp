@@ -16,14 +16,13 @@ struct Pixel {
   Pixel()
       : blink(false),
         bold(false),
-        dim(false),        
-        inverted(false),
+        dim(false),
         italic(false),
+        inverted(false),
         underlined(false),
         underlined_double(false),
         strikethrough(false),
-        automerge(false),
-        _spare(0)   {}
+        automerge(false) {}
 
   // A bit field representing the style:
   bool blink : 1;
@@ -35,7 +34,6 @@ struct Pixel {
   bool underlined_double : 1;
   bool strikethrough : 1;
   bool automerge : 1;
-  bool _spare : 7;
 
   // The hyperlink associated with the pixel.
   // 0 is the default value, meaning no hyperlink.

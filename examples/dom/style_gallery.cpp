@@ -15,6 +15,7 @@ int main() {
     hbox({
       text("normal")                                    , text(" ") ,
       text("bold")               | bold                 , text(" ") ,
+      text("italic")             | italic               , text(" ") ,
       text("dim")                | dim                  , text(" ") ,
       text("inverted")           | inverted             , text(" ") ,
       text("underlined")         | underlined           , text(" ") ,
