@@ -83,7 +83,7 @@ void UpdatePixelStyle(const Screen* screen,
     ss << ((prev.bold && !next.bold) || (prev.dim && !next.dim) ? "\x1B[22m"
                                                                 : "");
     ss << (next.bold ? "\x1B[1m" : "");  // BOLD_SET
-    ss << (next.dim ? "\x1B[2m" : "");   // DIM_SET
+    ss << (next.dim ? "\x1B[2m" : "");   // DIM_SET    
   }
 
   // Underline
@@ -104,6 +104,12 @@ void UpdatePixelStyle(const Screen* screen,
   if (FTXUI_UNLIKELY(next.inverted != prev.inverted)) {
     ss << (next.inverted ? "\x1B[7m"     // INVERTED_SET
                          : "\x1B[27m");  // INVERTED_RESET
+  }
+
+  // Italics
+  if (FTXUI_UNLIKELY(next.italic != prev.italic)) {
+    ss << (next.italic ? "\x1B[3m"     // ITALIC_SET
+                       : "\x1B[23m");  // ITALIC_RESET
   }
 
   // StrikeThrough
