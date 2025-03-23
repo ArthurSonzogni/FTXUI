@@ -102,11 +102,11 @@ Element focus(Element child) {
   return std::make_shared<Focus>(unpack(std::move(child)));
 }
 
-/// @deprecated Use `focus` instead.
+/// This is deprecated. Use `focus` instead.
 /// @brief Set the `child` to be the one focused among its siblings.
 /// @param child The element to be focused.
-Element select(Element e) {
-  return focus(std::move(e));
+Element select(Element child) {
+  return focus(std::move(child));
 }
 
 /// @brief Allow an element to be displayed inside a 'virtual' area. It size can

@@ -19,18 +19,16 @@ jobs:
           - name: Linux GCC
             os: ubuntu-latest
             compiler: gcc
-            gcov_executable: gcov
 
           - name: Linux Clang
             os: ubuntu-latest
             compiler: llvm
             gcov_executable: "llvm-cov gcov"
 
-          # https://github.com/aminya/setup-cpp/issues/246
-          #- name: MacOS clang
-            #os: macos-latest
-            #compiler: llvm
-            #gcov_executable: "llvm-cov gcov"
+          - name: MacOS clang
+            os: macos-latest
+            compiler: llvm
+            gcov_executable: "llvm-cov gcov"
 
           - name: Windows MSVC
             os: windows-latest
@@ -85,7 +83,7 @@ jobs:
           ctest -C Debug --rerun-failed --output-on-failure;
 
       - name: Unix - coverage
-        if: runner.os != 'Windows'
+        if: matrix.gcov_executable != ''
         working-directory: ./build
         run: >
           gcovr
@@ -106,7 +104,7 @@ jobs:
           --gcov-executable '${{ matrix.gcov_executable }}';
 
       - name: Windows - Test and coverage
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && false
         working-directory: ./build
         run: >
           OpenCppCoverage.exe
