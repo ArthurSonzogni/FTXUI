@@ -4,6 +4,9 @@ Changelog
 current (development) 
 ---------------------
 
+6.0.0 (2025-03-23)
+-----
+
 ### Component
 - Feature: Add support for raw input. Allowing more keys to be detected.
 - Feature: Add `ScreenInteractive::ForceHandleCtrlC(false)` to allow component
