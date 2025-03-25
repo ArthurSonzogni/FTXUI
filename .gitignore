@@ -57,6 +57,12 @@ out/
 !src/ftxui/**/*.hpp
 !src/ftxui/**/*.cpp
 
+# modules directory:
+!modules/*.txt
+!modules/ftxui/*.cppm
+!modules/ftxui/*.txt
+!modules/ftxui/**/*.cppm
+
 # tools directory:
 !tools/**/*.sh
 !tools/**/*.cpp
