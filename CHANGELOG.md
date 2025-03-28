@@ -1,8 +1,16 @@
 Changelog
 =========
 
-current (development) 
----------------------
+6.0.1 (2025-03-28)
+-----
+
+Same as v6.0.0.
+
+Due to a problem tag v6.0.0 was replaced. This isn't a good practice and affect
+developers that started using it in the short timeframe. Submitting a new
+release with the same content is the best way to fix this.
+
+See #1017 and #1019.
 
 6.0.0 (2025-03-23)
 -----
@@ -74,6 +82,10 @@ current (development)
   - See `selectionStyleReset` decorator.
 - Breaking change: Change how "focus"/"select" are handled. This fixes the
   behavior.
+- Breaking change: `Component::OnRender()` becomes the method to override to
+  render a component. This replaces `Component::Render()` that is still in use
+  to call the rendering method on the children. This change allows to fix a
+  couple of issues around focus handling.
 
 ### Screen
 - Feature: Add `Box::IsEmpty()`.
