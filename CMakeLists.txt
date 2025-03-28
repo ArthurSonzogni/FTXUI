@@ -182,7 +182,7 @@ add_subdirectory(doc)
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.28)
   message(STATUS "Building C++ modules (CMake ${CMAKE_VERSION} supports modules)")
-  add_subdirectory(modules)
+  add_subdirectory(modules/ftxui)
 else()
   message(STATUS "Skipping C++ modules (requires CMake 3.28+, found ${CMAKE_VERSION})")
 endif()
