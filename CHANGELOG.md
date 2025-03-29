@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Unreleased
+-----
+
+### Component
+- BugFix: Fix major crash on Windows affecting all components. See #1020
+- BugFix: Fix focusRelative.
+
 6.0.1 (2025-03-28)
 -----
 
