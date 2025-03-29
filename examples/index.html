@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>FTXUI examples WebAssembly</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>➡️</text></svg>">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.11.0/css/xterm.css"></link>
+    <script type="module" src="index.mjs"></script>
+  </head>
+  <body>
+    <script id="example_script"></script>
+
+    <div class="page">
+      <p>
+        <a href="https://github.com/ArthurSonzogni/FTXUI">FTXUI</a> is a simple
+        functional C++ library for terminal user interface. <br/>
+        This showcases the: <a href="https://github.com/ArthurSonzogni/FTXUI/tree/master/examples">./example/</a> folder. <br/>
+      </p>
+
+      <div id="terminalContainer">
+        <div class="fakeMenu">
+          <div class="fakeButtons fakeClose"></div>
+          <div class="fakeButtons fakeMinimize"></div>
+          <div class="fakeButtons fakeZoom"></div>
+          <select id="selectExample"></select>
+        </div>
+        <div id="terminal"></div>
+      </div>
+    </div>
+  </body>
+</html>
