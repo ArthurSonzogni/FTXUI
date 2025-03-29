@@ -104,7 +104,7 @@ jobs:
           --gcov-executable '${{ matrix.gcov_executable }}';
 
       - name: Windows - Test and coverage
-        if: runner.os == 'Windows' && false
+        if: runner.os == 'Windows'
         working-directory: ./build
         run: >
           OpenCppCoverage.exe

@@ -36,7 +36,7 @@ Decorator focusPositionRelative(float x, float y) {
 
     void ComputeRequirement() override {
       NodeDecorator::ComputeRequirement();
-      requirement_.focused.enabled = false;
+      requirement_.focused.enabled = true;
       requirement_.focused.node = this;
       requirement_.focused.box.x_min = int(float(requirement_.min_x) * x_);
       requirement_.focused.box.y_min = int(float(requirement_.min_y) * y_);
