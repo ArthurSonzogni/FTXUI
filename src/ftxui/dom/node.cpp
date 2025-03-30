@@ -145,7 +145,7 @@ void Render(Screen& screen, Node* node, Selection& selection) {
       // https://github.com/microsoft/terminal/issues/1203
       // https://github.com/microsoft/terminal/issues/3093
       &&
-      !node->requirement().focused.cursor_shape == Screen::Cursor::Shape::Hidden
+      node->requirement().focused.cursor_shape != Screen::Cursor::Shape::Hidden
 #endif
   ) {
     screen.SetCursor(Screen::Cursor{
