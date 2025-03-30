@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Unreleased
+6.0.2 (2025-03-30)
 -----
 
 ### Component
