@@ -48,12 +48,25 @@ Dimensions& FallbackSize() {
   return g_fallback_size;
 }
 
-const char* Safe(const char* c) {
-  return (c != nullptr) ? c : "";
-}
-
 bool Contains(const std::string& s, const char* key) {
   return s.find(key) != std::string::npos;
+}
+
+// https://github.com/gabime/spdlog/blob/885b5473e291833b148eeac3b7ce227e582cd88b/include/spdlog/details/os-inl.h#L566
+std::string getenv_safe(const char *field) {
+#if defined(_MSC_VER)
+#if defined(__cplusplus_winrt)
+  return std::string{};  // not supported under uwp
+#else
+  size_t len = 0;
+  char buf[1024];
+  bool ok = ::getenv_s(&len, buf, sizeof(buf), field) == 0;
+  return ok ? buf : std::string{};
+#endif
+#else  // revert to getenv
+  char *buf = ::getenv(field); // NOLINT(*-mt-unsafe)
+  return buf ? buf : std::string{};
+#endif
 }
 
 Terminal::Color ComputeColorSupport() {
@@ -61,12 +74,12 @@ Terminal::Color ComputeColorSupport() {
   return Terminal::Color::TrueColor;
 #endif
 
-  std::string COLORTERM = Safe(std::getenv("COLORTERM"));  // NOLINT
+  std::string COLORTERM = getenv_safe("COLORTERM");
   if (Contains(COLORTERM, "24bit") || Contains(COLORTERM, "truecolor")) {
     return Terminal::Color::TrueColor;
   }
 
-  std::string TERM = Safe(std::getenv("TERM"));  // NOLINT
+  std::string TERM = getenv_safe("TERM");
   if (Contains(COLORTERM, "256") || Contains(TERM, "256")) {
     return Terminal::Color::Palette256;
   }
