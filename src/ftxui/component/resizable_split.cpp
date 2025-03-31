@@ -77,16 +77,16 @@ class ResizableSplitBase : public ComponentBase {
 
     switch (options_->direction()) {
       case Direction::Left:
-        options_->main_size() = event.mouse().x - box_.x_min;
+        options_->main_size() = std::max(0, event.mouse().x - box_.x_min);
         return true;
       case Direction::Right:
-        options_->main_size() = box_.x_max - event.mouse().x;
+        options_->main_size() = std::max(0, box_.x_max - event.mouse().x);
         return true;
       case Direction::Up:
-        options_->main_size() = event.mouse().y - box_.y_min;
+        options_->main_size() = std::max(0, event.mouse().y - box_.y_min);
         return true;
       case Direction::Down:
-        options_->main_size() = box_.y_max - event.mouse().y;
+        options_->main_size() = std::max(0, box_.y_max - event.mouse().y);
         return true;
     }
 
