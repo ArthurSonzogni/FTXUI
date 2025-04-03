@@ -214,6 +214,7 @@ struct ResizableSplitOption {
   Ref<int> main_size =
       (direction() == Direction::Left || direction() == Direction::Right) ? 20
                                                                           : 10;
+  Ref<int> min_size = 0;
   std::function<Element()> separator_func = [] { return ::ftxui::separator(); };
 };
 
