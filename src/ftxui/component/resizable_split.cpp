@@ -196,7 +196,6 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// @param main The main component of size |main_size|, on the left.
 /// @param back The back component taking the remaining size, on the right.
 /// @param main_size The size of the |main| component.
-/// @param min_size The minimum size of the |main| component.
 /// @ingroup component
 ///
 /// ### Example
@@ -206,7 +205,7 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// int left_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
-/// auto split = ResizableSplitLeft(left, right, &left_size, 5);
+/// auto split = ResizableSplitLeft(left, right, &left_size);
 /// screen.Loop(split);
 /// ```
 ///
@@ -217,16 +216,12 @@ Component ResizableSplit(ResizableSplitOption options) {
 ///    left   │   right
 ///           │
 /// ```
-Component ResizableSplitLeft(Component main,
-                             Component back,
-                             int* main_size,
-                             int* min_size) {
+Component ResizableSplitLeft(Component main, Component back, int* main_size) {
   return ResizableSplit({
       std::move(main),
       std::move(back),
       Direction::Left,
       main_size,
-      min_size,
   });
 }
 
@@ -235,7 +230,6 @@ Component ResizableSplitLeft(Component main,
 /// @param main The main component of size |main_size|, on the right.
 /// @param back The back component taking the remaining size, on the left.
 /// @param main_size The size of the |main| component.
-/// @param min_size The minimum size of the |main| component.
 /// @ingroup component
 ///
 /// ### Example
@@ -245,7 +239,7 @@ Component ResizableSplitLeft(Component main,
 /// int right_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
-/// auto split = ResizableSplitRight(right, left, &right_size, 5)
+/// auto split = ResizableSplitRight(right, left, &right_size)
 /// screen.Loop(split);
 /// ```
 ///
@@ -256,16 +250,12 @@ Component ResizableSplitLeft(Component main,
 ///    left   │   right
 ///           │
 /// ```
-Component ResizableSplitRight(Component main,
-                              Component back,
-                              int* main_size,
-                              int* min_size) {
+Component ResizableSplitRight(Component main, Component back, int* main_size) {
   return ResizableSplit({
       std::move(main),
       std::move(back),
       Direction::Right,
       main_size,
-      min_size,
   });
 }
 
@@ -274,7 +264,6 @@ Component ResizableSplitRight(Component main,
 /// @param main The main component of size |main_size|, on the top.
 /// @param back The back component taking the remaining size, on the bottom.
 /// @param main_size The size of the |main| component.
-/// @param min_size The minimum size of the |main| component.
 /// @ingroup component
 ///
 /// ### Example
@@ -295,16 +284,12 @@ Component ResizableSplitRight(Component main,
 /// ────────────
 ///    bottom
 /// ```
-Component ResizableSplitTop(Component main,
-                            Component back,
-                            int* main_size,
-                            int* min_size) {
+Component ResizableSplitTop(Component main, Component back, int* main_size) {
   return ResizableSplit({
       std::move(main),
       std::move(back),
       Direction::Up,
       main_size,
-      min_size,
   });
 }
 
@@ -313,7 +298,6 @@ Component ResizableSplitTop(Component main,
 /// @param main The main component of size |main_size|, on the bottom.
 /// @param back The back component taking the remaining size, on the top.
 /// @param main_size The size of the |main| component.
-/// @param min_size The minimum size of the |main| component.
 /// @ingroup component
 ///
 /// ### Example
@@ -334,16 +318,12 @@ Component ResizableSplitTop(Component main,
 /// ────────────
 ///    bottom
 /// ```
-Component ResizableSplitBottom(Component main,
-                               Component back,
-                               int* main_size,
-                               int* min_size) {
+Component ResizableSplitBottom(Component main, Component back, int* main_size) {
   return ResizableSplit({
       std::move(main),
       std::move(back),
       Direction::Down,
       main_size,
-      min_size,
   });
 }
 
