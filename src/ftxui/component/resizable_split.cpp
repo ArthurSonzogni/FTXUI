@@ -273,7 +273,7 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// int top_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
-/// auto split = ResizableSplitTop(top, bottom, &top_size, 1)
+/// auto split = ResizableSplitTop(top, bottom, &top_size)
 /// screen.Loop(split);
 /// ```
 ///
@@ -307,7 +307,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// int bottom_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
-/// auto split = ResizableSplit::Bottom(bottom, top, &bottom_size, 1)
+/// auto split = ResizableSplit::Bottom(bottom, top, &bottom_size)
 /// screen.Loop(split);
 /// ```
 ///
