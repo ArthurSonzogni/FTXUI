@@ -19,7 +19,7 @@ class Size : public Node {
       : Node(unpack(std::move(child))),
         direction_(direction),
         constraint_(constraint),
-        value_(value) {}
+        value_(std::max(0, value)) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();

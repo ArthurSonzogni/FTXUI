@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Development
+-----------
+### Component
+- Bugfix: Fix a crash with ResizeableSplit. See #1023.
+  - Clamp screen size to terminal size.
+  - Disallow `ResizeableSplit` with negative size.
+
+### Dom
+- Bugfix: Disallow specifying a negative size constraint. See #1023.
+
+
 6.0.2 (2025-03-30)
 -----
 

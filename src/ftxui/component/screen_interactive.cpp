@@ -34,6 +34,7 @@
 #include "ftxui/dom/requirement.hpp"                  // for Requirement
 #include "ftxui/screen/pixel.hpp"                     // for Pixel
 #include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
+#include "ftxui/screen/util.hpp"                      // for util::clamp
 
 #if defined(_WIN32)
 #define DEFINE_CONSOLEV2_PROPERTIES
@@ -917,15 +918,15 @@ void ScreenInteractive::Draw(Component component) {
       break;
     case Dimension::TerminalOutput:
       dimx = terminal.dimx;
-      dimy = document->requirement().min_y;
+      dimy = util::clamp(document->requirement().min_y, 0, terminal.dimy);
       break;
     case Dimension::Fullscreen:
       dimx = terminal.dimx;
       dimy = terminal.dimy;
       break;
     case Dimension::FitComponent:
-      dimx = std::min(document->requirement().min_x, terminal.dimx);
-      dimy = std::min(document->requirement().min_y, terminal.dimy);
+      dimx = util::clamp(document->requirement().min_x, 0, terminal.dimx);
+      dimy = util::clamp(document->requirement().min_y, 0, terminal.dimy);
       break;
   }
 
