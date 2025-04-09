@@ -3,6 +3,22 @@ Changelog
 
 Development
 -----------
+
+### Build
+- Feature: Support C++20 modules. 
+  This requires:
+  - Using the Ninja or MSVC generator
+  - A recent Clang/GCC/MSVC compiler.
+  - Cmake 3.28 or higher.
+  Usage:
+  ```cpp
+  import ftxui;
+  import ftxui.component;
+  import ftxui.dom;
+  import ftxui.screen;
+  ```
+  Thanks @mikomikotaishi for PR #1015.
+
 ### Component
 - Bugfix: Fix a crash with ResizeableSplit. See #1023.
   - Clamp screen size to terminal size.
