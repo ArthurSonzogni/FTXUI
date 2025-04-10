@@ -15,6 +15,7 @@ option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 option(FTXUI_CLANG_TIDY "Execute clang-tidy" OFF)
 option(FTXUI_ENABLE_COVERAGE "Execute code coverage" OFF)
 option(FTXUI_DEV_WARNINGS "Enable more compiler warnings and warnings as errors" OFF)
+option(FTXUI_BUILD_MODULES "Build the C++20 modules" OFF)
 
 set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
 terminal used will be one of Microsoft and use a set of reasonnable fallback \
@@ -176,7 +177,7 @@ include(cmake/iwyu.cmake)
 include(cmake/ftxui_export.cmake)
 include(cmake/ftxui_install.cmake)
 include(cmake/ftxui_package.cmake)
+include(cmake/ftxui_modules.cmake)
 
 add_subdirectory(examples)
 add_subdirectory(doc)
-add_subdirectory(modules/ftxui)
