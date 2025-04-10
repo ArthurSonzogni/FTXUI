@@ -122,16 +122,27 @@ jobs:
 
   test_modules:
     name: "Test modules"
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            compiler: llvm
+          # TODO add gcc / msvc
+    runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v3
 
-      - name: "Install cmake"
-        uses: lukka/get-cmake@latest
-
-      - name: "Install ninja"
-        run: sudo apt-get install ninja-build
+      - name: "Setup Cpp"
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          cmake: true
+          ninja: true
+          clangtidy: false
+          cppcheck: false
+          opencppcoverage: false
 
       - name: "Generate ./examples_modules"
         run: >
