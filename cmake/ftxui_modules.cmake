@@ -2,37 +2,6 @@ if (NOT FTXUI_BUILD_MODULES)
   return()
 endif()
 
-# CMake 3.28+ supports the new CMake C++ module system.
-if(CMAKE_VERSION VERSION_LESS 3.28)
-  message(FATAL_ERROR
-    "FTXUI_BUILD_MODULES requires CMake 3.28 or higher. "
-  )
-  return()
-endif()
-
-# Not all compilers support the C++ module system yet.
-if (NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU|MSVC")
-  message(FATAL_ERROR
-    "FTXUI_BUILD_MODULES requires a compiler that supports C++20 modules. "
-    "Currently, only Clang, GCC, and MSVC support this feature."
-  )
-  return()
-endif()
-
-# The list of generators which support scanning sources for C++ modules include:
-# - Ninja
-# - Ninja Multi-Config
-# - Visual Studio 17 2022
-if (NOT (CMAKE_GENERATOR MATCHES "Ninja") AND
-    NOT (CMAKE_GENERATOR MATCHES "Visual Studio" AND
-      CMAKE_GENERATOR_VERSION VERSION_GREATER_EQUAL 17))
-  message(FATAL_ERROR
-    "FTXUI_BUILD_MODULES requires a generator that supports C++20 modules.
-    Please use Ninja or Visual Studio 17 2022 or higher."
-  )
-  return()
-endif()
-
 cmake_minimum_required(VERSION 3.28)
 add_library(ftxui-modules)
 

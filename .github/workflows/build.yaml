@@ -120,6 +120,38 @@ jobs:
           name: ${{ runner.os }}-coverage
           files: ./build/coverage.xml
 
+  test_modules:
+    name: "Test modules"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Install cmake"
+        uses: lukka/get-cmake@latest
+
+      - name: "Install ninja"
+        run: sudo apt-get install ninja-build
+
+      - name: "Generate ./examples_modules"
+        run: >
+          ./tools/generate_examples_modules.sh
+
+      - name: "Build modules"
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+          -DCMAKE_GENERATOR=Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+          -DFTXUI_BUILD_DOCS=OFF
+          -DFTXUI_BUILD_EXAMPLES=ON
+          -DFTXUI_BUILD_TESTS=OFF
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=ON
+          -DFTXUI_DEV_WARNINGS=ON ;
+          cmake --build .
+
   # Create a release on new v* tags
   release:
     needs: test
