@@ -143,9 +143,10 @@ jobs:
           cd build;
           cmake ..
           -DCMAKE_GENERATOR=Ninja
+          -DFTXUI_BUILD_MODULES=ON
+          -DFTXUI_BUILD_EXAMPLES=ON
           -DCMAKE_BUILD_TYPE=Debug
           -DFTXUI_BUILD_DOCS=OFF
-          -DFTXUI_BUILD_EXAMPLES=ON
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
           -DFTXUI_ENABLE_INSTALL=ON
