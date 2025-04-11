@@ -1,11 +1,3 @@
-cmake_minimum_required(VERSION 3.12)
-
-project(ftxui
-  LANGUAGES CXX
-  VERSION 6.0.2
-  DESCRIPTION "C++ Functional Terminal User Interface."
-)
-
 option(FTXUI_BUILD_DOCS "Set to ON to build docs" OFF)
 option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" OFF)
 option(FTXUI_BUILD_MODULES "Build the C++20 modules" OFF)
@@ -16,6 +8,19 @@ option(FTXUI_DEV_WARNINGS "Enable more compiler warnings and warnings as errors"
 option(FTXUI_ENABLE_COVERAGE "Execute code coverage" OFF)
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
+
+if (FTXUI_BUILD_MODULES)
+  cmake_minimum_required(VERSION 3.12)
+else()
+  cmake_minimum_required(VERSION 3.28.2)
+endif()
+
+project(ftxui
+  LANGUAGES CXX
+  VERSION 6.0.2
+  DESCRIPTION "C++ Functional Terminal User Interface."
+)
+
 
 set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
 terminal used will be one of Microsoft and use a set of reasonnable fallback \

@@ -2,13 +2,10 @@ if (NOT FTXUI_BUILD_MODULES)
   return()
 endif()
 
-cmake_minimum_required(VERSION 3.28)
 add_library(ftxui-modules)
 
 target_sources(ftxui-modules
-  PUBLIC
-  FILE_SET CXX_MODULES
-  FILES
+  PUBLIC FILE_SET CXX_MODULES FILES
   src/ftxui/component.cppm
   src/ftxui/component/Animation.cppm
   src/ftxui/component/CapturedMouse.cppm
@@ -55,21 +52,30 @@ target_link_libraries(ftxui-modules
 )
 
 target_compile_features(ftxui-modules PUBLIC cxx_std_20)
-
-#set_target_properties(ftxui-modules PROPERTIES 
-  #CXX_STANDARD 23 
-  #CXX_STANDARD_REQUIRED ON
-  #CXX_EXTENSIONS OFF 
-  #CXX_MODULE_DYNDEP OFF
-#)
+if (CMAKE_COMPILER_IS_GNUCXX)
+  target_compile_options(${name} PUBLIC -fmodules-ts)
+endif ()
 
 add_library(ftxui::modules ALIAS ftxui-modules)
 
 if(FTXUI_ENABLE_INSTALL)
-  install(TARGETS ftxui-modules
+
+include(GNUInstallDirs)
+
+install(TARGETS ftxui-modules
     EXPORT ftxui-targets
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FILE_SET CXX_MODULES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui/modules
-  )
+    FILE_SET CXX_MODULES
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
+    FILE_SET HEADERS
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
+    INCLUDES
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
+)
+install(EXPORT ftxui-targets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+    CXX_MODULES_DIRECTORY ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+)
+install(FILES my_package-config.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
+)
 endif()
