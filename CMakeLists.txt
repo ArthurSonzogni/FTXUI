@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.12)
 
 project(ftxui
   LANGUAGES CXX
@@ -184,6 +184,6 @@ add_subdirectory(examples)
 
 # You can generate ./examples_modules/ by running
 # ./tools/generate_examples_modules.sh
-if(EXISTS "examples_modules")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples_modules/CMakeLists.txt")
   add_subdirectory(examples_modules)
 endif()
