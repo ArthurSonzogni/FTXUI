@@ -10,9 +10,9 @@ option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
 
 if (FTXUI_BUILD_MODULES)
-  cmake_minimum_required(VERSION 3.12)
-else()
   cmake_minimum_required(VERSION 3.28.2)
+else()
+  cmake_minimum_required(VERSION 3.12)
 endif()
 
 project(ftxui

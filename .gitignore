@@ -54,14 +54,10 @@ out/
 !include/ftxui/**/*.cpp
 
 # src directory:
+!src/ftxui/*.cppm
 !src/ftxui/**/*.hpp
 !src/ftxui/**/*.cpp
-
-# modules directory:
-!modules/*.txt
-!modules/ftxui/*.cppm
-!modules/ftxui/*.txt
-!modules/ftxui/**/*.cppm
+!src/ftxui/**/*.cppm
 
 # tools directory:
 !tools/**/*.sh
