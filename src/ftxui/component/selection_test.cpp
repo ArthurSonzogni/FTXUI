@@ -127,8 +127,6 @@ TEST(SelectionTest, SelectionOnChangeSquashedEvents) {
 }
 
 TEST(SelectionTest, StyleSelection) {
-  int selectionChangeCounter = 0;
-
   auto element = hbox({
       text("Lorem "),
       text("ipsum") | selectionColor(Color::Red),

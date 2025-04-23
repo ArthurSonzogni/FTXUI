@@ -20,6 +20,10 @@ out/
 !flake.nix
 !ftxui.pc.in
 !iwyu.imp
+!WORKSPACE
+!BUILD.bazel
+!MODULE.bazel
+!.bazelrc
 
 # .github directory:
 !.github/**/*.yaml

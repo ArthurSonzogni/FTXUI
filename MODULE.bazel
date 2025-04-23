@@ -1,0 +1,18 @@
+# Module.
+module(
+  name = "ftxui",
+  version = "6.0.2",
+)
+
+# Build deps.
+bazel_dep(name = "rules_cc", version = "0.0.17")
+
+# Test deps.
+bazel_dep(name = "googletest", version = "1.15.2")
+
+# Toolchain deps.
+cc_configure = use_extension(
+  "@rules_cc//bzlmod:extensions.bzl",
+  "cc_configure",
+)
+use_repo(cc_configure, "local_config_cc_toolchains")
