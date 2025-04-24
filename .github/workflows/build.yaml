@@ -63,7 +63,7 @@ jobs:
           repository-cache: true
 
       - name: "Tests with Bazel"
-        run: bazel run test
+        run: bazel run tests
 
       # make sure coverage is only enabled for Debug builds, since it sets -O0
       # to make sure coverage has meaningful results
