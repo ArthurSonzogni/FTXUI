@@ -52,11 +52,11 @@ jobs:
           repository-cache: false
       
       # Need on macos. See https://github.com/bazelbuild/bazel/issues/21718
-      - Clean Bazel cache 1
+      - name: Clean Bazel cache 1
         run: bazel clean --expunge
 
       # Need on macos. See https://github.com/bazelbuild/bazel/issues/21718
-      - Clean Bazel cache 2
+      - name: Clean Bazel cache 2
         run: bazel fetch --configure --force
 
       - name: "Build with Bazel"
