@@ -46,13 +46,9 @@ jobs:
 
       - name: "Install Bazel"
         uses: bazel-contrib/setup-bazel@0.14.0
-        with:
-          bazelisk-cache: false
-          disk-cache: ${{ github.workflow }}
-          repository-cache: false
       
       # Need on macos. See https://github.com/bazelbuild/bazel/issues/21718
-      - name: Clean Bazel cache 1
+      - name: Clean Bazel cache
         run: bazel clean --expunge
 
       - name: "Build with Bazel"
