@@ -42,8 +42,8 @@ class ComponentBase {
 
   // Component hierarchy:
   ComponentBase* Parent() const;
-  Component& ChildAt(int i);
-  int ChildCount() const;
+  Component& ChildAt(size_t i);
+  size_t ChildCount() const;
   int Index() const;
   void Add(Component children);
   void Detach();

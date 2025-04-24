@@ -12,7 +12,6 @@
 int main() {
   using namespace ftxui;
 
-  int saturation = 255;
   Elements red_line;
   Elements green_line;
   Elements blue_line;

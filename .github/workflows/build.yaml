@@ -55,6 +55,12 @@ jobs:
           gcovr: "5.0"
           opencppcoverage: true
 
+      - name: "Install Bazel"
+        uses: bazelbuild/setup-bazel@v5
+
+      - name: "Tests with Bazel"
+        run: bazel run test
+
       # make sure coverage is only enabled for Debug builds, since it sets -O0
       # to make sure coverage has meaningful results
       - name: "Configure CMake"
