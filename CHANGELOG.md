@@ -1,8 +1,12 @@
 Changelog
 =========
 
-Development
------------
+Next release (2025-04-01)
+-------------------------
+
+### Build
+- Feature: Support `bazel`. See #1032. Proposed by @kcc.
+
 ### Component
 - Bugfix: Fix a crash with ResizeableSplit. See #1023.
   - Clamp screen size to terminal size.

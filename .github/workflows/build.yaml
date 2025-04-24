@@ -49,9 +49,9 @@ jobs:
       - name: "Install Bazel"
         uses: bazel-contrib/setup-bazel@0.14.0
         with:
-          bazelisk-cache: true
+          bazelisk-cache: false
           disk-cache: ${{ github.workflow }}
-          repository-cache: true
+          repository-cache: false
 
       - name: "Build with Bazel"
         run: bazel build ...
