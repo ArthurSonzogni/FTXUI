@@ -24,12 +24,10 @@ jobs:
           - name: Linux Clang
             os: ubuntu-latest
             compiler: llvm
-            gcov_executable: "llvm-cov gcov"
 
           - name: MacOS clang
             os: macos-latest
             compiler: llvm
-            gcov_executable: "llvm-cov gcov"
 
           - name: Windows MSVC
             os: windows-latest
@@ -52,6 +50,14 @@ jobs:
           bazelisk-cache: false
           disk-cache: ${{ github.workflow }}
           repository-cache: false
+      
+      # Need on macos. See https://github.com/bazelbuild/bazel/issues/21718
+      - Clean Bazel cache 1
+        run: bazel clean --expunge
+
+      # Need on macos. See https://github.com/bazelbuild/bazel/issues/21718
+      - Clean Bazel cache 2
+        run: bazel fetch --configure --force
 
       - name: "Build with Bazel"
         run: bazel build ...
