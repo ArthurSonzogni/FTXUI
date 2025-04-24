@@ -56,7 +56,11 @@ jobs:
           opencppcoverage: true
 
       - name: "Install Bazel"
-        uses: bazelbuild/setup-bazel@v5
+        uses: bazel-contrib/setup-bazel@0.14.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
 
       - name: "Tests with Bazel"
         run: bazel run test
