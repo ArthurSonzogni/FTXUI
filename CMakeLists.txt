@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 6.0.3
+  VERSION 6.0.2
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
@@ -17,7 +17,7 @@ option(FTXUI_ENABLE_COVERAGE "Execute code coverage" OFF)
 option(FTXUI_DEV_WARNINGS "Enable more compiler warnings and warnings as errors" OFF)
 
 set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
-terminal used will be one of Microsoft and use a set of reasonable fallback \
+terminal used will be one of Microsoft and use a set of reasonnable fallback \
 to counteract its implementations problems.")
 if (WIN32)
   option(FTXUI_MICROSOFT_TERMINAL_FALLBACK

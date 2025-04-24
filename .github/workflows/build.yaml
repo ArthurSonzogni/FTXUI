@@ -62,6 +62,9 @@ jobs:
           disk-cache: ${{ github.workflow }}
           repository-cache: true
 
+      - name: "Build with Bazel"
+        run: bazel build ...
+
       - name: "Tests with Bazel"
         run: bazel run tests
 
