@@ -12,7 +12,7 @@ on:
 jobs:
 
   test_bazel:
-    name: "Bazel tests"
+    name: "Test Bazel"
     strategy:
       fail-fast: false
       matrix:
@@ -60,7 +60,7 @@ jobs:
         run: bazel run tests
 
   test_cmake:
-    name: "CMake tests"
+    name: "Tests CMake"
     strategy:
       fail-fast: false
       matrix:
@@ -103,19 +103,6 @@ jobs:
           cppcheck: false
           gcovr: "5.0"
           opencppcoverage: true
-
-      - name: "Install Bazel"
-        uses: bazel-contrib/setup-bazel@0.14.0
-        with:
-          bazelisk-cache: true
-          disk-cache: ${{ github.workflow }}
-          repository-cache: true
-
-      - name: "Build with Bazel"
-        run: bazel build ...
-
-      - name: "Tests with Bazel"
-        run: bazel run tests
 
       # make sure coverage is only enabled for Debug builds, since it sets -O0
       # to make sure coverage has meaningful results

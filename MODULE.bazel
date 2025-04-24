@@ -13,8 +13,8 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "googletest", version = "1.15.2")
 
 # Toolchain deps.
-#cc_configure = use_extension(
-#"@rules_cc//bzlmod:extensions.bzl",
-#"cc_configure",
-#)
-#use_repo(cc_configure, "local_config_cc_toolchains")
+cc_configure = use_extension(
+  "@rules_cc//bzlmod:extensions.bzl",
+  "cc_configure",
+)
+use_repo(cc_configure, "local_config_cc_toolchains")
