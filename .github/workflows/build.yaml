@@ -10,8 +10,57 @@ on:
       - main
 
 jobs:
-  test:
-    name: "Tests"
+
+  test_bazel:
+    name: "Bazel tests"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux GCC
+            os: ubuntu-latest
+            compiler: gcc
+
+          - name: Linux Clang
+            os: ubuntu-latest
+            compiler: llvm
+            gcov_executable: "llvm-cov gcov"
+
+          - name: MacOS clang
+            os: macos-latest
+            compiler: llvm
+            gcov_executable: "llvm-cov gcov"
+
+          - name: Windows MSVC
+            os: windows-latest
+            compiler: cl
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Setup Cpp"
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+
+      - name: "Install Bazel"
+        uses: bazel-contrib/setup-bazel@0.14.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+
+      - name: "Build with Bazel"
+        run: bazel build ...
+
+      - name: "Tests with Bazel"
+        run: bazel run tests
+
+  test_cmake:
+    name: "CMake tests"
     strategy:
       fail-fast: false
       matrix:
@@ -135,7 +184,9 @@ jobs:
 
   # Create a release on new v* tags
   release:
-    needs: test
+    needs:
+      - test_cmake
+      - test_bazel
     if: ${{ github.event_name == 'create' && startsWith(github.ref, 'refs/tags/v') }}
     name: "Create release"
     runs-on: ubuntu-latest
