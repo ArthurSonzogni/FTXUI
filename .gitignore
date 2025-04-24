@@ -20,7 +20,7 @@ out/
 !flake.nix
 !ftxui.pc.in
 !iwyu.imp
-!WORKSPACE
+!WORKSPACE.bazel
 !BUILD.bazel
 !MODULE.bazel
 !.bazelrc
@@ -32,6 +32,9 @@ out/
 # cmake directory:
 !cmake/**/*.in
 !cmake/**/*.cmake
+
+# bazel directory:
+!bazel/**/*.bzl
 
 # doc directory:
 !doc/**/Doxyfile.in

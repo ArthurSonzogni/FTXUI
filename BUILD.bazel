@@ -21,9 +21,10 @@ package(default_visibility = ["//visibility:public"])
 # A meta target that depends on all the ftxui sub modules.
 alias(
     name = "ftxui",
-    actual = ":component",  # Note that :component depends on :dom, which depends
-    # on :screen. Bazel doesn't really support "public"
-    # and "private" dependencies. They are all public.
+    # Note that :component depends on :dom, which depends on :screen. Bazel
+    # doesn't really support "public" and "private" dependencies. They are all
+    # public. This is equivalent to depending on all the submodules.
+    actual = ":component",
     visibility = ["//visibility:public"],
 )
 
