@@ -14,7 +14,9 @@
 # - Support WebAssembly
 
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
-load(":bazel/ftxui.bzl", "ftxui_cc_library", "generate_examples")
+load(":bazel/ftxui.bzl", "ftxui_cc_library")
+load(":bazel/ftxui.bzl", "generate_examples")
+load(":bazel/ftxui.bzl", "cpp20")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -241,6 +243,7 @@ cc_test(
         "include",
         "src",
     ],
+    copts = cpp20(),
     deps = [
         "//:ftxui",
         "@googletest//:gtest_main",

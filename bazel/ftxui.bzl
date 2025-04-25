@@ -2,17 +2,39 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
+def cpp17():
+    return select({
+        "@rules_cc//cc/compiler:msvc-cl": ["/std:c++17"],
+        "@rules_cc//cc/compiler:clang-cl": ["/std:c++17"],
+        "@rules_cc//cc/compiler:clang": ["-std=c++17"],
+        "@rules_cc//cc/compiler:gcc": ["-std=c++17"],
+        "//conditions:default": ["-std=c++17"],
+    })
+
+def cpp20():
+    return select({
+        "@rules_cc//cc/compiler:msvc-cl": ["/std:c++20"],
+        "@rules_cc//cc/compiler:clang-cl": ["/std:c++20"],
+        "@rules_cc//cc/compiler:clang": ["-std=c++20"],
+        "@rules_cc//cc/compiler:gcc": ["-std=c++20"],
+        "//conditions:default": ["-std=c++20"],
+    })
+
+def utf8():
+    return select({
+        "@rules_cc//cc/compiler:msvc-cl": ["/utf-8"],
+        "@rules_cc//cc/compiler:clang-cl": ["/utf-8"],
+        "@rules_cc//cc/compiler:clang": ["-finput-charset=UTF-8"],
+        "@rules_cc//cc/compiler:gcc": ["-finput-charset=UTF-8"],
+        "//conditions:default": ["-finput-charset=UTF-8"],
+    })
+
 def ftxui_cc_library(
         name,
         srcs,
         hdrs,
         linkopts = [],
         deps = []):
-
-    cpp20 = select({
-      "@bazel_tools//tools/cpp:msvc": ["/std:c++20"],
-      "//conditions:default":         ["-std=c++20"],
-    })
 
     cc_library(
         name = name,
@@ -26,7 +48,7 @@ def ftxui_cc_library(
             "include",
             "src",
         ],
-        copts = cpp20,
+        copts = cpp17() + utf8(),
         visibility = ["//visibility:public"],
     )
 
@@ -47,4 +69,5 @@ def generate_examples():
             name = name,
             srcs = [src],
             deps = ["//:component"],
+            copts = cpp20() + utf8(),
         )
