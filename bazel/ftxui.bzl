@@ -20,11 +20,20 @@ def cpp20():
         "//conditions:default": ["-std=c++20"],
     })
 
-# Force Microsoft Visual Studio to decode sources files in UTF-8, as it should.
-def utf8():
+def msvc_copts():
     return select({
-        "@rules_cc//cc/compiler:msvc-cl": ["/utf-8"],
-        "@rules_cc//cc/compiler:clang-cl": ["/utf-8"],
+        "@rules_cc//cc/compiler:msvc-cl": [
+            # Force Microsoft Visual Studio to decode sources files in UTF-8.
+            "/utf-8",
+
+            # Force Microsoft Visual Studio to interpret the source files as
+            # Unicode.
+            "/DUNICODE",
+            "/D_UNICODE",
+
+            # Fallback for Microsoft Terminal.
+            "/DFTXUI_MICROSOFT_TERMINAL_FALLBACK",
+        ],
         "//conditions:default": [],
     })
 
@@ -47,7 +56,7 @@ def ftxui_cc_library(
             "include",
             "src",
         ],
-        copts = cpp17() + utf8(),
+        copts = cpp17() + msvc_copts(),
         visibility = ["//visibility:public"],
     )
 
@@ -68,5 +77,5 @@ def generate_examples():
             name = name,
             srcs = [src],
             deps = ["//:component"],
-            copts = cpp20() + utf8(),
+            copts = cpp20() + msvc_copts(),
         )
