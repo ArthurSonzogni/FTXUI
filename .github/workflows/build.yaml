@@ -17,20 +17,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: Linux GCC
-            os: ubuntu-latest
+          - os: ubuntu-latest
             compiler: gcc
 
-          - name: Linux Clang
-            os: ubuntu-latest
+          - os: ubuntu-latest
             compiler: llvm
 
-          - name: MacOS clang
-            os: macos-latest
+          - os: macos-latest
             compiler: llvm
 
-          - name: Windows MSVC
-            os: windows-latest
+          - os: macos-latest
+            compiler: gcc
+
+          - os: windows-latest
             compiler: cl
 
     runs-on: ${{ matrix.os }}
@@ -46,10 +45,6 @@ jobs:
 
       - name: "Install Bazel"
         uses: bazel-contrib/setup-bazel@0.14.0
-      
-      # Need on macos. See https://github.com/bazelbuild/bazel/issues/21718
-      - name: Clean Bazel cache
-        run: bazel clean --expunge
 
       - name: "Build with Bazel"
         run: bazel build ...

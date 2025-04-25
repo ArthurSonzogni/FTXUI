@@ -20,7 +20,7 @@ def ftxui_cc_library(
             "include",
             "src",
         ],
-        copts = ["-std=c++17"],
+        copts = ["-std=c++20"],
         visibility = ["//visibility:public"],
     )
 
