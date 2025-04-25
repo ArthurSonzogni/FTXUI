@@ -20,13 +20,12 @@ def cpp20():
         "//conditions:default": ["-std=c++20"],
     })
 
+# Force Microsoft Visual Studio to decode sources files in UTF-8, as it should.
 def utf8():
     return select({
         "@rules_cc//cc/compiler:msvc-cl": ["/utf-8"],
         "@rules_cc//cc/compiler:clang-cl": ["/utf-8"],
-        "@rules_cc//cc/compiler:clang": ["-finput-charset=UTF-8"],
-        "@rules_cc//cc/compiler:gcc": ["-finput-charset=UTF-8"],
-        "//conditions:default": ["-finput-charset=UTF-8"],
+        "//conditions:default": [],
     })
 
 def ftxui_cc_library(
