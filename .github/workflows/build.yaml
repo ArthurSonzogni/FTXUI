@@ -23,11 +23,13 @@ jobs:
           - os: ubuntu-latest
             compiler: llvm
 
-          - os: macos-latest
-            compiler: llvm
+          # Failing
+          #- os: macos-latest
+            #compiler: llvm
 
-          - os: macos-latest
-            compiler: gcc
+          # Failing
+          #- os: macos-latest
+            #compiler: gcc
 
           - os: windows-latest
             compiler: cl

@@ -21,19 +21,22 @@ def cpp20():
     })
 
 def msvc_copts():
+    MSVC_COPTS = [
+      # Force Microsoft Visual Studio to decode sources files in UTF-8.
+      "/utf-8",
+
+      # Force Microsoft Visual Studio to interpret the source files as
+      # Unicode.
+      "/DUNICODE",
+      "/D_UNICODE",
+
+      # Fallback for Microsoft Terminal.
+      "/DFTXUI_MICROSOFT_TERMINAL_FALLBACK",
+    ]
+    
     return select({
-        "@rules_cc//cc/compiler:msvc-cl": [
-            # Force Microsoft Visual Studio to decode sources files in UTF-8.
-            "/utf-8",
-
-            # Force Microsoft Visual Studio to interpret the source files as
-            # Unicode.
-            "/DUNICODE",
-            "/D_UNICODE",
-
-            # Fallback for Microsoft Terminal.
-            "/DFTXUI_MICROSOFT_TERMINAL_FALLBACK",
-        ],
+        "@rules_cc//cc/compiler:msvc-cl": MSVC_COPTS,
+        "@rules_cc//cc/compiler:clang-cl": MSVC_COPTS,
         "//conditions:default": [],
     })
 
