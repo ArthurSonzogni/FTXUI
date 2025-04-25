@@ -23,13 +23,11 @@ jobs:
           - os: ubuntu-latest
             compiler: llvm
 
-          # Failing
-          #- os: macos-latest
-            #compiler: llvm
+          - os: macos-latest
+            compiler: llvm
 
-          # Failing
-          #- os: macos-latest
-            #compiler: gcc
+          - os: macos-latest
+            compiler: gcc
 
           - os: windows-latest
             compiler: cl
@@ -38,15 +36,6 @@ jobs:
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v3
-
-      - name: "Setup Cpp"
-        uses: aminya/setup-cpp@v1
-        with:
-          compiler: ${{ matrix.compiler }}
-          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
-
-      - name: "Install Bazel"
-        uses: bazel-contrib/setup-bazel@0.14.0
 
       - name: "Build with Bazel"
         run: bazel build ...
