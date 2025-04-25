@@ -8,6 +8,12 @@ def ftxui_cc_library(
         hdrs,
         linkopts = [],
         deps = []):
+
+    cpp20 = select({
+      "@bazel_tools//tools/cpp:msvc": ["/std:c++20"],
+      "//conditions:default":         ["-std=c++20"],
+    })
+
     cc_library(
         name = name,
         srcs = srcs,
@@ -20,7 +26,7 @@ def ftxui_cc_library(
             "include",
             "src",
         ],
-        copts = ["-std=c++20"],
+        copts = cpp20,
         visibility = ["//visibility:public"],
     )
 
