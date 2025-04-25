@@ -18,6 +18,7 @@ load(":bazel/ftxui.bzl", "ftxui_cc_library")
 load(":bazel/ftxui.bzl", "generate_examples")
 load(":bazel/ftxui.bzl", "cpp20")
 load(":bazel/ftxui.bzl", "msvc_copts")
+load(":bazel/ftxui.bzl", "pthread_linkopts")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -184,7 +185,7 @@ ftxui_cc_library(
         "include/ftxui/component/screen_interactive.hpp",
         "include/ftxui/component/task.hpp",
     ],
-    linkopts = ["-lpthread"],
+    linkopts = pthread_linkopts(),
     deps = [":dom"],
 )
 
