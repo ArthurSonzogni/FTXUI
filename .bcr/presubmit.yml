@@ -1,0 +1,25 @@
+# Copyright 2025 Arthur Sonzogni. All rights reserved.
+# Use of this source code is governed by the MIT license that can be found in
+# the LICENSE file.
+bcr_test_module:
+  module_path: "."
+  matrix:
+    platform: [
+      "debian11",
+      "macos",
+      "macos-arm64",
+      "ubuntu2204",
+      "windows",
+    ]
+    bazel: [
+      6.x,
+      7.x,
+      8.x,
+    ]
+  tasks:
+    run_tests:
+      name: "Run test module"
+      platform: ${{ platform }}
+      bazel: ${{ bazel }}
+      test_targets:
+        - "//..."

@@ -1,0 +1,28 @@
+on:
+  # Run the publish workflow after a successful release.
+  workflow_call:
+    inputs:
+      tag_name:
+        required: true
+        type: string
+
+  # Allow manual triggering of the workflow.
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        required: true
+        type: string
+
+jobs:    
+  publish:
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@[version]
+    with:
+      tag_name: ${{ inputs.tag_name }}
+      # GitHub repository which is a fork of the upstream where the Pull Request will be opened.
+      registry_fork: ArthurSonzogni/bazel-central-registry
+    permissions:
+      attestations: write
+      contents: write
+      id-token: write
+    secrets:
+      publish_token: ${{ secrets.PUBLISH_TOKEN }}

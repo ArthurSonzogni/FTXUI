@@ -35,6 +35,7 @@ out/
 
 # bazel directory:
 !bazel/**/*.bzl
+!.bcr/*
 
 # doc directory:
 !doc/**/Doxyfile.in
