@@ -12,7 +12,7 @@ on:
 jobs:
 
   test_bazel:
-    name: "${{ matrix.os }}/Bazel/${{ matrix.compiler }}"
+    name: "Bazel, ${{ matrix.compiler }}, ${{ matrix.os }}"
     strategy:
       fail-fast: false
       matrix:
@@ -44,7 +44,7 @@ jobs:
         run: bazel run tests
 
   test_cmake:
-    name: "${{ matrix.os }}/CMake/${{ matrix.compiler }}"
+    name: "CMake, ${{ matrix.compiler }}, ${{ matrix.os }}"
     strategy:
       fail-fast: false
       matrix:
