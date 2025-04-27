@@ -13,7 +13,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load(":bazel/ftxui.bzl", "ftxui_cc_library")
 load(":bazel/ftxui.bzl", "generate_examples")
 load(":bazel/ftxui.bzl", "cpp20")
-load(":bazel/ftxui.bzl", "msvc_copts")
+load(":bazel/ftxui.bzl", "windows_copts")
 load(":bazel/ftxui.bzl", "pthread_linkopts")
 
 package(default_visibility = ["//visibility:public"])
@@ -241,7 +241,7 @@ cc_test(
         "include",
         "src",
     ],
-    copts = cpp20() + msvc_copts(),
+    copts = cpp20() + windows_copts(),
     deps = [
         "//:ftxui",
         "@googletest//:gtest_main",
