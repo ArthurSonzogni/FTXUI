@@ -3,13 +3,9 @@
 # the LICENSE file.
 
 # TODO:
-# - Windows/MSVC support.
-#   - Pass /utf-8 to MSVC users depending on FTXUI.
-#   - Pass "FTXUI_MICROSOFT_TERMINAL_FALLBACK" to windows users.
-# - Support building benchmark.
-# - Support building examples.
-# - Support building fuzzer.
-# - Support building documentation.
+# - Build benchmark.
+# - Build fuzzers.
+# - Build documentation.
 # - Enable the two tests timing out.
 # - Support WebAssembly
 
