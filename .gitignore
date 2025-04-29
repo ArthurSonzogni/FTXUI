@@ -20,6 +20,10 @@ out/
 !flake.nix
 !ftxui.pc.in
 !iwyu.imp
+!WORKSPACE.bazel
+!BUILD.bazel
+!MODULE.bazel
+!.bazelrc
 
 # .github directory:
 !.github/**/*.yaml
@@ -28,6 +32,10 @@ out/
 # cmake directory:
 !cmake/**/*.in
 !cmake/**/*.cmake
+
+# bazel directory:
+!bazel/**/*.bzl
+!.bcr/*
 
 # doc directory:
 !doc/**/Doxyfile.in

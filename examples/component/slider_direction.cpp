@@ -19,7 +19,7 @@ using namespace ftxui;
 int main() {
   auto screen = ScreenInteractive::TerminalOutput();
   std::array<int, 30> values;
-  for (int i = 0; i < values.size(); ++i) {
+  for (size_t i = 0; i < values.size(); ++i) {
     values[i] = 50 + 20 * std::sin(i * 0.3);
   }
 
