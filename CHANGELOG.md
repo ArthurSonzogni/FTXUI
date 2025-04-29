@@ -1,11 +1,35 @@
 Changelog
 =========
 
-Next release (2025-04-01)
--------------------------
+Future release
+------------
+
+6.1.0 (2025-04-29)
+-----------------
 
 ### Build
-- Feature: Support `bazel`. See #1032. Proposed by @kcc.
+- Feature: Support `bazel` build system. See #1032.
+  Proposed by Kostya Serebryany @kcc
+  If all goes well (pending), it should appear in the Bazel central repository.
+  It can be imported into your project using the following lines:
+
+  **MODULE.bazel**
+  ```bazel
+  bazel_dep(name = "ftxui", version = "6.1.0")
+  ```
+
+  **BUILD.bazel**
+  ```bazel
+  deps = [
+    // Depend on the whole library:
+    "@ftxui//:ftxui",
+
+    // Choose a specific submodule:
+    "@ftxui//:component",
+    "@ftxui//:dom",
+    "@ftxui//:screen",
+  ]
+  ```
 
 ### Component
 - Bugfix: Fix a crash with ResizeableSplit. See #1023.
