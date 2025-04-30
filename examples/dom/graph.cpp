@@ -10,6 +10,7 @@
 #include <memory>                   // for shared_ptr
 #include <string>                   // for operator<<, string
 #include <thread>                   // for sleep_for
+#include <utility>                  // for ignore
 #include <vector>                   // for vector
 
 #include "ftxui/dom/node.hpp"  // for Render
@@ -49,6 +50,7 @@ int main() {
 
   std::string reset_position;
   for (int i = 0;; ++i) {
+    std::ignore = i;
     auto document = hbox({
         vbox({
             graph(std::ref(my_graph)),

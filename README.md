@@ -43,7 +43,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
  * Module support
  * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
  * Learn by [examples](#documentation), and [tutorials](#documentation)
- * Multiple packages: CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred), vcpkg, pkgbuild, conan.
+ * Multiple packages: CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred),Bazel, vcpkg, pkgbuild, conan.
  * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
 ## Documentation
@@ -374,7 +374,7 @@ include(FetchContent)
 
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  GIT_TAG v6.0.2
+  GIT_TAG v6.1.1
 )
 
 FetchContent_GetProperties(ftxui)
@@ -385,6 +385,7 @@ endif()
 ```
 
 If you don't, FTXUI may be used from the following packages:
+- [bazel](...)
 - [vcpkg](https://vcpkgx.com/details.html?package=ftxui)
 - [Arch Linux PKGBUILD](https://aur.archlinux.org/packages/ftxui-git/).
 - [conan.io](https://conan.io/center/ftxui)
@@ -398,7 +399,6 @@ g++ . . . -lftxui-component -lftxui-dom -lftxui-screen . . .
 ```
 
 To build FTXUI with modules, ensure that you are using a generator like Ninja or Visual Studio that supports modules, and pass the flag `FTXUI_BUILD_MODULES`. 
-
 
 ## Contributors
 
