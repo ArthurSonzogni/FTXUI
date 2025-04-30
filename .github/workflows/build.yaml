@@ -231,7 +231,7 @@ jobs:
 
       - name: "Create source package"
         run: >
-          git archive --format=tar.gz --prefix=ftxui/ -o source.tar.gz HEAD
+          git archive --format=tar.gz -o source.tar.gz HEAD
 
       - name: "Upload source package"
         uses: shogo82148/actions-upload-release-asset@v1

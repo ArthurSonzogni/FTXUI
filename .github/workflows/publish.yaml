@@ -1,11 +1,4 @@
 on:
-  # On new releases:
-  workflow_call:
-    inputs:
-      tag_name:
-        required: true
-        type: string
-
   # On manual trigger:
   workflow_dispatch:
     inputs:
