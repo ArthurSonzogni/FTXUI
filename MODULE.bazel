@@ -3,7 +3,7 @@
 # the LICENSE file.
 
 # FTXUI Module.
-module(name = "ftxui", version = "6.1.6")
+module(name = "ftxui", version = "6.1.7")
 
 # Build deps.
 bazel_dep(name = "rules_cc", version = "0.1.1")

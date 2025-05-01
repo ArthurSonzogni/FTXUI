@@ -4,7 +4,7 @@ Changelog
 Future release
 ------------
 
-6.1.6 (2025-05-01)
+6.1.7 (2025-05-01)
 ------------------
 
 ### Build
@@ -15,7 +15,7 @@ Future release
 
   **MODULE.bazel**
   ```bazel
-  bazel_dep(name = "ftxui", version = "6.1.6")
+  bazel_dep(name = "ftxui", version = "6.1.7")
   ```
 
   **BUILD.bazel**
