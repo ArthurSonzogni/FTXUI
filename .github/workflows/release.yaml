@@ -98,19 +98,3 @@ jobs:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: source.tar.gz
           overwrite: true
-
-      - name: Generate source attestation
-        id: attest_source
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: source.tar.gz
-
-      - name: Rename source attestation
-        run: mv ${{ steps.attest_source.outputs.bundle-path }} source.tar.gz.intoto.jsonl
-
-      - name: "Upload source attestation"
-        uses: shogo82148/actions-upload-release-asset@v1
-        with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: source.tar.gz.intoto.jsonl
-          overwrite: true
