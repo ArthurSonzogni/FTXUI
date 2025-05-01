@@ -1,8 +1,21 @@
+name: "Publish to Bazel Central Registry"
+
 on:
   # On manual trigger:
   workflow_dispatch:
     inputs:
       tag_name:
+        required: true
+        type: string
+
+  # Called from the release workflow:
+  workflow_call:
+    inputs:
+      tag_name:
+        required: true
+        type: string
+    secrets:
+      PUBLISH_TOKEN:
         required: true
         type: string
 
