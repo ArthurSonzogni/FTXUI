@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.12)
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 6.1.3
+  VERSION 6.1.4
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 

@@ -114,15 +114,3 @@ jobs:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: source.tar.gz.intoto.jsonl
           overwrite: true
-
-  # Publish to Bazel Central Registry.
-  # This call the .github/workflows/publish.yaml workflow.
-  publish_to_bazel_central_registry:
-    name: "Publish to Bazel Central Registry"
-    needs: package_source
-    uses: ./.github/workflows/publish.yaml
-    with:
-      tag_name: ${{ github.ref }}
-    secrets:
-      PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-
