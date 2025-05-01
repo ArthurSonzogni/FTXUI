@@ -23,8 +23,8 @@ Development
 Future release
 ------------
 
-6.1.1 (2025-04-30)
------------------
+6.1.8 (2025-05-01)
+------------------
 
 ### Build
 - Feature: Support `bazel` build system. See #1032.
@@ -34,7 +34,7 @@ Future release
 
   **MODULE.bazel**
   ```bazel
-  bazel_dep(name = "ftxui", version = "6.1.1")
+  bazel_dep(name = "ftxui", version = "6.1.8")
   ```
 
   **BUILD.bazel**

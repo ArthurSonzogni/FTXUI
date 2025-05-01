@@ -1,0 +1,100 @@
+name: Release
+
+on:
+  # On push to a tag:
+  push:
+    tags:
+      - 'v*'
+
+  # On manual trigger:
+  workflow_dispatch:
+
+permissions:
+  # Needed to mint attestations
+  id-token: write
+  attestations: write
+  # Needed to upload release assets
+  contents: write
+
+jobs:
+  release:
+    name: "Create release"
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+      - name: "Create release"
+        uses: softprops/action-gh-release@v1
+        id: create_release
+        with:
+          draft: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Build artifact for the release
+  package_compiled:
+    name: "Build packages"
+    needs: release
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset_path: build/ftxui*Linux*
+          - os: macos-latest
+            asset_path: build/ftxui*Darwin*
+          - os: windows-latest
+            asset_path: build/ftxui*Win64*
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v1
+        id: cpu-cores
+
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Install cmake"
+        uses: lukka/get-cmake@latest
+
+      - name: "Build packages"
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_BUILD_PARALLEL_LEVEL=${{ steps.cpu-cores.outputs.count }}
+          -DFTXUI_BUILD_DOCS=OFF
+          -DFTXUI_BUILD_EXAMPLES=OFF
+          -DFTXUI_BUILD_TESTS=OFF
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=ON
+          -DFTXUI_DEV_WARNINGS=ON ;
+          cmake --build . --target package;
+
+      - uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: ${{ matrix.asset_path }}
+          overwrite: true
+
+  # Build "source" artifact for the release. This is the same as the github
+  # "source" archive, but with a stable URL. This is useful for the Bazel
+  # Central Repository.
+  package_source:
+    name: "Build source package"
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Create source package"
+        run: >
+          git archive --format=tar.gz -o source.tar.gz HEAD
+
+      - name: "Upload source package"
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: source.tar.gz
+          overwrite: true

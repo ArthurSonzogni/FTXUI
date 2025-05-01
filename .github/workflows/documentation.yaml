@@ -1,0 +1,60 @@
+name: Documentation
+
+on:
+  # On new commits to main:
+  push:
+    branches:
+      - main
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Install cmake"
+        uses: lukka/get-cmake@latest
+
+      - name: "Install emsdk"
+        uses: mymindstorm/setup-emsdk@v7
+
+      - name: "Install Doxygen/Graphviz"
+        run: >
+          sudo apt-get update;
+          sudo apt-get install doxygen graphviz;
+
+      - name: "Build documentation"
+        run: >
+          mkdir build;
+          cd build;
+          emcmake cmake ..
+          -DCMAKE_BUILD_TYPE=Release
+          -DFTXUI_BUILD_DOCS=ON
+          -DFTXUI_BUILD_EXAMPLES=ON
+          -DFTXUI_BUILD_TESTS=OFF
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=OFF
+          -DFTXUI_DEV_WARNINGS=ON ;
+          cmake --build . --target doc;
+          cmake --build . ;
+          rsync -amv
+          --include='*/'
+          --include='*.html'
+          --include='*.css'
+          --include='*.mjs'
+          --include='*.js'
+          --include='*.wasm'
+          --exclude='*'
+          examples
+          doc/doxygen/html;
+
+      - name: "Deploy"
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/doc/doxygen/html/
+          enable_jekyll: false
+          allow_empty_commit: false
+          force_orphan: true
+          publish_branch: gh-pages

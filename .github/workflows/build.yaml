@@ -1,10 +1,12 @@
 name: Build
 
 on:
-  create:
+  # On new commits to main:
   push:
     branches:
       - main
+
+  # On pull requests:
   pull_request:
     branches:
       - main
