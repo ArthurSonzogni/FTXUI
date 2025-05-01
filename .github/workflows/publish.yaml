@@ -30,11 +30,7 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     with:
-      # If manual: use the input, otherwise grab the tag from the completed run
-      tag_name: ${{ 
-        github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name ||
-        github.event_name == 'workflow_run'      && github.event.workflow_run.head_branch 
-      }}
+      tag_name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name || github.event.workflow_run.head_branch }}
       registry_fork: ArthurSonzogni/bazel-central-registry
 
     secrets:

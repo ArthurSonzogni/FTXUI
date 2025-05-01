@@ -92,17 +92,6 @@ jobs:
         run: >
           git archive --format=tar.gz -o source.tar.gz HEAD
 
-      - name: Generate source attestation
-        id: attest_source
-        uses: actions/attest-build-provenance@v2
-        with:
-          subject-path: source.tar.gz
-
-      - name: Write source.intoto.jsonl
-        run: 
-          jq --compact-output < "${{ steps.attest_source.outputs.bundle-path }}" \
-            > source.tar.gz.intoto.jsonl
-
       - name: "Upload source package"
         uses: shogo82148/actions-upload-release-asset@v1
         with:
@@ -110,9 +99,14 @@ jobs:
           asset_path: source.tar.gz
           overwrite: true
 
-      - name: "Upload source attestation"
-        uses: shogo82148/actions-upload-release-asset@v1
+      - name: Generate source attestation
+        id: attest_source
+        uses: actions/attest-build-provenance@v2
         with:
-          upload_url: ${{ needs.release.outputs.upload_url }}
-          asset_path: source.tar.gz.intoto.jsonl
-          overwrite: true
+          subject-path: source.tar.gz
+
+      - name: "Upload source attestation"
+        uses: actions/upload-artifact@v3
+        with:
+          name: source.tar.gz.intoto.jsonl
+          path: ${{ steps.attest_source.outputs.bundle-path }}
