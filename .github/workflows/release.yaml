@@ -13,6 +13,8 @@ permissions:
   # Needed to mint attestations
   id-token: write
   attestations: write
+  # Needed to upload release assets
+  contents: write
 
 jobs:
   release:

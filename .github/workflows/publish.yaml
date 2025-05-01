@@ -1,22 +1,41 @@
 name: "Publish to Bazel Central Registry"
 
 on:
-  # On manual trigger:
+  # Manual kick-off (you type the tag)
   workflow_dispatch:
     inputs:
       tag_name:
+        description: "Tag to publish"
         required: true
         type: string
 
-jobs:    
+  # Fire as soon as the Release workflow completes
+  workflow_run:
+    workflows:
+      - Release
+    types:
+      - completed
+
+permissions:
+
+  attestations: write
+  contents:     write
+  id-token:     write
+
+jobs:
   publish:
     uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v0.0.4
+    # Only run on manual dispatch, or when Release finishes successfully
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     with:
-      tag_name: ${{ inputs.tag_name }}
+      # If manual: use the input, otherwise grab the tag from the completed run
+      tag_name: ${{ 
+        github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name ||
+        github.event_name == 'workflow_run'      && github.event.workflow_run.head_branch 
+      }}
       registry_fork: ArthurSonzogni/bazel-central-registry
-    permissions:
-      attestations: write
-      contents: write
-      id-token: write
+
     secrets:
       publish_token: ${{ secrets.PUBLISH_TOKEN }}
