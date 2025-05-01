@@ -1,9 +1,5 @@
-# Copyright 2025 Arthur Sonzogni. All rights reserved.
-# Use of this source code is governed by the MIT license that can be found in
-# the LICENSE file.
-
 # FTXUI Module.
-module(name = "ftxui", version = "6.1.8")
+module(name = "ftxui", version = "6.1.8", compatibility_level = 6)
 
 # Build deps.
 bazel_dep(name = "rules_cc", version = "0.1.1")
