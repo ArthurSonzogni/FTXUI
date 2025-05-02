@@ -4,6 +4,10 @@ Changelog
 Future release
 ------------
 
+### dom
+- Bugfix: Restore the `dbox` behavior from ftxui 5.0.0. To apply bgcolor
+  blending between the two layers, a new `dboxBlend` will be added.
+
 6.1.8 (2025-05-01)
 ------------------
 
