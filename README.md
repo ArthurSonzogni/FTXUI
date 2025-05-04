@@ -40,6 +40,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
  * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
  * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
  * No dependencies
+ * Module support
  * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
  * Learn by [examples](#documentation), and [tutorials](#documentation)
  * Multiple packages: CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred),Bazel, vcpkg, pkgbuild, conan.
@@ -348,6 +349,7 @@ Feel free to add your projects here:
 - [terminal-rain](https://github.com/Oakamoore/terminal-rain)
 - [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
 - [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
+- [openJuice](https://github.com/mikomikotaishi/openJuice)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
@@ -395,6 +397,8 @@ If you choose to build and link FTXUI yourself, `ftxui-component` must be first 
 ```bash
 g++ . . . -lftxui-component -lftxui-dom -lftxui-screen . . .
 ```
+
+To build FTXUI with modules, ensure that you are using a generator like Ninja or Visual Studio that supports modules, and pass the flag `FTXUI_BUILD_MODULES`. 
 
 ## Contributors
 
