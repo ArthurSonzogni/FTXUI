@@ -20,16 +20,16 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            compiler: gcc
+            compiler: g++
 
           - os: ubuntu-latest
-            compiler: llvm
+            compiler: clang++
 
           - os: macos-latest
-            compiler: llvm
+            compiler: g++
 
           - os: macos-latest
-            compiler: gcc
+            compiler: clang++
 
           - os: windows-latest
             compiler: cl
@@ -40,10 +40,14 @@ jobs:
         uses: actions/checkout@v3
 
       - name: "Build with Bazel"
+        env:
+          CC: ${{ matrix.compiler }}
         run: bazel build ...
 
       - name: "Tests with Bazel"
-        run: bazel run tests
+        env:
+          CC: ${{ matrix.compiler }}
+        run: bazel test --test_output=all ...
 
   test_cmake:
     name: "CMake, ${{ matrix.compiler }}, ${{ matrix.os }}"
