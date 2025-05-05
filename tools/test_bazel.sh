@@ -5,12 +5,9 @@
 # -------
 # - Version >= 7 are supported
 # - Version <= 6 fail with the error:
-#   ERROR: Analysis of target '//:component' failed; build aborted: no such
-#          package '@rules_cc//cc/compiler': BUILD file not found in directory
-#          'cc/compiler' of external repository @rules_cc. Add a BUILD file to a
-#          directory to mark it as a package.
-#
-
+#   Error:
+#     external/googletest~1.14.0.bcr.1/googletest/include/gtest/internal/gtest-port.h:279:2:
+#     error: #error C++ versions less than C++14 are not supported.
 for ver in \
   "7.0.0" \
   "8.0.0"

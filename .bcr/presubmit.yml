@@ -3,7 +3,7 @@ matrix:
   # instead of --std=c++20
   platform:
   - debian11
-  - ubuntu2024
+  - ubuntu2204
   - macos
   - macos-arm64
   - windows
