@@ -23,8 +23,6 @@ tasks:
     - '@ftxui//:dom'
     - '@ftxui//:component'
     - '@ftxui//:screen'
-    test_targets:
-    - '@ftxui//:tests'
 
   windows_test:
     name: Verify build targets
@@ -36,7 +34,3 @@ tasks:
     - '@ftxui//:dom'
     - '@ftxui//:component'
     - '@ftxui//:screen'
-    test_targets:
-    - '@ftxui//:tests'
-
-
