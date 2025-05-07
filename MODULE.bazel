@@ -1,7 +1,7 @@
 # FTXUI module.
 module(
     name = "ftxui",
-    version = "6.1.8",
+    version = "6.1.9",
     compatibility_level = 6,
 )
 
