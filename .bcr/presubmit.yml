@@ -18,7 +18,7 @@ tasks:
     platform: ${{ unix_platform }}
     bazel: ${{ bazel }}
     build_flags:
-    - --cxxopt=-std=c++17
+    - --cxxopt=-std=c++20
     build_targets:
     - '@ftxui//:dom'
     - '@ftxui//:component'
