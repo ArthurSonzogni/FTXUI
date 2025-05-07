@@ -3,24 +3,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 
-def cpp17():
-    return select({
-        "@rules_cc//cc/compiler:msvc-cl": ["/std:c++17"],
-        "@rules_cc//cc/compiler:clang-cl": ["/std:c++17"],
-        "@rules_cc//cc/compiler:clang": ["-std=c++17"],
-        "@rules_cc//cc/compiler:gcc": ["-std=c++17"],
-        "//conditions:default": ["-std=c++17"],
-    })
-
-def cpp20():
-    return select({
-        "@rules_cc//cc/compiler:msvc-cl": ["/std:c++20"],
-        "@rules_cc//cc/compiler:clang-cl": ["/std:c++20"],
-        "@rules_cc//cc/compiler:clang": ["-std=c++20"],
-        "@rules_cc//cc/compiler:gcc": ["-std=c++20"],
-        "//conditions:default": ["-std=c++20"],
-    })
-
 # Microsoft terminal is a bit buggy ¯\_(ツ)_/¯ and MSVC uses bad defaults.
 def windows_copts():
     MSVC_COPTS = [
@@ -90,7 +72,7 @@ def ftxui_cc_library(
             "include",
             "src",
         ],
-        copts = cpp17() + windows_copts(),
+        copts = windows_copts(),
         visibility = ["//visibility:public"],
     )
 
@@ -118,5 +100,5 @@ def generate_examples():
               ":dom",
               ":screen",
             ],
-            copts = cpp20() + windows_copts(),
+            copts = windows_copts(),
         )
