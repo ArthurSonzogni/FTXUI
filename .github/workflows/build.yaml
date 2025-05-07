@@ -14,25 +14,30 @@ on:
 jobs:
 
   test_bazel:
-    name: "Bazel, ${{ matrix.compiler }}, ${{ matrix.os }}"
+    name: "Bazel, ${{ matrix.cxx }}, ${{ matrix.os }}"
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
-            compiler: gcc
+            cxx: g++
+            cc: gcc
 
           - os: ubuntu-latest
-            compiler: llvm
+            cxx: clang++
+            cc: clang
 
           - os: macos-latest
-            compiler: llvm
+            cxx: g++
+            cc: gcc
 
           - os: macos-latest
-            compiler: gcc
+            cxx: clang++
+            cc: clang
 
           - os: windows-latest
-            compiler: cl
+            cxx: cl
+            cc: cl
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -40,10 +45,16 @@ jobs:
         uses: actions/checkout@v3
 
       - name: "Build with Bazel"
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
         run: bazel build ...
 
       - name: "Tests with Bazel"
-        run: bazel run tests
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: bazel test --test_output=all ...
 
   test_cmake:
     name: "CMake, ${{ matrix.compiler }}, ${{ matrix.os }}"

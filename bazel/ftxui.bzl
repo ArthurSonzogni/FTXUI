@@ -1,24 +1,7 @@
 # ftxui_common.bzl
 
 load("@rules_cc//cc:defs.bzl", "cc_library")
-
-def cpp17():
-    return select({
-        "@rules_cc//cc/compiler:msvc-cl": ["/std:c++17"],
-        "@rules_cc//cc/compiler:clang-cl": ["/std:c++17"],
-        "@rules_cc//cc/compiler:clang": ["-std=c++17"],
-        "@rules_cc//cc/compiler:gcc": ["-std=c++17"],
-        "//conditions:default": ["-std=c++17"],
-    })
-
-def cpp20():
-    return select({
-        "@rules_cc//cc/compiler:msvc-cl": ["/std:c++20"],
-        "@rules_cc//cc/compiler:clang-cl": ["/std:c++20"],
-        "@rules_cc//cc/compiler:clang": ["-std=c++20"],
-        "@rules_cc//cc/compiler:gcc": ["-std=c++20"],
-        "//conditions:default": ["-std=c++20"],
-    })
+load("@rules_cc//cc:defs.bzl", "cc_binary")
 
 # Microsoft terminal is a bit buggy ¯\_(ツ)_/¯ and MSVC uses bad defaults.
 def windows_copts():
@@ -45,7 +28,8 @@ def windows_copts():
       # This
       # - Replace missing font symbols by others.
       # - Reduce screen position pooling frequency to deals against a Microsoft
-      #   race condition. This was fixed in 2020, but clients never not updated.
+      #   race condition. This was fixed in 2020, but clients are still using
+      #   old versions.
       #   - https://github.com/microsoft/terminal/pull/7583
       #   - https://github.com/ArthurSonzogni/FTXUI/issues/136
       "-DFTXUI_MICROSOFT_TERMINAL_FALLBACK",
@@ -71,8 +55,8 @@ def pthread_linkopts():
 
 def ftxui_cc_library(
         name,
-        srcs,
-        hdrs,
+        srcs = [],
+        hdrs = [],
         linkopts = [],
         deps = []):
 
@@ -88,12 +72,13 @@ def ftxui_cc_library(
             "include",
             "src",
         ],
-        copts = cpp17() + windows_copts(),
+        copts = windows_copts(),
         visibility = ["//visibility:public"],
     )
 
 # Compile all the examples in the examples/ directory.
-# This is useful to check the Bazel is synchronized with CMake definitions.
+# This is useful to check the Bazel is always synchronized against CMake
+# definitions.
 def generate_examples():
     cpp_files = native.glob(["examples/**/*.cpp"])
 
@@ -107,9 +92,13 @@ def generate_examples():
         # Turn "examples/component/button.cpp" → "example_component_button"
         name = src.replace("/", "_").replace(".cpp", "")
 
-        native.cc_binary(
+        cc_binary(
             name = name,
             srcs = [src],
-            deps = ["//:component"],
-            copts = cpp20() + windows_copts(),
+            deps = [
+              ":component",
+              ":dom",
+              ":screen",
+            ],
+            copts = windows_copts(),
         )
