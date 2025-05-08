@@ -103,6 +103,35 @@ make
 ./main
 ```
 
+### Using Bazel
+
+See [ftxui module](https://registry.bazel.build/modules/ftxui) from the Bazel
+Central Registry.
+
+See also this [starter](https://github.com/ArthurSonzogni/ftxui-bazel) project.
+
+**Module.bazel**
+```starlark
+bazel_dep(
+    name = "ftxui",
+    version = "6.1.9",
+)
+```
+
+**BUILD.bazel**
+```starlark
+cc_binary(
+    name = "main",
+    srcs = ["main.cpp"],
+    deps = [
+        # Choose one of the following:
+        "@ftxui//:dom",
+        "@ftxui//:screen",
+        "@ftxui//:component",
+    ],
+)
+```
+
 # List of modules. {#modules}
 
 The project is comprised of 3 modules:
