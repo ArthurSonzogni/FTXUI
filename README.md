@@ -42,15 +42,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
  * No dependencies
  * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
  * Learn by [examples](#documentation), and [tutorials](#documentation)
- * Multiple packages:
-    - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred),
-    - [Bazel](https://registry.bazel.build/modules/ftxui),
-    - [vcpkg](https://vcpkg.link/ports/ftxui),
-    - [Conan](https://conan.io/center/recipes/ftxui)
-    - [Debian package](https://tracker.debian.org/pkg/ftxui),
-    - [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui),
-    - [Arch Linux](https://aur.archlinux.org/packages/ftxui/),
-    - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui),
+ * Multiple packages: CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred), [Bazel](https://registry.bazel.build/modules/ftxui), [vcpkg](https://vcpkg.link/ports/ftxui), [Conan](https://conan.io/center/recipes/ftxui) [Debian package](https://tracker.debian.org/pkg/ftxui), [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui), [Arch Linux](https://aur.archlinux.org/packages/ftxui/), [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui),
  * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
 ## Documentation
@@ -419,7 +411,6 @@ cc_binary(
 
 
 # Build with something else:
-```bash
 If you don't, FTXUI may be used from the following packages:
 - CMake [FetchContent]([https://bewagner.net/programming/2020/05/02/cmake-fetchcontent/](https://cmake.org/cmake/help/latest/module/FetchContent.html)) (preferred),
 - [Bazel](https://registry.bazel.build/modules/ftxui),
