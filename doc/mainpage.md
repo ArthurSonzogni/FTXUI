@@ -81,7 +81,7 @@ include(FetchContent)
 set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  GIT_TAG main # Important: Specify a version or a commit hash here.
+  GIT_TAG 6.1.9
 )
 FetchContent_MakeAvailable(ftxui)
 
@@ -94,16 +94,7 @@ target_link_libraries(ftxui-starter
 )
 ```
 
-## Build
-
-```bash
-mkdir build && cd build
-cmake ..
-make
-./main
-```
-
-### Using Bazel
+### Using Bazel {#build-bazel}
 
 See [ftxui module](https://registry.bazel.build/modules/ftxui) from the Bazel
 Central Registry.
