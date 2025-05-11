@@ -21,7 +21,19 @@ Development
 
 
 Future release
-------------
+=======
+6.1.9 (2025-05-07
+
+### Build
+If all goes well (pending), ftxui should appear in the Bazel central repository.
+It can be imported into your project using the following lines:
+
+**MODULE.bazel**
+```bazel
+bazel_dep(name = "ftxui", version = "6.1.9")
+```
+
+Thanks @robinlinden and @kcc for the reviews.
 
 ### dom
 - Bugfix: Restore the `dbox` behavior from ftxui 5.0.0. To apply bgcolor
@@ -33,13 +45,6 @@ Future release
 ### Build
 - Feature: Support `bazel` build system. See #1032.
   Proposed by Kostya Serebryany @kcc
-  If all goes well (pending), it should appear in the Bazel central repository.
-  It can be imported into your project using the following lines:
-
-  **MODULE.bazel**
-  ```bazel
-  bazel_dep(name = "ftxui", version = "6.1.8")
-  ```
 
   **BUILD.bazel**
   ```bazel

@@ -350,6 +350,7 @@ Feel free to add your projects here:
 - [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
 - [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
+- [SHOOT!](https://github.com/ShingZhanho/ENGG1340-Project-25Spring)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
@@ -374,7 +375,7 @@ include(FetchContent)
 
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  GIT_TAG v6.1.8
+  GIT_TAG v6.1.9
 )
 
 FetchContent_GetProperties(ftxui)

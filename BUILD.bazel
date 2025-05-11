@@ -12,23 +12,19 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load(":bazel/ftxui.bzl", "ftxui_cc_library")
 load(":bazel/ftxui.bzl", "generate_examples")
-load(":bazel/ftxui.bzl", "cpp20")
 load(":bazel/ftxui.bzl", "windows_copts")
 load(":bazel/ftxui.bzl", "pthread_linkopts")
 
-package(default_visibility = ["//visibility:public"])
+# A meta target depending on all of the ftxui submodules.
+# Note that component depends on dom and screen, so ftxui is just an alias for 
+# component.
+# ┌component──┐
+# │┌dom──────┐│
+# ││┌screen─┐││
+# └┴┴───────┴┴┘
+alias(name = "ftxui", actual = ":component")
 
-# A meta target that depends on all the ftxui sub modules.
-alias(
-    name = "ftxui",
-    # Note that :component depends on :dom, which depends on :screen. Bazel
-    # doesn't really support "public" and "private" dependencies. They are all
-    # public. This is equivalent to depending on all the submodules.
-    actual = ":component",
-    visibility = ["//visibility:public"],
-)
-
-# ftxui:screen is a module that provides a screen buffer and color management
+# @ftxui:screen is a module that provides a screen buffer and color management
 # for terminal applications. A screen is a 2D array of cells, each cell can
 # contain a glyph, a color, and other attributes. The library also provides
 # functions to manipulate the screen.
@@ -60,7 +56,7 @@ ftxui_cc_library(
     ],
 )
 
-# ftxui:dom is a library that provides a way to create and manipulate a
+# @ftxui:dom is a library that provides a way to create and manipulate a
 # "document" that can be rendered to a screen. The document is a tree of nodes.
 # Nodes can be text, layouts, or various decorators. Users needs to compose
 # nodes to create a document. A document is responsive to the size of the
@@ -130,7 +126,7 @@ ftxui_cc_library(
     deps = [":screen"],
 )
 
-# ftxui:component is a library to create "dynamic" component renderering and
+# @ftxui:component is a library to create "dynamic" component renderering and
 # updating a ftxui::dom document on the screen. It is a higher level API than
 # ftxui:dom.
 #
@@ -167,6 +163,13 @@ ftxui_cc_library(
         "src/ftxui/component/terminal_input_parser.hpp",
         "src/ftxui/component/util.cpp",
         "src/ftxui/component/window.cpp",
+
+        # Private header from ftxui:dom.
+        "src/ftxui/dom/node_decorator.hpp",
+
+        # Private header from ftxui:screen.
+        "src/ftxui/screen/string_internal.hpp",
+        "src/ftxui/screen/util.hpp",
     ],
     hdrs = [
         "include/ftxui/component/animation.hpp",
@@ -182,7 +185,10 @@ ftxui_cc_library(
         "include/ftxui/component/task.hpp",
     ],
     linkopts = pthread_linkopts(),
-    deps = [":dom"],
+    deps = [
+        ":dom",
+        ":screen",
+    ],
 )
 
 # FTXUI's tests
@@ -205,7 +211,6 @@ cc_test(
         "src/ftxui/component/resizable_split_test.cpp",
         "src/ftxui/component/slider_test.cpp",
         "src/ftxui/component/terminal_input_parser_test.cpp",
-        "src/ftxui/component/terminal_input_parser_test_fuzzer.cpp",
         "src/ftxui/component/toggle_test.cpp",
         "src/ftxui/dom/blink_test.cpp",
         "src/ftxui/dom/bold_test.cpp",
@@ -233,6 +238,17 @@ cc_test(
         "src/ftxui/screen/string_test.cpp",
         "src/ftxui/util/ref_test.cpp",
 
+        # Private header from ftxui:screen for string_test.cpp.
+        "src/ftxui/screen/string_internal.hpp",
+
+        # Private header from ftxui::component for
+        # terminal_input_parser_test.cpp.
+        "src/ftxui/component/terminal_input_parser.hpp",
+
+        # Private header from ftxui::dom for
+        # flexbox_helper_test.cpp.
+        "src/ftxui/dom/flexbox_helper.hpp",
+
         # TODO: Enable the two tests timing out with Bazel:
         # - "src/ftxui/component/screen_interactive_test.cpp",
         # - "src/ftxui/dom/selection_test.cpp",
@@ -241,9 +257,12 @@ cc_test(
         "include",
         "src",
     ],
-    copts = cpp20() + windows_copts(),
+    copts = windows_copts(),
     deps = [
-        "//:ftxui",
+        ":screen",
+        ":dom",
+        ":component",
+        "@googletest//:gtest",
         "@googletest//:gtest_main",
     ],
 )

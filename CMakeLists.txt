@@ -17,7 +17,7 @@ endif()
 
 project(ftxui
   LANGUAGES CXX
-  VERSION 6.1.8
+  VERSION 6.1.9
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
