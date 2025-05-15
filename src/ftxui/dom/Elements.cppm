@@ -65,6 +65,7 @@ export namespace ftxui {
 
     using ftxui::bold;
     using ftxui::dim;
+    using ftxui::italic;
     using ftxui::inverted;
     using ftxui::underlined;
     using ftxui::underlinedDouble;
