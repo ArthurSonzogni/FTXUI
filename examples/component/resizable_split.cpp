@@ -3,11 +3,17 @@
 // the LICENSE file.
 #include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
+#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
+#else
+import ftxui.component;
+import ftxui.dom;
+import ftxui.screen;
+#endif
 
 using namespace ftxui;
 

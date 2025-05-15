@@ -6,6 +6,7 @@
 #include <string>  // for string, operator+, to_string, basic_string
 #include <vector>  // for vector
 
+#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/animation.hpp"       // for BackOut, Duration
 #include "ftxui/component/component.hpp"       // for Menu, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
@@ -14,6 +15,11 @@
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for text, Element, operator|, borderEmpty, inverted
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Red
+#else
+import ftxui.component;
+import ftxui.dom;
+import ftxui.screen;
+#endif
 
 using namespace ftxui;
 

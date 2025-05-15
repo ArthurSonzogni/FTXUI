@@ -3,16 +3,24 @@
 // the LICENSE file.
 #include <array>                                  // for array
 #include <cmath>                                  // for sin
+#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/component/component_base.hpp>     // for ComponentBase
 #include <ftxui/component/component_options.hpp>  // for SliderOption
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Up
 #include <ftxui/dom/elements.hpp>   // for size, GREATER_THAN, HEIGHT
 #include <ftxui/util/ref.hpp>       // for ConstRef, Ref
+#endif
 #include <memory>                   // for shared_ptr, __shared_ptr_access
 
+#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Horizontal, Slider, operator|=
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#else
+import ftxui.component;
+import ftxui.dom;
+import ftxui.util;
+#endif
 
 using namespace ftxui;
 

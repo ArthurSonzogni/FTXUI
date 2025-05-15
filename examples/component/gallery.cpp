@@ -6,11 +6,16 @@
 #include <string>      // for string, basic_string
 #include <vector>      // for vector
 
+#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Slider, Checkbox, Vertical, Renderer, Button, Input, Menu, Radiobox, Toggle
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, size, xflex, text, WIDTH, hbox, vbox, EQUAL, border, GREATER_THAN
+#else
+import ftxui.component;
+import ftxui.dom;
+#endif
 
 using namespace ftxui;
 

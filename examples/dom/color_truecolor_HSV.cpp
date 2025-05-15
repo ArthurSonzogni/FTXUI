@@ -1,13 +1,21 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/dom/elements.hpp>  // for operator|, Elements, Fit, bgcolor, color, hbox, text, vbox, Element
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
+#endif 
+
 #include <memory>                   // for allocator
 #include <utility>                  // for move
 
+#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for Color, ftxui
+#else
+import ftxui.dom;
+import ftxui.screen;
+#endif
 
 int main() {
   using namespace ftxui;
