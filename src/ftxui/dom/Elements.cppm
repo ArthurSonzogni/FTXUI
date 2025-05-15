@@ -106,6 +106,12 @@ export namespace ftxui {
     using ftxui::Constraint;
     using ftxui::size;
 
+    using ftxui::frame;
+    using ftxui::xframe;
+    using ftxui::yframe;
+    using ftxui::focus;
+    using ftxui::select;
+
     using ftxui::focusCursorBlock;
     using ftxui::focusCursorBlockBlinking;
     using ftxui::focusCursorBar;
