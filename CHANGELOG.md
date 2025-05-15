@@ -1,8 +1,28 @@
 Changelog
 =========
 
-6.1.9 (2025-05-07)
-------------
+Development
+-----------
+
+### Build
+- Feature: Support C++20 modules. 
+  This requires:
+  - Using the Ninja or MSVC generator
+  - A recent Clang/GCC/MSVC compiler.
+  - Cmake 3.28 or higher.
+  Usage:
+  ```cpp
+  import ftxui;
+  import ftxui.component;
+  import ftxui.dom;
+  import ftxui.screen;
+  ```
+  Thanks @mikomikotaishi for PR #1015.
+
+
+Future release
+=======
+6.1.9 (2025-05-07
 
 ### Build
 If all goes well (pending), ftxui should appear in the Bazel central repository.

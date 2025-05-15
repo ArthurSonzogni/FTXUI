@@ -14,6 +14,8 @@
 #include <vector>   // for vector
 
 #include "../dom/color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
+
+#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, ResizableSplitLeft, Tab
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for MenuOption, InputOption
@@ -24,6 +26,11 @@
 #include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::Black, Color::Blue, Color::Cyan, Color::CyanLight, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::White, Color::Yellow, Color::YellowLight, Color::Default, Color::Palette256, ftxui
 #include "ftxui/screen/color_info.hpp"  // for ColorInfo
 #include "ftxui/screen/terminal.hpp"    // for Size, Dimensions
+#else
+import ftxui.component;
+import ftxui.dom;
+import ftxui.screen;
+#endif
 
 using namespace ftxui;
 

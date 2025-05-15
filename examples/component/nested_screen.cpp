@@ -4,11 +4,16 @@
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for operator+, string, char_traits, basic_string
 
+#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Button, Vertical, Renderer
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for separator, text, Element, operator|, vbox, border
+#else
+import ftxui.component;
+import ftxui.dom;
+#endif
 
 using namespace ftxui;
 

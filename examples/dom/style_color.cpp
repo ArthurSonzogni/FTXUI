@@ -1,13 +1,21 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
 #include <ftxui/screen/screen.hpp>        // for Full, Screen
+#endif 
+
 #include <memory>                         // for allocator
 
+#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, filler, Fit, hbox
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for Color, operator""_rgb, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::DeepSkyBlue4, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::SkyBlue1, Color::White, Color::Yellow, Color::YellowLight, ftxui
+#else
+import ftxui.dom;
+import ftxui.screen;
+#endif
 
 int main() {
   using namespace ftxui;
