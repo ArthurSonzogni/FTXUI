@@ -1,0 +1,39 @@
+@page installation Installation
+@tableofcontents
+
+## Overview
+
+FTXUI can be integrated into your project using several build systems and package managers.  
+This page serves as an entry point for the available integration methods.
+
+## Supported Methods
+
+- @subpage installation_cmake
+- @subpage installation_bazel
+- @subpage installation_vcpkg
+- @subpage installation_conan
+- @subpage installation_manual
+
+## Next Steps
+
+Once FTXUI is installed:
+
+- [Getting Started](getting-started.html): Write and run your first program
+- [Examples](examples.html): See what FTXUI can do
+- Modules:
+  - [DOM](module-dom.html)
+  - [Component](module-component.html)
+  - [Screen](module-screen.html)
+
+## Contributions
+
+If you use another build system or package manager, feel free to contribute a guide.  
+You can also open a feature request on the [GitHub issue tracker](https://github.com/ArthurSonzogni/FTXUI/issues).
+
+<div class="section_buttons">
+ 
+| Previous          |
+|:------------------|
+| [Getting Started](getting-started.html) |
+ 
+</div>

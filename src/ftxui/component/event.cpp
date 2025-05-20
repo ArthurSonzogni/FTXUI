@@ -74,7 +74,7 @@ Event Event::CursorShape(std::string input, int shape) {
 
 /// @brief An custom event whose meaning is defined by the user of the library.
 /// @param input An arbitrary sequence of character defined by the developer.
-/// @ingroup component.
+/// @ingroup component
 // static
 Event Event::Special(std::string input) {
   Event event;

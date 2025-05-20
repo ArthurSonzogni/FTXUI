@@ -159,7 +159,7 @@ ComponentDecorator Hoverable(bool* hover) {
 /// button |= Hoverable(
 ///   [&]{ on_enter_cnt++; },
 ///   [&]{ on_leave_cnt++; }
-//  );
+/// );
 /// ```
 // NOLINTNEXTLINE
 ComponentDecorator Hoverable(std::function<void()> on_enter,
@@ -182,7 +182,7 @@ ComponentDecorator Hoverable(std::function<void()> on_enter,
 /// auto button = Button("exit", screen.ExitLoopClosure());
 /// bool hovered = false;
 /// auto button_hoverable = Hoverable(button,
-//                                    [&](bool hover) { hovered = hover;});
+///                                   [&](bool hover) { hovered = hover;});
 /// ```
 // NOLINTNEXTLINE
 Component Hoverable(Component component, std::function<void(bool)> on_change) {
