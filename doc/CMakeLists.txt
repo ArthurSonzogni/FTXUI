@@ -23,7 +23,6 @@ set(DOM_EXAMPLES "")
 set(COMPONENT_EXAMPLES "")
 
 get_property(EXAMPLES GLOBAL PROPERTY FTXUI::EXAMPLES)
-message(STATUS "Initial FTXUI::EXAMPLES = '${EXAMPLES}'") # Check this value
 
 foreach(example IN LISTS EXAMPLES)
   if(example MATCHES "^dom/.*")
