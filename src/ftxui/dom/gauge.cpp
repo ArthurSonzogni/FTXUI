@@ -164,7 +164,7 @@ class Gauge : public Node {
 /// @brief Draw a high definition progress bar progressing in specified
 /// direction.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
-//  @param direction Direction of progress bars progression.
+/// @param direction Direction of progress bars progression.
 /// @ingroup dom
 Element gaugeDirection(float progress, Direction direction) {
   return std::make_shared<Gauge>(progress, direction);

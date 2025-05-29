@@ -242,11 +242,11 @@ class Flexbox : public Node {
 ///   text("element 2"),
 ///   text("element 3"),
 /// }, FlexboxConfig()
-//       .Set(FlexboxConfig::Direction::Column)
-//       .Set(FlexboxConfig::Wrap::WrapInversed)
-//       .SetGapMainAxis(1)
-//       .SetGapCrossAxis(1)
-//  )
+///      .Set(FlexboxConfig::Direction::Column)
+///      .Set(FlexboxConfig::Wrap::WrapInversed)
+///      .SetGapMainAxis(1)
+///      .SetGapCrossAxis(1)
+/// )
 /// ```
 Element flexbox(Elements children, FlexboxConfig config) {
   return std::make_shared<Flexbox>(std::move(children), config);

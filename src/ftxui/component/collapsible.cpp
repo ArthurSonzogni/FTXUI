@@ -28,7 +28,7 @@ namespace ftxui {
 ///
 /// ▼ Show details
 /// <details component>
-///  ```
+/// ```
 // NOLINTNEXTLINE
 Component Collapsible(ConstStringRef label, Component child, Ref<bool> show) {
   class Impl : public ComponentBase {

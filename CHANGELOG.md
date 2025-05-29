@@ -1,8 +1,13 @@
 Changelog
 =========
 
-Development
------------
+Next
+====
+
+### Doc
+- Fix broken Doxygen output. See @markmandel in #1029.
+- Use Doxygen awesome. Add our own theme.
+- Break the documentation into several pages.
 
 ### Build
 - Feature: Support C++20 modules. 
@@ -20,9 +25,8 @@ Development
   Thanks @mikomikotaishi for PR #1015.
 
 
-Future release
-=======
-6.1.9 (2025-05-07
+6.1.9 (2025-05-07)
+------------
 
 ### Build
 If all goes well (pending), ftxui should appear in the Bazel central repository.

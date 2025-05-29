@@ -8,13 +8,53 @@ if (NOT DOXYGEN_FOUND)
   return()
 endif()
 
+include(FetchContent)
+FetchContent_Declare(
+    doxygen-awesome-css
+    GIT_REPOSITORY https://github.com/jothepro/doxygen-awesome-css.git
+    GIT_TAG v2.3.4
+
+)
+FetchContent_MakeAvailable(doxygen-awesome-css)
+FetchContent_GetProperties(doxygen-awesome-css SOURCE_DIR AWESOME_CSS_DIR)
+
 # Generate example list for documentation
-set(EXAMPLE_LIST "${CMAKE_CURRENT_BINARY_DIR}/example_list.md")
-file(WRITE ${EXAMPLE_LIST} "# Examples")
+set(DOM_EXAMPLES "")
+set(COMPONENT_EXAMPLES "")
+
 get_property(EXAMPLES GLOBAL PROPERTY FTXUI::EXAMPLES)
-foreach(EXAMPLE IN LISTS EXAMPLES)
-  file(APPEND ${EXAMPLE_LIST} "\n@example examples/${EXAMPLE}.cpp")
-endforeach(EXAMPLE IN LISTS EXAMPLES)
+
+foreach(example IN LISTS EXAMPLES)
+  if(example MATCHES "^dom/.*")
+    list(APPEND DOM_EXAMPLES "${example}")
+  elseif(example MATCHES "^component/.*")
+    list(APPEND COMPONENT_EXAMPLES "${example}")
+  else()
+    message(ERROR "Unknown example '${example}'")
+  endif()
+endforeach()
+
+macro(write_example_list file title page examples)
+  file(APPEND "${file}" "@page ${page} ${title}\n")
+  file(APPEND "${file}" "@tableofcontents\n")
+
+  foreach(example IN LISTS ${examples})
+    get_filename_component(name "${example}" NAME_WE)
+    file(APPEND "${file}" "# ${name}\n")
+    file(APPEND "${file}" "@include examples/${example}.cpp\n")
+    file(APPEND "${file}" "@example examples/${example}.cpp\n")
+  endforeach()
+
+endmacro()
+
+write_example_list("${CMAKE_CURRENT_BINARY_DIR}/dom_examples.md"
+  "Example"
+  module-dom-examples
+  DOM_EXAMPLES)
+write_example_list("${CMAKE_CURRENT_BINARY_DIR}/component_examples.md"
+  "Example"
+  module-component-examples
+  COMPONENT_EXAMPLES)
 
 configure_file(Doxyfile.in Doxyfile @ONLY)
 

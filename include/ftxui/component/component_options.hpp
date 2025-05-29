@@ -17,9 +17,8 @@
 
 namespace ftxui {
 
-/// @brief arguments for |ButtonOption::transform|, |CheckboxOption::transform|,
-/// |Radiobox::transform|, |MenuEntryOption::transform|,
-/// |MenuOption::transform|.
+/// @brief arguments for transform from |ButtonOption|, |CheckboxOption|,
+/// |RadioboxOption|, |MenuEntryOption|, |MenuOption|.
 struct EntryState {
   std::string label;  ///< The label to display.
   bool state;         ///< The state of the button/checkbox/radiobox

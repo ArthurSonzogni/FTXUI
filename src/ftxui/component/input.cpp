@@ -603,6 +603,7 @@ Component Input(StringRef content, InputOption option) {
 
 /// @brief An input box for editing text.
 /// @param content The editable content.
+/// @param placeholder The placeholder text.
 /// @param option Additional optional parameters.
 /// @ingroup component
 /// @see InputBase
