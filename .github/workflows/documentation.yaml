@@ -19,10 +19,15 @@ jobs:
       - name: "Install emsdk"
         uses: mymindstorm/setup-emsdk@v7
 
-      - name: "Install Doxygen/Graphviz"
+      - name: "Install Doxygen"
+        uses: ssciwr/doxygen-install@v1
+        with:
+          version: '1.12.0'
+
+      - name: "Install Graphviz"
         run: >
           sudo apt-get update;
-          sudo apt-get install doxygen graphviz;
+          sudo apt-get install graphviz;
 
       - name: "Build documentation"
         run: >
@@ -35,7 +40,7 @@ jobs:
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
           -DFTXUI_ENABLE_INSTALL=OFF
-          -DFTXUI_DEV_WARNINGS=ON ;
+          -DFTXUI_DEV_WARNINGS=OFF;
           cmake --build . --target doc;
           cmake --build . ;
           rsync -amv

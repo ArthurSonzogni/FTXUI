@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Next
+====
+
+### Doc
+- Fix broken Doxygen output. See @markmandel in #1029.
+- Use Doxygen awesome. Add our own theme.
+- Break the documentation into several pages.
+
+
 6.1.9 (2025-05-07)
 ------------
 
