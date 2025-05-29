@@ -21,6 +21,7 @@ Next
   import ftxui.component;
   import ftxui.dom;
   import ftxui.screen;
+  import ftxui.util;
   ```
   Thanks @mikomikotaishi for PR #1015.
 
