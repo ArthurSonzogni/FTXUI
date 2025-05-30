@@ -1,6 +1,8 @@
 @page getting-started Getting Started
 @tableofcontents
 
+![3edd56cb-3ebb-442c-b7da-dfa5a759f4eb](https://github.com/user-attachments/assets/ed1bc694-7b3f-487c-9fd3-801437a6460b)
+
 # Install FTXUI
 
 To set up FTXUI in your project, follow the [installation guide](installation.html), which provides instructions for multiple build systems and package managers.

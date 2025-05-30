@@ -1,5 +1,8 @@
+
 @page installation Installation
 @tableofcontents
+
+![64c412f8-a29f-475f-8a2b-ffc662975a08](https://github.com/user-attachments/assets/ab5d7561-bae0-4f42-bd80-5e94bfd15e09)
 
 ## Overview
 
