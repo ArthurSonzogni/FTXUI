@@ -1,6 +1,6 @@
 # Modules {#modules}
 
-![66f79802-97b3-4b31-b3dd-e096095a0ab7](https://github.com/user-attachments/assets/9f964064-7cd5-421e-afb4-091256c5096e)
+![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595251.jpg)
 
 FTXUI is organized into three modules, each building upon the previous:
 

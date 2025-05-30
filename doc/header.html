@@ -28,6 +28,8 @@
 
     window.addEventListener('DOMContentLoaded', function () {
       document.querySelectorAll(".headertitle").forEach(div => {
+
+        // Hide progressively the title.
         if (div.textContent != "Getting Started" &&
             div.textContent != "Installation" &&
             div.textContent != "Modules" &&
@@ -35,8 +37,9 @@
           return;
         }
         div.style.display = "none";
+
+        // Show progressively the image.
         const img = document.querySelector("img.inline");
-        img.style.transition = "all 1.0s ease-in-out";
         img.style.maxHeight = "40vh";
         img.style.maxWidth = "100%";
         img.style.objectFit = "contain";

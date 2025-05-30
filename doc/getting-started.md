@@ -1,7 +1,7 @@
 @page getting-started Getting Started
 @tableofcontents
 
-![3edd56cb-3ebb-442c-b7da-dfa5a759f4eb](https://github.com/user-attachments/assets/ed1bc694-7b3f-487c-9fd3-801437a6460b)
+![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595256.jpg)
 
 # Install FTXUI
 
