@@ -1,5 +1,7 @@
-@page module-dom Module dom
+@page module-dom ftxui / dom
 @tableofcontents
+
+![title-img](https://nsm09.casimages.com/img/2025/05/31//2505310207423242518595347.png)
 
 This module defines a hierarchical set of `ftxui::Element`. An element manages
 the layout and can be responsive to the terminal dimension changes. Note the
@@ -43,7 +45,7 @@ corresponding header file:
 
 \include{strip} "ftxui/dom/elements.hpp"
 
-## text ## {#dom-text}
+# text # {#dom-text}
 
 The most simple widget. It displays a text.
 ```cpp
@@ -53,7 +55,7 @@ text("I am a piece of text");
 I am a piece of text.
 ```
 
-## vtext {#dom-vtext}
+# vtext {#dom-vtext}
 
 Identical to `ftxui::text`, but displayed vertically.
 
@@ -71,7 +73,7 @@ L
 O
 ```
 
-## paragraph {#dom-paragraph}
+# paragraph {#dom-paragraph}
 
 Similar to `ftxui::text`, but the individual word are wrapped along multiple
 lines, depending on the width of its container.
@@ -95,7 +97,7 @@ namespace ftxui {
 ```
 
 
-## border {#dom-border}
+# border {#dom-border}
 
 Adds a border around an element.
 
@@ -134,7 +136,7 @@ namespace ftxui {
 ```
 
 
-## window ## {#dom-window}
+# window # {#dom-window}
 
 A `ftxui::window` is a `ftxui::border`, but with an additional header. To add a
 window around an element, wrap it and specify a string as the header.
@@ -150,7 +152,7 @@ Terminal output:
 └───────────┘
 ```
 
-## separator {#dom-separator}
+# separator {#dom-separator}
 
 Displays a vertical/horizontal line to visually split the content of a
 container in two.
@@ -196,7 +198,7 @@ namespace ftxui {
 }
 ```
 
-## gauge {#dom-gauge}
+# gauge {#dom-gauge}
 
 This is a visual element that represents a ratio of progress.
 
@@ -224,7 +226,7 @@ namespace {
 }
 ```
 
-## graph {#dom-graph}
+# graph {#dom-graph}
 
 @htmlonly
 <script id="asciicast-223726" src="https://asciinema.org/a/223726.js" async></script>
@@ -235,7 +237,7 @@ See:
 Element graph(GraphFunction);
 ```
 
-## Colors {#dom-colors}
+# Colors {#dom-colors}
 
 Most terminal consoles can display colored text and colored backgrounds. FTXUI
 supports every color palette:
@@ -248,7 +250,7 @@ Decorator bgcolor(Color);
 Color [gallery](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gallery_8cpp-example.html):
 ![image](https://user-images.githubusercontent.com/4759106/147248595-04c7245a-5b85-4544-809d-a5984fc6f9e7.png)
 
-### Palette16 #{#dom-colors-palette-16}
+## Palette16 #{#dom-colors-palette-16}
 
 On most terminals the following colors are supported:
 - Default
@@ -284,7 +286,7 @@ text("Blue background") | bgcolor(Color::Blue);
 text("Black on white") | color(Color::Black) | bgcolor(Color::White);
 ```
 
-### Palette256 #{#dom-colors-palette-256}
+## Palette256 #{#dom-colors-palette-256}
 
 On terminal supporting 256 colors. 
 @htmlonly
@@ -295,7 +297,7 @@ On terminal supporting 256 colors.
 text("HotPink") | color(Color::HotPink);
 ```
 
-### TrueColor #{#dom-colors-true-color}
+## TrueColor #{#dom-colors-true-color}
 
 On terminal supporting trueColor, you can directly use the 24bit RGB color
 space:
@@ -314,7 +316,7 @@ ftxui::Color::HSV(uint8_t hue, uint8_t saturation, uint8_t value);
 <script id="asciicast-xwzzghmqcqzIuyLwCpQFEqbEu" src="https://asciinema.org/a/xwzzghmqcqzIuyLwCpQFEqbEu.js" async></script>
 @endhtmlonly
 
-## LinearGradient #{#dom-linear-gradient}
+# LinearGradient #{#dom-linear-gradient}
 
 FTXUI supports linear gradient. Either on the foreground or the background.
 
@@ -344,7 +346,7 @@ LinearGradient(45, Color::Red, Color::Blue);
 See [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/linear_gradient_gallery).
 
 
-## Style {#dom-style}
+# Style {#dom-style}
 In addition to colored text and colored backgrounds. Many terminals support text
 effects such as: `bold`, `italic`, `dim`, `underlined`, `inverted`, `blink`.
 
@@ -377,7 +379,7 @@ Alternatively, use the pipe operator to chain it on your element:
 text("This text is bold") | bold | underlined
 ```
 
-## Layout {#dom-layout}
+# Layout {#dom-layout}
 
 Enables elements to be arranged in the following ways:
   - **Horizontally** with `ftxui::hbox`
@@ -438,7 +440,7 @@ Terminal output:
 └────┘└───────────────────────────────┘└───────────────────────────────┘
 ```
 
-## Table {#dom-table}
+# Table {#dom-table}
 
 Enables easy formatting of data into a neat table like visual form.
 
@@ -446,7 +448,7 @@ Enables easy formatting of data into a neat table like visual form.
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
 
-## Canvas {#dom-canvas}
+# Canvas {#dom-canvas}
 
 See the API [<ftxui/dom/canvas.hpp>](./canvas_8hpp_source.html)
 

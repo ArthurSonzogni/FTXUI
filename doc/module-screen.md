@@ -1,5 +1,7 @@
-@page module-screen Module screen
+@page module-screen ftxui / screen
 @tableofcontents
+
+![title-img](https://nsm09.casimages.com/img/2025/05/31//2505310207423242518595348.png)
 
 The `ftxui::screen` module is the low-level foundation. It can be used
 standalone, but it is primarily designed to be used together by

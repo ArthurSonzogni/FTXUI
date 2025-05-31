@@ -1,5 +1,7 @@
-@page module-component Module component
+@page module-component ftxui / component
 @tableofcontents
+
+![title-img](https://nsm09.casimages.com/img/2025/05/31//2505310207423242518595349.png)
 
 The `ftxui::component` module defines the logic that produces interactive
 components that respond to user events (keyboard, mouse, etc.).
@@ -27,9 +29,9 @@ frame, and updating its state on events.
 All predefined components are available in
 ["ftxui/dom/component.hpp"](./component_8hpp.html)
 
-\include{strip ftxui/component/component.hpp
+\include ftxui/component/component.hpp
 
-## Input {#component-input}
+# Input {#component-input}
 
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2input_8cpp-example.html):
 
@@ -41,7 +43,7 @@ Produced by: `ftxui::Input()` from "ftxui/component/component.hpp"
 <script id="asciicast-223719" src="https://asciinema.org/a/223719.js" async></script>
 @endhtmlonly
 
-### Filtered input
+## Filtered input
 
 On can filter out the characters received by the input component, using
 `ftxui::CatchEvent`.
@@ -61,7 +63,7 @@ input |= CatchEvent([&](Event event) {
 });
 ```
 
-## Menu {#component-menu}
+# Menu {#component-menu}
 
 Defines a menu object. It contains a list of entries, one of them is selected.
 
@@ -76,7 +78,7 @@ Produced by: `ftxui::Menu()` from "ftxui/component/component.hpp"
 <script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
 @endhtmlonly
 
-## Toggle {#component-toggle}
+# Toggle {#component-toggle}
 
 A special kind of menu. The entries are displayed horizontally.
 
@@ -90,7 +92,7 @@ Produced by: `ftxui::Toggle()` from "ftxui/component/component.hpp"
 <script id="asciicast-223722" src="https://asciinema.org/a/223722.js" async></script>
 @endhtmlonly
 
-## CheckBox {#component-checkbox}
+# CheckBox {#component-checkbox}
 
 This component defines a checkbox. It is a single entry that can be turned
 on/off.
@@ -105,7 +107,7 @@ Produced by: `ftxui::Checkbox()` from "ftxui/component/component.hpp"
 <script id="asciicast-223724" src="https://asciinema.org/a/223724.js" async></script>
 @endhtmlonly
 
-## RadioBox {#component-radiobox}
+# RadioBox {#component-radiobox}
 
 A radiobutton component. This is a list of entries, where one can be turned on.
 
@@ -119,7 +121,7 @@ Produced by: `ftxui::Radiobox()` from "ftxui/component/component.hpp"
 <script id="asciicast-223725" src="https://asciinema.org/a/223725.js" async></script>
 @endhtmlonly
 
-## Dropdown {#component-dropdown}
+# Dropdown {#component-dropdown}
 
 A drop down menu is a component that when checked display a list of element for
 the user to select one.
@@ -130,7 +132,7 @@ the user to select one.
 
 Produced by: `ftxui::Dropdown()` from "ftxui/component/component.hpp"
 
-## Slider {#component-slider}
+# Slider {#component-slider}
 
 Represents a slider object that consists of a range with binned intermediate
 intervals. It can be created by `ftxui::Slider()`.
@@ -141,7 +143,7 @@ intervals. It can be created by `ftxui::Slider()`.
 
 Produced by: `ftxui::Slider()` from "ftxui/component/component.hpp"
 
-## Renderer {#component-renderer}
+# Renderer {#component-renderer}
 
 Produced by: `ftxui::Renderer()` from \ref ftxui/component/component.hpp. This
 component decorate another one by using a different function to render an
@@ -170,7 +172,7 @@ auto component = [...]
 component = component | border | bold;
 ```
 
-## CatchEvent {#component-catchevent}
+# CatchEvent {#component-catchevent}
 
 Produced by: `ftxui::CatchEvent()` from \ref ftxui/component/component.hpp.
 This component decorate others, catching events before the underlying component.
@@ -200,7 +202,7 @@ component = component
   ;
 ```
 
-## Collapsible {#component-collapsible}
+# Collapsible {#component-collapsible}
 
 Useful for visual elements whose visibility can be toggle on/off by the user.
 Essentially, this the combination of the `ftxui::Checkbox()` and
@@ -210,7 +212,7 @@ Essentially, this the combination of the `ftxui::Checkbox()` and
 auto collabsible = Collapsible("Show more", inner_element);
 ```
 
-## Maybe {#component-maybe}
+# Maybe {#component-maybe}
 
 Produced by: `ftxui::Maybe()` from \ref ftxui/component/component.hpp.
 This component can be utilized to show/hide any other component via a boolean or
@@ -237,21 +239,21 @@ component = component
   ;
 ```
 
-## Container {#component-container}
+# Container {#component-container}
 
-### Horizontal {#component-horizontal}
+## Horizontal {#component-horizontal}
 
 Produced by: `ftxui::Container::Horizontal()` from
 "ftxui/component/component.hpp". It displays a list of components horizontally
 and handle keyboard/mouse navigation.
 
-### Vertical {#component-vertical}
+## Vertical {#component-vertical}
 
 Produced by: `ftxui::Container::Vertical()` from
 "ftxui/component/component.hpp". It displays a list of components vertically 
 and handles keyboard/mouse navigation.
 
-### Tab {#component-tab}
+## Tab {#component-tab}
 
 Produced by: `ftxui::Container::Tab()` from
 "ftxui/component/component.hpp". It take a list of component and display only
@@ -266,7 +268,7 @@ one of them. This is useful for implementing a tab bar.
   ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif)
 
 
-## ResizableSplit  {#component-resizable-split}
+# ResizableSplit  {#component-resizable-split}
 
 It defines a horizontal or vertical separation between two children components.
 The position of the split is variable and controllable using the mouse. 
@@ -285,7 +287,7 @@ from "ftxui/component/component.hpp"
 <script id="asciicast-tprMH2EdkUoMb7D2YxgMGgpzx" src="https://asciinema.org/a/tprMH2EdkUoMb7D2YxgMGgpzx.js" async></script>
 @endhtmlonly
 
-## Force a frame redraw. {#component-force-redraw}
+# Force a frame redraw. {#component-force-redraw}
 
 Typically, `ftxui::ScreenInteractive::Loop()` is responsible for drawing a new
 frame whenever a new group of events (e.g keyboard, mouse, window resize, etc.)

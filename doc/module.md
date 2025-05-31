@@ -4,13 +4,13 @@
 
 FTXUI is organized into three modules, each building upon the previous:
 
-1. @subpage module-screen — low-level rendering
-2. @subpage module-dom — layout and composition
-3. @subpage module-component — user interaction
+1. [ftxui/screen](#module-screen) - Low-level rendering
+2. [ftxui/dom](#module-dom) - Layout and composition
+3. [ftxui/component](#module-component) - User interaction
 
 ---
 
-[ @subpage module-screen ]
+# ftxui/screen
 
 Defines:
 
@@ -20,9 +20,18 @@ Defines:
 
 Use for direct terminal drawing and styling.
 
+<div class="section_buttons">
+ 
+|                                  Next |
+|--------------------------------------:|
+| [Documentation](module-screen.html) |
+ 
+</div>
+
+
 ---
 
-[ @subpage module-dom ]
+# ftxui/dom
 
 Provides:
 
@@ -32,9 +41,17 @@ Provides:
 
 Ideal for structured, styled UIs.
 
----
+<div class="section_buttons">
 
-[ @subpage module-component ]
+|                                  Next |
+|--------------------------------------:|
+| [Documentation](module-dom.html) |
+
+</div>
+
+
+---
+# ftxui/component
 
 Adds:
 
@@ -43,6 +60,14 @@ Adds:
 - Supports keyboard/cursor input and composition.
 
 Use for interactive apps.
+
+<div class="section_buttons">
+
+|                                  Next |
+|--------------------------------------:|
+| [Documentation](module-component.html) |
+
+</div>
 
 ---
 
