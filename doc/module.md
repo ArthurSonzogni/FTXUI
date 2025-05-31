@@ -1,5 +1,7 @@
 # Modules {#modules}
 
+![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595251.jpg)
+
 FTXUI is organized into three modules, each building upon the previous:
 
 1. @subpage module-screen — low-level rendering

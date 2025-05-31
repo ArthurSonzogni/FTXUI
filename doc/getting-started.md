@@ -1,6 +1,8 @@
 @page getting-started Getting Started
 @tableofcontents
 
+![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595256.jpg)
+
 # Install FTXUI
 
 To set up FTXUI in your project, follow the [installation guide](installation.html), which provides instructions for multiple build systems and package managers.
