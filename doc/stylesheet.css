@@ -34,6 +34,7 @@ html {
   --fragment-linenumber-color: #414868;
   --fragment-linenumber-background: #2c2e34;
   --fragment-linenumber-border: #1a1b26;
+  --fragment-lineheight: 1.125em;
 }
 
 /* Base style for all sections */
