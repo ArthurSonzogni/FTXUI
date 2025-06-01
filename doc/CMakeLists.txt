@@ -35,16 +35,26 @@ foreach(example IN LISTS EXAMPLES)
 endforeach()
 
 macro(write_example_list file title page examples)
-  file(APPEND "${file}" "@page ${page} ${title}\n")
+  file(WRITE "${file}" "@page ${page} ${title}\n")
   file(APPEND "${file}" "@tableofcontents\n")
 
   foreach(example IN LISTS ${examples})
     get_filename_component(name "${example}" NAME_WE)
     file(APPEND "${file}" "# ${name}\n")
+
+    # Add a markdown  to the demo. URL example:
+    # https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated
+    file(APPEND "${file}" "[Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=${example})\n")
+
     file(APPEND "${file}" "@include examples/${example}.cpp\n")
-    file(APPEND "${file}" "@example examples/${example}.cpp\n")
+    file(APPEND "${file}" "\n")
   endforeach()
 
+  # Reference to the examples
+  foreach(example IN LISTS ${examples})
+    get_filename_component(name "${example}" NAME_WE)
+    file(APPEND "${file}" "@example examples/${example}.cpp\n")
+  endforeach()
 endmacro()
 
 write_example_list("${CMAKE_CURRENT_BINARY_DIR}/dom_examples.md"

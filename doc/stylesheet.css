@@ -22,7 +22,7 @@ html {
   --warning-color-darker: #f7768e;
   --bug-color: #f7768e;
 
-  --fragment-background: #2c2e34;
+  --fragment-background: #222222;
   --fragment-foreground: #e2e2e3;
   --fragment-keyword: #f7768e;       /* pink */
   --fragment-keywordtype: #7fbbb3;   /* teal */

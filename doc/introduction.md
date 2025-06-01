@@ -73,3 +73,16 @@ Expected output:
 | [Getting Started](getting-started.html) |
  
 </div>
+
+@defgroup screen ftxui/screen
+
+Please check the [tutorial](module-screen.html) of the `ftxui/screen` module.
+
+@defgroup dom ftxui/dom
+
+Please check the [tutorial](module-dom.html) of the `ftxui/dom` module.
+
+@defgroup component ftxui/component
+
+Please check the [tutorial](module-component.html) of the `ftxui/component`
+module.
