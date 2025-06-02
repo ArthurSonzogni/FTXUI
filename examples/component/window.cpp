@@ -3,6 +3,7 @@
 // the LICENSE file.
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
+#include <string>
 
 using namespace ftxui;
 
