@@ -46,10 +46,10 @@ target_sources(ftxui-modules
 
 target_link_libraries(ftxui-modules
   PUBLIC
-    ftxui::screen
-    ftxui::dom
-    ftxui::component
-)
+  ftxui::screen
+  ftxui::dom
+  ftxui::component
+  )
 
 target_compile_features(ftxui-modules PUBLIC cxx_std_20)
 if (CMAKE_COMPILER_IS_GNUCXX)
@@ -60,22 +60,22 @@ add_library(ftxui::modules ALIAS ftxui-modules)
 
 if(FTXUI_ENABLE_INSTALL)
 
-include(GNUInstallDirs)
+  include(GNUInstallDirs)
 
-install(TARGETS ftxui-modules
+  install(TARGETS ftxui-modules
     EXPORT ftxui-targets
     FILE_SET CXX_MODULES
-      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
     FILE_SET HEADERS
-      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
     INCLUDES
-      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
-)
-install(EXPORT ftxui-targets
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
+    )
+  install(EXPORT ftxui-targets
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
     CXX_MODULES_DIRECTORY ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
-)
-install(FILES my_package-config.cmake
+    )
+  install(FILES my_package-config.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
-)
+    )
 endif()

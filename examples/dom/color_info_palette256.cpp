@@ -1,22 +1,14 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/dom/elements.hpp>  // for text, bgcolor, hbox, operator|, Elements, Fit, vbox, Element
 #include <ftxui/screen/color_info.hpp>  // for ColorInfo
 #include <ftxui/screen/screen.hpp>      // for Full, Screen
-#endif 
-
 #include <utility>                      // for move
 #include <vector>                       // for vector, allocator
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Palette256, ftxui
-#else
-import ftxui.dom;
-import ftxui.screen;
-#endif
 
 using namespace ftxui;
 #include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D

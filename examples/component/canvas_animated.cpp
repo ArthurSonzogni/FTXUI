@@ -2,18 +2,13 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSED file.
 #include <cmath>                   // for sin, cos
-
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/dom/elements.hpp>  // for canvas, Element, separator, hbox, operator|, border
 #include <ftxui/screen/screen.hpp>  // for Pixel
-#endif 
-
 #include <memory>   // for allocator, shared_ptr, __shared_ptr_access
 #include <string>   // for string, basic_string
 #include <utility>  // for move
 #include <vector>   // for vector, __alloc_traits<>::value_type
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/component.hpp"  // for Renderer, CatchEvent, Horizontal, Menu, Tab
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/event.hpp"               // for Event
@@ -21,11 +16,6 @@
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 #include "ftxui/dom/canvas.hpp"                    // for Canvas
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
-#else
-import ftxui.component;
-import ftxui.dom;
-import ftxui.screen;
-#endif
 
 int main() {
   using namespace ftxui;

@@ -3,22 +3,13 @@
 // the LICENSE file.
 #include <stdio.h>                 // for getchar
 #include <cmath>                   // for cos
-
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/dom/elements.hpp>  // for Fit, canvas, operator|, border, Element
 #include <ftxui/screen/screen.hpp>  // for Pixel, Screen
-#endif
-
 #include <vector>                   // for vector, allocator
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/dom/canvas.hpp"  // for Canvas
 #include "ftxui/dom/node.hpp"    // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
-#else
-import ftxui.dom;
-import ftxui.screen;
-#endif
 
 int main() {
   using namespace ftxui;

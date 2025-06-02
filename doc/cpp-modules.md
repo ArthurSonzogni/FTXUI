@@ -80,3 +80,8 @@ are available:
     - `ftxui.util`
         - `ftxui.util.AutoReset`
         - `ftxui.util.Ref`
+
+> ![NOTE] The list can be generated with the following command:
+> ```sh
+> git grep "export module" | cut -d: -f2 | cut -d\  -f3
+> ```

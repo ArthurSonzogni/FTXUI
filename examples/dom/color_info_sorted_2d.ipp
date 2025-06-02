@@ -1,5 +1,3 @@
-#pragma once
-
 #include <algorithm>
 #include <cmath>
 #include <ftxui/screen/color_info.hpp>  // for ftxui::ColorInfo

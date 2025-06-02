@@ -3,12 +3,8 @@
 // the LICENSE file.
 #include <chrono>                  // for operator""s, chrono_literals
 #include <cmath>                   // for sin
-
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/dom/elements.hpp>  // for graph, operator|, separator, color, Element, vbox, flex, inverted, operator|=, Fit, hbox, size, border, GREATER_THAN, HEIGHT
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
-#endif 
-
 #include <functional>               // for ref, reference_wrapper
 #include <iostream>                 // for cout, ostream
 #include <memory>                   // for shared_ptr
@@ -17,13 +13,8 @@
 #include <utility>                  // for ignore
 #include <vector>                   // for vector
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/dom/node.hpp"  // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::YellowLight, ftxui
-#else
-import ftxui.dom;
-import ftxui.screen;
-#endif
 
 class Graph {
  public:

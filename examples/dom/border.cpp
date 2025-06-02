@@ -2,19 +2,12 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <stdlib.h>                // for EXIT_SUCCESS
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/dom/elements.hpp>  // for text, operator|, vbox, border, Element, Fit, hbox
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
-#endif 
 #include <memory>                   // for allocator
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for ftxui
-#else
-import ftxui.dom;
-import ftxui.screen;
-#endif
 
 int main() {
   using namespace ftxui;

@@ -1,20 +1,12 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/component/captured_mouse.hpp>  // for ftxui
-#endif 
-
 #include <string>  // for allocator, operator+, char_traits, string
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/component.hpp"           // for Renderer, Vertical
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
 #include "ftxui/dom/elements.hpp"  // for text, Decorator, focus, focusCursorBar, focusCursorBarBlinking, focusCursorBlock, focusCursorBlockBlinking, focusCursorUnderline, focusCursorUnderlineBlinking, hbox, Element
-#else
-import ftxui.component;
-import ftxui.dom;
-#endif
 
 using namespace ftxui;
 

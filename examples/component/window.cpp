@@ -1,16 +1,8 @@
 // Copyright 2023 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <cstdlib>
-#include <functional>
-#include <string>
-
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/screen_interactive.hpp>
-#else
-import ftxui.component;
-#endif
 
 using namespace ftxui;
 

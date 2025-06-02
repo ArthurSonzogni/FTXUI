@@ -2,25 +2,16 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <chrono>                  // for operator""s, chrono_literals
-
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/dom/elements.hpp>  // for Element, operator|, separator, filler, hbox, size, spinner, text, vbox, bold, border, Fit, EQUAL, WIDTH
 #include <ftxui/screen/screen.hpp>  // for Full, Screen
-#endif
-
 #include <iostream>                 // for cout, endl, ostream
 #include <string>                   // for to_string, operator<<, string
 #include <thread>                   // for sleep_for
 #include <utility>                  // for move
 #include <vector>                   // for vector
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for ftxui
-#else
-import ftxui.dom;
-import ftxui.screen;
-#endif
 
 int main() {
   using namespace ftxui;

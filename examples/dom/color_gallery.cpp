@@ -1,24 +1,16 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/screen/color_info.hpp>  // for ColorInfo
 #include <ftxui/screen/screen.hpp>      // for Full, Screen
 #include <ftxui/screen/terminal.hpp>  // for ColorSupport, Color, Palette16, Palette256, TrueColor
-#endif
-
 #include <memory>                     // for allocator, shared_ptr
 #include <utility>                    // for move
 #include <vector>                     // for vector
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/dom/elements.hpp"  // for text, bgcolor, color, vbox, hbox, separator, operator|, Elements, Element, Fit, border
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
-#else
-import ftxui.dom;
-import ftxui.screen;
-#endif
 
 using namespace ftxui;
 #include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D

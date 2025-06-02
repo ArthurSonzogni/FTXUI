@@ -39,8 +39,8 @@ A simple cross-platform C++ library for terminal based user interfaces!
  * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
  * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
  * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * No dependencies
- * Module support
+ * No dependencies.
+ * [C++20 Module support](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
  * **Cross platform**: Linux/MacOS (main target), WebAssembly, Windows (Thanks to contributors!).
  * Learn by [examples](#documentation), and [tutorials](#documentation)
  * Multiple packages:
@@ -437,7 +437,7 @@ If you choose to build and link FTXUI yourself, `ftxui-component` must be first 
 g++ . . . -lftxui-component -lftxui-dom -lftxui-screen . . .
 ```
 
-To build FTXUI with modules, ensure that you are using a generator like Ninja or Visual Studio that supports modules, and pass the flag `FTXUI_BUILD_MODULES`. 
+To build FTXUI with modules, check [documentation](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)
 
 ## Contributors
 

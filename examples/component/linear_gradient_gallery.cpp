@@ -1,25 +1,16 @@
 // Copyright 2023 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#ifndef FTXUI_BUILD_MODULES
 #include <ftxui/component/component_base.hpp>  // for ComponentBase, Component
 #include <ftxui/dom/elements.hpp>  // for operator|, Element, flex, bgcolor, text, vbox, center
 #include <ftxui/dom/linear_gradient.hpp>  // for LinearGradient
 #include <ftxui/screen/color.hpp>         // for Color, Color::Blue, Color::Red
-#endif 
-
 #include <memory>                         // for __shared_ptr_access, shared_ptr
 #include <string>  // for allocator, operator+, char_traits, string, to_string
 
-#ifndef FTXUI_BUILD_MODULES
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
-#else
-import ftxui.component;
-import ftxui.dom;
-import ftxui.screen;
-#endif
 
 int main() {
   using namespace ftxui;
