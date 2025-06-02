@@ -7,8 +7,7 @@
 > please open an issue.
 
 FTXUI provides an experimental support for [C++20
-modules](https://en.cppreference.com/w/cpp/language/modules) to improve
-compilation times and code organization.
+modules](https://en.cppreference.com/w/cpp/language/modules) to improve compilation times and code organization. The existing API has a module corresponding to each header.
 
 **Example with CMake and Ninja**
 
@@ -40,8 +39,7 @@ ninja
 ### Module list
 
 The modules directly reference the corresponding header, or a group of related
-headers to provide a more convenient interface. The following modules
-are available:
+headers to provide a more convenient interface. The following modules are available:
 
 - `ftxui`
     - `ftxui.component`
@@ -80,6 +78,10 @@ are available:
     - `ftxui.util`
         - `ftxui.util.AutoReset`
         - `ftxui.util.Ref`
+
+> ![NOTE] 
+> The module `ftxui` transitively imports all `ftxui.*` modules and thus 
+> has a dependency on those modules.
 
 > ![NOTE] The list can be generated with the following command:
 > ```sh
