@@ -53,7 +53,7 @@ target_link_libraries(ftxui-modules
 
 target_compile_features(ftxui-modules PUBLIC cxx_std_20)
 if (CMAKE_COMPILER_IS_GNUCXX)
-  target_compile_options(${name} PUBLIC -fmodules-ts)
+  target_compile_options(ftxui-modules PUBLIC -fmodules-ts)
 endif ()
 
 add_library(ftxui::modules ALIAS ftxui-modules)

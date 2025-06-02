@@ -345,8 +345,14 @@ OPTIMIZE_OUTPUT_SLICE  = NO
 #
 # Note see also the list of default file extension mappings.
 
-EXTENSION_MAPPING      = 
-
+EXTENSION_MAPPING      =  \
+  c=cpp \
+  cc=cpp \
+  cpp=cpp \
+  cxx=cpp \
+  h=cpp \
+  hh=cpp \
+  cmake=cmake \
 
 # If the MARKDOWN_SUPPORT tag is enabled then doxygen pre-processes all comments
 # according to the Markdown format, which allows for more readable
@@ -958,6 +964,7 @@ INPUT                  = \
                          @CMAKE_CURRENT_SOURCE_DIR@ \
                          @CMAKE_SOURCE_DIR@/include \
                          @CMAKE_SOURCE_DIR@/src \
+                         @CMAKE_SOURCE_DIR@/cmake \
                          @CMAKE_CURRENT_BINARY_DIR@ \
                          @CMAKE_SOURCE_DIR@/examples \
 
@@ -1001,48 +1008,15 @@ INPUT_FILE_ENCODING    =
 
 FILE_PATTERNS          = *.c \
                          *.cc \
-                         *.cxx \
                          *.cpp \
-                         *.c++ \
-                         *.java \
-                         *.ii \
-                         *.ixx \
                          *.ipp \
-                         *.i++ \
                          *.inl \
-                         *.idl \
-                         *.ddl \
-                         *.odl \
                          *.h \
-                         *.hh \
-                         *.hxx \
                          *.hpp \
-                         *.h++ \
-                         *.cs \
-                         *.d \
-                         *.php \
-                         *.php4 \
-                         *.php5 \
-                         *.phtml \
                          *.inc \
-                         *.m \
-                         *.markdown \
                          *.md \
-                         *.mm \
-                         *.dox \
-                         *.py \
-                         *.pyw \
-                         *.f90 \
-                         *.f95 \
-                         *.f03 \
-                         *.f08 \
-                         *.f \
-                         *.for \
-                         *.tcl \
-                         *.vhd \
-                         *.vhdl \
-                         *.ucf \
-                         *.qsf
+                         *.cmake \
+
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should
 # be searched for input files as well.
