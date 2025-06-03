@@ -51,7 +51,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
      - [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui)
      - [Arch Linux](https://aur.archlinux.org/packages/ftxui/)
      - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
-     - [https://xmake.io](XMake) repository [package](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
+     - [XMake](https://xmake.io) repository [package](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
  * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
 ## Documentation
