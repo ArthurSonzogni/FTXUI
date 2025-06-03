@@ -91,6 +91,40 @@
     }
 
 </script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("Modules") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
 
 $treeview
 $search
