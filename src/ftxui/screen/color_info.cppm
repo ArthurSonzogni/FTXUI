@@ -1,5 +1,5 @@
 /**
- * @file ColorInfo.cppm
+ * @file color_info.cppm
  * @brief Module file for the ColorInfo struct of the Screen module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/screen/color_info.hpp>
 
-export module ftxui.screen.ColorInfo;
+export module ftxui.screen.color_info;
 
 /**
  * @namespace ftxui

@@ -1,5 +1,5 @@
 /**
- * @file Loop.cppm
+ * @file loop.cppm
  * @brief Module file for the Loop class of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/loop.hpp>
 
-export module ftxui.component.Loop;
+export module ftxui.component.loop;
 
 /**
  * @namespace ftxui

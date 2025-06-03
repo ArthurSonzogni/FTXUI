@@ -5,13 +5,13 @@
 
 export module ftxui.dom;
 
-export import ftxui.dom.Canvas;
-export import ftxui.dom.Deprecated;
-export import ftxui.dom.Direction;
-export import ftxui.dom.Elements;
-export import ftxui.dom.FlexboxConfig;
-export import ftxui.dom.LinearGradient;
-export import ftxui.dom.Node;
-export import ftxui.dom.Requirement;
-export import ftxui.dom.Selection;
-export import ftxui.dom.Table;
+export import ftxui.dom.canvas;
+export import ftxui.dom.deprecated;
+export import ftxui.dom.direction;
+export import ftxui.dom.elements;
+export import ftxui.dom.flexbox_config;
+export import ftxui.dom.linear_gradient;
+export import ftxui.dom.node;
+export import ftxui.dom.requirement;
+export import ftxui.dom.selection;
+export import ftxui.dom.table;

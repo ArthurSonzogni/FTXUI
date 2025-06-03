@@ -5,14 +5,14 @@
 
 export module ftxui.component;
 
-export import ftxui.component.Animation;
-export import ftxui.component.CapturedMouse;
-export import ftxui.component.Component;
-export import ftxui.component.ComponentBase;
-export import ftxui.component.ComponentOptions;
-export import ftxui.component.Event;
-export import ftxui.component.Loop;
-export import ftxui.component.Mouse;
-export import ftxui.component.Receiver;
-export import ftxui.component.ScreenInteractive;
-export import ftxui.component.Task;
+export import ftxui.component.animation;
+export import ftxui.component.captured_mouse;
+export import ftxui.component.component;
+export import ftxui.component.component_base;
+export import ftxui.component.component_options;
+export import ftxui.component.event;
+export import ftxui.component.loop;
+export import ftxui.component.mouse;
+export import ftxui.component.receiver;
+export import ftxui.component.screen_interactive;
+export import ftxui.component.task;

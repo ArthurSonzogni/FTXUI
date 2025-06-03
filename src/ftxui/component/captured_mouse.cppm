@@ -1,5 +1,5 @@
 /**
- * @file CapturedMouse.cppm
+ * @file captured_mouse.cppm
  * @brief Module file for the CapturedMouseInterface class of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/captured_mouse.hpp>
 
-export module ftxui.component.CapturedMouse;
+export module ftxui.component.captured_mouse;
 
 /**
  * @namespace ftxui

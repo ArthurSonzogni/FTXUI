@@ -1,5 +1,5 @@
 /**
- * @file Task.cppm
+ * @file task.cppm
  * @brief Module file for the Task class of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/task.hpp>
 
-export module ftxui.component.Task;
+export module ftxui.component.task;
 
 /**
  * @namespace ftxui

@@ -1,5 +1,5 @@
 /**
- * @file Receiver.cppm
+ * @file receiver.cppm
  * @brief Module file for the Receiver class of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/receiver.hpp>
 
-export module ftxui.component.Receiver;
+export module ftxui.component.receiver;
 
 /**
  * @namespace ftxui

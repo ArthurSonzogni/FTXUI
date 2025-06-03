@@ -1,5 +1,5 @@
 /**
- * @file Screen.cppm
+ * @file screen.cppm
  * @brief Module file for the Screen class of the Screen module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/screen/screen.hpp>
 
-export module ftxui.screen.Screen;
+export module ftxui.screen.screen;
 
 /**
  * @namespace ftxui

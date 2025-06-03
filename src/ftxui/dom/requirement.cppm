@@ -1,5 +1,5 @@
 /**
- * @file Requirement.cppm
+ * @file requirement.cppm
  * @brief Module file for the Requirement struct of the Dom module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/dom/requirement.hpp>
 
-export module ftxui.dom.Requirement;
+export module ftxui.dom.requirement;
 
 /**
  * @namespace ftxui

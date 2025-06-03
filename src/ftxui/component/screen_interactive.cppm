@@ -1,5 +1,5 @@
 /**
- * @file ScreenInteractive.cppm
+ * @file screen_interactive.cppm
  * @brief Module file for the ScreenInteractive class of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/screen_interactive.hpp>
 
-export module ftxui.component.ScreenInteractive;
+export module ftxui.component.screen_interactive;
 
 /**
  * @namespace ftxui

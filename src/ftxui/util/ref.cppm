@@ -1,5 +1,5 @@
 /**
- * @file Ref.cppm
+ * @file ref.cppm
  * @brief Module file for the Ref classes of the Util module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/util/ref.hpp>
 
-export module ftxui.util.Ref;
+export module ftxui.util.ref;
 
 /**
  * @namespace ftxui

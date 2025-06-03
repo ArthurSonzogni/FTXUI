@@ -1,5 +1,5 @@
 /**
- * @file ComponentOptions.cppm
+ * @file component_options.cppm
  * @brief Module file for options for the Component class of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/component_options.hpp>
 
-export module ftxui.component.ComponentOptions;
+export module ftxui.component.component_options;
 
 /**
  * @namespace ftxui

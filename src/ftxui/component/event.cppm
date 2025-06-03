@@ -1,5 +1,5 @@
 /**
- * @file Event.cppm
+ * @file event.cppm
  * @brief Module file for the Event struct of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/event.hpp>
 
-export module ftxui.component.Event;
+export module ftxui.component.event;
 
 /**
  * @namespace ftxui

@@ -1,5 +1,5 @@
 /**
- * @file Canvas.cppm
+ * @file canvas.cppm
  * @brief Module file for the Element classes and functions of the Dom module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/dom/elements.hpp>
 
-export module ftxui.dom.Elements;
+export module ftxui.dom.elements;
 
 /**
  * @namespace ftxui

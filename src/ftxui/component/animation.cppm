@@ -1,5 +1,5 @@
 /**
- * @file Animation.cppm
+ * @file animation.cppm
  * @brief Module file for the Animation namespace of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/animation.hpp>
 
-export module ftxui.component.Animation;
+export module ftxui.component.animation;
 
 /**
  * @namespace ftxui::animation

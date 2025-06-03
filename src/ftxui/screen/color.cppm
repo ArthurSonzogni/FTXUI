@@ -1,5 +1,5 @@
 /**
- * @file Color.cppm
+ * @file color.cppm
  * @brief Module file for the Color class of the Screen module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/screen/color.hpp>
 
-export module ftxui.screen.Color;
+export module ftxui.screen.color;
 
 /**
  * @namespace ftxui

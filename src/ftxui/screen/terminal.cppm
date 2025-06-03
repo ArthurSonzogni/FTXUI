@@ -1,5 +1,5 @@
 /**
- * @file Terminal.cppm
+ * @file terminal.cppm
  * @brief Module file for the Terminal namespace of the Screen module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/screen/terminal.hpp>
 
-export module ftxui.screen.Terminal;
+export module ftxui.screen.terminal;
 
 /**
  * @namespace ftxui

@@ -7,41 +7,41 @@ add_library(ftxui-modules)
 target_sources(ftxui-modules
   PUBLIC FILE_SET CXX_MODULES FILES
   src/ftxui/component.cppm
-  src/ftxui/component/Animation.cppm
-  src/ftxui/component/CapturedMouse.cppm
-  src/ftxui/component/Component.cppm
-  src/ftxui/component/ComponentBase.cppm
-  src/ftxui/component/ComponentOptions.cppm
-  src/ftxui/component/Event.cppm
-  src/ftxui/component/Loop.cppm
-  src/ftxui/component/Mouse.cppm
-  src/ftxui/component/Receiver.cppm
-  src/ftxui/component/ScreenInteractive.cppm
-  src/ftxui/component/Task.cppm
+  src/ftxui/component/animation.cppm
+  src/ftxui/component/captured_mouse.cppm
+  src/ftxui/component/component.cppm
+  src/ftxui/component/component_base.cppm
+  src/ftxui/component/component_options.cppm
+  src/ftxui/component/event.cppm
+  src/ftxui/component/loop.cppm
+  src/ftxui/component/mouse.cppm
+  src/ftxui/component/receiver.cppm
+  src/ftxui/component/screen_interactive.cppm
+  src/ftxui/component/task.cppm
   src/ftxui/dom.cppm
-  src/ftxui/dom/Canvas.cppm
-  src/ftxui/dom/Deprecated.cppm
-  src/ftxui/dom/Direction.cppm
-  src/ftxui/dom/Elements.cppm
-  src/ftxui/dom/FlexboxConfig.cppm
-  src/ftxui/dom/LinearGradient.cppm
-  src/ftxui/dom/Node.cppm
-  src/ftxui/dom/Requirement.cppm
-  src/ftxui/dom/Selection.cppm
-  src/ftxui/dom/Table.cppm
+  src/ftxui/dom/canvas.cppm
+  src/ftxui/dom/deprecated.cppm
+  src/ftxui/dom/direction.cppm
+  src/ftxui/dom/elements.cppm
+  src/ftxui/dom/flexbox_config.cppm
+  src/ftxui/dom/linear_gradient.cppm
+  src/ftxui/dom/node.cppm
+  src/ftxui/dom/requirement.cppm
+  src/ftxui/dom/selection.cppm
+  src/ftxui/dom/table.cppm
   src/ftxui/screen.cppm
-  src/ftxui/screen/Box.cppm
-  src/ftxui/screen/Color.cppm
-  src/ftxui/screen/ColorInfo.cppm
-  src/ftxui/screen/Deprecated.cppm
-  src/ftxui/screen/Image.cppm
-  src/ftxui/screen/Pixel.cppm
-  src/ftxui/screen/Screen.cppm
-  src/ftxui/screen/String.cppm
-  src/ftxui/screen/Terminal.cppm
+  src/ftxui/screen/box.cppm
+  src/ftxui/screen/color.cppm
+  src/ftxui/screen/color_info.cppm
+  src/ftxui/screen/deprecated.cppm
+  src/ftxui/screen/image.cppm
+  src/ftxui/screen/pixel.cppm
+  src/ftxui/screen/screen.cppm
+  src/ftxui/screen/string.cppm
+  src/ftxui/screen/terminal.cppm
   src/ftxui/util.cppm
-  src/ftxui/util/AutoReset.cppm
-  src/ftxui/util/Ref.cppm
+  src/ftxui/util/autoreset.cppm
+  src/ftxui/util/ref.cppm
   )
 
 target_link_libraries(ftxui-modules
@@ -52,6 +52,7 @@ target_link_libraries(ftxui-modules
   )
 
 target_compile_features(ftxui-modules PUBLIC cxx_std_20)
+# TODO: Explain why this is needed.
 if (CMAKE_COMPILER_IS_GNUCXX)
   target_compile_options(ftxui-modules PUBLIC -fmodules-ts)
 endif ()

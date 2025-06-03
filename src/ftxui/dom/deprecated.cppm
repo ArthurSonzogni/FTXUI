@@ -1,5 +1,5 @@
 /**
- * @file Deprecated.cppm
+ * @file deprecated.cppm
  * @brief Module file for deprecated parts of the Dom module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/dom/deprecated.hpp>
 
-export module ftxui.dom.Deprecated;
+export module ftxui.dom.deprecated;
 
 /**
  * @namespace ftxui

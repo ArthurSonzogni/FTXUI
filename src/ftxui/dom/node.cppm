@@ -1,5 +1,5 @@
 /**
- * @file Node.cppm
+ * @file node.cppm
  * @brief Module file for the Node class of the Dom module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/dom/node.hpp>
 
-export module ftxui.dom.Node;
+export module ftxui.dom.node;
 
 /**
  * @namespace ftxui

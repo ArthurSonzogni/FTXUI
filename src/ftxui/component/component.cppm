@@ -1,5 +1,5 @@
 /**
- * @file Component.cppm
+ * @file component.cppm
  * @brief Module file for the Component classes of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/component.hpp>
 
-export module ftxui.component.Component;
+export module ftxui.component.component;
 
 /**
  * @namespace ftxui

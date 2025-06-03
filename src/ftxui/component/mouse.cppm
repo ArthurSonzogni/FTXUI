@@ -1,5 +1,5 @@
 /**
- * @file Mouse.cppm
+ * @file mouse.cppm
  * @brief Module file for the Mouse struct of the Component module
  */
 
@@ -7,7 +7,7 @@ module;
 
 #include <ftxui/component/mouse.hpp>
 
-export module ftxui.component.Mouse;
+export module ftxui.component.mouse;
 
 /**
  * @namespace ftxui
