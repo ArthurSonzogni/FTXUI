@@ -207,7 +207,7 @@ Code:
 border(gauge(0.5))
 ```
 
-Teminal output:
+Terminal output:
 ```bash
 ┌────────────────────────────────────────────────────────────────────────────┐
 │██████████████████████████████████████                                      │
@@ -407,7 +407,7 @@ Checkout this
 and the associated
 [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox).
 
-Element can also become flexible using the the `ftxui::flex` decorator.
+Element can also become flexible using the `ftxui::flex` decorator.
 
 Code:
 ```cpp

@@ -15,8 +15,8 @@
 
 namespace ftxui {
 
-/// @brief Display a vertical scrollbar to the right.
-/// colors.
+/// @brief Display a vertical scrollbar on the right.
+/// Colors follow the content.
 /// @ingroup dom
 Element vscroll_indicator(Element child) {
   class Impl : public NodeDecorator {
@@ -70,8 +70,8 @@ Element vscroll_indicator(Element child) {
   return std::make_shared<Impl>(std::move(child));
 }
 
-/// @brief Display an horizontal scrollbar to the bottom.
-/// colors.
+/// @brief Display a horizontal scrollbar at the bottom.
+/// Colors follow the content.
 /// @ingroup dom
 Element hscroll_indicator(Element child) {
   class Impl : public NodeDecorator {

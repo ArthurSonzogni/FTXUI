@@ -1,6 +1,5 @@
 @page cpp20-modules C++20 Modules
 
-coucou
 
 > [!WARNING]
 > This feature is still in development, and the API may change in future releases.
@@ -8,10 +7,10 @@ coucou
 > of C++20 modules in FTXUI. If you encounter any issues or have suggestions,
 > please open an issue.
 
-FTXUI provides an experimental support for [C++20
-modules](https://en.cppreference.com/w/cpp/language/modules) to improve 
-compilation times and code organization. The existing API has a module 
-corresponding to each header.
+FTXUI experimentally supports
+[C++20 modules](https://en.cppreference.com/w/cpp/language/modules) to reduce
+compilation times and improve code organization. Each header has a
+corresponding module.
 
 **Example with CMake and Ninja**
 

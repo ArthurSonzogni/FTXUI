@@ -16,7 +16,7 @@ Node::Node() = default;
 Node::Node(Elements children) : children_(std::move(children)) {}
 Node::~Node() = default;
 
-/// @brief Compute how much space an elements needs.
+/// @brief Compute how much space an element needs.
 /// @ingroup dom
 void Node::ComputeRequirement() {
   if (children_.empty()) {

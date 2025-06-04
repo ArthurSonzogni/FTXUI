@@ -10,7 +10,7 @@ This page explains how to depend on FTXUI using [CMake](https://cmake.org).
 
 This approach downloads FTXUI at configure time and doesn't require a system-wide install.
 
-```fortran 
+```cmake 
 include(FetchContent)
 
 FetchContent_Declare(ftxui
@@ -34,8 +34,8 @@ This ensures reproducible builds and easy dependency management.
 
 If FTXUI is installed system-wide or via a package manager (e.g. vcpkg or Conan), you can use:
 
-```fortran 
-fortranind_package(ftxui REQUIRED)
+```cmake 
+find_package(ftxui REQUIRED)
 
 add_executable(main main.cpp)
 target_link_libraries(main
@@ -51,7 +51,7 @@ Make sure the package is visible in your `CMAKE_PREFIX_PATH`.
 
 You can also add FTXUI as a [Git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules), keeping it as part of your repository:
 
-```fortran
+```cmake
 git submodule add https://github.com/ArthurSonzogni/FTXUI external/ftxui
 git submodule update --init --recursive
 ```
@@ -66,7 +66,7 @@ git submodule update --init --recursive
 
 Then in your `CMakeLists.txt`:
 
-```fortran
+```cmake
 add_subdirectory(external/ftxui)
 
 add_executable(main main.cpp)

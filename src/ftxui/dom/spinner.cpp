@@ -273,8 +273,8 @@ const std::vector<std::vector<std::vector<std::string>>> elements = {
 
 }  // namespace
 
-/// @brief Useful to represent the effect of time and/or events. This display an
-/// ASCII art "video".
+/// @brief Useful to represent the effect of time and/or events. This displays
+/// an ASCII art "video".
 /// @param charset_index The type of "video".
 /// @param image_index The "frame" of the video. You need to increase this for
 /// every "step".

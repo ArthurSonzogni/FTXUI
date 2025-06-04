@@ -97,7 +97,7 @@ Element can be arranged together:
   - inside a grid with `gridbox`
   - wrap along one direction using the `flexbox`.
   
-Element can become flexible using the the `flex` decorator.
+Element can become flexible using the `flex` decorator.
   
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html) using `hbox`, `vbox` and `filler`.
 

@@ -427,7 +427,7 @@ Element separator(Pixel pixel) {
   return std::make_shared<SeparatorWithPixel>(std::move(pixel));
 }
 
-/// @brief Draw an horizontal bar, with the area in between left/right colored
+/// @brief Draw a horizontal bar, with the area in between left/right colored
 /// differently.
 /// @param left the left limit of the active area.
 /// @param right the right limit of the active area.
