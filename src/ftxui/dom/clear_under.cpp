@@ -32,7 +32,7 @@ class ClearUnder : public NodeDecorator {
 }  // namespace
 
 /// @brief Before drawing |child|, clear the pixels below. This is useful in
-//         combinaison with dbox.
+///        combination with dbox.
 /// @see ftxui::dbox
 /// @ingroup dom
 Element clear_under(Element element) {

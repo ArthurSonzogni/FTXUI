@@ -14,7 +14,7 @@ A `ftxui::Component` is a shared pointer to a `ftxui::ComponentBase`. The latter
   - `ftxui::ComponentBase::Render()`: How to render the interface.
   - `ftxui::ComponentBase::OnEvent()`: How to react to events.
   - `ftxui::ComponentBase::Add()`: Construct a parent/child relationship
-    between two components. The tree of component is used to define how to
+    between two components. The tree of components is used to define how to
     navigate using the keyboard.
 
 `ftxui::Element` are used to render a single frame.
@@ -45,7 +45,7 @@ Produced by: `ftxui::Input()` from "ftxui/component/component.hpp"
 
 ## Filtered input
 
-On can filter out the characters received by the input component, using
+One can filter out the characters received by the input component, using
 `ftxui::CatchEvent`.
 
 ```cpp
@@ -123,8 +123,8 @@ Produced by: `ftxui::Radiobox()` from "ftxui/component/component.hpp"
 
 # Dropdown {#component-dropdown}
 
-A drop down menu is a component that when checked display a list of element for
-the user to select one.
+A drop-down menu is a component that, when opened, displays a list of elements
+for the user to select from.
 
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html):
 
@@ -204,12 +204,12 @@ component = component
 
 # Collapsible {#component-collapsible}
 
-Useful for visual elements whose visibility can be toggle on/off by the user.
-Essentially, this the combination of the `ftxui::Checkbox()` and
+Useful for visual elements whose visibility can be toggled on or off by the
+user. Essentially, this is the combination of the `ftxui::Checkbox()` and
 `ftxui::Maybe()` components.
 
 ```cpp
-auto collabsible = Collapsible("Show more", inner_element);
+auto collapsible = Collapsible("Show more", inner_element);
 ```
 
 # Maybe {#component-maybe}
@@ -245,7 +245,7 @@ component = component
 
 Produced by: `ftxui::Container::Horizontal()` from
 "ftxui/component/component.hpp". It displays a list of components horizontally
-and handle keyboard/mouse navigation.
+and handles keyboard/mouse navigation.
 
 ## Vertical {#component-vertical}
 
@@ -256,8 +256,8 @@ and handles keyboard/mouse navigation.
 ## Tab {#component-tab}
 
 Produced by: `ftxui::Container::Tab()` from
-"ftxui/component/component.hpp". It take a list of component and display only
-one of them. This is useful for implementing a tab bar.
+"ftxui/component/component.hpp". It takes a list of components and displays
+only one of them. This is useful for implementing a tab bar.
 
 [Vertical](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_vertical_8cpp-example.html):
   

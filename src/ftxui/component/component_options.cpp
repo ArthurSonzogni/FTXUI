@@ -68,7 +68,7 @@ void UnderlineOption::SetAnimationFunction(
   follower_function = std::move(f_follower);
 }
 
-/// @brief Standard options for an horizontal menu.
+/// @brief Standard options for a horizontal menu.
 /// This can be useful to implement a tab bar.
 /// @ingroup component
 // static
@@ -148,7 +148,7 @@ MenuOption MenuOption::VerticalAnimated() {
   return option;
 }
 
-/// @brief Standard options for a horitontal menu with some separator.
+/// @brief Standard options for a horizontal menu with some separator.
 /// This can be useful to implement a tab bar.
 /// @ingroup component
 // static
