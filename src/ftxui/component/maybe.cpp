@@ -15,7 +15,7 @@ namespace ftxui {
 
 /// @brief Decorate a component |child|. It is shown only when |show| returns
 /// true.
-/// @param child the compoenent to decorate.
+/// @param child the component to decorate.
 /// @param show a function returning whether |child| should shown.
 /// @ingroup component
 Component Maybe(Component child, std::function<bool()> show) {
@@ -61,7 +61,7 @@ ComponentDecorator Maybe(std::function<bool()> show) {
 }
 
 /// @brief Decorate a component |child|. It is shown only when |show| is true.
-/// @param child the compoennt to decorate.
+/// @param child the component to decorate.
 /// @param show a boolean. |child| is shown when |show| is true.
 /// @ingroup component
 ///
