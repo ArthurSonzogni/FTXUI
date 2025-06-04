@@ -1561,7 +1561,7 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(
   return out;
 }
 
-/// Convert a UTF8 std::string into a std::wstring.
+/// Convert a std::wstring into a UTF8 std::string.
 std::string to_string(const std::wstring& s) {
   std::string out;
 
@@ -1633,7 +1633,7 @@ std::string to_string(const std::wstring& s) {
   return out;
 }
 
-/// Convert a std::wstring into a UTF8 std::string.
+/// Convert a UTF8 std::string into a std::wstring.
 std::wstring to_wstring(const std::string& s) {
   std::wstring out;
 
