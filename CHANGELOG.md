@@ -9,6 +9,22 @@ Next
 - Use Doxygen awesome. Add our own theme.
 - Break the documentation into several pages.
 
+### Build
+- Feature: Support C++20 modules. 
+  This requires:
+  - Using the Ninja or MSVC generator
+  - A recent Clang/GCC/MSVC compiler.
+  - Cmake 3.28 or higher.
+  Usage:
+  ```cpp
+  import ftxui;
+  import ftxui.component;
+  import ftxui.dom;
+  import ftxui.screen;
+  import ftxui.util;
+  ```
+  Thanks @mikomikotaishi for PR #1015.
+
 
 6.1.9 (2025-05-07)
 ------------

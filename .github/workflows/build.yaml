@@ -165,3 +165,47 @@ jobs:
           flags: ${{ runner.os }}
           name: ${{ runner.os }}-coverage
           files: ./build/coverage.xml
+
+  test_modules:
+    name: "Test modules"
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            compiler: llvm
+          # TODO add gcc / msvc
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v3
+
+      - name: "Setup Cpp"
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          cmake: true
+          ninja: true
+          clangtidy: false
+          cppcheck: false
+          opencppcoverage: false
+
+      - name: "Generate ./examples_modules"
+        run: >
+          ./tools/generate_examples_modules.sh
+
+      - name: "Build modules"
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+          -DCMAKE_GENERATOR=Ninja
+          -DFTXUI_BUILD_MODULES=ON
+          -DFTXUI_BUILD_EXAMPLES=ON
+          -DCMAKE_BUILD_TYPE=Debug
+          -DFTXUI_BUILD_DOCS=OFF
+          -DFTXUI_BUILD_TESTS=OFF
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=ON
+          -DFTXUI_DEV_WARNINGS=ON ;
+          cmake --build .

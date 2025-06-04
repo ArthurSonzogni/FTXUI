@@ -1,4 +1,19 @@
-cmake_minimum_required(VERSION 3.12)
+option(FTXUI_BUILD_DOCS "Set to ON to build docs" OFF)
+option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" OFF)
+option(FTXUI_BUILD_MODULES "Build the C++20 modules" OFF)
+option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
+option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
+option(FTXUI_CLANG_TIDY "Execute clang-tidy" OFF)
+option(FTXUI_DEV_WARNINGS "Enable more compiler warnings and warnings as errors" OFF)
+option(FTXUI_ENABLE_COVERAGE "Execute code coverage" OFF)
+option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
+option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
+
+if (FTXUI_BUILD_MODULES)
+  cmake_minimum_required(VERSION 3.28.2)
+else()
+  cmake_minimum_required(VERSION 3.12)
+endif()
 
 project(ftxui
   LANGUAGES CXX
@@ -6,15 +21,6 @@ project(ftxui
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
-option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
-option(FTXUI_BUILD_EXAMPLES "Set to ON to build examples" OFF)
-option(FTXUI_BUILD_DOCS "Set to ON to build docs" OFF)
-option(FTXUI_BUILD_TESTS "Set to ON to build tests" OFF)
-option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
-option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
-option(FTXUI_CLANG_TIDY "Execute clang-tidy" OFF)
-option(FTXUI_ENABLE_COVERAGE "Execute code coverage" OFF)
-option(FTXUI_DEV_WARNINGS "Enable more compiler warnings and warnings as errors" OFF)
 
 set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
 terminal used will be one of Microsoft and use a set of reasonnable fallback \
@@ -176,6 +182,13 @@ include(cmake/iwyu.cmake)
 include(cmake/ftxui_export.cmake)
 include(cmake/ftxui_install.cmake)
 include(cmake/ftxui_package.cmake)
+include(cmake/ftxui_modules.cmake)
 
-add_subdirectory(examples)
 add_subdirectory(doc)
+add_subdirectory(examples)
+
+# You can generate ./examples_modules/ by running
+# ./tools/generate_examples_modules.sh
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples_modules/CMakeLists.txt")
+  add_subdirectory(examples_modules)
+endif()
