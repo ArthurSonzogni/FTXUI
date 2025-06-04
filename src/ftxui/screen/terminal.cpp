@@ -72,7 +72,7 @@ Terminal::Color ComputeColorSupport() {
   }
 
 #if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-  // Microsoft terminals do not properly declare themselve supporting true
+  // Microsoft terminals do not properly declare themselves supporting true
   // colors: https://github.com/microsoft/terminal/issues/1040
   // As a fallback, assume microsoft terminal are the ones not setting those
   // variables, and enable true colors.
