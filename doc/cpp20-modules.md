@@ -1,5 +1,7 @@
 @page cpp20-modules C++20 Modules
 
+coucou
+
 > [!WARNING]
 > This feature is still in development, and the API may change in future releases.
 > Your contribution is needed to help us improve the compatibility and usability
@@ -57,36 +59,27 @@ are available:
       - `ftxui.component.Receiver`
       - `ftxui.component.ScreenInteractive`
       - `ftxui.component.Task`
-    - `ftxui.dom`
-        - `ftxui.dom.Canvas`
-        - `ftxui.dom.Deprecated`
-        - `ftxui.dom.Direction`
-        - `ftxui.dom.Elements`
-        - `ftxui.dom.FlexboxConfig`
-        - `ftxui.dom.LinearGradient`
-        - `ftxui.dom.Node`
-        - `ftxui.dom.Requirement`
-        - `ftxui.dom.Selection`
-        - `ftxui.dom.Table`
-    - `ftxui.screen`
-        - `ftxui.screen.Box`
-        - `ftxui.screen.Color`
-        - `ftxui.screen.ColorInfo`
-        - `ftxui.screen.Deprecated`
-        - `ftxui.screen.Image`
-        - `ftxui.screen.Pixel`
-        - `ftxui.screen.Screen`
-        - `ftxui.screen.String`
-        - `ftxui.screen.Terminal`
-    - `ftxui.util`
-        - `ftxui.util.AutoReset`
-        - `ftxui.util.Ref`
-
-> ![NOTE] 
-> The module `ftxui` transitively imports all `ftxui.*` modules and thus 
-> has a dependency on those modules.
-
-> ![NOTE] The list can be generated with the following command:
-> ```sh
-> git grep "export module" | cut -d: -f2 | cut -d\  -f3
-> ```
+- `ftxui.dom`
+    - `ftxui.dom.Canvas`
+    - `ftxui.dom.Deprecated`
+    - `ftxui.dom.Direction`
+    - `ftxui.dom.Elements`
+    - `ftxui.dom.FlexboxConfig`
+    - `ftxui.dom.LinearGradient`
+    - `ftxui.dom.Node`
+    - `ftxui.dom.Requirement`
+    - `ftxui.dom.Selection`
+    - `ftxui.dom.Table`
+- `ftxui.screen`
+    - `ftxui.screen.Box`
+    - `ftxui.screen.Color`
+    - `ftxui.screen.ColorInfo`
+    - `ftxui.screen.Deprecated`
+    - `ftxui.screen.Image`
+    - `ftxui.screen.Pixel`
+    - `ftxui.screen.Screen`
+    - `ftxui.screen.String`
+    - `ftxui.screen.Terminal`
+- `ftxui.util`
+    - `ftxui.util.AutoReset`
+    - `ftxui.util.Ref`

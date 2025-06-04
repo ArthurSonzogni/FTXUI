@@ -1,7 +1,7 @@
-/**
- * @file animation.cppm
- * @brief Module file for the Animation namespace of the Component module
- */
+/// @module ftxui.component.animation
+/// @brief Module file for the Animation namespace of the Component module.
+///
+/// @file animation.cppm
 
 module;
 

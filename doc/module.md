@@ -1,4 +1,4 @@
-# Modules {#modules}
+# ftxui {#ftxui}
 
 ![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595251.jpg)
 
