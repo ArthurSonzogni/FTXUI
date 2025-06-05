@@ -13,7 +13,12 @@
 
 namespace ftxui {
 
-/// @brief Represent a selection in the terminal.
+/// @brief Represents a selection in a terminal user interface.
+///
+/// Selection is a class that represents the two endpoints of a selection in a
+/// terminal user interface.
+///
+/// @ingroup dom
 class Selection {
  public:
   Selection();  // Empty selection.

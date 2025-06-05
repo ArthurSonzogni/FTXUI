@@ -24,6 +24,14 @@ using Elements = std::vector<Element>;
 using Decorator = std::function<Element(Element)>;
 using GraphFunction = std::function<std::vector<int>(int, int)>;
 
+/// @brief BorderStyle is an enumeration that represents the different styles
+/// of borders that can be applied to elements in the terminal UI.
+///
+/// BorderStyle is an enumeration that represents the different styles of
+/// borders that can be applied to elements in the terminal UI.
+/// It is used to define the visual appearance of borders around elements,
+/// such as windows, frames, or separators.
+/// @ingroup dom
 enum BorderStyle {
   LIGHT,
   DASHED,

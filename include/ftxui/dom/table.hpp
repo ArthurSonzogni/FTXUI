@@ -11,28 +11,28 @@
 
 namespace ftxui {
 
-// Usage:
-//
-// Initialization:
-// ---------------
-//
-// auto table = Table({
-//   {"X", "Y"},
-//   {"-1", "1"},
-//   {"+0", "0"},
-//   {"+1", "1"},
-// });
-//
-// table.SelectAll().Border(LIGHT);
-//
-// table.SelectRow(1).Border(DOUBLE);
-// table.SelectRow(1).SeparatorInternal(Light);
-//
-// std::move(table).Element();
-
 class Table;
 class TableSelection;
 
+/// @brief Table is a utility to draw tables.
+///
+/// **example**
+/// ```cpp
+/// auto table = Table({
+///  {"X", "Y"},
+///  {"-1", "1"},
+///  {"+0", "0"},
+///  {"+1", "1"},
+/// });
+///
+/// table.SelectAll().Border(LIGHT);
+/// table.SelectRow(1).Border(DOUBLE);
+/// table.SelectRow(1).SeparatorInternal(LIGHT);
+///
+/// std::move(table).Render();
+/// ```
+///
+/// @ingroup dom
 class Table {
  public:
   Table();

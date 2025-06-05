@@ -7,6 +7,7 @@
 #include <memory>
 
 namespace ftxui {
+
 class CapturedMouseInterface {
  public:
   CapturedMouseInterface() = default;

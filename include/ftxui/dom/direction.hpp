@@ -5,6 +5,11 @@
 #define FTXUI_DOM_DIRECTION_HPP
 
 namespace ftxui {
+
+/// @brief Direction is an enumeration that represents the four cardinal
+/// directions.
+///
+/// @ingroup dom
 enum class Direction {
   Up = 0,
   Down = 1,

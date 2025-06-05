@@ -14,6 +14,45 @@ class ComponentBase;
 using Component = std::shared_ptr<ComponentBase>;
 class ScreenInteractive;
 
+/// @brief Loop is a class that manages the event loop for a component.
+///
+/// It is responsible for running the component, handling events, and
+/// updating the screen.
+///
+/// The Loop class is designed to be used with a ScreenInteractive object,
+/// which represents the terminal screen.
+///
+/// **Example**
+/// ```cpp
+/// #include <ftxui/component/component.hpp>
+/// #include <ftxui/component/screen_interactive.hpp>
+/// #include <ftxui/component/loop.hpp>
+///
+/// int main() {
+///  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+///  auto component = ftxui::Button("Click me", [] { ... });
+///
+///  ftxui::Loop loop(screen.get(), component);
+///
+///  // Either
+///  loop.Run();  // Blocking until the component quits.
+///
+///  // Or
+///  loop.RunOnce();  // Non-blocking, returns immediately.
+///
+///  // Or
+///  loop.RunOnceBlocking();  // Blocking until handling one event.
+///
+///  // Or in a loop:
+///  while (!loop.HasQuitted()) {
+///    loop.RunOnce();
+///
+///    // Do something else like running a different library loop function.
+///  }
+/// }
+/// ```
+///
+/// @ingroup component
 class Loop {
  public:
   Loop(ScreenInteractive* screen, Component component);

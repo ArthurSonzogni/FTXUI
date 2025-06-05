@@ -44,14 +44,12 @@ void Order(int& a, int& b) {
 }  // namespace
 
 /// @brief Create an empty table.
-/// @ingroup dom
 Table::Table() {
   Initialize({});
 }
 
 /// @brief Create a table from a vector of vector of string.
 /// @param input The input data.
-/// @ingroup dom
 Table::Table(std::vector<std::vector<std::string>> input) {
   std::vector<std::vector<Element>> output;
   output.reserve(input.size());
@@ -68,14 +66,12 @@ Table::Table(std::vector<std::vector<std::string>> input) {
 
 /// @brief Create a table from a vector of vector of Element
 /// @param input The input elements.
-/// @ingroup dom
 Table::Table(std::vector<std::vector<Element>> input) {
   Initialize(std::move(input));
 }
 
 // @brief Create a table from a list of list of string.
 // @param init The input data.
-// @ingroup dom
 Table::Table(std::initializer_list<std::vector<std::string>> init) {
   std::vector<std::vector<Element>> input;
   for (const auto& row : init) {
@@ -139,7 +135,6 @@ void Table::Initialize(std::vector<std::vector<Element>> input) {
 /// @brief Select a row of the table.
 /// @param index The index of the row to select.
 /// @note You can use negative index to select from the end.
-/// @ingroup dom
 TableSelection Table::SelectRow(int index) {
   return SelectRectangle(0, -1, index, index);
 }
@@ -148,7 +143,6 @@ TableSelection Table::SelectRow(int index) {
 /// @param row_min The first row to select.
 /// @param row_max The last row to select.
 /// @note You can use negative index to select from the end.
-/// @ingroup dom
 TableSelection Table::SelectRows(int row_min, int row_max) {
   return SelectRectangle(0, -1, row_min, row_max);
 }
@@ -156,7 +150,6 @@ TableSelection Table::SelectRows(int row_min, int row_max) {
 /// @brief Select a column of the table.
 /// @param index The index of the column to select.
 /// @note You can use negative index to select from the end.
-/// @ingroup dom
 TableSelection Table::SelectColumn(int index) {
   return SelectRectangle(index, index, 0, -1);
 }
@@ -165,7 +158,6 @@ TableSelection Table::SelectColumn(int index) {
 /// @param column_min The first column to select.
 /// @param column_max The last column to select.
 /// @note You can use negative index to select from the end.
-/// @ingroup dom
 TableSelection Table::SelectColumns(int column_min, int column_max) {
   return SelectRectangle(column_min, column_max, 0, -1);
 }
@@ -174,7 +166,6 @@ TableSelection Table::SelectColumns(int column_min, int column_max) {
 /// @param column The column of the cell to select.
 /// @param row The row of the cell to select.
 /// @note You can use negative index to select from the end.
-/// @ingroup dom
 TableSelection Table::SelectCell(int column, int row) {
   return SelectRectangle(column, column, row, row);
 }
@@ -185,7 +176,6 @@ TableSelection Table::SelectCell(int column, int row) {
 /// @param row_min The first row to select.
 /// @param row_max The last row to select.
 /// @note You can use negative index to select from the end.
-/// @ingroup dom
 TableSelection Table::SelectRectangle(int column_min,
                                       int column_max,
                                       int row_min,
@@ -207,7 +197,6 @@ TableSelection Table::SelectRectangle(int column_min,
 }
 
 /// @brief Select all the table.
-/// @ingroup dom
 TableSelection Table::SelectAll() {
   TableSelection output;  // NOLINT
   output.table_ = this;
@@ -220,7 +209,6 @@ TableSelection Table::SelectAll() {
 
 /// @brief Render the table.
 /// @return The rendered table. This is an element you can draw.
-/// @ingroup dom
 Element Table::Render() {
   for (int y = 0; y < dim_y_; ++y) {
     for (int x = 0; x < dim_x_; ++x) {
@@ -250,7 +238,6 @@ Element Table::Render() {
 /// @brief Apply the `decorator` to the selection.
 /// This decorate both the cells, the lines and the corners.
 /// @param decorator The decorator to apply.
-/// @ingroup dom
 // NOLINTNEXTLINE
 void TableSelection::Decorate(Decorator decorator) {
   for (int y = y_min_; y <= y_max_; ++y) {
@@ -264,7 +251,6 @@ void TableSelection::Decorate(Decorator decorator) {
 /// @brief Apply the `decorator` to the selection.
 /// @param decorator The decorator to apply.
 /// This decorate only the cells.
-/// @ingroup dom
 // NOLINTNEXTLINE
 void TableSelection::DecorateCells(Decorator decorator) {
   for (int y = y_min_; y <= y_max_; ++y) {
@@ -282,7 +268,6 @@ void TableSelection::DecorateCells(Decorator decorator) {
 /// @param decorator The decorator to apply.
 /// @param modulo The modulo of the lines to decorate.
 /// @param shift The shift of the lines to decorate.
-/// @ingroup dom
 // NOLINTNEXTLINE
 void TableSelection::DecorateAlternateColumn(Decorator decorator,
                                              int modulo,
@@ -302,7 +287,6 @@ void TableSelection::DecorateAlternateColumn(Decorator decorator,
 /// @param decorator The decorator to apply.
 /// @param modulo The modulo of the lines to decorate.
 /// @param shift The shift of the lines to decorate.
-/// @ingroup dom
 // NOLINTNEXTLINE
 void TableSelection::DecorateAlternateRow(Decorator decorator,
                                           int modulo,
@@ -322,7 +306,6 @@ void TableSelection::DecorateAlternateRow(Decorator decorator,
 /// @param decorator The decorator to apply.
 /// @param modulo The modulo of the corners to decorate.
 /// @param shift The shift of the corners to decorate.
-/// @ingroup dom
 // NOLINTNEXTLINE
 void TableSelection::DecorateCellsAlternateColumn(Decorator decorator,
                                                   int modulo,
@@ -342,7 +325,6 @@ void TableSelection::DecorateCellsAlternateColumn(Decorator decorator,
 /// @param decorator The decorator to apply.
 /// @param modulo The modulo of the corners to decorate.
 /// @param shift The shift of the corners to decorate.
-/// @ingroup dom
 // NOLINTNEXTLINE
 void TableSelection::DecorateCellsAlternateRow(Decorator decorator,
                                                int modulo,
@@ -359,7 +341,6 @@ void TableSelection::DecorateCellsAlternateRow(Decorator decorator,
 
 /// @brief Apply a `border` around the selection.
 /// @param border The border style to apply.
-/// @ingroup dom
 void TableSelection::Border(BorderStyle border) {
   BorderLeft(border);
   BorderRight(border);
@@ -378,7 +359,6 @@ void TableSelection::Border(BorderStyle border) {
 
 /// @brief Draw some separator lines in the selection.
 /// @param border The border style to apply.
-/// @ingroup dom
 void TableSelection::Separator(BorderStyle border) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
@@ -394,7 +374,6 @@ void TableSelection::Separator(BorderStyle border) {
 
 /// @brief Draw some vertical separator lines in the selection.
 /// @param border The border style to apply.
-/// @ingroup dom
 void TableSelection::SeparatorVertical(BorderStyle border) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
@@ -408,7 +387,6 @@ void TableSelection::SeparatorVertical(BorderStyle border) {
 
 /// @brief Draw some horizontal separator lines in the selection.
 /// @param border The border style to apply.
-/// @ingroup dom
 void TableSelection::SeparatorHorizontal(BorderStyle border) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
@@ -422,7 +400,6 @@ void TableSelection::SeparatorHorizontal(BorderStyle border) {
 
 /// @brief Draw some separator lines to the left side of the selection.
 /// @param border The border style to apply.
-/// @ingroup dom
 void TableSelection::BorderLeft(BorderStyle border) {
   for (int y = y_min_; y <= y_max_; y++) {
     table_->elements_[y][x_min_] =
@@ -432,7 +409,6 @@ void TableSelection::BorderLeft(BorderStyle border) {
 
 /// @brief Draw some separator lines to the right side of the selection.
 /// @param border The border style to apply.
-/// @ingroup dom
 void TableSelection::BorderRight(BorderStyle border) {
   for (int y = y_min_; y <= y_max_; y++) {
     table_->elements_[y][x_max_] =
@@ -442,7 +418,6 @@ void TableSelection::BorderRight(BorderStyle border) {
 
 /// @brief Draw some separator lines to the top side of the selection.
 /// @param border The border style to apply.
-/// @ingroup dom
 void TableSelection::BorderTop(BorderStyle border) {
   for (int x = x_min_; x <= x_max_; x++) {
     table_->elements_[y_min_][x] =
@@ -452,7 +427,6 @@ void TableSelection::BorderTop(BorderStyle border) {
 
 /// @brief Draw some separator lines to the bottom side of the selection.
 /// @param border The border style to apply.
-/// @ingroup dom
 void TableSelection::BorderBottom(BorderStyle border) {
   for (int x = x_min_; x <= x_max_; x++) {
     table_->elements_[y_max_][x] =

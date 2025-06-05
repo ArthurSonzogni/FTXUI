@@ -27,6 +27,10 @@ struct Event;
 using Component = std::shared_ptr<ComponentBase>;
 class ScreenInteractivePrivate;
 
+/// @brief ScreenInteractive is a `Screen` that can handle events, run a main
+/// loop, and manage components.
+///
+/// @ingroup component
 class ScreenInteractive : public Screen {
  public:
   // Constructors:

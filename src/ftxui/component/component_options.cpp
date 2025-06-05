@@ -17,7 +17,6 @@ namespace ftxui {
 /// @params _active The color when the component is active.
 /// @params _duration The duration of the animation.
 /// @params _function The easing function of the animation.
-/// @ingroup component
 void AnimatedColorOption::Set(Color _inactive,
                               Color _active,
                               animation::Duration _duration,
@@ -32,7 +31,6 @@ void AnimatedColorOption::Set(Color _inactive,
 /// @brief Set how the underline should animate.
 /// @param d The duration of the animation.
 /// @param f The easing function of the animation.
-/// @ingroup component
 void UnderlineOption::SetAnimation(animation::Duration d,
                                    animation::easing::Function f) {
   SetAnimationDuration(d);
@@ -41,7 +39,6 @@ void UnderlineOption::SetAnimation(animation::Duration d,
 
 /// @brief Set how the underline should animate.
 /// @param d The duration of the animation.
-/// @ingroup component
 void UnderlineOption::SetAnimationDuration(animation::Duration d) {
   leader_duration = d;
   follower_duration = d;
@@ -49,7 +46,6 @@ void UnderlineOption::SetAnimationDuration(animation::Duration d) {
 
 /// @brief Set how the underline should animate.
 /// @param f The easing function of the animation.
-/// @ingroup component
 void UnderlineOption::SetAnimationFunction(animation::easing::Function f) {
   leader_function = f;
   follower_function = std::move(f);
@@ -60,7 +56,6 @@ void UnderlineOption::SetAnimationFunction(animation::easing::Function f) {
 /// follower.
 /// @param f_leader The duration of the animation for the leader.
 /// @param f_follower The duration of the animation for the follower.
-/// @ingroup component
 void UnderlineOption::SetAnimationFunction(
     animation::easing::Function f_leader,
     animation::easing::Function f_follower) {
@@ -70,7 +65,6 @@ void UnderlineOption::SetAnimationFunction(
 
 /// @brief Standard options for a horizontal menu.
 /// This can be useful to implement a tab bar.
-/// @ingroup component
 // static
 MenuOption MenuOption::Horizontal() {
   MenuOption option;
@@ -95,7 +89,6 @@ MenuOption MenuOption::Horizontal() {
 
 /// @brief Standard options for an animated horizontal menu.
 /// This can be useful to implement a tab bar.
-/// @ingroup component
 // static
 MenuOption MenuOption::HorizontalAnimated() {
   auto option = Horizontal();
@@ -105,7 +98,6 @@ MenuOption MenuOption::HorizontalAnimated() {
 
 /// @brief Standard options for a vertical menu.
 /// This can be useful to implement a list of selectable items.
-/// @ingroup component
 // static
 MenuOption MenuOption::Vertical() {
   MenuOption option;
@@ -127,7 +119,6 @@ MenuOption MenuOption::Vertical() {
 
 /// @brief Standard options for an animated vertical menu.
 /// This can be useful to implement a list of selectable items.
-/// @ingroup component
 // static
 MenuOption MenuOption::VerticalAnimated() {
   auto option = MenuOption::Vertical();
@@ -150,7 +141,6 @@ MenuOption MenuOption::VerticalAnimated() {
 
 /// @brief Standard options for a horizontal menu with some separator.
 /// This can be useful to implement a tab bar.
-/// @ingroup component
 // static
 MenuOption MenuOption::Toggle() {
   auto option = MenuOption::Horizontal();
@@ -159,7 +149,6 @@ MenuOption MenuOption::Toggle() {
 }
 
 /// @brief Create a ButtonOption, highlighted using [] characters.
-/// @ingroup component
 // static
 ButtonOption ButtonOption::Ascii() {
   ButtonOption option;
@@ -172,7 +161,6 @@ ButtonOption ButtonOption::Ascii() {
 }
 
 /// @brief Create a ButtonOption, inverted when focused.
-/// @ingroup component
 // static
 ButtonOption ButtonOption::Simple() {
   ButtonOption option;
@@ -188,7 +176,6 @@ ButtonOption ButtonOption::Simple() {
 
 /// @brief Create a ButtonOption. The button is shown using a border, inverted
 /// when focused. This is the current default.
-/// @ingroup component
 ButtonOption ButtonOption::Border() {
   ButtonOption option;
   option.transform = [](const EntryState& s) {
@@ -205,7 +192,6 @@ ButtonOption ButtonOption::Border() {
 }
 
 /// @brief Create a ButtonOption, using animated colors.
-/// @ingroup component
 // static
 ButtonOption ButtonOption::Animated() {
   return Animated(Color::Black, Color::GrayLight,  //
@@ -213,7 +199,6 @@ ButtonOption ButtonOption::Animated() {
 }
 
 /// @brief Create a ButtonOption, using animated colors.
-/// @ingroup component
 // static
 ButtonOption ButtonOption::Animated(Color color) {
   return ButtonOption::Animated(
@@ -224,7 +209,6 @@ ButtonOption ButtonOption::Animated(Color color) {
 }
 
 /// @brief Create a ButtonOption, using animated colors.
-/// @ingroup component
 // static
 ButtonOption ButtonOption::Animated(Color background, Color foreground) {
   // NOLINTBEGIN
@@ -237,7 +221,6 @@ ButtonOption ButtonOption::Animated(Color background, Color foreground) {
 }
 
 /// @brief Create a ButtonOption, using animated colors.
-/// @ingroup component
 // static
 ButtonOption ButtonOption::Animated(Color background,
                                     Color foreground,
@@ -257,7 +240,6 @@ ButtonOption ButtonOption::Animated(Color background,
 }
 
 /// @brief Option for standard Checkbox.
-/// @ingroup component
 // static
 CheckboxOption CheckboxOption::Simple() {
   auto option = CheckboxOption();
@@ -282,7 +264,6 @@ CheckboxOption CheckboxOption::Simple() {
 }
 
 /// @brief Option for standard Radiobox
-/// @ingroup component
 // static
 RadioboxOption RadioboxOption::Simple() {
   auto option = RadioboxOption();
@@ -307,7 +288,6 @@ RadioboxOption RadioboxOption::Simple() {
 }
 
 /// @brief Standard options for the input component.
-/// @ingroup component
 // static
 InputOption InputOption::Default() {
   InputOption option;
@@ -330,7 +310,6 @@ InputOption InputOption::Default() {
 }
 
 /// @brief Standard options for a more beautiful input component.
-/// @ingroup component
 // static
 InputOption InputOption::Spacious() {
   InputOption option;

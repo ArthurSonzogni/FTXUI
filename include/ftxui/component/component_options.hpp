@@ -27,6 +27,8 @@ struct EntryState {
   int index;          ///< Index of the entry when applicable or -1.
 };
 
+/// @brief Option for the underline effect.
+/// @ingroup component
 struct UnderlineOption {
   bool enabled = false;
 
@@ -230,7 +232,8 @@ struct SliderOption {
   std::function<void()> on_change;  ///> Called when `value` is updated.
 };
 
-// Parameter pack used by `WindowOptions::render`.
+/// @brief State passed to the `Window` component's render function.
+/// @ingroup component
 struct WindowRenderState {
   Element inner;             ///< The element wrapped inside this window.
   const std::string& title;  ///< The title of the window.
