@@ -11,7 +11,6 @@ namespace ftxui {
 
 /// @brief A Loop is a wrapper around a Component and a ScreenInteractive.
 /// It is used to run a Component in a terminal.
-/// @ingroup component
 /// @see Component, ScreenInteractive.
 /// @see ScreenInteractive::Loop().
 /// @see ScreenInteractive::ExitLoop().
@@ -28,7 +27,6 @@ Loop::~Loop() {
 }
 
 /// @brief Whether the loop has quitted.
-/// @ingroup component
 bool Loop::HasQuitted() {
   return screen_->HasQuitted();
 }

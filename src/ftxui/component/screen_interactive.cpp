@@ -366,7 +366,6 @@ ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
   };
 }
 
-/// @ingroup component
 /// Create a ScreenInteractive taking the full terminal size. This is using the
 /// alternate screen buffer to avoid messing with the terminal content.
 /// @note This is the same as `ScreenInteractive::FullscreenAlternateScreen()`
@@ -375,7 +374,6 @@ ScreenInteractive ScreenInteractive::Fullscreen() {
   return FullscreenAlternateScreen();
 }
 
-/// @ingroup component
 /// Create a ScreenInteractive taking the full terminal size. The primary screen
 /// buffer is being used. It means if the terminal is resized, the previous
 /// content might mess up with the terminal content.
@@ -389,7 +387,6 @@ ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
   };
 }
 
-/// @ingroup component
 /// Create a ScreenInteractive taking the full terminal size. This is using the
 /// alternate screen buffer to avoid messing with the terminal content.
 // static
@@ -422,7 +419,6 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   };
 }
 
-/// @ingroup component
 /// @brief Set whether mouse is tracked and events reported.
 /// called outside of the main loop. E.g `ScreenInteractive::Loop(...)`.
 /// @param enable Whether to enable mouse event tracking.
@@ -444,7 +440,6 @@ void ScreenInteractive::TrackMouse(bool enable) {
 
 /// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
-/// @ingroup component
 void ScreenInteractive::Post(Task task) {
   // Task/Events sent toward inactive screen or screen waiting to become
   // inactive are dropped.
@@ -457,7 +452,6 @@ void ScreenInteractive::Post(Task task) {
 
 /// @brief Add an event to the main loop.
 /// It will be executed later, after every other scheduled events.
-/// @ingroup component
 void ScreenInteractive::PostEvent(Event event) {
   Post(event);
 }
@@ -479,7 +473,6 @@ void ScreenInteractive::RequestAnimationFrame() {
 /// @brief Try to get the unique lock about behing able to capture the mouse.
 /// @return A unique lock if the mouse is not already captured, otherwise a
 /// null.
-/// @ingroup component
 CapturedMouse ScreenInteractive::CaptureMouse() {
   if (mouse_captured) {
     return nullptr;
@@ -491,14 +484,12 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 
 /// @brief Execute the main loop.
 /// @param component The component to draw.
-/// @ingroup component
 void ScreenInteractive::Loop(Component component) {  // NOLINT
   class Loop loop(this, std::move(component));
   loop.Run();
 }
 
 /// @brief Return whether the main loop has been quit.
-/// @ingroup component
 bool ScreenInteractive::HasQuitted() {
   return task_receiver_->HasQuitted();
 }
@@ -1022,13 +1013,11 @@ void ScreenInteractive::ResetCursorPosition() {
 }
 
 /// @brief Return a function to exit the main loop.
-/// @ingroup component
 Closure ScreenInteractive::ExitLoopClosure() {
   return [this] { Exit(); };
 }
 
 /// @brief Exit the main loop.
-/// @ingroup component
 void ScreenInteractive::Exit() {
   Post([this] { ExitNow(); });
 }

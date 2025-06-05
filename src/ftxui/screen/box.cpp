@@ -7,7 +7,6 @@
 
 namespace ftxui {
 /// @return the biggest Box contained in both |a| and |b|.
-/// @ingroup screen
 // static
 Box Box::Intersection(Box a, Box b) {
   return Box{
@@ -19,7 +18,6 @@ Box Box::Intersection(Box a, Box b) {
 }
 
 /// @return the smallest Box containing both |a| and |b|.
-/// @ingroup screen
 // static
 Box Box::Union(Box a, Box b) {
   return Box{
@@ -33,7 +31,6 @@ Box Box::Union(Box a, Box b) {
 /// Shift the box by (x,y).
 /// @param x horizontal shift.
 /// @param y vertical shift.
-/// @ingroup screen
 void Box::Shift(int x, int y) {
   x_min += x;
   x_max += x;
@@ -42,7 +39,6 @@ void Box::Shift(int x, int y) {
 }
 
 /// @return whether (x,y) is contained inside the box.
-/// @ingroup screen
 bool Box::Contain(int x, int y) const {
   return x_min <= x &&  //
          x_max >= x &&  //
@@ -51,20 +47,17 @@ bool Box::Contain(int x, int y) const {
 }
 
 /// @return whether the box is empty.
-/// @ingroup screen
 bool Box::IsEmpty() const {
   return x_min > x_max || y_min > y_max;
 }
 
 /// @return whether |other| is the same as |this|
-/// @ingroup screen
 bool Box::operator==(const Box& other) const {
   return (x_min == other.x_min) && (x_max == other.x_max) &&
          (y_min == other.y_min) && (y_max == other.y_max);
 }
 
 /// @return whether |other| and |this| are different.
-/// @ingroup screen
 bool Box::operator!=(const Box& other) const {
   return !operator==(other);
 }

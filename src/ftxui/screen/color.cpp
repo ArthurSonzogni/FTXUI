@@ -74,20 +74,16 @@ std::string Color::Print(bool is_background_color) const {
 }
 
 /// @brief Build a transparent color.
-/// @ingroup screen
 Color::Color() = default;
 
 /// @brief Build a transparent color.
-/// @ingroup screen
 Color::Color(Palette1 /*value*/) : Color() {}
 
 /// @brief Build a color using the Palette16 colors.
-/// @ingroup screen
 Color::Color(Palette16 index)
     : type_(ColorType::Palette16), red_(index), alpha_(255) {}
 
 /// @brief Build a color using Palette256 colors.
-/// @ingroup screen
 Color::Color(Palette256 index)
     : type_(ColorType::Palette256), red_(index), alpha_(255) {
   if (Terminal::ColorSupport() >= Terminal::Color::Palette256) {
@@ -104,7 +100,6 @@ Color::Color(Palette256 index)
 /// @param green The quantity of green [0,255]
 /// @param blue The quantity of blue [0,255]
 /// @param alpha The quantity of alpha [0,255]
-/// @ingroup screen
 Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
     : type_(ColorType::TrueColor),
       red_(red),
@@ -148,7 +143,6 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
 /// @param red The quantity of red [0,255]
 /// @param green The quantity of green [0,255]
 /// @param blue The quantity of blue [0,255]
-/// @ingroup screen
 // static
 Color Color::RGB(uint8_t red, uint8_t green, uint8_t blue) {
   return RGBA(red, green, blue, 255);
@@ -160,7 +154,6 @@ Color Color::RGB(uint8_t red, uint8_t green, uint8_t blue) {
 /// @param green The quantity of green [0,255]
 /// @param blue The quantity of blue [0,255]
 /// @param alpha The quantity of alpha [0,255]
-/// @ingroup screen
 /// @see Color::RGB
 // static
 Color Color::RGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
@@ -174,7 +167,6 @@ Color Color::RGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) {
 /// @param s The "colorfulness" [0,255].
 /// @param v The "Lightness" [0,255]
 /// @param alpha The quantity of alpha [0,255]
-/// @ingroup screen
 // static
 Color Color::HSVA(uint8_t h, uint8_t s, uint8_t v, uint8_t alpha) {
   uint8_t region = h / 43;                                        // NOLINT
@@ -202,7 +194,6 @@ Color Color::HSVA(uint8_t h, uint8_t s, uint8_t v, uint8_t alpha) {
 /// @param h The hue of the color [0,255]
 /// @param s The "colorfulness" [0,255].
 /// @param v The "Lightness" [0,255]
-/// @ingroup screen
 // static
 Color Color::HSV(uint8_t h, uint8_t s, uint8_t v) {
   return HSVA(h, s, v, 255);
