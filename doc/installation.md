@@ -16,6 +16,11 @@ This page serves as an entry point for the available integration methods.
 - @subpage installation_vcpkg
 - @subpage installation_conan
 - @subpage installation_manual
+- @subpage installation_nix
+- @subpage installation_debian
+- @subpage installation_arch
+- @subpage installation_opensuse
+- @subpage installation_xmake
 
 ## Next Steps
 
