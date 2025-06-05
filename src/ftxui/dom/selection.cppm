@@ -1,7 +1,5 @@
-/**
- * @file selection.cppm
- * @brief Module file for the Selection class of the Dom module
- */
+/// @module ftxui.dom.selection
+/// @brief Module file for the Selection class of the Dom module
 
 module;
 

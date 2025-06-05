@@ -1,7 +1,5 @@
-/**
- * @file color.cppm
- * @brief Module file for the Color class of the Screen module
- */
+/// @module ftxui.screen.color
+/// @brief Module file for the Color class of the Screen module
 
 module;
 

@@ -1,7 +1,5 @@
-/**
- * @file terminal.cppm
- * @brief Module file for the Terminal namespace of the Screen module
- */
+/// @module ftxui.screen.terminal
+/// @brief Module file for the Terminal namespace of the Screen module
 
 module;
 

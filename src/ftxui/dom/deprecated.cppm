@@ -1,7 +1,5 @@
-/**
- * @file deprecated.cppm
- * @brief Module file for deprecated parts of the Dom module
- */
+/// @module ftxui.dom.deprecated
+/// @brief Module file for deprecated parts of the Dom module
 
 module;
 

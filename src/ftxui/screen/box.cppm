@@ -1,7 +1,5 @@
-/**
- * @file box.cppm
- * @brief Module file for the Box struct of the Screen module
- */
+/// @module ftxui.screen.box
+/// @brief Module file for the Box struct of the Screen module
 
 module;
 

@@ -1,7 +1,5 @@
-/**
- * @file task.cppm
- * @brief Module file for the Task class of the Component module
- */
+/// @module ftxui.component.task
+/// @brief Module file for the Task class of the Component module
 
 module;
 

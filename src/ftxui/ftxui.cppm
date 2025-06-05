@@ -1,7 +1,5 @@
-/**
- * @file ftxui.cppm
- * @brief Module file re-exporting all FTXUI submodules.
- */
+/// @module ftxui
+/// @brief Module file re-exporting all FTXUI submodules.
 
 export module ftxui;
 

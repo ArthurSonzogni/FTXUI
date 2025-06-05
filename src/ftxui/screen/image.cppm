@@ -1,7 +1,5 @@
-/**
- * @file image.cppm
- * @brief Module file for the Image class of the Screen module
- */
+/// @module ftxui.screen.image
+/// @brief Module file for the Image class of the Screen module
 
 module;
 

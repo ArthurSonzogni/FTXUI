@@ -1,7 +1,5 @@
-/**
- * @file component.cppm
- * @brief Module file for FTXUI component operations.
- */
+/// @module ftxui.component
+/// @brief Module file for FTXUI component operations.
 
 export module ftxui.component;
 

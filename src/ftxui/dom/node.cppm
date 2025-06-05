@@ -1,7 +1,5 @@
-/**
- * @file node.cppm
- * @brief Module file for the Node class of the Dom module
- */
+/// @module ftxui.dom.node
+/// @brief Module file for the Node class of the Dom module
 
 module;
 

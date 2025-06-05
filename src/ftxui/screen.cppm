@@ -1,7 +1,5 @@
-/**
- * @file screen.cppm
- * @brief Module file for FTXUI screen operations.
- */
+/// @module ftxui.screen
+/// @brief Module file for FTXUI screen operations.
 
 export module ftxui.screen;
 

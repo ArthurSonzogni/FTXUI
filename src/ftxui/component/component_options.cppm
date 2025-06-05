@@ -1,7 +1,5 @@
-/**
- * @file component_options.cppm
- * @brief Module file for options for the Component class of the Component module
- */
+/// @module ftxui.component.component_options
+/// @brief Module file for options for the Component class of the Component module
 
 module;
 

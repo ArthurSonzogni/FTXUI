@@ -1,7 +1,5 @@
-/**
- * @file dom.cppm
- * @brief Module file for FTXUI main operations.
- */
+/// @module ftxui.dom
+/// @brief Module file for FTXUI main operations.
 
 export module ftxui.dom;
 

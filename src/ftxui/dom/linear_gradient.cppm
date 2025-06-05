@@ -1,7 +1,5 @@
-/**
- * @file linear_gradient.cppm
- * @brief Module file for the LinearGradient struct of the Dom module
- */
+/// @module ftxui.dom.linear_gradient
+/// @brief Module file for the LinearGradient struct of the Dom module
 
 module;
 

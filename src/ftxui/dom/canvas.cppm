@@ -1,7 +1,5 @@
-/**
- * @file canvas.cppm
- * @brief Module file for the Canvas struct of the Dom module
- */
+/// @module ftxui.dom.canvas
+/// @brief Module file for the Canvas struct of the Dom module
 
 module;
 

@@ -1,7 +1,5 @@
-/**
- * @file loop.cppm
- * @brief Module file for the Loop class of the Component module
- */
+/// @module ftxui.component.loop
+/// @brief Module file for the Loop class of the Component module
 
 module;
 

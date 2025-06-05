@@ -1,7 +1,5 @@
-/**
- * @file captured_mouse.cppm
- * @brief Module file for the CapturedMouseInterface class of the Component module
- */
+/// @module ftxui.component.captured_mouse
+/// @brief Module file for the CapturedMouseInterface class of the Component module
 
 module;
 
