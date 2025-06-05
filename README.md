@@ -50,8 +50,9 @@ A simple cross-platform C++ library for terminal based user interfaces!
      - [Conan](https://conan.io/center/recipes/ftxui) [Debian package](https://tracker.debian.org/pkg/ftxui)
      - [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui)
      - [Arch Linux](https://aur.archlinux.org/packages/ftxui/)
-     - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
-     - [XMake](https://xmake.io) repository [package](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
+    - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui)
+    - [XMake](https://xmake.io) repository [package](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
+    - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
  * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
 ## Documentation
@@ -430,6 +431,7 @@ If you don't, FTXUI may be used from the following packages:
 - [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui),
 - [Arch Linux](https://aur.archlinux.org/packages/ftxui/),
 - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui),
+[Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix),
 [![Packaging status](https://repology.org/badge/vertical-allrepos/libftxui.svg)](https://repology.org/project/libftxui/versions)
 
 
