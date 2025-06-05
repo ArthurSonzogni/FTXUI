@@ -1,7 +1,5 @@
-/**
- * @file table.cppm
- * @brief Module file for the Table class of the Dom module
- */
+/// @module ftxui.dom.table
+/// @brief Module file for the Table class of the Dom module
 
 module;
 

@@ -1,7 +1,6 @@
 /// @module ftxui.component.animation
-/// @brief Module file for the Animation namespace of the Component module.
+/// @brief C++20 module interface for the Animation namespace of the Component module.
 ///
-/// @file animation.cppm
 
 module;
 

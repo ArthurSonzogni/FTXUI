@@ -1,7 +1,5 @@
-/**
- * @file autoreset.cppm
- * @brief Module file for the AutoReset class of the Util module
- */
+/// @module ftxui.util.autoreset
+/// @brief Module file for the AutoReset class of the Util module
 
 module;
 

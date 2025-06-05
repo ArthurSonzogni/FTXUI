@@ -1,7 +1,5 @@
-/**
- * @file screen_interactive.cppm
- * @brief Module file for the ScreenInteractive class of the Component module
- */
+/// @module ftxui.component.screen_interactive
+/// @brief Module file for the ScreenInteractive class of the Component module
 
 module;
 

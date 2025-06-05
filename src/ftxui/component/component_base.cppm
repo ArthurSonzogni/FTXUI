@@ -1,7 +1,5 @@
-/**
- * @file component_base.cppm
- * @brief Module file for the ComponentBase class of the Component module
- */
+/// @module ftxui.component.component_base
+/// @brief Module file for the ComponentBase class of the Component module
 
 module;
 

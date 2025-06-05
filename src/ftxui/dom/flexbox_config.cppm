@@ -1,7 +1,5 @@
-/**
- * @file flexbox_config.cppm
- * @brief Module file for the FlexboxConfig struct of the Dom module
- */
+/// @module ftxui.dom.flexbox_config
+/// @brief Module file for the FlexboxConfig struct of the Dom module
 
 module;
 

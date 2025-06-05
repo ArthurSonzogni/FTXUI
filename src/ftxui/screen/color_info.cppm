@@ -1,7 +1,5 @@
-/**
- * @file color_info.cppm
- * @brief Module file for the ColorInfo struct of the Screen module
- */
+/// @module ftxui.screen.color_info
+/// @brief Module file for the ColorInfo struct of the Screen module
 
 module;
 

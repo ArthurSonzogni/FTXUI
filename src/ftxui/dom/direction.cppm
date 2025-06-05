@@ -1,7 +1,5 @@
-/**
- * @file direction.cppm
- * @brief Module file for the Direction enum of the Dom module
- */
+/// @module ftxui.dom.direction
+/// @brief Module file for the Direction enum of the Dom module
 
 module;
 

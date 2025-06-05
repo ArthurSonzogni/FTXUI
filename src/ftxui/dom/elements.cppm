@@ -1,7 +1,5 @@
-/**
- * @file canvas.cppm
- * @brief Module file for the Element classes and functions of the Dom module
- */
+/// @module ftxui.dom.elements
+/// @brief Module file for the Element classes and functions of the Dom module
 
 module;
 

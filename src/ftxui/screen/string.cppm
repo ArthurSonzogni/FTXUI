@@ -1,7 +1,5 @@
-/**
- * @file string.cppm
- * @brief Module file for string functions of the Screen module
- */
+/// @module ftxui.screen.string
+/// @brief Module file for string functions of the Screen module
 
 module;
 

@@ -1,7 +1,5 @@
-/**
- * @file receiver.cppm
- * @brief Module file for the Receiver class of the Component module
- */
+/// @module ftxui.component.receiver
+/// @brief Module file for the Receiver class of the Component module
 
 module;
 

@@ -1,7 +1,5 @@
-/**
- * @file requirement.cppm
- * @brief Module file for the Requirement struct of the Dom module
- */
+/// @module ftxui.dom.requirement
+/// @brief Module file for the Requirement struct of the Dom module
 
 module;
 

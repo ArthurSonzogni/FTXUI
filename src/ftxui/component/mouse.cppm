@@ -1,7 +1,5 @@
-/**
- * @file mouse.cppm
- * @brief Module file for the Mouse struct of the Component module
- */
+/// @module ftxui.component.mouse
+/// @brief Module file for the Mouse struct of the Component module
 
 module;
 

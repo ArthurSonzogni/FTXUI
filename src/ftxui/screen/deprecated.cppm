@@ -1,7 +1,5 @@
-/**
- * @file box.cppm
- * @brief Module file for the deprecated parts of the Screen module
- */
+/// @module ftxui.screen.deprecated
+/// @brief Module file for the deprecated parts of the Screen module
 
 module;
 

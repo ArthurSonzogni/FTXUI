@@ -1,7 +1,5 @@
-/**
- * @file ref.cppm
- * @brief Module file for the Ref classes of the Util module
- */
+/// @module ftxui.util.ref
+/// @brief Module file for the Ref classes of the Util module
 
 module;
 

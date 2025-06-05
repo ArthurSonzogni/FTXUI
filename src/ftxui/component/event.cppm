@@ -1,7 +1,5 @@
-/**
- * @file event.cppm
- * @brief Module file for the Event struct of the Component module
- */
+/// @module ftxui.component.event
+/// @brief Module file for the Event struct of the Component module
 
 module;
 

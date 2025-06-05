@@ -1,7 +1,5 @@
-/**
- * @file pixel.cppm
- * @brief Module file for the Pixel struct of the Screen module
- */
+/// @module ftxui.screen.pixel
+/// @brief Module file for the Pixel struct of the Screen module
 
 module;
 
