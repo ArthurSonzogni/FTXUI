@@ -27,8 +27,15 @@ namespace ftxui {
 /// LinearGradient(Color::Red, Color::Blue);
 /// LinearGradient(45, Color::Red, Color::Blue);
 /// ```
+///
+/// @ingroup dom
 struct LinearGradient {
   float angle = 0.f;
+
+  /// A stop is a color at a specific position in the gradient.
+  /// The position is a value between 0.0 and 1.0,
+  /// where 0.0 is the start of the gradient
+  /// and 1.0 is the end of the gradient.
   struct Stop {
     Color color = Color::Default;
     std::optional<float> position;

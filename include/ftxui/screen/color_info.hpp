@@ -9,6 +9,10 @@
 
 namespace ftxui {
 
+/// @brief ColorInfo is a structure that contains information about the terminal
+/// color palette.
+///
+/// @ingroup screen
 struct ColorInfo {
   const char* name;
   uint8_t index_256;

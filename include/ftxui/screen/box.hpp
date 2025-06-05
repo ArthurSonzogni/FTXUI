@@ -6,6 +6,13 @@
 
 namespace ftxui {
 
+/// @brief Box is a structure that represents a rectangular area in a 2D space.
+///
+/// It is defined by its minimum and maximum coordinates along the x and y axes.
+/// Note that the coordinates are inclusive, meaning that the box includes both
+/// the minimum and maximum values.
+/// 
+/// @ingroup screen
 struct Box {
   int x_min = 0;
   int x_max = 0;

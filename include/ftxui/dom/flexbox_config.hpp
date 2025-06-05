@@ -12,6 +12,19 @@
 
 namespace ftxui {
 
+
+/// @brief FlexboxConfig is a configuration structure that defines the layout
+/// properties for a flexbox container.
+//
+/// It allows you to specify the direction of the flex items, whether they
+/// should wrap, how they should be justified along the main axis, and how
+/// they should be aligned along the cross axis.
+/// It also includes properties for gaps between flex items in both the
+/// main and cross axes.
+/// This structure is used to configure the layout behavior of flexbox
+/// containers in a terminal user interface.
+///
+/// @ingroup dom
 struct FlexboxConfig {
   /// This establishes the main-axis, thus defining the direction flex items are
   /// placed in the flex container. Flexbox is (aside wrapping) single-direction

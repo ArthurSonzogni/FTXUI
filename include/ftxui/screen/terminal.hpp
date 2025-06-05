@@ -5,6 +5,9 @@
 #define FTXUI_SCREEN_TERMINAL_HPP
 
 namespace ftxui {
+
+/// @brief Dimensions is a structure that represents the size of the terminal
+/// @ingroup screen
 struct Dimensions {
   int dimx;
   int dimy;
@@ -14,6 +17,9 @@ namespace Terminal {
 Dimensions Size();
 void SetFallbackSize(const Dimensions& fallbackSize);
 
+/// @brief Color is an enumeration that represents the color support of the
+/// terminal.
+/// @ingroup screen
 enum Color {
   Palette1,
   Palette16,

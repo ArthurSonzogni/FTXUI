@@ -24,6 +24,8 @@ class ComponentBase;
 ///
 /// Useful documentation about xterm specification:
 /// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+///
+/// @ingroup component
 struct Event {
   // --- Constructor section ---------------------------------------------------
   static Event Character(std::string);

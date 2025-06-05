@@ -20,6 +20,20 @@ class Screen;
 using Element = std::shared_ptr<Node>;
 using Elements = std::vector<Element>;
 
+/// @brief Node is the base class for all elements in the DOM tree.
+///
+/// It represents a single node in the document object model (DOM) and provides
+/// the basic structure for layout and rendering.
+/// It contains methods for computing layout requirements, setting the box
+/// dimensions, selecting content, rendering to the screen, and checking the
+/// layout status.
+/// It typically contains child elements, which are also instances of Node.
+///
+/// Users are expected to derive from this class to create custom elements.
+///
+/// A list of builtin elements can be found in the `elements.hpp` file.
+///
+/// @ingroup dom
 class Node {
  public:
   Node();

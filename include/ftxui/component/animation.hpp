@@ -8,11 +8,21 @@
 #include <functional>  // for function
 
 namespace ftxui::animation {
-// Components who haven't completed their animation can call this function to
-// request a new frame to be drawn later.
-//
-// When there is no new events and no animations to complete, no new frame is
-// drawn.
+/// @brief RequestAnimationFrame is a function that requests a new frame to be
+/// drawn in the next animation cycle.
+///
+/// @note This function is typically called by components that need to
+/// update their state or appearance over time, such as animations or
+/// transitions. This is useful when the change doesn't depend depend on the
+/// events seen by the terminal, but rather on the passage of time.
+///
+/// Components who haven't completed their animation can call this function to
+/// request a new frame to be drawn later.
+///
+/// When there is no new events and no animations to complete, no new frame is
+/// drawn.
+///
+/// @ingroup component
 void RequestAnimationFrame();
 
 using Clock = std::chrono::steady_clock;

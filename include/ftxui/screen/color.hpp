@@ -15,7 +15,9 @@
 
 namespace ftxui {
 
-/// @brief A class representing terminal colors.
+/// @brief Color is a class that represents a color in the terminal user
+/// interface.
+///
 /// @ingroup screen
 class Color {
  public:

@@ -10,6 +10,11 @@
 namespace ftxui {
 class Node;
 
+/// @brief Requirement is a structure that defines the layout requirements for a
+/// Node in the terminal user interface.
+///
+/// It specifies the minimum size required to fully draw the element,
+/// @ingroup dom
 struct Requirement {
   // The required size to fully draw the element.
   int min_x = 0;
