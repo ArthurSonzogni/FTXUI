@@ -1,0 +1,8 @@
+#!/bin/bash
+
+/usr/bin/g++ \
+  -I/home/ece/FTXUI/include \
+  -L/home/ece/FTXUI/build \
+  "$@" \
+  -lftxui-component -lftxui-dom -lftxui-screen
+
