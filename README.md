@@ -436,6 +436,11 @@ If you don't, FTXUI may be used from the following packages:
 
 
 If you choose to build with g++, you can use bash script:
+1. Run the installer:
+```bash
+chmod +x install && ./install
+```
+2. Compile your codes:
 ```bash
 g++ftxui -o out source_code.cpp
 ```
