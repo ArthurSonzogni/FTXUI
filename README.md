@@ -435,9 +435,14 @@ If you don't, FTXUI may be used from the following packages:
 [![Packaging status](https://repology.org/badge/vertical-allrepos/libftxui.svg)](https://repology.org/project/libftxui/versions)
 
 
-If you choose to build and link FTXUI yourself, `ftxui-component` must be first in the linking order relative to the other FTXUI libraries, i.e.
+If you choose to build with g++, you can use bash script:
+1. Run the installer:
 ```bash
-g++ . . . -lftxui-component -lftxui-dom -lftxui-screen . . .
+chmod +x install && ./install
+```
+2. Compile your codes:
+```bash
+g++ftxui -o out source_code.cpp
 ```
 
 To build FTXUI with modules, check [documentation](https://arthursonzogni.github.io/FTXUI/cpp20-modules.html)

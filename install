@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo cp g++ftxui /usr/local/bin/ && sudo chmod +x /usr/local/bin/g++ftxui
