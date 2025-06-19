@@ -105,15 +105,14 @@ class ScreenInteractive : public Screen {
     Fullscreen,
     TerminalOutput,
   };
-  Dimension dimension_ = Dimension::Fixed;
-  bool use_alternative_screen_ = false;
+  const Dimension dimension_ = Dimension::Fixed;
+  const int dimension_fixed_x_ = 0;
+  const int dimension_fixed_y_ = 0;
+  const bool use_alternative_screen_ = false;
 
   ScreenInteractive(Dimension dimension,
                     bool use_alternative_screen);
-  ScreenInteractive(Dimension dimension,
-                    int dimx,
-                    int dimy,
-                    bool use_alternative_screen);
+  ScreenInteractive(int dimx, int dimy); // Dimension::Fixed constructor.
 
   bool track_mouse_ = true;
 
@@ -129,8 +128,6 @@ class ScreenInteractive : public Screen {
   bool animation_requested_ = false;
   animation::TimePoint previous_animation_time_;
 
-  int fixed_dimx_ = 0;
-  int fixed_dimy_ = 0;
   int cursor_x_ = 1;
   int cursor_y_ = 1;
 

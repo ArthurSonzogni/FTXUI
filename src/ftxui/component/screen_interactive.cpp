@@ -354,25 +354,16 @@ ScreenInteractive::ScreenInteractive(Dimension dimension,
   task_receiver_ = MakeReceiver<Task>();
 }
 
-ScreenInteractive::ScreenInteractive(Dimension dimension,
-                                     int dimx,
-                                     int dimy,
-                                     bool use_alternative_screen)
+ScreenInteractive::ScreenInteractive(int dimx, int dimy)
     : Screen(0, 0),
-      dimension_(dimension),
-      fixed_dimx_(dimx), fixed_dimy_(dimy),
-      use_alternative_screen_(use_alternative_screen) {
+      dimension_fixed_x_(dimx),
+      dimension_fixed_y_(dimy) {
   task_receiver_ = MakeReceiver<Task>();
 }
 
 // static
 ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
-  return {
-      Dimension::Fixed,
-      dimx,
-      dimy,
-      false,
-  };
+  return { dimx, dimy };
 }
 
 /// Create a ScreenInteractive taking the full terminal size. This is using the
@@ -404,6 +395,8 @@ ScreenInteractive ScreenInteractive::FullscreenAlternateScreen() {
   };
 }
 
+/// Create a ScreenInteractive whose width match the terminal output width and
+/// the height matches the component being drawn.
 // static
 ScreenInteractive ScreenInteractive::TerminalOutput() {
   return {
@@ -412,6 +405,8 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
   };
 }
 
+/// Create a ScreenInteractive whose width and height match the component being
+/// drawn.
 // static
 ScreenInteractive ScreenInteractive::FitComponent() {
   return {
@@ -905,8 +900,8 @@ void ScreenInteractive::Draw(Component component) {
   document->ComputeRequirement();
   switch (dimension_) {
     case Dimension::Fixed:
-      dimx = fixed_dimx_;
-      dimy = fixed_dimy_;
+      dimx = dimension_fixed_x_;
+      dimy = dimension_fixed_y_;
       break;
     case Dimension::TerminalOutput:
       dimx = terminal.dimx;
