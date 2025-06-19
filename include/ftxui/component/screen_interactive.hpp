@@ -106,13 +106,12 @@ class ScreenInteractive : public Screen {
     TerminalOutput,
   };
   const Dimension dimension_ = Dimension::Fixed;
-  const int dimension_fixed_x_ = 0;
-  const int dimension_fixed_y_ = 0;
   const bool use_alternative_screen_ = false;
 
   ScreenInteractive(Dimension dimension,
+                    int dimx,
+                    int dimy,
                     bool use_alternative_screen);
-  ScreenInteractive(int dimx, int dimy); // Dimension::Fixed constructor.
 
   bool track_mouse_ = true;
 
@@ -131,6 +130,7 @@ class ScreenInteractive : public Screen {
   int cursor_x_ = 1;
   int cursor_y_ = 1;
 
+  std::uint64_t frame_count_ = 0;
   bool mouse_captured = false;
   bool previous_frame_resized_ = false;
 
