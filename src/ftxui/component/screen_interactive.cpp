@@ -346,12 +346,21 @@ void AnimationListener(std::atomic<bool>* quit, Sender<Task> out) {
 
 }  // namespace
 
-ScreenInteractive::ScreenInteractive(int dimx,
-                                     int dimy,
-                                     Dimension dimension,
+ScreenInteractive::ScreenInteractive(Dimension dimension,
                                      bool use_alternative_screen)
-    : Screen(dimx, dimy),
+    : Screen(0, 0),
       dimension_(dimension),
+      use_alternative_screen_(use_alternative_screen) {
+  task_receiver_ = MakeReceiver<Task>();
+}
+
+ScreenInteractive::ScreenInteractive(Dimension dimension,
+                                     int dimx,
+                                     int dimy,
+                                     bool use_alternative_screen)
+    : Screen(0, 0),
+      dimension_(dimension),
+      fixed_dimx_(dimx), fixed_dimy_(dimy),
       use_alternative_screen_(use_alternative_screen) {
   task_receiver_ = MakeReceiver<Task>();
 }
@@ -359,9 +368,9 @@ ScreenInteractive::ScreenInteractive(int dimx,
 // static
 ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
   return {
+      Dimension::Fixed,
       dimx,
       dimy,
-      Dimension::Fixed,
       false,
   };
 }
@@ -380,8 +389,6 @@ ScreenInteractive ScreenInteractive::Fullscreen() {
 // static
 ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
   return {
-      0,
-      0,
       Dimension::Fullscreen,
       false,
   };
@@ -392,8 +399,6 @@ ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
 // static
 ScreenInteractive ScreenInteractive::FullscreenAlternateScreen() {
   return {
-      0,
-      0,
       Dimension::Fullscreen,
       true,
   };
@@ -402,8 +407,6 @@ ScreenInteractive ScreenInteractive::FullscreenAlternateScreen() {
 // static
 ScreenInteractive ScreenInteractive::TerminalOutput() {
   return {
-      0,
-      0,
       Dimension::TerminalOutput,
       false,
   };
@@ -412,8 +415,6 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
 // static
 ScreenInteractive ScreenInteractive::FitComponent() {
   return {
-      0,
-      0,
       Dimension::FitComponent,
       false,
   };
@@ -904,8 +905,8 @@ void ScreenInteractive::Draw(Component component) {
   document->ComputeRequirement();
   switch (dimension_) {
     case Dimension::Fixed:
-      dimx = dimx_;
-      dimy = dimy_;
+      dimx = fixed_dimx_;
+      dimy = fixed_dimy_;
       break;
     case Dimension::TerminalOutput:
       dimx = terminal.dimx;

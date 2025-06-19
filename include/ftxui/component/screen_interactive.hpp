@@ -107,9 +107,12 @@ class ScreenInteractive : public Screen {
   };
   Dimension dimension_ = Dimension::Fixed;
   bool use_alternative_screen_ = false;
-  ScreenInteractive(int dimx,
+
+  ScreenInteractive(Dimension dimension,
+                    bool use_alternative_screen);
+  ScreenInteractive(Dimension dimension,
+                    int dimx,
                     int dimy,
-                    Dimension dimension,
                     bool use_alternative_screen);
 
   bool track_mouse_ = true;
@@ -126,6 +129,8 @@ class ScreenInteractive : public Screen {
   bool animation_requested_ = false;
   animation::TimePoint previous_animation_time_;
 
+  int fixed_dimx_ = 0;
+  int fixed_dimy_ = 0;
   int cursor_x_ = 1;
   int cursor_y_ = 1;
 
