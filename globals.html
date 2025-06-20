@@ -1,0 +1,351 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: File Members</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('globals.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="contents">
+<div class="textblock">Here is a list of all file members with links to the files they belong to:</div>
+
+<h3><a id="index_a" name="index_a"></a>- a -</h3><ul>
+<li>angle&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2linear__gradient_8cpp.html#ab8ef1bf8a70cc07c6d55823c390a7e76">src/ftxui/dom/linear_gradient.cpp</a></li>
+<li>asked_&#160;:&#160;<a class="el" href="flexbox_8cpp.html#a020ee158f0c398a7ffd442a82bb878d0">flexbox.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_b" name="index_b"></a>- b -</h3><ul>
+<li>button_style&#160;:&#160;<a class="el" href="modal__dialog_8cpp.html#a1a0df261e66f85913256ea3d321b3e87">modal_dialog.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_c" name="index_c"></a>- c -</h3><ul>
+<li>charset_&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2border_8cpp.html#a108d200440dbd1759a7b025709c2d321">src/ftxui/dom/border.cpp</a></li>
+<li>Code()&#160;:&#160;<a class="el" href="print__key__press_8cpp.html#a1bbdd0071095abee0e28134bd4ad9213">print_key_press.cpp</a></li>
+<li>color_&#160;:&#160;<a class="el" href="src_2ftxui_2component_2window_8cpp.html#af75802a6553b2b23639f23d3c4b94217">src/ftxui/component/window.cpp</a>, <a class="el" href="dom_2color_8cpp.html#af75802a6553b2b23639f23d3c4b94217">dom/color.cpp</a></li>
+<li>Colored()&#160;:&#160;<a class="el" href="menu__entries_8cpp.html#a12f3ca405f8238e1d03dff81d4cf6997">menu_entries.cpp</a>, <a class="el" href="menu__entries__animated_8cpp.html#a12f3ca405f8238e1d03dff81d4cf6997">menu_entries_animated.cpp</a></li>
+<li>ColorInfoSorted2D()&#160;:&#160;<a class="el" href="color__info__sorted__2d_8ipp.html#a0f08918d6064cd2a0e56cb9ec74033ca">color_info_sorted_2d.ipp</a></li>
+<li>colors&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2linear__gradient_8cpp.html#ac3290ba0758760ac0d6df01f7707dd94">src/ftxui/dom/linear_gradient.cpp</a></li>
+<li>ColorString()&#160;:&#160;<a class="el" href="slider__rgb_8cpp.html#acfbf512737b012658b0c3b6997da144e">slider_rgb.cpp</a></li>
+<li>ColorTile()&#160;:&#160;<a class="el" href="slider__rgb_8cpp.html#ac5038fb3740e7d9137dfb4969a9a8035">slider_rgb.cpp</a></li>
+<li>config_&#160;:&#160;<a class="el" href="flexbox_8cpp.html#a85d583fe20f57cb4f383cba6eae3d073">flexbox.cpp</a></li>
+<li>config_normalized_&#160;:&#160;<a class="el" href="flexbox_8cpp.html#a8a92e22645479418ed4d290ebf4b51c3">flexbox.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_d" name="index_d"></a>- d -</h3><ul>
+<li>down&#160;:&#160;<a class="el" href="screen_8cpp.html#a9cdd0454d64ec151b59fdd7d22ed505a">screen.cpp</a></li>
+<li>DummyComponent()&#160;:&#160;<a class="el" href="menu__underline__animated__gallery_8cpp.html#a488a81f58d76f17bf95ef222f68e0dfe">menu_underline_animated_gallery.cpp</a></li>
+<li>DummyWindowContent()&#160;:&#160;<a class="el" href="scrollbar_8cpp.html#a83db372d294b69185f7a26148935cfc3">scrollbar.cpp</a>, <a class="el" href="examples_2component_2window_8cpp.html#a83db372d294b69185f7a26148935cfc3">examples/component/window.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_e" name="index_e"></a>- e -</h3><ul>
+<li>Empty()&#160;:&#160;<a class="el" href="examples_2component_2collapsible_8cpp.html#aacbbfcb3c5bc93d26a5c681172e27eae">examples/component/collapsible.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_f" name="index_f"></a>- f -</h3><ul>
+<li>f_&#160;:&#160;<a class="el" href="flex_8cpp.html#a51920d6139d68e1a860381e730c217c3">flex.cpp</a></li>
+<li>foreground_color_&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2border_8cpp.html#ab929ed9438df4a818e56490a23d8324e">src/ftxui/dom/border.cpp</a></li>
+<li>FTXUI_LIKELY&#160;:&#160;<a class="el" href="screen_8cpp.html#a3350a75634f7952b2795de433b111f0e">screen.cpp</a></li>
+<li>FTXUI_UNLIKELY&#160;:&#160;<a class="el" href="screen_8cpp.html#a6048239c71b0f0be5c9d01ba721d7dd9">screen.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_g" name="index_g"></a>- g -</h3><ul>
+<li>global_&#160;:&#160;<a class="el" href="flexbox_8cpp.html#ac8e8d5f863ecfaf27c5cf94ab6c9c9ca">flexbox.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_h" name="index_h"></a>- h -</h3><ul>
+<li>HMenu1()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#a909976f4b60ea372663d733e16011767">menu_style.cpp</a></li>
+<li>HMenu2()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#a9ec2a6df3ad7dd845b4d4ab507d9d5fe">menu_style.cpp</a></li>
+<li>HMenu3()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#ab5a58c425dbca17b57cfcbf4b8c98e2e">menu_style.cpp</a></li>
+<li>HMenu4()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#a1aead66022c928952b560ebab9913346">menu_style.cpp</a></li>
+<li>HMenu5()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#a16cc679d7e91d82d484eff7e443539cb">menu_style.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_i" name="index_i"></a>- i -</h3><ul>
+<li>Inner()&#160;:&#160;<a class="el" href="examples_2component_2collapsible_8cpp.html#a74bf63b8448df7b03bd98ae6de127c0a">examples/component/collapsible.cpp</a></li>
+<li>Instance()&#160;:&#160;<a class="el" href="focus__cursor_8cpp.html#a96da73e7fb75cca8a91e59559ce1dba2">focus_cursor.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_l" name="index_l"></a>- l -</h3><ul>
+<li>left&#160;:&#160;<a class="el" href="screen_8cpp.html#a972107f15f3c0c099eb9fd605e7f51c6">screen.cpp</a></li>
+<li>lines_&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2gridbox_8cpp.html#a14d0ca68485bdef40e820b3bd755deb7">src/ftxui/dom/gridbox.cpp</a></li>
+<li>link_&#160;:&#160;<a class="el" href="hyperlink_8cpp.html#a42544edd174cb953c823c19cdec44b86">hyperlink.cpp</a></li>
+<li>LLVMFuzzerTestOneInput()&#160;:&#160;<a class="el" href="component__fuzzer_8cpp.html#af5589fffd86439465eeb19c9774d1982">component_fuzzer.cpp</a>, <a class="el" href="terminal__input__parser__test__fuzzer_8cpp.html#af5589fffd86439465eeb19c9774d1982">terminal_input_parser_test_fuzzer.cpp</a></li>
+<li>LoremIpsum()&#160;:&#160;<a class="el" href="examples_2component_2selection_8cpp.html#a693bf20426978b4a6d5114374d8c521d">examples/component/selection.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_m" name="index_m"></a>- m -</h3><ul>
+<li>main()&#160;:&#160;<a class="el" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/button.cpp</a>, <a class="el" href="button__animated_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">button_animated.cpp</a>, <a class="el" href="button__in__frame_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">button_in_frame.cpp</a>, <a class="el" href="button__style_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">button_style.cpp</a>, <a class="el" href="canvas__animated_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">canvas_animated.cpp</a>, <a class="el" href="examples_2component_2checkbox_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/checkbox.cpp</a>, <a class="el" href="checkbox__in__frame_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">checkbox_in_frame.cpp</a>, <a class="el" href="examples_2component_2collapsible_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/collapsible.cpp</a>, <a class="el" href="composition_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">composition.cpp</a>, <a class="el" href="custom__loop_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">custom_loop.cpp</a>, <a class="el" href="examples_2component_2dropdown_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/dropdown.cpp</a>, <a class="el" href="dropdown__custom_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">dropdown_custom.cpp</a>, <a class="el" href="flexbox__gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">flexbox_gallery.cpp</a>, <a class="el" href="examples_2component_2focus_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/focus.cpp</a>, <a class="el" href="focus__cursor_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">focus_cursor.cpp</a>, <a class="el" href="gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">gallery.cpp</a>, <a class="el" href="homescreen_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">homescreen.cpp</a>, <a class="el" href="examples_2component_2input_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/input.cpp</a>, <a class="el" href="input__in__frame_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">input_in_frame.cpp</a>, <a class="el" href="input__style_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">input_style.cpp</a>, <a class="el" href="linear__gradient__gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">linear_gradient_gallery.cpp</a>, <a class="el" href="examples_2component_2maybe_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/maybe.cpp</a>, <a class="el" href="examples_2component_2menu_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/menu.cpp</a>, <a class="el" href="menu2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">menu2.cpp</a>, <a class="el" href="menu__entries_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">menu_entries.cpp</a>, <a class="el" href="menu__entries__animated_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">menu_entries_animated.cpp</a>, <a class="el" href="menu__in__frame_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">menu_in_frame.cpp</a>, <a class="el" href="menu__in__frame__horizontal_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">menu_in_frame_horizontal.cpp</a>, <a class="el" href="menu__multiple_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">menu_multiple.cpp</a>, <a class="el" href="menu__style_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">menu_style.cpp</a>, <a class="el" href="menu__underline__animated__gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">menu_underline_animated_gallery.cpp</a>, <a class="el" href="modal__dialog_8cpp.html#ac0f2228420376f4db7e1274f2b41667c">modal_dialog.cpp</a>, <a class="el" href="modal__dialog__custom_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">modal_dialog_custom.cpp</a>, <a class="el" href="nested__screen_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">nested_screen.cpp</a>, <a class="el" href="print__key__press_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">print_key_press.cpp</a>, <a class="el" href="examples_2component_2radiobox_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/radiobox.cpp</a>, <a class="el" href="radiobox__in__frame_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">radiobox_in_frame.cpp</a>, <a class="el" href="examples_2component_2renderer_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/renderer.cpp</a>, <a class="el" href="examples_2component_2resizable__split_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/resizable_split.cpp</a>, <a class="el" href="scrollbar_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">scrollbar.cpp</a>, <a class="el" href="examples_2component_2selection_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/selection.cpp</a>, <a class="el" href="examples_2component_2slider_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/slider.cpp</a>, <a class="el" href="slider__direction_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">slider_direction.cpp</a>, <a class="el" href="slider__rgb_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">slider_rgb.cpp</a>, <a class="el" href="tab__horizontal_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">tab_horizontal.cpp</a>, <a class="el" href="tab__vertical_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">tab_vertical.cpp</a>, <a class="el" href="textarea_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">textarea.cpp</a>, <a class="el" href="toggle_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">toggle.cpp</a>, <a class="el" href="examples_2component_2window_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/component/window.cpp</a>, <a class="el" href="with__restored__io_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">with_restored_io.cpp</a>, <a class="el" href="examples_2dom_2border_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/border.cpp</a>, <a class="el" href="border__colored_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">border_colored.cpp</a>, <a class="el" href="border__style_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">border_style.cpp</a>, <a class="el" href="examples_2dom_2canvas_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/canvas.cpp</a>, <a class="el" href="color__gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">color_gallery.cpp</a>, <a class="el" href="color__info__palette256_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">color_info_palette256.cpp</a>, <a class="el" href="color__truecolor__HSV_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">color_truecolor_HSV.cpp</a>, <a class="el" href="color__truecolor__RGB_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">color_truecolor_RGB.cpp</a>, <a class="el" href="examples_2dom_2dbox_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/dbox.cpp</a>, <a class="el" href="examples_2dom_2gauge_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/gauge.cpp</a>, <a class="el" href="gauge__direction_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">gauge_direction.cpp</a>, <a class="el" href="examples_2dom_2graph_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/graph.cpp</a>, <a class="el" href="examples_2dom_2gridbox_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/gridbox.cpp</a>, <a class="el" href="hflow_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">hflow.cpp</a>, <a class="el" href="html__like_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">html_like.cpp</a>, <a class="el" href="examples_2dom_2linear__gradient_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/linear_gradient.cpp</a>, <a class="el" href="package__manager_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">package_manager.cpp</a>, <a class="el" href="examples_2dom_2paragraph_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/paragraph.cpp</a>, <a class="el" href="examples_2dom_2separator_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/separator.cpp</a>, <a class="el" href="separator__style_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">separator_style.cpp</a>, <a class="el" href="examples_2dom_2size_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/size.cpp</a>, <a class="el" href="examples_2dom_2spinner_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/spinner.cpp</a>, <a class="el" href="style__blink_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_blink.cpp</a>, <a class="el" href="style__bold_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_bold.cpp</a>, <a class="el" href="style__color_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_color.cpp</a>, <a class="el" href="style__dim_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_dim.cpp</a>, <a class="el" href="style__gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_gallery.cpp</a>, <a class="el" href="style__hyperlink_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_hyperlink.cpp</a>, <a class="el" href="style__inverted_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_inverted.cpp</a>, <a class="el" href="style__italic_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_italic.cpp</a>, <a class="el" href="style__strikethrough_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_strikethrough.cpp</a>, <a class="el" href="style__underlined_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_underlined.cpp</a>, <a class="el" href="style__underlined__double_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">style_underlined_double.cpp</a>, <a class="el" href="examples_2dom_2table_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">examples/dom/table.cpp</a>, <a class="el" href="vbox__hbox_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">vbox_hbox.cpp</a>, <a class="el" href="vflow_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">vflow.cpp</a></li>
+<li>MainComponent()&#160;:&#160;<a class="el" href="modal__dialog_8cpp.html#aa61b015248766b6067b6d3c99f04c389">modal_dialog.cpp</a></li>
+<li>make_box()&#160;:&#160;<a class="el" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">examples/component/focus.cpp</a></li>
+<li>make_grid()&#160;:&#160;<a class="el" href="examples_2component_2focus_8cpp.html#a9543e1b98f00db8484ee0c856a1d4cca">examples/component/focus.cpp</a></li>
+<li>ModalComponent()&#160;:&#160;<a class="el" href="modal__dialog_8cpp.html#a3b73476f6f304dce17f808a7c3789f5c">modal_dialog.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_n" name="index_n"></a>- n -</h3><ul>
+<li>need_iteration_&#160;:&#160;<a class="el" href="flexbox_8cpp.html#a82e273363997977449a51ea1b7dce6f0">flexbox.cpp</a></li>
+<li>Nested()&#160;:&#160;<a class="el" href="nested__screen_8cpp.html#a77fdac0113a8c43983469efa26ce7276">nested_screen.cpp</a></li>
+<li>NOMINMAX&#160;:&#160;<a class="el" href="src_2ftxui_2component_2window_8cpp.html#a9f918755b601cf4bffca775992e6fb90">src/ftxui/component/window.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_p" name="index_p"></a>- p -</h3><ul>
+<li>positions&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2linear__gradient_8cpp.html#af3fd42b7427cb742f96e7ec3244fb7cf">src/ftxui/dom/linear_gradient.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_r" name="index_r"></a>- r -</h3><ul>
+<li>resize_down_&#160;:&#160;<a class="el" href="src_2ftxui_2component_2window_8cpp.html#abb5820730ee5ac08f5623d866a8b6777">src/ftxui/component/window.cpp</a></li>
+<li>resize_left_&#160;:&#160;<a class="el" href="src_2ftxui_2component_2window_8cpp.html#a11cd63ba8957337034d3351d3b416030">src/ftxui/component/window.cpp</a></li>
+<li>resize_right_&#160;:&#160;<a class="el" href="src_2ftxui_2component_2window_8cpp.html#a435bdeaeaea854a80f574fbfda91032f">src/ftxui/component/window.cpp</a></li>
+<li>resize_top_&#160;:&#160;<a class="el" href="src_2ftxui_2component_2window_8cpp.html#a12f0c5cd8f00f860d8fb47550f0af746">src/ftxui/component/window.cpp</a></li>
+<li>right&#160;:&#160;<a class="el" href="screen_8cpp.html#aa4b74e56e675912bbc06504407fc7a46">screen.cpp</a></li>
+<li>round&#160;:&#160;<a class="el" href="screen_8cpp.html#ad20ff2177c37ddb2e308815c71d4be81">screen.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_s" name="index_s"></a>- s -</h3><ul>
+<li>style_&#160;:&#160;<a class="el" href="selection__style_8cpp.html#a4e933ebfcd587caa8c7a7c518ee9e4f6">selection_style.cpp</a>, <a class="el" href="src_2ftxui_2dom_2separator_8cpp.html#ac30a0a0ed81dc58d609a872c58242761">src/ftxui/dom/separator.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_t" name="index_t"></a>- t -</h3><ul>
+<li>Text()&#160;:&#160;<a class="el" href="menu__underline__animated__gallery_8cpp.html#abd88e1b2ce2a860c64bbcd44c0e0282b">menu_underline_animated_gallery.cpp</a></li>
+<li>top&#160;:&#160;<a class="el" href="screen_8cpp.html#a495e1456dc6a7df7638b2c507c756a24">screen.cpp</a></li>
+<li>triangle()&#160;:&#160;<a class="el" href="examples_2dom_2graph_8cpp.html#a5ab45e2cb218468666c7dc7b2b957396">examples/dom/graph.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_v" name="index_v"></a>- v -</h3><ul>
+<li>value_&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2separator_8cpp.html#ad84db3d1db4de4af9935d2d361626bdb">src/ftxui/dom/separator.cpp</a></li>
+<li>VMenu1()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#abc833415e917ac2a93b5a4f35df2f0fb">menu_style.cpp</a></li>
+<li>VMenu2()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#ab1c7204fedc90016a50553cdcdc9b58b">menu_style.cpp</a></li>
+<li>VMenu3()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#aec99d3a88e71643df15281e0041e44a2">menu_style.cpp</a></li>
+<li>VMenu4()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#afc540158e9fcd015af9e24d4ef072214">menu_style.cpp</a></li>
+<li>VMenu5()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#a62669e7b3cf3a388a714910a16cce19b">menu_style.cpp</a></li>
+<li>VMenu6()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#aeeb06101b3a771616149626f203be146">menu_style.cpp</a></li>
+<li>VMenu7()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#af07f6b560af2a9d723b3e53360d280b5">menu_style.cpp</a></li>
+<li>VMenu8()&#160;:&#160;<a class="el" href="menu__style_8cpp.html#afade922e195c0cda670066485469de56">menu_style.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_w" name="index_w"></a>- w -</h3><ul>
+<li>Window()&#160;:&#160;<a class="el" href="menu__multiple_8cpp.html#ac2013764d7f0c7eb57876c3755e98bb3">menu_multiple.cpp</a></li>
+<li>Wrap()&#160;:&#160;<a class="el" href="gallery_8cpp.html#a0a320000c5a485508c57030f605b800a">gallery.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_x" name="index_x"></a>- x -</h3><ul>
+<li>x_size&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2gridbox_8cpp.html#aa84601b56e801ce086fd86309a13e695">src/ftxui/dom/gridbox.cpp</a></li>
+</ul>
+
+
+<h3><a id="index_y" name="index_y"></a>- y -</h3><ul>
+<li>y_size&#160;:&#160;<a class="el" href="src_2ftxui_2dom_2gridbox_8cpp.html#a99e442a053babaa64367447a56138823">src/ftxui/dom/gridbox.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
+  </ul>
+</div>
+</body>
+</html>

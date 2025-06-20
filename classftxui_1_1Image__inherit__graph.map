@@ -1,0 +1,7 @@
+<map id="Image" name="Image">
+<area shape="rect" id="Node000001" title="A rectangular grid of Pixel." alt="" coords="42,5,105,31"/>
+<area shape="rect" id="Node000002" href="$group__screen.html#classftxui_1_1Screen" title="A rectangular grid of Pixel." alt="" coords="40,79,107,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,44,76,79,71,79,71,44"/>
+<area shape="rect" id="Node000003" href="$group__component.html#classftxui_1_1ScreenInteractive" title="ScreenInteractive is a Screen that can handle events, run a main loop, and manage components." alt="" coords="5,152,141,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,118,76,152,71,152,71,118"/>
+</map>
