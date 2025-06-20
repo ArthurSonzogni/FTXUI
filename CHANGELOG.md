@@ -25,6 +25,10 @@ Next
   ```
   Thanks @mikomikotaishi for PR #1015.
 
+### Component
+- Fix ScreenInteractive::FixedSize screen stomps on the preceding terminal
+  output. Thanks @zozowell in #1064.
+
 
 6.1.9 (2025-05-07)
 ------------
