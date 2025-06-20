@@ -10,7 +10,6 @@
 #include <memory>                        // for shared_ptr
 #include <string>                        // for string
 #include <thread>                        // for thread
-#include <variant>                       // for variant
 
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
@@ -105,13 +104,12 @@ class ScreenInteractive : public Screen {
     Fullscreen,
     TerminalOutput,
   };
-  const Dimension dimension_ = Dimension::Fixed;
-  const bool use_alternative_screen_ = false;
-
   ScreenInteractive(Dimension dimension,
                     int dimx,
                     int dimy,
                     bool use_alternative_screen);
+  const Dimension dimension_;
+  const bool use_alternative_screen_;
 
   bool track_mouse_ = true;
 
