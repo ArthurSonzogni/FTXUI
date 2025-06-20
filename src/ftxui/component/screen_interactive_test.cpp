@@ -195,7 +195,9 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
     Loop loop(&screen, component);
     loop.RunOnce();
   }
-  ASSERT_EQ(
+  using namespace std::string_view_literals;
+
+  auto expected =
       // Install the ScreenInteractive.
       "\0"           // Flush stdout.
       "\x1BP$q q"    // Set cursor shape to 1 (block).
@@ -236,8 +238,8 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
       "\0"           // Flush stdout.
 
       // Skip one line to avoid the prompt to be printed over the last drawing.
-      "\r\n",
-      output);
+      "\r\n"sv;
+  ASSERT_EQ(expected, output);
 #endif
 
 }
