@@ -346,9 +346,9 @@ void AnimationListener(std::atomic<bool>* quit, Sender<Task> out) {
 
 }  // namespace
 
-ScreenInteractive::ScreenInteractive(int dimx,
+ScreenInteractive::ScreenInteractive(Dimension dimension,
+                                     int dimx,
                                      int dimy,
-                                     Dimension dimension,
                                      bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
@@ -359,10 +359,10 @@ ScreenInteractive::ScreenInteractive(int dimx,
 // static
 ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
   return {
+      Dimension::Fixed,
       dimx,
       dimy,
-      Dimension::Fixed,
-      false,
+      /*use_alternative_screen=*/false,
   };
 }
 
@@ -379,11 +379,12 @@ ScreenInteractive ScreenInteractive::Fullscreen() {
 /// content might mess up with the terminal content.
 // static
 ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
+  auto terminal = Terminal::Size();
   return {
-      0,
-      0,
-      Dimension::Fullscreen,
-      false,
+    Dimension::Fullscreen,
+    terminal.dimx,
+    terminal.dimy,
+    /*use_alternative_screen=*/false,
   };
 }
 
@@ -391,30 +392,37 @@ ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
 /// alternate screen buffer to avoid messing with the terminal content.
 // static
 ScreenInteractive ScreenInteractive::FullscreenAlternateScreen() {
+  auto terminal = Terminal::Size();
   return {
-      0,
-      0,
       Dimension::Fullscreen,
-      true,
+      terminal.dimx,
+      terminal.dimy,
+      /*use_alternative_screen=*/true,
   };
 }
 
+/// Create a ScreenInteractive whose width match the terminal output width and
+/// the height matches the component being drawn.
 // static
 ScreenInteractive ScreenInteractive::TerminalOutput() {
+  auto terminal = Terminal::Size();
   return {
-      0,
-      0,
       Dimension::TerminalOutput,
-      false,
+      terminal.dimx,
+      terminal.dimy, // Best guess.
+      /*use_alternative_screen=*/false,
   };
 }
 
+/// Create a ScreenInteractive whose width and height match the component being
+/// drawn.
 // static
 ScreenInteractive ScreenInteractive::FitComponent() {
+  auto terminal = Terminal::Size();
   return {
-      0,
-      0,
       Dimension::FitComponent,
+      terminal.dimx, // Best guess.
+      terminal.dimy, // Best guess.
       false,
   };
 }
@@ -921,7 +929,7 @@ void ScreenInteractive::Draw(Component component) {
       break;
   }
 
-  const bool resized = (dimx != dimx_) || (dimy != dimy_);
+  const bool resized = frame_count_ == 0 || (dimx != dimx_) || (dimy != dimy_);
   ResetCursorPosition();
   std::cout << ResetPosition(/*clear=*/resized);
 
@@ -1004,6 +1012,7 @@ void ScreenInteractive::Draw(Component component) {
   Flush();
   Clear();
   frame_valid_ = true;
+  frame_count_++;
 }
 
 // private
