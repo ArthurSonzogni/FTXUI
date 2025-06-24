@@ -469,52 +469,21 @@ TerminalInputParser::Output TerminalInputParser::ParseCursorPosition(
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseTerminalID(
-  std::vector<int> arguments)
-{
-  Output output(TERMINAL_ID);
-
-  if (!arguments.empty())
-  {
-    switch(arguments[0])
-    {
-      case 1:
-      {
-        output.terminal_id =
-          TerminalID::URXVT;
-
-        break;
-      }
-      case 6:
-      {
-        output.terminal_id =
-          TerminalID::LINUXVC;
-
-        break;
-      }
-      case 62:
-      {
-        output.terminal_id =
-          TerminalID::KONSOLE;
-
-        break;
-      }
-      default:
-      {
-        output.terminal_id =
-          TerminalID::UNKNOWN;
-
-        break;
-      }
-    }
-  }
-  else
-  {
-    output.terminal_id =
-      TerminalID::UNKNOWN;
+    std::vector<int> arguments) {
+  if (arguments.empty()) {
+    return TerminalID::Unknown;
   }
 
-  return output;
+  switch (arguments[0]) {
+    case 1:
+      return TerminalID::Xterm;
+    case 6:
+      return TerminalID::LinuxVC;
+    case 62:
+      return TerminalID::Konsole;
+    default:
+      return TerminalID::Unknown;
+  }
 }
-
 
 }  // namespace ftxui

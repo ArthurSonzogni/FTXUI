@@ -25,6 +25,8 @@ class Loop;
 struct Event;
 
 using Component = std::shared_ptr<ComponentBase>;
+using TerminalIDUpdateCallback = std::function<void (const TerminalID &)>;
+
 class ScreenInteractivePrivate;
 
 /// @brief ScreenInteractive is a `Screen` that can handle events, run a main
@@ -75,10 +77,7 @@ class ScreenInteractive : public Screen {
 
   TerminalID TerminalId() const;
 
-  typedef std::function<void(TerminalID const& terminal_id)> TerminalIDUpdateCallback;
-
-  void OnTerminalIDUpdate(
-    TerminalIDUpdateCallback const& callback);
+  void OnTerminalIDUpdate(const TerminalIDUpdateCallback& callback);
 
   // Selection API.
   std::string GetSelection();
@@ -164,10 +163,10 @@ class ScreenInteractive : public Screen {
   std::unique_ptr<Selection> selection_;
   std::function<void()> selection_on_change_;
 
-  TerminalID m_terminal_id;
+  TerminalID m_terminal_id = TerminalID::Unknown;
 
-  typedef std::list<TerminalIDUpdateCallback> TerminalIDUpdateCallbackContainer;
-  TerminalIDUpdateCallbackContainer m_terminal_id_update_callbacks;
+  using TerminalIDUpdateCallbackContainer = std::list<TerminalIDUpdateCallback>;
+  TerminalIDUpdateCallbackContainer terminal_id_callback_;
 
   friend class Loop;
 

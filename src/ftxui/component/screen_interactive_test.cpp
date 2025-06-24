@@ -207,6 +207,7 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
       "\x1B[?1003h"  // Enable mouse motion tracking.
       "\x1B[?1015h"  // Enable mouse wheel tracking.
       "\x1B[?1006h"  // Enable SGR mouse tracking.
+      "\x1B[0c"      // Query terminal ID.
       "\0"           // Flush stdout.
 
       // Reset the screen.

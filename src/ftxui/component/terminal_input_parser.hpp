@@ -53,6 +53,9 @@ class TerminalInputParser {
 
     Output(Type t)  // NOLINT
         : type(t) {}
+
+    Output(TerminalID terminal_id) // NOLINT
+        : type(TERMINAL_ID), terminal_id(terminal_id) {}
   };
 
   void Send(Output output);

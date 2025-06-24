@@ -7,45 +7,35 @@
 namespace ftxui
 {
 
-std::ostream& operator<<(
-	std::ostream& os,
-	TerminalID terminal_id)
-{
-	switch(terminal_id)
-	{
-		case TerminalID::UNKNOWN:
-		{
-			os << "UNKNOWN";
+std::ostream& operator<<(std::ostream& os, TerminalID terminal_id) {
+  switch (terminal_id) {
+    case TerminalID::Unknown: {
+      os << "Unknown";
+      break;
+    }
+    case TerminalID::Urxvt: {
+		  os << "Urxvt";
 			break;
 		}
-		case TerminalID::XTERM:
-		{
-			os << "XTERM";
+		case TerminalID::LinuxVC: {
+			os << "LinuxVC";
 			break;
 		}
-		case TerminalID::KONSOLE:
-		{
-			os << "KONSOLE";
+		case TerminalID::Konsole: {
+			os << "Konsole";
 			break;
 		}
-		case TerminalID::URXVT:
-		{
-			os << "URXVT";
+		case TerminalID::Vte: {
+			os << "Vte";
 			break;
 		}
-		case TerminalID::VTE:
-		{
-			os << "VTE";
+		case TerminalID::Xterm: {
+			os << "Xterm";
 			break;
 		}
-		case TerminalID::LINUXVC:
-		{
-			os << "LINUXVC";
-			break;
-		}
-	}
+  }
 
-	return os;
+  return os;
 }
 
 }  // namespace ftxui

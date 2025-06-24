@@ -321,6 +321,8 @@ std::string DeviceStatusReport(DSRMode ps) {
   return CSI + std::to_string(int(ps)) + "n";
 }
 
+const std::string TerminalIdReport = "\x1b[0c";
+
 class CapturedMouseImpl : public CapturedMouseInterface {
  public:
   explicit CapturedMouseImpl(std::function<void(void)> callback)
@@ -352,8 +354,7 @@ ScreenInteractive::ScreenInteractive(Dimension dimension,
                                      bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
-      use_alternative_screen_(use_alternative_screen),
-      m_terminal_id(TerminalID::UNKNOWN) {
+      use_alternative_screen_(use_alternative_screen) {
   task_receiver_ = MakeReceiver<Task>();
 }
 
@@ -382,10 +383,10 @@ ScreenInteractive ScreenInteractive::Fullscreen() {
 ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
   auto terminal = Terminal::Size();
   return {
-    Dimension::Fullscreen,
-    terminal.dimx,
-    terminal.dimy,
-    /*use_alternative_screen=*/false,
+      Dimension::Fullscreen,
+      terminal.dimx,
+      terminal.dimy,
+      /*use_alternative_screen=*/false,
   };
 }
 
@@ -410,7 +411,7 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
   return {
       Dimension::TerminalOutput,
       terminal.dimx,
-      terminal.dimy, // Best guess.
+      terminal.dimy,  // Best guess.
       /*use_alternative_screen=*/false,
   };
 }
@@ -422,8 +423,8 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   auto terminal = Terminal::Size();
   return {
       Dimension::FitComponent,
-      terminal.dimx, // Best guess.
-      terminal.dimy, // Best guess.
+      terminal.dimx,  // Best guess.
+      terminal.dimy,  // Best guess.
       false,
   };
 }
@@ -725,6 +726,9 @@ void ScreenInteractive::Install() {
     enable({DECMode::kMouseSgrExtMode});
   }
 
+  // Report the Terminal ID.
+  std::cout << TerminalIdReport;
+
   // After installing the new configuration, flush it to the terminal to
   // ensure it is fully applied:
   Flush();
@@ -795,32 +799,20 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
         return;
       }
 
+      if (arg.is_terminal_id()) {
+        m_terminal_id = arg.terminal_id();
+
+        for(auto & callback : terminal_id_callback_) {
+          if (callback) {
+            callback(m_terminal_id);
+          }
+        }
+        return;
+      }
+
       if (arg.is_mouse()) {
         arg.mouse().x -= cursor_x_;
         arg.mouse().y -= cursor_y_;
-      }
-
-      if (arg.is_terminal_id())
-      {
-        m_terminal_id =
-          arg.terminal_id();
-
-        for (auto itr = m_terminal_id_update_callbacks.begin(),
-             end_itr = m_terminal_id_update_callbacks.end();
-            (itr != end_itr);
-            ++itr)
-        {
-          if (*itr)
-          {
-            (*itr)(m_terminal_id);
-          }
-          else
-          {
-             // The callback function is invalid and will be removed
-             m_terminal_id_update_callbacks.erase(
-               itr);
-          }
-        }
       }
 
       arg.screen_ = this;
@@ -1108,16 +1100,13 @@ bool ScreenInteractive::SelectionData::operator!=(
   return !(*this == other);
 }
 
-TerminalID ScreenInteractive::TerminalId() const
-{
-	return m_terminal_id;
+TerminalID ScreenInteractive::TerminalId() const {
+  return m_terminal_id;
 }
 
 void ScreenInteractive::OnTerminalIDUpdate(
-	TerminalIDUpdateCallback const& callback)
-{
-	m_terminal_id_update_callbacks.push_back(
-		callback);
+    const TerminalIDUpdateCallback& callback) {
+  terminal_id_callback_.push_back(callback);
 }
 
 }  // namespace ftxui.

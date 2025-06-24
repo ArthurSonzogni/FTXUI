@@ -10,20 +10,20 @@
 
 namespace ftxui {
 
-std::string const TERMINAL_ID_REQUEST("\x1b[0c");
-
-/// @brief A mouse event. It contains the coordinate of the mouse, the button
-/// pressed and the modifier (shift, ctrl, meta).
+/// @brief The TerminalID enum class represents different types of terminal
+/// emulators that FTXUI can detect. It is used to identify the terminal
+/// emulator in use, which can affect how FTXUI renders its output and handles
+/// input events.
 /// @ingroup component
+enum class TerminalID {
+  Unknown,
+  // --
 
-enum class TerminalID
-{
-	UNKNOWN,
-	XTERM,
-	KONSOLE,
-	URXVT,
-	VTE,
-	LINUXVC
+  Konsole,
+  LinuxVC,
+  Urxvt,
+  Vte,
+  Xterm,
 };
 
 std::ostream& operator<<(
