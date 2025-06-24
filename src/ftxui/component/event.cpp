@@ -87,6 +87,16 @@ Event Event::CursorPosition(std::string input, int x, int y) {
   return event;
 }
 
+/// @internal
+// static
+Event Event::TerminalID(std::string input, enum TerminalID terminal_id) {
+  Event event;
+  event.input_ = std::move(input);
+  event.type_ = Type::TerminalID;
+  event.data_.terminal_id = terminal_id;
+  return event;
+}
+
 /// @brief Return a string representation of the event.
 std::string Event::DebugString() const {
   static std::map<Event, const char*> event_to_string = {

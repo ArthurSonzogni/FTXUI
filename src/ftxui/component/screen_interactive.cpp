@@ -352,7 +352,8 @@ ScreenInteractive::ScreenInteractive(Dimension dimension,
                                      bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
-      use_alternative_screen_(use_alternative_screen) {
+      use_alternative_screen_(use_alternative_screen),
+      m_terminal_id(TerminalID::UNKNOWN) {
   task_receiver_ = MakeReceiver<Task>();
 }
 
@@ -799,6 +800,29 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
         arg.mouse().y -= cursor_y_;
       }
 
+      if (arg.is_terminal_id())
+      {
+        m_terminal_id =
+          arg.terminal_id();
+
+        for (auto itr = m_terminal_id_update_callbacks.begin(),
+             end_itr = m_terminal_id_update_callbacks.end();
+            (itr != end_itr);
+            ++itr)
+        {
+          if (*itr)
+          {
+            (*itr)(m_terminal_id);
+          }
+          else
+          {
+             // The callback function is invalid and will be removed
+             m_terminal_id_update_callbacks.erase(
+               itr);
+          }
+        }
+      }
+
       arg.screen_ = this;
 
       bool handled = component->OnEvent(arg);
@@ -1082,6 +1106,18 @@ bool ScreenInteractive::SelectionData::operator==(
 bool ScreenInteractive::SelectionData::operator!=(
     const ScreenInteractive::SelectionData& other) const {
   return !(*this == other);
+}
+
+TerminalID ScreenInteractive::TerminalId() const
+{
+	return m_terminal_id;
+}
+
+void ScreenInteractive::OnTerminalIDUpdate(
+	TerminalIDUpdateCallback const& callback)
+{
+	m_terminal_id_update_callbacks.push_back(
+		callback);
 }
 
 }  // namespace ftxui.

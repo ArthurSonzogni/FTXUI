@@ -161,6 +161,11 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       out_->Send(Event::CursorShape(std::move(pending_), output.cursor_shape));
       pending_.clear();
       return;
+
+    case TERMINAL_ID:
+      out_->Send(Event::TerminalID(std::move(pending_), output.terminal_id));
+      pending_.clear();
+      return;
   }
   // NOT_REACHED().
 }
@@ -374,6 +379,8 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
           return ParseMouse(altered, false, std::move(arguments));
         case 'R':
           return ParseCursorPosition(std::move(arguments));
+        case 'c':
+          return ParseTerminalID(std::move(arguments));
         default:
           return SPECIAL;
       }
@@ -460,5 +467,54 @@ TerminalInputParser::Output TerminalInputParser::ParseCursorPosition(
   output.cursor.x = arguments[1];  // NOLINT
   return output;
 }
+
+TerminalInputParser::Output TerminalInputParser::ParseTerminalID(
+  std::vector<int> arguments)
+{
+  Output output(TERMINAL_ID);
+
+  if (!arguments.empty())
+  {
+    switch(arguments[0])
+    {
+      case 1:
+      {
+        output.terminal_id =
+          TerminalID::URXVT;
+
+        break;
+      }
+      case 6:
+      {
+        output.terminal_id =
+          TerminalID::LINUXVC;
+
+        break;
+      }
+      case 62:
+      {
+        output.terminal_id =
+          TerminalID::KONSOLE;
+
+        break;
+      }
+      default:
+      {
+        output.terminal_id =
+          TerminalID::UNKNOWN;
+
+        break;
+      }
+    }
+  }
+  else
+  {
+    output.terminal_id =
+      TerminalID::UNKNOWN;
+  }
+
+  return output;
+}
+
 
 }  // namespace ftxui

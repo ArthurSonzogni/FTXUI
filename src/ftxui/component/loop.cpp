@@ -1,7 +1,9 @@
 // Copyright 2022 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#include <iostream>
 #include "ftxui/component/loop.hpp"
+#include "ftxui/component/terminal_id.hpp"
 
 #include <utility>  // for move
 
@@ -47,6 +49,9 @@ void Loop::RunOnceBlocking() {
 /// Execute the loop, blocking the current thread, up until the loop has
 /// quitted.
 void Loop::Run() {
+  // Ensure we perform a single terminal id request before we are starting the loop itself.
+  std::cout << TERMINAL_ID_REQUEST;
+
   while (!HasQuitted()) {
     RunOnceBlocking();
   }

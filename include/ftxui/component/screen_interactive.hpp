@@ -10,6 +10,7 @@
 #include <memory>                        // for shared_ptr
 #include <string>                        // for string
 #include <thread>                        // for thread
+#include <list>
 
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
@@ -71,6 +72,13 @@ class ScreenInteractive : public Screen {
   // the following functions with force=true.
   void ForceHandleCtrlC(bool force);
   void ForceHandleCtrlZ(bool force);
+
+  TerminalID TerminalId() const;
+
+  typedef std::function<void(TerminalID const& terminal_id)> TerminalIDUpdateCallback;
+
+  void OnTerminalIDUpdate(
+    TerminalIDUpdateCallback const& callback);
 
   // Selection API.
   std::string GetSelection();
@@ -155,6 +163,11 @@ class ScreenInteractive : public Screen {
   SelectionData selection_data_previous_;
   std::unique_ptr<Selection> selection_;
   std::function<void()> selection_on_change_;
+
+  TerminalID m_terminal_id;
+
+  typedef std::list<TerminalIDUpdateCallback> TerminalIDUpdateCallbackContainer;
+  TerminalIDUpdateCallbackContainer m_terminal_id_update_callbacks;
 
   friend class Loop;
 
