@@ -4,8 +4,9 @@
 #ifndef FTXUI_COMPONENT_EVENT_HPP
 #define FTXUI_COMPONENT_EVENT_HPP
 
-#include <ftxui/component/mouse.hpp>  // for Mouse
-#include <string>                     // for string, operator==
+#include <ftxui/component/mouse.hpp>       // for Mouse
+#include <ftxui/component/terminal_id.hpp> // for TerminalID
+#include <string>                          // for string, operator==
 
 namespace ftxui {
 
@@ -35,6 +36,7 @@ struct Event {
   static Event Mouse(std::string, Mouse mouse);
   static Event CursorPosition(std::string, int x, int y);  // Internal
   static Event CursorShape(std::string, int shape);        // Internal
+  static Event TerminalID(std::string input, enum TerminalID terminal_id); // Internal
 
   // --- Arrow ---
   static const Event ArrowLeft;
@@ -117,6 +119,9 @@ struct Event {
   bool is_cursor_shape() const { return type_ == Type::CursorShape; }
   int cursor_shape() const { return data_.cursor_shape; }
 
+  bool is_terminal_id() const { return type_ == Type::TerminalID; }
+  enum TerminalID terminal_id() const { return data_.terminal_id; }
+
   // Debug
   std::string DebugString() const;
 
@@ -132,6 +137,7 @@ struct Event {
     Mouse,
     CursorPosition,
     CursorShape,
+    TerminalID
   };
   Type type_ = Type::Unknown;
 
@@ -144,6 +150,7 @@ struct Event {
     struct Mouse mouse;
     struct Cursor cursor;
     int cursor_shape;
+    enum TerminalID terminal_id;
   } data_ = {};
 
   std::string input_;

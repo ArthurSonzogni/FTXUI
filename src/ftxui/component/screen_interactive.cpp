@@ -321,6 +321,8 @@ std::string DeviceStatusReport(DSRMode ps) {
   return CSI + std::to_string(int(ps)) + "n";
 }
 
+const std::string TerminalIdReport = "\x1b[0c";
+
 class CapturedMouseImpl : public CapturedMouseInterface {
  public:
   explicit CapturedMouseImpl(std::function<void(void)> callback)
@@ -381,10 +383,10 @@ ScreenInteractive ScreenInteractive::Fullscreen() {
 ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
   auto terminal = Terminal::Size();
   return {
-    Dimension::Fullscreen,
-    terminal.dimx,
-    terminal.dimy,
-    /*use_alternative_screen=*/false,
+      Dimension::Fullscreen,
+      terminal.dimx,
+      terminal.dimy,
+      /*use_alternative_screen=*/false,
   };
 }
 
@@ -409,7 +411,7 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
   return {
       Dimension::TerminalOutput,
       terminal.dimx,
-      terminal.dimy, // Best guess.
+      terminal.dimy,  // Best guess.
       /*use_alternative_screen=*/false,
   };
 }
@@ -421,8 +423,8 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   auto terminal = Terminal::Size();
   return {
       Dimension::FitComponent,
-      terminal.dimx, // Best guess.
-      terminal.dimy, // Best guess.
+      terminal.dimx,  // Best guess.
+      terminal.dimy,  // Best guess.
       false,
   };
 }
@@ -724,6 +726,9 @@ void ScreenInteractive::Install() {
     enable({DECMode::kMouseSgrExtMode});
   }
 
+  // Report the Terminal ID.
+  std::cout << TerminalIdReport;
+
   // After installing the new configuration, flush it to the terminal to
   // ensure it is fully applied:
   Flush();
@@ -791,6 +796,17 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 
       if (arg.is_cursor_shape()) {
         cursor_reset_shape_= arg.cursor_shape();
+        return;
+      }
+
+      if (arg.is_terminal_id()) {
+        m_terminal_id = arg.terminal_id();
+
+        for(auto & callback : terminal_id_callback_) {
+          if (callback) {
+            callback(m_terminal_id);
+          }
+        }
         return;
       }
 
@@ -1082,6 +1098,15 @@ bool ScreenInteractive::SelectionData::operator==(
 bool ScreenInteractive::SelectionData::operator!=(
     const ScreenInteractive::SelectionData& other) const {
   return !(*this == other);
+}
+
+TerminalID ScreenInteractive::TerminalId() const {
+  return m_terminal_id;
+}
+
+void ScreenInteractive::OnTerminalIDUpdate(
+    const TerminalIDUpdateCallback& callback) {
+  terminal_id_callback_.push_back(callback);
 }
 
 }  // namespace ftxui.

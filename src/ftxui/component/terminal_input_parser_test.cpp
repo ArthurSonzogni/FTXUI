@@ -510,5 +510,27 @@ TEST(Event, DeviceControlString) {
   EXPECT_FALSE(event_receiver->Receive(&received));
 }
 
+TEST(Event, TerminalID) {
+  // Test terminal id for KDE konsole
+  auto event_receiver = MakeReceiver<Task>();
+  {
+    auto parser = TerminalInputParser(event_receiver->MakeSender());
+    parser.Add('\x1B');
+    parser.Add('[');
+    parser.Add('?');
+    parser.Add('6');
+    parser.Add('2');
+    parser.Add(';');
+    parser.Add('2');
+    parser.Add('c');
+  }
+
+  Task received;
+  EXPECT_TRUE(event_receiver->Receive(&received));
+  EXPECT_TRUE(std::get<Event>(received).is_terminal_id());
+  EXPECT_EQ(TerminalID::Konsole, std::get<Event>(received).terminal_id());
+  EXPECT_FALSE(event_receiver->Receive(&received));
+}
+
 }  // namespace ftxui
    // NOLINTEND

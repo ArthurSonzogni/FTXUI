@@ -7,9 +7,10 @@
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "ftxui/component/mouse.hpp"     // for Mouse
-#include "ftxui/component/receiver.hpp"  // for Sender
-#include "ftxui/component/task.hpp"      // for Task
+#include "ftxui/component/mouse.hpp"       // for Mouse
+#include "ftxui/component/terminal_id.hpp" // for TerminalId
+#include "ftxui/component/receiver.hpp"    // for Sender
+#include "ftxui/component/task.hpp"        // for Task
 
 namespace ftxui {
 struct Event;
@@ -33,6 +34,7 @@ class TerminalInputParser {
     CURSOR_POSITION,
     CURSOR_SHAPE,
     SPECIAL,
+    TERMINAL_ID
   };
 
   struct CursorPosition {
@@ -46,10 +48,14 @@ class TerminalInputParser {
       Mouse mouse;
       CursorPosition cursor{};
       int cursor_shape;
+      TerminalID terminal_id;
     };
 
     Output(Type t)  // NOLINT
         : type(t) {}
+
+    Output(TerminalID terminal_id) // NOLINT
+        : type(TERMINAL_ID), terminal_id(terminal_id) {}
   };
 
   void Send(Output output);
@@ -61,6 +67,7 @@ class TerminalInputParser {
   Output ParseOSC();
   Output ParseMouse(bool altered, bool pressed, std::vector<int> arguments);
   Output ParseCursorPosition(std::vector<int> arguments);
+  Output ParseTerminalID(std::vector<int> arguments);
 
   Sender<Task> out_;
   int position_ = -1;

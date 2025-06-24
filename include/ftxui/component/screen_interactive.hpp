@@ -10,6 +10,7 @@
 #include <memory>                        // for shared_ptr
 #include <string>                        // for string
 #include <thread>                        // for thread
+#include <list>
 
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
@@ -24,6 +25,8 @@ class Loop;
 struct Event;
 
 using Component = std::shared_ptr<ComponentBase>;
+using TerminalIDUpdateCallback = std::function<void (const TerminalID &)>;
+
 class ScreenInteractivePrivate;
 
 /// @brief ScreenInteractive is a `Screen` that can handle events, run a main
@@ -71,6 +74,10 @@ class ScreenInteractive : public Screen {
   // the following functions with force=true.
   void ForceHandleCtrlC(bool force);
   void ForceHandleCtrlZ(bool force);
+
+  TerminalID TerminalId() const;
+
+  void OnTerminalIDUpdate(const TerminalIDUpdateCallback& callback);
 
   // Selection API.
   std::string GetSelection();
@@ -155,6 +162,11 @@ class ScreenInteractive : public Screen {
   SelectionData selection_data_previous_;
   std::unique_ptr<Selection> selection_;
   std::function<void()> selection_on_change_;
+
+  TerminalID m_terminal_id = TerminalID::Unknown;
+
+  using TerminalIDUpdateCallbackContainer = std::list<TerminalIDUpdateCallback>;
+  TerminalIDUpdateCallbackContainer terminal_id_callback_;
 
   friend class Loop;
 
