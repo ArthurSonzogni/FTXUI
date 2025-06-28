@@ -115,7 +115,7 @@ class GridBox : public Node {
 
     const int target_size_x = box.x_max - box.x_min + 1;
     const int target_size_y = box.y_max - box.y_min + 1;
-    box_helper::Compute(&elements_x, target_size_x);
+    box_helper::Compute(&elements_x, target_size_x, true);
     box_helper::Compute(&elements_y, target_size_y);
 
     Box box_y = box;
