@@ -46,6 +46,12 @@ class GridBox : public Node {
         line.push_back(filler());
       }
     }
+
+    for (const auto& line : lines_) {
+      for (const auto &element : line) {
+        children_.push_back( element );
+      }
+    }
   }
 
   void ComputeRequirement() override {
