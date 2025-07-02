@@ -1,0 +1,560 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: ConstRef&lt; T &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('classftxui_1_1ConstRef.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classftxui_1_1ConstRef-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">ConstRef&lt; T &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>An adapter. Own or reference an immutable object.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ref_8hpp_source.html">ref.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a2949426897a0bd427771597c7cc34f08" id="r_a2949426897a0bd427771597c7cc34f08"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2949426897a0bd427771597c7cc34f08">ConstRef</a> ()=default</td></tr>
+<tr class="separator:a2949426897a0bd427771597c7cc34f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa33f2e3c9020518540c2850c7ad2669f" id="r_aa33f2e3c9020518540c2850c7ad2669f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa33f2e3c9020518540c2850c7ad2669f">ConstRef</a> (T t)</td></tr>
+<tr class="separator:aa33f2e3c9020518540c2850c7ad2669f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7dde5cd8bdbcd4c83a7b3bbddfc31bd9" id="r_a7dde5cd8bdbcd4c83a7b3bbddfc31bd9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dde5cd8bdbcd4c83a7b3bbddfc31bd9">ConstRef</a> (const T *t)</td></tr>
+<tr class="separator:a7dde5cd8bdbcd4c83a7b3bbddfc31bd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad144149e6f6f0d59610da4b28e22aef1" id="r_ad144149e6f6f0d59610da4b28e22aef1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad144149e6f6f0d59610da4b28e22aef1">operator=</a> (<a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> &amp;&amp;) noexcept=default</td></tr>
+<tr class="separator:ad144149e6f6f0d59610da4b28e22aef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a184e14dab2e9bca47f7d172ca7126c60" id="r_a184e14dab2e9bca47f7d172ca7126c60"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a184e14dab2e9bca47f7d172ca7126c60">ConstRef</a> (const <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp;)=default</td></tr>
+<tr class="separator:a184e14dab2e9bca47f7d172ca7126c60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa89dd79143a428e57480cda1cc7b675e" id="r_aa89dd79143a428e57480cda1cc7b675e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa89dd79143a428e57480cda1cc7b675e">ConstRef</a> (<a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp;&amp;) noexcept=default</td></tr>
+<tr class="separator:aa89dd79143a428e57480cda1cc7b675e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ab7aed14f1e68d9be361d5ccfcd4e0f" id="r_a4ab7aed14f1e68d9be361d5ccfcd4e0f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ab7aed14f1e68d9be361d5ccfcd4e0f">~ConstRef</a> ()=default</td></tr>
+<tr class="separator:a4ab7aed14f1e68d9be361d5ccfcd4e0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a834cee3b2f409135c37c188c583bce91" id="r_a834cee3b2f409135c37c188c583bce91"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a834cee3b2f409135c37c188c583bce91">operator=</a> (const <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp;)=default</td></tr>
+<tr class="separator:a834cee3b2f409135c37c188c583bce91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdc36f6a5716b29a5d81a2dd93376d82" id="r_afdc36f6a5716b29a5d81a2dd93376d82"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afdc36f6a5716b29a5d81a2dd93376d82">operator()</a> () const</td></tr>
+<tr class="separator:afdc36f6a5716b29a5d81a2dd93376d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a241c04e3ce86e1fd5a946eb2aa8b1f22" id="r_a241c04e3ce86e1fd5a946eb2aa8b1f22"><td class="memItemLeft" align="right" valign="top">const T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a241c04e3ce86e1fd5a946eb2aa8b1f22">operator*</a> () const</td></tr>
+<tr class="separator:a241c04e3ce86e1fd5a946eb2aa8b1f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaade5c780b539b94de660e314cb0c90" id="r_abaade5c780b539b94de660e314cb0c90"><td class="memItemLeft" align="right" valign="top">const T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abaade5c780b539b94de660e314cb0c90">operator-&gt;</a> () const</td></tr>
+<tr class="separator:abaade5c780b539b94de660e314cb0c90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
+class ftxui::ConstRef&lt; T &gt;</div><p>An adapter. Own or reference an immutable object. </p>
+
+<p class="definition">Definition at line <a class="el" href="ref_8hpp_source.html#l00017">17</a> of file <a class="el" href="ref_8hpp_source.html">ref.hpp</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2949426897a0bd427771597c7cc34f08" name="a2949426897a0bd427771597c7cc34f08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2949426897a0bd427771597c7cc34f08">&#9670;&#160;</a></span>ConstRef() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa33f2e3c9020518540c2850c7ad2669f" name="aa33f2e3c9020518540c2850c7ad2669f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa33f2e3c9020518540c2850c7ad2669f">&#9670;&#160;</a></span>ConstRef() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> </td>
+          <td>(</td>
+          <td class="paramtype">T</td>          <td class="paramname"><span class="paramname"><em>t</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ref_8hpp_source.html#l00020">20</a> of file <a class="el" href="ref_8hpp_source.html">ref.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7dde5cd8bdbcd4c83a7b3bbddfc31bd9" name="a7dde5cd8bdbcd4c83a7b3bbddfc31bd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dde5cd8bdbcd4c83a7b3bbddfc31bd9">&#9670;&#160;</a></span>ConstRef() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> </td>
+          <td>(</td>
+          <td class="paramtype">const T *</td>          <td class="paramname"><span class="paramname"><em>t</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ref_8hpp_source.html#l00021">21</a> of file <a class="el" href="ref_8hpp_source.html">ref.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a184e14dab2e9bca47f7d172ca7126c60" name="a184e14dab2e9bca47f7d172ca7126c60"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a184e14dab2e9bca47f7d172ca7126c60">&#9670;&#160;</a></span>ConstRef() <span class="overload">[4/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa89dd79143a428e57480cda1cc7b675e" name="aa89dd79143a428e57480cda1cc7b675e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa89dd79143a428e57480cda1cc7b675e">&#9670;&#160;</a></span>ConstRef() <span class="overload">[5/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4ab7aed14f1e68d9be361d5ccfcd4e0f" name="a4ab7aed14f1e68d9be361d5ccfcd4e0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ab7aed14f1e68d9be361d5ccfcd4e0f">&#9670;&#160;</a></span>~ConstRef()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">~<a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ad144149e6f6f0d59610da4b28e22aef1" name="ad144149e6f6f0d59610da4b28e22aef1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad144149e6f6f0d59610da4b28e22aef1">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> &amp; operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a834cee3b2f409135c37c188c583bce91" name="a834cee3b2f409135c37c188c583bce91"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a834cee3b2f409135c37c188c583bce91">&#9670;&#160;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp; operator= </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; T &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afdc36f6a5716b29a5d81a2dd93376d82" name="afdc36f6a5716b29a5d81a2dd93376d82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdc36f6a5716b29a5d81a2dd93376d82">&#9670;&#160;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const T &amp; operator() </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ref_8hpp_source.html#l00031">31</a> of file <a class="el" href="ref_8hpp_source.html">ref.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a241c04e3ce86e1fd5a946eb2aa8b1f22" name="a241c04e3ce86e1fd5a946eb2aa8b1f22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a241c04e3ce86e1fd5a946eb2aa8b1f22">&#9670;&#160;</a></span>operator*()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const T &amp; operator* </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ref_8hpp_source.html#l00032">32</a> of file <a class="el" href="ref_8hpp_source.html">ref.hpp</a>.</p>
+
+</div>
+</div>
+<a id="abaade5c780b539b94de660e314cb0c90" name="abaade5c780b539b94de660e314cb0c90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abaade5c780b539b94de660e314cb0c90">&#9670;&#160;</a></span>operator-&gt;()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const T * operator-&gt; </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ref_8hpp_source.html#l00033">33</a> of file <a class="el" href="ref_8hpp_source.html">ref.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li><a class="el" href="ref_8hpp_source.html">ref.hpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="namespaceftxui.html">ftxui</a></li><li class="navelem"><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
+  </ul>
+</div>
+</body>
+</html>

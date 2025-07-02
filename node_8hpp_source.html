@@ -1,0 +1,339 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: node.hpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('node_8hpp_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">node.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="node_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2020 Arthur Sonzogni. All rights reserved.</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Use of this source code is governed by the MIT license that can be found in</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// the LICENSE file.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef FTXUI_DOM_NODE_HPP</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#define FTXUI_DOM_NODE_HPP</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;memory&gt;</span>  <span class="comment">// for shared_ptr</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;vector&gt;</span>  <span class="comment">// for vector</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="requirement_8hpp.html">ftxui/dom/requirement.hpp</a>&quot;</span>  <span class="comment">// for Requirement</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="selection_8hpp.html">ftxui/dom/selection.hpp</a>&quot;</span>    <span class="comment">// for Selection</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="box_8hpp.html">ftxui/screen/box.hpp</a>&quot;</span>       <span class="comment">// for Box</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="screen_8hpp.html">ftxui/screen/screen.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">class </span>Node;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">class </span>Screen;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">using </span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> = std::shared_ptr&lt;Node&gt;;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">using </span><a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> = std::vector&lt;Element&gt;;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"></span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">/// @brief Node is the base class for all elements in the DOM tree.</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">///</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">/// It represents a single node in the document object model (DOM) and provides</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">/// the basic structure for layout and rendering.</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">/// It contains methods for computing layout requirements, setting the box</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">/// dimensions, selecting content, rendering to the screen, and checking the</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">/// layout status.</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">/// It typically contains child elements, which are also instances of Node.</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">///</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">/// Users are expected to derive from this class to create custom elements.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">///</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">/// A list of builtin elements can be found in the `elements.hpp` file.</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">///</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">/// @ingroup dom</span></div>
+<div class="foldopen" id="foldopen00037" data-start="{" data-end="};">
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="group__dom.html">   37</a></span><span class="comment"></span><span class="keyword">class </span><a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a> {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="group__dom.html#a0d313fac56abd7ebe58a17f1530b879e">   39</a></span>  <a class="code hl_function" href="group__dom.html#a0d313fac56abd7ebe58a17f1530b879e">Node</a>();</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keyword">explicit</span> <a class="code hl_function" href="group__dom.html#a0d313fac56abd7ebe58a17f1530b879e">Node</a>(<a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> children);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="group__dom.html#a7eb6a9efa23e5f6f7fc53b5aa3759dff">   41</a></span>  <a class="code hl_function" href="group__dom.html#a7eb6a9efa23e5f6f7fc53b5aa3759dff">Node</a>(<span class="keyword">const</span> <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="group__dom.html#ac6365e35a2029b3e58eca97905f8124d">   42</a></span>  <a class="code hl_function" href="group__dom.html#ac6365e35a2029b3e58eca97905f8124d">Node</a>(<span class="keyword">const</span> <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="group__dom.html#a7e12a390c13d283fc06cafbbfef7eba7">   43</a></span>  <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>&amp; <a class="code hl_function" href="group__dom.html#a7e12a390c13d283fc06cafbbfef7eba7">operator=</a>(<span class="keyword">const</span> <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="group__dom.html#abe938f0d7bfdca112e345590d4887de6">   44</a></span>  <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>&amp; <a class="code hl_function" href="group__dom.html#abe938f0d7bfdca112e345590d4887de6">operator=</a>(<span class="keyword">const</span> <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>&amp;&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="group__dom.html#a6fa6bf60f34f1e3efb0e59333428c9c8">   46</a></span>  <span class="keyword">virtual</span> <a class="code hl_function" href="group__dom.html#a6fa6bf60f34f1e3efb0e59333428c9c8">~Node</a>();</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  <span class="comment">// Step 1: Compute layout requirement. Tell parent what dimensions this</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  <span class="comment">//         element wants to be.</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <span class="comment">//         Propagated from Children to Parents.</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="group__dom.html#a40bd818c5de23bb2d208360d275ae59d">ComputeRequirement</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="group__dom.html#a39a263e8c8786dc62fcb4d734aad7fe6">   52</a></span>  <a class="code hl_struct" href="group__dom.html#structftxui_1_1Requirement">Requirement</a> <a class="code hl_function" href="group__dom.html#a39a263e8c8786dc62fcb4d734aad7fe6">requirement</a>() { <span class="keywordflow">return</span> <a class="code hl_variable" href="group__dom.html#a3530d99687053ce0d0006b9dee9a1ca7">requirement_</a>; }</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  <span class="comment">// Step 2: Assign this element its final dimensions.</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="comment">//         Propagated from Parents to Children.</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="group__dom.html#a2ed318aaadb07efc50e76fce1ccf9637">SetBox</a>(<a class="code hl_struct" href="group__screen.html#structftxui_1_1Box">Box</a> box);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  <span class="comment">// Step 3: (optional) Selection</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="comment">//         Propagated from Parents to Children.</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="group__dom.html#a05352f5a353f1e86630a978060e77305">Select</a>(<a class="code hl_class" href="group__dom.html#classftxui_1_1Selection">Selection</a>&amp; selection);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  <span class="comment">// Step 4: Draw this element.</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_friend" href="group__dom.html#ab35030b64136afa183d474d11bd1f6dd">Render</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a>&amp; screen);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keyword">virtual</span> std::string <a class="code hl_function" href="group__dom.html#a2c5cebe05557529299e649867b499680">GetSelectedContent</a>(<a class="code hl_class" href="group__dom.html#classftxui_1_1Selection">Selection</a>&amp; selection);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="comment">// Layout may not resolve within a single iteration for some elements. This</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="comment">// allows them to request additionnal iterations. This signal must be</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="comment">// forwarded to children at least once.</span></div>
+<div class="foldopen" id="foldopen00070" data-start="{" data-end="};">
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="structftxui_1_1Node_1_1Status.html">   70</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structftxui_1_1Node_1_1Status.html">Status</a> {</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="structftxui_1_1Node_1_1Status.html#aa6371382c6b4224e577e14ea610ab9a9">   71</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structftxui_1_1Node_1_1Status.html#aa6371382c6b4224e577e14ea610ab9a9">iteration</a> = 0;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="structftxui_1_1Node_1_1Status.html#a0fffbfa5479a3b6d3ddf5ff13504a51c">   72</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="structftxui_1_1Node_1_1Status.html#a0fffbfa5479a3b6d3ddf5ff13504a51c">need_iteration</a> = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  };</div>
+</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code hl_function" href="group__dom.html#a5b71d891a102197f2856f53702425581">Check</a>(<a class="code hl_struct" href="structftxui_1_1Node_1_1Status.html">Status</a>* status);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <span class="keyword">friend</span> <span class="keywordtype">void</span> <a class="code hl_friend" href="group__dom.html#ab35030b64136afa183d474d11bd1f6dd">Render</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a>&amp; screen, <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>* node, <a class="code hl_class" href="group__dom.html#classftxui_1_1Selection">Selection</a>&amp; selection);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="group__dom.html#a2aeb117dade3254694355ab90e9fc566">   79</a></span>  <a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> <a class="code hl_variable" href="group__dom.html#a2aeb117dade3254694355ab90e9fc566">children_</a>;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="group__dom.html#a3530d99687053ce0d0006b9dee9a1ca7">   80</a></span>  <a class="code hl_struct" href="group__dom.html#structftxui_1_1Requirement">Requirement</a> <a class="code hl_variable" href="group__dom.html#a3530d99687053ce0d0006b9dee9a1ca7">requirement_</a>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="group__dom.html#aa7e7d30102945911407723a5cbcdfabc">   81</a></span>  <a class="code hl_struct" href="group__screen.html#structftxui_1_1Box">Box</a> <a class="code hl_variable" href="group__dom.html#aa7e7d30102945911407723a5cbcdfabc">box_</a>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>};</div>
+</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="keywordtype">void</span> <a class="code hl_function" href="group__dom.html#gad4b8aa9392f56ba41e2b421e046a7d83">Render</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a>&amp; screen, <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&amp; element);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="keywordtype">void</span> <a class="code hl_function" href="group__dom.html#gad4b8aa9392f56ba41e2b421e046a7d83">Render</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a>&amp; screen, <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>* node);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keywordtype">void</span> <a class="code hl_function" href="group__dom.html#gad4b8aa9392f56ba41e2b421e046a7d83">Render</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a>&amp; screen, <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>* node, <a class="code hl_class" href="group__dom.html#classftxui_1_1Selection">Selection</a>&amp; selection);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>std::string <a class="code hl_function" href="namespaceftxui.html#a1a3d5804148186b3d4bcc07391ba5f30">GetNodeSelectedContent</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a>&amp; screen,</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                                   <a class="code hl_class" href="group__dom.html#classftxui_1_1Node">Node</a>* node,</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>                                   <a class="code hl_class" href="group__dom.html#classftxui_1_1Selection">Selection</a>&amp; selection);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>}  <span class="comment">// namespace ftxui</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="preprocessor">#endif  </span><span class="comment">// FTXUI_DOM_NODE_HPP</span></div>
+<div class="ttc" id="abox_8hpp_html"><div class="ttname"><a href="box_8hpp.html">box.hpp</a></div></div>
+<div class="ttc" id="agroup__dom_html_a05352f5a353f1e86630a978060e77305"><div class="ttname"><a href="group__dom.html#a05352f5a353f1e86630a978060e77305">ftxui::Node::Select</a></div><div class="ttdeci">virtual void Select(Selection &amp;selection)</div><div class="ttdoc">Compute the selection of an element.</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00046">node.cpp:46</a></div></div>
+<div class="ttc" id="agroup__dom_html_a0d313fac56abd7ebe58a17f1530b879e"><div class="ttname"><a href="group__dom.html#a0d313fac56abd7ebe58a17f1530b879e">ftxui::Node::Node</a></div><div class="ttdeci">Node()</div></div>
+<div class="ttc" id="agroup__dom_html_a2aeb117dade3254694355ab90e9fc566"><div class="ttname"><a href="group__dom.html#a2aeb117dade3254694355ab90e9fc566">ftxui::Node::children_</a></div><div class="ttdeci">Elements children_</div><div class="ttdef"><b>Definition</b> <a href="#l00079">node.hpp:79</a></div></div>
+<div class="ttc" id="agroup__dom_html_a2c5cebe05557529299e649867b499680"><div class="ttname"><a href="group__dom.html#a2c5cebe05557529299e649867b499680">ftxui::Node::GetSelectedContent</a></div><div class="ttdeci">virtual std::string GetSelectedContent(Selection &amp;selection)</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00072">node.cpp:72</a></div></div>
+<div class="ttc" id="agroup__dom_html_a2ed318aaadb07efc50e76fce1ccf9637"><div class="ttname"><a href="group__dom.html#a2ed318aaadb07efc50e76fce1ccf9637">ftxui::Node::SetBox</a></div><div class="ttdeci">virtual void SetBox(Box box)</div><div class="ttdoc">Assign a position and a dimension to an element for drawing.</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00041">node.cpp:41</a></div></div>
+<div class="ttc" id="agroup__dom_html_a3530d99687053ce0d0006b9dee9a1ca7"><div class="ttname"><a href="group__dom.html#a3530d99687053ce0d0006b9dee9a1ca7">ftxui::Node::requirement_</a></div><div class="ttdeci">Requirement requirement_</div><div class="ttdef"><b>Definition</b> <a href="#l00080">node.hpp:80</a></div></div>
+<div class="ttc" id="agroup__dom_html_a39a263e8c8786dc62fcb4d734aad7fe6"><div class="ttname"><a href="group__dom.html#a39a263e8c8786dc62fcb4d734aad7fe6">ftxui::Node::requirement</a></div><div class="ttdeci">Requirement requirement()</div><div class="ttdef"><b>Definition</b> <a href="#l00052">node.hpp:52</a></div></div>
+<div class="ttc" id="agroup__dom_html_a40bd818c5de23bb2d208360d275ae59d"><div class="ttname"><a href="group__dom.html#a40bd818c5de23bb2d208360d275ae59d">ftxui::Node::ComputeRequirement</a></div><div class="ttdeci">virtual void ComputeRequirement()</div><div class="ttdoc">Compute how much space an element needs.</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00020">node.cpp:20</a></div></div>
+<div class="ttc" id="agroup__dom_html_a5b71d891a102197f2856f53702425581"><div class="ttname"><a href="group__dom.html#a5b71d891a102197f2856f53702425581">ftxui::Node::Check</a></div><div class="ttdeci">virtual void Check(Status *status)</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00065">node.cpp:65</a></div></div>
+<div class="ttc" id="agroup__dom_html_a6fa6bf60f34f1e3efb0e59333428c9c8"><div class="ttname"><a href="group__dom.html#a6fa6bf60f34f1e3efb0e59333428c9c8">ftxui::Node::~Node</a></div><div class="ttdeci">virtual ~Node()</div></div>
+<div class="ttc" id="agroup__dom_html_a7e12a390c13d283fc06cafbbfef7eba7"><div class="ttname"><a href="group__dom.html#a7e12a390c13d283fc06cafbbfef7eba7">ftxui::Node::operator=</a></div><div class="ttdeci">Node &amp; operator=(const Node &amp;)=delete</div></div>
+<div class="ttc" id="agroup__dom_html_a7eb6a9efa23e5f6f7fc53b5aa3759dff"><div class="ttname"><a href="group__dom.html#a7eb6a9efa23e5f6f7fc53b5aa3759dff">ftxui::Node::Node</a></div><div class="ttdeci">Node(const Node &amp;)=delete</div></div>
+<div class="ttc" id="agroup__dom_html_aa7e7d30102945911407723a5cbcdfabc"><div class="ttname"><a href="group__dom.html#aa7e7d30102945911407723a5cbcdfabc">ftxui::Node::box_</a></div><div class="ttdeci">Box box_</div><div class="ttdef"><b>Definition</b> <a href="#l00081">node.hpp:81</a></div></div>
+<div class="ttc" id="agroup__dom_html_ab35030b64136afa183d474d11bd1f6dd"><div class="ttname"><a href="group__dom.html#ab35030b64136afa183d474d11bd1f6dd">ftxui::Node::Render</a></div><div class="ttdeci">friend void Render(Screen &amp;screen, Node *node, Selection &amp;selection)</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00096">node.cpp:96</a></div></div>
+<div class="ttc" id="agroup__dom_html_abe938f0d7bfdca112e345590d4887de6"><div class="ttname"><a href="group__dom.html#abe938f0d7bfdca112e345590d4887de6">ftxui::Node::operator=</a></div><div class="ttdeci">Node &amp; operator=(const Node &amp;&amp;)=delete</div></div>
+<div class="ttc" id="agroup__dom_html_ac6365e35a2029b3e58eca97905f8124d"><div class="ttname"><a href="group__dom.html#ac6365e35a2029b3e58eca97905f8124d">ftxui::Node::Node</a></div><div class="ttdeci">Node(const Node &amp;&amp;)=delete</div></div>
+<div class="ttc" id="agroup__dom_html_classftxui_1_1Node"><div class="ttname"><a href="group__dom.html#classftxui_1_1Node">ftxui::Node</a></div><div class="ttdoc">Node is the base class for all elements in the DOM tree.</div><div class="ttdef"><b>Definition</b> <a href="#l00037">node.hpp:37</a></div></div>
+<div class="ttc" id="agroup__dom_html_classftxui_1_1Selection"><div class="ttname"><a href="group__dom.html#classftxui_1_1Selection">ftxui::Selection</a></div><div class="ttdoc">Represents a selection in a terminal user interface.</div><div class="ttdef"><b>Definition</b> <a href="selection_8hpp_source.html#l00022">selection.hpp:22</a></div></div>
+<div class="ttc" id="agroup__dom_html_gad4b8aa9392f56ba41e2b421e046a7d83"><div class="ttname"><a href="group__dom.html#gad4b8aa9392f56ba41e2b421e046a7d83">ftxui::Render</a></div><div class="ttdeci">void Render(Screen &amp;screen, const Element &amp;element)</div><div class="ttdoc">Display an element on a ftxui::Screen.</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00084">node.cpp:84</a></div></div>
+<div class="ttc" id="agroup__dom_html_structftxui_1_1Requirement"><div class="ttname"><a href="group__dom.html#structftxui_1_1Requirement">ftxui::Requirement</a></div><div class="ttdoc">Requirement is a structure that defines the layout requirements for a Node in the terminal user inter...</div><div class="ttdef"><b>Definition</b> <a href="requirement_8hpp_source.html#l00018">requirement.hpp:18</a></div></div>
+<div class="ttc" id="agroup__screen_html_classftxui_1_1Screen"><div class="ttname"><a href="group__screen.html#classftxui_1_1Screen">ftxui::Screen</a></div><div class="ttdoc">A rectangular grid of Pixel.</div><div class="ttdef"><b>Definition</b> <a href="screen_8hpp_source.html#l00027">screen.hpp:27</a></div></div>
+<div class="ttc" id="agroup__screen_html_structftxui_1_1Box"><div class="ttname"><a href="group__screen.html#structftxui_1_1Box">ftxui::Box</a></div><div class="ttdoc">Box is a structure that represents a rectangular area in a 2D space.</div><div class="ttdef"><b>Definition</b> <a href="box_8hpp_source.html#l00016">box.hpp:16</a></div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">The FTXUI ftxui:: namespace.</div><div class="ttdef"><b>Definition</b> <a href="animation_8hpp_source.html#l00010">animation.hpp:10</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a1a3d5804148186b3d4bcc07391ba5f30"><div class="ttname"><a href="namespaceftxui.html#a1a3d5804148186b3d4bcc07391ba5f30">ftxui::GetNodeSelectedContent</a></div><div class="ttdeci">std::string GetNodeSelectedContent(Screen &amp;screen, Node *node, Selection &amp;selection)</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00168">node.cpp:168</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a2bc31f2d685189e5c61d2293a1f51b4f"><div class="ttname"><a href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">ftxui::Element</a></div><div class="ttdeci">std::shared_ptr&lt; Node &gt; Element</div><div class="ttdef"><b>Definition</b> <a href="elements_8hpp_source.html#l00022">elements.hpp:22</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a5d4aa06ca6cc6a72e981bd5386f93f0a"><div class="ttname"><a href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">ftxui::Elements</a></div><div class="ttdeci">std::vector&lt; Element &gt; Elements</div><div class="ttdef"><b>Definition</b> <a href="elements_8hpp_source.html#l00023">elements.hpp:23</a></div></div>
+<div class="ttc" id="arequirement_8hpp_html"><div class="ttname"><a href="requirement_8hpp.html">requirement.hpp</a></div></div>
+<div class="ttc" id="ascreen_8hpp_html"><div class="ttname"><a href="screen_8hpp.html">screen.hpp</a></div></div>
+<div class="ttc" id="aselection_8hpp_html"><div class="ttname"><a href="selection_8hpp.html">selection.hpp</a></div></div>
+<div class="ttc" id="astructftxui_1_1Node_1_1Status_html"><div class="ttname"><a href="structftxui_1_1Node_1_1Status.html">ftxui::Node::Status</a></div><div class="ttdef"><b>Definition</b> <a href="#l00070">node.hpp:70</a></div></div>
+<div class="ttc" id="astructftxui_1_1Node_1_1Status_html_a0fffbfa5479a3b6d3ddf5ff13504a51c"><div class="ttname"><a href="structftxui_1_1Node_1_1Status.html#a0fffbfa5479a3b6d3ddf5ff13504a51c">ftxui::Node::Status::need_iteration</a></div><div class="ttdeci">bool need_iteration</div><div class="ttdef"><b>Definition</b> <a href="#l00072">node.hpp:72</a></div></div>
+<div class="ttc" id="astructftxui_1_1Node_1_1Status_html_aa6371382c6b4224e577e14ea610ab9a9"><div class="ttname"><a href="structftxui_1_1Node_1_1Status.html#aa6371382c6b4224e577e14ea610ab9a9">ftxui::Node::Status::iteration</a></div><div class="ttdeci">int iteration</div><div class="ttdef"><b>Definition</b> <a href="#l00071">node.hpp:71</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_7f0d124f4cd00c9c7b5b93f60cb4ae34.html">ftxui</a></li><li class="navelem"><a class="el" href="dir_4cbb3a1c219643e03aadd7cd3693e7bd.html">dom</a></li><li class="navelem"><a class="el" href="node_8hpp.html">node.hpp</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
+  </ul>
+</div>
+</body>
+</html>
