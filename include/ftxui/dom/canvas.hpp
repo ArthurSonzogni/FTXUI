@@ -30,7 +30,7 @@ namespace ftxui {
 /// - 2x4 braille characters (1x1 pixel)
 /// - 2x2 block characters (2x2 pixels)
 /// - 2x4 normal characters (2x4 pixels)
-/// 
+///
 /// You need to multiply the x coordinate by 2 and the y coordinate by 4 to
 /// get the correct position in the terminal.
 ///

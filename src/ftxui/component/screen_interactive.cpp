@@ -173,7 +173,8 @@ int CheckStdinReady(int usec_timeout) {
 
 // Read char from the terminal.
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
-  auto parser = TerminalInputParser(std::move(out));
+  auto parser =
+      TerminalInputParser([&](Task task) { out->Send(std::move(task)); });
 
   while (!*quit) {
     if (!CheckStdinReady(timeout_microseconds)) {
@@ -381,10 +382,10 @@ ScreenInteractive ScreenInteractive::Fullscreen() {
 ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
   auto terminal = Terminal::Size();
   return {
-    Dimension::Fullscreen,
-    terminal.dimx,
-    terminal.dimy,
-    /*use_alternative_screen=*/false,
+      Dimension::Fullscreen,
+      terminal.dimx,
+      terminal.dimy,
+      /*use_alternative_screen=*/false,
   };
 }
 
@@ -409,7 +410,7 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
   return {
       Dimension::TerminalOutput,
       terminal.dimx,
-      terminal.dimy, // Best guess.
+      terminal.dimy,  // Best guess.
       /*use_alternative_screen=*/false,
   };
 }
@@ -421,8 +422,8 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   auto terminal = Terminal::Size();
   return {
       Dimension::FitComponent,
-      terminal.dimx, // Best guess.
-      terminal.dimy, // Best guess.
+      terminal.dimx,  // Best guess.
+      terminal.dimy,  // Best guess.
       false,
   };
 }

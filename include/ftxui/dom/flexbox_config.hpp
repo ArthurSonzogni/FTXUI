@@ -12,7 +12,6 @@
 
 namespace ftxui {
 
-
 /// @brief FlexboxConfig is a configuration structure that defines the layout
 /// properties for a flexbox container.
 //
