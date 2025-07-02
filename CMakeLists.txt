@@ -148,15 +148,16 @@ add_library(component
   src/ftxui/component/terminal_input_parser.hpp
   src/ftxui/component/util.cpp
   src/ftxui/component/window.cpp
+  src/ftxui/core/task.cpp
+  src/ftxui/core/task.hpp
+  src/ftxui/core/task_queue.cpp
+  src/ftxui/core/task_queue.hpp
+  src/ftxui/core/task_runner.cpp
+  src/ftxui/core/task_runner.hpp
 )
 
-target_link_libraries(dom
-  PUBLIC screen
-)
-
-target_link_libraries(component
-  PUBLIC dom
-)
+target_link_libraries(dom PUBLIC screen)
+target_link_libraries(component PUBLIC dom)
 
 if (NOT EMSCRIPTEN)
   find_package(Threads)
