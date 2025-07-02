@@ -30,11 +30,12 @@
 #include "ftxui/component/loop.hpp"            // for Loop
 #include "ftxui/component/receiver.hpp"  // for ReceiverImpl, Sender, MakeReceiver, SenderImpl, Receiver
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
-#include "ftxui/dom/node.hpp"                         // for Node, Render
-#include "ftxui/dom/requirement.hpp"                  // for Requirement
-#include "ftxui/screen/pixel.hpp"                     // for Pixel
-#include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
-#include "ftxui/screen/util.hpp"                      // for util::clamp
+#include "ftxui/core/task_runner.hpp"
+#include "ftxui/dom/node.hpp"         // for Node, Render
+#include "ftxui/dom/requirement.hpp"  // for Requirement
+#include "ftxui/screen/pixel.hpp"     // for Pixel
+#include "ftxui/screen/terminal.hpp"  // for Dimensions, Size
+#include "ftxui/screen/util.hpp"      // for util::clamp
 
 #if defined(_WIN32)
 #define DEFINE_CONSOLEV2_PROPERTIES
@@ -416,6 +417,8 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
       /*use_alternative_screen=*/false,
   };
 }
+
+ScreenInteractive::~ScreenInteractive() = default;
 
 /// Create a ScreenInteractive whose width and height match the component being
 /// drawn.

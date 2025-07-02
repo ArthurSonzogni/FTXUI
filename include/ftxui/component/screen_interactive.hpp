@@ -26,6 +26,10 @@ struct Event;
 using Component = std::shared_ptr<ComponentBase>;
 class ScreenInteractivePrivate;
 
+namespace task {
+  class TaskRunner;
+}
+
 /// @brief ScreenInteractive is a `Screen` that can handle events, run a main
 /// loop, and manage components.
 ///
@@ -39,6 +43,9 @@ class ScreenInteractive : public Screen {
   static ScreenInteractive FullscreenAlternateScreen();
   static ScreenInteractive FitComponent();
   static ScreenInteractive TerminalOutput();
+
+  // Destructor.
+  ~ScreenInteractive();
 
   // Options. Must be called before Loop().
   void TrackMouse(bool enable = true);
@@ -155,6 +162,8 @@ class ScreenInteractive : public Screen {
   SelectionData selection_data_previous_;
   std::unique_ptr<Selection> selection_;
   std::function<void()> selection_on_change_;
+
+  std::unique_ptr<task::TaskRunner> task_runner_;
 
   friend class Loop;
 
