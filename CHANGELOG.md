@@ -24,6 +24,7 @@ Next
   import ftxui.util;
   ```
   Thanks @mikomikotaishi for PR #1015.
+- Remove dependency on 'pthread'.
 
 ### Component
 - Fix ScreenInteractive::FixedSize screen stomps on the preceding terminal

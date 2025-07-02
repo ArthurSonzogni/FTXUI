@@ -11,7 +11,6 @@
 
 #include "ftxui/screen/image.hpp"     // for Pixel, Image
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
-#include "ftxui/util/autoreset.hpp"   // for AutoReset
 
 namespace ftxui {
 
@@ -30,6 +29,9 @@ class Screen : public Image {
   Screen(int dimx, int dimy);
   static Screen Create(Dimensions dimension);
   static Screen Create(Dimensions width, Dimensions height);
+
+  // Destructor:
+  ~Screen() override = default;
 
   std::string ToString() const;
 

@@ -20,6 +20,9 @@ class Image {
   Image() = delete;
   Image(int dimx, int dimy);
 
+  // Destructor:
+  virtual ~Image() = default;
+
   // Access a character in the grid at a given position.
   std::string& at(int x, int y);
   const std::string& at(int x, int y) const;

@@ -13,7 +13,6 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load(":bazel/ftxui.bzl", "ftxui_cc_library")
 load(":bazel/ftxui.bzl", "generate_examples")
 load(":bazel/ftxui.bzl", "windows_copts")
-load(":bazel/ftxui.bzl", "pthread_linkopts")
 
 # A meta target depending on all of the ftxui submodules.
 # Note that component depends on dom and screen, so ftxui is just an alias for 
@@ -159,10 +158,17 @@ ftxui_cc_library(
         "src/ftxui/component/resizable_split.cpp",
         "src/ftxui/component/screen_interactive.cpp",
         "src/ftxui/component/slider.cpp",
+        "src/ftxui/component/task.cpp",
+        "src/ftxui/component/task_internal.hpp",
+        "src/ftxui/component/task_queue.cpp",
+        "src/ftxui/component/task_queue.hpp",
+        "src/ftxui/component/task_runner.cpp",
+        "src/ftxui/component/task_runner.hpp",
         "src/ftxui/component/terminal_input_parser.cpp",
         "src/ftxui/component/terminal_input_parser.hpp",
         "src/ftxui/component/util.cpp",
         "src/ftxui/component/window.cpp",
+
 
         # Private header from ftxui:dom.
         "src/ftxui/dom/node_decorator.hpp",
@@ -184,7 +190,6 @@ ftxui_cc_library(
         "include/ftxui/component/screen_interactive.hpp",
         "include/ftxui/component/task.hpp",
     ],
-    linkopts = pthread_linkopts(),
     deps = [
         ":dom",
         ":screen",
@@ -207,7 +212,6 @@ cc_test(
         "src/ftxui/component/menu_test.cpp",
         "src/ftxui/component/modal_test.cpp",
         "src/ftxui/component/radiobox_test.cpp",
-        "src/ftxui/component/receiver_test.cpp",
         "src/ftxui/component/resizable_split_test.cpp",
         "src/ftxui/component/slider_test.cpp",
         "src/ftxui/component/terminal_input_parser_test.cpp",

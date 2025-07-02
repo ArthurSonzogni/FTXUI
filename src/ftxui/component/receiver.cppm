@@ -12,9 +12,15 @@ export module ftxui.component.receiver;
  * @brief The FTXUI ftxui:: namespace
  */
 export namespace ftxui {
+    // Deprecated:
     using ftxui::SenderImpl;
+    // Deprecated:
     using ftxui::ReceiverImpl;
+    // Deprecated:
     using ftxui::Sender;
+    // Deprecated:
     using ftxui::Receiver;
+    // Deprecated:
     using ftxui::MakeReceiver;
+    // Deprecated:
 }
