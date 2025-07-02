@@ -2,6 +2,7 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <cassert>
+#include <ftxui/component/event.hpp>
 #include <vector>
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"
@@ -212,16 +213,17 @@ extern "C" int LLVMFuzzerTestOneInput(const char* data, size_t size) {
   auto screen =
       Screen::Create(Dimension::Fixed(width), Dimension::Fixed(height));
 
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    for (size_t i = 0; i < size; ++i)
-      parser.Add(data[i]);
+  // Generate some events.
+  std::vector<Event> events;
+  auto parser =
+      TerminalInputParser([&](const Event& event) { events.push_back(event); });
+
+  for (size_t i = 0; i < size; ++i) {
+    parser.Add(data[i]);
   }
 
-  Task event;
-  while (event_receiver->Receive(&event)) {
-    component->OnEvent(std::get<Event>(event));
+  for (const auto& event : events) {
+    component->OnEvent(event);
     auto document = component->Render();
     Render(screen, document);
   }

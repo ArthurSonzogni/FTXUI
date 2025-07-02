@@ -16,7 +16,7 @@ struct Event;
 // Parse a sequence of |char| accross |time|. Produces |Event|.
 class TerminalInputParser {
  public:
-  explicit TerminalInputParser(std::function<void(Event)> callback);
+  explicit TerminalInputParser(std::function<void(Event)> out);
   void Timeout(int time);
   void Add(char c);
 
@@ -61,7 +61,7 @@ class TerminalInputParser {
   Output ParseMouse(bool altered, bool pressed, std::vector<int> arguments);
   Output ParseCursorPosition(std::vector<int> arguments);
 
-  std::function<void(Event)> callback_;
+  std::function<void(Event)> out_;
   int position_ = -1;
   int timeout_ = 0;
   std::string pending_;

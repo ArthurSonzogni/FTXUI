@@ -84,7 +84,8 @@ constexpr int timeout_milliseconds = 20;
 
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
   auto console = GetStdHandle(STD_INPUT_HANDLE);
-  auto parser = TerminalInputParser(out->Clone());
+  auto parser =
+      TerminalInputParser([&](Event event) { out->Send(std::move(event)); });
   while (!*quit) {
     // Throttle ReadConsoleInput by waiting 250ms, this wait function will
     // return if there is input in the console.
@@ -137,7 +138,8 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
 
 // Read char from the terminal.
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
-  auto parser = TerminalInputParser(std::move(out));
+  auto parser =
+      TerminalInputParser([&](Event event) { out->Send(std::move(event)); });
 
   char c;
   while (!*quit) {
@@ -174,7 +176,7 @@ int CheckStdinReady(int usec_timeout) {
 // Read char from the terminal.
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
   auto parser =
-      TerminalInputParser([&](Task task) { out->Send(std::move(task)); });
+      TerminalInputParser([&](Event event) { out->Send(std::move(event)); });
 
   while (!*quit) {
     if (!CheckStdinReady(timeout_microseconds)) {

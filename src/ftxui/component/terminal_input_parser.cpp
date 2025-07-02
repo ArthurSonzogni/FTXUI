@@ -90,8 +90,8 @@ const std::map<std::string, std::string> g_uniformize = {
     {"\x1B[X", "\x1B[24~"},  // F12
 };
 
-TerminalInputParser::TerminalInputParser(std::function<void(Event)> callback)
-    : callback_(std::move(callback)) {}
+TerminalInputParser::TerminalInputParser(std::function<void(Event)> out)
+    : out_(std::move(out)) {}
 
 void TerminalInputParser::Timeout(int time) {
   timeout_ += time;
@@ -131,7 +131,7 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
 
     case CHARACTER:
-      callback_(Event::Character(std::move(pending_)));
+      out_(Event::Character(std::move(pending_)));
       pending_.clear();
       return;
 
@@ -140,25 +140,25 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       if (it != g_uniformize.end()) {
         pending_ = it->second;
       }
-      callback_(Event::Special(std::move(pending_)));
+      out_(Event::Special(std::move(pending_)));
       pending_.clear();
     }
       return;
 
     case MOUSE:
-      callback_(Event::Mouse(std::move(pending_), output.mouse));  // NOLINT
+      out_(Event::Mouse(std::move(pending_), output.mouse));  // NOLINT
       pending_.clear();
       return;
 
     case CURSOR_POSITION:
-      callback_(Event::CursorPosition(std::move(pending_),  // NOLINT
+      out_(Event::CursorPosition(std::move(pending_),  // NOLINT
                                       output.cursor.x,      // NOLINT
                                       output.cursor.y));    // NOLINT
       pending_.clear();
       return;
 
     case CURSOR_SHAPE:
-      callback_(Event::CursorShape(std::move(pending_), output.cursor_shape));
+      out_(Event::CursorShape(std::move(pending_), output.cursor_shape));
       pending_.clear();
       return;
   }
