@@ -5,7 +5,7 @@
 
 #include <cstdint>                    // for uint32_t
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Button, Mouse::Motion
-#include <ftxui/component/receiver.hpp>  // for SenderImpl, Sender
+#include <functional>                 // for std::function
 #include <map>
 #include <memory>   // for unique_ptr, allocator
 #include <utility>  // for move
@@ -90,7 +90,7 @@ const std::map<std::string, std::string> g_uniformize = {
     {"\x1B[X", "\x1B[24~"},  // F12
 };
 
-TerminalInputParser::TerminalInputParser(Sender<Task> out)
+TerminalInputParser::TerminalInputParser(std::function<void(Event)> out)
     : out_(std::move(out)) {}
 
 void TerminalInputParser::Timeout(int time) {
@@ -131,7 +131,7 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
 
     case CHARACTER:
-      out_->Send(Event::Character(std::move(pending_)));
+      out_(Event::Character(std::move(pending_)));
       pending_.clear();
       return;
 
@@ -140,25 +140,25 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       if (it != g_uniformize.end()) {
         pending_ = it->second;
       }
-      out_->Send(Event::Special(std::move(pending_)));
+      out_(Event::Special(std::move(pending_)));
       pending_.clear();
     }
       return;
 
     case MOUSE:
-      out_->Send(Event::Mouse(std::move(pending_), output.mouse));  // NOLINT
+      out_(Event::Mouse(std::move(pending_), output.mouse));  // NOLINT
       pending_.clear();
       return;
 
     case CURSOR_POSITION:
-      out_->Send(Event::CursorPosition(std::move(pending_),  // NOLINT
-                                       output.cursor.x,      // NOLINT
-                                       output.cursor.y));    // NOLINT
+      out_(Event::CursorPosition(std::move(pending_),  // NOLINT
+                                      output.cursor.x,      // NOLINT
+                                      output.cursor.y));    // NOLINT
       pending_.clear();
       return;
 
     case CURSOR_SHAPE:
-      out_->Send(Event::CursorShape(std::move(pending_), output.cursor_shape));
+      out_(Event::CursorShape(std::move(pending_), output.cursor_shape));
       pending_.clear();
       return;
   }

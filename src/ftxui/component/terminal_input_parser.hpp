@@ -4,12 +4,11 @@
 #ifndef FTXUI_COMPONENT_TERMINAL_INPUT_PARSER
 #define FTXUI_COMPONENT_TERMINAL_INPUT_PARSER
 
+#include <functional>
 #include <string>  // for string
 #include <vector>  // for vector
 
-#include "ftxui/component/mouse.hpp"     // for Mouse
-#include "ftxui/component/receiver.hpp"  // for Sender
-#include "ftxui/component/task.hpp"      // for Task
+#include "ftxui/component/mouse.hpp"  // for Mouse
 
 namespace ftxui {
 struct Event;
@@ -17,7 +16,7 @@ struct Event;
 // Parse a sequence of |char| accross |time|. Produces |Event|.
 class TerminalInputParser {
  public:
-  explicit TerminalInputParser(Sender<Task> out);
+  explicit TerminalInputParser(std::function<void(Event)> out);
   void Timeout(int time);
   void Add(char c);
 
@@ -62,7 +61,7 @@ class TerminalInputParser {
   Output ParseMouse(bool altered, bool pressed, std::vector<int> arguments);
   Output ParseCursorPosition(std::vector<int> arguments);
 
-  Sender<Task> out_;
+  std::function<void(Event)> out_;
   int position_ = -1;
   int timeout_ = 0;
   std::string pending_;

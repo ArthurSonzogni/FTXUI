@@ -27,9 +27,9 @@ namespace {
 // Capture the standard output (stdout) to a string.
 class StdCapture {
  public:
-  explicit StdCapture(std::string* captured)
-      : captured_(captured) {
-    if (pipe(pipefd_) != 0) return;
+  explicit StdCapture(std::string* captured) : captured_(captured) {
+    if (pipe(pipefd_) != 0)
+      return;
     old_stdout_ = dup(fileno(stdout));
     fflush(stdout);
     dup2(pipefd_[1], fileno(stdout));
@@ -188,9 +188,7 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
     auto capture = StdCapture(&output);
 
     auto screen = ScreenInteractive::FixedSize(2, 2);
-    auto component = Renderer([&] {
-      return text("AB");
-    });
+    auto component = Renderer([&] { return text("AB"); });
 
     Loop loop(&screen, component);
     loop.RunOnce();
@@ -241,7 +239,6 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
       "\r\n"sv;
   ASSERT_EQ(expected, output);
 #endif
-
 }
 
 }  // namespace ftxui

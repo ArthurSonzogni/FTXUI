@@ -2,12 +2,12 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <ftxui/component/mouse.hpp>  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::Pressed, Mouse::Released, Mouse::Right
-#include <ftxui/component/task.hpp>   // for Task
+#include <functional>                 // for function
 #include <initializer_list>           // for initializer_list
 #include <memory>                     // for allocator, unique_ptr
+#include <vector>                     // for vector
 
 #include "ftxui/component/event.hpp"  // for Event, Event::Return, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::Backspace, Event::End, Event::Home, Event::Custom, Event::Delete, Event::F1, Event::F10, Event::F11, Event::F12, Event::F2, Event::F3, Event::F4, Event::F5, Event::F6, Event::F7, Event::F8, Event::F9, Event::PageDown, Event::PageUp, Event::Tab, Event::TabReverse, Event::Escape
-#include "ftxui/component/receiver.hpp"  // for MakeReceiver, ReceiverImpl
 #include "ftxui/component/terminal_input_parser.hpp"
 #include "gtest/gtest.h"  // for AssertionResult, Test, Message, TestPartResult, EXPECT_EQ, EXPECT_TRUE, TEST, EXPECT_FALSE
 
@@ -22,228 +22,197 @@ TEST(Event, Character) {
   for (char c = 'A'; c <= 'Z'; ++c)
     basic_char.push_back(c);
 
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    for (char c : basic_char)
-      parser.Add(c);
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  for (char c : basic_char)
+    parser.Add(c);
 
-  Task received;
-  for (char c : basic_char) {
-    EXPECT_TRUE(event_receiver->Receive(&received));
-    EXPECT_TRUE(std::get<Event>(received).is_character());
-    EXPECT_EQ(c, std::get<Event>(received).character()[0]);
+  for (size_t i = 0; i < basic_char.size(); ++i) {
+    EXPECT_TRUE(received_events[i].is_character());
+    EXPECT_EQ(basic_char[i], received_events[i].character()[0]);
   }
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(received_events.size(), basic_char.size());
 }
 
 TEST(Event, EscapeKeyWithoutWaiting) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
 
-  Task received;
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_TRUE(received_events.empty());
 }
 
 TEST(Event, EscapeKeyNotEnoughWait) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Timeout(49);
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Timeout(49);
 
-  Task received;
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_TRUE(received_events.empty());
 }
 
 TEST(Event, EscapeKeyEnoughWait) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Timeout(50);
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Timeout(50);
 
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_EQ(std::get<Event>(received), Event::Escape);
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(received_events[0], Event::Escape);
 }
 
 TEST(Event, EscapeFast) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Add('a');
-    parser.Add('\x1B');
-    parser.Add('b');
-    parser.Timeout(49);
-  }
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_EQ(std::get<Event>(received), Event::AltA);
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_EQ(std::get<Event>(received), Event::AltB);
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Add('a');
+  parser.Add('');
+  parser.Add('b');
+  parser.Timeout(49);
+
+  EXPECT_EQ(2, received_events.size());
+  EXPECT_EQ(received_events[0], Event::AltA);
+  EXPECT_EQ(received_events[1], Event::AltB);
 }
 
 TEST(Event, MouseLeftClickPressed) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Add('[');
-    parser.Add('0');
-    parser.Add(';');
-    parser.Add('1');
-    parser.Add('2');
-    parser.Add(';');
-    parser.Add('4');
-    parser.Add('2');
-    parser.Add('M');
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Add('[');
+  parser.Add('0');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('4');
+  parser.Add('2');
+  parser.Add('M');
 
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(std::get<Event>(received).is_mouse());
-  EXPECT_EQ(Mouse::Left, std::get<Event>(received).mouse().button);
-  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
-  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
-  EXPECT_EQ(std::get<Event>(received).mouse().motion, Mouse::Pressed);
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(1, received_events.size());
+  EXPECT_TRUE(received_events[0].is_mouse());
+  EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
+  EXPECT_EQ(12, received_events[0].mouse().x);
+  EXPECT_EQ(42, received_events[0].mouse().y);
+  EXPECT_EQ(received_events[0].mouse().motion, Mouse::Pressed);
 }
 
 TEST(Event, MouseLeftMoved) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Add('[');
-    parser.Add('3');
-    parser.Add('2');
-    parser.Add(';');
-    parser.Add('1');
-    parser.Add('2');
-    parser.Add(';');
-    parser.Add('4');
-    parser.Add('2');
-    parser.Add('M');
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Add('[');
+  parser.Add('3');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('4');
+  parser.Add('2');
+  parser.Add('M');
 
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(std::get<Event>(received).is_mouse());
-  EXPECT_EQ(Mouse::Left, std::get<Event>(received).mouse().button);
-  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
-  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
-  EXPECT_EQ(std::get<Event>(received).mouse().motion, Mouse::Moved);
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(1, received_events.size());
+  EXPECT_TRUE(received_events[0].is_mouse());
+  EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
+  EXPECT_EQ(12, received_events[0].mouse().x);
+  EXPECT_EQ(42, received_events[0].mouse().y);
+  EXPECT_EQ(received_events[0].mouse().motion, Mouse::Moved);
 }
 
 TEST(Event, MouseLeftClickReleased) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Add('[');
-    parser.Add('0');
-    parser.Add(';');
-    parser.Add('1');
-    parser.Add('2');
-    parser.Add(';');
-    parser.Add('4');
-    parser.Add('2');
-    parser.Add('m');
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Add('[');
+  parser.Add('0');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('4');
+  parser.Add('2');
+  parser.Add('m');
 
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(std::get<Event>(received).is_mouse());
-  EXPECT_EQ(Mouse::Left, std::get<Event>(received).mouse().button);
-  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
-  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
-  EXPECT_EQ(std::get<Event>(received).mouse().motion, Mouse::Released);
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(1, received_events.size());
+  EXPECT_TRUE(received_events[0].is_mouse());
+  EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
+  EXPECT_EQ(12, received_events[0].mouse().x);
+  EXPECT_EQ(42, received_events[0].mouse().y);
+  EXPECT_EQ(received_events[0].mouse().motion, Mouse::Released);
 }
 
 TEST(Event, MouseReporting) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Add('[');
-    parser.Add('1');
-    parser.Add('2');
-    parser.Add(';');
-    parser.Add('4');
-    parser.Add('2');
-    parser.Add('R');
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Add('[');
+  parser.Add('1');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('4');
+  parser.Add('2');
+  parser.Add('R');
 
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(std::get<Event>(received).is_cursor_position());
-  EXPECT_EQ(42, std::get<Event>(received).cursor_x());
-  EXPECT_EQ(12, std::get<Event>(received).cursor_y());
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(1, received_events.size());
+  EXPECT_TRUE(received_events[0].is_cursor_position());
+  EXPECT_EQ(42, received_events[0].cursor_x());
+  EXPECT_EQ(12, received_events[0].cursor_y());
 }
 
 TEST(Event, MouseMiddleClick) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Add('[');
-    parser.Add('3');
-    parser.Add('3');
-    parser.Add(';');
-    parser.Add('1');
-    parser.Add('2');
-    parser.Add(';');
-    parser.Add('4');
-    parser.Add('2');
-    parser.Add('M');
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Add('[');
+  parser.Add('3');
+  parser.Add('3');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('4');
+  parser.Add('2');
+  parser.Add('M');
 
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(std::get<Event>(received).is_mouse());
-  EXPECT_EQ(Mouse::Middle, std::get<Event>(received).mouse().button);
-  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
-  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(1, received_events.size());
+  EXPECT_TRUE(received_events[0].is_mouse());
+  EXPECT_EQ(Mouse::Middle, received_events[0].mouse().button);
+  EXPECT_EQ(12, received_events[0].mouse().x);
+  EXPECT_EQ(42, received_events[0].mouse().y);
 }
 
 TEST(Event, MouseRightClick) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add('\x1B');
-    parser.Add('[');
-    parser.Add('3');
-    parser.Add('4');
-    parser.Add(';');
-    parser.Add('1');
-    parser.Add('2');
-    parser.Add(';');
-    parser.Add('4');
-    parser.Add('2');
-    parser.Add('M');
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('');
+  parser.Add('[');
+  parser.Add('3');
+  parser.Add('4');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('4');
+  parser.Add('2');
+  parser.Add('M');
 
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(std::get<Event>(received).is_mouse());
-  EXPECT_EQ(Mouse::Right, std::get<Event>(received).mouse().button);
-  EXPECT_EQ(12, std::get<Event>(received).mouse().x);
-  EXPECT_EQ(42, std::get<Event>(received).mouse().y);
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(1, received_events.size());
+  EXPECT_TRUE(received_events[0].is_mouse());
+  EXPECT_EQ(Mouse::Right, received_events[0].mouse().button);
+  EXPECT_EQ(12, received_events[0].mouse().x);
+  EXPECT_EQ(42, received_events[0].mouse().y);
 }
 
 TEST(Event, UTF8) {
@@ -313,31 +282,29 @@ TEST(Event, UTF8) {
 
   };
   for (auto test : kTestCase) {
-    auto event_receiver = MakeReceiver<Task>();
-    {
-      auto parser = TerminalInputParser(event_receiver->MakeSender());
-      for (auto input : test.input)
-        parser.Add(input);
-    }
-    Task received;
+    std::vector<Event> received_events;
+    auto parser = TerminalInputParser(
+        [&](Event event) { received_events.push_back(std::move(event)); });
+    for (auto input : test.input)
+      parser.Add(input);
+
     if (test.valid) {
-      EXPECT_TRUE(event_receiver->Receive(&received));
-      EXPECT_TRUE(std::get<Event>(received).is_character());
+      EXPECT_EQ(1, received_events.size());
+      EXPECT_TRUE(received_events[0].is_character());
+    } else {
+      EXPECT_TRUE(received_events.empty());
     }
-    EXPECT_FALSE(event_receiver->Receive(&received));
   }
 }
 
 TEST(Event, NewLine) {
   for (char newline : {'\r', '\n'}) {
-    auto event_receiver = MakeReceiver<Task>();
-    {
-      auto parser = TerminalInputParser(event_receiver->MakeSender());
-      parser.Add(newline);
-    }
-    Task received;
-    EXPECT_TRUE(event_receiver->Receive(&received));
-    EXPECT_TRUE(std::get<Event>(received) == Event::Return);
+    std::vector<Event> received_events;
+    auto parser = TerminalInputParser(
+        [&](Event event) { received_events.push_back(std::move(event)); });
+    parser.Add(newline);
+    EXPECT_EQ(1, received_events.size());
+    EXPECT_TRUE(received_events[0] == Event::Return);
   }
 }
 
@@ -357,17 +324,16 @@ TEST(Event, Control) {
   cases.push_back({char(127), false});
 
   for (auto test : cases) {
-    auto event_receiver = MakeReceiver<Task>();
-    {
-      auto parser = TerminalInputParser(event_receiver->MakeSender());
-      parser.Add(test.input);
-    }
-    Task received;
+    std::vector<Event> received_events;
+    auto parser = TerminalInputParser(
+        [&](Event event) { received_events.push_back(std::move(event)); });
+    parser.Add(test.input);
+
     if (test.cancel) {
-      EXPECT_FALSE(event_receiver->Receive(&received));
+      EXPECT_TRUE(received_events.empty());
     } else {
-      EXPECT_TRUE(event_receiver->Receive(&received));
-      EXPECT_EQ(std::get<Event>(received), Event::Special({test.input}));
+      EXPECT_EQ(1, received_events.size());
+      EXPECT_EQ(received_events[0], Event::Special({test.input}));
     }
   }
 }
@@ -385,10 +351,9 @@ TEST(Event, Special) {
     Event expected;
   } kTestCase[] = {
       // Arrow (default cursor mode)
-      {str("\x1B[A"), Event::ArrowUp},    {str("\x1B[B"), Event::ArrowDown},
-      {str("\x1B[C"), Event::ArrowRight}, {str("\x1B[D"), Event::ArrowLeft},
-      {str("\x1B[H"), Event::Home},       {str("\x1B[F"), Event::End},
-      /*
+      {str("[A"), Event::ArrowUp},    {str("[B"), Event::ArrowDown},
+      {str("[C"), Event::ArrowRight}, {str("[D"), Event::ArrowLeft},
+      {str("[H"), Event::Home},       {str("[F"), Event::End},
 
       // Arrow (application cursor mode)
       {str("\x1BOA"), Event::ArrowUp},
@@ -469,45 +434,38 @@ TEST(Event, Special) {
 
       // Custom:
       {{0}, Event::Custom},
-      */
   };
 
   for (auto test : kTestCase) {
-    auto event_receiver = MakeReceiver<Task>();
-    {
-      auto parser = TerminalInputParser(event_receiver->MakeSender());
-      for (auto input : test.input) {
-        parser.Add(input);
-      }
+    std::vector<Event> received_events;
+    auto parser = TerminalInputParser(
+        [&](Event event) { received_events.push_back(std::move(event)); });
+    for (auto input : test.input) {
+      parser.Add(input);
     }
-    Task received;
-    EXPECT_TRUE(event_receiver->Receive(&received));
-    EXPECT_EQ(std::get<Event>(received), test.expected);
-    EXPECT_FALSE(event_receiver->Receive(&received));
+    EXPECT_EQ(1, received_events.size());
+    EXPECT_EQ(received_events[0], test.expected);
   }
 }
 
 TEST(Event, DeviceControlString) {
-  auto event_receiver = MakeReceiver<Task>();
-  {
-    auto parser = TerminalInputParser(event_receiver->MakeSender());
-    parser.Add(27);   // ESC
-    parser.Add(80);   // P
-    parser.Add(49);   // 1
-    parser.Add(36);   // $
-    parser.Add(114);  // r
-    parser.Add(49);   // 1
-    parser.Add(32);   // SP
-    parser.Add(113);  // q
-    parser.Add(27);   // ESC
-    parser.Add(92);   // (backslash)
-  }
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add(27);   // ESC
+  parser.Add(80);   // P
+  parser.Add(49);   // 1
+  parser.Add(36);   // $
+  parser.Add(114);  // r
+  parser.Add(49);   // 1
+  parser.Add(32);   // SP
+  parser.Add(113);  // q
+  parser.Add(27);   // ESC
+  parser.Add(92);   // (backslash)
 
-  Task received;
-  EXPECT_TRUE(event_receiver->Receive(&received));
-  EXPECT_TRUE(std::get<Event>(received).is_cursor_shape());
-  EXPECT_EQ(1, std::get<Event>(received).cursor_shape());
-  EXPECT_FALSE(event_receiver->Receive(&received));
+  EXPECT_EQ(1, received_events.size());
+  EXPECT_TRUE(received_events[0].is_cursor_shape());
+  EXPECT_EQ(1, received_events[0].cursor_shape());
 }
 
 }  // namespace ftxui

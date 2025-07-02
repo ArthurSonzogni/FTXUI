@@ -84,7 +84,8 @@ constexpr int timeout_milliseconds = 20;
 
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
   auto console = GetStdHandle(STD_INPUT_HANDLE);
-  auto parser = TerminalInputParser(out->Clone());
+  auto parser =
+      TerminalInputParser([&](Event event) { out->Send(std::move(event)); });
   while (!*quit) {
     // Throttle ReadConsoleInput by waiting 250ms, this wait function will
     // return if there is input in the console.
@@ -137,7 +138,8 @@ void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
 
 // Read char from the terminal.
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
-  auto parser = TerminalInputParser(std::move(out));
+  auto parser =
+      TerminalInputParser([&](Event event) { out->Send(std::move(event)); });
 
   char c;
   while (!*quit) {
@@ -173,7 +175,8 @@ int CheckStdinReady(int usec_timeout) {
 
 // Read char from the terminal.
 void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
-  auto parser = TerminalInputParser(std::move(out));
+  auto parser =
+      TerminalInputParser([&](Event event) { out->Send(std::move(event)); });
 
   while (!*quit) {
     if (!CheckStdinReady(timeout_microseconds)) {
@@ -381,10 +384,10 @@ ScreenInteractive ScreenInteractive::Fullscreen() {
 ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
   auto terminal = Terminal::Size();
   return {
-    Dimension::Fullscreen,
-    terminal.dimx,
-    terminal.dimy,
-    /*use_alternative_screen=*/false,
+      Dimension::Fullscreen,
+      terminal.dimx,
+      terminal.dimy,
+      /*use_alternative_screen=*/false,
   };
 }
 
@@ -409,7 +412,7 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
   return {
       Dimension::TerminalOutput,
       terminal.dimx,
-      terminal.dimy, // Best guess.
+      terminal.dimy,  // Best guess.
       /*use_alternative_screen=*/false,
   };
 }
@@ -421,8 +424,8 @@ ScreenInteractive ScreenInteractive::FitComponent() {
   auto terminal = Terminal::Size();
   return {
       Dimension::FitComponent,
-      terminal.dimx, // Best guess.
-      terminal.dimy, // Best guess.
+      terminal.dimx,  // Best guess.
+      terminal.dimy,  // Best guess.
       false,
   };
 }
