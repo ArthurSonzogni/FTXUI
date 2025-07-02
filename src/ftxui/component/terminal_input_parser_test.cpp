@@ -354,15 +354,14 @@ TEST(Event, Special) {
       {str("[A"), Event::ArrowUp},    {str("[B"), Event::ArrowDown},
       {str("[C"), Event::ArrowRight}, {str("[D"), Event::ArrowLeft},
       {str("[H"), Event::Home},       {str("[F"), Event::End},
-      /*
 
       // Arrow (application cursor mode)
-      {str("OA"), Event::ArrowUp},
-      {str("OB"), Event::ArrowDown},
-      {str("OC"), Event::ArrowRight},
-      {str("OD"), Event::ArrowLeft},
-      {str("OH"), Event::Home},
-      {str("OF"), Event::End},
+      {str("\x1BOA"), Event::ArrowUp},
+      {str("\x1BOB"), Event::ArrowDown},
+      {str("\x1BOC"), Event::ArrowRight},
+      {str("\x1BOD"), Event::ArrowLeft},
+      {str("\x1BOH"), Event::Home},
+      {str("\x1BOF"), Event::End},
 
       // Backspace & Quirk for:
       // https://github.com/ArthurSonzogni/FTXUI/issues/508
@@ -370,7 +369,7 @@ TEST(Event, Special) {
       {{8}, Event::Backspace},
 
       // Delete
-      {str("[3~"), Event::Delete},
+      {str("\x1B[3~"), Event::Delete},
 
       // Return
       {{13}, Event::Return},
@@ -381,61 +380,60 @@ TEST(Event, Special) {
       {{27, 91, 90}, Event::TabReverse},
 
       // Function keys
-      {str("OP"), Event::F1},
-      {str("OQ"), Event::F2},
-      {str("OR"), Event::F3},
-      {str("OS"), Event::F4},
-      {str("[15~"), Event::F5},
-      {str("[17~"), Event::F6},
-      {str("[18~"), Event::F7},
-      {str("[19~"), Event::F8},
-      {str("[20~"), Event::F9},
-      {str("[21~"), Event::F10},
-      {str("[23~"), Event::F11},
-      {str("[24~"), Event::F12},
+      {str("\x1BOP"), Event::F1},
+      {str("\x1BOQ"), Event::F2},
+      {str("\x1BOR"), Event::F3},
+      {str("\x1BOS"), Event::F4},
+      {str("\x1B[15~"), Event::F5},
+      {str("\x1B[17~"), Event::F6},
+      {str("\x1B[18~"), Event::F7},
+      {str("\x1B[19~"), Event::F8},
+      {str("\x1B[20~"), Event::F9},
+      {str("\x1B[21~"), Event::F10},
+      {str("\x1B[23~"), Event::F11},
+      {str("\x1B[24~"), Event::F12},
 
       // Function keys for virtual terminal:
-      {str("[[A"), Event::F1},
-      {str("[[B"), Event::F2},
-      {str("[[C"), Event::F3},
-      {str("[[D"), Event::F4},
-      {str("[[E"), Event::F5},
+      {str("\x1B[[A"), Event::F1},
+      {str("\x1B[[B"), Event::F2},
+      {str("\x1B[[C"), Event::F3},
+      {str("\x1B[[D"), Event::F4},
+      {str("\x1B[[E"), Event::F5},
 
       // Function keys for xterm-r5, xterm-r6, rxvt
-      {str("[11~"), Event::F1},
-      {str("[12~"), Event::F2},
-      {str("[13~"), Event::F3},
-      {str("[14~"), Event::F4},
+      {str("\x1B[11~"), Event::F1},
+      {str("\x1B[12~"), Event::F2},
+      {str("\x1B[13~"), Event::F3},
+      {str("\x1B[14~"), Event::F4},
 
       // Function keys for vt100
-      {str("Ot"), Event::F5},
-      {str("Ou"), Event::F6},
-      {str("Ov"), Event::F7},
-      {str("Ol"), Event::F8},
-      {str("Ow"), Event::F9},
-      {str("Ox"), Event::F10},
+      {str("\x1BOt"), Event::F5},
+      {str("\x1BOu"), Event::F6},
+      {str("\x1BOv"), Event::F7},
+      {str("\x1BOl"), Event::F8},
+      {str("\x1BOw"), Event::F9},
+      {str("\x1BOx"), Event::F10},
 
       // Function keys for scoansi
-      {str("[M"), Event::F1},
-      {str("[N"), Event::F2},
-      {str("[O"), Event::F3},
-      {str("[P"), Event::F4},
-      {str("[Q"), Event::F5},
-      {str("[R"), Event::F6},
-      {str("[S"), Event::F7},
-      {str("[T"), Event::F8},
-      {str("[U"), Event::F9},
-      {str("[V"), Event::F10},
-      {str("[W"), Event::F11},
-      {str("[X"), Event::F12},
+      {str("\x1B[M"), Event::F1},
+      {str("\x1B[N"), Event::F2},
+      {str("\x1B[O"), Event::F3},
+      {str("\x1B[P"), Event::F4},
+      {str("\x1B[Q"), Event::F5},
+      {str("\x1B[R"), Event::F6},
+      {str("\x1B[S"), Event::F7},
+      {str("\x1B[T"), Event::F8},
+      {str("\x1B[U"), Event::F9},
+      {str("\x1B[V"), Event::F10},
+      {str("\x1B[W"), Event::F11},
+      {str("\x1B[X"), Event::F12},
 
       // Page up and down:
-      {str("[5~"), Event::PageUp},
-      {str("[6~"), Event::PageDown},
+      {str("\x1B[5~"), Event::PageUp},
+      {str("\x1B[6~"), Event::PageDown},
 
       // Custom:
       {{0}, Event::Custom},
-      */
   };
 
   for (auto test : kTestCase) {
