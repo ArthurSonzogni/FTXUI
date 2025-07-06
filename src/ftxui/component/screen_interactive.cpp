@@ -17,6 +17,7 @@
 #include <memory>
 #include <stack>  // for stack
 #include <string>
+#include <array>
 #include <thread>       // for thread, sleep_for
 #include <tuple>        // for _Swallow_assign, ignore
 #include <type_traits>  // for decay_t
@@ -59,6 +60,20 @@
 #endif
 
 namespace ftxui {
+
+struct ScreenInteractive::Internal {
+  // Convert char to Event.
+  TerminalInputParser terminal_input_parser;
+
+  task::TaskRunner task_runner;
+
+  // The last time a character was received.
+  std::chrono::time_point<std::chrono::steady_clock> last_char_time =
+      std::chrono::steady_clock::now();
+
+  explicit Internal(std::function<void(Event)> out)
+      : terminal_input_parser(std::move(out)) {}
+};
 
 namespace animation {
 void RequestAnimationFrame() {
@@ -174,25 +189,25 @@ int CheckStdinReady(int usec_timeout) {
   return FD_ISSET(STDIN_FILENO, &fds);                    // NOLINT
 }
 
+
 // Read char from the terminal.
-void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
-  auto parser =
-      TerminalInputParser([&](Event event) { out->Send(std::move(event)); });
+//void EventListener(std::atomic<bool>* quit, Sender<Task> out) {
+  //auto parser =
+      //TerminalInputParser([&](Event event) { out->Send(std::move(event)); });
 
-  while (!*quit) {
-    if (!CheckStdinReady(timeout_microseconds)) {
-      parser.Timeout(timeout_milliseconds);
-      continue;
-    }
+  //while (!*quit) {
+    //auto pending = ReadPendingChars();
+    //if (pending.empty()) {
+      //parser.Timeout(timeout_milliseconds);
+      //continue;
+    //}
 
-    const size_t buffer_size = 100;
-    std::array<char, buffer_size> buffer;                        // NOLINT;
-    size_t l = read(fileno(stdin), buffer.data(), buffer_size);  // NOLINT
-    for (size_t i = 0; i < l; ++i) {
-      parser.Add(buffer[i]);  // NOLINT
-    }
-  }
-}
+    //for (auto c : pending) {
+      //parser.Add(c);
+    //}
+  //}
+//}
+
 #endif
 
 std::stack<Closure> on_exit_functions;  // NOLINT
@@ -339,15 +354,6 @@ class CapturedMouseImpl : public CapturedMouseInterface {
   std::function<void(void)> callback_;
 };
 
-void AnimationListener(std::atomic<bool>* quit, Sender<Task> out) {
-  // Animation at around 60fps.
-  const auto time_delta = std::chrono::milliseconds(15);
-  while (!*quit) {
-    out->Send(AnimationTask());
-    std::this_thread::sleep_for(time_delta);
-  }
-}
-
 }  // namespace
 
 ScreenInteractive::ScreenInteractive(Dimension dimension,
@@ -357,7 +363,8 @@ ScreenInteractive::ScreenInteractive(Dimension dimension,
     : Screen(dimx, dimy),
       dimension_(dimension),
       use_alternative_screen_(use_alternative_screen) {
-  task_receiver_ = MakeReceiver<Task>();
+  internal_ = std::make_unique<Internal>(
+      [&](Event event) { PostEvent(std::move(event)); });
 }
 
 // static
@@ -455,13 +462,9 @@ void ScreenInteractive::TrackMouse(bool enable) {
 /// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
 void ScreenInteractive::Post(Task task) {
-  // Task/Events sent toward inactive screen or screen waiting to become
-  // inactive are dropped.
-  if (!task_sender_) {
-    return;
-  }
-
-  task_sender_->Send(std::move(task));
+  internal_->task_runner.PostTask([this, task = std::move(task)]() mutable {
+    HandleTask(component_, task);
+  });
 }
 
 /// @brief Add an event to the main loop.
@@ -505,7 +508,7 @@ void ScreenInteractive::Loop(Component component) {  // NOLINT
 
 /// @brief Return whether the main loop has been quit.
 bool ScreenInteractive::HasQuitted() {
-  return task_receiver_->HasQuitted();
+  return quit_;
 }
 
 // private
@@ -735,39 +738,41 @@ void ScreenInteractive::Install() {
   Flush();
 
   quit_ = false;
-  task_sender_ = task_receiver_->MakeSender();
-  event_listener_ =
-      std::thread(&EventListener, &quit_, task_receiver_->MakeSender());
-  animation_listener_ =
-      std::thread(&AnimationListener, &quit_, task_receiver_->MakeSender());
+
+  PostAnimationTask();
 }
 
 // private
 void ScreenInteractive::Uninstall() {
   ExitNow();
-  event_listener_.join();
-  animation_listener_.join();
   OnExit();
 }
 
 // private
 // NOLINTNEXTLINE
 void ScreenInteractive::RunOnceBlocking(Component component) {
-  ExecuteSignalHandlers();
-  Task task;
-  if (task_receiver_->Receive(&task)) {
-    HandleTask(component, task);
+  size_t executed_task = internal_->task_runner.ExecutedTasks();
+  while(executed_task == internal_->task_runner.ExecutedTasks() &&
+        !HasQuitted()) {
+    RunOnce(component);
   }
-  RunOnce(component);
 }
 
 // private
 void ScreenInteractive::RunOnce(Component component) {
-  Task task;
-  while (task_receiver_->ReceiveNonBlocking(&task)) {
-    HandleTask(component, task);
-    ExecuteSignalHandlers();
+  component_ = component;
+  ExecuteSignalHandlers();
+  FetchTerminalEvents();
+
+  // Execute the pending tasks from the queue.
+  const size_t executed_task = internal_->task_runner.ExecutedTasks();
+  internal_->task_runner.RunUntilIdle();
+  // If no executed task, we can return early without redrawing the screen.
+  if (executed_task == internal_->task_runner.ExecutedTasks()) {
+    return;
   }
+
+  ExecuteSignalHandlers();
   Draw(std::move(component));
 
   if (selection_data_previous_ != selection_data_) {
@@ -777,6 +782,8 @@ void ScreenInteractive::RunOnce(Component component) {
       Post(Event::Custom);
     }
   }
+
+  component_.reset();
 }
 
 // private
@@ -1040,7 +1047,6 @@ void ScreenInteractive::Exit() {
 // private:
 void ScreenInteractive::ExitNow() {
   quit_ = true;
-  task_sender_.reset();
 }
 
 // private:
@@ -1071,6 +1077,36 @@ void ScreenInteractive::Signal(int signal) {
     return;
   }
 #endif
+}
+
+void ScreenInteractive::FetchTerminalEvents() {
+  if (!CheckStdinReady(timeout_microseconds)) {
+    const auto timeout =
+        std::chrono::steady_clock::now() - internal_->last_char_time;
+    const size_t timeout_ms =
+        std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
+    internal_->terminal_input_parser.Timeout(timeout_ms);
+    return;
+  }
+  internal_->last_char_time = std::chrono::steady_clock::now();
+
+  // Read chars from the terminal.
+  std::array<char, 128> out;
+  size_t l = read(fileno(stdin), out.data(), out.size());
+
+  // Convert the chars to events.
+  for(size_t i = 0; i < l; ++i) {
+    internal_->terminal_input_parser.Add(out[i]);
+  }
+}
+
+void ScreenInteractive::PostAnimationTask() {
+  Post(AnimationTask());
+
+  // Repeat the animation task every 15ms. This correspond to a frame rate
+  // of around 66fps.
+  internal_->task_runner.PostDelayedTask(
+      [this] { PostAnimationTask(); }, std::chrono::milliseconds(15));
 }
 
 bool ScreenInteractive::SelectionData::operator==(

@@ -9,7 +9,6 @@
 #include <functional>                    // for function
 #include <memory>                        // for shared_ptr
 #include <string>                        // for string
-#include <thread>                        // for thread
 
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
@@ -104,6 +103,10 @@ class ScreenInteractive : public Screen {
 
   void Signal(int signal);
 
+  void FetchTerminalEvents();
+
+  void PostAnimationTask();
+
   ScreenInteractive* suspended_screen_ = nullptr;
   enum class Dimension {
     FitComponent,
@@ -127,8 +130,6 @@ class ScreenInteractive : public Screen {
   std::string reset_cursor_position;
 
   std::atomic<bool> quit_{false};
-  std::thread event_listener_;
-  std::thread animation_listener_;
   bool animation_requested_ = false;
   animation::TimePoint previous_animation_time_;
 
@@ -163,9 +164,14 @@ class ScreenInteractive : public Screen {
   std::unique_ptr<Selection> selection_;
   std::function<void()> selection_on_change_;
 
-  std::unique_ptr<task::TaskRunner> task_runner_;
+  // PIMPL private implementation idiom (Pimpl).
+  struct Internal;
+  std::unique_ptr<Internal> internal_;
 
   friend class Loop;
+
+  Component component_;
+
 
  public:
   class Private {

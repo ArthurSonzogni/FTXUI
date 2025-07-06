@@ -48,6 +48,7 @@ auto TaskRunner::RunUntilIdle()
     }
 
     if (std::holds_alternative<Task>(maybe_task)) {
+      executed_tasks_++;
       std::get<Task>(maybe_task)();
       continue;
     }

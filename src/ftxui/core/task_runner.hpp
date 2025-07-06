@@ -31,9 +31,16 @@ class TaskRunner {
   // Runs the tasks in the queue, blocking until all tasks are executed.
   auto Run() -> void;
 
+  bool HasImmediateTasks() const {
+    return queue_.HasImmediateTasks();
+  }
+
+  size_t ExecutedTasks() const { return executed_tasks_; }
+
  private:
   TaskRunner* previous_task_runner_ = nullptr;
   TaskQueue queue_;
+  size_t executed_tasks_ = 0;
 };
 
 } // namespace ftxui::task
