@@ -139,7 +139,6 @@ class ButtonBase : public ComponentBase, public ButtonOption {
  private:
   bool mouse_hover_ = false;
   Box box_;
-  ButtonOption option_;
   float animation_background_ = 0;
   float animation_foreground_ = 0;
   animation::Animator animator_background_ =
