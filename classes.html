@@ -1,0 +1,262 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: Class Index</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('classes.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Class Index</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="qindex"><a class="qindex" href="#letter_A">A</a>&#160;|&#160;<a class="qindex" href="#letter_B">B</a>&#160;|&#160;<a class="qindex" href="#letter_C">C</a>&#160;|&#160;<a class="qindex" href="#letter_D">D</a>&#160;|&#160;<a class="qindex" href="#letter_E">E</a>&#160;|&#160;<a class="qindex" href="#letter_F">F</a>&#160;|&#160;<a class="qindex" href="#letter_G">G</a>&#160;|&#160;<a class="qindex" href="#letter_I">I</a>&#160;|&#160;<a class="qindex" href="#letter_L">L</a>&#160;|&#160;<a class="qindex" href="#letter_M">M</a>&#160;|&#160;<a class="qindex" href="#letter_N">N</a>&#160;|&#160;<a class="qindex" href="#letter_P">P</a>&#160;|&#160;<a class="qindex" href="#letter_R">R</a>&#160;|&#160;<a class="qindex" href="#letter_S">S</a>&#160;|&#160;<a class="qindex" href="#letter_T">T</a>&#160;|&#160;<a class="qindex" href="#letter_U">U</a>&#160;|&#160;<a class="qindex" href="#letter_W">W</a></div>
+<div class="classindex">
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_A" name="letter_A">A</a></dt>
+<dd><a class="el" href="classftxui_1_1ConstStringListRef_1_1Adapter.html">ConstStringListRef::Adapter</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1AnimatedColorOption">AnimatedColorOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="structftxui_1_1AnimatedColorsOption.html">AnimatedColorsOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1AnimationTask.html">AnimationTask</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1animation_1_1Animator.html">Animator</a> (<a class="el" href="namespaceftxui_1_1animation.html">ftxui::animation</a>)</dd><dd><a class="el" href="classftxui_1_1AutoReset.html">AutoReset</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex odd">
+<dt class="alphachar"><a id="letter_B" name="letter_B">B</a></dt>
+<dd><a class="el" href="structftxui_1_1flexbox__helper_1_1Block.html">Block</a> (<a class="el" href="namespaceftxui_1_1flexbox__helper.html">ftxui::flexbox_helper</a>)</dd><dd><a class="el" href="group__screen.html#structftxui_1_1Box">Box</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1ButtonOption">ButtonOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_C" name="letter_C">C</a></dt>
+<dd><a class="el" href="group__dom.html#structftxui_1_1Canvas">Canvas</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1CapturedMouseInterface.html">CapturedMouseInterface</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1CheckboxOption">CheckboxOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__screen.html#structftxui_1_1ColorInfo">ColorInfo</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#classftxui_1_1ComponentBase">ComponentBase</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1ConstStringListRef.html">ConstStringListRef</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1ConstStringRef.html">ConstStringRef</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="structftxui_1_1Screen_1_1Cursor.html">Screen::Cursor</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex odd">
+<dt class="alphachar"><a id="letter_D" name="letter_D">D</a></dt>
+<dd><a class="el" href="group__screen.html#structftxui_1_1Dimensions">Dimensions</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1DropdownOption">DropdownOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_E" name="letter_E">E</a></dt>
+<dd><a class="el" href="structftxui_1_1box__helper_1_1Element.html">Element</a> (<a class="el" href="namespaceftxui_1_1box__helper.html">ftxui::box_helper</a>)</dd><dd><a class="el" href="structftxui_1_1EntryState.html">EntryState</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1Event">Event</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex odd">
+<dt class="alphachar"><a id="letter_F" name="letter_F">F</a></dt>
+<dd><a class="el" href="group__dom.html#structftxui_1_1FlexboxConfig">FlexboxConfig</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="structftxui_1_1Requirement_1_1Focused.html">Requirement::Focused</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_G" name="letter_G">G</a></dt>
+<dd><a class="el" href="structftxui_1_1flexbox__helper_1_1Global.html">Global</a> (<a class="el" href="namespaceftxui_1_1flexbox__helper.html">ftxui::flexbox_helper</a>)</dd></dl>
+<dl class="classindex odd">
+<dt class="alphachar"><a id="letter_I" name="letter_I">I</a></dt>
+<dd><a class="el" href="group__screen.html#classftxui_1_1Image">Image</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1InputOption">InputOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="structftxui_1_1InputState.html">InputState</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_L" name="letter_L">L</a></dt>
+<dd><a class="el" href="structftxui_1_1flexbox__helper_1_1Line.html">Line</a> (<a class="el" href="namespaceftxui_1_1flexbox__helper.html">ftxui::flexbox_helper</a>)</dd><dd><a class="el" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#classftxui_1_1Loop">Loop</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex odd">
+<dt class="alphachar"><a id="letter_M" name="letter_M">M</a></dt>
+<dd><a class="el" href="group__component.html#structftxui_1_1MenuEntryOption">MenuEntryOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1MenuOption">MenuOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1Mouse">Mouse</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_N" name="letter_N">N</a></dt>
+<dd><a class="el" href="group__dom.html#classftxui_1_1Node">Node</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1NodeDecorator.html">NodeDecorator</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex odd">
+<dt class="alphachar"><a id="letter_P" name="letter_P">P</a></dt>
+<dd><a class="el" href="classftxui_1_1animation_1_1Params.html">Params</a> (<a class="el" href="namespaceftxui_1_1animation.html">ftxui::animation</a>)</dd><dd><a class="el" href="group__screen.html#structftxui_1_1Pixel">Pixel</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1ScreenInteractive_1_1Private.html">ScreenInteractive::Private</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_R" name="letter_R">R</a></dt>
+<dd><a class="el" href="group__component.html#structftxui_1_1RadioboxOption">RadioboxOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1ReceiverImpl.html">ReceiverImpl</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1Ref.html">Ref</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__dom.html#structftxui_1_1Requirement">Requirement</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="structftxui_1_1ResizableSplitOption.html">ResizableSplitOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex odd">
+<dt class="alphachar"><a id="letter_S" name="letter_S">S</a></dt>
+<dd><a class="el" href="group__screen.html#classftxui_1_1Screen">Screen</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#classftxui_1_1ScreenInteractive">ScreenInteractive</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__dom.html#classftxui_1_1Selection">Selection</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1SenderImpl.html">SenderImpl</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="structftxui_1_1SliderOption.html">SliderOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="structftxui_1_1Node_1_1Status.html">Node::Status</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="structftxui_1_1LinearGradient_1_1Stop.html">LinearGradient::Stop</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1StringRef.html">StringRef</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_T" name="letter_T">T</a></dt>
+<dd><a class="el" href="group__dom.html#classftxui_1_1Table">Table</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1TableSelection.html">TableSelection</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="classftxui_1_1TerminalInputParser.html">TerminalInputParser</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex odd">
+<dt class="alphachar"><a id="letter_U" name="letter_U">U</a></dt>
+<dd><a class="el" href="group__component.html#structftxui_1_1UnderlineOption">UnderlineOption</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+<dl class="classindex even">
+<dt class="alphachar"><a id="letter_W" name="letter_W">W</a></dt>
+<dd><a class="el" href="structftxui_1_1WindowOptions.html">WindowOptions</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd><dd><a class="el" href="group__component.html#structftxui_1_1WindowRenderState">WindowRenderState</a> (<a class="el" href="namespaceftxui.html">ftxui</a>)</dd></dl>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
+  </ul>
+</div>
+</body>
+</html>
