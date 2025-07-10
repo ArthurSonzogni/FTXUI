@@ -18,7 +18,7 @@
   <br/>
   <a href="https://arthursonzogni.github.io/FTXUI/">Documentation</a> ·
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Report a Bug</a> ·
-  <a href="https://arthursonzogni.github.io/FTXUI/examples.html">Examples</a> .
+  <a href="https://arthursonzogni.github.io/FTXUI/examples/">Examples</a> .
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Request Feature</a> ·
   <a href="https://github.com/ArthurSonzogni/FTXUI/pulls">Send a Pull Request</a>
 
