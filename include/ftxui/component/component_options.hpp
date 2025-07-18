@@ -15,6 +15,14 @@
 #include "ftxui/component/component_base.hpp"  // for Component
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
 
+#if defined(max)
+#undef max
+#endif
+
+#if defined(min)
+#undef min
+#endif
+
 namespace ftxui {
 
 /// @brief arguments for transform from |ButtonOption|, |CheckboxOption|,
