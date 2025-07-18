@@ -6,6 +6,7 @@ add_library(ftxui-modules)
 
 target_sources(ftxui-modules
   PUBLIC FILE_SET CXX_MODULES FILES
+  src/ftxui/ftxui.cppm
   src/ftxui/component.cppm
   src/ftxui/component/animation.cppm
   src/ftxui/component/captured_mouse.cppm
