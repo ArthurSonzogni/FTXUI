@@ -12,8 +12,24 @@ FTXUI experimentally supports
 compilation times and improve code organization. Each header has a
 corresponding module.
 
-**Example with CMake and Ninja**
+Use the FTXUI_BUILD_MODULES option to build the FTXUI project itself to provide C++ 20 modules,
+for example with CMake and Ninja:
 
+```sh
+cmake \
+    -DCMAKE_GENERATOR=Ninja \
+    -DFTXUI_BUILD_MODULES=ON \
+    ..
+
+ninja
+```
+
+> [!NOTE]
+> To use modules, you need a C++20 compatible compiler, CMake version 3.20 or
+> higher, and use a compatible generator like Ninja. Note that Makefile
+> generators **do not support modules**.
+
+Then, in your own code you can consume the modules and code as normal:
 
 ```cpp
 import ftxui;
@@ -26,23 +42,30 @@ int main() {
 }
 ```
 
-```sh
-cmake \
-    -DCMAKE_GENERATOR=Ninja \
-    -DFTXUI_BUILD_MODULES=ON \
-    ..
+Note, the `ftxui` convenience module which simply pulls together all the modules:
 
-ninja
+```cpp
+export import ftxui.component;
+export import ftxui.dom;
+export import ftxui.screen;
+export import ftxui.util;
 ```
-> [!NOTE]
-> To use modules, you need a C++20 compatible compiler, CMake version 3.20 or
-> higher, and use a compatible generator like Ninja. Note that Makefile
-> generators **do not support modules**.
+You can instead import only the module(s) you need if desired.
+
+To properly find and link the modules with CMake, use `target_link_libraries` to get the right
+compiler, linker, etc. flags.
+
+```cmake
+target_link_libraries(my_executable
+    #...whatever...
+    PRIVATE ftxui::modules
+)
+```
 
 ### Module list
 
 The modules directly reference the corresponding header, or a group of related
-headers to provide a more convenient interface. The following modules 
+headers to provide a more convenient interface. The following modules
 are available:
 
 - `ftxui`
