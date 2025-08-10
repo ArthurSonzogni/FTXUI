@@ -382,6 +382,8 @@ Several games using the FTXUI have been made during the Game Jam:
 - [smoothlife](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/smoothlife.md)
 - [Consu](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/consu.md)
 
+
+
 ## Build using CMake
 
 It is **highly** recommended to use CMake FetchContent to depend on FTXUI so you may specify which commit you would like to depend on.

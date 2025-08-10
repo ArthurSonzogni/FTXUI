@@ -12,6 +12,7 @@
 #include <mutex>    // for mutex, unique_lock
 #include <queue>    // for queue
 #include <utility>  // for move
+#include "ftxui/util/warn_windows_macro.hpp"
 
 namespace ftxui {
 
