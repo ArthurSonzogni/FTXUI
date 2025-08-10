@@ -372,6 +372,24 @@ void ScreenInteractive::TrackMouse(bool enable) {
   track_mouse_ = enable;
 }
 
+/// @brief Enable or disable automatic piped input handling.
+/// When enabled, FTXUI will detect piped input and redirect stdin to /dev/tty
+/// for keyboard input, allowing applications to read piped data while still
+/// receiving interactive keyboard events.
+/// @param enable Whether to enable piped input handling
+/// @note This must be called before Loop().
+/// @note This feature is disabled by default for backward compatibility.
+/// @note This feature is only available on POSIX systems (Linux/macOS).
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+void ScreenInteractive::HandlePipedInput(bool enable) {
+  handle_piped_input_ = enable;
+}
+#else
+void ScreenInteractive::HandlePipedInput(bool /*enable*/) {
+  // This feature is not supported on this platform.
+}
+#endif
+
 /// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
 void ScreenInteractive::Post(Task task) {
@@ -658,6 +676,28 @@ void ScreenInteractive::Install() {
   // ensure it is fully applied:
   Flush();
 
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+  // Handle piped input redirection if explicitly enabled by the application.
+  // This allows applications to read data from stdin while still receiving
+  // keyboard input from the terminal for interactive use.
+  if (handle_piped_input_ && !stdin_was_redirected_ && !isatty(STDIN_FILENO)) {
+    // Save the current stdin so we can restore it later
+    original_stdin_fd_ = dup(STDIN_FILENO);
+    if (original_stdin_fd_ >= 0) {
+      // Redirect stdin to the controlling terminal for keyboard input
+      if (freopen("/dev/tty", "r", stdin) != nullptr) {
+        stdin_was_redirected_ = true;
+      } else {
+        // Failed to open /dev/tty (containers, headless systems, etc.)
+        // Clean up and continue without redirection
+        close(original_stdin_fd_);
+        original_stdin_fd_ = -1;
+      }
+    }
+    // If dup() failed, we silently continue without redirection
+  }
+#endif
+
   quit_ = false;
 
   PostAnimationTask();
@@ -666,6 +706,17 @@ void ScreenInteractive::Install() {
 // private
 void ScreenInteractive::Uninstall() {
   ExitNow();
+  
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+  // Restore stdin to its original state if we redirected it
+  if (stdin_was_redirected_ && original_stdin_fd_ >= 0) {
+    dup2(original_stdin_fd_, STDIN_FILENO);
+    close(original_stdin_fd_);
+    original_stdin_fd_ = -1;
+    stdin_was_redirected_ = false;
+  }
+#endif
+  
   OnExit();
 }
 
