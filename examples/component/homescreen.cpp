@@ -6,6 +6,7 @@
 #include <atomic>      // for atomic
 #include <chrono>      // for operator""s, chrono_literals
 #include <cmath>       // for sin
+#include <ftxui/component/loop.hpp>
 #include <functional>  // for ref, reference_wrapper, function
 #include <memory>      // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for string, basic_string, char_traits, operator+, to_string
@@ -269,7 +270,7 @@ int main() {
   auto spinner_tab_renderer = Renderer([&] {
     Elements entries;
     for (int i = 0; i < 22; ++i) {
-      entries.push_back(spinner(i, shift / 2) | bold |
+      entries.push_back(spinner(i, shift / 5) | bold |
                         size(WIDTH, GREATER_THAN, 2) | border);
     }
     return hflow(std::move(entries));
@@ -512,24 +513,20 @@ int main() {
     });
   });
 
-  std::atomic<bool> refresh_ui_continue = true;
-  std::thread refresh_ui([&] {
-    while (refresh_ui_continue) {
-      using namespace std::chrono_literals;
-      std::this_thread::sleep_for(0.05s);
-      // The |shift| variable belong to the main thread. `screen.Post(task)`
-      // will execute the update on the thread where |screen| lives (e.g. the
-      // main thread). Using `screen.Post(task)` is threadsafe.
-      screen.Post([&] { shift++; });
-      // After updating the state, request a new frame to be drawn. This is done
-      // by simulating a new "custom" event to be handled.
-      screen.Post(Event::Custom);
-    }
-  });
+  Loop loop(&screen, main_renderer);
+  while(!loop.HasQuitted()) {
+    // Update the state of the application.
+    shift++;
 
-  screen.Loop(main_renderer);
-  refresh_ui_continue = false;
-  refresh_ui.join();
+    // Request a new frame to be drawn.
+    screen.RequestAnimationFrame();
+
+    // Execute events, and draw the next frame.
+    loop.RunOnce();
+
+    // Sleep for a short duration to control the frame rate (60 FPS).
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000/60));
+  }
 
   return 0;
 }

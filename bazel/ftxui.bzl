@@ -43,16 +43,6 @@ def windows_copts():
         "//conditions:default": [],
     })
 
-def pthread_linkopts():
-    return select({
-        # With MSVC, threading is already built-in (you don't need -pthread.
-        "@rules_cc//cc/compiler:msvc-cl": [],
-        "@rules_cc//cc/compiler:clang-cl": [],
-        "@rules_cc//cc/compiler:clang": ["-pthread"],
-        "@rules_cc//cc/compiler:gcc": ["-pthread"],
-        "//conditions:default": ["-pthread"],
-    })
-
 def ftxui_cc_library(
         name,
         srcs = [],

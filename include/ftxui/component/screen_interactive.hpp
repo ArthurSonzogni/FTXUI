@@ -5,11 +5,9 @@
 #define FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 
 #include <atomic>                        // for atomic
-#include <ftxui/component/receiver.hpp>  // for Receiver, Sender
 #include <functional>                    // for function
 #include <memory>                        // for shared_ptr
 #include <string>                        // for string
-#include <thread>                        // for thread
 
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
@@ -26,6 +24,10 @@ struct Event;
 using Component = std::shared_ptr<ComponentBase>;
 class ScreenInteractivePrivate;
 
+namespace task {
+  class TaskRunner;
+}
+
 /// @brief ScreenInteractive is a `Screen` that can handle events, run a main
 /// loop, and manage components.
 ///
@@ -39,6 +41,9 @@ class ScreenInteractive : public Screen {
   static ScreenInteractive FullscreenAlternateScreen();
   static ScreenInteractive FitComponent();
   static ScreenInteractive TerminalOutput();
+
+  // Destructor.
+  ~ScreenInteractive();
 
   // Options. Must be called before Loop().
   void TrackMouse(bool enable = true);
@@ -97,6 +102,10 @@ class ScreenInteractive : public Screen {
 
   void Signal(int signal);
 
+  void FetchTerminalEvents();
+
+  void PostAnimationTask();
+
   ScreenInteractive* suspended_screen_ = nullptr;
   enum class Dimension {
     FitComponent,
@@ -113,15 +122,10 @@ class ScreenInteractive : public Screen {
 
   bool track_mouse_ = true;
 
-  Sender<Task> task_sender_;
-  Receiver<Task> task_receiver_;
-
   std::string set_cursor_position;
   std::string reset_cursor_position;
 
   std::atomic<bool> quit_{false};
-  std::thread event_listener_;
-  std::thread animation_listener_;
   bool animation_requested_ = false;
   animation::TimePoint previous_animation_time_;
 
@@ -156,7 +160,14 @@ class ScreenInteractive : public Screen {
   std::unique_ptr<Selection> selection_;
   std::function<void()> selection_on_change_;
 
+  // PIMPL private implementation idiom (Pimpl).
+  struct Internal;
+  std::unique_ptr<Internal> internal_;
+
   friend class Loop;
+
+  Component component_;
+
 
  public:
   class Private {

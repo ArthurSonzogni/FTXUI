@@ -1,3 +1,5 @@
+common --enable_bzlmod
+
 build --features=layering_check
 build --enable_bzlmod
 

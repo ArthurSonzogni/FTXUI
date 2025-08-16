@@ -7,7 +7,7 @@ if ("serviceWorker" in navigator && !window.crossOriginIsolated) {
   const url_sw = new URL("./sw.js", location.href);
   const registration = await navigator.serviceWorker.register(url_sw);
   window.location.reload(); // Reload to ensure the COOP/COEP headers are set.
-} 
+}
 
 const example_list = "@EXAMPLES@".split(";");
 const url_search_params = new URLSearchParams(window.location.search);
@@ -55,7 +55,7 @@ const stdout = code => {
 const stderr = code => {
   if (code == 0 || code == 10) {
     console.error(String.fromCodePoint(...stderr_buffer));
-    stderr_buffer = [];
+    stderr_buffer.length = 0;
   } else {
     stderr_buffer.push(code)
   }
@@ -89,9 +89,6 @@ window.Module = {
     const resize_observer = new ResizeObserver(resize_handler);
     resize_observer.observe(term_element);
     resize_handler();
-
-    // Disable scrollbar
-    //term.write('\x1b[?47h')
   },
 };
 

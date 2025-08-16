@@ -144,26 +144,20 @@ add_library(component
   src/ftxui/component/resizable_split.cpp
   src/ftxui/component/screen_interactive.cpp
   src/ftxui/component/slider.cpp
+  src/ftxui/component/task.cpp
+  src/ftxui/component/task_internal.hpp
+  src/ftxui/component/task_queue.cpp
+  src/ftxui/component/task_queue.hpp
+  src/ftxui/component/task_runner.cpp
+  src/ftxui/component/task_runner.hpp
   src/ftxui/component/terminal_input_parser.cpp
   src/ftxui/component/terminal_input_parser.hpp
   src/ftxui/component/util.cpp
   src/ftxui/component/window.cpp
 )
 
-target_link_libraries(dom
-  PUBLIC screen
-)
-
-target_link_libraries(component
-  PUBLIC dom
-)
-
-if (NOT EMSCRIPTEN)
-  find_package(Threads)
-  target_link_libraries(component
-    PUBLIC Threads::Threads
-  )
-endif()
+target_link_libraries(dom PUBLIC screen)
+target_link_libraries(component PUBLIC dom)
 
 include(cmake/ftxui_set_options.cmake)
 ftxui_set_options(screen)
