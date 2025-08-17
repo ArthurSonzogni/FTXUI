@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Khula:700);
 
 html {
-  --toc-width: 380px;
+  --toc-width: 250px;
 }
 
 body {
@@ -120,9 +120,10 @@ h1 {
   bottom: 0;
   width: var(--toc-width);
   background: white;
-  padding: 8px;
-  padding-top: 0;
+  padding: 0;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
 }
 
 .toc-title {
@@ -132,15 +133,21 @@ h1 {
   color: #555;
 
   position: sticky;
+  transition: position 1.0s ease-in-out;
   top: 0;
-  background: white;
   z-index: 1;
-  padding-top: 8px;
+  padding: 20px;
+  margin: 0;
+
+  border-bottom: 1px solid #ddd;
+
+  /* Gradient background for the title */
+  background-color: #f0f0f0;
 }
 
 .toc-item {
   padding: 3px 8px;
-  margin: 2px 0;
+  margin: 0;
   cursor: pointer;
   font-size: 0.85em;
   border-radius: 3px;

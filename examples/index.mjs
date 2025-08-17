@@ -92,6 +92,9 @@ window.Module = {
   },
 };
 
+const source = document.querySelector("#source");
+source.href = "https://github.com/ArthurSonzogni/FTXUI/blob/main/examples/" + example + ".cpp";
+
 const words = example.split('/')
 words[1] = "ftxui_example_" + words[1] + ".js"
 document.querySelector("#example_script").src = words.join('/');
@@ -108,26 +111,50 @@ if (!selectEl) {
   const tocContainer = document.querySelector('.toc-container');
   const tocList = tocContainer.querySelector('.toc-list');
 
-  // Generate TOC items
-  Array.from(selectEl.options).forEach((option, index) => {
-    const tocItem = document.createElement('div');
-    tocItem.textContent = option.text;
-    tocItem.className = 'toc-item';
-
-    if (index == selectEl.selectedIndex) {
-      tocItem.classList.add('selected');
+  // Group options by directory
+  const groupedOptions = Array.from(selectEl.options).reduce((acc, option) => {
+    const [dir, file] = option.text.split('/');
+    if (!acc[dir]) {
+      acc[dir] = [];
     }
+    acc[dir].push({ option, file });
+    return acc;
+  }, {});
 
-    // Click handler
-    tocItem.addEventListener('click', () => {
-      selectEl.selectedIndex = index;
+  // Generate TOC items
+  for (const dir in groupedOptions) {
+    const dirContainer = document.createElement('div');
 
-      history.pushState({}, "", "?file=" + option.value);
-      location.reload();
+    const dirHeader = document.createElement('div');
+    dirHeader.textContent = dir;
+    dirHeader.className = 'toc-title';
+    dirContainer.appendChild(dirHeader);
+
+    groupedOptions[dir].forEach(({ option, file }) => {
+      const tocItem = document.createElement('div');
+      tocItem.textContent = file;
+      tocItem.className = 'toc-item';
+
+      if (selectEl.options[selectEl.selectedIndex].value === option.value) {
+        tocItem.classList.add('selected');
+      }
+
+      // Click handler
+      tocItem.addEventListener('click', () => {
+        for(let i=0; i<selectEl.options.length; ++i) {
+          if (selectEl.options[i].value == option.value) {
+            selectEl.selectedIndex = i;
+            break;
+          }
+        }
+
+        history.pushState({}, "", "?file=" + option.value);
+        location.reload();
+      });
+
+      dirContainer.appendChild(tocItem);
     });
 
-    tocList.appendChild(tocItem);
-  });
-
-  console.log('TOC created successfully!');
-}
+    tocList.appendChild(dirContainer);
+  }
+}''
