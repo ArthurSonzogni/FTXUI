@@ -169,13 +169,15 @@ ftxui_cc_library(
         "src/ftxui/component/util.cpp",
         "src/ftxui/component/window.cpp",
 
-
         # Private header from ftxui:dom.
         "src/ftxui/dom/node_decorator.hpp",
 
         # Private header from ftxui:screen.
         "src/ftxui/screen/string_internal.hpp",
         "src/ftxui/screen/util.hpp",
+
+        # Private header.
+        "include/ftxui/util/warn_windows_macro.hpp",
     ],
     hdrs = [
         "include/ftxui/component/animation.hpp",
