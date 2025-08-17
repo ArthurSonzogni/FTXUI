@@ -1284,8 +1284,9 @@ bool IsCombining(uint32_t ucs) {
 }
 
 bool IsFullWidth(uint32_t ucs) {
-  if (ucs < 0x0300)  // Quick path: // NOLINT
+  if (ucs < 0x0300) {  // Quick path: // NOLINT
     return false;
+  }
 
   return Bisearch(ucs, g_full_width_characters);
 }

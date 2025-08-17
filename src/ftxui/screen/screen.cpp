@@ -47,8 +47,9 @@ namespace {
 #if defined(_WIN32)
 void WindowsEmulateVT100Terminal() {
   static bool done = false;
-  if (done)
+  if (done) {
     return;
+  }
   done = true;
 
   // Enable VT processing on stdout and stdin

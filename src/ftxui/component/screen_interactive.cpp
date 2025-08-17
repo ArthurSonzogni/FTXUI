@@ -1057,8 +1057,9 @@ void ScreenInteractive::FetchTerminalEvents() {
       case KEY_EVENT: {
         auto key_event = r.Event.KeyEvent;
         // ignore UP key events
-        if (key_event.bKeyDown == FALSE)
+        if (key_event.bKeyDown == FALSE) {
           continue;
+        }
         std::wstring wstring;
         wstring += key_event.uChar.UnicodeChar;
         for (auto it : to_string(wstring)) {

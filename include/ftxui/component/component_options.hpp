@@ -9,8 +9,9 @@
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Left, Direction::Right, Direction::Down
 #include <ftxui/dom/elements.hpp>  // for Element, separator
 #include <ftxui/util/ref.hpp>      // for Ref, ConstRef, StringRef
-#include <functional>              // for function
-#include <string>                  // for string
+#include <ftxui/util/warn_windows_macro.hpp>
+#include <functional>  // for function
+#include <string>      // for string
 
 #include "ftxui/component/component_base.hpp"  // for Component
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White

@@ -21,8 +21,9 @@ int main() {
   for (int index = 0; index < 200; ++index) {
     std::vector<Element> entries;
     for (int i = 0; i < 23; ++i) {
-      if (i != 0)
+      if (i != 0) {
         entries.push_back(separator());
+      }
       entries.push_back(  //
           hbox({
               text(std::to_string(i)) | size(WIDTH, EQUAL, 2),

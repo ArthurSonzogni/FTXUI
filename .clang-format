@@ -2,3 +2,6 @@
 # http://clang.llvm.org/docs/ClangFormatStyleOptions.html
 BasedOnStyle: Chromium
 Standard: Cpp11
+
+InsertBraces: true
+InsertNewlineAtEOF: true

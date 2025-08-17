@@ -23,8 +23,9 @@ bool GeneratorBool(const char*& data, size_t& size) {
 
 std::string GeneratorString(const char*& data, size_t& size) {
   int index = 0;
-  while (index < size && data[index])
+  while (index < size && data[index]) {
     ++index;
+  }
 
   auto out = std::string(data, data + index);
   data += index;
@@ -40,8 +41,9 @@ std::string GeneratorString(const char*& data, size_t& size) {
 }
 
 int GeneratorInt(const char* data, size_t size) {
-  if (size == 0)
+  if (size == 0) {
     return 0;
+  }
   auto out = int(data[0]);
   data++;
   size--;
@@ -113,8 +115,9 @@ Components GeneratorComponents(const char*& data, size_t& size, int depth);
 Component GeneratorComponent(const char*& data, size_t& size, int depth) {
   depth--;
   int value = GeneratorInt(data, size);
-  if (depth <= 0)
+  if (depth <= 0) {
     return Button(GeneratorString(data, size), [] {});
+  }
 
   constexpr int value_max = 19;
   value = (value % value_max + value_max) % value_max;

@@ -17,16 +17,19 @@ namespace ftxui {
 // Test char |c| to are trivially converted into |Event::Character(c)|.
 TEST(Event, Character) {
   std::vector<char> basic_char;
-  for (char c = 'a'; c <= 'z'; ++c)
+  for (char c = 'a'; c <= 'z'; ++c) {
     basic_char.push_back(c);
-  for (char c = 'A'; c <= 'Z'; ++c)
+  }
+  for (char c = 'A'; c <= 'Z'; ++c) {
     basic_char.push_back(c);
+  }
 
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(
       [&](Event event) { received_events.push_back(std::move(event)); });
-  for (char c : basic_char)
+  for (char c : basic_char) {
     parser.Add(c);
+  }
 
   for (size_t i = 0; i < basic_char.size(); ++i) {
     EXPECT_TRUE(received_events[i].is_character());
@@ -285,8 +288,9 @@ TEST(Event, UTF8) {
     std::vector<Event> received_events;
     auto parser = TerminalInputParser(
         [&](Event event) { received_events.push_back(std::move(event)); });
-    for (auto input : test.input)
+    for (auto input : test.input) {
       parser.Add(input);
+    }
 
     if (test.valid) {
       EXPECT_EQ(1, received_events.size());
@@ -315,8 +319,9 @@ TEST(Event, Control) {
   };
   std::vector<TestCase> cases;
   for (int i = 0; i < 32; ++i) {
-    if (i == 8 || i == 13 || i == 24 || i == 26 || i == 27)
+    if (i == 8 || i == 13 || i == 24 || i == 26 || i == 27) {
       continue;
+    }
     cases.push_back({char(i), false});
   }
   cases.push_back({char(24), false});
@@ -341,8 +346,9 @@ TEST(Event, Control) {
 TEST(Event, Special) {
   auto str = [](std::string input) {
     std::vector<unsigned char> output;
-    for (auto it : input)
+    for (auto it : input) {
       output.push_back(it);
+    }
     return output;
   };
 
@@ -351,9 +357,12 @@ TEST(Event, Special) {
     Event expected;
   } kTestCase[] = {
       // Arrow (default cursor mode)
-      {str("[A"), Event::ArrowUp},    {str("[B"), Event::ArrowDown},
-      {str("[C"), Event::ArrowRight}, {str("[D"), Event::ArrowLeft},
-      {str("[H"), Event::Home},       {str("[F"), Event::End},
+      {str("[A"), Event::ArrowUp},
+      {str("[B"), Event::ArrowDown},
+      {str("[C"), Event::ArrowRight},
+      {str("[D"), Event::ArrowLeft},
+      {str("[H"), Event::Home},
+      {str("[F"), Event::End},
 
       // Arrow (application cursor mode)
       {str("\x1BOA"), Event::ArrowUp},

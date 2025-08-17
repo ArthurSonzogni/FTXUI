@@ -4,6 +4,7 @@
 #ifndef FTXUI_COMPONENT_RECEIVER_HPP_
 #define FTXUI_COMPONENT_RECEIVER_HPP_
 
+#include <ftxui/util/warn_windows_macro.h>
 #include <algorithm>           // for copy, max
 #include <atomic>              // for atomic, __atomic_base
 #include <condition_variable>  // for condition_variable

@@ -8,6 +8,7 @@
 #include <memory>      // for make_shared, shared_ptr
 #include <utility>     // for forward
 
+#include <ftxui/util/warn_windows_macro.hpp>
 #include "ftxui/component/component_base.hpp"  // for Component, Components
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, CheckboxOption, MenuOption
 #include "ftxui/dom/elements.hpp"  // for Element

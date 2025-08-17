@@ -86,8 +86,9 @@ int main() {
 
   auto render = [&]() {
     std::vector<Element> entries;
-    for (auto& task : displayed_task)
+    for (auto& task : displayed_task) {
       entries.push_back(renderTask(task));
+    }
 
     return vbox({
         // List of tasks.
@@ -138,8 +139,9 @@ int main() {
     std::this_thread::sleep_for(0.01s);
 
     // Exit
-    if (nb_active + nb_queued == 0)
+    if (nb_active + nb_queued == 0) {
       break;
+    }
 
     // Update the model for the next frame.
     updateModel();

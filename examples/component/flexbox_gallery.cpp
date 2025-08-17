@@ -82,10 +82,12 @@ int main() {
                    size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy) |
                    bgcolor(Color::HSV(index * 25, 255, 255)) |
                    color(Color::Black);
-    if (element_xflex_grow)
+    if (element_xflex_grow) {
       element = element | xflex_grow;
-    if (element_yflex_grow)
+    }
+    if (element_yflex_grow) {
       element = element | yflex_grow;
+    }
     return element;
   };
 
@@ -119,10 +121,12 @@ int main() {
 
     group = group | notflex;
 
-    if (!group_xflex_grow)
+    if (!group_xflex_grow) {
       group = hbox(group, filler());
-    if (!group_yflex_grow)
+    }
+    if (!group_yflex_grow) {
       group = vbox(group, filler());
+    }
 
     group = group | flex;
     return group;

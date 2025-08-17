@@ -28,8 +28,9 @@ namespace {
 class StdCapture {
  public:
   explicit StdCapture(std::string* captured) : captured_(captured) {
-    if (pipe(pipefd_) != 0)
+    if (pipe(pipefd_) != 0) {
       return;
+    }
     old_stdout_ = dup(fileno(stdout));
     fflush(stdout);
     dup2(pipefd_[1], fileno(stdout));
