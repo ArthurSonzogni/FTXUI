@@ -539,6 +539,8 @@ void ScreenInteractive::Install() {
   // https://github.com/ArthurSonzogni/FTXUI/issues/846
   Flush();
 
+  InstallPipedInputHandling();
+
   // After uninstalling the new configuration, flush it to the terminal to
   // ensure it is fully applied:
   on_exit_functions.emplace([] { Flush(); });
@@ -604,9 +606,10 @@ void ScreenInteractive::Install() {
   }
 
   struct termios terminal;  // NOLINT
-  tcgetattr(STDIN_FILENO, &terminal);
-  on_exit_functions.emplace(
-      [=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
+  tcgetattr(tty_fd_, &terminal);
+  on_exit_functions.emplace([terminal = terminal, tty_fd_ = tty_fd_] {
+    tcsetattr(tty_fd_, TCSANOW, &terminal);
+  });
 
   // Enabling raw terminal input mode
   terminal.c_iflag &= ~IGNBRK;  // Disable ignoring break condition
@@ -634,7 +637,7 @@ void ScreenInteractive::Install() {
                              // read.
   terminal.c_cc[VTIME] = 0;  // Timeout in deciseconds for non-canonical read.
 
-  tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
+  tcsetattr(tty_fd_, TCSANOW, &terminal);
 
 #endif
 
@@ -670,21 +673,13 @@ void ScreenInteractive::Install() {
   // ensure it is fully applied:
   Flush();
 
-  // Redirect the true terminal to stdin, so that we can read keyboard input
-  // directly from stdin, even if the input is piped from a file or another
-  // process.
-  //
-  // TODO: Instead of redirecting stdin, we could define the file descriptor to
-  // read from, and use it in the TerminalInputParser.
-  InstallPipedInputHandling();
-
   quit_ = false;
 
   PostAnimationTask();
 }
 
 void ScreenInteractive::InstallPipedInputHandling() {
-  tty_fd_ = STDIN_FILENO;  // Default to stdin.
+  tty_fd_ = fileno(stdin);  // NOLINT
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
   // Handle piped input redirection if explicitly enabled by the application.
   // This allows applications to read data from stdin while still receiving
@@ -694,7 +689,7 @@ void ScreenInteractive::InstallPipedInputHandling() {
   }
 
   // If stdin is a terminal, we don't need to open /dev/tty.
-  if (isatty(STDIN_FILENO)) {
+  if (isatty(fileno(stdin))) {
     return;
   }
 
@@ -702,7 +697,7 @@ void ScreenInteractive::InstallPipedInputHandling() {
   tty_fd_ = open("/dev/tty", O_RDONLY);
   if (tty_fd_ < 0) {
     // Failed to open /dev/tty (containers, headless systems, etc.)
-    tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
+    tty_fd_ = fileno(stdin);  // Fallback to stdin.
     return;
   }
 
