@@ -32,10 +32,12 @@ int main() {
 
   // Plot a function:
   std::vector<int> ys(100);
-  for (int x = 0; x < 100; x++)
+  for (int x = 0; x < 100; x++) {
     ys[x] = int(80 + 20 * cos(x * 0.2));
-  for (int x = 0; x < 99; x++)
+  }
+  for (int x = 0; x < 99; x++) {
     c.DrawPointLine(x, ys[x], x + 1, ys[x + 1], Color::Red);
+  }
 
   auto document = canvas(&c) | border;
 

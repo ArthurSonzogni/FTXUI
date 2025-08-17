@@ -19,10 +19,11 @@ int main() {
 
   // 1. Example of focusable renderer:
   auto renderer_focusable = Renderer([](bool focused) {
-    if (focused)
+    if (focused) {
       return text("FOCUSABLE RENDERER()") | center | bold | border;
-    else
+    } else {
       return text(" Focusable renderer() ") | center | border;
+    }
   });
 
   // 2. Examples of a non focusable renderer.
@@ -33,10 +34,11 @@ int main() {
   // 3. Renderer can wrap other components to redefine their Render() function.
   auto button = Button("Wrapped quit button", screen.ExitLoopClosure());
   auto renderer_wrap = Renderer(button, [&] {
-    if (button->Focused())
+    if (button->Focused()) {
       return button->Render() | bold | color(Color::Red);
-    else
+    } else {
       return button->Render();
+    }
   });
 
   // Let's renderer everyone:

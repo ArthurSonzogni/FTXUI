@@ -91,4 +91,4 @@ TEST(TaskTest, RunDelayedTask) {
   EXPECT_EQ(values, (std::vector<int>{1, 2, 3}));
 }
 
-} // namespace ftxui::task
+}  // namespace ftxui::task

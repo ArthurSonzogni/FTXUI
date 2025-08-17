@@ -20,8 +20,9 @@ using namespace ftxui;
 Component DummyComponent(int id) {
   return Renderer([id](bool focused) {
     auto t = text("component " + std::to_string(id));
-    if (focused)
+    if (focused) {
       t = t | inverted;
+    }
     return t;
   });
 }

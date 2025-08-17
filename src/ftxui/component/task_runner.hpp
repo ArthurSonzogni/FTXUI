@@ -21,8 +21,8 @@ class TaskRunner {
   auto PostTask(Task task) -> void;
 
   /// Schedules a task to be executed after a certain duration.
-  auto PostDelayedTask(Task task,
-                       std::chrono::steady_clock::duration duration) -> void;
+  auto PostDelayedTask(Task task, std::chrono::steady_clock::duration duration)
+      -> void;
 
   /// Runs the tasks in the queue, return the delay until the next delayed task
   /// can be executed.
@@ -31,9 +31,7 @@ class TaskRunner {
   // Runs the tasks in the queue, blocking until all tasks are executed.
   auto Run() -> void;
 
-  bool HasImmediateTasks() const {
-    return queue_.HasImmediateTasks();
-  }
+  bool HasImmediateTasks() const { return queue_.HasImmediateTasks(); }
 
   size_t ExecutedTasks() const { return executed_tasks_; }
 
@@ -43,7 +41,6 @@ class TaskRunner {
   size_t executed_tasks_ = 0;
 };
 
-} // namespace ftxui::task
-
+}  // namespace ftxui::task
 
 #endif  // TASK_RUNNER_HPP

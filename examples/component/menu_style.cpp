@@ -116,10 +116,12 @@ Component VMenu1(std::vector<std::string>* entries, int* selected) {
   option.entries_option.transform = [](EntryState state) {
     state.label = (state.active ? "> " : "  ") + state.label;
     Element e = text(state.label);
-    if (state.focused)
+    if (state.focused) {
       e = e | bgcolor(Color::Blue);
-    if (state.active)
+    }
+    if (state.active) {
       e = e | bold;
+    }
     return e;
   };
   return Menu(entries, selected, option);
@@ -130,10 +132,12 @@ Component VMenu2(std::vector<std::string>* entries, int* selected) {
   option.entries_option.transform = [](EntryState state) {
     state.label += (state.active ? " <" : "  ");
     Element e = hbox(filler(), text(state.label));
-    if (state.focused)
+    if (state.focused) {
       e = e | bgcolor(Color::Red);
-    if (state.active)
+    }
+    if (state.active) {
       e = e | bold;
+    }
     return e;
   };
   return Menu(entries, selected, option);
@@ -144,13 +148,16 @@ Component VMenu3(std::vector<std::string>* entries, int* selected) {
   option.entries_option.transform = [](EntryState state) {
     Element e = state.active ? text("[" + state.label + "]")
                              : text(" " + state.label + " ");
-    if (state.focused)
+    if (state.focused) {
       e = e | bold;
+    }
 
-    if (state.focused)
+    if (state.focused) {
       e = e | color(Color::Blue);
-    if (state.active)
+    }
+    if (state.active) {
       e = e | bold;
+    }
     return e;
   };
   return Menu(entries, selected, option);
@@ -245,10 +252,12 @@ Component HMenu5(std::vector<std::string>* entries, int* selected) {
                                 animation::easing::ElasticOut);
   option.entries_option.transform = [](EntryState state) {
     Element e = text(state.label) | hcenter | flex;
-    if (state.active && state.focused)
+    if (state.active && state.focused) {
       e = e | bold;
-    if (!state.focused && !state.active)
+    }
+    if (!state.focused && !state.active) {
       e = e | dim;
+    }
     return e;
   };
   option.underline.color_inactive = Color::Default;

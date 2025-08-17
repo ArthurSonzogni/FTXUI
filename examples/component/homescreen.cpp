@@ -1,11 +1,11 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <stddef.h>    // for size_t
-#include <array>       // for array
-#include <atomic>      // for atomic
-#include <chrono>      // for operator""s, chrono_literals
-#include <cmath>       // for sin
+#include <stddef.h>  // for size_t
+#include <array>     // for array
+#include <atomic>    // for atomic
+#include <chrono>    // for operator""s, chrono_literals
+#include <cmath>     // for sin
 #include <ftxui/component/loop.hpp>
 #include <functional>  // for ref, reference_wrapper, function
 #include <memory>      // for allocator, shared_ptr, __shared_ptr_access
@@ -514,7 +514,7 @@ int main() {
   });
 
   Loop loop(&screen, main_renderer);
-  while(!loop.HasQuitted()) {
+  while (!loop.HasQuitted()) {
     // Update the state of the application.
     shift++;
 
@@ -525,7 +525,7 @@ int main() {
     loop.RunOnce();
 
     // Sleep for a short duration to control the frame rate (60 FPS).
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000/60));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
   }
 
   return 0;

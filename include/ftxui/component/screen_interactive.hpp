@@ -4,10 +4,10 @@
 #ifndef FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 #define FTXUI_COMPONENT_SCREEN_INTERACTIVE_HPP
 
-#include <atomic>                        // for atomic
-#include <functional>                    // for function
-#include <memory>                        // for shared_ptr
-#include <string>                        // for string
+#include <atomic>      // for atomic
+#include <functional>  // for function
+#include <memory>      // for shared_ptr
+#include <string>      // for string
 
 #include "ftxui/component/animation.hpp"       // for TimePoint
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
@@ -25,7 +25,7 @@ using Component = std::shared_ptr<ComponentBase>;
 class ScreenInteractivePrivate;
 
 namespace task {
-  class TaskRunner;
+class TaskRunner;
 }
 
 /// @brief ScreenInteractive is a `Screen` that can handle events, run a main
@@ -167,7 +167,6 @@ class ScreenInteractive : public Screen {
   friend class Loop;
 
   Component component_;
-
 
  public:
   class Private {

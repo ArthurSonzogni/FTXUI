@@ -50,5 +50,4 @@ auto TaskQueue::Get() -> MaybeTask {
   return std::monostate{};
 }
 
-} // namespace ftxui::task
-
+}  // namespace ftxui::task

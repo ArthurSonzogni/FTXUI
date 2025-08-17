@@ -16,5 +16,4 @@ bool PendingTask::operator<(const PendingTask& other) const {
   }
   return time.value() > other.time.value();
 }
-} // namespace ftxui::task
-
+}  // namespace ftxui::task

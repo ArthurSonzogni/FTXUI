@@ -20,7 +20,6 @@ TaskRunner::~TaskRunner() {
   current_task_runner = previous_task_runner_;
 }
 
-
 // static
 auto TaskRunner::Current() -> TaskRunner* {
   assert(current_task_runner);
@@ -73,5 +72,4 @@ auto TaskRunner::Run() -> void {
   }
 }
 
-} // namespace ftxui::task
-
+}  // namespace ftxui::task

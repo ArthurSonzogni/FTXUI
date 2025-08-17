@@ -133,8 +133,9 @@ int main() {
       float dy = 50.f;
       ys[x] = int(dy + 20 * cos(dx * 0.14) + 10 * sin(dx * 0.42));
     }
-    for (int x = 1; x < 99; x++)
+    for (int x = 1; x < 99; x++) {
       c.DrawPointLine(x, ys[x], x + 1, ys[x + 1]);
+    }
 
     return canvas(std::move(c));
   });

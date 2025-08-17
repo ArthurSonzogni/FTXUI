@@ -21,8 +21,7 @@ struct PendingTask {
 
   // Delayed task with a duration
   PendingTask(Task t, std::chrono::steady_clock::duration duration)
-      : task(std::move(t)),
-        time(std::chrono::steady_clock::now() + duration) {}
+      : task(std::move(t)), time(std::chrono::steady_clock::now() + duration) {}
 
   /// The task to be executed.
   Task task;
@@ -36,7 +35,6 @@ struct PendingTask {
   bool operator<(const PendingTask& other) const;
 };
 
-} // namespace ftxui::task
-
+}  // namespace ftxui::task
 
 #endif  // TASK_HPP_

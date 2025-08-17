@@ -152,8 +152,8 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
 
     case CURSOR_POSITION:
       out_(Event::CursorPosition(std::move(pending_),  // NOLINT
-                                      output.cursor.x,      // NOLINT
-                                      output.cursor.y));    // NOLINT
+                                 output.cursor.x,      // NOLINT
+                                 output.cursor.y));    // NOLINT
       pending_.clear();
       return;
 

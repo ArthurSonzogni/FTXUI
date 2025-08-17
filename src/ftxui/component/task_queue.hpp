@@ -25,16 +25,13 @@ struct TaskQueue {
       std::variant<Task, std::chrono::steady_clock::duration, std::monostate>;
   auto Get() -> MaybeTask;
 
-  bool HasImmediateTasks() const {
-    return !immediate_tasks_.empty();
-  }
+  bool HasImmediateTasks() const { return !immediate_tasks_.empty(); }
 
  private:
   std::queue<PendingTask> immediate_tasks_;
   std::priority_queue<PendingTask> delayed_tasks_;
 };
 
-} // namespace ftxui::task
-
+}  // namespace ftxui::task
 
 #endif
