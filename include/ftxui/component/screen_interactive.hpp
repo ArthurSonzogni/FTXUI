@@ -147,6 +147,8 @@ class ScreenInteractive : public Screen {
 
   // Piped input handling state (POSIX only)
   bool handle_piped_input_ = true;
+  // File descriptor for /dev/tty, used for piped input handling.
+  int tty_fd_ = -1;
 
   // The style of the cursor to restore on exit.
   int cursor_reset_shape_ = 1;

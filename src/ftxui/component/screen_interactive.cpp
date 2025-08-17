@@ -112,13 +112,13 @@ void ftxui_on_resize(int columns, int rows) {
 
 #else  // POSIX (Linux & Mac)
 
-int CheckStdinReady() {
+int CheckStdinReady(int fd) {
   timeval tv = {0, 0};  // NOLINT
   fd_set fds;
   FD_ZERO(&fds);                                          // NOLINT
-  FD_SET(STDIN_FILENO, &fds);                             // NOLINT
-  select(STDIN_FILENO + 1, &fds, nullptr, nullptr, &tv);  // NOLINT
-  return FD_ISSET(STDIN_FILENO, &fds);                    // NOLINT
+  FD_SET(fd, &fds);                             // NOLINT
+  select(fd + 1, &fds, nullptr, nullptr, &tv);  // NOLINT
+  return FD_ISSET(fd, &fds);                    // NOLINT
 }
 
 #endif
@@ -684,6 +684,7 @@ void ScreenInteractive::Install() {
 }
 
 void ScreenInteractive::InstallPipedInputHandling() {
+  tty_fd_ = STDIN_FILENO;  // Default to stdin.
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
   // Handle piped input redirection if explicitly enabled by the application.
   // This allows applications to read data from stdin while still receiving
@@ -692,29 +693,23 @@ void ScreenInteractive::InstallPipedInputHandling() {
     return;
   }
 
-  // If stdin is a terminal, we don't need to redirect it.
+  // If stdin is a terminal, we don't need to open /dev/tty.
   if (isatty(STDIN_FILENO)) {
     return;
   }
 
-  // Save the current stdin so we can restore it later.
-  int original_fd = dup(STDIN_FILENO);
-  if (original_fd < 0) {
-    return;
-  }
-
-  // Redirect stdin to the controlling terminal for keyboard input.
-  if (std::freopen("/dev/tty", "r", stdin) == nullptr) {
+  // Open /dev/tty for keyboard input.
+  tty_fd_ = open("/dev/tty", O_RDONLY);
+  if (tty_fd_ < 0) {
     // Failed to open /dev/tty (containers, headless systems, etc.)
-    // Clean up and continue without redirection
-    close(original_fd);
+    tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
     return;
   }
 
-  // Restore the original stdin file descriptor on exit.
-  on_exit_functions.emplace([=] {
-    dup2(original_fd, STDIN_FILENO);
-    close(original_fd);
+  // Close the /dev/tty file descriptor on exit.
+  on_exit_functions.emplace([this] {
+    close(tty_fd_);
+    tty_fd_ = -1;
   });
 #endif
 }
@@ -1152,7 +1147,7 @@ void ScreenInteractive::FetchTerminalEvents() {
     internal_->terminal_input_parser.Add(out[i]);
   }
 #else  // POSIX (Linux & Mac)
-  if (!CheckStdinReady()) {
+  if (!CheckStdinReady(tty_fd_)) {
     const auto timeout =
         std::chrono::steady_clock::now() - internal_->last_char_time;
     const size_t timeout_ms =
@@ -1164,7 +1159,7 @@ void ScreenInteractive::FetchTerminalEvents() {
 
   // Read chars from the terminal.
   std::array<char, 128> out{};
-  size_t l = read(fileno(stdin), out.data(), out.size());
+  size_t l = read(tty_fd_, out.data(), out.size());
 
   // Convert the chars to events.
   for (size_t i = 0; i < l; ++i) {
