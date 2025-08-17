@@ -44,6 +44,7 @@ out/
 !doc/**/*.html
 !doc/**/*.xml
 !doc/**/*.md
+!doc/*.md
 
 # examples directory:
 !examples/**/*.cpp

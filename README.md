@@ -378,21 +378,7 @@ Several games using the FTXUI have been made during the Game Jam:
 - [smoothlife](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/smoothlife.md)
 - [Consu](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/consu.md)
 
-## Advanced Usage
 
-### Piped Input Support
-
-If your application reads from stdin (piped data) and also needs interactive keyboard input:
-
-```cpp
-auto screen = ScreenInteractive::Fullscreen();
-screen.HandlePipedInput(true);  // Enable before Loop()
-screen.Loop(component);
-```
-
-This allows commands like `cat data.txt | your_app` to work with full keyboard interaction.
-
-**Note:** This feature is only available on POSIX systems (Linux/macOS). On Windows, the method call is a no-op.
 
 ## Build using CMake
 
