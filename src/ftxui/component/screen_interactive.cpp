@@ -376,9 +376,9 @@ void ScreenInteractive::TrackMouse(bool enable) {
 /// When enabled, FTXUI will detect piped input and redirect stdin to /dev/tty
 /// for keyboard input, allowing applications to read piped data while still
 /// receiving interactive keyboard events.
-/// @param enable Whether to enable piped input handling
+/// @param enable Whether to enable piped input handling. Default is true.
 /// @note This must be called before Loop().
-/// @note This feature is disabled by default for backward compatibility.
+/// @note This feature is enabled by default.
 /// @note This feature is only available on POSIX systems (Linux/macOS).
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
 void ScreenInteractive::HandlePipedInput(bool enable) {

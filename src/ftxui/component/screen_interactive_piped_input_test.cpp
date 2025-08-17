@@ -63,20 +63,24 @@ class PipedInputTest : public ::testing::Test {
   bool piped_stdin_setup_ = false;
 };
 
-TEST_F(PipedInputTest, DefaultBehaviorNoChange) {
-  // Test that HandlePipedInput is disabled by default
+TEST_F(PipedInputTest, DefaultBehaviorEnabled) {
+  // Test that HandlePipedInput is enabled by default
+  if (!IsTtyAvailable()) {
+    GTEST_SKIP() << "/dev/tty not available in this environment";
+  }
+
   auto screen = ScreenInteractive::TerminalOutput();
   auto component = Renderer([] { return text("test"); });
 
   SetupPipedStdin();
   WriteToPipedStdin("test data\n");
 
-  // Install should not redirect stdin since HandlePipedInput not called
+  // Install should redirect stdin since HandlePipedInput is on by default
   screen.Install();
-  
-  // Stdin should still be the pipe (isatty should return false)
-  EXPECT_FALSE(isatty(STDIN_FILENO));
-  
+
+  // Stdin should be the tty
+  EXPECT_TRUE(isatty(STDIN_FILENO));
+
   screen.Uninstall();
 }
 
@@ -97,7 +101,7 @@ TEST_F(PipedInputTest, ExplicitlyDisabled) {
   screen.Uninstall();
 }
 
-TEST_F(PipedInputTest, PipedInputDetectionAndRedirection) {
+TEST_F(PipedInputTest, ExplicitlyEnabled) {
   if (!IsTtyAvailable()) {
     GTEST_SKIP() << "/dev/tty not available in this environment";
   }
@@ -127,7 +131,6 @@ TEST_F(PipedInputTest, PipedInputDetectionAndRedirection) {
 TEST_F(PipedInputTest, NormalStdinUnchanged) {
   // Test that normal stdin (not piped) is not affected
   auto screen = ScreenInteractive::TerminalOutput();
-  screen.HandlePipedInput(true);
   auto component = Renderer([] { return text("test"); });
 
   // Don't setup piped stdin - use normal stdin
@@ -150,7 +153,6 @@ TEST_F(PipedInputTest, MultipleInstallUninstallCycles) {
   }
 
   auto screen = ScreenInteractive::TerminalOutput();
-  screen.HandlePipedInput(true);
   auto component = Renderer([] { return text("test"); });
 
   SetupPipedStdin();
@@ -192,7 +194,6 @@ TEST_F(PipedInputTest, HandlePipedInputMethodBehavior) {
 // This test simulates environments like containers where /dev/tty might not exist
 TEST_F(PipedInputTest, GracefulFallbackWhenTtyUnavailable) {
   auto screen = ScreenInteractive::TerminalOutput();
-  screen.HandlePipedInput(true);
   auto component = Renderer([] { return text("test"); });
 
   SetupPipedStdin();

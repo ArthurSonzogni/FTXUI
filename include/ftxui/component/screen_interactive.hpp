@@ -144,7 +144,7 @@ class ScreenInteractive : public Screen {
 
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
   // Piped input handling state (POSIX only)
-  bool handle_piped_input_ = false;
+  bool handle_piped_input_ = true;
   bool stdin_was_redirected_ = false;
   int original_stdin_fd_ = -1;
 #endif
