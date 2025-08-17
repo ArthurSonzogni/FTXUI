@@ -373,22 +373,16 @@ void ScreenInteractive::TrackMouse(bool enable) {
 }
 
 /// @brief Enable or disable automatic piped input handling.
-/// When enabled, FTXUI will detect piped input and redirect stdin to /dev/tty
+/// When enabled, FTXUI will detect piped input and redirect stdin from /dev/tty
 /// for keyboard input, allowing applications to read piped data while still
 /// receiving interactive keyboard events.
 /// @param enable Whether to enable piped input handling. Default is true.
 /// @note This must be called before Loop().
 /// @note This feature is enabled by default.
 /// @note This feature is only available on POSIX systems (Linux/macOS).
-#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
 void ScreenInteractive::HandlePipedInput(bool enable) {
   handle_piped_input_ = enable;
 }
-#else
-void ScreenInteractive::HandlePipedInput(bool /*enable*/) {
-  // This feature is not supported on this platform.
-}
-#endif
 
 /// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
@@ -676,47 +670,58 @@ void ScreenInteractive::Install() {
   // ensure it is fully applied:
   Flush();
 
-#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
-  // Handle piped input redirection if explicitly enabled by the application.
-  // This allows applications to read data from stdin while still receiving
-  // keyboard input from the terminal for interactive use.
-  if (handle_piped_input_ && !stdin_was_redirected_ && !isatty(STDIN_FILENO)) {
-    // Save the current stdin so we can restore it later
-    original_stdin_fd_ = dup(STDIN_FILENO);
-    if (original_stdin_fd_ >= 0) {
-      // Redirect stdin to the controlling terminal for keyboard input
-      if (freopen("/dev/tty", "r", stdin) != nullptr) {
-        stdin_was_redirected_ = true;
-      } else {
-        // Failed to open /dev/tty (containers, headless systems, etc.)
-        // Clean up and continue without redirection
-        close(original_stdin_fd_);
-        original_stdin_fd_ = -1;
-      }
-    }
-    // If dup() failed, we silently continue without redirection
-  }
-#endif
+  // Redirect the true terminal to stdin, so that we can read keyboard input
+  // directly from stdin, even if the input is piped from a file or another
+  // process.
+  //
+  // TODO: Instead of redirecting stdin, we could define the file descriptor to
+  // read from, and use it in the TerminalInputParser.
+  InstallPipedInputHandling();
 
   quit_ = false;
 
   PostAnimationTask();
 }
 
+void ScreenInteractive::InstallPipedInputHandling() {
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+  // Handle piped input redirection if explicitly enabled by the application.
+  // This allows applications to read data from stdin while still receiving
+  // keyboard input from the terminal for interactive use.
+  if (!handle_piped_input_) {
+    return;
+  }
+
+  // If stdin is a terminal, we don't need to redirect it.
+  if (isatty(STDIN_FILENO)) {
+    return;
+  }
+
+  // Save the current stdin so we can restore it later.
+  int original_fd = dup(STDIN_FILENO);
+  if (original_fd < 0) {
+    return;
+  }
+
+  // Redirect stdin to the controlling terminal for keyboard input.
+  if (std::freopen("/dev/tty", "r", stdin) == nullptr) {
+    // Failed to open /dev/tty (containers, headless systems, etc.)
+    // Clean up and continue without redirection
+    close(original_fd);
+    return;
+  }
+
+  // Restore the original stdin file descriptor on exit.
+  on_exit_functions.emplace([=] {
+    dup2(original_fd, STDIN_FILENO);
+    close(original_fd);
+  });
+#endif
+}
+
 // private
 void ScreenInteractive::Uninstall() {
   ExitNow();
-  
-#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
-  // Restore stdin to its original state if we redirected it
-  if (stdin_was_redirected_ && original_stdin_fd_ >= 0) {
-    dup2(original_stdin_fd_, STDIN_FILENO);
-    close(original_stdin_fd_);
-    original_stdin_fd_ = -1;
-    stdin_was_redirected_ = false;
-  }
-#endif
-  
   OnExit();
 }
 
