@@ -1,5 +1,9 @@
 # POSIX Piped Input in FTXUI
 
+> [!WARNING]
+> This feature works only on Linux and macOS. It is not supported on
+> Windows and WebAssembly.
+
 ## What is a POSIX Pipe?
 
 A POSIX pipe is a way for two separate programs to communicate. One program sends its output directly as input to another program. Think of it like a one-way tube for data.
@@ -40,7 +44,6 @@ auto screen = ScreenInteractive::Fullscreen();
 screen.Loop(component);
 ```
 
-**Note:** This feature works only on Linux and macOS. It does nothing on Windows.
 
 ## Turning Off Piped Input
 
