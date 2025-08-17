@@ -95,3 +95,39 @@ window.Module = {
 const words = example.split('/')
 words[1] = "ftxui_example_" + words[1] + ".js"
 document.querySelector("#example_script").src = words.join('/');
+
+
+// Table of Contents (TOC) for quick navigation.
+
+// Get select element
+const selectEl = document.querySelector('select#selectExample');
+if (!selectEl) {
+  console.error('select#selectExample not found');
+} else {
+  // Get TOC container
+  const tocContainer = document.querySelector('.toc-container');
+  const tocList = tocContainer.querySelector('.toc-list');
+
+  // Generate TOC items
+  Array.from(selectEl.options).forEach((option, index) => {
+    const tocItem = document.createElement('div');
+    tocItem.textContent = option.text;
+    tocItem.className = 'toc-item';
+
+    if (index == selectEl.selectedIndex) {
+      tocItem.classList.add('selected');
+    }
+
+    // Click handler
+    tocItem.addEventListener('click', () => {
+      selectEl.selectedIndex = index;
+
+      history.pushState({}, "", "?file=" + option.value);
+      location.reload();
+    });
+
+    tocList.appendChild(tocItem);
+  });
+
+  console.log('TOC created successfully!');
+}
