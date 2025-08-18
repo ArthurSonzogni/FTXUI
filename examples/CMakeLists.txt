@@ -17,10 +17,12 @@ add_subdirectory(dom)
 if (EMSCRIPTEN)
   get_property(EXAMPLES GLOBAL PROPERTY FTXUI::EXAMPLES)
   foreach(file
+      "index.css"
       "index.html"
       "index.mjs"
-      "index.css"
-      "run_webassembly.py")
+      "run_webassembly.py"
+      "sw.js"
+  )
     configure_file(${file} ${file})
   endforeach(file)
 endif()
