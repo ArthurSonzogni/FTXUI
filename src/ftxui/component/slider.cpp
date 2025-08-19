@@ -33,6 +33,20 @@ Decorator flexDirection(Direction direction) {
   return xflex;  // NOT_REACHED()
 }
 
+Direction Opposite(Direction d) {
+  switch (d) {
+    case Direction::Up:
+      return Direction::Down;
+    case Direction::Down:
+      return Direction::Up;
+    case Direction::Left:
+      return Direction::Right;
+    case Direction::Right:
+      return Direction::Left;
+  }
+  return d;  // NOT_REACHED()
+}
+
 template <class T>
 class SliderBase : public SliderOption<T>, public ComponentBase {
  public:
@@ -47,59 +61,15 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
            flexDirection(this->direction) | reflect(gauge_box_) | gauge_color;
   }
 
-  void OnLeft() {
-    switch (this->direction) {
-      case Direction::Right:
-        this->value() -= this->increment();
-        break;
-      case Direction::Left:
-        this->value() += this->increment();
-        break;
-      case Direction::Up:
-      case Direction::Down:
-        break;
+  void OnDirection(Direction pressed) {
+    if (pressed == this->direction) {
+      this->value() += this->increment();
+      return;
     }
-  }
 
-  void OnRight() {
-    switch (this->direction) {
-      case Direction::Right:
-        this->value() += this->increment();
-        break;
-      case Direction::Left:
-        this->value() -= this->increment();
-        break;
-      case Direction::Up:
-      case Direction::Down:
-        break;
-    }
-  }
-
-  void OnUp() {
-    switch (this->direction) {
-      case Direction::Up:
-        this->value() -= this->increment();
-        break;
-      case Direction::Down:
-        this->value() += this->increment();
-        break;
-      case Direction::Left:
-      case Direction::Right:
-        break;
-    }
-  }
-
-  void OnDown() {
-    switch (this->direction) {
-      case Direction::Down:
-        this->value() += this->increment();
-        break;
-      case Direction::Up:
-        this->value() -= this->increment();
-        break;
-      case Direction::Left:
-      case Direction::Right:
-        break;
+    if (pressed == Opposite(this->direction)) {
+      this->value() -= this->increment();
+      return;
     }
   }
 
@@ -110,16 +80,16 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
 
     T old_value = this->value();
     if (event == Event::ArrowLeft || event == Event::Character('h')) {
-      OnLeft();
+      OnDirection(Direction::Left);
     }
     if (event == Event::ArrowRight || event == Event::Character('l')) {
-      OnRight();
+      OnDirection(Direction::Right);
     }
     if (event == Event::ArrowUp || event == Event::Character('k')) {
-      OnDown();
+      OnDirection(Direction::Up);
     }
     if (event == Event::ArrowDown || event == Event::Character('j')) {
-      OnUp();
+      OnDirection(Direction::Down);
     }
 
     this->value() = std::max(this->min(), std::min(this->max(), this->value()));
