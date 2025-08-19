@@ -29,6 +29,8 @@ Next
 ### Component
 - Fix ScreenInteractive::FixedSize screen stomps on the preceding terminal
   output. Thanks @zozowell in #1064.
+- Fix vertical `ftxui::Slider`. The "up" key was previously decreasing the
+  value. Thanks @its-pablo in #1093 for reporting the issue.
 
 
 6.1.9 (2025-05-07)
