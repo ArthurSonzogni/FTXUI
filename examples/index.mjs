@@ -92,6 +92,69 @@ window.Module = {
   },
 };
 
+const source = document.querySelector("#source");
+source.href = "https://github.com/ArthurSonzogni/FTXUI/blob/main/examples/" + example + ".cpp";
+
 const words = example.split('/')
 words[1] = "ftxui_example_" + words[1] + ".js"
 document.querySelector("#example_script").src = words.join('/');
+
+
+// Table of Contents (TOC) for quick navigation.
+
+// Get select element
+const selectEl = document.querySelector('select#selectExample');
+if (!selectEl) {
+  console.error('select#selectExample not found');
+} else {
+  // Get TOC container
+  const tocContainer = document.querySelector('.toc-container');
+  const tocList = tocContainer.querySelector('.toc-list');
+
+  // Group options by directory
+  const groupedOptions = Array.from(selectEl.options).reduce((acc, option) => {
+    const [dir, file] = option.text.split('/');
+    if (!acc[dir]) {
+      acc[dir] = [];
+    }
+    acc[dir].push({ option, file });
+    return acc;
+  }, {});
+
+  // Generate TOC items
+  for (const dir in groupedOptions) {
+    const dirContainer = document.createElement('div');
+
+    const dirHeader = document.createElement('div');
+    dirHeader.textContent = dir;
+    dirHeader.className = 'toc-title';
+    dirContainer.appendChild(dirHeader);
+
+    groupedOptions[dir].forEach(({ option, file }) => {
+      const tocItem = document.createElement('div');
+      tocItem.textContent = file;
+      tocItem.className = 'toc-item';
+
+      if (selectEl.options[selectEl.selectedIndex].value === option.value) {
+        tocItem.classList.add('selected');
+      }
+
+      // Click handler
+      tocItem.addEventListener('click', () => {
+        for(let i=0; i<selectEl.options.length; ++i) {
+          if (selectEl.options[i].value == option.value) {
+            selectEl.selectedIndex = i;
+            break;
+          }
+        }
+
+        history.pushState({}, "", "?file=" + option.value);
+        location.reload();
+      });
+
+      dirContainer.appendChild(tocItem);
+    });
+
+    tocList.appendChild(dirContainer);
+  }
+}''
