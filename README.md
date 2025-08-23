@@ -362,6 +362,7 @@ Feel free to add your projects here:
 - [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
 - [SHOOT!](https://github.com/ShingZhanho/ENGG1340-Project-25Spring)
+- [VerifySN (Fast Hash Tool)](https://github.com/d06i/verifySN)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
