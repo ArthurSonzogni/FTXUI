@@ -115,7 +115,7 @@ void ftxui_on_resize(int columns, int rows) {
 int CheckStdinReady(int fd) {
   timeval tv = {0, 0};  // NOLINT
   fd_set fds;
-  FD_ZERO(&fds);                                          // NOLINT
+  FD_ZERO(&fds);                                // NOLINT
   FD_SET(fd, &fds);                             // NOLINT
   select(fd + 1, &fds, nullptr, nullptr, &tv);  // NOLINT
   return FD_ISSET(fd, &fds);                    // NOLINT
@@ -679,7 +679,7 @@ void ScreenInteractive::Install() {
 }
 
 void ScreenInteractive::InstallPipedInputHandling() {
-  tty_fd_ = fileno(stdin);  // NOLINT
+  tty_fd_ = STDIN_FILENO;
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
   // Handle piped input redirection if explicitly enabled by the application.
   // This allows applications to read data from stdin while still receiving
@@ -689,7 +689,7 @@ void ScreenInteractive::InstallPipedInputHandling() {
   }
 
   // If stdin is a terminal, we don't need to open /dev/tty.
-  if (isatty(fileno(stdin))) {
+  if (isatty(STDIN_FILENO)) {
     return;
   }
 
@@ -697,7 +697,7 @@ void ScreenInteractive::InstallPipedInputHandling() {
   tty_fd_ = open("/dev/tty", O_RDONLY);
   if (tty_fd_ < 0) {
     // Failed to open /dev/tty (containers, headless systems, etc.)
-    tty_fd_ = fileno(stdin);  // Fallback to stdin.
+    tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
     return;
   }
 
