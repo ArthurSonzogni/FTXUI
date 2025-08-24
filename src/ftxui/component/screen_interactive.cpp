@@ -112,13 +112,13 @@ void ftxui_on_resize(int columns, int rows) {
 
 #else  // POSIX (Linux & Mac)
 
-int CheckStdinReady() {
+int CheckStdinReady(int fd) {
   timeval tv = {0, 0};  // NOLINT
   fd_set fds;
-  FD_ZERO(&fds);                                          // NOLINT
-  FD_SET(STDIN_FILENO, &fds);                             // NOLINT
-  select(STDIN_FILENO + 1, &fds, nullptr, nullptr, &tv);  // NOLINT
-  return FD_ISSET(STDIN_FILENO, &fds);                    // NOLINT
+  FD_ZERO(&fds);                                // NOLINT
+  FD_SET(fd, &fds);                             // NOLINT
+  select(fd + 1, &fds, nullptr, nullptr, &tv);  // NOLINT
+  return FD_ISSET(fd, &fds);                    // NOLINT
 }
 
 #endif
@@ -372,6 +372,18 @@ void ScreenInteractive::TrackMouse(bool enable) {
   track_mouse_ = enable;
 }
 
+/// @brief Enable or disable automatic piped input handling.
+/// When enabled, FTXUI will detect piped input and redirect stdin from /dev/tty
+/// for keyboard input, allowing applications to read piped data while still
+/// receiving interactive keyboard events.
+/// @param enable Whether to enable piped input handling. Default is true.
+/// @note This must be called before Loop().
+/// @note This feature is enabled by default.
+/// @note This feature is only available on POSIX systems (Linux/macOS).
+void ScreenInteractive::HandlePipedInput(bool enable) {
+  handle_piped_input_ = enable;
+}
+
 /// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
 void ScreenInteractive::Post(Task task) {
@@ -527,6 +539,8 @@ void ScreenInteractive::Install() {
   // https://github.com/ArthurSonzogni/FTXUI/issues/846
   Flush();
 
+  InstallPipedInputHandling();
+
   // After uninstalling the new configuration, flush it to the terminal to
   // ensure it is fully applied:
   on_exit_functions.emplace([] { Flush(); });
@@ -592,9 +606,10 @@ void ScreenInteractive::Install() {
   }
 
   struct termios terminal;  // NOLINT
-  tcgetattr(STDIN_FILENO, &terminal);
-  on_exit_functions.emplace(
-      [=] { tcsetattr(STDIN_FILENO, TCSANOW, &terminal); });
+  tcgetattr(tty_fd_, &terminal);
+  on_exit_functions.emplace([terminal = terminal, tty_fd_ = tty_fd_] {
+    tcsetattr(tty_fd_, TCSANOW, &terminal);
+  });
 
   // Enabling raw terminal input mode
   terminal.c_iflag &= ~IGNBRK;  // Disable ignoring break condition
@@ -622,7 +637,7 @@ void ScreenInteractive::Install() {
                              // read.
   terminal.c_cc[VTIME] = 0;  // Timeout in deciseconds for non-canonical read.
 
-  tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
+  tcsetattr(tty_fd_, TCSANOW, &terminal);
 
 #endif
 
@@ -661,6 +676,37 @@ void ScreenInteractive::Install() {
   quit_ = false;
 
   PostAnimationTask();
+}
+
+void ScreenInteractive::InstallPipedInputHandling() {
+  tty_fd_ = STDIN_FILENO;
+#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+  // Handle piped input redirection if explicitly enabled by the application.
+  // This allows applications to read data from stdin while still receiving
+  // keyboard input from the terminal for interactive use.
+  if (!handle_piped_input_) {
+    return;
+  }
+
+  // If stdin is a terminal, we don't need to open /dev/tty.
+  if (isatty(STDIN_FILENO)) {
+    return;
+  }
+
+  // Open /dev/tty for keyboard input.
+  tty_fd_ = open("/dev/tty", O_RDONLY);
+  if (tty_fd_ < 0) {
+    // Failed to open /dev/tty (containers, headless systems, etc.)
+    tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
+    return;
+  }
+
+  // Close the /dev/tty file descriptor on exit.
+  on_exit_functions.emplace([this] {
+    close(tty_fd_);
+    tty_fd_ = -1;
+  });
+#endif
 }
 
 // private
@@ -1096,7 +1142,7 @@ void ScreenInteractive::FetchTerminalEvents() {
     internal_->terminal_input_parser.Add(out[i]);
   }
 #else  // POSIX (Linux & Mac)
-  if (!CheckStdinReady()) {
+  if (!CheckStdinReady(tty_fd_)) {
     const auto timeout =
         std::chrono::steady_clock::now() - internal_->last_char_time;
     const size_t timeout_ms =
@@ -1108,7 +1154,7 @@ void ScreenInteractive::FetchTerminalEvents() {
 
   // Read chars from the terminal.
   std::array<char, 128> out{};
-  size_t l = read(fileno(stdin), out.data(), out.size());
+  size_t l = read(tty_fd_, out.data(), out.size());
 
   // Convert the chars to events.
   for (size_t i = 0; i < l; ++i) {
