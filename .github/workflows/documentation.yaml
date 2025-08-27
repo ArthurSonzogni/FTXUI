@@ -12,6 +12,10 @@ jobs:
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0   # Need full history.
+          fetch-tags: true # Need tags.
+
 
       - name: "Install cmake"
         uses: lukka/get-cmake@latest
@@ -30,19 +34,23 @@ jobs:
           sudo apt-get install graphviz;
 
       - name: "Build documentation"
+        run: |
+          ./tools/build_multiversion_doc.sh
+
+      - name: "Build examples"
         run: >
+          mkdir -p multiversion_docs/main/examples;
           mkdir build;
           cd build;
           emcmake cmake ..
           -DCMAKE_BUILD_TYPE=Release
-          -DFTXUI_BUILD_DOCS=ON
+          -DFTXUI_BUILD_DOCS=OFF
           -DFTXUI_BUILD_EXAMPLES=ON
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
           -DFTXUI_ENABLE_INSTALL=OFF
           -DFTXUI_DEV_WARNINGS=OFF;
           cmake --build . --target doc;
-          cmake --build . ;
           rsync -amv
           --include='*/'
           --include='*.html'
@@ -52,13 +60,13 @@ jobs:
           --include='*.wasm'
           --exclude='*'
           examples
-          doc/doxygen/html;
+          ../multiversion_docs/main/examples;
 
       - name: "Deploy"
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/doc/doxygen/html/
+          publish_dir: multiversion_docs
           enable_jekyll: false
           allow_empty_commit: false
           force_orphan: true

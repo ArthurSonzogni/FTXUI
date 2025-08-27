@@ -70,5 +70,6 @@ out/
 
 # tools directory:
 !tools/**/*.sh
+!tools/**/*.py
 !tools/**/*.cpp
 build/
