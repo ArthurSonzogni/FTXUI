@@ -34,8 +34,8 @@ int main() {
   int value = 50;
 
   // clang-format off
-  auto btn_dec_01 = Button("-1", [&] { value += 1; }, Style());
-  auto btn_inc_01 = Button("+1", [&] { value -= 1; }, Style());
+  auto btn_dec_01 = Button("-1", [&] { value -= 1; }, Style());
+  auto btn_inc_01 = Button("+1", [&] { value += 1; }, Style());
   auto btn_dec_10 = Button("-10", [&] { value -= 10; }, Style());
   auto btn_inc_10 = Button("+10", [&] { value += 10; }, Style());
   // clang-format on
