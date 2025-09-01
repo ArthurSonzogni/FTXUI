@@ -27,6 +27,12 @@ Next
 - Remove dependency on 'pthread'.
 
 ### Component
+- Feature: POSIX Piped Input Handling.
+  - Allows FTXUI applications to read data from stdin (when piped) while still receiving keyboard input from the terminal.
+  - Enabled by default.
+  - Can be disabled using `ScreenInteractive::HandlePipedInput(false)`.
+  - Only available on Linux and macOS.
+  Thanks @HarryPehkonen for PR #1094.
 - Fix ScreenInteractive::FixedSize screen stomps on the preceding terminal
   output. Thanks @zozowell in #1064.
 - Fix vertical `ftxui::Slider`. The "up" key was previously decreasing the
