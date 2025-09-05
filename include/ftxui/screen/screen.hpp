@@ -60,7 +60,7 @@ class Screen : public Image {
       BarBlinking = 5,
       Bar = 6,
     };
-    Shape shape;
+    Shape shape = Hidden;
   };
 
   Cursor cursor() const { return cursor_; }
