@@ -364,6 +364,7 @@ Feel free to add your projects here:
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
 - [SHOOT!](https://github.com/ShingZhanho/ENGG1340-Project-25Spring)
 - [VerifySN (Fast Hash Tool)](https://github.com/d06i/verifySN)
+- [tic-tac-toe](https://github.com/birland/tic-tac-toe)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
