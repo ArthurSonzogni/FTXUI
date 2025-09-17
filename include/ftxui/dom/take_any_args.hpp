@@ -5,7 +5,11 @@
 #define FTXUI_DOM_TAKE_ANY_ARGS_HPP
 
 // IWYU pragma: private, include "ftxui/dom/elements.hpp"
+#include <concepts>
 #include <ftxui/dom/node.hpp>
+#include <queue>
+#include <ranges>
+#include <stack>
 
 namespace ftxui {
 
@@ -17,10 +21,31 @@ inline void Merge(Elements& container, Element element) {
   container.push_back(std::move(element));
 }
 
-template <>
-inline void Merge(Elements& container, Elements elements) {
+template <class Container>
+concept ElementRange =
+    std::ranges::range<Container> &&
+    std::same_as<std::ranges::range_value_t<Container>, Element>;
+
+template <ElementRange T>
+inline void Merge(Elements& container, T elements) {
   for (auto& element : elements) {
     container.push_back(std::move(element));
+  }
+}
+
+template <>
+inline void Merge(Elements& container, std::stack<Element> elements) {
+  while (!elements.empty()) {
+    container.push_back(std::move(elements.top()));
+    elements.pop();
+  }
+}
+
+template <>
+inline void Merge(Elements& container, std::queue<Element> elements) {
+  while (!elements.empty()) {
+    container.push_back(std::move(elements.back()));
+    elements.pop();
   }
 }
 
