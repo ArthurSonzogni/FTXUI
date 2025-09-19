@@ -28,6 +28,7 @@ out/
 # .github directory:
 !.github/**/*.yaml
 !.github/**/*.yml
+!.github/**/*.md
 
 # cmake directory:
 !cmake/**/*.in
@@ -70,3 +71,4 @@ out/
 # tools directory:
 !tools/**/*.sh
 !tools/**/*.cpp
+build/
