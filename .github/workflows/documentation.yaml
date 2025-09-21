@@ -35,7 +35,7 @@ jobs:
 
       - name: "Build documentation"
         run: |
-          ./tools/build_multiversion_doc.sh
+          python3 ./tools/build_multiversion_doc.py
 
       - name: "Build examples"
         run: >
