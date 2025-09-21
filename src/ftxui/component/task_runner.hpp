@@ -21,8 +21,8 @@ class TaskRunner {
   auto PostTask(Task task) -> void;
 
   /// Schedules a task to be executed after a certain duration.
-  auto PostDelayedTask(Task task, std::chrono::steady_clock::duration duration)
-      -> void;
+  auto PostDelayedTask(Task task,
+                       std::chrono::steady_clock::duration duration) -> void;
 
   /// Runs the tasks in the queue, return the delay until the next delayed task
   /// can be executed.
