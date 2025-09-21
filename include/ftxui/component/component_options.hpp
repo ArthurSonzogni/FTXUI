@@ -226,7 +226,7 @@ struct SliderOption {
   Ref<T> value;
   ConstRef<T> min = T(0);
   ConstRef<T> max = T(100);
-  ConstRef<T> increment = (max() - min()) / 20;
+  ConstRef<T> increment = ((max)() - (min)()) / 20;
   Direction direction = Direction::Right;
   Color color_active = Color::White;
   Color color_inactive = Color::GrayDark;
