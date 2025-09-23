@@ -4,6 +4,7 @@
 #include <ftxui/component/component_options.hpp>  // for ResizableSplitOption
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <ftxui/util/ref.hpp>       // for Ref
+#include <algorithm>                // for max
 #include <functional>               // for function
 #include <utility>                  // for move
 
