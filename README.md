@@ -416,9 +416,9 @@ cc_binary(
     name = "your_target",
     srcs = ["your_source.cc"],
     deps = [
-        "@ftxui//:ftxui_component",
-        "@ftxui//:ftxui_dom",
-        "@ftxui//:ftxui_screen",
+        "@ftxui//:component",
+        "@ftxui//:dom",
+        "@ftxui//:screen",
     ],
 )
 ```
