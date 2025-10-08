@@ -11,6 +11,7 @@
 #include <ftxui/util/ref.hpp>      // for Ref, ConstRef, StringRef
 #include <ftxui/util/warn_windows_macro.hpp>
 #include <functional>  // for function
+#include <limits>      // for numeric_limits
 #include <string>      // for string
 
 #include "ftxui/component/component_base.hpp"  // for Component
@@ -217,6 +218,10 @@ struct ResizableSplitOption {
       (direction() == Direction::Left || direction() == Direction::Right) ? 20
                                                                           : 10;
   std::function<Element()> separator_func = [] { return ::ftxui::separator(); };
+
+  // Constraints on main_size:
+  Ref<int> min = 0;
+  Ref<int> max = std::numeric_limits<int>::max();
 };
 
 // @brief Option for the `Slider` component.
