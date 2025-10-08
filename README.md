@@ -365,6 +365,7 @@ Feel free to add your projects here:
 - [SHOOT!](https://github.com/ShingZhanho/ENGG1340-Project-25Spring)
 - [VerifySN (Fast Hash Tool)](https://github.com/d06i/verifySN)
 - [tic-tac-toe](https://github.com/birland/tic-tac-toe)
+- [typing-speed-test](https://github.com/ymcx/typing-speed-test)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
