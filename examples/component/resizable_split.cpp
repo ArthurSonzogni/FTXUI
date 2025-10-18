@@ -3,7 +3,6 @@
 // the LICENSE file.
 #include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
-#include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
@@ -14,16 +13,23 @@ using namespace ftxui;
 int main() {
   auto screen = ScreenInteractive::Fullscreen();
 
-  auto middle = Renderer([] { return text("middle") | center; });
-  auto left = Renderer([] { return text("Left") | center; });
-  auto right = Renderer([] { return text("right") | center; });
-  auto top = Renderer([] { return text("top") | center; });
-  auto bottom = Renderer([] { return text("bottom") | center; });
-
+  // State:
   int left_size = 20;
   int right_size = 20;
   int top_size = 10;
   int bottom_size = 10;
+
+  // Renderers:
+  auto RendererInfo = [](const std::string& name, int* size) {
+    return Renderer([name, size] {
+      return text(name + ": " + std::to_string(*size)) | center;
+    });
+  };
+  auto middle = Renderer([] { return text("Middle") | center; });
+  auto left = RendererInfo("Left", &left_size);
+  auto right = RendererInfo("Right", &right_size);
+  auto top = RendererInfo("Top", &top_size);
+  auto bottom = RendererInfo("Bottom", &bottom_size);
 
   auto container = middle;
   container = ResizableSplitLeft(left, container, &left_size);

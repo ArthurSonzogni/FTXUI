@@ -1,10 +1,10 @@
 // Copyright 2021 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#include <algorithm>                              // for max
 #include <ftxui/component/component_options.hpp>  // for ResizableSplitOption
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
 #include <ftxui/util/ref.hpp>       // for Ref
-#include <algorithm>                // for max
 #include <functional>               // for function
 #include <utility>                  // for move
 
@@ -19,34 +19,22 @@
 namespace ftxui {
 namespace {
 
-class ResizableSplitBase : public ComponentBase {
+class ResizableSplitBase : public ComponentBase, public ResizableSplitOption {
  public:
   explicit ResizableSplitBase(ResizableSplitOption options)
-      : options_(std::move(options)) {
-    switch (options_->direction()) {
+      : ResizableSplitOption(std::move(options)) {
+    switch (direction()) {
       case Direction::Left:
-        Add(Container::Horizontal({
-            options_->main,
-            options_->back,
-        }));
+        Add(Container::Horizontal({main, back}));
         break;
       case Direction::Right:
-        Add(Container::Horizontal({
-            options_->back,
-            options_->main,
-        }));
+        Add(Container::Horizontal({back, main}));
         break;
       case Direction::Up:
-        Add(Container::Vertical({
-            options_->main,
-            options_->back,
-        }));
+        Add(Container::Vertical({main, back}));
         break;
       case Direction::Down:
-        Add(Container::Vertical({
-            options_->back,
-            options_->main,
-        }));
+        Add(Container::Vertical({back, main}));
         break;
     }
   }
@@ -76,27 +64,27 @@ class ResizableSplitBase : public ComponentBase {
       return ComponentBase::OnEvent(event);
     }
 
-    switch (options_->direction()) {
+    switch (direction()) {
       case Direction::Left:
-        options_->main_size() = std::max(0, event.mouse().x - box_.x_min);
-        return true;
+        main_size() = std::max(0, event.mouse().x - box_.x_min);
+        break;
       case Direction::Right:
-        options_->main_size() = std::max(0, box_.x_max - event.mouse().x);
-        return true;
+        main_size() = std::max(0, box_.x_max - event.mouse().x);
+        break;
       case Direction::Up:
-        options_->main_size() = std::max(0, event.mouse().y - box_.y_min);
-        return true;
+        main_size() = std::max(0, event.mouse().y - box_.y_min);
+        break;
       case Direction::Down:
-        options_->main_size() = std::max(0, box_.y_max - event.mouse().y);
-        return true;
+        main_size() = std::max(0, box_.y_max - event.mouse().y);
+        break;
     }
 
-    // NOTREACHED()
-    return false;
+    main_size() = std::clamp(main_size(), min(), max());
+    return true;
   }
 
   Element OnRender() final {
-    switch (options_->direction()) {
+    switch (direction()) {
       case Direction::Left:
         return RenderLeft();
       case Direction::Right:
@@ -112,46 +100,41 @@ class ResizableSplitBase : public ComponentBase {
 
   Element RenderLeft() {
     return hbox({
-               options_->main->Render() |
-                   size(WIDTH, EQUAL, options_->main_size()),
-               options_->separator_func() | reflect(separator_box_),
-               options_->back->Render() | xflex,
+               main->Render() | size(WIDTH, EQUAL, main_size()),
+               separator_func() | reflect(separator_box_),
+               back->Render() | xflex,
            }) |
            reflect(box_);
   }
 
   Element RenderRight() {
     return hbox({
-               options_->back->Render() | xflex,
-               options_->separator_func() | reflect(separator_box_),
-               options_->main->Render() |
-                   size(WIDTH, EQUAL, options_->main_size()),
+               back->Render() | xflex,
+               separator_func() | reflect(separator_box_),
+               main->Render() | size(WIDTH, EQUAL, main_size()),
            }) |
            reflect(box_);
   }
 
   Element RenderTop() {
     return vbox({
-               options_->main->Render() |
-                   size(HEIGHT, EQUAL, options_->main_size()),
-               options_->separator_func() | reflect(separator_box_),
-               options_->back->Render() | yflex,
+               main->Render() | size(HEIGHT, EQUAL, main_size()),
+               separator_func() | reflect(separator_box_),
+               back->Render() | yflex,
            }) |
            reflect(box_);
   }
 
   Element RenderBottom() {
     return vbox({
-               options_->back->Render() | yflex,
-               options_->separator_func() | reflect(separator_box_),
-               options_->main->Render() |
-                   size(HEIGHT, EQUAL, options_->main_size()),
+               back->Render() | yflex,
+               separator_func() | reflect(separator_box_),
+               main->Render() | size(HEIGHT, EQUAL, main_size()),
            }) |
            reflect(box_);
   }
 
  private:
-  Ref<ResizableSplitOption> options_;
   CapturedMouse captured_mouse_;
   Box separator_box_;
   Box box_;

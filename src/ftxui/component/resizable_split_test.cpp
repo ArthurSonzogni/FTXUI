@@ -233,5 +233,105 @@ TEST(ResizableSplit, NavigationVertical) {
   EXPECT_FALSE(component_bottom->Active());
 }
 
+TEST(ResizableSplit, MinMaxSizeLeft) {
+  int position = 5;
+  auto component = ResizableSplit({
+      .main = BasicComponent(),
+      .back = BasicComponent(),
+      .direction = Direction::Left,
+      .main_size = &position,
+      .separator_func = [] { return separatorDouble(); },
+      .min = 3,
+      .max = 8,
+  });
+  auto screen = Screen(20, 20);
+  Render(screen, component->Render());
+  EXPECT_EQ(position, 5);
+  EXPECT_TRUE(component->OnEvent(MousePressed(5, 1)));
+  EXPECT_EQ(position, 5);
+  // Try to resize below min
+  EXPECT_TRUE(component->OnEvent(MousePressed(2, 1)));
+  EXPECT_EQ(position, 3);  // Clamped to min
+  // Try to resize above max
+  EXPECT_TRUE(component->OnEvent(MousePressed(10, 1)));
+  EXPECT_EQ(position, 8);  // Clamped to max
+  EXPECT_TRUE(component->OnEvent(MouseReleased(10, 1)));
+  EXPECT_EQ(position, 8);
+}
+
+TEST(ResizableSplit, MinMaxSizeRight) {
+  int position = 5;
+  auto component = ResizableSplit({
+      .main = BasicComponent(),
+      .back = BasicComponent(),
+      .direction = Direction::Right,
+      .main_size = &position,
+      .separator_func = [] { return separatorDouble(); },
+      .min = 3,
+      .max = 8,
+  });
+  auto screen = Screen(20, 20);
+  Render(screen, component->Render());
+  EXPECT_EQ(position, 5);
+  EXPECT_TRUE(component->OnEvent(MousePressed(14, 1)));
+  EXPECT_EQ(position, 5);
+  // Try to resize below min
+  EXPECT_TRUE(component->OnEvent(MousePressed(18, 1)));
+  EXPECT_EQ(position, 3);  // Clamped to min
+  // Try to resize above max
+  EXPECT_TRUE(component->OnEvent(MousePressed(10, 1)));
+  EXPECT_EQ(position, 8);  // Clamped to max
+  EXPECT_TRUE(component->OnEvent(MouseReleased(10, 1)));
+  EXPECT_EQ(position, 8);
+}
+
+TEST(ResizableSplit, MinMaxSizeTop) {
+  int position = 5;
+  auto component = ResizableSplit({
+      .main = BasicComponent(),
+      .back = BasicComponent(),
+      .direction = Direction::Up,
+      .main_size = &position,
+      .separator_func = [] { return separatorDouble(); },
+      .min = 2,
+      .max = 10,
+  });
+  auto screen = Screen(20, 20);
+  Render(screen, component->Render());
+  EXPECT_EQ(position, 5);
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 5)));
+  EXPECT_EQ(position, 5);
+  // Try to resize below min
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 1)));
+  EXPECT_EQ(position, 2);  // Clamped to min
+  // Try to resize above max
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 15)));
+  EXPECT_EQ(position, 10);  // Clamped to max
+}
+
+TEST(ResizableSplit, MinMaxSizeBottom) {
+  int position = 5;
+  auto component = ResizableSplit({
+      .main = BasicComponent(),
+      .back = BasicComponent(),
+      .direction = Direction::Down,
+      .main_size = &position,
+      .separator_func = [] { return separatorDouble(); },
+      .min = 3,
+      .max = 12,
+  });
+  auto screen = Screen(20, 20);
+  Render(screen, component->Render());
+  EXPECT_EQ(position, 5);
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 14)));
+  EXPECT_EQ(position, 5);
+  // Try to resize below min
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 18)));
+  EXPECT_EQ(position, 3);  // Clamped to min
+  // Try to resize above max
+  EXPECT_TRUE(component->OnEvent(MousePressed(1, 5)));
+  EXPECT_EQ(position, 12);  // Clamped to max
+}
+
 }  // namespace ftxui
 // NOLINTEND
