@@ -151,8 +151,6 @@ def main():
         git_tags_result.stdout.splitlines(),
         reverse=True
     )
-    # For demonstration, limit the number of versions. Remove this in production.
-    version_names = version_names[:4]
     print(f"Versions to build: {', '.join(version_names)}")
 
     # Pre-compute all version information and paths.
@@ -205,7 +203,19 @@ def main():
             continue
         
         print(f"Processing HTML files in: {version.dest_dir}")
-        for html_file in version.dest_dir.rglob("*.html"):
+
+        html_files = []
+        if version.is_main:
+            # For the main version, find all HTML files, but explicitly exclude the 'en' directory.
+            html_files.extend(version.dest_dir.glob("*.html"))
+            for subdir in version.dest_dir.iterdir():
+                if subdir.is_dir() and subdir.name != 'en':
+                    html_files.extend(subdir.rglob("*.html"))
+        else:
+            # For other versions, their directory is self-contained.
+            html_files = list(version.dest_dir.rglob("*.html"))
+
+        for html_file in html_files:
             js_script = get_version_switcher_js(version, versions, html_file)
             script_tag = f'<script>{js_script}</script>'
 
