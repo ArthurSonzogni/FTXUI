@@ -10,6 +10,7 @@
 namespace ftxui::box_helper {
 
 namespace {
+<<<<<<< HEAD
 // Multiplication that clamps on overflow. Can be replaced by std::mul_sat
 // in C++26.
 int mul_sat(int a, int b) {
@@ -25,6 +26,19 @@ int mul_sat(int a, int b) {
   }
 
   return static_cast<int>(result);
+=======
+// Clamp to int range, can be replaced by std::clamp in C++17
+int clamp(long long a) {
+  // Clamp to int range, can be replaced by std::clamp in C++17
+  if (a > std::numeric_limits<int>::max()) {
+    return std::numeric_limits<int>::max();
+  }
+  if (a < std::numeric_limits<int>::min()) {
+    return std::numeric_limits<int>::min();
+  }
+
+  return static_cast<int>(a);
+>>>>>>> c876ceb (Mitigate integer overflow in ComputeShrinkHard (#1136))
 }
 
 // Called when the size allowed is greater than the requested size. This
@@ -70,8 +84,16 @@ void ComputeShrinkHard(std::vector<Element>* elements,
       continue;
     }
 
+<<<<<<< HEAD
     const int added_space =
         mul_sat(extra_space, element.min_size) / std::max(1, size);
+=======
+    // Perform operation into long long to avoid overflow
+    long long long_long_added_space = static_cast<long long>(extra_space) *
+                                      element.min_size / std::max(size, 1);
+
+    const int added_space = clamp(long_long_added_space);
+>>>>>>> c876ceb (Mitigate integer overflow in ComputeShrinkHard (#1136))
     extra_space -= added_space;
     size -= element.min_size;
 
