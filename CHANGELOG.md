@@ -32,6 +32,9 @@ Next
 - Fix vertical `ftxui::Slider`. The "up" key was previously decreasing the
   value. Thanks @its-pablo in #1093 for reporting the issue.
 
+### Dom
+- Fix integer overflow in `ComputeShrinkHard`. Thanks @its-pablo in #1137 for
+  reporting and fixing the issue.
 
 6.1.9 (2025-05-07)
 ------------

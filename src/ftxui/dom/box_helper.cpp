@@ -4,24 +4,13 @@
 #include "ftxui/dom/box_helper.hpp"
 
 #include <algorithm>  // for max
-#include <limits>     // for numeric_limits
-#include <vector>     // for vector
+#include <cstdint>
+#include <limits>  // for numeric_limits
+#include <vector>  // for vector
 
 namespace ftxui::box_helper {
 
 namespace {
-// Clamp to int range, can be replaced by std::clamp in C++17
-int clamp(long long a) {
-  if (a > std::numeric_limits<int>::max()) {
-    return std::numeric_limits<int>::max();
-  }
-  if (a < std::numeric_limits<int>::min()) {
-    return std::numeric_limits<int>::min();
-  }
-
-  return static_cast<int>(a);
-}
-
 // Called when the size allowed is greater than the requested size. This
 // distributes the extra spaces toward the flexible elements, in relative
 // proportions.
@@ -53,7 +42,7 @@ void ComputeShrinkEasy(std::vector<Element>* elements,
 }
 
 // Called when the size allowed is lower than the requested size, and the
-// shrinkable element can not absorbe the (negative) extra_space. This assign
+// shrinkable element can not absorb the (negative) extra_space. This assigns
 // zero to shrinkable elements and distribute the remaining (negative)
 // extra_space toward the other non shrinkable elements.
 void ComputeShrinkHard(std::vector<Element>* elements,
@@ -65,11 +54,17 @@ void ComputeShrinkHard(std::vector<Element>* elements,
       continue;
     }
 
-    // Perform operation into long long to avoid overflow
-    long long long_long_added_space = static_cast<long long>(extra_space) *
-                                      element.min_size / std::max(size, 1);
+    // Perform operation into int64_t to avoid overflow.
+    // The size of an int is at most 32 bits, so the multiplication can't
+    // overflow int64_t. Since `size` is the sum of elements.min_size, it is
+    // lower than every element.min_size. At the end `added_space` is guaranteed
+    // to be lower than extra_space in absolute value, so no overflow can
+    // happen.
+    int added_space =
+        static_cast<int>(static_cast<int64_t>(extra_space) *
+                         static_cast<int64_t>(element.min_size) /
+                         std::max(static_cast<int64_t>(size), 1L));
 
-    const int added_space = clamp(long_long_added_space);
     extra_space -= added_space;
     size -= element.min_size;
 
