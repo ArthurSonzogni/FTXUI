@@ -12,7 +12,6 @@ namespace ftxui::box_helper {
 namespace {
 // Clamp to int range, can be replaced by std::clamp in C++17
 int clamp(long long a) {
-  // Clamp to int range, can be replaced by std::clamp in C++17
   if (a > std::numeric_limits<int>::max()) {
     return std::numeric_limits<int>::max();
   }
