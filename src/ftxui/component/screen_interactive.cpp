@@ -679,8 +679,8 @@ void ScreenInteractive::Install() {
 }
 
 void ScreenInteractive::InstallPipedInputHandling() {
-  tty_fd_ = STDIN_FILENO;
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+  tty_fd_ = STDIN_FILENO;
   // Handle piped input redirection if explicitly enabled by the application.
   // This allows applications to read data from stdin while still receiving
   // keyboard input from the terminal for interactive use.
