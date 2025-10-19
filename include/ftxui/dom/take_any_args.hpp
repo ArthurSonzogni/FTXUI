@@ -27,6 +27,10 @@ Elements unpack(Args... args) {
 
 // Make |container| able to take any number of arguments.
 #define TAKE_ANY_ARGS(container)                               \
+  inline Element container(Element child) {                    \
+    return container(unpack(std::move(child)));                \
+  }                                                            \
+                                                               \
   template <class... Args>                                     \
   inline Element container(Args... children) {                 \
     return container(unpack(std::forward<Args>(children)...)); \
