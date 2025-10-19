@@ -4,7 +4,8 @@
 #include "ftxui/dom/box_helper.hpp"
 
 #include <algorithm>  // for max
-#include <vector>     // for vector
+#include <cstdint>
+#include <vector>  // for vector
 
 namespace ftxui::box_helper {
 
@@ -40,7 +41,7 @@ void ComputeShrinkEasy(std::vector<Element>* elements,
 }
 
 // Called when the size allowed is lower than the requested size, and the
-// shrinkable element can not absorbe the (negative) extra_space. This assign
+// shrinkable element can not absorb the (negative) extra_space. This assigns
 // zero to shrinkable elements and distribute the remaining (negative)
 // extra_space toward the other non shrinkable elements.
 void ComputeShrinkHard(std::vector<Element>* elements,
@@ -52,7 +53,18 @@ void ComputeShrinkHard(std::vector<Element>* elements,
       continue;
     }
 
-    const int added_space = extra_space * element.min_size / std::max(1, size);
+    // Perform operation into int64_t to avoid overflow.
+    // The size of an int is at most 32 bits, so the multiplication can't
+    // overflow int64_t. Since `size` is the sum of elements.min_size, it is
+    // greater than every element.min_size. The added_space represents the
+    // fraction of extra_space assigned to this element, so it is always less
+    // than extra_space in absolute. Since extra_space fits into int,
+    // added_space fits into int as well.
+    int added_space =
+        static_cast<int>(static_cast<int64_t>(extra_space) *
+                         static_cast<int64_t>(element.min_size) /
+                         std::max(static_cast<int64_t>(size), 1L));
+
     extra_space -= added_space;
     size -= element.min_size;
 
