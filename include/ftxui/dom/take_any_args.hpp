@@ -5,23 +5,16 @@
 #define FTXUI_DOM_TAKE_ANY_ARGS_HPP
 
 // IWYU pragma: private, include "ftxui/dom/elements.hpp"
+#include <deque>
 #include <ftxui/dom/node.hpp>
+#include <queue>
+#include <stack>
+#include <vector>
 
 namespace ftxui {
 
-template <class T>
-void Merge(Elements& /*container*/, T /*element*/) {}
-
-template <>
 inline void Merge(Elements& container, Element element) {
   container.push_back(std::move(element));
-}
-
-template <>
-inline void Merge(Elements& container, Elements elements) {
-  for (auto& element : elements) {
-    container.push_back(std::move(element));
-  }
 }
 
 // Turn a set of arguments into a vector.
@@ -32,11 +25,46 @@ Elements unpack(Args... args) {
   return vec;
 }
 
-// Make |container| able to take any number of argments.
+// Make |container| able to take any number of arguments.
 #define TAKE_ANY_ARGS(container)                               \
   template <class... Args>                                     \
-  Element container(Args... children) {                        \
+  inline Element container(Args... children) {                 \
     return container(unpack(std::forward<Args>(children)...)); \
+  }                                                            \
+                                                               \
+  template <class Container>                                   \
+  inline Element container(Container&& children) {             \
+    Elements elements;                                         \
+    for (auto& child : children) {                             \
+      elements.push_back(std::move(child));                    \
+    }                                                          \
+    return container(std::move(elements));                     \
+  }                                                            \
+  template <>                                                  \
+  inline Element container(std::stack<Element>&& children) {   \
+    Elements elements;                                         \
+    while (!children.empty()) {                                \
+      elements.push_back(std::move(children.top()));           \
+      children.pop();                                          \
+    }                                                          \
+    return container(std::move(elements));                     \
+  }                                                            \
+  template <>                                                  \
+  inline Element container(std::queue<Element>&& children) {   \
+    Elements elements;                                         \
+    while (!children.empty()) {                                \
+      elements.push_back(std::move(children.front()));         \
+      children.pop();                                          \
+    }                                                          \
+    return container(std::move(elements));                     \
+  }                                                            \
+  template <>                                                  \
+  inline Element container(std::deque<Element>&& children) {   \
+    Elements elements;                                         \
+    for (auto& child : children) {                             \
+      elements.push_back(std::move(child));                    \
+    }                                                          \
+    return container(std::move(elements));                     \
   }
 
 TAKE_ANY_ARGS(vbox)
