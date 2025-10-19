@@ -4,11 +4,25 @@
 #include "ftxui/dom/box_helper.hpp"
 
 #include <algorithm>  // for max
+#include <limits>     // for numeric_limits
 #include <vector>     // for vector
 
 namespace ftxui::box_helper {
 
 namespace {
+// Clamp to int range, can be replaced by std::clamp in C++17
+int clamp(long long a) {
+  // Clamp to int range, can be replaced by std::clamp in C++17
+  if (a > std::numeric_limits<int>::max()) {
+    return std::numeric_limits<int>::max();
+  }
+  if (a < std::numeric_limits<int>::min()) {
+    return std::numeric_limits<int>::min();
+  }
+
+  return static_cast<int>(a);
+}
+
 // Called when the size allowed is greater than the requested size. This
 // distributes the extra spaces toward the flexible elements, in relative
 // proportions.
@@ -52,7 +66,11 @@ void ComputeShrinkHard(std::vector<Element>* elements,
       continue;
     }
 
-    const int added_space = extra_space * element.min_size / std::max(1, size);
+    // Perform operation into long long to avoid overflow
+    long long long_long_added_space = static_cast<long long>(extra_space) *
+                                      element.min_size / std::max(size, 1);
+
+    const int added_space = clamp(long_long_added_space);
     extra_space -= added_space;
     size -= element.min_size;
 
