@@ -10,6 +10,12 @@
 namespace ftxui::box_helper {
 
 namespace {
+
+int SafeRatio(int value, int numerator, int denominator) {
+  return static_cast<int64_t>(value) * static_cast<int64_t>(numerator) /
+         std::max(static_cast<int64_t>(denominator), static_cast<int64_t>(1));
+}
+
 // Called when the size allowed is greater than the requested size. This
 // distributes the extra spaces toward the flexible elements, in relative
 // proportions.
@@ -18,7 +24,7 @@ void ComputeGrow(std::vector<Element>* elements,
                  int flex_grow_sum) {
   for (Element& element : *elements) {
     const int added_space =
-        extra_space * element.flex_grow / std::max(flex_grow_sum, 1);
+        SafeRatio(extra_space, element.flex_grow, flex_grow_sum);
     extra_space -= added_space;
     flex_grow_sum -= element.flex_grow;
     element.size = element.min_size + added_space;
@@ -32,8 +38,8 @@ void ComputeShrinkEasy(std::vector<Element>* elements,
                        int extra_space,
                        int flex_shrink_sum) {
   for (Element& element : *elements) {
-    const int added_space = extra_space * element.min_size *
-                            element.flex_shrink / std::max(flex_shrink_sum, 1);
+    const int added_space = SafeRatio(
+        extra_space, element.min_size * element.flex_shrink, flex_shrink_sum);
     extra_space -= added_space;
     flex_shrink_sum -= element.flex_shrink * element.min_size;
     element.size = element.min_size + added_space;
@@ -53,17 +59,7 @@ void ComputeShrinkHard(std::vector<Element>* elements,
       continue;
     }
 
-    // Perform operation into int64_t to avoid overflow.
-    // The size of an int is at most 32 bits, so the multiplication can't
-    // overflow int64_t. Since `size` is the sum of elements.min_size, it is
-    // greater than every element.min_size. The added_space represents the
-    // fraction of extra_space assigned to this element, so it is always less
-    // than extra_space in absolute. Since extra_space fits into int,
-    // added_space fits into int as well.
-    int added_space =
-        static_cast<int>(static_cast<int64_t>(extra_space) *
-                         static_cast<int64_t>(element.min_size) /
-                         std::max(static_cast<int64_t>(size), 1L));
+    const int added_space = SafeRatio(extra_space, element.min_size, size);
 
     extra_space -= added_space;
     size -= element.min_size;
