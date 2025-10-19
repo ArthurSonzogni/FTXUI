@@ -46,7 +46,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
       }
       elements.push_back(element | reflect(boxes_[i]));
     }
-    return vbox(std::move(elements), hovered_) | reflect(box_);
+    return vbox(std::move(elements)) | reflect(box_);
   }
 
   // NOLINTNEXTLINE(readability-function-cognitive-complexity)

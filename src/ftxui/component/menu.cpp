@@ -145,8 +145,8 @@ class MenuBase : public ComponentBase, public MenuOption {
     }
 
     const Element bar = IsHorizontal()
-                            ? hbox(std::move(elements), selected_focus_)
-                            : vbox(std::move(elements), selected_focus_);
+                            ? hbox(std::move(elements))
+                            : vbox(std::move(elements));
 
     if (!underline.enabled) {
       return bar | reflect(box_);

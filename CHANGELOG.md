@@ -35,6 +35,8 @@ Next
 ### Dom
 - Fix integer overflow in `ComputeShrinkHard`. Thanks @its-pablo in #1137 for
   reporting and fixing the issue.
+- Add specialization for `vbox/hbox/dbox` to allow a container of Element as
+  as input. Thanks @nbusser in #1117.
 
 6.1.9 (2025-05-07)
 ------------

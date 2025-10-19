@@ -173,7 +173,7 @@ class InputBase : public ComponentBase, public InputOption {
       elements.push_back(element);
     }
 
-    auto element = vbox(std::move(elements), cursor_line) | frame;
+    auto element = vbox(std::move(elements)) | frame;
     return transform_func({
                std::move(element), hovered_, is_focused,
                false  // placeholder

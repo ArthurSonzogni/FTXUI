@@ -4,6 +4,7 @@
 #include <gtest/gtest.h>  // for Test, TestInfo (ptr only), EXPECT_EQ, Message, TEST, TestPartResult
 #include <array>          // for array
 #include <cstddef>        // for size_t
+#include <queue>
 #include <stack>          // for stack
 #include <string>         // for allocator, basic_string, string
 #include <unordered_set>  // for unordered_set
