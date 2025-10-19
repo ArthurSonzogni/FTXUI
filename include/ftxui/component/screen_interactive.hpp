@@ -43,10 +43,11 @@ class ScreenInteractive : public Screen {
   static ScreenInteractive TerminalOutput();
 
   // Destructor.
-  ~ScreenInteractive();
+  ~ScreenInteractive() override;
 
   // Options. Must be called before Loop().
   void TrackMouse(bool enable = true);
+  void HandlePipedInput(bool enable = true);
 
   // Return the currently active screen, nullptr if none.
   static ScreenInteractive* Active();
@@ -100,6 +101,8 @@ class ScreenInteractive : public Screen {
   void Draw(Component component);
   void ResetCursorPosition();
 
+  void InstallPipedInputHandling();
+
   void Signal(int signal);
 
   void FetchTerminalEvents();
@@ -117,6 +120,7 @@ class ScreenInteractive : public Screen {
                     int dimx,
                     int dimy,
                     bool use_alternative_screen);
+
   const Dimension dimension_;
   const bool use_alternative_screen_;
 
@@ -140,6 +144,11 @@ class ScreenInteractive : public Screen {
 
   bool force_handle_ctrl_c_ = true;
   bool force_handle_ctrl_z_ = true;
+
+  // Piped input handling state (POSIX only)
+  bool handle_piped_input_ = true;
+  // File descriptor for /dev/tty, used for piped input handling.
+  int tty_fd_ = -1;
 
   // The style of the cursor to restore on exit.
   int cursor_reset_shape_ = 1;
