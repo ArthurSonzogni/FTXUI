@@ -56,7 +56,7 @@ void ComputeShrinkHard(std::vector<Element>* elements,
     // Perform operation into int64_t to avoid overflow.
     // The size of an int is at most 32 bits, so the multiplication can't
     // overflow int64_t. Since `size` is the sum of elements.min_size, it is
-    // greater than every element.min_size. The aadded space represents the
+    // greater than every element.min_size. The added_space represents the
     // fraction of extra_space assigned to this element, so it is always less
     // than extra_space in absolute. Since extra_space fits into int,
     // added_space fits into int as well.
