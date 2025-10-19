@@ -4,11 +4,29 @@
 #include "ftxui/dom/box_helper.hpp"
 
 #include <algorithm>  // for max
+#include <limits>     // for numeric_limits
 #include <vector>     // for vector
 
 namespace ftxui::box_helper {
 
 namespace {
+// Multiplication that clamps on overflow. Can be replaced by std::mul_sat
+// in C++26.
+int mul_sat(int a, int b) {
+  // We can multiply into a long long safely without overflowing
+  long long result = static_cast<long long>(a) * static_cast<long long>(b);
+
+  // Clamp to int range, can be replaced by std::clamp in C++17
+  if (result > std::numeric_limits<int>::max()) {
+    return std::numeric_limits<int>::max();
+  }
+  if (result < std::numeric_limits<int>::min()) {
+    return std::numeric_limits<int>::min();
+  }
+
+  return static_cast<int>(result);
+}
+
 // Called when the size allowed is greater than the requested size. This
 // distributes the extra spaces toward the flexible elements, in relative
 // proportions.
@@ -52,7 +70,8 @@ void ComputeShrinkHard(std::vector<Element>* elements,
       continue;
     }
 
-    const int added_space = extra_space * element.min_size / std::max(1, size);
+    const int added_space =
+        mul_sat(extra_space, element.min_size) / std::max(1, size);
     extra_space -= added_space;
     size -= element.min_size;
 
