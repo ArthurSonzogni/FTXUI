@@ -44,13 +44,13 @@ jobs:
           cd build;
           emcmake cmake ..
           -DCMAKE_BUILD_TYPE=Release
-          -DFTXUI_BUILD_DOCS=OFF
+          -DFTXUI_BUILD_DOCS=ON
           -DFTXUI_BUILD_EXAMPLES=ON
           -DFTXUI_BUILD_TESTS=OFF
           -DFTXUI_BUILD_TESTS_FUZZER=OFF
           -DFTXUI_ENABLE_INSTALL=OFF
           -DFTXUI_DEV_WARNINGS=OFF;
-          cmake --build . --target doc;
+          cmake --build .;
           rsync -amv
           --include='*/'
           --include='*.html'
@@ -60,7 +60,7 @@ jobs:
           --include='*.wasm'
           --exclude='*'
           examples
-          ../multiversion_docs/main/examples;
+          ../multiversion_docs/
 
       - name: "Deploy"
         uses: peaceiris/actions-gh-pages@v3
