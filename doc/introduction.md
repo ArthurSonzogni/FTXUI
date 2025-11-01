@@ -3,6 +3,8 @@
 
 <img src="https://github.com/ArthurSonzogni/FTXUI/assets/4759106/6925b6da-0a7e-49d9-883c-c890e1f36007" alt="Demo image"></img>
 
+other language version: [简体中文](https://xiaoditx.github.io/docs/ftxui%E4%B8%AD%E6%96%87%E7%BF%BB%E8%AF%91/)
+
 **FTXUI** is simple cross-platform C++ library for terminal based user interfaces!
 
 # Feature

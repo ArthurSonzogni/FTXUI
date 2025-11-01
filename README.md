@@ -1,3 +1,4 @@
+<!--Many of the links in this document that lead to examples are showing a 404 error. I'm not sure if there have been any changes on the website. Anyway, I tried to fix it but some are failed. So, I leave a reminder here.-->
 
 <p align="center">
   <img src="https://github.com/ArthurSonzogni/FTXUI/assets/4759106/6925b6da-0a7e-49d9-883c-c890e1f36007" alt="Demo image"></img>
@@ -23,6 +24,11 @@
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Request Feature</a> ·
   <a href="https://github.com/ArthurSonzogni/FTXUI/pulls">Send a Pull Request</a>
 
+  <br/>
+  Choice other language version: 
+  <a href="https://github.com/ArthurSonzogni/FTXUI/laguages/zh-CN">简体中文</a> |
+  <a href="https://github.com/ArthurSonzogni/FTXUI/laguages/zh-TW">台灣繁體</a> |
+  <a href="https://github.com/ArthurSonzogni/FTXUI/laguages/zh-HK">港澳繁體</a>
 </p>
 
 # FTXUI
@@ -61,6 +67,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
 - [Starter CMake](https://github.com/ArthurSonzogni/ftxui-starter)
 - [Starter Bazel](https://github.com/ArthurSonzogni/ftxui-bazel)
 - [Documentation](https://arthursonzogni.github.io/FTXUI/)
+- [Documentation-simple Chinese version](https://xiaoditx.github.io/docs/ftxui%E4%B8%AD%E6%96%87%E7%BF%BB%E8%AF%91/)
 - [Examples (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
 - [Build using CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
 - [Build using Bazel](https://arthursonzogni.github.io/FTXUI/#build-bazel)
@@ -100,21 +107,21 @@ Element can be arranged together:
   - wrap along one direction using the `flexbox`.
   
 Element can become flexible using the `flex` decorator.
-  
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html) using `hbox`, `vbox` and `filler`.
+
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/vbox_hbox) using `hbox`, `vbox` and `filler`:
 
 ![image](https://user-images.githubusercontent.com/4759106/147242524-7103b5d9-1a92-4e2d-ac70-b3d6740061e3.png)
   
   
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2gridbox_8cpp-example.html) using gridbox:
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/gridbox) using `gridbox`:
 
 ![image](https://user-images.githubusercontent.com/4759106/147242972-0db1f2e9-0790-496f-86e6-ed2c604f7a73.png)
 
-[Example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/hflow.cpp) using flexbox:
+[Example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/hflow.cpp) using `flexbox`:
 
 ![image](https://user-images.githubusercontent.com/4759106/147243064-780ac7cc-605b-475f-94b8-cf7c4aed03a5.png)
 
-[See](https://arthursonzogni.github.io/FTXUI/examples_2dom_2hflow_8cpp-example.html) also this [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox).
+[See](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/hflow) also this [demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/flexbox).
 
 </details>
 
@@ -133,7 +140,7 @@ An element can be decorated using the functions:
   - `bgcolor`
   - `hyperlink`
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2style_gallery_8cpp-example.html)
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/style_gallery)
 
 ![image](https://user-images.githubusercontent.com/4759106/147244118-380bf834-9e33-40df-9ff0-07c10f2598ef.png)
   
@@ -145,7 +152,7 @@ FTXUI supports the pipe operator. It means: `decorator1(decorator2(element))` an
 
 FTXUI support every color palette:
 
-Color [gallery](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gallery_8cpp-example.html):
+Color [gallery](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/color_gallery):
 ![image](https://user-images.githubusercontent.com/4759106/147248595-04c7245a-5b85-4544-809d-a5984fc6f9e7.png)
 
 </details>
@@ -163,7 +170,7 @@ auto document = vbox({
 
 ```
 
-[Demo](https://arthursonzogni.github.io/FTXUI/examples_2dom_2separator_8cpp-example.html):
+[Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/separator):
   
 ![image](https://user-images.githubusercontent.com/4759106/147244514-4135f24b-fb8e-4067-8896-bc53545583f7.png)
   
@@ -182,7 +189,7 @@ Element paragraphAlignCenter(std::string text);
 Element paragraphAlignJustify(std::string text);
 ```
   
-[Paragraph example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2paragraph_8cpp-example.html)
+[Paragraph example](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/paragraph)
   
 ![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/4759106/147251370-983a06e7-6f41-4113-92b8-942f43d34d06.gif)
 
@@ -192,7 +199,7 @@ Element paragraphAlignJustify(std::string text);
 
 A class to easily style a table of data.
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=dom/table):
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
 
@@ -219,7 +226,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Gallery</summary>
 
-[Gallery](https://arthursonzogni.github.io/FTXUI/examples_2component_2gallery_8cpp-example.html) of multiple components. ([demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/gallery))
+[Gallery](https://arthursonzogni.github.io/FTXUI/examples/?file=component/gallery) of multiple components. ([demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/gallery))
 
 ![image](https://user-images.githubusercontent.com/4759106/147247330-b60beb9f-e665-48b4-81c0-4b01ee95bc66.png)
 
@@ -227,7 +234,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Radiobox</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2radiobox_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=component/radiobox):
   
 ![image](https://user-images.githubusercontent.com/4759106/147246401-809d14a5-6621-4e36-8dd9-a2d75ef2a94e.png)
 
@@ -235,7 +242,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Checkbox</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2checkbox_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=component/checkbox):
 
 ![image](https://user-images.githubusercontent.com/4759106/147246646-b86926a9-1ef9-4efb-af98-48a9b62acd81.png)
 
@@ -243,7 +250,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Input</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2input_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=component/input):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247671-f1d6f606-1845-4e94-a4a0-d4273e9ae6bd.png)
 
@@ -251,7 +258,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Toggle</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=component/toggle):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png)
 
@@ -260,7 +267,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Slider</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2slider_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=component/slider):
 
 ![image](https://user-images.githubusercontent.com/4759106/147249265-7e2cad75-082c-436e-affe-44a550c480ab.png)
 
@@ -269,7 +276,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Menu</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu):
 
 ![image](https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png)
 
@@ -278,7 +285,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>ResizableSplit</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2resizable_split_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=component/resizable_split):
 
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/4759106/147248372-c55512fe-9b96-4b08-a1df-d05cf2cae431.gif)  
 </details>
@@ -286,7 +293,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Dropdown</summary>
 
-[Example](https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html):
+[Example](https://arthursonzogni.github.io/FTXUI/examples/?file=component/dropdown):
 
 ![youtube-video-gif (3)](https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif)
 
@@ -294,11 +301,11 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 
 <details><summary>Tab</summary>
 
-[Vertical](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_vertical_8cpp-example.html):
+[Vertical](https://arthursonzogni.github.io/FTXUI/examples/?file=component/dropdown):
   
 ![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/4759106/147250144-22ff044a-4773-4ff7-a49c-12ba4034acb4.gif)
 
-[Horizontal](https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_horizontal_8cpp-example.html):
+[Horizontal](https://arthursonzogni.github.io/FTXUI/examples/?file=component/dropdown):
   
   ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif)
 
@@ -403,7 +410,7 @@ target_link_libraries(your_target PRIVATE
 )
 ```
 
-# Build using Bazel
+## Build using Bazel
 
 **MODULE.bazel**
 ```starlark
