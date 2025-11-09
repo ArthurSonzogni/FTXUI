@@ -181,9 +181,7 @@ def main():
             # Configure and build the docs using CMake.
             version_build_dir = build_dir / f"build_{version.name}"
             version_build_dir.mkdir()
-            run_command([
-                "cmake", str(version_src_dir), "-DFTXUI_BUILD_DOCS=ON"
-            ], cwd=version_build_dir)
+            run_command([ "cmake", str(version_src_dir), "-DFTXUI_BUILD_DOCS=ON", '-DFTXUI_BUILD_EXAMPLES=ON'], cwd=version_build_dir)
             run_command(["make", "doc"], cwd=version_build_dir)
 
             # Copy the generated HTML files to the final destination.
