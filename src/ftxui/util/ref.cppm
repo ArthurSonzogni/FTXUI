@@ -1,11 +1,11 @@
-/// @module ftxui.util.ref
+/// @module ftxui.util:Ref
 /// @brief Module file for the Ref classes of the Util module
 
 module;
 
 #include <ftxui/util/ref.hpp>
 
-export module ftxui.util.ref;
+export module ftxui.util:Ref;
 
 /**
  * @namespace ftxui

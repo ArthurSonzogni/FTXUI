@@ -1,11 +1,11 @@
-/// @module ftxui.screen.terminal
+/// @module ftxui.screen:Terminal
 /// @brief Module file for the Terminal namespace of the Screen module
 
 module;
 
 #include <ftxui/screen/terminal.hpp>
 
-export module ftxui.screen.terminal;
+export module ftxui.screen:Terminal;
 
 /**
  * @namespace ftxui
@@ -14,6 +14,10 @@ export module ftxui.screen.terminal;
 export namespace ftxui {
     using ftxui::Dimensions;
 
+    /**
+     * @namespace Terminal
+     * @brief The FTXUI ftxui::Terminal:: namespace
+     */
     namespace Terminal {
         using ftxui::Terminal::Size;
         using ftxui::Terminal::SetFallbackSize;

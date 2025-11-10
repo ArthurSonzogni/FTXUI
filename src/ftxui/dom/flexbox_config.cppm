@@ -1,11 +1,11 @@
-/// @module ftxui.dom.flexbox_config
-/// @brief Module file for the FlexboxConfig struct of the Dom module
+/// @module ftxui.dom:FlexboxConfig
+/// @brief Module file for the FlexboxConfig struct of the DOM module
 
 module;
 
 #include <ftxui/dom/flexbox_config.hpp>
 
-export module ftxui.dom.flexbox_config;
+export module ftxui.dom:FlexboxConfig;
 
 /**
  * @namespace ftxui

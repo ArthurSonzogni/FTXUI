@@ -1,11 +1,11 @@
-/// @module ftxui.screen.image
+/// @module ftxui.screen:Image
 /// @brief Module file for the Image class of the Screen module
 
 module;
 
 #include <ftxui/screen/image.hpp>
 
-export module ftxui.screen.image;
+export module ftxui.screen:Image;
 
 /**
  * @namespace ftxui

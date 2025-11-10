@@ -1,11 +1,11 @@
-/// @module ftxui.component.component_options
+/// @module ftxui.component:ComponentOptions
 /// @brief Module file for options for the Component class of the Component module
 
 module;
 
 #include <ftxui/component/component_options.hpp>
 
-export module ftxui.component.component_options;
+export module ftxui.component:ComponentOptions;
 
 /**
  * @namespace ftxui

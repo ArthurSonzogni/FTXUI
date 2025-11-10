@@ -1,11 +1,11 @@
-/// @module ftxui.util.autoreset
+/// @module ftxui.util:AutoReset
 /// @brief Module file for the AutoReset class of the Util module
 
 module;
 
 #include <ftxui/util/autoreset.hpp>
 
-export module ftxui.util.autoreset;
+export module ftxui.util:AutoReset;
 
 /**
  * @namespace ftxui

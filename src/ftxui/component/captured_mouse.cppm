@@ -1,11 +1,11 @@
-/// @module ftxui.component.captured_mouse
+/// @module ftxui.component.CapturedMouse
 /// @brief Module file for the CapturedMouseInterface class of the Component module
 
 module;
 
 #include <ftxui/component/captured_mouse.hpp>
 
-export module ftxui.component.captured_mouse;
+export module ftxui.component:CapturedMouse;
 
 /**
  * @namespace ftxui

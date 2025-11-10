@@ -1,11 +1,11 @@
-/// @module ftxui.dom.table
-/// @brief Module file for the Table class of the Dom module
+/// @module ftxui.dom:Table
+/// @brief Module file for the Table class of the DOM module
 
 module;
 
 #include <ftxui/dom/table.hpp>
 
-export module ftxui.dom.table;
+export module ftxui.dom:Table;
 
 /**
  * @namespace ftxui

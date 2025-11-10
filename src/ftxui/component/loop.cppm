@@ -1,11 +1,11 @@
-/// @module ftxui.component.loop
+/// @module ftxui.component:Loop
 /// @brief Module file for the Loop class of the Component module
 
 module;
 
 #include <ftxui/component/loop.hpp>
 
-export module ftxui.component.loop;
+export module ftxui.component:Loop;
 
 /**
  * @namespace ftxui

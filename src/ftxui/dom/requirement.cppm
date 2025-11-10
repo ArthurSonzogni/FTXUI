@@ -1,11 +1,11 @@
-/// @module ftxui.dom.requirement
-/// @brief Module file for the Requirement struct of the Dom module
+/// @module ftxui.dom:Requirement
+/// @brief Module file for the Requirement struct of the DOM module
 
 module;
 
 #include <ftxui/dom/requirement.hpp>
 
-export module ftxui.dom.requirement;
+export module ftxui.dom:Requirement;
 
 /**
  * @namespace ftxui

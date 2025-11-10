@@ -1,11 +1,11 @@
-/// @module ftxui.component.receiver
+/// @module ftxui.component:Receiver
 /// @brief Module file for the Receiver class of the Component module
 
 module;
 
 #include <ftxui/component/receiver.hpp>
 
-export module ftxui.component.receiver;
+export module ftxui.component:Receiver;
 
 /**
  * @namespace ftxui

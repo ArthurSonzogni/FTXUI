@@ -1,11 +1,11 @@
-/// @module ftxui.dom.deprecated
-/// @brief Module file for deprecated parts of the Dom module
+/// @module ftxui.dom:Deprecated
+/// @brief Module file for deprecated parts of the DOM module
 
 module;
 
 #include <ftxui/dom/deprecated.hpp>
 
-export module ftxui.dom.deprecated;
+export module ftxui.dom:Deprecated;
 
 /**
  * @namespace ftxui
