@@ -73,38 +73,6 @@ are available:
 
 - `ftxui`
     - `ftxui.component`
-      - `ftxui.component:Animation`
-      - `ftxui.component:CapturedMouse`
-      - `ftxui.component:Component`
-      - `ftxui.component:ComponentBase`
-      - `ftxui.component:ComponentOptions`
-      - `ftxui.component:Event`
-      - `ftxui.component:Loop`
-      - `ftxui.component:Mouse`
-      - `ftxui.component:Receiver`
-      - `ftxui.component:ScreenInteractive`
-      - `ftxui.component:Task`
-- `ftxui.dom`
-    - `ftxui.dom:Canvas`
-    - `ftxui.dom:Deprecated`
-    - `ftxui.dom:Direction`
-    - `ftxui.dom:Elements`
-    - `ftxui.dom:FlexboxConfig`
-    - `ftxui.dom:LinearGradient`
-    - `ftxui.dom:Node`
-    - `ftxui.dom:Requirement`
-    - `ftxui.dom:Selection`
-    - `ftxui.dom:Table`
-- `ftxui.screen`
-    - `ftxui.screen:Box`
-    - `ftxui.screen:Color`
-    - `ftxui.screen:ColorInfo`
-    - `ftxui.screen:Deprecated`
-    - `ftxui.screen:Image`
-    - `ftxui.screen:Pixel`
-    - `ftxui.screen:Screen`
-    - `ftxui.screen:String`
-    - `ftxui.screen:Terminal`
-- `ftxui.util`
-    - `ftxui.util:AutoReset`
-    - `ftxui.util:Ref`
+    - `ftxui.dom`
+    - `ftxui.screen`
+    - `ftxui.util`
