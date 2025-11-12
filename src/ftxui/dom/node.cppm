@@ -1,11 +1,11 @@
-/// @module ftxui.dom.node
-/// @brief Module file for the Node class of the Dom module
+/// @module ftxui.dom:Node
+/// @brief Module file for the Node class of the DOM module
 
 module;
 
 #include <ftxui/dom/node.hpp>
 
-export module ftxui.dom.node;
+export module ftxui.dom:Node;
 
 /**
  * @namespace ftxui

@@ -1,11 +1,11 @@
-/// @module ftxui.component.component_base
+/// @module ftxui.component:ComponentBase
 /// @brief Module file for the ComponentBase class of the Component module
 
 module;
 
 #include <ftxui/component/component_base.hpp>
 
-export module ftxui.component.component_base;
+export module ftxui.component:ComponentBase;
 
 /**
  * @namespace ftxui
@@ -16,6 +16,10 @@ export namespace ftxui {
     using ftxui::Focus;
     using ftxui::Event;
 
+    /**
+     * @namespace animation
+     * @brief The FTXUI ftxui::animation:: namespace
+     */
     namespace animation {
         using ftxui::animation::Params;
     }

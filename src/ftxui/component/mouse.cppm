@@ -1,11 +1,11 @@
-/// @module ftxui.component.mouse
+/// @module ftxui.component:Mouse
 /// @brief Module file for the Mouse struct of the Component module
 
 module;
 
 #include <ftxui/component/mouse.hpp>
 
-export module ftxui.component.mouse;
+export module ftxui.component:Mouse;
 
 /**
  * @namespace ftxui

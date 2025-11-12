@@ -1,11 +1,11 @@
-/// @module ftxui.screen.deprecated
+/// @module ftxui.screen:Deprecated
 /// @brief Module file for the deprecated parts of the Screen module
 
 module;
 
 #include <ftxui/screen/deprecated.hpp>
 
-export module ftxui.screen.deprecated;
+export module ftxui.screen:Deprecated;
 
 /**
  * @namespace ftxui

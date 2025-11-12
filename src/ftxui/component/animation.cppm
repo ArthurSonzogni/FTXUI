@@ -1,4 +1,4 @@
-/// @module ftxui.component.animation
+/// @module ftxui.component:Animation
 /// @brief C++20 module interface for the Animation namespace of the Component module.
 ///
 
@@ -6,7 +6,7 @@ module;
 
 #include <ftxui/component/animation.hpp>
 
-export module ftxui.component.animation;
+export module ftxui.component:Animation;
 
 /**
  * @namespace ftxui::animation
@@ -23,7 +23,7 @@ export namespace ftxui::animation {
 
     /**
      * @namespace easing
-     * @brief The FTXUI sf::animation::easing:: namespace
+     * @brief The FTXUI ftxui::animation::easing:: namespace
      */
     namespace easing {
         using ftxui::animation::easing::Function;

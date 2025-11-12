@@ -3,5 +3,5 @@
 
 export module ftxui.util;
 
-export import ftxui.util.autoreset;
-export import ftxui.util.ref;
+export import :AutoReset;
+export import :Ref;

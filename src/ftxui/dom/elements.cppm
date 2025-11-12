@@ -1,11 +1,11 @@
-/// @module ftxui.dom.elements
-/// @brief Module file for the Element classes and functions of the Dom module
+/// @module ftxui.dom:Elements
+/// @brief Module file for the Element classes and functions of the DOM module
 
 module;
 
 #include <ftxui/dom/elements.hpp>
 
-export module ftxui.dom.elements;
+export module ftxui.dom:Elements;
 
 /**
  * @namespace ftxui

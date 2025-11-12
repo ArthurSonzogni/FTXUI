@@ -1,11 +1,11 @@
-/// @module ftxui.screen.color_info
+/// @module ftxui.screen:ColorInfo
 /// @brief Module file for the ColorInfo struct of the Screen module
 
 module;
 
 #include <ftxui/screen/color_info.hpp>
 
-export module ftxui.screen.color_info;
+export module ftxui.screen:ColorInfo;
 
 /**
  * @namespace ftxui

@@ -1,11 +1,11 @@
-/// @module ftxui.screen.string
+/// @module ftxui.screen:String
 /// @brief Module file for string functions of the Screen module
 
 module;
 
 #include <ftxui/screen/string.hpp>
 
-export module ftxui.screen.string;
+export module ftxui.screen:String;
 
 /**
  * @namespace ftxui

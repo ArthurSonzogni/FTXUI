@@ -1,11 +1,11 @@
-/// @module ftxui.component.screen_interactive
+/// @module ftxui.component:ScreenInteractive
 /// @brief Module file for the ScreenInteractive class of the Component module
 
 module;
 
 #include <ftxui/component/screen_interactive.hpp>
 
-export module ftxui.component.screen_interactive;
+export module ftxui.component:ScreenInteractive;
 
 /**
  * @namespace ftxui

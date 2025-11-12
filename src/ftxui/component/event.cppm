@@ -1,11 +1,11 @@
-/// @module ftxui.component.event
+/// @module ftxui.component:Event
 /// @brief Module file for the Event struct of the Component module
 
 module;
 
 #include <ftxui/component/event.hpp>
 
-export module ftxui.component.event;
+export module ftxui.component:Event;
 
 /**
  * @namespace ftxui

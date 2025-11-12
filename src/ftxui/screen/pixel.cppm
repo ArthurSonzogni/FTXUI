@@ -1,11 +1,11 @@
-/// @module ftxui.screen.pixel
+/// @module ftxui.screen:Pixel
 /// @brief Module file for the Pixel struct of the Screen module
 
 module;
 
 #include <ftxui/screen/pixel.hpp>
 
-export module ftxui.screen.pixel;
+export module ftxui.screen:Pixel;
 
 /**
  * @namespace ftxui

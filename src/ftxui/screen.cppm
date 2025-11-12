@@ -3,12 +3,12 @@
 
 export module ftxui.screen;
 
-export import ftxui.screen.box;
-export import ftxui.screen.color;
-export import ftxui.screen.color_info;
-export import ftxui.screen.deprecated;
-export import ftxui.screen.image;
-export import ftxui.screen.pixel;
-export import ftxui.screen.screen;
-export import ftxui.screen.string;
-export import ftxui.screen.terminal;
+export import :Box;
+export import :Color;
+export import :ColorInfo;
+export import :Deprecated;
+export import :Image;
+export import :Pixel;
+export import :Screen;
+export import :String;
+export import :Terminal;

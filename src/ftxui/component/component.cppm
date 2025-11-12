@@ -1,11 +1,11 @@
-/// @module ftxui.component.component
+/// @module ftxui.component:Component
 /// @brief Module file for the Component classes of the Component module
 
 module;
 
 #include <ftxui/component/component.hpp>
 
-export module ftxui.component.component;
+export module ftxui.component:Component;
 
 /**
  * @namespace ftxui
@@ -28,6 +28,10 @@ export namespace ftxui {
     using ftxui::operator|;
     using ftxui::operator|=;
 
+    /**
+     * @namespace Container
+     * @brief The FTXUI ftxui::Container:: namespace
+     */
     namespace Container {
         using ftxui::Container::Vertical;
         using ftxui::Container::Horizontal;
