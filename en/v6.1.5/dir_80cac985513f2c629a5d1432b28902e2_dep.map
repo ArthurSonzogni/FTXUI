@@ -1,0 +1,13 @@
+<map id="src/ftxui/component" name="src/ftxui/component">
+<area shape="rect" id="node1" href="dir_05deed47e306a9252af92a31e3309318.html" title="dom" alt="" coords="27,125,77,151"/>
+<area shape="rect" id="node2" href="dir_c332e26bda35bc9e8fe3a2471e7a4ee1.html" title="screen" alt="" coords="102,125,167,151"/>
+<area shape="rect" id="node3" href="dir_80cac985513f2c629a5d1432b28902e2.html" title="component" alt="" coords="73,52,167,77"/>
+<area shape="poly" id="edge1" href="dir_000001_000005.html" alt="" coords="111,80,75,117,71,113,107,76"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000001_000005.html" title="1" alt="" coords="77,111,86,125"/>
+<area shape="poly" id="edge3" href="dir_000001_000010.html" alt="" coords="125,77,132,111,127,112,120,78"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000001_000010.html" title="6" alt="" coords="132,98,142,113"/>
+<area shape="rect" id="node4" href="dir_aa9b523609c3388c07901dd0a6ade8f6.html" title="include" alt="" coords="192,125,261,151"/>
+<area shape="poly" id="edge2" href="dir_000001_000008.html" alt="" coords="139,75,199,115,196,120,136,80"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000001_000008.html" title="163" alt="" coords="186,101,211,115"/>
+<area shape="rect" id="clust1" href="dir_1328a94a7e67bddaf4b7c92a07a178a9.html" title="ftxui" alt="" coords="16,16,179,161"/>
+</map>
