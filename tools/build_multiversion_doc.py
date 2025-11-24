@@ -10,7 +10,7 @@ from typing import List, Dict
 
 # --- Configuration ---
 # URL for the translations repository. This is where other language branches reside.
-TRANSLATIONS_REPO_URL = "git@github.com:ArthurSonzogni/ftxui-translations.git"
+TRANSLATIONS_REPO_URL = "https://github.com/ArthurSonzogni/ftxui-translations"
 # --- End Configuration ---
 
 # Mapping of language codes to their display names for the dropdown menu.

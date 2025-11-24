@@ -32,7 +32,7 @@ console = Console()
 # Config & Constants
 # ---------------------------------------------------------------------------
 FTXUI_REPO_URL = "git@github.com:ArthurSonzogni/FTXUI.git"
-TRANSLATIONS_REPO_URL = "https://github.com/ArthurSonzogni/ftxui-translations.git"
+TRANSLATIONS_REPO_URL = "git@github.com:ArthurSonzogni/ftxui-translations.git"
 MODEL = "gemini-2.5-flash"
 
 # --- FREE TIER LIMITS (Conservative) ---
