@@ -58,6 +58,8 @@ LANG_NAMES = {
     "fr": "French",
     "it": "Italian",
     "zh-CN": "Simplified Chinese",
+    "zh-TW": "Traditional Chinese",
+    "zh-HK": "Hong Kong Chinese",
     "ja": "Japanese",
     "es": "Spanish",
     "pt": "Portuguese",
