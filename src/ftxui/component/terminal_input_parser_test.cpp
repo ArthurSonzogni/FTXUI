@@ -338,7 +338,7 @@ TEST(Event, Control) {
       EXPECT_TRUE(received_events.empty());
     } else {
       EXPECT_EQ(1, received_events.size());
-      EXPECT_EQ(received_events[0], Event::Special({test.input}));
+      EXPECT_EQ(received_events[0], Event::Special(std::string({test.input})));
     }
   }
 }

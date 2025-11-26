@@ -48,7 +48,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     }
 
     const EntryState state{
-        *label, false, active, focused_or_hover, Index(),
+        std::string(*label), false, active, focused_or_hover, Index(),
     };
 
     auto element = (transform ? transform : DefaultTransform)  //

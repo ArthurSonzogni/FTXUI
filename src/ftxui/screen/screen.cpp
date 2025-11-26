@@ -531,7 +531,7 @@ void Screen::ApplyShader() {
 }
 // clang-format on
 
-std::uint8_t Screen::RegisterHyperlink(const std::string& link) {
+std::uint8_t Screen::RegisterHyperlink(std::string_view link) {
   for (std::size_t i = 0; i < hyperlinks_.size(); ++i) {
     if (hyperlinks_[i] == link) {
       return i;
@@ -540,7 +540,7 @@ std::uint8_t Screen::RegisterHyperlink(const std::string& link) {
   if (hyperlinks_.size() == std::numeric_limits<std::uint8_t>::max()) {
     return 0;
   }
-  hyperlinks_.push_back(link);
+  hyperlinks_.push_back(std::string(link));
   return hyperlinks_.size() - 1;
 }
 

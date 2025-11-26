@@ -2,7 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <gtest/gtest.h>
-#include <string>  // for allocator, string
+#include <string>       // for allocator, string
+#include <string_view>  // for string_view
 
 #include "ftxui/dom/elements.hpp"   // for text, operator|, border, Element
 #include "ftxui/dom/node.hpp"       // for Render
@@ -117,6 +118,14 @@ TEST(TextTest, CombiningCharactersWithSpace) {
       "a͎ a͓ a͔ a͕ a͖ a͙ a͚ a͜ a͟ a͢ a᷂ a᷊ a᷿ a⃨ ";
   auto element = text(t);
   Screen screen(290, 1);
+  Render(screen, element);
+  EXPECT_EQ(t, screen.ToString());
+}
+
+TEST(TextTest, WithStringViews) {
+  const std::string_view t = "Hello, world!";
+  auto element = text(t);
+  Screen screen(13, 1);
   Render(screen, element);
   EXPECT_EQ(t, screen.ToString());
 }

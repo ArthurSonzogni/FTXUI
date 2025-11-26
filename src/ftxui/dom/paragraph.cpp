@@ -38,7 +38,7 @@ Element Split(const std::string& paragraph,
 /// @brief Return an element drawing the paragraph on multiple lines.
 /// @ingroup dom
 /// @see flexbox.
-Element paragraph(const std::string& the_text) {
+Element paragraph(std::string_view the_text) {
   return paragraphAlignLeft(the_text);
 }
 
@@ -46,8 +46,8 @@ Element paragraph(const std::string& the_text) {
 /// the left.
 /// @ingroup dom
 /// @see flexbox.
-Element paragraphAlignLeft(const std::string& the_text) {
-  return Split(the_text, [](const std::string& line) {
+Element paragraphAlignLeft(std::string_view the_text) {
+  return Split(std::string(the_text), [](const std::string& line) {
     static const auto config = FlexboxConfig().SetGap(1, 0);
     return flexbox(Split(line), config);
   });
@@ -57,8 +57,8 @@ Element paragraphAlignLeft(const std::string& the_text) {
 /// the right.
 /// @ingroup dom
 /// @see flexbox.
-Element paragraphAlignRight(const std::string& the_text) {
-  return Split(the_text, [](const std::string& line) {
+Element paragraphAlignRight(std::string_view the_text) {
+  return Split(std::string(the_text), [](const std::string& line) {
     static const auto config = FlexboxConfig().SetGap(1, 0).Set(
         FlexboxConfig::JustifyContent::FlexEnd);
     return flexbox(Split(line), config);
@@ -69,8 +69,8 @@ Element paragraphAlignRight(const std::string& the_text) {
 /// the center.
 /// @ingroup dom
 /// @see flexbox.
-Element paragraphAlignCenter(const std::string& the_text) {
-  return Split(the_text, [](const std::string& line) {
+Element paragraphAlignCenter(std::string_view the_text) {
+  return Split(std::string(the_text), [](const std::string& line) {
     static const auto config =
         FlexboxConfig().SetGap(1, 0).Set(FlexboxConfig::JustifyContent::Center);
     return flexbox(Split(line), config);
@@ -82,8 +82,8 @@ Element paragraphAlignCenter(const std::string& the_text) {
 /// the center.
 /// @ingroup dom
 /// @see flexbox.
-Element paragraphAlignJustify(const std::string& the_text) {
-  return Split(the_text, [](const std::string& line) {
+Element paragraphAlignJustify(std::string_view the_text) {
+  return Split(std::string(the_text), [](const std::string& line) {
     static const auto config = FlexboxConfig().SetGap(1, 0).Set(
         FlexboxConfig::JustifyContent::SpaceBetween);
     Elements words = Split(line);

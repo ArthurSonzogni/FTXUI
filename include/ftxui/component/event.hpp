@@ -6,6 +6,7 @@
 
 #include <ftxui/component/mouse.hpp>  // for Mouse
 #include <string>                     // for string, operator==
+#include <string_view>
 
 namespace ftxui {
 
@@ -28,13 +29,13 @@ class ComponentBase;
 /// @ingroup component
 struct Event {
   // --- Constructor section ---------------------------------------------------
-  static Event Character(std::string);
+  static Event Character(std::string_view);
   static Event Character(char);
   static Event Character(wchar_t);
-  static Event Special(std::string);
-  static Event Mouse(std::string, Mouse mouse);
-  static Event CursorPosition(std::string, int x, int y);  // Internal
-  static Event CursorShape(std::string, int shape);        // Internal
+  static Event Special(std::string_view);
+  static Event Mouse(std::string_view, Mouse mouse);
+  static Event CursorPosition(std::string_view, int x, int y);  // Internal
+  static Event CursorShape(std::string_view, int shape);        // Internal
 
   // --- Arrow ---
   static const Event ArrowLeft;

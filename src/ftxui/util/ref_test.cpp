@@ -13,7 +13,7 @@ class Adapter : public ConstStringListRef::Adapter {
  public:
   Adapter(std::vector<std::string>& entries) : entries(entries) {}
   size_t size() const override { return entries.size() * 2; }
-  std::string operator[](size_t index) const override {
+  std::string_view operator[](size_t index) const override {
     return entries[index / 2];
   }
   std::vector<std::string>& entries;

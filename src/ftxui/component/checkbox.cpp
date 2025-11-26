@@ -27,7 +27,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     const bool is_focused = Focused();
     const bool is_active = Active();
     auto entry_state = EntryState{
-        *label, *checked, is_active, is_focused || hovered_, -1,
+        std::string(*label), *checked, is_active, is_focused || hovered_, -1,
     };
     auto element = (transform ? transform : CheckboxOption::Simple().transform)(
         entry_state);
