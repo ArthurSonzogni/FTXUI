@@ -5,6 +5,7 @@
 #include <memory>     // for make_shared
 #include <sstream>
 #include <string>   // for string, wstring
+#include <string_view>  // for string_view
 #include <utility>  // for move
 
 #include "ftxui/dom/deprecated.hpp"   // for text, vtext
@@ -24,6 +25,7 @@ using ftxui::Screen;
 class Text : public Node {
  public:
   explicit Text(std::string text) : text_(std::move(text)) {}
+  explicit Text(std::string_view sv) : Text(std::string(sv)) {}
 
   void ComputeRequirement() override {
     requirement_.min_x = string_width(text_);
@@ -96,6 +98,9 @@ class VText : public Node {
   explicit VText(std::string text)
       : text_(std::move(text)), width_{std::min(string_width(text_), 1)} {}
 
+  explicit VText(std::string_view sv)
+      : VText(std::string(sv)) {}
+
   void ComputeRequirement() override {
     requirement_.min_x = width_;
     requirement_.min_y = string_width(text_);
@@ -142,6 +147,25 @@ Element text(std::string text) {
   return std::make_shared<Text>(std::move(text));
 }
 
+/// @brief Display a piece of UTF8 encoded unicode text.
+/// @ingroup dom
+/// @see ftxui::to_wstring
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = text("Hello world!");
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// Hello world!
+/// ```
+Element text(std::string_view sv) {
+  return text(std::string(sv));
+}
+
 /// @brief Display a piece of unicode text.
 /// @ingroup dom
 /// @see ftxui::to_wstring
@@ -159,6 +183,25 @@ Element text(std::string text) {
 /// ```
 Element text(std::wstring text) {  // NOLINT
   return std::make_shared<Text>(to_string(text));
+}
+
+/// @brief Display a piece of unicode text.
+/// @ingroup dom
+/// @see ftxui::to_wstring
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = text(L"Hello world!");
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// Hello world!
+/// ```
+Element text(std::wstring_view sv) {
+  return text(std::wstring(sv));
 }
 
 /// @brief Display a piece of unicode text vertically.
@@ -191,6 +234,36 @@ Element vtext(std::string text) {
   return std::make_shared<VText>(std::move(text));
 }
 
+/// @brief Display a piece of unicode text vertically.
+/// @ingroup dom
+/// @see ftxui::to_wstring
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = vtext("Hello world!");
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// H
+/// e
+/// l
+/// l
+/// o
+///
+/// w
+/// o
+/// r
+/// l
+/// d
+/// !
+/// ```
+Element vtext(std::string_view text) {
+  return vtext(std::string(text));
+}
+
 /// @brief Display a piece unicode text vertically.
 /// @ingroup dom
 /// @see ftxui::to_wstring
@@ -219,6 +292,36 @@ Element vtext(std::string text) {
 /// ```
 Element vtext(std::wstring text) {  // NOLINT
   return std::make_shared<VText>(to_string(text));
+}
+
+/// @brief Display a piece unicode text vertically.
+/// @ingroup dom
+/// @see ftxui::to_wstring
+///
+/// ### Example
+///
+/// ```cpp
+/// Element document = vtext(L"Hello world!");
+/// ```
+///
+/// ### Output
+///
+/// ```bash
+/// H
+/// e
+/// l
+/// l
+/// o
+///
+/// w
+/// o
+/// r
+/// l
+/// d
+/// !
+/// ```
+Element vtext(std::wstring_view text) {  // NOLINT
+  return vtext(std::wstring(text));
 }
 
 }  // namespace ftxui
