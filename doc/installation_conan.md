@@ -91,7 +91,7 @@ add_executable(demo demo.cpp)
 target_link_libraries(demo PRIVATE ftxui::component)
 ```
 
-@todo 考虑到中国多数地区使用Conan很有可能遇到各种网络问题，我想做一个定制的版本说明，但是我对conan的了解有限再加上没有找到合适的资料，因此这个计划短暂的被搁置了，如果您知道方法，欢迎在[中文版本](xiaoditx.girhub.io/public/docs/ftxui%E4%B8%AD%E6%96%87%E7%BF%BB%E8%AF%91/installation/conan/)的下方留下评论以提醒我
+@todo 中国大陆在这方面的下载可能会受限制，需要一个替代的方案
 
 ---
 
