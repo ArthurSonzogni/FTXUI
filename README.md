@@ -22,6 +22,12 @@
   <a href="https://arthursonzogni.github.io/FTXUI/examples/">Examples</a> .
   <a href="https://github.com/ArthurSonzogni/FTXUI/issues">Request Feature</a> ·
   <a href="https://github.com/ArthurSonzogni/FTXUI/pulls">Send a Pull Request</a>
+  
+  <br/>
+  <a href="https://github.com/ArthurSonzogni/">English</a> |
+  <a href="https://github.com/ArthurSonzogni/ftxui-translations/tree/zh-CH">中文翻译</a> |
+  <a href="https://github.com/ArthurSonzogni/ftxui-translations/tree/zh-CH">繁體中文</a> |
+  <a href="https://github.com/ArthurSonzogni/ftxui-translations/tree/ja">日本語</a>
 
 </p>
 
