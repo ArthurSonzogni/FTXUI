@@ -1,0 +1,9 @@
+# bazel_integration/BUILD.bazel
+cc_binary(
+    name = "smoke",
+    srcs = ["smoke.cpp"],
+    deps = [
+        "@ftxui//:ftxui",
+    ],
+)
+

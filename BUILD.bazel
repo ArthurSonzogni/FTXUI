@@ -21,7 +21,7 @@ load(":bazel/ftxui.bzl", "windows_copts")
 # │┌dom──────┐│
 # ││┌screen─┐││
 # └┴┴───────┴┴┘
-alias(name = "ftxui", actual = ":component")
+alias(name = "ftxui", actual = ":component", visibility = ["//visibility:public"])
 
 # @ftxui:screen is a module that provides a screen buffer and color management
 # for terminal applications. A screen is a 2D array of cells, each cell can
