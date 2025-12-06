@@ -37,6 +37,9 @@ Next
   output. Thanks @zozowell in #1064.
 - Fix vertical `ftxui::Slider`. The "up" key was previously decreasing the
   value. Thanks @its-pablo in #1093 for reporting the issue.
+- Fix Windows UTF-16 key input handling. Emoji and other code points outside the
+  Basic Multilingual Plane (BMP) are now correctly processed. Thanks @739C1AE2
+  in #1160 for fixing the issue.
 
 ### Dom
 - Fix integer overflow in `ComputeShrinkHard`. Thanks @its-pablo in #1137 for
