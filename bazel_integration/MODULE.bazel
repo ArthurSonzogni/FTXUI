@@ -4,4 +4,3 @@ module(
 )
 
 bazel_dep(name = "ftxui", version = "6.1.9")
-
