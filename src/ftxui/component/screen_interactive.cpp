@@ -1098,6 +1098,7 @@ void ScreenInteractive::FetchTerminalEvents() {
   // Convert the input events to FTXUI events.
   // For each event, we call the terminal input parser to convert it to
   // Event.
+  std::wstring wstring;
   for (const auto& r : records) {
     switch (r.EventType) {
       case KEY_EVENT: {
@@ -1106,11 +1107,16 @@ void ScreenInteractive::FetchTerminalEvents() {
         if (key_event.bKeyDown == FALSE) {
           continue;
         }
-        std::wstring wstring;
-        wstring += key_event.uChar.UnicodeChar;
+        const wchar_t wc = key_event.uChar.UnicodeChar;
+        wstring += wc;
+        if (wc >= 0xd800 && wc <= 0xdbff) {
+          // Wait for the Low Surrogate to arrive in the next record.
+          continue;
+        }
         for (auto it : to_string(wstring)) {
           internal_->terminal_input_parser.Add(it);
         }
+        wstring.clear();
       } break;
       case WINDOW_BUFFER_SIZE_EVENT:
         Post(Event::Special({0}));
