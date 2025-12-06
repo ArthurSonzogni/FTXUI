@@ -60,7 +60,7 @@ jobs:
         env:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
-        run: bazel build //... --enable_bzlmod --override_module=ftxui=..
+        run: bazel build //... --enable_bzlmod --override_module=ftxui=../..
         working-directory: bazel/test
 
   test_cmake:

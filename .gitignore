@@ -38,8 +38,9 @@ out/
 # bazel directory:
 !bazel/**/*.bzl
 !.bcr/*
-!bazel/test/*.cpp
 !bazel/test/*.bazel
+!bazel/test/*.bazelrc
+!bazel/test/*.cpp
 !bazel/test/*.md
 
 # doc directory:
