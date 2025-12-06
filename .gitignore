@@ -38,8 +38,9 @@ out/
 # bazel directory:
 !bazel/**/*.bzl
 !.bcr/*
-!bazel_integration/*.cpp
-!bazel_integration/*.bazel
+!bazel/test/*.cpp
+!bazel/test/*.bazel
+!bazel/test/*.md
 
 # doc directory:
 !doc/**/Doxyfile.in

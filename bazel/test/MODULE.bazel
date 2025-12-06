@@ -1,0 +1,9 @@
+# Copyright 2025 Arthur Sonzogni. All rights reserved.
+# Use of this source code is governed by the MIT license that can be found in
+# the LICENSE file.
+module(
+    name = "ftxui_integration_test",
+    version = "0.0.1",
+)
+
+bazel_dep(name = "ftxui", version = "6.1.9")

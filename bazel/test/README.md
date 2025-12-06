@@ -14,17 +14,17 @@ These tests ensure that:
 To build all targets:
 
 ```bash
-bazel build //... --enable_bzlmod --override_module=ftxui=..
+bazel build //... --enable_bzlmod --override_module=ftxui=../..
 ```
 
 To build individual targets:
 
 ```bash
 # Test using individual submodules
-bazel build //:smoke --enable_bzlmod --override_module=ftxui=..
+bazel build //:smoke --enable_bzlmod --override_module=ftxui=../..
 
 # Test using the single ftxui target
-bazel build //:smoke_single_dependency --enable_bzlmod --override_module=ftxui=..
+bazel build //:smoke_single_dependency --enable_bzlmod --override_module=ftxui=../..
 ```
 
 ## Run the Examples
