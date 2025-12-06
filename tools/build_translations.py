@@ -150,8 +150,7 @@ limiter = RateLimiter(LIMIT_RPM, LIMIT_TPM)
 # Prompts
 # ---------------------------------------------------------------------------
 AGENT_NEW_FILE_PROMPT = """\
-You are an autonomous documentation translator. You are translating the FTXUI
-C++ library from English into {lang_name} ("{lang_code}").
+You are an autonomous documentation translator.
 
 GOAL
 - Translate a single, NEW file to {lang_name} ("{lang_code}").
@@ -174,8 +173,7 @@ TOOLS: {allowed_tools}.
 """
 
 AGENT_DIFF_FILE_PROMPT = """\
-You are an autonomous documentation translator. You are translating the FTXUI
-C++ library from English into {lang_name} ("{lang_code}").
+You are an autonomous documentation translator.
 
 GOAL
 - Update existing translation: {tx_root}/{rel_path}
@@ -196,16 +194,6 @@ WORKFLOW
    c. Update the file using `replace`.
 4. ONLY update text where the source changed.
 5. DO NOT translate code.
-
-RULES:
-1. Translate ONLY documentation:
-   * C++ comments (//, /* ... */)
-   * Doxygen comments (///, /** ... */).
-   * Prose in Markdown.
-2. DO NOT translate/modify:
-   * C/C++ code, identifiers, includes, macros.
-   * Doxygen commands/params.
-   * Markdown code fences/URLs.
 
 TOOLS: {allowed_tools}.
 """
@@ -416,14 +404,8 @@ def main() -> None:
     all_files.sort()
 
     for lang_code in args.langs:
-        lang_name = LANG_NAMES.get(lang_code, "")
+        lang_name = LANG_NAMES.get(lang_code, lang_code)
         print_step(f"Processing Language: {lang_name} ({lang_code})")
-
-        if not lang_name:
-            exit_msg = f"Unknown language code: {lang_code}. Please update LANG_NAMES dictionary."
-            print_err(exit_msg)
-            sys.exit(1)
-
         
         checkout_or_create_branch(tx_dir, lang_code)
         
