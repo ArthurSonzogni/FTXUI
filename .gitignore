@@ -24,6 +24,7 @@ out/
 !BUILD.bazel
 !MODULE.bazel
 !.bazelrc
+!.bazelignore
 
 # .github directory:
 !.github/**/*.yaml
@@ -37,6 +38,10 @@ out/
 # bazel directory:
 !bazel/**/*.bzl
 !.bcr/*
+!bazel/test/*.bazel
+!bazel/test/*.bazelrc
+!bazel/test/*.cpp
+!bazel/test/*.md
 
 # doc directory:
 !doc/**/Doxyfile.in

@@ -425,9 +425,13 @@ cc_binary(
     name = "your_target",
     srcs = ["your_source.cc"],
     deps = [
+        # Choose submodules
         "@ftxui//:component",
         "@ftxui//:dom",
         "@ftxui//:screen",
+        
+        # Or use the single ftxui target (includes all modules)
+        # "@ftxui//:ftxui",
     ],
 )
 ```

@@ -56,6 +56,13 @@ jobs:
           CXX: ${{ matrix.cxx }}
         run: bazel test --test_output=all ...
 
+      - name: "Bazel Smoke test"
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+        run: bazel build //... --enable_bzlmod --override_module=ftxui=../..
+        working-directory: bazel/test
+
   test_cmake:
     name: "CMake, ${{ matrix.compiler }}, ${{ matrix.os }}"
     strategy:

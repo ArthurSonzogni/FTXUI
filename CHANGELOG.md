@@ -25,6 +25,7 @@ Next
   ```
   Thanks @mikomikotaishi for PR #1015.
 - Remove dependency on 'pthread'.
+- Bugfix: Bazel target @ftxui is now visible. Thanks @dskkato in #1157.
 
 ### Component
 - Feature: POSIX Piped Input Handling.

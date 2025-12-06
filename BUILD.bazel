@@ -15,13 +15,16 @@ load(":bazel/ftxui.bzl", "generate_examples")
 load(":bazel/ftxui.bzl", "windows_copts")
 
 # A meta target depending on all of the ftxui submodules.
-# Note that component depends on dom and screen, so ftxui is just an alias for 
-# component.
+# Note that component depends on dom and screen, so ftxui re-exports all headers.
 # ┌component──┐
 # │┌dom──────┐│
 # ││┌screen─┐││
 # └┴┴───────┴┴┘
-alias(name = "ftxui", actual = ":component")
+ftxui_cc_library(
+    name = "ftxui",
+    hdrs = glob(["include/ftxui/**/*.hpp"]),
+    deps = [":component"],
+)
 
 # @ftxui:screen is a module that provides a screen buffer and color management
 # for terminal applications. A screen is a 2D array of cells, each cell can
