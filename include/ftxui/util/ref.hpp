@@ -7,6 +7,7 @@
 #include <ftxui/screen/string.hpp>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <variant>
 #include <vector>
 
@@ -125,13 +126,15 @@ class ConstStringListRef {
     Adapter& operator=(Adapter&&) = default;
     virtual ~Adapter() = default;
     virtual size_t size() const = 0;
-    virtual std::string operator[](size_t i) const = 0;
+    virtual std::string_view operator[](size_t i) const = 0;
   };
-  using Variant = std::variant<const std::vector<std::string>,    //
-                               const std::vector<std::string>*,   //
-                               const std::vector<std::wstring>*,  //
-                               Adapter*,                          //
-                               std::unique_ptr<Adapter>           //
+  using Variant = std::variant<const std::vector<std::string>,      //
+                               const std::vector<std::string>*,     //
+                               const std::vector<std::string_view>,   //
+                               const std::vector<std::string_view>*,  //
+                               const std::vector<std::wstring>*,    //
+                               Adapter*,                            //
+                               std::unique_ptr<Adapter>             //
                                >;
 
   ConstStringListRef() = default;
@@ -146,6 +149,14 @@ class ConstStringListRef {
     variant_ = std::make_shared<Variant>(value);
   }
   ConstStringListRef(const std::vector<std::string>* value)  // NOLINT
+  {
+    variant_ = std::make_shared<Variant>(value);
+  }
+  ConstStringListRef(std::vector<std::string_view> value)  // NOLINT
+  {
+    variant_ = std::make_shared<Variant>(value);
+  }
+  ConstStringListRef(const std::vector<std::string_view>* value)  // NOLINT
   {
     variant_ = std::make_shared<Variant>(value);
   }
@@ -169,7 +180,61 @@ class ConstStringListRef {
   }
 
   std::string operator[](size_t i) const {
-    return variant_ ? std::visit(IndexedGetter(i), *variant_) : "";
+    if (!variant_) {
+      return "";
+    }
+    auto& v = *variant_;
+    if (std::holds_alternative<const std::vector<std::string>>(v)) {
+      return std::get<const std::vector<std::string>>(v)[i];
+    }
+    if (std::holds_alternative<const std::vector<std::string>*>(v)) {
+      return (*std::get<const std::vector<std::string>*>(v))[i];
+    }
+    if (std::holds_alternative<const std::vector<std::string_view>>(v)) {
+      return std::string(std::get<const std::vector<std::string_view>>(v)[i]);
+    }
+    if (std::holds_alternative<const std::vector<std::string_view>*>(v)) {
+      return std::string((*std::get<const std::vector<std::string_view>*>(v))[i]);
+    }
+    if (std::holds_alternative<const std::vector<std::wstring>*>(v)) {
+      return to_string((*std::get<const std::vector<std::wstring>*>(v))[i]);
+    }
+    if (std::holds_alternative<Adapter*>(v)) {
+      return std::string((*std::get<Adapter*>(v))[i]);
+    }
+    if (std::holds_alternative<std::unique_ptr<Adapter>>(v)) {
+      return std::string((*std::get<std::unique_ptr<Adapter>>(v))[i]);
+    }
+    return "";
+  }
+
+  std::string_view at(size_t i) const {
+    if (!variant_) {
+      return "";
+    }
+    auto& v = *variant_;
+    if (std::holds_alternative<const std::vector<std::string>>(v)) {
+      return std::get<const std::vector<std::string>>(v)[i];
+    }
+    if (std::holds_alternative<const std::vector<std::string>*>(v)) {
+      return (*std::get<const std::vector<std::string>*>(v))[i];
+    }
+    if (std::holds_alternative<const std::vector<std::string_view>>(v)) {
+      return std::get<const std::vector<std::string_view>>(v)[i];
+    }
+    if (std::holds_alternative<const std::vector<std::string_view>*>(v)) {
+      return (*std::get<const std::vector<std::string_view>*>(v))[i];
+    }
+    if (std::holds_alternative<const std::vector<std::wstring>*>(v)) {
+      return {};
+    }
+    if (std::holds_alternative<Adapter*>(v)) {
+      return (*std::get<Adapter*>(v))[i];
+    }
+    if (std::holds_alternative<std::unique_ptr<Adapter>>(v)) {
+      return (*std::get<std::unique_ptr<Adapter>>(v))[i];
+    }
+    return {};
   }
 
  private:
@@ -180,31 +245,18 @@ class ConstStringListRef {
     size_t operator()(const std::vector<std::string>* v) const {
       return v->size();
     }
+    size_t operator()(const std::vector<std::string_view>& v) const {
+      return v.size();
+    }
+    size_t operator()(const std::vector<std::string_view>* v) const {
+      return v->size();
+    }
     size_t operator()(const std::vector<std::wstring>* v) const {
       return v->size();
     }
     size_t operator()(const Adapter* v) const { return v->size(); }
     size_t operator()(const std::unique_ptr<Adapter>& v) const {
       return v->size();
-    }
-  };
-
-  struct IndexedGetter {
-    IndexedGetter(size_t index)  // NOLINT
-        : index_(index) {}
-    size_t index_;
-    std::string operator()(const std::vector<std::string>& v) const {
-      return v[index_];
-    }
-    std::string operator()(const std::vector<std::string>* v) const {
-      return (*v)[index_];
-    }
-    std::string operator()(const std::vector<std::wstring>* v) const {
-      return to_string((*v)[index_]);
-    }
-    std::string operator()(const Adapter* v) const { return (*v)[index_]; }
-    std::string operator()(const std::unique_ptr<Adapter>& v) const {
-      return (*v)[index_];
     }
   };
 

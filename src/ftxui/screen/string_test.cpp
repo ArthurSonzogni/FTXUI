@@ -154,14 +154,14 @@ TEST(StringTest, to_string) {
 }
 
 TEST(StringTest, to_wstring) {
-  EXPECT_EQ(to_wstring(std::string("hello")), L"hello");
-  EXPECT_EQ(to_wstring(std::string("€")), L"€");
-  EXPECT_EQ(to_wstring(std::string("ÿ")), L"ÿ");
-  EXPECT_EQ(to_wstring(std::string("߿")), L"߿");
-  EXPECT_EQ(to_wstring(std::string("ɰɱ")), L"ɰɱ");
-  EXPECT_EQ(to_wstring(std::string("«»")), L"«»");
-  EXPECT_EQ(to_wstring(std::string("嵰嵲嵫")), L"嵰嵲嵫");
-  EXPECT_EQ(to_wstring(std::string("🎅🎄")), L"🎅🎄");
+  EXPECT_EQ(to_wstring("hello"), L"hello");
+  EXPECT_EQ(to_wstring("€"), L"€");
+  EXPECT_EQ(to_wstring("ÿ"), L"ÿ");
+  EXPECT_EQ(to_wstring("߿"), L"߿");
+  EXPECT_EQ(to_wstring("ɰɱ"), L"ɰɱ");
+  EXPECT_EQ(to_wstring("«»"), L"«»");
+  EXPECT_EQ(to_wstring("嵰嵲嵫"), L"嵰嵲嵫");
+  EXPECT_EQ(to_wstring("🎅🎄"), L"🎅🎄");
 }
 
 }  // namespace ftxui

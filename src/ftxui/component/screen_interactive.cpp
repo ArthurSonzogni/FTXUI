@@ -1054,7 +1054,7 @@ void ScreenInteractive::Signal(int signal) {
   }
 
   if (signal == SIGWINCH) {
-    Post(Event::Special({0}));
+    Post(Event::Special(std::string({0})));
     return;
   }
 #endif

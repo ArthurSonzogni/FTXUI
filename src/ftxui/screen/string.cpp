@@ -1171,7 +1171,7 @@ namespace ftxui {
 // one codepoint. Put the codepoint into |ucs|. Start at |start| and update
 // |end| to represent the beginning of the next byte to eat for consecutive
 // executions.
-bool EatCodePoint(const std::string& input,
+bool EatCodePoint(std::string_view input,
                   size_t start,
                   size_t* end,
                   uint32_t* ucs) {
@@ -1241,7 +1241,7 @@ bool EatCodePoint(const std::string& input,
 // one codepoint. Put the codepoint into |ucs|. Start at |start| and update
 // |end| to represent the beginning of the next byte to eat for consecutive
 // executions.
-bool EatCodePoint(const std::wstring& input,
+bool EatCodePoint(std::wstring_view input,
                   size_t start,
                   size_t* end,
                   uint32_t* ucs) {
@@ -1328,7 +1328,7 @@ int wstring_width(const std::wstring& text) {
   return width;
 }
 
-int string_width(const std::string& input) {
+int string_width(std::string_view input) {
   int width = 0;
   size_t start = 0;
   while (start < input.size()) {
@@ -1355,7 +1355,7 @@ int string_width(const std::string& input) {
   return width;
 }
 
-std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
+std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
   std::vector<std::string> out;
   out.reserve(input.size());
   size_t start = 0;
@@ -1367,7 +1367,7 @@ std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
       continue;
     }
 
-    const std::string append = input.substr(start, end - start);
+    const auto append = input.substr(start, end - start);
     start = end;
 
     // Ignore control characters.
@@ -1386,18 +1386,18 @@ std::vector<std::string> Utf8ToGlyphs(const std::string& input) {
     // Fullwidth characters take two cells. The second is made of the empty
     // string to reserve the space the first is taking.
     if (IsFullWidth(codepoint)) {
-      out.push_back(append);
+      out.push_back(std::string(append));
       out.emplace_back("");
       continue;
     }
 
     // Normal characters:
-    out.push_back(append);
+    out.push_back(std::string(append));
   }
   return out;
 }
 
-size_t GlyphPrevious(const std::string& input, size_t start) {
+size_t GlyphPrevious(std::string_view input, size_t start) {
   while (true) {
     if (start == 0) {
       return 0;
@@ -1422,7 +1422,7 @@ size_t GlyphPrevious(const std::string& input, size_t start) {
   }
 }
 
-size_t GlyphNext(const std::string& input, size_t start) {
+size_t GlyphNext(std::string_view input, size_t start) {
   bool glyph_found = false;
   while (start < input.size()) {
     size_t end = 0;
@@ -1448,7 +1448,7 @@ size_t GlyphNext(const std::string& input, size_t start) {
   return static_cast<int>(input.size());
 }
 
-size_t GlyphIterate(const std::string& input, int glyph_offset, size_t start) {
+size_t GlyphIterate(std::string_view input, int glyph_offset, size_t start) {
   if (glyph_offset >= 0) {
     for (int i = 0; i < glyph_offset; ++i) {
       start = GlyphNext(input, start);
@@ -1462,7 +1462,7 @@ size_t GlyphIterate(const std::string& input, int glyph_offset, size_t start) {
   }
 }
 
-std::vector<int> CellToGlyphIndex(const std::string& input) {
+std::vector<int> CellToGlyphIndex(std::string_view input) {
   int x = -1;
   std::vector<int> out;
   out.reserve(input.size());
@@ -1503,7 +1503,7 @@ std::vector<int> CellToGlyphIndex(const std::string& input) {
   return out;
 }
 
-int GlyphCount(const std::string& input) {
+int GlyphCount(std::string_view input) {
   int size = 0;
   size_t start = 0;
   size_t end = 0;
@@ -1532,7 +1532,7 @@ int GlyphCount(const std::string& input) {
 }
 
 std::vector<WordBreakProperty> Utf8ToWordBreakProperty(
-    const std::string& input) {
+    std::string_view input) {
   std::vector<WordBreakProperty> out;
   out.reserve(input.size());
   size_t start = 0;
@@ -1563,7 +1563,7 @@ std::vector<WordBreakProperty> Utf8ToWordBreakProperty(
 }
 
 /// Convert a std::wstring into a UTF8 std::string.
-std::string to_string(const std::wstring& s) {
+std::string to_string(std::wstring_view s) {
   std::string out;
 
   size_t i = 0;
@@ -1635,7 +1635,7 @@ std::string to_string(const std::wstring& s) {
 }
 
 /// Convert a UTF8 std::string into a std::wstring.
-std::wstring to_wstring(const std::string& s) {
+std::wstring to_wstring(std::string_view s) {
   std::wstring out;
 
   size_t i = 0;

@@ -16,6 +16,7 @@
 #include "ftxui/screen/color.hpp"
 #include "ftxui/screen/terminal.hpp"
 #include "ftxui/util/ref.hpp"
+#include <string_view>
 
 namespace ftxui {
 class Node;
@@ -51,8 +52,8 @@ Elements operator|(Elements, Decorator);
 Decorator operator|(Decorator, Decorator);
 
 // --- Widget ---
-Element text(std::string text);
-Element vtext(std::string text);
+Element text(std::string_view text);
+Element vtext(std::string_view text);
 Element separator();
 Element separatorLight();
 Element separatorDashed();
@@ -61,7 +62,7 @@ Element separatorDouble();
 Element separatorEmpty();
 Element separatorStyled(BorderStyle);
 Element separator(Pixel);
-Element separatorCharacter(std::string);
+Element separatorCharacter(std::string_view);
 Element separatorHSelector(float left,
                            float right,
                            Color unselected_color,
@@ -89,11 +90,11 @@ Decorator borderStyled(Color);
 Decorator borderWith(const Pixel&);
 Element window(Element title, Element content, BorderStyle border = ROUNDED);
 Element spinner(int charset_index, size_t image_index);
-Element paragraph(const std::string& text);
-Element paragraphAlignLeft(const std::string& text);
-Element paragraphAlignRight(const std::string& text);
-Element paragraphAlignCenter(const std::string& text);
-Element paragraphAlignJustify(const std::string& text);
+Element paragraph(std::string_view text);
+Element paragraphAlignLeft(std::string_view text);
+Element paragraphAlignRight(std::string_view text);
+Element paragraphAlignCenter(std::string_view text);
+Element paragraphAlignJustify(std::string_view text);
 Element graph(GraphFunction);
 Element emptyElement();
 Element canvas(ConstRef<Canvas>);
@@ -120,8 +121,8 @@ Element bgcolor(const LinearGradient&, Element);
 Decorator focusPosition(int x, int y);
 Decorator focusPositionRelative(float x, float y);
 Element automerge(Element child);
-Decorator hyperlink(std::string link);
-Element hyperlink(std::string link, Element child);
+Decorator hyperlink(std::string_view link);
+Element hyperlink(std::string_view link, Element child);
 Element selectionStyleReset(Element);
 Decorator selectionColor(Color foreground);
 Decorator selectionBackgroundColor(Color foreground);

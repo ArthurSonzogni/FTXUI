@@ -143,7 +143,7 @@ Selection Selection::SaturateVertical(Box box) {
   return {start_x, start_y, end_x, end_y, parent_};
 }
 
-void Selection::AddPart(const std::string& part, int y, int left, int right) {
+void Selection::AddPart(std::string_view part, int y, int left, int right) {
   if (parent_ != this) {
     parent_->AddPart(part, y, left, right);
     return;

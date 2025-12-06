@@ -623,7 +623,7 @@ Component MenuEntry(MenuEntryOption option) {
       UpdateAnimationTarget();
 
       const EntryState state{
-          label(), false, hovered_, is_focused, Index(),
+          std::string(label()), false, hovered_, is_focused, Index(),
       };
 
       Element element = (transform ? transform : DefaultOptionTransform)  //

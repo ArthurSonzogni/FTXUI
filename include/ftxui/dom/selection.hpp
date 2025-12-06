@@ -30,7 +30,7 @@ class Selection {
   Selection SaturateVertical(Box box);
   bool IsEmpty() const { return empty_; }
 
-  void AddPart(const std::string& part, int y, int left, int right);
+  void AddPart(std::string_view part, int y, int left, int right);
   std::string GetParts() { return parts_.str(); }
 
  private:

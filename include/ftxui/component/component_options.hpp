@@ -242,7 +242,7 @@ struct SliderOption {
 /// @ingroup component
 struct WindowRenderState {
   Element inner;             ///< The element wrapped inside this window.
-  const std::string& title;  ///< The title of the window.
+  std::string title;  ///< The title of the window.
   bool active = false;       ///< Whether the window is the active one.
   bool drag = false;         ///< Whether the window is being dragged.
   bool resize = false;       ///< Whether the window is being resized.

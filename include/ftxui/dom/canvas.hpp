@@ -106,9 +106,9 @@ struct Canvas {
   // Draw using character of size 2x4 at position (x,y)
   // x is considered to be a multiple of 2.
   // y is considered to be a multiple of 4.
-  void DrawText(int x, int y, const std::string& value);
-  void DrawText(int x, int y, const std::string& value, const Color& color);
-  void DrawText(int x, int y, const std::string& value, const Stylizer& style);
+  void DrawText(int x, int y, std::string_view value);
+  void DrawText(int x, int y, std::string_view value, const Color& color);
+  void DrawText(int x, int y, std::string_view value, const Stylizer& style);
 
   // Draw using directly pixels or images --------------------------------------
   // x is considered to be a multiple of 2.

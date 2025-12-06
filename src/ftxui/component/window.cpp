@@ -132,7 +132,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
 
     const WindowRenderState state = {
         element,
-        title(),
+        std::string(title()),
         Active(),
         drag_,
         resize_left_ || resize_right_ || resize_down_ || resize_top_,
