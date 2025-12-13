@@ -392,8 +392,8 @@ Element separatorEmpty() {
 /// ────
 /// down
 /// ```
-Element separatorCharacter(std::string value) {
-  return std::make_shared<Separator>(std::move(value));
+Element separatorCharacter(std::string_view value) {
+  return std::make_shared<Separator>(std::string(value));
 }
 
 /// @brief Draw a separator in between two element filled with a given pixel.

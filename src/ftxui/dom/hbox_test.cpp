@@ -2,8 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <gtest/gtest.h>  // for Test, TestInfo (ptr only), EXPECT_EQ, Message, TEST, TestPartResult
-#include <array>          // for array
-#include <cstddef>        // for size_t
+#include <array>    // for array
+#include <cstddef>  // for size_t
 #include <queue>
 #include <stack>          // for stack
 #include <string>         // for allocator, basic_string, string

@@ -27,6 +27,11 @@ Next
 - Remove dependency on 'pthread'.
 - Bugfix: Bazel target @ftxui is now visible. Thanks @dskkato in #1157.
 
+### General
+- Breaking. Move to `std::string_view` instead of `const std::string&` where
+  applicable. This yields better interoperability with string literals and
+  avoids unnecessary copies. Thanks @mikomikotaishi for PR #1154
+
 ### Component
 - Feature: POSIX Piped Input Handling.
   - Allows FTXUI applications to read data from stdin (when piped) while still receiving keyboard input from the terminal.
