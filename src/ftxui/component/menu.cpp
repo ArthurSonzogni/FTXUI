@@ -123,7 +123,7 @@ class MenuBase : public ComponentBase, public MenuOption {
       const bool is_selected = (selected() == i);
 
       const EntryState state = {
-          entries[i], false, is_selected, is_focused, i,
+        std::string(entries[i]), false, is_selected, is_focused, i,
       };
 
       Element element = (entries_option.transform ? entries_option.transform
