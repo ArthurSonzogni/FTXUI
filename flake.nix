@@ -12,15 +12,9 @@
     let llvm = pkgs.llvmPackages_latest; in
     {
       packages = rec {
-        default = pkgs.stdenv.mkDerivation rec {
-          pname = "ftxui";
-          version = "v4.0.0";
-          src = pkgs.fetchFromGitHub {
-            owner = "ArthurSonzogni";
-            repo = "FTXUI";
-            rev = version;
-            sha256 = "sha256-3kAhHDUwzwdvHc8JZAcA14tGqa6w69qrN1JXhSxNBQY=";
-          };
+        default = pkgs.stdenv.mkDerivation {
+          name = "ftxui";
+          src = ./.;
 
           nativeBuildInputs = [
             pkgs.cmake
