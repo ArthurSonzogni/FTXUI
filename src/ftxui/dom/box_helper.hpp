@@ -19,7 +19,7 @@ struct Element {
   int size = 0;
 };
 
-void Compute(std::vector<Element>* elements, int target_size);
+void Compute(std::vector<Element>* elements, int target_size, bool hack=false);
 }  // namespace ftxui::box_helper
 
 #endif /* end of include guard: FTXUI_DOM_BOX_HELPER_HPP */
