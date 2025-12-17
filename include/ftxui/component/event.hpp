@@ -33,6 +33,7 @@ struct Event {
   static Event Character(char);
   static Event Character(wchar_t);
   static Event Special(std::string_view);
+  static Event Special(std::initializer_list<char>);
   static Event Mouse(std::string_view, Mouse mouse);
   static Event CursorPosition(std::string_view, int x, int y);  // Internal
   static Event CursorShape(std::string_view, int shape);        // Internal

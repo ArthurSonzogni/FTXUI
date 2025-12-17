@@ -77,6 +77,13 @@ Event Event::Special(std::string_view input) {
   return event;
 }
 
+/// @brief An custom event whose meaning is defined by the user of the library.
+/// @param input An arbitrary sequence of character defined by the developer.
+// static
+Event Event::Special(std::initializer_list<char> input) {
+  return Event::Special(std::string(input));
+}
+
 /// @internal
 // static
 Event Event::CursorPosition(std::string_view input, int x, int y) {
@@ -292,12 +299,12 @@ const Event Event::ArrowLeftCtrl  = Event::Special("\x1B[1;5D");
 const Event Event::ArrowRightCtrl = Event::Special("\x1B[1;5C");
 const Event Event::ArrowUpCtrl    = Event::Special("\x1B[1;5A");
 const Event Event::ArrowDownCtrl  = Event::Special("\x1B[1;5B");
-const Event Event::Backspace      = Event::Special(std::string({127}));
+const Event Event::Backspace      = Event::Special({127});
 const Event Event::Delete         = Event::Special("\x1B[3~");
 const Event Event::Escape         = Event::Special("\x1B");
-const Event Event::Return         = Event::Special(std::string({10}));
-const Event Event::Tab            = Event::Special(std::string({9}));
-const Event Event::TabReverse     = Event::Special(std::string({27, 91, 90}));
+const Event Event::Return         = Event::Special({10});
+const Event Event::Tab            = Event::Special({9});
+const Event Event::TabReverse     = Event::Special({27, 91, 90});
 
 // See https://invisible-island.net/xterm/xterm-function-keys.html
 // We follow xterm-new / vterm-xf86-v4 / mgt / screen
@@ -315,11 +322,11 @@ const Event Event::F11 = Event::Special("\x1B[23~");
 const Event Event::F12 = Event::Special("\x1B[24~");
 
 const Event Event::Insert   = Event::Special("\x1B[2~");
-const Event Event::Home     = Event::Special(std::string({27, 91, 72}));
-const Event Event::End      = Event::Special(std::string({27, 91, 70}));
-const Event Event::PageUp   = Event::Special(std::string({27, 91, 53, 126}));
-const Event Event::PageDown = Event::Special(std::string({27, 91, 54, 126}));
-const Event Event::Custom   = Event::Special(std::string({0}));
+const Event Event::Home     = Event::Special({27, 91, 72});
+const Event Event::End      = Event::Special({27, 91, 70});
+const Event Event::PageUp   = Event::Special({27, 91, 53, 126});
+const Event Event::PageDown = Event::Special({27, 91, 54, 126});
+const Event Event::Custom   = Event::Special({0});
 
 const Event Event::a = Event::Character("a");
 const Event Event::b = Event::Character("b");

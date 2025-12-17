@@ -52,11 +52,6 @@
 #include <cerrno>
 #endif
 
-// Quick exit is missing in standard CLang headers
-#if defined(__clang__) && defined(__APPLE__)
-#define quick_exit(a) exit(a)
-#endif
-
 namespace ftxui {
 
 struct ScreenInteractive::Internal {
@@ -1054,7 +1049,7 @@ void ScreenInteractive::Signal(int signal) {
   }
 
   if (signal == SIGWINCH) {
-    Post(Event::Special(std::string({0})));
+    Post(Event::Special({0}));
     return;
   }
 #endif
