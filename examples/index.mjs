@@ -9,6 +9,16 @@ if ("serviceWorker" in navigator && !window.crossOriginIsolated) {
   window.location.reload(); // Reload to ensure the COOP/COEP headers are set.
 }
 
+const webgl_support = () => {
+  try {
+    var canvas = document.createElement('canvas'); 
+    return !!window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+  } catch(e) {
+    return false;
+  }
+};
+
 const example_list = "@EXAMPLES@".split(";");
 const url_search_params = new URLSearchParams(window.location.search);
 
@@ -31,9 +41,12 @@ const term = new xterm.Terminal();
 term.options.scrollback = 0;
 term.open(term_element);
 const fit_addon = new xterm_addon_fit.FitAddon();
-const webgl_addon = new xterm_addon_webgl.WebglAddon();
-term.loadAddon(webgl_addon);
 term.loadAddon(fit_addon);
+
+if (webgl_support()) {
+  const webgl_addon = new xterm_addon_webgl.WebglAddon();
+  term.loadAddon(webgl_addon);
+}
 
 const stdin_buffer = [];
 const stdout_buffer = [];
