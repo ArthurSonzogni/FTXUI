@@ -14,5 +14,4 @@ export module ftxui.dom:Deprecated;
 export namespace ftxui {
     using ftxui::text;
     using ftxui::vtext;
-    using ftxui::paragraph;
 }

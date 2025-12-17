@@ -161,27 +161,8 @@ Element text(std::string_view text) {
 /// ```bash
 /// Hello world!
 /// ```
-Element text(std::wstring text) {  // NOLINT
-  return std::make_shared<Text>(to_string(text));
-}
-
-/// @brief Display a piece of unicode text.
-/// @ingroup dom
-/// @see ftxui::to_wstring
-///
-/// ### Example
-///
-/// ```cpp
-/// Element document = text(L"Hello world!");
-/// ```
-///
-/// ### Output
-///
-/// ```bash
-/// Hello world!
-/// ```
 Element text(std::wstring_view sv) {
-  return text(std::wstring(sv));
+  return text(to_string(sv));
 }
 
 /// @brief Display a piece of unicode text vertically.
@@ -240,38 +221,8 @@ Element vtext(std::string_view text) {
 /// d
 /// !
 /// ```
-Element vtext(std::wstring text) {  // NOLINT
-  return std::make_shared<VText>(to_string(text));
-}
-
-/// @brief Display a piece unicode text vertically.
-/// @ingroup dom
-/// @see ftxui::to_wstring
-///
-/// ### Example
-///
-/// ```cpp
-/// Element document = vtext(L"Hello world!");
-/// ```
-///
-/// ### Output
-///
-/// ```bash
-/// H
-/// e
-/// l
-/// l
-/// o
-///
-/// w
-/// o
-/// r
-/// l
-/// d
-/// !
-/// ```
 Element vtext(std::wstring_view text) {  // NOLINT
-  return vtext(std::wstring(text));
+  return vtext(to_string(text));
 }
 
 }  // namespace ftxui
