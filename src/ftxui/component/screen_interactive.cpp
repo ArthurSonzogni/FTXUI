@@ -540,8 +540,6 @@ void ScreenInteractive::Install() {
   // ensure it is fully applied:
   on_exit_functions.emplace([] { Flush(); });
 
-  on_exit_functions.emplace([this] { ExitLoopClosure()(); });
-
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
   std::cout << DECRQSS_DECSCUSR;
