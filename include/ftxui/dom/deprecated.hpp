@@ -10,7 +10,6 @@
 namespace ftxui {
 Element text(std::wstring_view text);
 Element vtext(std::wstring_view text);
-Elements paragraph(std::wstring text);
 }  // namespace ftxui
 
 #endif  // FTXUI_DOM_DEPRECATED_HPP
