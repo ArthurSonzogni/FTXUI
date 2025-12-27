@@ -782,7 +782,7 @@ void Canvas::DrawBlockEllipseFilled(int x1,
 /// @param x the x coordinate of the text.
 /// @param y the y coordinate of the text.
 /// @param value the text to draw.
-void Canvas::DrawText(int x, int y, const std::string& value) {
+void Canvas::DrawText(int x, int y, std::string_view value) {
   DrawText(x, y, value, nostyle);
 }
 
@@ -793,7 +793,7 @@ void Canvas::DrawText(int x, int y, const std::string& value) {
 /// @param color the color of the text.
 void Canvas::DrawText(int x,
                       int y,
-                      const std::string& value,
+                      std::string_view value,
                       const Color& color) {
   DrawText(x, y, value, [color](Pixel& p) { p.foreground_color = color; });
 }
@@ -805,7 +805,7 @@ void Canvas::DrawText(int x,
 /// @param style the style of the text.
 void Canvas::DrawText(int x,
                       int y,
-                      const std::string& value,
+                      std::string_view value,
                       const Stylizer& style) {
   for (const auto& it : Utf8ToGlyphs(value)) {
     if (!IsIn(x, y)) {

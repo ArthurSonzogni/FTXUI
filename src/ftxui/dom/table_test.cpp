@@ -25,12 +25,12 @@ TEST(TableTest, Empty) {
 }
 
 TEST(TableTest, Basic) {
-  auto table = Table({
+  auto table = Table(std::initializer_list<std::vector<std::string>>({
       {"a", "b", "c", "d"},
       {"e", "f", "g", "h"},
       {"i", "j", "k", "l"},
       {"m", "n", "o", "p"},
-  });
+  }));
   Screen screen(10, 10);
   Render(screen, table.Render());
   EXPECT_EQ(

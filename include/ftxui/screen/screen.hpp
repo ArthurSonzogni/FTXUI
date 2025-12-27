@@ -68,7 +68,7 @@ class Screen : public Image {
 
   // Store an hyperlink in the screen. Return the id of the hyperlink. The id is
   // used to identify the hyperlink when the user click on it.
-  uint8_t RegisterHyperlink(const std::string& link);
+  uint8_t RegisterHyperlink(std::string_view link);
   const std::string& Hyperlink(uint8_t id) const;
 
   using SelectionStyle = std::function<void(Pixel&)>;

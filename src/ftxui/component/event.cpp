@@ -25,9 +25,9 @@ namespace ftxui {
 /// @brief An event corresponding to a given typed character.
 /// @param input The character typed by the user.
 // static
-Event Event::Character(std::string input) {
+Event Event::Character(std::string_view input) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   event.type_ = Type::Character;
   return event;
 }
@@ -50,9 +50,9 @@ Event Event::Character(wchar_t c) {
 /// @param input The sequence of character send by the terminal.
 /// @param mouse The mouse state.
 // static
-Event Event::Mouse(std::string input, struct Mouse mouse) {
+Event Event::Mouse(std::string_view input, struct Mouse mouse) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   event.type_ = Type::Mouse;
   event.data_.mouse = mouse;  // NOLINT
   return event;
@@ -60,9 +60,9 @@ Event Event::Mouse(std::string input, struct Mouse mouse) {
 
 /// @brief An event corresponding to a terminal DCS (Device Control String).
 // static
-Event Event::CursorShape(std::string input, int shape) {
+Event Event::CursorShape(std::string_view input, int shape) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   event.type_ = Type::CursorShape;
   event.data_.cursor_shape = shape;  // NOLINT
   return event;
@@ -71,17 +71,24 @@ Event Event::CursorShape(std::string input, int shape) {
 /// @brief An custom event whose meaning is defined by the user of the library.
 /// @param input An arbitrary sequence of character defined by the developer.
 // static
-Event Event::Special(std::string input) {
+Event Event::Special(std::string_view input) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   return event;
+}
+
+/// @brief An custom event whose meaning is defined by the user of the library.
+/// @param input An arbitrary sequence of character defined by the developer.
+// static
+Event Event::Special(std::initializer_list<char> input) {
+  return Event::Special(std::string(input));
 }
 
 /// @internal
 // static
-Event Event::CursorPosition(std::string input, int x, int y) {
+Event Event::CursorPosition(std::string_view input, int x, int y) {
   Event event;
-  event.input_ = std::move(input);
+  event.input_ = std::string(input);
   event.type_ = Type::CursorPosition;
   event.data_.cursor = {x, y};  // NOLINT
   return event;

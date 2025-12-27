@@ -123,7 +123,7 @@ class MenuBase : public ComponentBase, public MenuOption {
       const bool is_selected = (selected() == i);
 
       const EntryState state = {
-          entries[i], false, is_selected, is_focused, i,
+        std::string(entries[i]), false, is_selected, is_focused, i,
       };
 
       Element element = (entries_option.transform ? entries_option.transform
@@ -144,9 +144,8 @@ class MenuBase : public ComponentBase, public MenuOption {
       std::reverse(elements.begin(), elements.end());
     }
 
-    const Element bar = IsHorizontal()
-                            ? hbox(std::move(elements))
-                            : vbox(std::move(elements));
+    const Element bar =
+        IsHorizontal() ? hbox(std::move(elements)) : vbox(std::move(elements));
 
     if (!underline.enabled) {
       return bar | reflect(box_);
@@ -623,7 +622,7 @@ Component MenuEntry(MenuEntryOption option) {
       UpdateAnimationTarget();
 
       const EntryState state{
-          label(), false, hovered_, is_focused, Index(),
+          std::string(label()), false, hovered_, is_focused, Index(),
       };
 
       Element element = (transform ? transform : DefaultOptionTransform)  //

@@ -1,4 +1,5 @@
 common --enable_bzlmod
+common --enable_workspace
 
 build --features=layering_check
 build --enable_bzlmod
@@ -6,4 +7,4 @@ build --enable_bzlmod
 build --enable_platform_specific_config
 build:linux --cxxopt=-std=c++20
 build:macos --cxxopt=-std=c++20
-build:windows --cxxopt=-std:c++20
+build:windows --cxxopt=/std:c++20

@@ -327,54 +327,55 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 Feel free to add your projects here:
 - [json-tui](https://github.com/ArthurSonzogni/json-tui)
 - [git-tui](https://github.com/ArthurSonzogni/git-tui)
-- [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
 - [rgb-tui](https://github.com/ArthurSonzogni/rgb-tui)
 - [chrome-log-beautifier](https://github.com/ArthurSonzogni/chrome-log-beautifier)
-- [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
-- [ltuiny](https://github.com/adrianoviana87/ltuiny)
-- [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
-- [simpPRU](https://github.com/VedantParanjape/simpPRU)
-- [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
-- [hastur](https://github.com/robinlinden/hastur)
-- [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
-- [todoman](https://github.com/aaleino/todoman)
-- [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
-- [vantage](https://github.com/gokulmaxi/vantage)
-- [tabdeeli](https://github.com/typon/tabdeeli)
-- [tiles](https://github.com/tusharpm/tiles)
-- [cachyos-cli-installer](https://github.com/cachyos/new-cli-installer)
-- [beagle-config](https://github.com/SAtacker/beagle-config)
-- [turing_cmd](https://github.com/DanArmor/turing_cmd)
-- [StartUp](https://github.com/StubbornVegeta/StartUp)
-- [eCAL monitor](https://github.com/eclipse-ecal/ecal)
-- [Path Finder](https://github.com/Ruebled/Path_Finder)
-- [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
-- [resource-monitor](https://github.com/catalincd/resource-monitor)
-- [ftxuiFileReader](https://github.com/J0sephDavis/ftxuiFileReader)
-- [ftxui_CPUMeter](https://github.com/tzzzzzzzx/ftxui_CPUMeter)
-- [Captain's log](https://github.com/nikoladucak/caps-log)
-- [FTowerX](https://github.com/MhmRhm/FTowerX)
-- [Caravan](https://github.com/r3w0p/caravan)
-- [Step-Writer](https://github.com/BrianAnakPintar/step-writer)
-- [XJ music](https://github.com/xjmusic/xjmusic)
-- [UDP chat](https://github.com/Sergeydigl3/udp-chat-tui)
+---
 - [2048-cpp](https://github.com/Chessom/2048-cpp)
-- [Memory game](https://github.com/mikolajlubiak/memory)
-- [Terminal Animation](https://github.com/mikolajlubiak/terminal_animation)
-- [pciex](https://github.com/s0nx/pciex)
+- [BestEdrOfTheMarket](https://github.com/Xacone/BestEdrOfTheMarket)
+- [Captain's log](https://github.com/nikoladucak/caps-log)
+- [Caravan](https://github.com/r3w0p/caravan)
+- [CryptoCalculator](https://github.com/brevis/CryptoCalculator)
+- [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
+- [FTowerX](https://github.com/MhmRhm/FTowerX)
 - [Fallout terminal hacking](https://github.com/gshigin/yet-another-fallout-terminal-hacking-game)
 - [Lazylist](https://github.com/zhuyongqi9/lazylist)
-- [TUISIC](https://github.com/Dark-Kernel/tuisic)
-- [inLimbo](https://github.com/nots1dd/inLimbo)
-- [BestEdrOfTheMarket](https://github.com/Xacone/BestEdrOfTheMarket)
-- [terminal-rain](https://github.com/Oakamoore/terminal-rain)
-- [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
-- [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
-- [openJuice](https://github.com/mikomikotaishi/openJuice)
+- [Memory game](https://github.com/mikolajlubiak/memory)
+- [Path Finder](https://github.com/Ruebled/Path_Finder)
+- [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
 - [SHOOT!](https://github.com/ShingZhanho/ENGG1340-Project-25Spring)
+- [StartUp](https://github.com/StubbornVegeta/StartUp)
+- [Step-Writer](https://github.com/BrianAnakPintar/step-writer)
+- [TUISIC](https://github.com/Dark-Kernel/tuisic)
+- [Terminal Animation](https://github.com/mikolajlubiak/terminal_animation)
+- [TimeAccumulator](https://github.com/asari555/TimeAccumulator)
+- [UDP chat](https://github.com/Sergeydigl3/udp-chat-tui)
 - [VerifySN (Fast Hash Tool)](https://github.com/d06i/verifySN)
+- [XJ music](https://github.com/xjmusic/xjmusic)
+- [beagle-config](https://github.com/SAtacker/beagle-config)
+- [cachyos-cli-installer](https://github.com/cachyos/new-cli-installer)
+- [eCAL monitor](https://github.com/eclipse-ecal/ecal)
+- [ftxuiFileReader](https://github.com/J0sephDavis/ftxuiFileReader)
+- [ftxui_CPUMeter](https://github.com/tzzzzzzzx/ftxui_CPUMeter)
+- [hastur](https://github.com/robinlinden/hastur)
+- [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
+- [inLimbo](https://github.com/nots1dd/inLimbo)
+- [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
+- [ltuiny](https://github.com/adrianoviana87/ltuiny)
+- [openJuice](https://github.com/mikomikotaishi/openJuice)
+- [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
+- [pciex](https://github.com/s0nx/pciex)
+- [resource-monitor](https://github.com/catalincd/resource-monitor)
+- [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
+- [simpPRU](https://github.com/VedantParanjape/simpPRU)
+- [tabdeeli](https://github.com/typon/tabdeeli)
+- [terminal-rain](https://github.com/Oakamoore/terminal-rain)
 - [tic-tac-toe](https://github.com/birland/tic-tac-toe)
+- [tiles](https://github.com/tusharpm/tiles)
+- [todoman](https://github.com/aaleino/todoman)
+- [turing_cmd](https://github.com/DanArmor/turing_cmd)
 - [typing-speed-test](https://github.com/ymcx/typing-speed-test)
+- [vantage](https://github.com/gokulmaxi/vantage)
+- [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
@@ -390,7 +391,6 @@ Several games using the FTXUI have been made during the Game Jam:
 - [TheWorld](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/TheWorld.md)
 - [smoothlife](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/smoothlife.md)
 - [Consu](https://github.com/cpp-best-practices/game_jam/blob/main/Jam1_April_2022/consu.md)
-
 
 
 ## Build using CMake
@@ -428,9 +428,13 @@ cc_binary(
     name = "your_target",
     srcs = ["your_source.cc"],
     deps = [
+        # Choose submodules
         "@ftxui//:component",
         "@ftxui//:dom",
         "@ftxui//:screen",
+        
+        # Or use the single ftxui target (includes all modules)
+        # "@ftxui//:ftxui",
     ],
 )
 ```
@@ -446,7 +450,8 @@ If you don't, FTXUI may be used from the following packages:
 - [Ubuntu package](https://launchpad.net/ubuntu/+source/ftxui),
 - [Arch Linux](https://aur.archlinux.org/packages/ftxui/),
 - [OpenSUSE](https://build.opensuse.org/package/show/devel:libraries:c_c++/ftxui),
-[Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix),
+- [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix),
+
 [![Packaging status](https://repology.org/badge/vertical-allrepos/libftxui.svg)](https://repology.org/project/libftxui/versions)
 
 

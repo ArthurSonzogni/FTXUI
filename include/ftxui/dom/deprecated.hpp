@@ -8,9 +8,8 @@
 #include <string>
 
 namespace ftxui {
-Element text(std::wstring text);
-Element vtext(std::wstring text);
-Elements paragraph(std::wstring text);
+Element text(std::wstring_view text);
+Element vtext(std::wstring_view text);
 }  // namespace ftxui
 
 #endif  // FTXUI_DOM_DEPRECATED_HPP

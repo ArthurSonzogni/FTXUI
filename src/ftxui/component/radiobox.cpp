@@ -37,7 +37,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
       const bool is_focused = (focused_entry() == i) && is_menu_focused;
       const bool is_selected = (hovered_ == i);
       auto state = EntryState{
-          entries[i], selected() == i, is_selected, is_focused, i,
+          std::string(entries[i]), selected() == i, is_selected, is_focused, i,
       };
       auto element =
           (transform ? transform : RadioboxOption::Simple().transform)(state);

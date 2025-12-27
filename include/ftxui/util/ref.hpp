@@ -7,6 +7,7 @@
 #include <ftxui/screen/string.hpp>
 #include <memory>
 #include <string>
+#include <string_view>
 #include <variant>
 #include <vector>
 
@@ -17,8 +18,13 @@ template <typename T>
 class ConstRef {
  public:
   ConstRef() = default;
+
+  // Owning constructors:
   ConstRef(T t) : variant_(std::move(t)) {}  // NOLINT
+
+  // Referencing constructors:
   ConstRef(const T* t) : variant_(t) {}      // NOLINT
+
   ConstRef& operator=(ConstRef&&) noexcept = default;
   ConstRef(const ConstRef<T>&) = default;
   ConstRef(ConstRef<T>&&) noexcept = default;
@@ -46,8 +52,13 @@ template <typename T>
 class Ref {
  public:
   Ref() = default;
+
+  // Owning constructors:
   Ref(T t) : variant_(std::move(t)) {}  // NOLINT
+                                        //
+  // Referencing constructors:
   Ref(T* t) : variant_(t) {}            // NOLINT
+                                        //
   ~Ref() = default;
   Ref& operator=(Ref&&) noexcept = default;
   Ref(const Ref<T>&) = default;
@@ -83,10 +94,15 @@ class StringRef : public Ref<std::string> {
  public:
   using Ref<std::string>::Ref;
 
+  // Owning constructors:
   StringRef(const wchar_t* ref)  // NOLINT
       : StringRef(to_string(std::wstring(ref))) {}
   StringRef(const char* ref)  // NOLINT
       : StringRef(std::string(ref)) {}
+  StringRef(std::string_view ref)  // NOLINT
+      : StringRef(std::string(ref)) {}
+  StringRef(std::wstring_view ref)  // NOLINT
+      : StringRef(to_string(ref)) {}
 };
 
 /// @brief An adapter. Own or reference a constant string. For convenience, this
@@ -95,13 +111,20 @@ class ConstStringRef : public ConstRef<std::string> {
  public:
   using ConstRef<std::string>::ConstRef;
 
+  // Referencing constructors:
   ConstStringRef(const std::wstring* ref)  // NOLINT
       : ConstStringRef(to_string(*ref)) {}
+
+  // Owning constructors:
   ConstStringRef(const std::wstring ref)  // NOLINT
+      : ConstStringRef(to_string(ref)) {}
+  ConstStringRef(std::wstring_view ref)  // NOLINT
       : ConstStringRef(to_string(ref)) {}
   ConstStringRef(const wchar_t* ref)  // NOLINT
       : ConstStringRef(to_string(std::wstring(ref))) {}
   ConstStringRef(const char* ref)  // NOLINT
+      : ConstStringRef(std::string(ref)) {}
+  ConstStringRef(std::string_view ref)  // NOLINT
       : ConstStringRef(std::string(ref)) {}
 };
 
@@ -125,13 +148,15 @@ class ConstStringListRef {
     Adapter& operator=(Adapter&&) = default;
     virtual ~Adapter() = default;
     virtual size_t size() const = 0;
-    virtual std::string operator[](size_t i) const = 0;
+    virtual std::string_view operator[](size_t i) const = 0;
   };
-  using Variant = std::variant<const std::vector<std::string>,    //
-                               const std::vector<std::string>*,   //
-                               const std::vector<std::wstring>*,  //
-                               Adapter*,                          //
-                               std::unique_ptr<Adapter>           //
+  using Variant = std::variant<const std::vector<std::string>,        //
+                               const std::vector<std::string>*,       //
+                               const std::vector<std::string_view>,   //
+                               const std::vector<std::string_view>*,  //
+                               const std::vector<std::wstring>*,      //
+                               Adapter*,                              //
+                               std::unique_ptr<Adapter>               //
                                >;
 
   ConstStringListRef() = default;
@@ -141,25 +166,26 @@ class ConstStringListRef {
   ConstStringListRef(ConstStringListRef&&) = default;
   ConstStringListRef(const ConstStringListRef&) = default;
 
-  ConstStringListRef(std::vector<std::string> value)  // NOLINT
-  {
+  ConstStringListRef(std::vector<std::string> value) {  // NOLINT
     variant_ = std::make_shared<Variant>(value);
   }
-  ConstStringListRef(const std::vector<std::string>* value)  // NOLINT
-  {
+  ConstStringListRef(const std::vector<std::string>* value)  {// NOLINT
     variant_ = std::make_shared<Variant>(value);
   }
-  ConstStringListRef(const std::vector<std::wstring>* value)  // NOLINT
-  {
+  ConstStringListRef(std::vector<std::string_view> value) { // NOLINT
     variant_ = std::make_shared<Variant>(value);
   }
-  ConstStringListRef(Adapter* adapter)  // NOLINT
-  {
+  ConstStringListRef(const std::vector<std::string_view>* value) { // NOLINT
+    variant_ = std::make_shared<Variant>(value);
+  }
+  ConstStringListRef(const std::vector<std::wstring>* value) { // NOLINT
+    variant_ = std::make_shared<Variant>(value);
+  }
+  ConstStringListRef(Adapter* adapter) { // NOLINT
     variant_ = std::make_shared<Variant>(adapter);
   }
   template <typename AdapterType>
-  ConstStringListRef(std::unique_ptr<AdapterType> adapter)  // NOLINT
-  {
+  ConstStringListRef(std::unique_ptr<AdapterType> adapter) {  // NOLINT
     variant_ = std::make_shared<Variant>(
         static_cast<std::unique_ptr<Adapter>>(std::move(adapter)));
   }
@@ -168,16 +194,45 @@ class ConstStringListRef {
     return variant_ ? std::visit(SizeVisitor(), *variant_) : 0;
   }
 
-  std::string operator[](size_t i) const {
-    return variant_ ? std::visit(IndexedGetter(i), *variant_) : "";
+  std::string_view operator[](size_t i) const {
+    return variant_ ? std::visit(IndexedGetter{i}, *variant_) : "";
   }
 
  private:
+  struct IndexedGetter {
+    size_t i;
+    std::string_view operator()(const std::vector<std::string>& v) const {
+      return v[i];
+    }
+    std::string_view operator()(const std::vector<std::string>* v) const {
+      return (*v)[i];
+    }
+    std::string_view operator()(const std::vector<std::string_view>& v) const {
+      return std::string(v[i]);
+    }
+    std::string_view operator()(const std::vector<std::string_view>* v) const {
+      return std::string((*v)[i]);
+    }
+    std::string_view operator()(const std::vector<std::wstring>* v) const {
+      return to_string((*v)[i]);
+    }
+    std::string_view operator()(Adapter* v) const { return std::string((*v)[i]); }
+    std::string_view operator()(const std::unique_ptr<Adapter>& v) const {
+      return (*v)[i];
+    }
+  };
+
   struct SizeVisitor {
     size_t operator()(const std::vector<std::string>& v) const {
       return v.size();
     }
     size_t operator()(const std::vector<std::string>* v) const {
+      return v->size();
+    }
+    size_t operator()(const std::vector<std::string_view>& v) const {
+      return v.size();
+    }
+    size_t operator()(const std::vector<std::string_view>* v) const {
       return v->size();
     }
     size_t operator()(const std::vector<std::wstring>* v) const {
@@ -186,25 +241,6 @@ class ConstStringListRef {
     size_t operator()(const Adapter* v) const { return v->size(); }
     size_t operator()(const std::unique_ptr<Adapter>& v) const {
       return v->size();
-    }
-  };
-
-  struct IndexedGetter {
-    IndexedGetter(size_t index)  // NOLINT
-        : index_(index) {}
-    size_t index_;
-    std::string operator()(const std::vector<std::string>& v) const {
-      return v[index_];
-    }
-    std::string operator()(const std::vector<std::string>* v) const {
-      return (*v)[index_];
-    }
-    std::string operator()(const std::vector<std::wstring>* v) const {
-      return to_string((*v)[index_]);
-    }
-    std::string operator()(const Adapter* v) const { return (*v)[index_]; }
-    std::string operator()(const std::unique_ptr<Adapter>& v) const {
-      return (*v)[index_];
     }
   };
 
