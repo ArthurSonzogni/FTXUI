@@ -139,7 +139,6 @@ add_library(component
   src/ftxui/component/menu.cpp
   src/ftxui/component/modal.cpp
   src/ftxui/component/radiobox.cpp
-  src/ftxui/component/radiobox.cpp
   src/ftxui/component/renderer.cpp
   src/ftxui/component/resizable_split.cpp
   src/ftxui/component/screen_interactive.cpp

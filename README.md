@@ -24,10 +24,13 @@
   <a href="https://github.com/ArthurSonzogni/FTXUI/pulls">Send a Pull Request</a>
   
   <br/>
+  Doc:
   <a href="https://github.com/ArthurSonzogni/">English</a> |
-  <a href="https://github.com/ArthurSonzogni/ftxui-translations/tree/zh-CH">中文翻译</a> |
-  <a href="https://github.com/ArthurSonzogni/ftxui-translations/tree/zh-CH">繁體中文</a> |
-  <a href="https://github.com/ArthurSonzogni/ftxui-translations/tree/ja">日本語</a>
+  <a href="https://arthursonzogni.github.io/FTXUI/fr/index.html">Français</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/es/index.html">Español</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/zh-TW/index.html">繁體中文</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/zh-CH/index.html">简体中文</a> |
+  <a href="https://arthursonzogni.github.io/FTXUI/ja/index.html">日本語</a> |
 
 </p>
 
