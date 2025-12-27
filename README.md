@@ -320,6 +320,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 - [ftxui-grid-container](https://github.com/mingsheng13/grid-container-ftxui)
 - [ftxui-ip-input](https://github.com/mingsheng13/ip-input-ftxui)
 - [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): For Image Display.
+- [ftxui-navigation-tree](https://github.com/Appisolato/navigation-tree-ftxui)
 
 
 ## Project using FTXUI
