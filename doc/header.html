@@ -122,13 +122,15 @@
     }
 
     // Include only selected navtree items.
-    console.log("navtree.textContent", navtree.textContent);
-    if (!navtree.textContent.includes("Getting Started") &&
-        !navtree.textContent.includes("Installation") &&
-        !navtree.textContent.includes("ftxui / screen") &&
-        !navtree.textContent.includes("ftxui / dom") &&
-        !navtree.textContent.includes("ftxui / component") &&
-        !navtree.textContent.includes("Reference")) {
+    if (!(
+        navtree.textContent.includes("Getting Started") &&
+        navtree.textContent.includes("Installation") &&
+        navtree.textContent.includes("ftxui / screen") &&
+        navtree.textContent.includes("ftxui / dom") &&
+        navtree.textContent.includes("ftxui / component") &&
+        navtree.textContent.includes("Reference")
+      )
+    ) {
       break;
     }
 
