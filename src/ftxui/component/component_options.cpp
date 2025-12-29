@@ -292,8 +292,6 @@ RadioboxOption RadioboxOption::Simple() {
 InputOption InputOption::Default() {
   InputOption option;
   option.transform = [](InputState state) {
-    state.element |= color(Color::White);
-
     if (state.is_placeholder) {
       state.element |= dim;
     }
@@ -301,7 +299,7 @@ InputOption InputOption::Default() {
     if (state.focused) {
       state.element |= inverted;
     } else if (state.hovered) {
-      state.element |= bgcolor(Color::GrayDark);
+      state.element |= underlined;
     }
 
     return state.element;
@@ -315,18 +313,15 @@ InputOption InputOption::Spacious() {
   InputOption option;
   option.transform = [](InputState state) {
     state.element |= borderEmpty;
-    state.element |= color(Color::White);
 
     if (state.is_placeholder) {
       state.element |= dim;
     }
 
     if (state.focused) {
-      state.element |= bgcolor(Color::Black);
-    }
-
-    if (state.hovered) {
-      state.element |= bgcolor(Color::GrayDark);
+      state.element |= inverted;
+    } else if (state.hovered) {
+      state.element |= bold;
     }
 
     return state.element;

@@ -46,6 +46,8 @@ Next
 - Fix Windows UTF-16 key input handling. Emoji and other code points outside the
   Basic Multilingual Plane (BMP) are now correctly processed. Thanks @739C1AE2
   in #1160 for fixing the issue.
+- Fix Input style is now colorschem agnostic. Thanks @Smail in #1170 for reporting
+  and fixing the issue.
 
 ### Dom
 - Fix integer overflow in `ComputeShrinkHard`. Thanks @its-pablo in #1137 for
