@@ -368,6 +368,7 @@ Feel free to add your projects here:
 - [resource-monitor](https://github.com/catalincd/resource-monitor)
 - [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
 - [simpPRU](https://github.com/VedantParanjape/simpPRU)
+- [sweeper](https://www.thomthom.net/thoughts/2026/01/sweeper-a-hat-tip-to-the-simple-fun-games/) ([Play web version :heart:](https://games.evilsoftwareempire.com/sweeper/play/))
 - [tabdeeli](https://github.com/typon/tabdeeli)
 - [terminal-rain](https://github.com/Oakamoore/terminal-rain)
 - [tic-tac-toe](https://github.com/birland/tic-tac-toe)
