@@ -66,11 +66,39 @@ void ComputeShrinkHard(std::vector<Element>* elements,
 
     element.size = element.min_size + added_space;
   }
+
+}
+
+
+// Called when the size allowed is lower than the requested size, and the
+// shrinkable element can not absorbe the (negative) extra_space. This assign
+// zero to shrinkable elements and distribute the remaining (negative)
+// extra_space toward the other non shrinkable elements.
+void ComputeShrinkHardHack(std::vector<Element>* elements,
+                       int extra_space,
+                       int size)
+{
+  for (Element& element : *elements)
+  {
+    if (element.flex_shrink != 0)
+    {
+      element.size = 0;
+    }
+  }
+
+  for (auto it = elements->rbegin(); it != elements->rend(); ++it)
+  {
+    Element& element = *it;
+
+    auto remove = std::min(element.min_size, -extra_space);
+    element.size = element.min_size - remove;
+    extra_space += remove;
+  }
 }
 
 }  // namespace
 
-void Compute(std::vector<Element>* elements, int target_size) {
+void Compute(std::vector<Element>* elements, int target_size, bool hack) {
   int size = 0;
   int flex_grow_sum = 0;
   int flex_shrink_sum = 0;
@@ -92,8 +120,14 @@ void Compute(std::vector<Element>* elements, int target_size) {
     ComputeShrinkEasy(elements, extra_space, flex_shrink_sum);
 
   } else {
-    ComputeShrinkHard(elements, extra_space + flex_shrink_size,
-                      size - flex_shrink_size);
+    if (hack)
+    {
+      ComputeShrinkHardHack(elements, extra_space + flex_shrink_size, size - flex_shrink_size);
+    }
+    else
+    {
+      ComputeShrinkHard(elements, extra_space + flex_shrink_size, size - flex_shrink_size);
+    }
   }
 }
 
