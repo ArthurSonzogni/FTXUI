@@ -574,10 +574,12 @@ void ScreenInteractive::Install() {
   out_mode |= disable_newline_auto_return;
 
   // https://docs.microsoft.com/en-us/windows/console/setconsolemode
+  const int enabled_processed_input = 0x0001;
   const int enable_line_input = 0x0002;
   const int enable_echo_input = 0x0004;
   const int enable_virtual_terminal_input = 0x0200;
   const int enable_window_input = 0x0008;
+  in_mode &= ~enabled_processed_input;
   in_mode &= ~enable_echo_input;
   in_mode &= ~enable_line_input;
   in_mode |= enable_virtual_terminal_input;
