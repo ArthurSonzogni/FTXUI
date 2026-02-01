@@ -4,6 +4,7 @@
 #ifndef TASK_QUEUE_HPP
 #define TASK_QUEUE_HPP
 
+#include <mutex>
 #include <queue>
 #include <variant>
 
@@ -30,6 +31,7 @@ struct TaskQueue {
  private:
   std::queue<PendingTask> immediate_tasks_;
   std::priority_queue<PendingTask> delayed_tasks_;
+  std::mutex mutex_;
 };
 
 }  // namespace ftxui::task

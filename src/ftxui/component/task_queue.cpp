@@ -6,6 +6,8 @@
 namespace ftxui::task {
 
 auto TaskQueue::PostTask(PendingTask task) -> void {
+  std::unique_lock<std::mutex> lock(mutex_);
+
   if (!task.time) {
     immediate_tasks_.push(task);
     return;
@@ -20,6 +22,8 @@ auto TaskQueue::PostTask(PendingTask task) -> void {
 }
 
 auto TaskQueue::Get() -> MaybeTask {
+  std::unique_lock<std::mutex> lock(mutex_);
+
   // Attempt to execute a task immediately.
   if (!immediate_tasks_.empty()) {
     auto task = immediate_tasks_.front();
