@@ -78,8 +78,7 @@ jobs:
           overwrite: true
 
   # Build "source" artifact for the release. This is the same as the github
-  # "source" archive, but with a stable URL. This is useful for the Bazel
-  # Central Repository.
+  # "source" archive, but with a stable URL.
   package_source:
     name: "Build source package"
     needs: release

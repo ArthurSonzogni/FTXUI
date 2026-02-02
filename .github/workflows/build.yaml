@@ -12,57 +12,6 @@ on:
       - main
 
 jobs:
-
-  test_bazel:
-    name: "Bazel, ${{ matrix.cxx }}, ${{ matrix.os }}"
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            cxx: g++
-            cc: gcc
-
-          - os: ubuntu-latest
-            cxx: clang++
-            cc: clang
-
-          - os: macos-latest
-            cxx: g++
-            cc: gcc
-
-          - os: macos-latest
-            cxx: clang++
-            cc: clang
-
-          - os: windows-latest
-            cxx: cl
-            cc: cl
-
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@v3
-
-      - name: "Build with Bazel"
-        env:
-          CC: ${{ matrix.cc }}
-          CXX: ${{ matrix.cxx }}
-        run: bazel build ...
-
-      - name: "Tests with Bazel"
-        env:
-          CC: ${{ matrix.cc }}
-          CXX: ${{ matrix.cxx }}
-        run: bazel test --test_output=all ...
-
-      - name: "Bazel Smoke test"
-        env:
-          CC: ${{ matrix.cc }}
-          CXX: ${{ matrix.cxx }}
-        run: bazel build //... --enable_bzlmod --override_module=ftxui=../..
-        working-directory: bazel/test
-
   test_cmake:
     name: "CMake, ${{ matrix.compiler }}, ${{ matrix.os }}"
     strategy:
