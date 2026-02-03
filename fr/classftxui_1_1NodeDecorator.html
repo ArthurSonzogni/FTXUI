@@ -1,0 +1,671 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: Référence de la classe NodeDecorator</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('classftxui_1_1NodeDecorator.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Fonctions membres publiques</a> &#124;
+<a href="#pro-attribs">Attributs protégés</a> &#124;
+<a href="classftxui_1_1NodeDecorator-members.html">Liste de tous les membres</a>  </div>
+  <div class="headertitle"><div class="title">Référence de la classe NodeDecorator</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="node__decorator_8hpp_source.html">node_decorator.hpp</a>&gt;</code></p>
+<div id="dynsection-0" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Graphe d'héritage de NodeDecorator:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="classftxui_1_1NodeDecorator__inherit__graph.png" border="0" usemap="#aNodeDecorator_inherit__map" alt="Inheritance graph"/></div>
+<map name="aNodeDecorator_inherit__map" id="aNodeDecorator_inherit__map">
+<area shape="rect" title=" " alt="" coords="5,79,125,104"/>
+<area shape="rect" href="group__dom.html#classftxui_1_1Node" title="Node est la classe de base pour tous les éléments de l&#39;arbre DOM." alt="" coords="37,5,93,31"/>
+<area shape="poly" title=" " alt="" coords="68,44,68,79,63,79,63,44"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">légende</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Fonctions membres publiques</h2></td></tr>
+<tr class="memitem:a7e9d74ba5d480d87e8bfcaf2df66fbbe" id="r_a7e9d74ba5d480d87e8bfcaf2df66fbbe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7e9d74ba5d480d87e8bfcaf2df66fbbe">NodeDecorator</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="separator:a7e9d74ba5d480d87e8bfcaf2df66fbbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac68a91492bfe8a6dd7ea2b3f7f295720" id="r_ac68a91492bfe8a6dd7ea2b3f7f295720"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac68a91492bfe8a6dd7ea2b3f7f295720">ComputeRequirement</a> () override</td></tr>
+<tr class="memdesc:ac68a91492bfe8a6dd7ea2b3f7f295720"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calcule l'espace nécessaire à un élément.  <br /></td></tr>
+<tr class="separator:ac68a91492bfe8a6dd7ea2b3f7f295720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafcc9bd6538ccb37babf4d56c4c1c238" id="r_aafcc9bd6538ccb37babf4d56c4c1c238"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafcc9bd6538ccb37babf4d56c4c1c238">SetBox</a> (<a class="el" href="group__screen.html#structftxui_1_1Box">Box</a> box) override</td></tr>
+<tr class="memdesc:aafcc9bd6538ccb37babf4d56c4c1c238"><td class="mdescLeft">&#160;</td><td class="mdescRight">Assigne une position et une dimension à un élément pour le dessin.  <br /></td></tr>
+<tr class="separator:aafcc9bd6538ccb37babf4d56c4c1c238"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39a263e8c8786dc62fcb4d734aad7fe6" id="r_a39a263e8c8786dc62fcb4d734aad7fe6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__dom.html#structftxui_1_1Requirement">Requirement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#a39a263e8c8786dc62fcb4d734aad7fe6">requirement</a> ()</td></tr>
+<tr class="separator:a39a263e8c8786dc62fcb4d734aad7fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05352f5a353f1e86630a978060e77305" id="r_a05352f5a353f1e86630a978060e77305"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#a05352f5a353f1e86630a978060e77305">Select</a> (<a class="el" href="group__dom.html#classftxui_1_1Selection">Selection</a> &amp;selection)</td></tr>
+<tr class="memdesc:a05352f5a353f1e86630a978060e77305"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calcule la sélection d'un élément.  <br /></td></tr>
+<tr class="separator:a05352f5a353f1e86630a978060e77305"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02feb1564ee23b6229b82be0289c96e4" id="r_a02feb1564ee23b6229b82be0289c96e4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#a02feb1564ee23b6229b82be0289c96e4">Render</a> (<a class="el" href="group__screen.html#classftxui_1_1Screen">Screen</a> &amp;<a class="el" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>)</td></tr>
+<tr class="separator:a02feb1564ee23b6229b82be0289c96e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c5cebe05557529299e649867b499680" id="r_a2c5cebe05557529299e649867b499680"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#a2c5cebe05557529299e649867b499680">GetSelectedContent</a> (<a class="el" href="group__dom.html#classftxui_1_1Selection">Selection</a> &amp;selection)</td></tr>
+<tr class="separator:a2c5cebe05557529299e649867b499680"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b71d891a102197f2856f53702425581" id="r_a5b71d891a102197f2856f53702425581"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#a5b71d891a102197f2856f53702425581">Check</a> (<a class="el" href="structftxui_1_1Node_1_1Status.html">Status</a> *status)</td></tr>
+<tr class="separator:a5b71d891a102197f2856f53702425581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Attributs protégés</h2></td></tr>
+<tr class="memitem:a2aeb117dade3254694355ab90e9fc566" id="r_a2aeb117dade3254694355ab90e9fc566"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#a2aeb117dade3254694355ab90e9fc566">children_</a></td></tr>
+<tr class="separator:a2aeb117dade3254694355ab90e9fc566"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3530d99687053ce0d0006b9dee9a1ca7" id="r_a3530d99687053ce0d0006b9dee9a1ca7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__dom.html#structftxui_1_1Requirement">Requirement</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#a3530d99687053ce0d0006b9dee9a1ca7">requirement_</a></td></tr>
+<tr class="separator:a3530d99687053ce0d0006b9dee9a1ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7e7d30102945911407723a5cbcdfabc" id="r_aa7e7d30102945911407723a5cbcdfabc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__screen.html#structftxui_1_1Box">Box</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#aa7e7d30102945911407723a5cbcdfabc">box_</a></td></tr>
+<tr class="separator:aa7e7d30102945911407723a5cbcdfabc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Description détaillée</h2>
+<div class="textblock">
+<p class="definition">Définition à la ligne <a class="el" href="node__decorator_8hpp_source.html#l00016">16</a> du fichier <a class="el" href="node__decorator_8hpp_source.html">node_decorator.hpp</a>.</p>
+</div><h2 class="groupheader">Documentation des constructeurs et destructeur</h2>
+<a id="a7e9d74ba5d480d87e8bfcaf2df66fbbe" name="a7e9d74ba5d480d87e8bfcaf2df66fbbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e9d74ba5d480d87e8bfcaf2df66fbbe">&#9670;&#160;</a></span>NodeDecorator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1NodeDecorator.html">NodeDecorator</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a></td>          <td class="paramname"><span class="paramname"><em>child</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="node__decorator_8hpp_source.html#l00018">18</a> du fichier <a class="el" href="node__decorator_8hpp_source.html">node_decorator.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentation des fonctions membres</h2>
+<a id="ac68a91492bfe8a6dd7ea2b3f7f295720" name="ac68a91492bfe8a6dd7ea2b3f7f295720"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac68a91492bfe8a6dd7ea2b3f7f295720">&#9670;&#160;</a></span>ComputeRequirement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ComputeRequirement </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calcule l'espace nécessaire à un élément. </p>
+
+<p>Réimplémentée à partir de <a class="el" href="group__dom.html#a40bd818c5de23bb2d208360d275ae59d">Node</a>.</p>
+
+<p class="definition">Définition à la ligne <a class="el" href="node__decorator_8cpp_source.html#l00012">12</a> du fichier <a class="el" href="node__decorator_8cpp_source.html">node_decorator.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aafcc9bd6538ccb37babf4d56c4c1c238" name="aafcc9bd6538ccb37babf4d56c4c1c238"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafcc9bd6538ccb37babf4d56c4c1c238">&#9670;&#160;</a></span>SetBox()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SetBox </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__screen.html#structftxui_1_1Box">Box</a></td>          <td class="paramname"><span class="paramname"><em>box</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Assigne une position et une dimension à un élément pour le dessin. </p>
+
+<p>Réimplémentée à partir de <a class="el" href="group__dom.html#a2ed318aaadb07efc50e76fce1ccf9637">Node</a>.</p>
+
+<p class="definition">Définition à la ligne <a class="el" href="node__decorator_8cpp_source.html#l00017">17</a> du fichier <a class="el" href="node__decorator_8cpp_source.html">node_decorator.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a39a263e8c8786dc62fcb4d734aad7fe6" name="a39a263e8c8786dc62fcb4d734aad7fe6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39a263e8c8786dc62fcb4d734aad7fe6">&#9670;&#160;</a></span>requirement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__dom.html#structftxui_1_1Requirement">Requirement</a> requirement </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="node_8hpp_source.html#l00051">51</a> du fichier <a class="el" href="node_8hpp_source.html">node.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a05352f5a353f1e86630a978060e77305" name="a05352f5a353f1e86630a978060e77305"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05352f5a353f1e86630a978060e77305">&#9670;&#160;</a></span>Select()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Select </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__dom.html#classftxui_1_1Selection">Selection</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>selection</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calcule la sélection d'un élément. </p>
+
+<p class="definition">Définition à la ligne <a class="el" href="node_8cpp_source.html#l00046">46</a> du fichier <a class="el" href="node_8cpp_source.html">node.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a02feb1564ee23b6229b82be0289c96e4" name="a02feb1564ee23b6229b82be0289c96e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02feb1564ee23b6229b82be0289c96e4">&#9670;&#160;</a></span>Render()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Render </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__screen.html#classftxui_1_1Screen">Screen</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>screen</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2c5cebe05557529299e649867b499680" name="a2c5cebe05557529299e649867b499680"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c5cebe05557529299e649867b499680">&#9670;&#160;</a></span>GetSelectedContent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string GetSelectedContent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__dom.html#classftxui_1_1Selection">Selection</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>selection</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="node_8cpp_source.html#l00071">71</a> du fichier <a class="el" href="node_8cpp_source.html">node.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a5b71d891a102197f2856f53702425581" name="a5b71d891a102197f2856f53702425581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b71d891a102197f2856f53702425581">&#9670;&#160;</a></span>Check()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Check </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structftxui_1_1Node_1_1Status.html">Status</a> *</td>          <td class="paramname"><span class="paramname"><em>status</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="node_8cpp_source.html#l00064">64</a> du fichier <a class="el" href="node_8cpp_source.html">node.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentation des données membres</h2>
+<a id="a2aeb117dade3254694355ab90e9fc566" name="a2aeb117dade3254694355ab90e9fc566"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2aeb117dade3254694355ab90e9fc566">&#9670;&#160;</a></span>children_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> children_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="node_8hpp_source.html#l00078">78</a> du fichier <a class="el" href="node_8hpp_source.html">node.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3530d99687053ce0d0006b9dee9a1ca7" name="a3530d99687053ce0d0006b9dee9a1ca7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3530d99687053ce0d0006b9dee9a1ca7">&#9670;&#160;</a></span>requirement_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__dom.html#structftxui_1_1Requirement">Requirement</a> requirement_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="node_8hpp_source.html#l00079">79</a> du fichier <a class="el" href="node_8hpp_source.html">node.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa7e7d30102945911407723a5cbcdfabc" name="aa7e7d30102945911407723a5cbcdfabc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7e7d30102945911407723a5cbcdfabc">&#9670;&#160;</a></span>box_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__screen.html#structftxui_1_1Box">Box</a> box_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Définition à la ligne <a class="el" href="node_8hpp_source.html#l00080">80</a> du fichier <a class="el" href="node_8hpp_source.html">node.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>La documentation de cette classe a été générée à partir des fichiers suivants :<ul>
+<li><a class="el" href="node__decorator_8hpp_source.html">node_decorator.hpp</a></li>
+<li><a class="el" href="node__decorator_8cpp_source.html">node_decorator.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "fr";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>
