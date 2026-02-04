@@ -216,13 +216,13 @@ Element Table::Render() {
 
       // Line
       if ((x + y) % 2 == 1) {
-        it = std::move(it) | flex;
+        it = std::move(it)| flex;  //it = std::move(it); // | flex;
         continue;
       }
 
       // Cells
       if ((x % 2) == 1 && (y % 2) == 1) {
-        it = std::move(it) | flex_shrink;
+        // it = std::move(it) | flex_shrink;   //it = std::move(it) | flex_shrink;
         continue;
       }
 
