@@ -80,7 +80,7 @@ Component Dropdown(DropdownOption option) {
 
         if (should_close) {
           checkbox_->TakeFocus();
-          open_ = false;
+          *open_ = false;
           handled = true;
         }
       }
