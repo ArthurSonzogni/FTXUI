@@ -48,6 +48,8 @@ Next
   in #1160 for fixing the issue.
 - Fix Input style is now colorschem agnostic. Thanks @Smail in #1170 for reporting
   and fixing the issue.
+- Fix `ScreenInteractive::Post(..)` is now thread safe. Thanks @739C1AE2 in
+  ~1183 for reporting the issue. This regressed in non released versions.
 
 ### Dom
 - Fix integer overflow in `ComputeShrinkHard`. Thanks @its-pablo in #1137 for

@@ -6,6 +6,7 @@
 namespace ftxui::task {
 
 auto TaskQueue::PostTask(PendingTask task) -> void {
+  std::lock_guard<std::mutex> lock(mutex_);
   if (!task.time) {
     immediate_tasks_.push(task);
     return;
@@ -20,6 +21,7 @@ auto TaskQueue::PostTask(PendingTask task) -> void {
 }
 
 auto TaskQueue::Get() -> MaybeTask {
+  std::lock_guard<std::mutex> lock(mutex_);
   // Attempt to execute a task immediately.
   if (!immediate_tasks_.empty()) {
     auto task = immediate_tasks_.front();
@@ -48,6 +50,11 @@ auto TaskQueue::Get() -> MaybeTask {
 
   // If there are no tasks to execute, return the maximum duration.
   return std::monostate{};
+}
+
+auto TaskQueue::HasImmediateTasks() const -> bool {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return !immediate_tasks_.empty();
 }
 
 }  // namespace ftxui::task

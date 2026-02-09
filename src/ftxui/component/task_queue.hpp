@@ -4,6 +4,7 @@
 #ifndef TASK_QUEUE_HPP
 #define TASK_QUEUE_HPP
 
+#include <mutex>
 #include <queue>
 #include <variant>
 
@@ -19,15 +20,15 @@ namespace ftxui::task {
 /// - If a task is scheduled to be executed in the past, it is executed
 ///   immediately.
 struct TaskQueue {
-  auto PostTask(PendingTask task) -> void;
-
   using MaybeTask =
       std::variant<Task, std::chrono::steady_clock::duration, std::monostate>;
-  auto Get() -> MaybeTask;
 
-  bool HasImmediateTasks() const { return !immediate_tasks_.empty(); }
+  auto Get() -> MaybeTask;
+  auto HasImmediateTasks() const -> bool;
+  auto PostTask(PendingTask task) -> void;
 
  private:
+  mutable std::mutex mutex_;
   std::queue<PendingTask> immediate_tasks_;
   std::priority_queue<PendingTask> delayed_tasks_;
 };
