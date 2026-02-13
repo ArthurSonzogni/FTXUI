@@ -321,6 +321,7 @@ Prebuilt components are declared in [<ftxui/component/component.hpp>](https://ar
 - [ftxui-ip-input](https://github.com/mingsheng13/ip-input-ftxui)
 - [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): For Image Display.
 - [ftxui-navigation-tree](https://github.com/Appisolato/navigation-tree-ftxui)
+- [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI): Markdown Editor/Viewer for the terminal.
 
 
 ## Project using FTXUI
