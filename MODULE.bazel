@@ -6,8 +6,8 @@ module(
 )
 
 # Build dependencies.
-bazel_dep(name = "rules_cc", version = "0.1.1")
-bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "platforms", version = "1.0.0")
 
 # Test dependencies.
-bazel_dep(name = "googletest", version = "1.14.0.bcr.1", dev_dependency = True)
+bazel_dep(name = "googletest", version = "1.17.0.bcr.2", dev_dependency = True)

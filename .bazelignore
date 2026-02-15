@@ -1,1 +1,3 @@
-bazel/test/
+build
+iwyu
+bazel/test

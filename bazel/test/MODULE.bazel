@@ -7,3 +7,9 @@ module(
 )
 
 bazel_dep(name = "ftxui", version = "6.1.9")
+bazel_dep(name = "rules_cc", version = "0.2.16")
+
+local_path_override(
+    module_name = "ftxui",
+    path = "../..",
+)

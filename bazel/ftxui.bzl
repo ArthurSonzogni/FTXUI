@@ -48,6 +48,7 @@ def ftxui_cc_library(
         srcs = [],
         hdrs = [],
         linkopts = [],
+        visibility = ["//visibility:public"],
         deps = []):
 
     cc_library(
@@ -56,14 +57,12 @@ def ftxui_cc_library(
         hdrs = hdrs,
         linkopts = linkopts,
         deps = deps,
-        strip_include_prefix = "",
-        include_prefix = "",
+        strip_include_prefix = "include",
         includes = [
-            "include",
             "src",
         ],
         copts = windows_copts(),
-        visibility = ["//visibility:public"],
+        visibility = visibility,
     )
 
 # Compile all the examples in the examples/ directory.

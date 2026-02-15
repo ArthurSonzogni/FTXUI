@@ -6,7 +6,6 @@
 # - Build benchmark.
 # - Build fuzzers.
 # - Build documentation.
-# - Enable the two tests timing out.
 # - Support WebAssembly
 
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
@@ -55,6 +54,7 @@ ftxui_cc_library(
         "include/ftxui/screen/terminal.hpp",
         "include/ftxui/util/autoreset.hpp",
         "include/ftxui/util/ref.hpp",
+        "include/ftxui/util/warn_windows_macro.hpp",
     ],
 )
 
@@ -124,6 +124,7 @@ ftxui_cc_library(
         "include/ftxui/dom/selection.hpp",
         "include/ftxui/dom/table.hpp",
         "include/ftxui/dom/take_any_args.hpp",
+        "include/ftxui/util/warn_windows_macro.hpp",
     ],
     deps = [":screen"],
 )
@@ -178,9 +179,6 @@ ftxui_cc_library(
         # Private header from ftxui:screen.
         "src/ftxui/screen/string_internal.hpp",
         "src/ftxui/screen/util.hpp",
-
-        # Private header.
-        "include/ftxui/util/warn_windows_macro.hpp",
     ],
     hdrs = [
         "include/ftxui/component/animation.hpp",
@@ -194,6 +192,7 @@ ftxui_cc_library(
         "include/ftxui/component/receiver.hpp",
         "include/ftxui/component/screen_interactive.hpp",
         "include/ftxui/component/task.hpp",
+        "include/ftxui/util/warn_windows_macro.hpp",
     ],
     deps = [
         ":dom",
@@ -258,12 +257,10 @@ cc_test(
         # flexbox_helper_test.cpp.
         "src/ftxui/dom/flexbox_helper.hpp",
 
-        # TODO: Enable the two tests timing out with Bazel:
-        # - "src/ftxui/component/screen_interactive_test.cpp",
-        # - "src/ftxui/dom/selection_test.cpp",
+        "src/ftxui/component/screen_interactive_test.cpp",
+        "src/ftxui/dom/selection_test.cpp",
     ],
     includes = [
-        "include",
         "src",
     ],
     copts = windows_copts(),
