@@ -6,6 +6,7 @@
 #include <array>  // for array
 #include <cmath>
 #include <cstdint>
+#include <cstdio>  // for snprintf
 #include <string>
 
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
@@ -32,6 +33,22 @@ const std::array<const char*, 33> palette16code = {
     "97", "107",  //
 };
 
+void AppendNumber(std::string& out, uint8_t n) {
+  if (n >= 100) {
+    out += static_cast<char>('0' + n / 100);
+    n %= 100;
+    out += static_cast<char>('0' + n / 10);
+    n %= 10;
+    out += static_cast<char>('0' + n);
+  } else if (n >= 10) {
+    out += static_cast<char>('0' + n / 10);
+    n %= 10;
+    out += static_cast<char>('0' + n);
+  } else {
+    out += static_cast<char>('0' + n);
+  }
+}
+
 }  // namespace
 
 bool Color::operator==(const Color& rhs) const {
@@ -44,33 +61,35 @@ bool Color::operator!=(const Color& rhs) const {
 }
 
 std::string Color::Print(bool is_background_color) const {
-  if (is_background_color) {
-    switch (type_) {
-      case ColorType::Palette1:
-        return "49";
-      case ColorType::Palette16:
-        return palette16code[2 * red_ + 1];  // NOLINT
-      case ColorType::Palette256:
-        return "48;5;" + std::to_string(red_);
-      case ColorType::TrueColor:
-        return "48;2;" + std::to_string(red_) + ";" + std::to_string(green_) +
-               ";" + std::to_string(blue_);
-    }
-  } else {
-    switch (type_) {
-      case ColorType::Palette1:
-        return "39";
-      case ColorType::Palette16:
-        return palette16code[2 * red_];  // NOLINT
-      case ColorType::Palette256:
-        return "38;5;" + std::to_string(red_);
-      case ColorType::TrueColor:
-        return "38;2;" + std::to_string(red_) + ";" + std::to_string(green_) +
-               ";" + std::to_string(blue_);
-    }
+  std::string out;
+  PrintTo(out, is_background_color);
+  return out;
+}
+
+/// @brief Append the ANSI color code to a string (zero-allocation fast path).
+/// @param out The string to append to.
+/// @param is_background_color Whether this is a background color code.
+void Color::PrintTo(std::string& out, bool is_background_color) const {
+  switch (type_) {
+    case ColorType::Palette1:
+      out.append(is_background_color ? "49" : "39", 2);
+      return;
+    case ColorType::Palette16:
+      out.append(palette16code[2 * red_ + (is_background_color ? 1 : 0)]);
+      return;
+    case ColorType::Palette256:
+      out.append(is_background_color ? "48;5;" : "38;5;", 5);
+      AppendNumber(out, red_);
+      return;
+    case ColorType::TrueColor:
+      out.append(is_background_color ? "48;2;" : "38;2;", 5);
+      AppendNumber(out, red_);
+      out += ';';
+      AppendNumber(out, green_);
+      out += ';';
+      AppendNumber(out, blue_);
+      return;
   }
-  // NOTREACHED();
-  return "";
 }
 
 /// @brief Build a transparent color.

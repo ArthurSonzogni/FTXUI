@@ -3,10 +3,9 @@
 // the LICENSE file.
 #include <cstddef>  // for size_t
 #include <cstdint>
-#include <iostream>  // for operator<<, stringstream, basic_ostream, flush, cout, ostream
+#include <iostream>  // for cout, flush
 #include <limits>
 #include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
-#include <sstream>  // IWYU pragma: keep
 #include <utility>  // for pair
 
 #include "ftxui/screen/image.hpp"  // for Image
@@ -70,59 +69,70 @@ void WindowsEmulateVT100Terminal() {
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void UpdatePixelStyle(const Screen* screen,
-                      std::stringstream& ss,
+                      std::string& ss,
                       const Pixel& prev,
                       const Pixel& next) {
   // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
   if (FTXUI_UNLIKELY(next.hyperlink != prev.hyperlink)) {
-    ss << "\x1B]8;;" << screen->Hyperlink(next.hyperlink) << "\x1B\\";
+    ss += "\x1B]8;;";
+    ss += screen->Hyperlink(next.hyperlink);
+    ss += "\x1B\\";
   }
 
   // Bold
   if (FTXUI_UNLIKELY((next.bold ^ prev.bold) | (next.dim ^ prev.dim))) {
     // BOLD_AND_DIM_RESET:
-    ss << ((prev.bold && !next.bold) || (prev.dim && !next.dim) ? "\x1B[22m"
-                                                                : "");
-    ss << (next.bold ? "\x1B[1m" : "");  // BOLD_SET
-    ss << (next.dim ? "\x1B[2m" : "");   // DIM_SET
+    if ((prev.bold && !next.bold) || (prev.dim && !next.dim)) {
+      ss += "\x1B[22m";
+    }
+    if (next.bold) {
+      ss += "\x1B[1m";  // BOLD_SET
+    }
+    if (next.dim) {
+      ss += "\x1B[2m";  // DIM_SET
+    }
   }
 
   // Underline
   if (FTXUI_UNLIKELY(next.underlined != prev.underlined ||
                      next.underlined_double != prev.underlined_double)) {
-    ss << (next.underlined          ? "\x1B[4m"     // UNDERLINE
+    ss += (next.underlined          ? "\x1B[4m"     // UNDERLINE
            : next.underlined_double ? "\x1B[21m"    // UNDERLINE_DOUBLE
                                     : "\x1B[24m");  // UNDERLINE_RESET
   }
 
   // Blink
   if (FTXUI_UNLIKELY(next.blink != prev.blink)) {
-    ss << (next.blink ? "\x1B[5m"     // BLINK_SET
+    ss += (next.blink ? "\x1B[5m"     // BLINK_SET
                       : "\x1B[25m");  // BLINK_RESET
   }
 
   // Inverted
   if (FTXUI_UNLIKELY(next.inverted != prev.inverted)) {
-    ss << (next.inverted ? "\x1B[7m"     // INVERTED_SET
+    ss += (next.inverted ? "\x1B[7m"     // INVERTED_SET
                          : "\x1B[27m");  // INVERTED_RESET
   }
 
   // Italics
   if (FTXUI_UNLIKELY(next.italic != prev.italic)) {
-    ss << (next.italic ? "\x1B[3m"     // ITALIC_SET
+    ss += (next.italic ? "\x1B[3m"     // ITALIC_SET
                        : "\x1B[23m");  // ITALIC_RESET
   }
 
   // StrikeThrough
   if (FTXUI_UNLIKELY(next.strikethrough != prev.strikethrough)) {
-    ss << (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
+    ss += (next.strikethrough ? "\x1B[9m"     // CROSSED_OUT
                               : "\x1B[29m");  // CROSSED_OUT_RESET
   }
 
   if (FTXUI_UNLIKELY(next.foreground_color != prev.foreground_color ||
                      next.background_color != prev.background_color)) {
-    ss << "\x1B[" + next.foreground_color.Print(false) + "m";
-    ss << "\x1B[" + next.background_color.Print(true) + "m";
+    ss += "\x1B[";
+    next.foreground_color.PrintTo(ss, false);
+    ss += 'm';
+    ss += "\x1B[";
+    next.background_color.PrintTo(ss, true);
+    ss += 'm';
   }
 }
 
@@ -414,7 +424,9 @@ Screen::Screen(int dimx, int dimy) : Image{dimx, dimy} {
 /// @note Don't forget to flush stdout. Alternatively, you can use
 /// Screen::Print();
 std::string Screen::ToString() const {
-  std::stringstream ss;
+  // Pre-allocate: ~30 bytes per pixel for character + escape codes.
+  std::string ss;
+  ss.reserve(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_) * 30);
 
   const Pixel default_pixel;
   const Pixel* previous_pixel_ref = &default_pixel;
@@ -424,7 +436,7 @@ std::string Screen::ToString() const {
     if (y != 0) {
       UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
       previous_pixel_ref = &default_pixel;
-      ss << "\r\n";
+      ss += "\r\n";
     }
 
     // After printing a fullwith character, we need to skip the next cell.
@@ -434,19 +446,23 @@ std::string Screen::ToString() const {
         UpdatePixelStyle(this, ss, *previous_pixel_ref, pixel);
         previous_pixel_ref = &pixel;
         if (pixel.character.empty()) {
-          ss << " ";
+          ss += ' ';
         } else {
-          ss << pixel.character;
+          ss += pixel.character;
         }
       }
-      previous_fullwidth = (string_width(pixel.character) == 2);
+      if (pixel.character.size() <= 1) {
+        previous_fullwidth = false;
+      } else {
+        previous_fullwidth = (string_width(pixel.character) == 2);
+      }
     }
   }
 
   // Reset the style to default:
   UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
 
-  return ss.str();
+  return ss;
 }
 
 // Print the Screen to the terminal.
@@ -474,21 +490,22 @@ void Screen::Print() const {
 /// @return The string to print in order to reset the cursor position to the
 ///         beginning.
 std::string Screen::ResetPosition(bool clear) const {
-  std::stringstream ss;
+  std::string ss;
+  ss.reserve(static_cast<size_t>(dimy_) * 12);
   if (clear) {
-    ss << "\r";       // MOVE_LEFT;
-    ss << "\x1b[2K";  // CLEAR_SCREEN;
+    ss += '\r';        // MOVE_LEFT;
+    ss += "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
-      ss << "\x1B[1A";  // MOVE_UP;
-      ss << "\x1B[2K";  // CLEAR_LINE;
+      ss += "\x1B[1A";  // MOVE_UP;
+      ss += "\x1B[2K";  // CLEAR_LINE;
     }
   } else {
-    ss << "\r";  // MOVE_LEFT;
+    ss += '\r';  // MOVE_LEFT;
     for (int y = 1; y < dimy_; ++y) {
-      ss << "\x1B[1A";  // MOVE_UP;
+      ss += "\x1B[1A";  // MOVE_UP;
     }
   }
-  return ss.str();
+  return ss;
 }
 
 /// @brief Clear all the pixel from the screen.
