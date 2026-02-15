@@ -745,5 +745,18 @@ TEST(TableTest, Issue912) {
   });
 }
 
+TEST(TableTest, DecorateBorder) {
+  auto table = Table({
+      {"a", "b"},
+      {"c", "d"},
+  });
+  table.SelectAll().Border(LIGHT);
+  table.SelectAll().Separator(LIGHT);
+  table.SelectAll().DecorateBorder(color(Color::Red));
+  table.SelectAll().DecorateSeparator(color(Color::Red));
+  table.SelectAll().Border(LIGHT, color(Color::Red));
+  table.SelectAll().Separator(LIGHT, color(Color::Red));
+}
+
 }  // namespace ftxui
 // NOLINTEND

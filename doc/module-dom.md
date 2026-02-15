@@ -444,9 +444,72 @@ Terminal output:
 
 Enables easy formatting of data into a neat table like visual form.
 
+**Basic example:**
+```cpp
+auto table = Table({
+  {"Planet", "Radius", "Mass"},
+  {"Mercury", "2440", "0.330"},
+  {"Venus", "6052", "4.87"},
+  {"Earth", "6371", "5.97"},
+  {"Mars", "3390", "0.642"},
+});
+
+table.SelectAll().Border(LIGHT);
+table.SelectRow(0).Decorate(bold);
+table.SelectRow(0).SeparatorVertical(LIGHT);
+table.SelectRow(0).Border(DOUBLE);
+
+auto document = table.Render();
+```
+
 [Code example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2table_8cpp-example.html):
   
 ![image](https://user-images.githubusercontent.com/4759106/147250766-77d8ec9e-cf2b-486d-9866-1fd9f1bd2e6b.png)
+
+### Selection and Styling
+
+You can select parts of the table and apply decorators or borders to them. Selection methods include:
+```cpp
+ftxui::TableSelection::SelectAll();
+ftxui::TableSelection::SelectCell(column, row);
+ftxui::TableSelection::SelectRow(row_index);
+ftxui::TableSelection::SelectRows(row_min, row_max);
+ftxui::TableSelection::SelectColumn(column_index);
+ftxui::TableSelection::SelectColumns(column_min, column_max);
+ftxui::TableSelection::SelectRectangle(column_min, column_max, row_min, row_max);
+```
+
+Once a selection is made, you can apply:
+```cpp
+ftxui::TableSelection::Decorate(Decorator); // Apply a decorator to the whole selection (cells and borders).
+ftxui::TableSelection::DecorateCells(Decorator); // Apply a decorator only to the cells.
+ftxui::TableSelection::Border(BorderStyle); // Add a border around the selection.
+ftxui::TableSelection::Separator(BorderStyle); // 
+```
+
+### Colored borders
+
+You can also apply decorators specifically to borders and separators:
+```cpp
+// Apply a red border to the whole table.
+table.SelectAll().Border(LIGHT, color(Color::Red));
+
+// Apply a blue separator to the first row.
+table.SelectRow(0).SeparatorVertical(LIGHT, color(Color::Blue));
+```
+
+The following methods are available for fine-grained border decoration:
+```cpp
+ftxui::TableSelection::DecorateBorder(Decorator); // Apply a decorator to all borders of the selection.
+ftxui::TableSelection::DecorateBorderLeft(Decorator); // Apply a decorator to the left border of the selection.
+ftxui::TableSelection::DecorateBorderRight(Decorator); // Apply a decorator to the right border of the selection.
+ftxui::TableSelection::DecorateBorderTop(Decorator); // Apply a decorator to the top border of the selection.
+ftxui::TableSelection::DecorateBorderBottom(Decorator); // Apply a decorator to the bottom border of the selection.
+ftxui::TableSelection::DecorateSeparator(Decorator); // Apply a decorator to all separators of the selection.
+ftxui::TableSelection::DecorateSeparatorVertical(Decorator); // Apply a decorator to all vertical separators of the selection.
+ftxui::TableSelection::DecorateSeparatorHorizontal(Decorator); // Apply a decorator to all horizontal separators of the selection.
+```
+
 
 # Canvas {#dom-canvas}
 

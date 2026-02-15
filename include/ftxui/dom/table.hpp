@@ -63,23 +63,48 @@ class Table {
 
 class TableSelection {
  public:
+  // Decorate the whole selection with a decorator.
   void Decorate(Decorator);
   void DecorateAlternateRow(Decorator, int modulo = 2, int shift = 0);
   void DecorateAlternateColumn(Decorator, int modulo = 2, int shift = 0);
 
+  // Decorate only the cells of the selection with a decorator.
   void DecorateCells(Decorator);
   void DecorateCellsAlternateColumn(Decorator, int modulo = 2, int shift = 0);
   void DecorateCellsAlternateRow(Decorator, int modulo = 2, int shift = 0);
 
-  void Border(BorderStyle border = LIGHT);
-  void BorderLeft(BorderStyle border = LIGHT);
-  void BorderRight(BorderStyle border = LIGHT);
-  void BorderTop(BorderStyle border = LIGHT);
-  void BorderBottom(BorderStyle border = LIGHT);
+  // Decorate only the border of the selection with a decorator.
+  void DecorateBorder(Decorator);
+  void DecorateBorderLeft(Decorator);
+  void DecorateBorderRight(Decorator);
+  void DecorateBorderTop(Decorator);
+  void DecorateBorderBottom(Decorator);
 
+  // Decorate only the separator of the selection with a decorator.
+  void DecorateSeparator(Decorator);
+  void DecorateSeparatorVertical(Decorator);
+  void DecorateSeparatorHorizontal(Decorator);
+
+  // Decorate the border of the selection with a border style and a decorator.
+  void Border(BorderStyle border = LIGHT);
+  void Border(BorderStyle, Decorator);
+  void BorderLeft(BorderStyle border = LIGHT);
+  void BorderLeft(BorderStyle, Decorator);
+  void BorderRight(BorderStyle border = LIGHT);
+  void BorderRight(BorderStyle, Decorator);
+  void BorderTop(BorderStyle border = LIGHT);
+  void BorderTop(BorderStyle, Decorator);
+  void BorderBottom(BorderStyle border = LIGHT);
+  void BorderBottom(BorderStyle, Decorator);
+
+  // Decorate the separator of the selection with a border style and a
+  // decorator.
   void Separator(BorderStyle border = LIGHT);
+  void Separator(BorderStyle, Decorator);
   void SeparatorVertical(BorderStyle border = LIGHT);
+  void SeparatorVertical(BorderStyle, Decorator);
   void SeparatorHorizontal(BorderStyle border = LIGHT);
+  void SeparatorHorizontal(BorderStyle, Decorator);
 
  private:
   friend Table;

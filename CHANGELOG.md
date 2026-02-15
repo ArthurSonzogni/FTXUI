@@ -52,6 +52,8 @@ Next
   ~1183 for reporting the issue. This regressed in non released versions.
 
 ### Dom
+- Feature: Support for table border decorators. This allows for instance to
+  color the border of a table. Thanks @Sckab in #1186 for proposing it.
 - Fix integer overflow in `ComputeShrinkHard`. Thanks @its-pablo in #1137 for
   reporting and fixing the issue.
 - Add specialization for `vbox/hbox/dbox` to allow a container of Element as
