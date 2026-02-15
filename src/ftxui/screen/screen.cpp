@@ -451,7 +451,11 @@ std::string Screen::ToString() const {
           ss += pixel.character;
         }
       }
-      previous_fullwidth = (string_width(pixel.character) == 2);
+      if (pixel.character.size() <= 1) {
+        previous_fullwidth = false;
+      } else {
+        previous_fullwidth = (string_width(pixel.character) == 2);
+      }
     }
   }
 
