@@ -58,8 +58,18 @@ Next
   as input. Thanks @nbusser in #1117.
 
 ### Screen
-- Performance: Optimize `Screen::ToString()`. Yields about 8% FPS improvements.
-  Thanks @killerdevildog in #1188.
+- Performance: Optimize `Screen::ToString()`, `Color::Print()` and
+  `string_width()`. 
+  This was achieved by:
+  1. Skipping calling `string_width` for cells with single-byte data (the
+     primary driver for performance gains).
+  2. Pre-allocating memory for the output string.
+  3. Optimizing the ASCII path for string width calculation.
+  Benchmarks show a significant improvement:
+  - Basic rendering: ~27% faster.
+  - Text rendering: ~27% faster.
+  - Styled rendering: ~38% faster.
+  Thanks @killerdevildog for initiating (2) in #1188.
 
 6.1.9 (2025-05-07)
 ------------
