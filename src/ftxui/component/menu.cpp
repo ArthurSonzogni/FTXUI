@@ -68,7 +68,9 @@ bool IsHorizontal(Direction direction) {
 /// @ingroup component
 class MenuBase : public ComponentBase, public MenuOption {
  public:
-  explicit MenuBase(const MenuOption& option) : MenuOption(option) {}
+  explicit MenuBase(const MenuOption& option) : MenuOption(option) {
+    focused_entry() = selected();
+  }
 
   bool IsHorizontal() { return ftxui::IsHorizontal(direction); }
   void OnChange() {
