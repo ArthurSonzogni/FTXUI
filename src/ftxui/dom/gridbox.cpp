@@ -46,6 +46,13 @@ class GridBox : public Node {
         line.push_back(filler());
       }
     }
+
+    // Add children to properly forward non overridden methods from Node.
+    for (auto& line : lines_) {
+      for (auto& cell : line) {
+        children_.push_back(cell);
+      }
+    }
   }
 
   void ComputeRequirement() override {

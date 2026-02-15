@@ -56,6 +56,9 @@ Next
   reporting and fixing the issue.
 - Add specialization for `vbox/hbox/dbox` to allow a container of Element as
   as input. Thanks @nbusser in #1117.
+- Bugfix: In the gridbox, add the children to the tree so that the default
+  behaviors inherited from Node are correctly implemented. Thanks KenReneris for
+  #1070.
 
 ### Screen
 - Performance: Optimize `Screen::ToString()`, `Color::Print()` and
