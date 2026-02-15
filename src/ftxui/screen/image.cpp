@@ -55,7 +55,21 @@ const Pixel& Image::PixelAt(int x, int y) const {
 void Image::Clear() {
   for (auto& line : pixels_) {
     for (auto& cell : line) {
-      cell = Pixel();
+      // Reset style bits in-place instead of constructing a new Pixel.
+      // This avoids destroying and re-allocating the character string.
+      cell.blink = false;
+      cell.bold = false;
+      cell.dim = false;
+      cell.italic = false;
+      cell.inverted = false;
+      cell.underlined = false;
+      cell.underlined_double = false;
+      cell.strikethrough = false;
+      cell.automerge = false;
+      cell.hyperlink = 0;
+      cell.character.clear();  // Reuse existing allocation.
+      cell.background_color = Color::Default;
+      cell.foreground_color = Color::Default;
     }
   }
 }
