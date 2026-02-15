@@ -57,6 +57,10 @@ Next
 - Add specialization for `vbox/hbox/dbox` to allow a container of Element as
   as input. Thanks @nbusser in #1117.
 
+### Screen
+- Performance: Optimize `Screen::ToString()`. Yields about 8% FPS improvements.
+  Thanks @killerdevildog in #1188.
+
 6.1.9 (2025-05-07)
 ------------
 

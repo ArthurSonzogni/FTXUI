@@ -318,6 +318,7 @@ class Color {
   bool operator!=(const Color& rhs) const;
 
   std::string Print(bool is_background_color) const;
+  void PrintTo(std::string& out, bool is_background_color) const;
   bool IsOpaque() const { return alpha_ == 255; }
 
  private:

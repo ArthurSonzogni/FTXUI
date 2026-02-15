@@ -6,6 +6,7 @@
 #include <array>  // for array
 #include <cmath>
 #include <cstdint>
+#include <cstdio>  // for snprintf
 #include <string>
 
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
@@ -71,6 +72,52 @@ std::string Color::Print(bool is_background_color) const {
   }
   // NOTREACHED();
   return "";
+}
+
+/// @brief Append the ANSI color code to a string (zero-allocation fast path).
+/// @param out The string to append to.
+/// @param is_background_color Whether this is a background color code.
+void Color::PrintTo(std::string& out, bool is_background_color) const {
+  // Stack buffer large enough for "48;2;255;255;255" (17 chars + null).
+  char buf[24];
+  int n = 0;
+  if (is_background_color) {
+    switch (type_) {
+      case ColorType::Palette1:
+        out.append("49", 2);
+        return;
+      case ColorType::Palette16:
+        out.append(palette16code[2 * red_ + 1]);  // NOLINT
+        return;
+      case ColorType::Palette256:
+        n = std::snprintf(buf, sizeof(buf), "48;5;%d", red_);
+        out.append(buf, static_cast<size_t>(n));
+        return;
+      case ColorType::TrueColor:
+        n = std::snprintf(buf, sizeof(buf), "48;2;%d;%d;%d", red_, green_,
+                          blue_);
+        out.append(buf, static_cast<size_t>(n));
+        return;
+    }
+  } else {
+    switch (type_) {
+      case ColorType::Palette1:
+        out.append("39", 2);
+        return;
+      case ColorType::Palette16:
+        out.append(palette16code[2 * red_]);  // NOLINT
+        return;
+      case ColorType::Palette256:
+        n = std::snprintf(buf, sizeof(buf), "38;5;%d", red_);
+        out.append(buf, static_cast<size_t>(n));
+        return;
+      case ColorType::TrueColor:
+        n = std::snprintf(buf, sizeof(buf), "38;2;%d;%d;%d", red_, green_,
+                          blue_);
+        out.append(buf, static_cast<size_t>(n));
+        return;
+    }
+  }
 }
 
 /// @brief Build a transparent color.
