@@ -64,7 +64,7 @@ TEST(Event, EscapeKeyEnoughWait) {
   parser.Add('');
   parser.Timeout(50);
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_EQ(received_events[0], Event::Escape);
 }
 
@@ -78,7 +78,7 @@ TEST(Event, EscapeFast) {
   parser.Add('b');
   parser.Timeout(49);
 
-  EXPECT_EQ(2, received_events.size());
+  EXPECT_EQ(2u, received_events.size());
   EXPECT_EQ(received_events[0], Event::AltA);
   EXPECT_EQ(received_events[1], Event::AltB);
 }
@@ -98,7 +98,7 @@ TEST(Event, MouseLeftClickPressed) {
   parser.Add('2');
   parser.Add('M');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -122,7 +122,7 @@ TEST(Event, MouseLeftMoved) {
   parser.Add('2');
   parser.Add('M');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -145,7 +145,7 @@ TEST(Event, MouseLeftClickReleased) {
   parser.Add('2');
   parser.Add('m');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Left, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -166,7 +166,7 @@ TEST(Event, MouseReporting) {
   parser.Add('2');
   parser.Add('R');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_cursor_position());
   EXPECT_EQ(42, received_events[0].cursor_x());
   EXPECT_EQ(12, received_events[0].cursor_y());
@@ -188,7 +188,7 @@ TEST(Event, MouseMiddleClick) {
   parser.Add('2');
   parser.Add('M');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Middle, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -211,7 +211,7 @@ TEST(Event, MouseRightClick) {
   parser.Add('2');
   parser.Add('M');
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_mouse());
   EXPECT_EQ(Mouse::Right, received_events[0].mouse().button);
   EXPECT_EQ(12, received_events[0].mouse().x);
@@ -293,7 +293,7 @@ TEST(Event, UTF8) {
     }
 
     if (test.valid) {
-      EXPECT_EQ(1, received_events.size());
+      EXPECT_EQ(1u, received_events.size());
       EXPECT_TRUE(received_events[0].is_character());
     } else {
       EXPECT_TRUE(received_events.empty());
@@ -307,7 +307,7 @@ TEST(Event, NewLine) {
     auto parser = TerminalInputParser(
         [&](Event event) { received_events.push_back(std::move(event)); });
     parser.Add(newline);
-    EXPECT_EQ(1, received_events.size());
+    EXPECT_EQ(1u, received_events.size());
     EXPECT_TRUE(received_events[0] == Event::Return);
   }
 }
@@ -337,7 +337,7 @@ TEST(Event, Control) {
     if (test.cancel) {
       EXPECT_TRUE(received_events.empty());
     } else {
-      EXPECT_EQ(1, received_events.size());
+      EXPECT_EQ(1u, received_events.size());
       EXPECT_EQ(received_events[0], Event::Special({test.input}));
     }
   }
@@ -452,7 +452,7 @@ TEST(Event, Special) {
     for (auto input : test.input) {
       parser.Add(input);
     }
-    EXPECT_EQ(1, received_events.size());
+    EXPECT_EQ(1u, received_events.size());
     EXPECT_EQ(received_events[0], test.expected);
   }
 }
@@ -472,7 +472,7 @@ TEST(Event, DeviceControlString) {
   parser.Add(27);   // ESC
   parser.Add(92);   // (backslash)
 
-  EXPECT_EQ(1, received_events.size());
+  EXPECT_EQ(1u, received_events.size());
   EXPECT_TRUE(received_events[0].is_cursor_shape());
   EXPECT_EQ(1, received_events[0].cursor_shape());
 }

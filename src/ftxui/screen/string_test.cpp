@@ -67,52 +67,52 @@ TEST(StringTest, GlyphCount) {
 
 TEST(StringTest, GlyphIterate) {
   // Basic:
-  EXPECT_EQ(GlyphIterate("", -1), 0);
-  EXPECT_EQ(GlyphIterate("", 0), 0);
-  EXPECT_EQ(GlyphIterate("", 1), 0);
-  EXPECT_EQ(GlyphIterate("a", 0), 0);
-  EXPECT_EQ(GlyphIterate("a", 1), 1);
-  EXPECT_EQ(GlyphIterate("ab", 0), 0);
-  EXPECT_EQ(GlyphIterate("ab", 1), 1);
-  EXPECT_EQ(GlyphIterate("ab", 2), 2);
-  EXPECT_EQ(GlyphIterate("abc", 0), 0);
-  EXPECT_EQ(GlyphIterate("abc", 1), 1);
-  EXPECT_EQ(GlyphIterate("abc", 2), 2);
-  EXPECT_EQ(GlyphIterate("abc", 3), 3);
+  EXPECT_EQ(GlyphIterate("", -1), 0u);
+  EXPECT_EQ(GlyphIterate("", 0), 0u);
+  EXPECT_EQ(GlyphIterate("", 1), 0u);
+  EXPECT_EQ(GlyphIterate("a", 0), 0u);
+  EXPECT_EQ(GlyphIterate("a", 1), 1u);
+  EXPECT_EQ(GlyphIterate("ab", 0), 0u);
+  EXPECT_EQ(GlyphIterate("ab", 1), 1u);
+  EXPECT_EQ(GlyphIterate("ab", 2), 2u);
+  EXPECT_EQ(GlyphIterate("abc", 0), 0u);
+  EXPECT_EQ(GlyphIterate("abc", 1), 1u);
+  EXPECT_EQ(GlyphIterate("abc", 2), 2u);
+  EXPECT_EQ(GlyphIterate("abc", 3), 3u);
   // Fullwidth glyphs:
-  EXPECT_EQ(GlyphIterate("测", 0), 0);
-  EXPECT_EQ(GlyphIterate("测", 1), 3);
-  EXPECT_EQ(GlyphIterate("测试", 0), 0);
-  EXPECT_EQ(GlyphIterate("测试", 1), 3);
-  EXPECT_EQ(GlyphIterate("测试", 2), 6);
-  EXPECT_EQ(GlyphIterate("测试", 1, 3), 6);
-  EXPECT_EQ(GlyphIterate("测试", 1, 0), 3);
+  EXPECT_EQ(GlyphIterate("测", 0), 0u);
+  EXPECT_EQ(GlyphIterate("测", 1), 3u);
+  EXPECT_EQ(GlyphIterate("测试", 0), 0u);
+  EXPECT_EQ(GlyphIterate("测试", 1), 3u);
+  EXPECT_EQ(GlyphIterate("测试", 2), 6u);
+  EXPECT_EQ(GlyphIterate("测试", 1, 3), 6u);
+  EXPECT_EQ(GlyphIterate("测试", 1, 0), 3u);
   // Combining characters:
-  EXPECT_EQ(GlyphIterate("ā", 0), 0);
-  EXPECT_EQ(GlyphIterate("ā", 1), 3);
-  EXPECT_EQ(GlyphIterate("a⃒a̗ā", 0), 0);
-  EXPECT_EQ(GlyphIterate("a⃒a̗ā", 1), 4);
-  EXPECT_EQ(GlyphIterate("a⃒a̗ā", 2), 7);
-  EXPECT_EQ(GlyphIterate("a⃒a̗ā", 3), 10);
+  EXPECT_EQ(GlyphIterate("ā", 0), 0u);
+  EXPECT_EQ(GlyphIterate("ā", 1), 3u);
+  EXPECT_EQ(GlyphIterate("a⃒a̗ā", 0), 0u);
+  EXPECT_EQ(GlyphIterate("a⃒a̗ā", 1), 4u);
+  EXPECT_EQ(GlyphIterate("a⃒a̗ā", 2), 7u);
+  EXPECT_EQ(GlyphIterate("a⃒a̗ā", 3), 10u);
   // Control characters:
-  EXPECT_EQ(GlyphIterate("\1", 0), 0);
-  EXPECT_EQ(GlyphIterate("\1", 1), 1);
-  EXPECT_EQ(GlyphIterate("a\1a", 0), 0);
-  EXPECT_EQ(GlyphIterate("a\1a", 1), 2);
-  EXPECT_EQ(GlyphIterate("a\1a", 2), 3);
+  EXPECT_EQ(GlyphIterate("\1", 0), 0u);
+  EXPECT_EQ(GlyphIterate("\1", 1), 1u);
+  EXPECT_EQ(GlyphIterate("a\1a", 0), 0u);
+  EXPECT_EQ(GlyphIterate("a\1a", 1), 2u);
+  EXPECT_EQ(GlyphIterate("a\1a", 2), 3u);
 }
 
 TEST(StringTest, CellToGlyphIndex) {
   // Basic:
   auto basic = CellToGlyphIndex("abc");
-  ASSERT_EQ(basic.size(), 3);
+  ASSERT_EQ(basic.size(), 3u);
   EXPECT_EQ(basic[0], 0);
   EXPECT_EQ(basic[1], 1);
   EXPECT_EQ(basic[2], 2);
 
   // Fullwidth glyphs:
   auto fullwidth = CellToGlyphIndex("测试");
-  ASSERT_EQ(fullwidth.size(), 4);
+  ASSERT_EQ(fullwidth.size(), 4u);
   EXPECT_EQ(fullwidth[0], 0);
   EXPECT_EQ(fullwidth[1], 0);
   EXPECT_EQ(fullwidth[2], 1);
@@ -120,7 +120,7 @@ TEST(StringTest, CellToGlyphIndex) {
 
   // Combining characters:
   auto combining = CellToGlyphIndex("a⃒a̗ā");
-  ASSERT_EQ(combining.size(), 3);
+  ASSERT_EQ(combining.size(), 3u);
   EXPECT_EQ(combining[0], 0);
   EXPECT_EQ(combining[1], 1);
   EXPECT_EQ(combining[2], 2);

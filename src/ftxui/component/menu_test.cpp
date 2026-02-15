@@ -267,7 +267,7 @@ TEST(MenuTest, MenuEntryIndex) {
   menu->OnEvent(Event::ArrowDown);
   menu->OnEvent(Event::Return);
   for (size_t index = 0; index < menu->ChildCount(); index++) {
-    EXPECT_EQ(menu->ChildAt(index)->Index(), index);
+    EXPECT_EQ(menu->ChildAt(index)->Index(), (int)index);
   }
 }
 

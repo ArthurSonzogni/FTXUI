@@ -101,7 +101,7 @@ TEST(CanvasTest, GoldText) {
   auto element = canvas(c);
   Screen screen(30, 10);
   Render(screen, element);
-  EXPECT_EQ(Hash(screen.ToString()), 1074960375);
+  EXPECT_EQ(Hash(screen.ToString()), 1074960375u);
 }
 
 }  // namespace ftxui
