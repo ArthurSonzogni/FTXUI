@@ -1,0 +1,1102 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: homescreen.cpp File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ja",
+    "/ko"
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('homescreen_8cpp.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">homescreen.cpp File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><a href="homescreen_8cpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4" id="r_ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
+<tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a864723bd5932d215ef164764817e0974" id="r_a864723bd5932d215ef164764817e0974"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a864723bd5932d215ef164764817e0974">for</a> (auto &amp;column :info_columns)</td></tr>
+<tr class="separator:a864723bd5932d215ef164764817e0974"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95c43a570508ead835257223e47c988e" id="r_a95c43a570508ead835257223e47c988e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95c43a570508ead835257223e47c988e">for</a> (int value=0;value&lt; 255;value+=16)</td></tr>
+<tr class="separator:a95c43a570508ead835257223e47c988e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf1552a080ef0a9889340056057d0ca2" id="r_adf1552a080ef0a9889340056057d0ca2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adf1552a080ef0a9889340056057d0ca2">flexbox</a> ({ <a class="el" href="#aadac5850b3b9d0856054810b16163414">basic_color_display</a>, <a class="el" href="#a391f44f7de3d24ec6b1cfe48bb1210cd">palette_256_color_display</a>, <a class="el" href="#a220688cc22ac1597c07f12bdd081bff9">true_color_display</a>, }, <a class="el" href="group__dom.html#structftxui_1_1FlexboxConfig">FlexboxConfig</a>().SetGap(1, 1))</td></tr>
+<tr class="separator:adf1552a080ef0a9889340056057d0ca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5579bc51e6b713d975798ba1f06d2e8" id="r_ae5579bc51e6b713d975798ba1f06d2e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae5579bc51e6b713d975798ba1f06d2e8">hbox</a> ({ text(std::to_string(int(<a class="el" href="#ac7abb4766cd3f65c31f56279d7decff8">progress</a> *100))+&quot;% &quot;)|size(WIDTH, <a class="el" href="#ad28a0f8acf7ec71346d0ac30efc30d07">EQUAL</a>, 5), gauge(<a class="el" href="#ac7abb4766cd3f65c31f56279d7decff8">progress</a>), })</td></tr>
+<tr class="separator:ae5579bc51e6b713d975798ba1f06d2e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add852e8162dbf08b43c18f42e7431fa2" id="r_add852e8162dbf08b43c18f42e7431fa2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#add852e8162dbf08b43c18f42e7431fa2">window</a> (text(<a class="el" href="#ac30fed21fe991cc8475ce543929f8b72">title</a>)|hcenter|bold, text(&quot;contenido&quot;)|hcenter|dim)|size(WIDTH</td></tr>
+<tr class="separator:add852e8162dbf08b43c18f42e7431fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a597817b41a8dd2568e26e733a9d74e21" id="r_a597817b41a8dd2568e26e733a9d74e21"><td class="memItemLeft" align="right" valign="top"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a> dimx&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a597817b41a8dd2568e26e733a9d74e21">size</a> (HEIGHT, <a class="el" href="#ad28a0f8acf7ec71346d0ac30efc30d07">EQUAL</a>, dimy)</td></tr>
+<tr class="separator:a597817b41a8dd2568e26e733a9d74e21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68c8906157bc1e6aa0d402d747343abc" id="r_a68c8906157bc1e6aa0d402d747343abc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a68c8906157bc1e6aa0d402d747343abc">while</a> (!loop.HasQuitted())</td></tr>
+<tr class="separator:a68c8906157bc1e6aa0d402d747343abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aadac5850b3b9d0856054810b16163414" id="r_aadac5850b3b9d0856054810b16163414"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aadac5850b3b9d0856054810b16163414">basic_color_display</a></td></tr>
+<tr class="separator:aadac5850b3b9d0856054810b16163414"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a391f44f7de3d24ec6b1cfe48bb1210cd" id="r_a391f44f7de3d24ec6b1cfe48bb1210cd"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a391f44f7de3d24ec6b1cfe48bb1210cd">palette_256_color_display</a> = text(&quot;Paleta de 256 colores:&quot;)</td></tr>
+<tr class="separator:a391f44f7de3d24ec6b1cfe48bb1210cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ebe6335e84289128edc5d470399260e" id="r_a9ebe6335e84289128edc5d470399260e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ebe6335e84289128edc5d470399260e">columns</a></td></tr>
+<tr class="separator:a9ebe6335e84289128edc5d470399260e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a220688cc22ac1597c07f12bdd081bff9" id="r_a220688cc22ac1597c07f12bdd081bff9"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a220688cc22ac1597c07f12bdd081bff9">true_color_display</a> = text(&quot;Colores verdaderos: 24bits:&quot;)</td></tr>
+<tr class="separator:a220688cc22ac1597c07f12bdd081bff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a220e860b9cd3e6e1a911c1fb81a81ac4" id="r_a220e860b9cd3e6e1a911c1fb81a81ac4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a220e860b9cd3e6e1a911c1fb81a81ac4">array</a></td></tr>
+<tr class="separator:a220e860b9cd3e6e1a911c1fb81a81ac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7abb4766cd3f65c31f56279d7decff8" id="r_ac7abb4766cd3f65c31f56279d7decff8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7abb4766cd3f65c31f56279d7decff8">progress</a> = (shift + delta) % 500 / 500.f</td></tr>
+<tr class="separator:ac7abb4766cd3f65c31f56279d7decff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7883bcbd7c4289b627d5ddb8024170f9" id="r_a7883bcbd7c4289b627d5ddb8024170f9"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7883bcbd7c4289b627d5ddb8024170f9">gauge_component</a></td></tr>
+<tr class="separator:a7883bcbd7c4289b627d5ddb8024170f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac30fed21fe991cc8475ce543929f8b72" id="r_ac30fed21fe991cc8475ce543929f8b72"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac30fed21fe991cc8475ce543929f8b72">title</a> = std::to_string(dimx) + &quot;x&quot; + std::to_string(dimy)</td></tr>
+<tr class="separator:ac30fed21fe991cc8475ce543929f8b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad28a0f8acf7ec71346d0ac30efc30d07" id="r_ad28a0f8acf7ec71346d0ac30efc30d07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad28a0f8acf7ec71346d0ac30efc30d07">EQUAL</a></td></tr>
+<tr class="separator:ad28a0f8acf7ec71346d0ac30efc30d07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa646efa8a872f03dbd2b03b52bf2a127" id="r_aa646efa8a872f03dbd2b03b52bf2a127"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa646efa8a872f03dbd2b03b52bf2a127">paragraph_renderer_left</a></td></tr>
+<tr class="separator:aa646efa8a872f03dbd2b03b52bf2a127"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49cdc60f6728a8eaa19bbf8490c3fd86" id="r_a49cdc60f6728a8eaa19bbf8490c3fd86"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a49cdc60f6728a8eaa19bbf8490c3fd86">paragraph_renderer_right</a></td></tr>
+<tr class="separator:a49cdc60f6728a8eaa19bbf8490c3fd86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24413d596cf94f25e07d4c3ab876065b" id="r_a24413d596cf94f25e07d4c3ab876065b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24413d596cf94f25e07d4c3ab876065b">paragraph_renderer_split_position</a> = Terminal::Size().dimx / 2</td></tr>
+<tr class="separator:a24413d596cf94f25e07d4c3ab876065b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea311d105f61e5e5fbff222fb0de8abe" id="r_aea311d105f61e5e5fbff222fb0de8abe"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aea311d105f61e5e5fbff222fb0de8abe">paragraph_renderer_group</a></td></tr>
+<tr class="separator:aea311d105f61e5e5fbff222fb0de8abe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e5afc4f5840709c4498e028afdae008" id="r_a3e5afc4f5840709c4498e028afdae008"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3e5afc4f5840709c4498e028afdae008">paragraph_renderer_group_renderer</a></td></tr>
+<tr class="separator:a3e5afc4f5840709c4498e028afdae008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7114c41f8794383c0f870e16b4e4dfa" id="r_ac7114c41f8794383c0f870e16b4e4dfa"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7114c41f8794383c0f870e16b4e4dfa">tab_index</a> = 0</td></tr>
+<tr class="separator:ac7114c41f8794383c0f870e16b4e4dfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084bcdbf83ea1fb1096178386621ec7b" id="r_a084bcdbf83ea1fb1096178386621ec7b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a084bcdbf83ea1fb1096178386621ec7b">tab_entries</a></td></tr>
+<tr class="separator:a084bcdbf83ea1fb1096178386621ec7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc6b9e7173d155888ef3b52201375254" id="r_afc6b9e7173d155888ef3b52201375254"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc6b9e7173d155888ef3b52201375254">tab_selection</a></td></tr>
+<tr class="separator:afc6b9e7173d155888ef3b52201375254"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0e78b985a19760ef86282657396f621" id="r_ae0e78b985a19760ef86282657396f621"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae0e78b985a19760ef86282657396f621">tab_content</a></td></tr>
+<tr class="separator:ae0e78b985a19760ef86282657396f621"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad350a89c4d9681436b4cf9e3682bc579" id="r_ad350a89c4d9681436b4cf9e3682bc579"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad350a89c4d9681436b4cf9e3682bc579">exit_button</a></td></tr>
+<tr class="separator:ad350a89c4d9681436b4cf9e3682bc579"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bff956732f25fb8971a9ea89bbe3f3a" id="r_a2bff956732f25fb8971a9ea89bbe3f3a"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2bff956732f25fb8971a9ea89bbe3f3a">main_container</a></td></tr>
+<tr class="separator:a2bff956732f25fb8971a9ea89bbe3f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22853e6a0e98dcdf618d5280f118fee5" id="r_a22853e6a0e98dcdf618d5280f118fee5"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a22853e6a0e98dcdf618d5280f118fee5">main_renderer</a></td></tr>
+<tr class="separator:a22853e6a0e98dcdf618d5280f118fee5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af010cdd73db621d1a59ca2ab8003cbbc" id="r_af010cdd73db621d1a59ca2ab8003cbbc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__component.html#classftxui_1_1Loop">Loop</a> loop &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af010cdd73db621d1a59ca2ab8003cbbc">screen</a></td></tr>
+<tr class="separator:af010cdd73db621d1a59ca2ab8003cbbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9717e7bbecb906637e86cef6da3d83c2" id="r_a9717e7bbecb906637e86cef6da3d83c2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9717e7bbecb906637e86cef6da3d83c2">return</a></td></tr>
+<tr class="separator:a9717e7bbecb906637e86cef6da3d83c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ae66f6b31b5ad750f1fe042a706a4e3d4" name="ae66f6b31b5ad750f1fe042a706a4e3d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae66f6b31b5ad750f1fe042a706a4e3d4">&#9670;&#160;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00031">31</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a864723bd5932d215ef164764817e0974" name="a864723bd5932d215ef164764817e0974"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a864723bd5932d215ef164764817e0974">&#9670;&#160;</a></span>for() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">for </td>
+          <td>(</td>
+          <td class="paramtype">auto &amp;column :info_columns</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00326">326</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a95c43a570508ead835257223e47c988e" name="a95c43a570508ead835257223e47c988e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95c43a570508ead835257223e47c988e">&#9670;&#160;</a></span>for() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">for </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00347">347</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="adf1552a080ef0a9889340056057d0ca2" name="adf1552a080ef0a9889340056057d0ca2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf1552a080ef0a9889340056057d0ca2">&#9670;&#160;</a></span>flexbox()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a> flexbox </td>
+          <td>(</td>
+          <td class="paramtype">{ <a class="el" href="#aadac5850b3b9d0856054810b16163414">basic_color_display</a>, <a class="el" href="#a391f44f7de3d24ec6b1cfe48bb1210cd">palette_256_color_display</a>, <a class="el" href="#a220688cc22ac1597c07f12bdd081bff9">true_color_display</a>, }</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__dom.html#structftxui_1_1FlexboxConfig">FlexboxConfig</a>().SetGap(1, 1)</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2flexbox_gallery_8cpp-example.html#a13">examples/component/flexbox_gallery.cpp</a>, and <a class="el" href="examples_2component_2homescreen_8cpp-example.html#a15">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="ae5579bc51e6b713d975798ba1f06d2e8" name="ae5579bc51e6b713d975798ba1f06d2e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5579bc51e6b713d975798ba1f06d2e8">&#9670;&#160;</a></span>hbox()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a> hbox </td>
+          <td>(</td>
+          <td class="paramtype">{ text(std::to_string(int(<a class="el" href="#ac7abb4766cd3f65c31f56279d7decff8">progress</a> *100))+&quot;% &quot;)|size(WIDTH, <a class="el" href="#ad28a0f8acf7ec71346d0ac30efc30d07">EQUAL</a>, 5), gauge(<a class="el" href="#ac7abb4766cd3f65c31f56279d7decff8">progress</a>), }</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2button_in_frame_8cpp-example.html#a2">examples/component/button_in_frame.cpp</a>, <a class="el" href="examples_2component_2canvas_animated_8cpp-example.html#a11">examples/component/canvas_animated.cpp</a>, <a class="el" href="examples_2component_2collapsible_8cpp-example.html#a1">examples/component/collapsible.cpp</a>, <a class="el" href="examples_2component_2flexbox_gallery_8cpp-example.html#a14">examples/component/flexbox_gallery.cpp</a>, <a class="el" href="examples_2component_2focus_cursor_8cpp-example.html#a1">examples/component/focus_cursor.cpp</a>, <a class="el" href="examples_2component_2gallery_8cpp-example.html#a1">examples/component/gallery.cpp</a>, <a class="el" href="examples_2component_2homescreen_8cpp-example.html#a3">examples/component/homescreen.cpp</a>, <a class="el" href="examples_2component_2input_8cpp-example.html#a6">examples/component/input.cpp</a>, <a class="el" href="examples_2component_2input_style_8cpp-example.html#a5">examples/component/input_style.cpp</a>, <a class="el" href="examples_2component_2menu2_8cpp-example.html#a4">examples/component/menu2.cpp</a>, <a class="el" href="examples_2component_2menu_entries_8cpp-example.html#a8">examples/component/menu_entries.cpp</a>, <a class="el" href="examples_2component_2menu_entries_animated_8cpp-example.html#a12">examples/component/menu_entries_animated.cpp</a>, <a class="el" href="examples_2component_2menu_style_8cpp-example.html#a15">examples/component/menu_style.cpp</a>, <a class="el" href="examples_2component_2modal_dialog_custom_8cpp-example.html#a3">examples/component/modal_dialog_custom.cpp</a>, <a class="el" href="examples_2component_2selection_8cpp-example.html#a7">examples/component/selection.cpp</a>, <a class="el" href="examples_2component_2slider_rgb_8cpp-example.html#a4">examples/component/slider_rgb.cpp</a>, <a class="el" href="examples_2component_2tab_vertical_8cpp-example.html#a1">examples/component/tab_vertical.cpp</a>, <a class="el" href="examples_2component_2toggle_8cpp-example.html#a2">examples/component/toggle.cpp</a>, <a class="el" href="examples_2component_2with_restored_io_8cpp-example.html#a3">examples/component/with_restored_io.cpp</a>, <a class="el" href="examples_2dom_2border_8cpp-example.html#a1">examples/dom/border.cpp</a>, <a class="el" href="examples_2dom_2border_colored_8cpp-example.html#a2">examples/dom/border_colored.cpp</a>, <a class="el" href="examples_2dom_2color_gallery_8cpp-example.html#a3">examples/dom/color_gallery.cpp</a>, <a class="el" href="examples_2dom_2color_info_palette256_8cpp-example.html#a2">examples/dom/color_info_palette256.cpp</a>, <a class="el" href="examples_2dom_2color_truecolor_HSV_8cpp-example.html#a2">examples/dom/color_truecolor_HSV.cpp</a>, <a class="el" href="examples_2dom_2color_truecolor_RGB_8cpp-example.html#a3">examples/dom/color_truecolor_RGB.cpp</a>, <a class="el" href="examples_2dom_2gauge_8cpp-example.html#a1">examples/dom/gauge.cpp</a>, <a class="el" href="examples_2dom_2gauge_direction_8cpp-example.html#a1">examples/dom/gauge_direction.cpp</a>, <a class="el" href="examples_2dom_2graph_8cpp-example.html#a2">examples/dom/graph.cpp</a>, <a class="el" href="examples_2dom_2package_manager_8cpp-example.html#a3">examples/dom/package_manager.cpp</a>, <a class="el" href="examples_2dom_2paragraph_8cpp-example.html#a2">examples/dom/paragraph.cpp</a>, <a class="el" href="examples_2dom_2separator_8cpp-example.html#a1">examples/dom/separator.cpp</a>, <a class="el" href="examples_2dom_2separator_style_8cpp-example.html#a2">examples/dom/separator_style.cpp</a>, <a class="el" href="examples_2dom_2size_8cpp-example.html#a6">examples/dom/size.cpp</a>, <a class="el" href="examples_2dom_2spinner_8cpp-example.html#a1">examples/dom/spinner.cpp</a>, <a class="el" href="examples_2dom_2style_blink_8cpp-example.html#a1">examples/dom/style_blink.cpp</a>, <a class="el" href="examples_2dom_2style_bold_8cpp-example.html#a1">examples/dom/style_bold.cpp</a>, <a class="el" href="examples_2dom_2style_color_8cpp-example.html#a1">examples/dom/style_color.cpp</a>, <a class="el" href="examples_2dom_2style_dim_8cpp-example.html#a1">examples/dom/style_dim.cpp</a>, <a class="el" href="examples_2dom_2style_gallery_8cpp-example.html#a1">examples/dom/style_gallery.cpp</a>, <a class="el" href="examples_2dom_2style_hyperlink_8cpp-example.html#a1">examples/dom/style_hyperlink.cpp</a>, <a class="el" href="examples_2dom_2style_inverted_8cpp-example.html#a1">examples/dom/style_inverted.cpp</a>, <a class="el" href="examples_2dom_2style_italic_8cpp-example.html#a1">examples/dom/style_italic.cpp</a>, <a class="el" href="examples_2dom_2style_strikethrough_8cpp-example.html#a1">examples/dom/style_strikethrough.cpp</a>, <a class="el" href="examples_2dom_2style_underlined_8cpp-example.html#a1">examples/dom/style_underlined.cpp</a>, <a class="el" href="examples_2dom_2style_underlined_double_8cpp-example.html#a1">examples/dom/style_underlined_double.cpp</a>, and <a class="el" href="examples_2dom_2vbox_hbox_8cpp-example.html#a2">examples/dom/vbox_hbox.cpp</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="add852e8162dbf08b43c18f42e7431fa2" name="add852e8162dbf08b43c18f42e7431fa2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add852e8162dbf08b43c18f42e7431fa2">&#9670;&#160;</a></span>window()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a> window </td>
+          <td>(</td>
+          <td class="paramtype">text(<a class="el" href="#ac30fed21fe991cc8475ce543929f8b72">title</a>)|hcenter|</td>          <td class="paramname"><span class="paramname"><em>bold</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">text(&quot;contenido&quot;)|hcenter|</td>          <td class="paramname"><span class="paramname"><em>dim</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2flexbox_gallery_8cpp-example.html#a4">examples/component/flexbox_gallery.cpp</a>, <a class="el" href="examples_2component_2homescreen_8cpp-example.html#a5">examples/component/homescreen.cpp</a>, <a class="el" href="examples_2component_2menu_multiple_8cpp-example.html#a2">examples/component/menu_multiple.cpp</a>, <a class="el" href="examples_2component_2resizable_split_clamp_8cpp-example.html#a2">examples/component/resizable_split_clamp.cpp</a>, <a class="el" href="examples_2component_2selection_8cpp-example.html#a6">examples/component/selection.cpp</a>, <a class="el" href="examples_2dom_2color_truecolor_RGB_8cpp-example.html#a2">examples/dom/color_truecolor_RGB.cpp</a>, <a class="el" href="examples_2dom_2hflow_8cpp-example.html#a3">examples/dom/hflow.cpp</a>, <a class="el" href="examples_2dom_2package_manager_8cpp-example.html#a5">examples/dom/package_manager.cpp</a>, <a class="el" href="examples_2dom_2size_8cpp-example.html#a3">examples/dom/size.cpp</a>, and <a class="el" href="examples_2dom_2vflow_8cpp-example.html#a3">examples/dom/vflow.cpp</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="a597817b41a8dd2568e26e733a9d74e21" name="a597817b41a8dd2568e26e733a9d74e21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a597817b41a8dd2568e26e733a9d74e21">&#9670;&#160;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a> dimx size </td>
+          <td>(</td>
+          <td class="paramtype">HEIGHT</td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#ad28a0f8acf7ec71346d0ac30efc30d07">EQUAL</a></td>          <td class="paramname"><span class="paramname"><em></em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dimy</td>          <td class="paramname"><span class="paramname"><em></em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2button_in_frame_8cpp-example.html#a3">examples/component/button_in_frame.cpp</a>, <a class="el" href="examples_2component_2canvas_animated_8cpp-example.html#a7">examples/component/canvas_animated.cpp</a>, <a class="el" href="examples_2component_2checkbox_in_frame_8cpp-example.html#a1">examples/component/checkbox_in_frame.cpp</a>, <a class="el" href="examples_2component_2dropdown_custom_8cpp-example.html#a2">examples/component/dropdown_custom.cpp</a>, <a class="el" href="examples_2component_2flexbox_gallery_8cpp-example.html#a5">examples/component/flexbox_gallery.cpp</a>, <a class="el" href="examples_2component_2focus_8cpp-example.html#a2">examples/component/focus.cpp</a>, <a class="el" href="examples_2component_2gallery_8cpp-example.html#a2">examples/component/gallery.cpp</a>, <a class="el" href="examples_2component_2homescreen_8cpp-example.html#a6">examples/component/homescreen.cpp</a>, <a class="el" href="examples_2component_2input_in_frame_8cpp-example.html#a1">examples/component/input_in_frame.cpp</a>, <a class="el" href="examples_2component_2menu_entries_8cpp-example.html#a9">examples/component/menu_entries.cpp</a>, <a class="el" href="examples_2component_2menu_in_frame_8cpp-example.html#a1">examples/component/menu_in_frame.cpp</a>, <a class="el" href="examples_2component_2modal_dialog_8cpp-example.html#a3">examples/component/modal_dialog.cpp</a>, <a class="el" href="examples_2component_2modal_dialog_custom_8cpp-example.html#a4">examples/component/modal_dialog_custom.cpp</a>, <a class="el" href="examples_2component_2radiobox_in_frame_8cpp-example.html#a1">examples/component/radiobox_in_frame.cpp</a>, <a class="el" href="examples_2component_2resizable_split_8cpp-example.html#a2">examples/component/resizable_split.cpp</a>, <a class="el" href="examples_2component_2selection_8cpp-example.html#a4">examples/component/selection.cpp</a>, <a class="el" href="examples_2component_2slider_direction_8cpp-example.html#a7">examples/component/slider_direction.cpp</a>, <a class="el" href="examples_2component_2slider_rgb_8cpp-example.html#a1">examples/component/slider_rgb.cpp</a>, <a class="el" href="examples_2component_2with_restored_io_8cpp-example.html#a4">examples/component/with_restored_io.cpp</a>, <a class="el" href="examples_2dom_2graph_8cpp-example.html#a4">examples/dom/graph.cpp</a>, <a class="el" href="examples_2dom_2hflow_8cpp-example.html#a4">examples/dom/hflow.cpp</a>, <a class="el" href="examples_2dom_2package_manager_8cpp-example.html#a1">examples/dom/package_manager.cpp</a>, <a class="el" href="examples_2dom_2size_8cpp-example.html#a4">examples/dom/size.cpp</a>, <a class="el" href="examples_2dom_2spinner_8cpp-example.html#a2">examples/dom/spinner.cpp</a>, and <a class="el" href="examples_2dom_2vflow_8cpp-example.html#a4">examples/dom/vflow.cpp</a>.</dd>
+</dl>
+
+</div>
+</div>
+<a id="a68c8906157bc1e6aa0d402d747343abc" name="a68c8906157bc1e6aa0d402d747343abc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68c8906157bc1e6aa0d402d747343abc">&#9670;&#160;</a></span>while()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">while </td>
+          <td>(</td>
+          <td class="paramtype">!loop.</td>          <td class="paramname"><span class="paramname"><em>HasQuitted</em></span>()</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00504">504</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="aadac5850b3b9d0856054810b16163414" name="aadac5850b3b9d0856054810b16163414"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadac5850b3b9d0856054810b16163414">&#9670;&#160;</a></span>basic_color_display</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto basic_color_display</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a8">examples/component/homescreen.cpp</a>, and <a class="el" href="examples_2dom_2color_gallery_8cpp-example.html#a1">examples/dom/color_gallery.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00275">275</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a391f44f7de3d24ec6b1cfe48bb1210cd" name="a391f44f7de3d24ec6b1cfe48bb1210cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a391f44f7de3d24ec6b1cfe48bb1210cd">&#9670;&#160;</a></span>palette_256_color_display</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">palette_256_color_display = text(&quot;Paleta de 256 colores:&quot;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a9">examples/component/homescreen.cpp</a>, and <a class="el" href="examples_2dom_2color_gallery_8cpp-example.html#a4">examples/dom/color_gallery.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00322">322</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9ebe6335e84289128edc5d470399260e" name="a9ebe6335e84289128edc5d470399260e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ebe6335e84289128edc5d470399260e">&#9670;&#160;</a></span>columns</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> columns</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{</div>
+<div class="line">      std::vector&lt;std::vector&lt;ColorInfo&gt;&gt; info_columns = <a class="code hl_function" href="color__info__sorted__2d_8ipp.html#a0f08918d6064cd2a0e56cb9ec74033ca">ColorInfoSorted2D</a>()</div>
+<div class="ttc" id="acolor__info__sorted__2d_8ipp_html_a0f08918d6064cd2a0e56cb9ec74033ca"><div class="ttname"><a href="color__info__sorted__2d_8ipp.html#a0f08918d6064cd2a0e56cb9ec74033ca">ColorInfoSorted2D</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; ftxui::ColorInfo &gt; &gt; ColorInfoSorted2D()</div><div class="ttdef"><b>Definition</b> <a href="color__info__sorted__2d_8ipp_source.html#l00005">color_info_sorted_2d.ipp:5</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a11">examples/component/homescreen.cpp</a>, and <a class="el" href="examples_2dom_2color_gallery_8cpp-example.html#a6">examples/dom/color_gallery.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00325">325</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a220688cc22ac1597c07f12bdd081bff9" name="a220688cc22ac1597c07f12bdd081bff9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a220688cc22ac1597c07f12bdd081bff9">&#9670;&#160;</a></span>true_color_display</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">true_color_display = text(&quot;Colores verdaderos: 24bits:&quot;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a13">examples/component/homescreen.cpp</a>, and <a class="el" href="examples_2dom_2color_gallery_8cpp-example.html#a8">examples/dom/color_gallery.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00343">343</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a220e860b9cd3e6e1a911c1fb81a81ac4" name="a220e860b9cd3e6e1a911c1fb81a81ac4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a220e860b9cd3e6e1a911c1fb81a81ac4">&#9670;&#160;</a></span>array</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> array</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{</div>
+<div class="line">      <span class="keywordtype">int</span> saturation = 255</div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a14">examples/component/homescreen.cpp</a>, <a class="el" href="examples_2dom_2color_gallery_8cpp-example.html#a9">examples/dom/color_gallery.cpp</a>, and <a class="el" href="examples_2dom_2color_truecolor_HSV_8cpp-example.html#a1">examples/dom/color_truecolor_HSV.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00346">346</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac7abb4766cd3f65c31f56279d7decff8" name="ac7abb4766cd3f65c31f56279d7decff8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7abb4766cd3f65c31f56279d7decff8">&#9670;&#160;</a></span>progress</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float progress = (shift + delta) % 500 / 500.f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a18">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00375">375</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a7883bcbd7c4289b627d5ddb8024170f9" name="a7883bcbd7c4289b627d5ddb8024170f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7883bcbd7c4289b627d5ddb8024170f9">&#9670;&#160;</a></span>gauge_component</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto gauge_component</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>([render_gauge] {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceftxui.html#a8efa7828025f618b7cd2d1e53034e167">vbox</a>({</div>
+<div class="line">        render_gauge(0) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fac1e9bce8242f443c54c7405223d616cd">Color::Black</a>),</div>
+<div class="line">        render_gauge(100) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fade3b52f7f38e412815092547cd6e8be7">Color::GrayDark</a>),</div>
+<div class="line">        render_gauge(50) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fadebf1805c024a5504872f795f83a6835">Color::GrayLight</a>),</div>
+<div class="line">        render_gauge(6894) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fab548046646b36c12aa6ba841de500094">Color::White</a>),</div>
+<div class="line">        <a class="code hl_function" href="group__dom.html#gac1ef1cf6bf7cd0759ffa195071edb2a0">separator</a>(),</div>
+<div class="line">        render_gauge(6841) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802faf5e09dd1da4088464f264b7a3118bff8">Color::Blue</a>),</div>
+<div class="line">        render_gauge(9813) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802faf7cc79a56a740e9c59a156b0b3b93cbd">Color::BlueLight</a>),</div>
+<div class="line">        render_gauge(98765) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fab0d4738f9c7f12049e52aa4e868bdc8b">Color::Cyan</a>),</div>
+<div class="line">        render_gauge(98) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa61bd7f1290cc0a24e565539a61ba5839">Color::CyanLight</a>),</div>
+<div class="line">        render_gauge(9846) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fad0784a3f969fe736e8b271a5a161d106">Color::Green</a>),</div>
+<div class="line">        render_gauge(1122) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa9827485e548095e18c65045bc8058ce7">Color::GreenLight</a>),</div>
+<div class="line">        render_gauge(84) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fab5059a620e2c7dc57556b1e275c2f9bc">Color::Magenta</a>),</div>
+<div class="line">        render_gauge(645) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa9663f993a3affdf3526fa032cfe5b9f4">Color::MagentaLight</a>),</div>
+<div class="line">        render_gauge(568) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fad3163c1fcda01965b692ec2c3122b743">Color::Red</a>),</div>
+<div class="line">        render_gauge(2222) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa0a04dda6f997cd48c0ca74203c501d27">Color::RedLight</a>),</div>
+<div class="line">        render_gauge(220) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fabf28513245738599d13e3ce36bd16c82">Color::Yellow</a>),</div>
+<div class="line">        render_gauge(348) | <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa7948fe5f055329af04798409b7ac37b5">Color::YellowLight</a>),</div>
+<div class="line">    });</div>
+<div class="line">  })</div>
+<div class="ttc" id="agroup__component_html_ga533e883e2aeea28de2b60564fcaf0361"><div class="ttname"><a href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">ftxui::Renderer</a></div><div class="ttdeci">Component Renderer(Component child, std::function&lt; Element()&gt;)</div><div class="ttdoc">Retorna un nuevo Componente, similar a |child|, pero usando |render| como el evento Component::Render...</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2component_2renderer_8cpp_source.html#l00061">src/ftxui/component/renderer.cpp:61</a></div></div>
+<div class="ttc" id="agroup__dom_html_gac1ef1cf6bf7cd0759ffa195071edb2a0"><div class="ttname"><a href="group__dom.html#gac1ef1cf6bf7cd0759ffa195071edb2a0">ftxui::separator</a></div><div class="ttdeci">Element separator()</div><div class="ttdoc">Dibuja una separación vertical u horizontal entre otros dos elementos.</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2separator_8cpp_source.html#l00134">src/ftxui/dom/separator.cpp:134</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaf61b489da39ca5e24b68e6e1a2b09c0d"><div class="ttname"><a href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">ftxui::color</a></div><div class="ttdeci">Decorator color(Color)</div><div class="ttdoc">Decora usando un color de primer plano.</div><div class="ttdef"><b>Definition</b> <a href="dom_2color_8cpp_source.html#l00110">dom/color.cpp:110</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fa0a04dda6f997cd48c0ca74203c501d27"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa0a04dda6f997cd48c0ca74203c501d27">ftxui::Color::RedLight</a></div><div class="ttdeci">@ RedLight</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00062">color.hpp:62</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fa61bd7f1290cc0a24e565539a61ba5839"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa61bd7f1290cc0a24e565539a61ba5839">ftxui::Color::CyanLight</a></div><div class="ttdeci">@ CyanLight</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00067">color.hpp:67</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fa7948fe5f055329af04798409b7ac37b5"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa7948fe5f055329af04798409b7ac37b5">ftxui::Color::YellowLight</a></div><div class="ttdeci">@ YellowLight</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00064">color.hpp:64</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fa9663f993a3affdf3526fa032cfe5b9f4"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa9663f993a3affdf3526fa032cfe5b9f4">ftxui::Color::MagentaLight</a></div><div class="ttdeci">@ MagentaLight</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00066">color.hpp:66</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fa9827485e548095e18c65045bc8058ce7"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fa9827485e548095e18c65045bc8058ce7">ftxui::Color::GreenLight</a></div><div class="ttdeci">@ GreenLight</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00063">color.hpp:63</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fab0d4738f9c7f12049e52aa4e868bdc8b"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fab0d4738f9c7f12049e52aa4e868bdc8b">ftxui::Color::Cyan</a></div><div class="ttdeci">@ Cyan</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00059">color.hpp:59</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fab5059a620e2c7dc57556b1e275c2f9bc"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fab5059a620e2c7dc57556b1e275c2f9bc">ftxui::Color::Magenta</a></div><div class="ttdeci">@ Magenta</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00058">color.hpp:58</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fab548046646b36c12aa6ba841de500094"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fab548046646b36c12aa6ba841de500094">ftxui::Color::White</a></div><div class="ttdeci">@ White</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00068">color.hpp:68</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fabf28513245738599d13e3ce36bd16c82"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fabf28513245738599d13e3ce36bd16c82">ftxui::Color::Yellow</a></div><div class="ttdeci">@ Yellow</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00056">color.hpp:56</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fac1e9bce8242f443c54c7405223d616cd"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fac1e9bce8242f443c54c7405223d616cd">ftxui::Color::Black</a></div><div class="ttdeci">@ Black</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00053">color.hpp:53</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fad0784a3f969fe736e8b271a5a161d106"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fad0784a3f969fe736e8b271a5a161d106">ftxui::Color::Green</a></div><div class="ttdeci">@ Green</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00055">color.hpp:55</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fad3163c1fcda01965b692ec2c3122b743"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fad3163c1fcda01965b692ec2c3122b743">ftxui::Color::Red</a></div><div class="ttdeci">@ Red</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00054">color.hpp:54</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fade3b52f7f38e412815092547cd6e8be7"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fade3b52f7f38e412815092547cd6e8be7">ftxui::Color::GrayDark</a></div><div class="ttdeci">@ GrayDark</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00061">color.hpp:61</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fadebf1805c024a5504872f795f83a6835"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fadebf1805c024a5504872f795f83a6835">ftxui::Color::GrayLight</a></div><div class="ttdeci">@ GrayLight</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00060">color.hpp:60</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802faf5e09dd1da4088464f264b7a3118bff8"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802faf5e09dd1da4088464f264b7a3118bff8">ftxui::Color::Blue</a></div><div class="ttdeci">@ Blue</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00057">color.hpp:57</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802faf7cc79a56a740e9c59a156b0b3b93cbd"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802faf7cc79a56a740e9c59a156b0b3b93cbd">ftxui::Color::BlueLight</a></div><div class="ttdeci">@ BlueLight</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00065">color.hpp:65</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a8efa7828025f618b7cd2d1e53034e167"><div class="ttname"><a href="namespaceftxui.html#a8efa7828025f618b7cd2d1e53034e167">ftxui::vbox</a></div><div class="ttdeci">Element vbox(Elements)</div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a19">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00383">383</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac30fed21fe991cc8475ce543929f8b72" name="ac30fed21fe991cc8475ce543929f8b72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac30fed21fe991cc8475ce543929f8b72">&#9670;&#160;</a></span>title</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string title = std::to_string(dimx) + &quot;x&quot; + std::to_string(dimy)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2flexbox_gallery_8cpp-example.html#a3">examples/component/flexbox_gallery.cpp</a>, <a class="el" href="examples_2component_2focus_8cpp-example.html#a1">examples/component/focus.cpp</a>, <a class="el" href="examples_2component_2homescreen_8cpp-example.html#a20">examples/component/homescreen.cpp</a>, <a class="el" href="examples_2component_2menu_multiple_8cpp-example.html#a1">examples/component/menu_multiple.cpp</a>, <a class="el" href="examples_2dom_2hflow_8cpp-example.html#a2">examples/dom/hflow.cpp</a>, <a class="el" href="examples_2dom_2size_8cpp-example.html#a2">examples/dom/size.cpp</a>, and <a class="el" href="examples_2dom_2vflow_8cpp-example.html#a2">examples/dom/vflow.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00407">407</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad28a0f8acf7ec71346d0ac30efc30d07" name="ad28a0f8acf7ec71346d0ac30efc30d07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad28a0f8acf7ec71346d0ac30efc30d07">&#9670;&#160;</a></span>EQUAL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="composition_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2">return</a> EQUAL</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2flexbox_gallery_8cpp-example.html#a6">examples/component/flexbox_gallery.cpp</a>, <a class="el" href="examples_2component_2focus_8cpp-example.html#a3">examples/component/focus.cpp</a>, <a class="el" href="examples_2component_2gallery_8cpp-example.html#a3">examples/component/gallery.cpp</a>, <a class="el" href="examples_2component_2homescreen_8cpp-example.html#a7">examples/component/homescreen.cpp</a>, <a class="el" href="examples_2component_2selection_8cpp-example.html#a5">examples/component/selection.cpp</a>, <a class="el" href="examples_2dom_2hflow_8cpp-example.html#a5">examples/dom/hflow.cpp</a>, <a class="el" href="examples_2dom_2package_manager_8cpp-example.html#a2">examples/dom/package_manager.cpp</a>, <a class="el" href="examples_2dom_2size_8cpp-example.html#a5">examples/dom/size.cpp</a>, <a class="el" href="examples_2dom_2spinner_8cpp-example.html#a3">examples/dom/spinner.cpp</a>, and <a class="el" href="examples_2dom_2vflow_8cpp-example.html#a5">examples/dom/vflow.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00410">410</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aa646efa8a872f03dbd2b03b52bf2a127" name="aa646efa8a872f03dbd2b03b52bf2a127"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa646efa8a872f03dbd2b03b52bf2a127">&#9670;&#160;</a></span>paragraph_renderer_left</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto paragraph_renderer_left</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a21">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00413">413</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a49cdc60f6728a8eaa19bbf8490c3fd86" name="a49cdc60f6728a8eaa19bbf8490c3fd86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49cdc60f6728a8eaa19bbf8490c3fd86">&#9670;&#160;</a></span>paragraph_renderer_right</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto paragraph_renderer_right</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>([] {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceftxui.html#ac54cdd05db30871ce082a8fa650545da">paragraph</a>(<span class="stringliteral">&quot;&lt;--- Esta barra vertical es redimensionable usando el ratón&quot;</span>) |</div>
+<div class="line">           <a class="code hl_function" href="group__dom.html#ga5b11656305fce8427b81daf1c35883f1">center</a>;</div>
+<div class="line">  })</div>
+<div class="ttc" id="agroup__dom_html_ga5b11656305fce8427b81daf1c35883f1"><div class="ttname"><a href="group__dom.html#ga5b11656305fce8427b81daf1c35883f1">ftxui::center</a></div><div class="ttdeci">Element center(Element)</div><div class="ttdoc">Centra un elemento horizontal y verticalmente.</div><div class="ttdef"><b>Definition</b> <a href="composite__decorator_8cpp_source.html#l00031">composite_decorator.cpp:31</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ac54cdd05db30871ce082a8fa650545da"><div class="ttname"><a href="namespaceftxui.html#ac54cdd05db30871ce082a8fa650545da">ftxui::paragraph</a></div><div class="ttdeci">Elements paragraph(std::wstring text)</div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a23">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00449">449</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a24413d596cf94f25e07d4c3ab876065b" name="a24413d596cf94f25e07d4c3ab876065b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24413d596cf94f25e07d4c3ab876065b">&#9670;&#160;</a></span>paragraph_renderer_split_position</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int paragraph_renderer_split_position = Terminal::Size().dimx / 2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a24">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00454">454</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aea311d105f61e5e5fbff222fb0de8abe" name="aea311d105f61e5e5fbff222fb0de8abe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea311d105f61e5e5fbff222fb0de8abe">&#9670;&#160;</a></span>paragraph_renderer_group</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto paragraph_renderer_group</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <a class="code hl_function" href="group__component.html#gae2205fc172615b43e1e3307bb614be4c">ResizableSplitLeft</a>(<a class="code hl_variable" href="#aa646efa8a872f03dbd2b03b52bf2a127">paragraph_renderer_left</a>, <a class="code hl_variable" href="#a49cdc60f6728a8eaa19bbf8490c3fd86">paragraph_renderer_right</a>,</div>
+<div class="line">                         &amp;<a class="code hl_variable" href="#a24413d596cf94f25e07d4c3ab876065b">paragraph_renderer_split_position</a>)</div>
+<div class="ttc" id="agroup__component_html_gae2205fc172615b43e1e3307bb614be4c"><div class="ttname"><a href="group__component.html#gae2205fc172615b43e1e3307bb614be4c">ftxui::ResizableSplitLeft</a></div><div class="ttdeci">Component ResizableSplitLeft(Component main, Component back, int *main_size)</div><div class="ttdoc">Una división horizontal entre dos componentes, configurable usando el ratón.</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2component_2resizable__split_8cpp_source.html#l00199">src/ftxui/component/resizable_split.cpp:199</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_a24413d596cf94f25e07d4c3ab876065b"><div class="ttname"><a href="#a24413d596cf94f25e07d4c3ab876065b">paragraph_renderer_split_position</a></div><div class="ttdeci">int paragraph_renderer_split_position</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00454">homescreen.cpp:454</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_a49cdc60f6728a8eaa19bbf8490c3fd86"><div class="ttname"><a href="#a49cdc60f6728a8eaa19bbf8490c3fd86">paragraph_renderer_right</a></div><div class="ttdeci">auto paragraph_renderer_right</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00449">homescreen.cpp:449</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_aa646efa8a872f03dbd2b03b52bf2a127"><div class="ttname"><a href="#aa646efa8a872f03dbd2b03b52bf2a127">paragraph_renderer_left</a></div><div class="ttdeci">auto paragraph_renderer_left</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00413">homescreen.cpp:413</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a25">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00455">455</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a3e5afc4f5840709c4498e028afdae008" name="a3e5afc4f5840709c4498e028afdae008"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e5afc4f5840709c4498e028afdae008">&#9670;&#160;</a></span>paragraph_renderer_group_renderer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto paragraph_renderer_group_renderer</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>(<a class="code hl_variable" href="#aea311d105f61e5e5fbff222fb0de8abe">paragraph_renderer_group</a>,</div>
+<div class="line">               [&amp;] { <span class="keywordflow">return</span> <a class="code hl_variable" href="#aea311d105f61e5e5fbff222fb0de8abe">paragraph_renderer_group</a>-&gt;Render(); })</div>
+<div class="ttc" id="ahomescreen_8cpp_html_aea311d105f61e5e5fbff222fb0de8abe"><div class="ttname"><a href="#aea311d105f61e5e5fbff222fb0de8abe">paragraph_renderer_group</a></div><div class="ttdeci">auto paragraph_renderer_group</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00455">homescreen.cpp:455</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a26">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00458">458</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac7114c41f8794383c0f870e16b4e4dfa" name="ac7114c41f8794383c0f870e16b4e4dfa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7114c41f8794383c0f870e16b4e4dfa">&#9670;&#160;</a></span>tab_index</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int tab_index = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a27">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00464">464</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a084bcdbf83ea1fb1096178386621ec7b" name="a084bcdbf83ea1fb1096178386621ec7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a084bcdbf83ea1fb1096178386621ec7b">&#9670;&#160;</a></span>tab_entries</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; tab_entries</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
+<div class="line">      <span class="stringliteral">&quot;htop&quot;</span>, <span class="stringliteral">&quot;color&quot;</span>, <span class="stringliteral">&quot;spinner&quot;</span>, <span class="stringliteral">&quot;gauge&quot;</span>, <span class="stringliteral">&quot;compiler&quot;</span>, <span class="stringliteral">&quot;paragraph&quot;</span>,</div>
+<div class="line">  }</div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a28">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00465">465</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="afc6b9e7173d155888ef3b52201375254" name="afc6b9e7173d155888ef3b52201375254"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc6b9e7173d155888ef3b52201375254">&#9670;&#160;</a></span>tab_selection</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto tab_selection</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <a class="code hl_function" href="group__component.html#ga27828fc39da10a18478ba84b1b162039">Menu</a>(&amp;<a class="code hl_variable" href="#a084bcdbf83ea1fb1096178386621ec7b">tab_entries</a>, &amp;<a class="code hl_variable" href="#ac7114c41f8794383c0f870e16b4e4dfa">tab_index</a>, <a class="code hl_function" href="group__component.html#aedc93fba91339d9713812821cb140c50">MenuOption::HorizontalAnimated</a>())</div>
+<div class="ttc" id="agroup__component_html_aedc93fba91339d9713812821cb140c50"><div class="ttname"><a href="group__component.html#aedc93fba91339d9713812821cb140c50">ftxui::MenuOption::HorizontalAnimated</a></div><div class="ttdeci">static MenuOption HorizontalAnimated()</div><div class="ttdoc">Opciones estándar para un menú horizontal animado. Esto puede ser útil para implementar una barra de ...</div><div class="ttdef"><b>Definition</b> <a href="component__options_8cpp_source.html#l00092">component_options.cpp:92</a></div></div>
+<div class="ttc" id="agroup__component_html_ga27828fc39da10a18478ba84b1b162039"><div class="ttname"><a href="group__component.html#ga27828fc39da10a18478ba84b1b162039">ftxui::Menu</a></div><div class="ttdeci">Component Menu(MenuOption options)</div><div class="ttdoc">Una lista de texto. El elemento enfocado es seleccionado.</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2component_2menu_8cpp_source.html#l00512">src/ftxui/component/menu.cpp:512</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_a084bcdbf83ea1fb1096178386621ec7b"><div class="ttname"><a href="#a084bcdbf83ea1fb1096178386621ec7b">tab_entries</a></div><div class="ttdeci">std::vector&lt; std::string &gt; tab_entries</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00465">homescreen.cpp:465</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_ac7114c41f8794383c0f870e16b4e4dfa"><div class="ttname"><a href="#ac7114c41f8794383c0f870e16b4e4dfa">tab_index</a></div><div class="ttdeci">int tab_index</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00464">homescreen.cpp:464</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a29">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00468">468</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae0e78b985a19760ef86282657396f621" name="ae0e78b985a19760ef86282657396f621"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e78b985a19760ef86282657396f621">&#9670;&#160;</a></span>tab_content</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto tab_content</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= Container::Tab(</div>
+<div class="line">      {</div>
+<div class="line">          htop,</div>
+<div class="line">          color_tab_renderer,</div>
+<div class="line">          spinner_tab_renderer,</div>
+<div class="line">          <a class="code hl_variable" href="#a7883bcbd7c4289b627d5ddb8024170f9">gauge_component</a>,</div>
+<div class="line">          compiler_renderer,</div>
+<div class="line">          <a class="code hl_variable" href="#a3e5afc4f5840709c4498e028afdae008">paragraph_renderer_group_renderer</a>,</div>
+<div class="line">      },</div>
+<div class="line">      &amp;<a class="code hl_variable" href="#ac7114c41f8794383c0f870e16b4e4dfa">tab_index</a>)</div>
+<div class="ttc" id="ahomescreen_8cpp_html_a3e5afc4f5840709c4498e028afdae008"><div class="ttname"><a href="#a3e5afc4f5840709c4498e028afdae008">paragraph_renderer_group_renderer</a></div><div class="ttdeci">auto paragraph_renderer_group_renderer</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00458">homescreen.cpp:458</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_a7883bcbd7c4289b627d5ddb8024170f9"><div class="ttname"><a href="#a7883bcbd7c4289b627d5ddb8024170f9">gauge_component</a></div><div class="ttdeci">auto gauge_component</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00383">homescreen.cpp:383</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a30">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00470">470</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad350a89c4d9681436b4cf9e3682bc579" name="ad350a89c4d9681436b4cf9e3682bc579"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad350a89c4d9681436b4cf9e3682bc579">&#9670;&#160;</a></span>exit_button</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto exit_button</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">=</div>
+<div class="line">      <a class="code hl_function" href="group__component.html#ga4e8295ec77dd31b0acc5063b134473e7">Button</a>(<span class="stringliteral">&quot;Salir&quot;</span>, [&amp;] { <a class="code hl_variable" href="#af010cdd73db621d1a59ca2ab8003cbbc">screen</a>.Exit(); }, <a class="code hl_function" href="group__component.html#aff2c83442fc0e47ef7fde64b62a148d5">ButtonOption::Animated</a>())</div>
+<div class="ttc" id="agroup__component_html_aff2c83442fc0e47ef7fde64b62a148d5"><div class="ttname"><a href="group__component.html#aff2c83442fc0e47ef7fde64b62a148d5">ftxui::ButtonOption::Animated</a></div><div class="ttdeci">static ButtonOption Animated()</div></div>
+<div class="ttc" id="agroup__component_html_ga4e8295ec77dd31b0acc5063b134473e7"><div class="ttname"><a href="group__component.html#ga4e8295ec77dd31b0acc5063b134473e7">ftxui::Button</a></div><div class="ttdeci">Component Button(ButtonOption options)</div><div class="ttdoc">Dibuja un botón. Ejecuta una función al hacer clic.</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2component_2button_8cpp_source.html#l00175">src/ftxui/component/button.cpp:175</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_af010cdd73db621d1a59ca2ab8003cbbc"><div class="ttname"><a href="#af010cdd73db621d1a59ca2ab8003cbbc">screen</a></div><div class="ttdeci">Loop loop &amp; screen</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00503">homescreen.cpp:503</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2homescreen_8cpp-example.html#a31">examples/component/homescreen.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00481">481</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a2bff956732f25fb8971a9ea89bbe3f3a" name="a2bff956732f25fb8971a9ea89bbe3f3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bff956732f25fb8971a9ea89bbe3f3a">&#9670;&#160;</a></span>main_container</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto main_container</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= Container::Vertical({</div>
+<div class="line">      Container::Horizontal({</div>
+<div class="line">          <a class="code hl_variable" href="#afc6b9e7173d155888ef3b52201375254">tab_selection</a>,</div>
+<div class="line">          <a class="code hl_variable" href="#ad350a89c4d9681436b4cf9e3682bc579">exit_button</a>,</div>
+<div class="line">      }),</div>
+<div class="line">      <a class="code hl_variable" href="#ae0e78b985a19760ef86282657396f621">tab_content</a>,</div>
+<div class="line">  })</div>
+<div class="ttc" id="ahomescreen_8cpp_html_ad350a89c4d9681436b4cf9e3682bc579"><div class="ttname"><a href="#ad350a89c4d9681436b4cf9e3682bc579">exit_button</a></div><div class="ttdeci">auto exit_button</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00481">homescreen.cpp:481</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_ae0e78b985a19760ef86282657396f621"><div class="ttname"><a href="#ae0e78b985a19760ef86282657396f621">tab_content</a></div><div class="ttdeci">auto tab_content</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00470">homescreen.cpp:470</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_afc6b9e7173d155888ef3b52201375254"><div class="ttname"><a href="#afc6b9e7173d155888ef3b52201375254">tab_selection</a></div><div class="ttdeci">auto tab_selection</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00468">homescreen.cpp:468</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2flexbox_gallery_8cpp-example.html#a17">examples/component/flexbox_gallery.cpp</a>, <a class="el" href="examples_2component_2homescreen_8cpp-example.html#a32">examples/component/homescreen.cpp</a>, and <a class="el" href="examples_2component_2modal_dialog_custom_8cpp-example.html#a5">examples/component/modal_dialog_custom.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00484">484</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a22853e6a0e98dcdf618d5280f118fee5" name="a22853e6a0e98dcdf618d5280f118fee5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22853e6a0e98dcdf618d5280f118fee5">&#9670;&#160;</a></span>main_renderer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto main_renderer</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">= <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>(<a class="code hl_variable" href="#a2bff956732f25fb8971a9ea89bbe3f3a">main_container</a>, [&amp;] {</div>
+<div class="line">    <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceftxui.html#a8efa7828025f618b7cd2d1e53034e167">vbox</a>({</div>
+<div class="line">        <a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;Demostración de FTXUI&quot;</span>) | bold | <a class="code hl_function" href="group__dom.html#gaf7d0d1e44c1a5424e42a5cddceacf7f7">hcenter</a>,</div>
+<div class="line">        <a class="code hl_function" href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">hbox</a>({</div>
+<div class="line">            <a class="code hl_variable" href="#afc6b9e7173d155888ef3b52201375254">tab_selection</a>-&gt;Render() | <a class="code hl_function" href="group__dom.html#ga257acd2bd47bab7db879cca2c0e67e23">flex</a>,</div>
+<div class="line">            <a class="code hl_variable" href="#ad350a89c4d9681436b4cf9e3682bc579">exit_button</a>-&gt;<a class="code hl_function" href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">Render</a>(),</div>
+<div class="line">        }),</div>
+<div class="line">        <a class="code hl_variable" href="#ae0e78b985a19760ef86282657396f621">tab_content</a>-&gt;<a class="code hl_function" href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">Render</a>() | <a class="code hl_function" href="group__dom.html#ga257acd2bd47bab7db879cca2c0e67e23">flex</a>,</div>
+<div class="line">    });</div>
+<div class="line">  })</div>
+<div class="ttc" id="agroup__dom_html_a7e286fe14880614686ceeec84a9a9702"><div class="ttname"><a href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">ftxui::Node::Render</a></div><div class="ttdeci">virtual void Render(Screen &amp;screen)</div><div class="ttdoc">Muestra un elemento en un ftxui::Screen.</div><div class="ttdef"><b>Definition</b> <a href="node_8cpp_source.html#l00059">node.cpp:59</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga257acd2bd47bab7db879cca2c0e67e23"><div class="ttname"><a href="group__dom.html#ga257acd2bd47bab7db879cca2c0e67e23">ftxui::flex</a></div><div class="ttdeci">Element flex(Element)</div><div class="ttdoc">Hace que un elemento hijo se expanda proporcionalmente al espacio restante en un contenedor.</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00123">flex.cpp:123</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga75baaa2734ed76a9f478beaafa87ae57"><div class="ttname"><a href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">ftxui::text</a></div><div class="ttdeci">Element text(std::wstring text)</div><div class="ttdoc">Muestra un fragmento de texto Unicode.</div><div class="ttdef"><b>Definition</b> <a href="text_8cpp_source.html#l00160">text.cpp:160</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaf7d0d1e44c1a5424e42a5cddceacf7f7"><div class="ttname"><a href="group__dom.html#gaf7d0d1e44c1a5424e42a5cddceacf7f7">ftxui::hcenter</a></div><div class="ttdeci">Element hcenter(Element)</div><div class="ttdoc">Centra un elemento horizontalmente.</div><div class="ttdef"><b>Definition</b> <a href="composite__decorator_8cpp_source.html#l00015">composite_decorator.cpp:15</a></div></div>
+<div class="ttc" id="ahomescreen_8cpp_html_a2bff956732f25fb8971a9ea89bbe3f3a"><div class="ttname"><a href="#a2bff956732f25fb8971a9ea89bbe3f3a">main_container</a></div><div class="ttdeci">auto main_container</div><div class="ttdef"><b>Definition</b> <a href="homescreen_8cpp_source.html#l00484">homescreen.cpp:484</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a552ba6d33b3c9bec586b99fba4c243ac"><div class="ttname"><a href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">ftxui::hbox</a></div><div class="ttdeci">Element hbox(Elements)</div><div class="ttdoc">Un contenedor que muestra elementos horizontalmente uno por uno.</div><div class="ttdef"><b>Definition</b> <a href="hbox_8cpp_source.html#l00094">hbox.cpp:94</a></div></div>
+</div><!-- fragment --><dl class="section examples"><dt>Examples</dt><dd><a class="el" href="examples_2component_2flexbox_gallery_8cpp-example.html#a18">examples/component/flexbox_gallery.cpp</a>, <a class="el" href="examples_2component_2homescreen_8cpp-example.html#a33">examples/component/homescreen.cpp</a>, and <a class="el" href="examples_2component_2modal_dialog_custom_8cpp-example.html#a6">examples/component/modal_dialog_custom.cpp</a>.</dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00492">492</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af010cdd73db621d1a59ca2ab8003cbbc" name="af010cdd73db621d1a59ca2ab8003cbbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af010cdd73db621d1a59ca2ab8003cbbc">&#9670;&#160;</a></span>screen</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__component.html#classftxui_1_1Loop">Loop</a> loop&amp; screen</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00503">503</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9717e7bbecb906637e86cef6da3d83c2" name="a9717e7bbecb906637e86cef6da3d83c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9717e7bbecb906637e86cef6da3d83c2">&#9670;&#160;</a></span>return</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">return</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="homescreen_8cpp_source.html#l00518">518</a> of file <a class="el" href="homescreen_8cpp_source.html">homescreen.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "es";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

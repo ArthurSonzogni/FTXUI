@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['s_0',['S',['../group__component.html#ad3a8ae79497cbfa7cd88230b8fef68bb',1,'ftxui::Event']]],
+  ['s_1',['s',['../group__component.html#ac09c6206315a7cd54fb467bc7760dfae',1,'ftxui::Event']]],
+  ['saturation_2',['saturation',['../group__screen.html#a4769b22557e2bcd3edbc69f2caaf691f',1,'ftxui::ColorInfo']]],
+  ['screen_5f_3',['screen_',['../group__component.html#a57ae65156ecf0f469cc559a49e6c4f2f',1,'ftxui::Event']]],
+  ['selected_4',['selected',['../group__component.html#ac42a32c3439d08be9c5626a5fbc3a0c4',1,'ftxui::MenuOption::selected'],['../group__component.html#ac42a32c3439d08be9c5626a5fbc3a0c4',1,'ftxui::RadioboxOption::selected']]],
+  ['selection_5fstyle_5f_5',['selection_style_',['../group__screen.html#ab9f757d5d67255f61e27950be4131be1',1,'ftxui::Screen']]],
+  ['separator_5ffunc_6',['separator_func',['../structftxui_1_1ResizableSplitOption.html#a237a29bec11c71ee14c9b36ae94a1dbf',1,'ftxui::ResizableSplitOption']]],
+  ['shape_7',['shape',['../structftxui_1_1Screen_1_1Cursor.html#a8b9f7758a8bd2bef680aeecc40bcfe04',1,'ftxui::Screen::Cursor']]],
+  ['shift_8',['shift',['../group__component.html#ace78b37abb3d96740735fd8eb41235e6',1,'ftxui::Mouse']]],
+  ['size_9',['size',['../structftxui_1_1box__helper_1_1Element.html#a439227feff9d7f55384e8780cfc2eb82',1,'ftxui::box_helper::Element::size'],['../string_8cpp.html#a4d43374ddb4d3a44203a443bc6c4c44c',1,'size:&#160;string.cpp']]],
+  ['size_5fx_10',['size_x',['../structftxui_1_1flexbox__helper_1_1Global.html#aec1dee03c858e0d3910c40c209890ab0',1,'ftxui::flexbox_helper::Global']]],
+  ['size_5fy_11',['size_y',['../structftxui_1_1flexbox__helper_1_1Global.html#a22aeb82e7a98517be5f90c810e423af0',1,'ftxui::flexbox_helper::Global']]],
+  ['state_12',['state',['../structftxui_1_1EntryState.html#ab30ba07e2a0bd07a15e45a92c32db9c5',1,'ftxui::EntryState']]],
+  ['stencil_13',['stencil',['../group__screen.html#a92cacd07ba30909855f19edc01192ff0',1,'ftxui::Image']]],
+  ['stops_14',['stops',['../group__dom.html#a9c56e5fb8075d8a48b1b0c3b4ea31831',1,'ftxui::LinearGradient']]],
+  ['strikethrough_15',['strikethrough',['../group__screen.html#a21fbeba389ccf8f76447c7a73ead8db2',1,'ftxui::Pixel']]],
+  ['style_5f_16',['style_',['../selection__style_8cpp.html#a4e933ebfcd587caa8c7a7c518ee9e4f6',1,'style_:&#160;selection_style.cpp'],['../src_2ftxui_2dom_2separator_8cpp.html#ac30a0a0ed81dc58d609a872c58242761',1,'style_:&#160;separator.cpp']]]
+];

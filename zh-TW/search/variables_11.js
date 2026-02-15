@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['r_0',['R',['../group__component.html#a587f0654c3c66dc8739b421c29dbe8a7',1,'ftxui::Event']]],
+  ['r_1',['r',['../group__component.html#a953b41738801a5ec92b15681aed4a3a9',1,'ftxui::Event']]],
+  ['radiobox_2',['radiobox',['../group__component.html#a83288bb2ebb6ca0eef0651285a71291e',1,'ftxui::DropdownOption::radiobox'],['../gallery_8cpp.html#a2f9270043301860784c4a1744ff064e1',1,'radiobox:&#160;gallery.cpp']]],
+  ['radiobox_5fentries_3',['radiobox_entries',['../gallery_8cpp.html#ab0f61defa62c405a77336f266aa2eb93',1,'gallery.cpp']]],
+  ['radiobox_5fselected_4',['radiobox_selected',['../gallery_8cpp.html#a981dd77a66be08ae4cff176eefb99b16',1,'gallery.cpp']]],
+  ['red_5',['red',['../group__screen.html#ad47d918910aaa51c73160ac85999d09c',1,'ftxui::ColorInfo']]],
+  ['render_6',['render',['../structftxui_1_1WindowOptions.html#aa3858f495756090a379c564844eaf342',1,'ftxui::WindowOptions']]],
+  ['requirement_5f_7',['requirement_',['../group__dom.html#a3530d99687053ce0d0006b9dee9a1ca7',1,'ftxui::Node']]],
+  ['resize_8',['resize',['../group__component.html#a47beb6819c84c39255cb60f5710714ce',1,'ftxui::WindowRenderState']]],
+  ['resize_5fdown_9',['resize_down',['../structftxui_1_1WindowOptions.html#a0e28320aa6145db8201aebb07162d461',1,'ftxui::WindowOptions']]],
+  ['resize_5fdown_5f_10',['resize_down_',['../src_2ftxui_2component_2window_8cpp.html#abb5820730ee5ac08f5623d866a8b6777',1,'window.cpp']]],
+  ['resize_5fleft_11',['resize_left',['../structftxui_1_1WindowOptions.html#a17b2004b29ac06ad2b486d923fad0dbb',1,'ftxui::WindowOptions']]],
+  ['resize_5fleft_5f_12',['resize_left_',['../src_2ftxui_2component_2window_8cpp.html#a11cd63ba8957337034d3351d3b416030',1,'window.cpp']]],
+  ['resize_5fright_13',['resize_right',['../structftxui_1_1WindowOptions.html#abaa0c8009acea8039e5b6f5bab86c4dc',1,'ftxui::WindowOptions']]],
+  ['resize_5fright_5f_14',['resize_right_',['../src_2ftxui_2component_2window_8cpp.html#a435bdeaeaea854a80f574fbfda91032f',1,'window.cpp']]],
+  ['resize_5ftop_15',['resize_top',['../structftxui_1_1WindowOptions.html#a8885b0a965d3975426bd615b2fef3542',1,'ftxui::WindowOptions']]],
+  ['resize_5ftop_5f_16',['resize_top_',['../src_2ftxui_2component_2window_8cpp.html#a12f0c5cd8f00f860d8fb47550f0af746',1,'window.cpp']]],
+  ['return_17',['Return',['../group__component.html#ad3ab0b5bcc923c4b994080d45b97e36b',1,'ftxui::Event']]],
+  ['return_18',['return',['../gallery_8cpp.html#a9717e7bbecb906637e86cef6da3d83c2',1,'gallery.cpp']]],
+  ['right_19',['right',['../screen_8cpp.html#aa4b74e56e675912bbc06504407fc7a46',1,'screen.cpp']]],
+  ['round_20',['round',['../screen_8cpp.html#ad20ff2177c37ddb2e308815c71d4be81',1,'screen.cpp']]]
+];

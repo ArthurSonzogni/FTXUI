@@ -1,0 +1,389 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: Hiérarchie des classes</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('hierarchy.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Hiérarchie des classes</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock">
+<p><a href="inherits.html">Aller au graphe hiérarchique des classes</a></p>
+Cette liste d'héritage est classée approximativement par ordre alphabétique :</div><div class="directory">
+<div class="levels">[Niveau de détails <span onclick="javascript:dynsection.toggleLevel(1);">1</span><span onclick="javascript:dynsection.toggleLevel(2);">2</span><span onclick="javascript:dynsection.toggleLevel(3);">3</span>]</div><table class="directory">
+<tr id="row_0_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1ConstStringListRef_1_1Adapter.html" target="_self">ConstStringListRef::Adapter</a></td><td class="desc"></td></tr>
+<tr id="row_1_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1AnimatedColorOption" target="_self">AnimatedColorOption</a></td><td class="desc">Option concernant une couleur potentiellement animée </td></tr>
+<tr id="row_2_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1AnimatedColorsOption.html" target="_self">AnimatedColorsOption</a></td><td class="desc"></td></tr>
+<tr id="row_3_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1AnimationTask.html" target="_self">AnimationTask</a></td><td class="desc"></td></tr>
+<tr id="row_4_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1animation_1_1Animator.html" target="_self">Animator</a></td><td class="desc"></td></tr>
+<tr id="row_5_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1AutoReset.html" target="_self">AutoReset&lt; T &gt;</a></td><td class="desc">Assigne une valeur à une variable, restaure son ancienne valeur lorsque la portée est quittée </td></tr>
+<tr id="row_6_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1flexbox__helper_1_1Block.html" target="_self">Block</a></td><td class="desc"></td></tr>
+<tr id="row_7_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__screen.html#structftxui_1_1Box" target="_self">Box</a></td><td class="desc"><a class="el" href="group__screen.html#structftxui_1_1Box" title="Box est une structure qui représente une zone rectangulaire dans un espace 2D.">Box</a> est une structure qui représente une zone rectangulaire dans un espace 2D </td></tr>
+<tr id="row_8_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1ButtonOption" target="_self">ButtonOption</a></td><td class="desc">Option pour le composant AnimatedButton </td></tr>
+<tr id="row_9_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__dom.html#structftxui_1_1Canvas" target="_self">Canvas</a></td><td class="desc"><a class="el" href="group__dom.html#structftxui_1_1Canvas" title="Canvas est un tampon dessinable associé aux opérations de dessin.">Canvas</a> est un tampon dessinable associé aux opérations de dessin </td></tr>
+<tr id="row_10_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1CapturedMouseInterface.html" target="_self">CapturedMouseInterface</a></td><td class="desc"></td></tr>
+<tr id="row_11_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1CheckboxOption" target="_self">CheckboxOption</a></td><td class="desc">Option pour le composant Checkbox </td></tr>
+<tr id="row_12_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__screen.html#classftxui_1_1Color" target="_self">Color</a></td><td class="desc"><a class="el" href="group__screen.html#classftxui_1_1Color" title="Color est une classe qui représente une couleur dans l&#39;interface utilisateur du terminal.">Color</a> est une classe qui représente une couleur dans l'interface utilisateur du terminal </td></tr>
+<tr id="row_13_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__screen.html#structftxui_1_1ColorInfo" target="_self">ColorInfo</a></td><td class="desc"><a class="el" href="group__screen.html#structftxui_1_1ColorInfo" title="ColorInfo est une structure qui contient des informations sur la palette de couleurs du terminal.">ColorInfo</a> est une structure qui contient des informations sur la palette de couleurs du terminal </td></tr>
+<tr id="row_14_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#classftxui_1_1ComponentBase" target="_self">ComponentBase</a></td><td class="desc">Il implémente son propre rendu en tant que <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">ftxui::Element</a>. Il implémente la navigation au clavier en répondant à <a class="el" href="group__component.html#structftxui_1_1Event" title="Représente un événement. Il peut s&#39;agir d&#39;un événement de touche, d&#39;un redimensionnement de terminal,...">ftxui::Event</a> </td></tr>
+<tr id="row_15_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1ConstRef.html" target="_self">ConstRef&lt; T &gt;</a></td><td class="desc">Un adaptateur. Possède ou référence un objet immuable </td></tr>
+<tr id="row_16_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_16_" class="arrow" onclick="dynsection.toggleFolder('16_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1ConstRef.html" target="_self">ConstRef&lt; std::string &gt;</a></td><td class="desc"></td></tr>
+<tr id="row_16_0_" class="odd"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1ConstStringRef.html" target="_self">ConstStringRef</a></td><td class="desc">Un adaptateur. Possède ou référence une chaîne constante. Par commodité, cette classe convertit plusieurs chaînes immuables vers une représentation partagée </td></tr>
+<tr id="row_17_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1ConstStringListRef.html" target="_self">ConstStringListRef</a></td><td class="desc">Un adaptateur. Référence une liste de chaînes de caractères </td></tr>
+<tr id="row_18_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1Screen_1_1Cursor.html" target="_self">Screen::Cursor</a></td><td class="desc"></td></tr>
+<tr id="row_19_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__screen.html#structftxui_1_1Dimensions" target="_self">Dimensions</a></td><td class="desc"><a class="el" href="group__screen.html#structftxui_1_1Dimensions" title="Dimensions est une structure qui représente la taille du terminal.">Dimensions</a> est une structure qui représente la taille du terminal </td></tr>
+<tr id="row_20_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1DropdownOption" target="_self">DropdownOption</a></td><td class="desc">Option pour le composant Dropdown.Un menu déroulant est une case à cocher qui ouvre/ferme une radiobox </td></tr>
+<tr id="row_21_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1box__helper_1_1Element.html" target="_self">Element</a></td><td class="desc"></td></tr>
+<tr id="row_22_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1EntryState.html" target="_self">EntryState</a></td><td class="desc">Arguments pour la transformation depuis |ButtonOption|, |CheckboxOption|, |RadioboxOption|, |MenuEntryOption|, |MenuOption| </td></tr>
+<tr id="row_23_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1Event" target="_self">Event</a></td><td class="desc">Représente un événement. Il peut s'agir d'un événement de touche, d'un redimensionnement de terminal, ou plus encore.. </td></tr>
+<tr id="row_24_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__dom.html#structftxui_1_1FlexboxConfig" target="_self">FlexboxConfig</a></td><td class="desc"><a class="el" href="group__dom.html#structftxui_1_1FlexboxConfig" title="FlexboxConfig est une structure de configuration qui définit les propriétés de mise en page pour un c...">FlexboxConfig</a> est une structure de configuration qui définit les propriétés de mise en page pour un conteneur flexbox </td></tr>
+<tr id="row_25_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1Requirement_1_1Focused.html" target="_self">Requirement::Focused</a></td><td class="desc"></td></tr>
+<tr id="row_26_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1flexbox__helper_1_1Global.html" target="_self">Global</a></td><td class="desc"></td></tr>
+<tr id="row_27_" class="even"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_27_" class="arrow" onclick="dynsection.toggleFolder('27_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__screen.html#classftxui_1_1Image" target="_self">Image</a></td><td class="desc">Une grille rectangulaire de pixels </td></tr>
+<tr id="row_27_0_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span id="arr_27_0_" class="arrow" onclick="dynsection.toggleFolder('27_0_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__screen.html#classftxui_1_1Screen" target="_self">Screen</a></td><td class="desc">Une grille rectangulaire de pixels </td></tr>
+<tr id="row_27_0_0_" class="even"><td class="entry"><span style="width:48px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#classftxui_1_1ScreenInteractive" target="_self">ScreenInteractive</a></td><td class="desc"><a class="el" href="group__component.html#classftxui_1_1ScreenInteractive" title="ScreenInteractive est un Screen qui peut gérer les événements, exécuter une boucle principale et gére...">ScreenInteractive</a> est un <code><a class="el" href="group__screen.html#classftxui_1_1Screen" title="Une grille rectangulaire de pixels.">Screen</a></code> qui peut gérer les événements, exécuter une boucle principale et gérer les composants </td></tr>
+<tr id="row_28_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1InputOption" target="_self">InputOption</a></td><td class="desc">Option pour le composant Input </td></tr>
+<tr id="row_29_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1InputState.html" target="_self">InputState</a></td><td class="desc">Utilisé pour définir le style du composant Input </td></tr>
+<tr id="row_30_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1flexbox__helper_1_1Line.html" target="_self">Line</a></td><td class="desc"></td></tr>
+<tr id="row_31_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__dom.html#structftxui_1_1LinearGradient" target="_self">LinearGradient</a></td><td class="desc">Une classe représentant les paramètres de l'effet de couleur en dégradé linéaire </td></tr>
+<tr id="row_32_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#classftxui_1_1Loop" target="_self">Loop</a></td><td class="desc"><a class="el" href="group__component.html#classftxui_1_1Loop" title="Loop est une classe qui gère la boucle d&#39;événements pour un composant.">Loop</a> est une classe qui gère la boucle d'événements pour un composant </td></tr>
+<tr id="row_33_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1MenuEntryOption" target="_self">MenuEntryOption</a></td><td class="desc">Option pour le composant MenuEntry </td></tr>
+<tr id="row_34_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1MenuOption" target="_self">MenuOption</a></td><td class="desc">Option pour le composant Menu </td></tr>
+<tr id="row_35_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1Mouse" target="_self">Mouse</a></td><td class="desc">Un événement de souris. Il contient les coordonnées de la souris, le bouton pressé et le modificateur (shift, ctrl, méta) </td></tr>
+<tr id="row_36_" class="odd"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_36_" class="arrow" onclick="dynsection.toggleFolder('36_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__dom.html#classftxui_1_1Node" target="_self">Node</a></td><td class="desc"><a class="el" href="group__dom.html#classftxui_1_1Node" title="Node est la classe de base pour tous les éléments de l&#39;arbre DOM.">Node</a> est la classe de base pour tous les éléments de l'arbre DOM </td></tr>
+<tr id="row_36_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1NodeDecorator.html" target="_self">NodeDecorator</a></td><td class="desc"></td></tr>
+<tr id="row_37_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1animation_1_1Params.html" target="_self">Params</a></td><td class="desc"></td></tr>
+<tr id="row_38_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1task_1_1PendingTask.html" target="_self">PendingTask</a></td><td class="desc"></td></tr>
+<tr id="row_39_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__screen.html#structftxui_1_1Pixel" target="_self">Pixel</a></td><td class="desc">Un caractère Unicode et son style associé </td></tr>
+<tr id="row_40_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1ScreenInteractive_1_1Private.html" target="_self">ScreenInteractive::Private</a></td><td class="desc"></td></tr>
+<tr id="row_41_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1RadioboxOption" target="_self">RadioboxOption</a></td><td class="desc">Option pour le composant Radiobox </td></tr>
+<tr id="row_42_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1ReceiverImpl.html" target="_self">ReceiverImpl&lt; T &gt;</a></td><td class="desc"></td></tr>
+<tr id="row_43_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1Ref.html" target="_self">Ref&lt; T &gt;</a></td><td class="desc">Un adaptateur. Possède ou référence un objet mutable </td></tr>
+<tr id="row_44_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1Ref.html" target="_self">Ref&lt; bool &gt;</a></td><td class="desc"></td></tr>
+<tr id="row_45_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1Ref.html" target="_self">Ref&lt; Direction &gt;</a></td><td class="desc"></td></tr>
+<tr id="row_46_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1Ref.html" target="_self">Ref&lt; int &gt;</a></td><td class="desc"></td></tr>
+<tr id="row_47_" class="odd"><td class="entry"><span style="width:0px;display:inline-block;">&#160;</span><span id="arr_47_" class="arrow" onclick="dynsection.toggleFolder('47_')">&#9660;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1Ref.html" target="_self">Ref&lt; std::string &gt;</a></td><td class="desc"></td></tr>
+<tr id="row_47_0_" class="even"><td class="entry"><span style="width:32px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1StringRef.html" target="_self">StringRef</a></td><td class="desc">Un adaptateur. Possède ou référence une chaîne constante. Par commodité, cette classe convertit plusieurs chaînes mutables vers une représentation partagée </td></tr>
+<tr id="row_48_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__dom.html#structftxui_1_1Requirement" target="_self">Requirement</a></td><td class="desc"><a class="el" href="group__dom.html#structftxui_1_1Requirement" title="Requirement est une structure qui définit les exigences de mise en page pour un Nœud dans l&#39;interface...">Requirement</a> est une structure qui définit les exigences de mise en page pour un Nœud dans l'interface utilisateur du terminal </td></tr>
+<tr id="row_49_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1ResizableSplitOption.html" target="_self">ResizableSplitOption</a></td><td class="desc"></td></tr>
+<tr id="row_50_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__dom.html#classftxui_1_1Selection" target="_self">Selection</a></td><td class="desc">Représente une sélection dans une interface utilisateur de terminal </td></tr>
+<tr id="row_51_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1SenderImpl.html" target="_self">SenderImpl&lt; T &gt;</a></td><td class="desc"></td></tr>
+<tr id="row_52_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1SliderOption.html" target="_self">SliderOption&lt; T &gt;</a></td><td class="desc"></td></tr>
+<tr id="row_53_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1Node_1_1Status.html" target="_self">Node::Status</a></td><td class="desc"></td></tr>
+<tr id="row_54_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1LinearGradient_1_1Stop.html" target="_self">LinearGradient::Stop</a></td><td class="desc"></td></tr>
+<tr id="row_55_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__dom.html#classftxui_1_1Table" target="_self">Table</a></td><td class="desc"><a class="el" href="group__dom.html#classftxui_1_1Table" title="Table est un utilitaire pour dessiner des tableaux.">Table</a> est un utilitaire pour dessiner des tableaux </td></tr>
+<tr id="row_56_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1TableSelection.html" target="_self">TableSelection</a></td><td class="desc"></td></tr>
+<tr id="row_57_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1task_1_1TaskQueue.html" target="_self">TaskQueue</a></td><td class="desc"></td></tr>
+<tr id="row_58_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1task_1_1TaskRunner.html" target="_self">TaskRunner</a></td><td class="desc"></td></tr>
+<tr id="row_59_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="classftxui_1_1TerminalInputParser.html" target="_self">TerminalInputParser</a></td><td class="desc"></td></tr>
+<tr id="row_60_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1UnderlineOption" target="_self">UnderlineOption</a></td><td class="desc">Option pour l'effet de soulignement </td></tr>
+<tr id="row_61_" class="even"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="structftxui_1_1WindowOptions.html" target="_self">WindowOptions</a></td><td class="desc"></td></tr>
+<tr id="row_62_" class="odd"><td class="entry"><span style="width:16px;display:inline-block;">&#160;</span><span class="icona"><span class="icon">C</span></span><a class="el" href="group__component.html#structftxui_1_1WindowRenderState" target="_self">WindowRenderState</a></td><td class="desc">État passé à la fonction de rendu du composant <code>Window</code> </td></tr>
+</table>
+</div><!-- directory -->
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "fr";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

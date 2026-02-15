@@ -1,0 +1,517 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: component.hpp File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ja",
+    "/ko"
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('component_8hpp.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">component.hpp File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><a href="component_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html">ftxui</a></td></tr>
+<tr class="memdesc:namespaceftxui"><td class="mdescLeft">&#160;</td><td class="mdescRight">El espacio de nombres ftxui:: de FTXUI. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui_1_1Container.html">ftxui::Container</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:af07b496fe512e3a4863ee546f19e9a6c" id="r_af07b496fe512e3a4863ee546f19e9a6c"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> = std::function&lt;<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>(<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>)&gt;</td></tr>
+<tr class="separator:af07b496fe512e3a4863ee546f19e9a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d5012891073dbf196bfada5f702f382" id="r_a2d5012891073dbf196bfada5f702f382"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ElementDecorator</a> = std::function&lt;<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>(<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>)&gt;</td></tr>
+<tr class="separator:a2d5012891073dbf196bfada5f702f382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a2b8973dc71334f1d98e2e6f55de8b5ae" id="r_a2b8973dc71334f1d98e2e6f55de8b5ae"><td class="memTemplParams" colspan="2">template&lt;class T , class... Args&gt; </td></tr>
+<tr class="memitem:a2b8973dc71334f1d98e2e6f55de8b5ae"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a2b8973dc71334f1d98e2e6f55de8b5ae">Make</a> (Args &amp;&amp;... args)</td></tr>
+<tr class="separator:a2b8973dc71334f1d98e2e6f55de8b5ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65a2e15f64ae3bc205c485abc3a5aeb9" id="r_a65a2e15f64ae3bc205c485abc3a5aeb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a65a2e15f64ae3bc205c485abc3a5aeb9">operator|</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component, <a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> decorator)</td></tr>
+<tr class="separator:a65a2e15f64ae3bc205c485abc3a5aeb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c4cf8bcb7012f740b146bfe89cbd3eb" id="r_a9c4cf8bcb7012f740b146bfe89cbd3eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a9c4cf8bcb7012f740b146bfe89cbd3eb">operator|</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component, <a class="el" href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ElementDecorator</a> decorator)</td></tr>
+<tr class="separator:a9c4cf8bcb7012f740b146bfe89cbd3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade35e69d695327db85be01c9787c39f8" id="r_ade35e69d695327db85be01c9787c39f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#ade35e69d695327db85be01c9787c39f8">operator|=</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> &amp;component, <a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> decorator)</td></tr>
+<tr class="separator:ade35e69d695327db85be01c9787c39f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa480c58bcaeae204fbe68b192c5ede92" id="r_aa480c58bcaeae204fbe68b192c5ede92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#aa480c58bcaeae204fbe68b192c5ede92">operator|=</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> &amp;component, <a class="el" href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ElementDecorator</a> decorator)</td></tr>
+<tr class="separator:aa480c58bcaeae204fbe68b192c5ede92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6471e39f5664d059144746c5801d37e6" id="r_ga6471e39f5664d059144746c5801d37e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga6471e39f5664d059144746c5801d37e6">Vertical</a> (<a class="el" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children)</td></tr>
+<tr class="memdesc:ga6471e39f5664d059144746c5801d37e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de componentes, dibujados uno a uno verticalmente y navegados verticalmente usando las teclas de flecha arriba/abajo o las teclas 'j'/'k'.  <br /></td></tr>
+<tr class="separator:ga6471e39f5664d059144746c5801d37e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga25099e2d2ead8a46c8d9a899982070b7" id="r_ga25099e2d2ead8a46c8d9a899982070b7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga25099e2d2ead8a46c8d9a899982070b7">Vertical</a> (<a class="el" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children, int *selector)</td></tr>
+<tr class="memdesc:ga25099e2d2ead8a46c8d9a899982070b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de componentes, dibujados uno a uno verticalmente y navegados verticalmente usando las teclas de flecha arriba/abajo o las teclas 'j'/'k'. Esto es útil para implementar un Menú, por ejemplo.  <br /></td></tr>
+<tr class="separator:ga25099e2d2ead8a46c8d9a899982070b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga01563bae9454fe64c0b29b0eb3755e68" id="r_ga01563bae9454fe64c0b29b0eb3755e68"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga01563bae9454fe64c0b29b0eb3755e68">Horizontal</a> (<a class="el" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children)</td></tr>
+<tr class="memdesc:ga01563bae9454fe64c0b29b0eb3755e68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de componentes, dibujados uno a uno horizontalmente y navegados horizontalmente usando las teclas de flecha izquierda/derecha o las teclas 'h'/'l'.  <br /></td></tr>
+<tr class="separator:ga01563bae9454fe64c0b29b0eb3755e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga337564f8a13c98222025d8fe7e47df4c" id="r_ga337564f8a13c98222025d8fe7e47df4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga337564f8a13c98222025d8fe7e47df4c">Horizontal</a> (<a class="el" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children, int *selector)</td></tr>
+<tr class="memdesc:ga337564f8a13c98222025d8fe7e47df4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de componentes, dibujados uno a uno horizontalmente y navegados horizontalmente usando las teclas de flecha izquierda/derecha o las teclas 'h'/'l'.  <br /></td></tr>
+<tr class="separator:ga337564f8a13c98222025d8fe7e47df4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaea9fe244eeeb420276bcc5760b46953d" id="r_gaea9fe244eeeb420276bcc5760b46953d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gaea9fe244eeeb420276bcc5760b46953d">Tab</a> (<a class="el" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children, int *selector)</td></tr>
+<tr class="memdesc:gaea9fe244eeeb420276bcc5760b46953d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de componentes, donde solo uno se dibuja e interactúa a la vez. El |selector| da el índice del componente seleccionado. Esto es útil para implementar pestañas.  <br /></td></tr>
+<tr class="separator:gaea9fe244eeeb420276bcc5760b46953d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaafd394665b0c231380a143b810339d8e" id="r_gaafd394665b0c231380a143b810339d8e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gaafd394665b0c231380a143b810339d8e">Stacked</a> (<a class="el" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children)</td></tr>
+<tr class="memdesc:gaafd394665b0c231380a143b810339d8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de componentes que se apilan uno encima del otro. Los eventos se propagan al primer componente, luego al segundo si no se manejan, etc. Los componentes se dibujan en el orden inverso en que se dan. Cuando un componente toma el foco, se coloca al frente, sin cambiar el orden relativo de los otros elementos.  <br /></td></tr>
+<tr class="separator:gaafd394665b0c231380a143b810339d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4e8295ec77dd31b0acc5063b134473e7" id="r_ga4e8295ec77dd31b0acc5063b134473e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga4e8295ec77dd31b0acc5063b134473e7">Button</a> (<a class="el" href="group__component.html#structftxui_1_1ButtonOption">ButtonOption</a> option)</td></tr>
+<tr class="memdesc:ga4e8295ec77dd31b0acc5063b134473e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un botón. Ejecuta una función al hacer clic.  <br /></td></tr>
+<tr class="separator:ga4e8295ec77dd31b0acc5063b134473e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0488e28ee9388e0ddca26f1d03d827d1" id="r_ga0488e28ee9388e0ddca26f1d03d827d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga0488e28ee9388e0ddca26f1d03d827d1">Button</a> (<a class="el" href="classftxui_1_1ConstStringRef.html">ConstStringRef</a> label, std::function&lt; void()&gt; on_click, <a class="el" href="group__component.html#structftxui_1_1ButtonOption">ButtonOption</a> option)</td></tr>
+<tr class="memdesc:ga0488e28ee9388e0ddca26f1d03d827d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un botón. Ejecuta una función al hacer clic.  <br /></td></tr>
+<tr class="separator:ga0488e28ee9388e0ddca26f1d03d827d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae0d441d2c83740f187f62db566bbefcd" id="r_gae0d441d2c83740f187f62db566bbefcd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">Checkbox</a> (<a class="el" href="group__component.html#structftxui_1_1CheckboxOption">CheckboxOption</a> option)</td></tr>
+<tr class="memdesc:gae0d441d2c83740f187f62db566bbefcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un elemento seleccionable.  <br /></td></tr>
+<tr class="separator:gae0d441d2c83740f187f62db566bbefcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5e9dbb03c44d549f10c96f134269366f" id="r_ga5e9dbb03c44d549f10c96f134269366f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga5e9dbb03c44d549f10c96f134269366f">Checkbox</a> (<a class="el" href="classftxui_1_1ConstStringRef.html">ConstStringRef</a> label, bool *checked, <a class="el" href="group__component.html#structftxui_1_1CheckboxOption">CheckboxOption</a> option)</td></tr>
+<tr class="memdesc:ga5e9dbb03c44d549f10c96f134269366f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un elemento seleccionable.  <br /></td></tr>
+<tr class="separator:ga5e9dbb03c44d549f10c96f134269366f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7f285fcbc4dd0a0767b89a255fd062dc" id="r_ga7f285fcbc4dd0a0767b89a255fd062dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga7f285fcbc4dd0a0767b89a255fd062dc">Input</a> (<a class="el" href="group__component.html#structftxui_1_1InputOption">InputOption</a> option)</td></tr>
+<tr class="memdesc:ga7f285fcbc4dd0a0767b89a255fd062dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un cuadro de entrada para editar texto.  <br /></td></tr>
+<tr class="separator:ga7f285fcbc4dd0a0767b89a255fd062dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d118d596e33bf5bee9d5eccb6265d15" id="r_ga9d118d596e33bf5bee9d5eccb6265d15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga9d118d596e33bf5bee9d5eccb6265d15">Input</a> (<a class="el" href="classftxui_1_1StringRef.html">StringRef</a> content, <a class="el" href="group__component.html#structftxui_1_1InputOption">InputOption</a> option)</td></tr>
+<tr class="memdesc:ga9d118d596e33bf5bee9d5eccb6265d15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un cuadro de entrada para editar texto.  <br /></td></tr>
+<tr class="separator:ga9d118d596e33bf5bee9d5eccb6265d15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga82ba18065d2c29514f034c7278dead74" id="r_ga82ba18065d2c29514f034c7278dead74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga82ba18065d2c29514f034c7278dead74">Input</a> (<a class="el" href="classftxui_1_1StringRef.html">StringRef</a> content, <a class="el" href="classftxui_1_1StringRef.html">StringRef</a> placeholder, <a class="el" href="group__component.html#structftxui_1_1InputOption">InputOption</a> option)</td></tr>
+<tr class="memdesc:ga82ba18065d2c29514f034c7278dead74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un cuadro de entrada para editar texto.  <br /></td></tr>
+<tr class="separator:ga82ba18065d2c29514f034c7278dead74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga27828fc39da10a18478ba84b1b162039" id="r_ga27828fc39da10a18478ba84b1b162039"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga27828fc39da10a18478ba84b1b162039">Menu</a> (<a class="el" href="group__component.html#structftxui_1_1MenuOption">MenuOption</a> option)</td></tr>
+<tr class="memdesc:ga27828fc39da10a18478ba84b1b162039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de texto. El elemento enfocado es seleccionado.  <br /></td></tr>
+<tr class="separator:ga27828fc39da10a18478ba84b1b162039"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad793a3a507766ffa711c4332a3815e24" id="r_gad793a3a507766ffa711c4332a3815e24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gad793a3a507766ffa711c4332a3815e24">Menu</a> (<a class="el" href="classftxui_1_1ConstStringListRef.html">ConstStringListRef</a> entries, int *selected, <a class="el" href="group__component.html#structftxui_1_1MenuOption">MenuOption</a> option)</td></tr>
+<tr class="memdesc:gad793a3a507766ffa711c4332a3815e24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de texto. El elemento enfocado es seleccionado.  <br /></td></tr>
+<tr class="separator:gad793a3a507766ffa711c4332a3815e24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga2c0a27959e6a5d90109f6d4506e00f69" id="r_ga2c0a27959e6a5d90109f6d4506e00f69"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga2c0a27959e6a5d90109f6d4506e00f69">MenuEntry</a> (<a class="el" href="group__component.html#structftxui_1_1MenuEntryOption">MenuEntryOption</a> option)</td></tr>
+<tr class="memdesc:ga2c0a27959e6a5d90109f6d4506e00f69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una entrada de menú específica. Se pueden colocar en un Container::Vertical para formar un menú.  <br /></td></tr>
+<tr class="separator:ga2c0a27959e6a5d90109f6d4506e00f69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafca94c5cdae5fbf3c6aa81fc1cd7b1c0" id="r_gafca94c5cdae5fbf3c6aa81fc1cd7b1c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gafca94c5cdae5fbf3c6aa81fc1cd7b1c0">MenuEntry</a> (<a class="el" href="classftxui_1_1ConstStringRef.html">ConstStringRef</a> label, <a class="el" href="group__component.html#structftxui_1_1MenuEntryOption">MenuEntryOption</a> option)</td></tr>
+<tr class="memdesc:gafca94c5cdae5fbf3c6aa81fc1cd7b1c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una entrada de menú específica. Se pueden colocar en un Container::Vertical para formar un menú.  <br /></td></tr>
+<tr class="separator:gafca94c5cdae5fbf3c6aa81fc1cd7b1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3e7a44f321fa910f07aef5879e67af95" id="r_ga3e7a44f321fa910f07aef5879e67af95"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">Radiobox</a> (<a class="el" href="group__component.html#structftxui_1_1RadioboxOption">RadioboxOption</a> option)</td></tr>
+<tr class="memdesc:ga3e7a44f321fa910f07aef5879e67af95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de elementos, donde solo uno puede ser seleccionado.  <br /></td></tr>
+<tr class="separator:ga3e7a44f321fa910f07aef5879e67af95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac73eebf15ff6b5386b7ee6c6cb4a4890" id="r_gac73eebf15ff6b5386b7ee6c6cb4a4890"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gac73eebf15ff6b5386b7ee6c6cb4a4890">Radiobox</a> (<a class="el" href="classftxui_1_1ConstStringListRef.html">ConstStringListRef</a> entries, int *selected, <a class="el" href="group__component.html#structftxui_1_1RadioboxOption">RadioboxOption</a> option)</td></tr>
+<tr class="memdesc:gac73eebf15ff6b5386b7ee6c6cb4a4890"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista de elementos, donde solo uno puede ser seleccionado.  <br /></td></tr>
+<tr class="separator:gac73eebf15ff6b5386b7ee6c6cb4a4890"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa22bddff4aeed66e20f30d0715596999" id="r_gaa22bddff4aeed66e20f30d0715596999"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gaa22bddff4aeed66e20f30d0715596999">Dropdown</a> (<a class="el" href="classftxui_1_1ConstStringListRef.html">ConstStringListRef</a> entries, int *selected)</td></tr>
+<tr class="memdesc:gaa22bddff4aeed66e20f30d0715596999"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un menú desplegable.  <br /></td></tr>
+<tr class="separator:gaa22bddff4aeed66e20f30d0715596999"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa4b353566017558bac648ee1409930de" id="r_gaa4b353566017558bac648ee1409930de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gaa4b353566017558bac648ee1409930de">Dropdown</a> (<a class="el" href="group__component.html#structftxui_1_1DropdownOption">DropdownOption</a> option)</td></tr>
+<tr class="memdesc:gaa4b353566017558bac648ee1409930de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un menú desplegable.  <br /></td></tr>
+<tr class="separator:gaa4b353566017558bac648ee1409930de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3537fccac66b07cd792874c9a6086811" id="r_ga3537fccac66b07cd792874c9a6086811"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga3537fccac66b07cd792874c9a6086811">Toggle</a> (<a class="el" href="classftxui_1_1ConstStringListRef.html">ConstStringListRef</a> entries, int *selected)</td></tr>
+<tr class="memdesc:ga3537fccac66b07cd792874c9a6086811"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una lista horizontal de elementos. El usuario puede navegar a través de ellos.  <br /></td></tr>
+<tr class="separator:ga3537fccac66b07cd792874c9a6086811"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3558d992a72679e5e9c9c7b67abd727" id="r_aa3558d992a72679e5e9c9c7b67abd727"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aa3558d992a72679e5e9c9c7b67abd727"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#aa3558d992a72679e5e9c9c7b67abd727">Slider</a> (<a class="el" href="structftxui_1_1SliderOption.html">SliderOption</a>&lt; T &gt; options)</td></tr>
+<tr class="memdesc:aa3558d992a72679e5e9c9c7b67abd727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un deslizador en cualquier dirección.  <br /></td></tr>
+<tr class="separator:aa3558d992a72679e5e9c9c7b67abd727"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafdce74ff1421c2f1bda336c8dacefcbd" id="r_gafdce74ff1421c2f1bda336c8dacefcbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gafdce74ff1421c2f1bda336c8dacefcbd">Slider</a> (<a class="el" href="classftxui_1_1ConstStringRef.html">ConstStringRef</a> label, <a class="el" href="classftxui_1_1Ref.html">Ref</a>&lt; int &gt; value, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; int &gt; min, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; int &gt; max, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; int &gt; increment)</td></tr>
+<tr class="memdesc:gafdce74ff1421c2f1bda336c8dacefcbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un deslizador horizontal.  <br /></td></tr>
+<tr class="separator:gafdce74ff1421c2f1bda336c8dacefcbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bfa2757905a4fb50e0ec263976d1f96" id="r_a8bfa2757905a4fb50e0ec263976d1f96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a8bfa2757905a4fb50e0ec263976d1f96">Slider</a> (<a class="el" href="classftxui_1_1ConstStringRef.html">ConstStringRef</a> label, <a class="el" href="classftxui_1_1Ref.html">Ref</a>&lt; float &gt; value, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; float &gt; min=0.f, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; float &gt; max=100.f, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; float &gt; increment=5.f)</td></tr>
+<tr class="separator:a8bfa2757905a4fb50e0ec263976d1f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba34419b025c881c07808816c81c5230" id="r_aba34419b025c881c07808816c81c5230"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#aba34419b025c881c07808816c81c5230">Slider</a> (<a class="el" href="classftxui_1_1ConstStringRef.html">ConstStringRef</a> label, <a class="el" href="classftxui_1_1Ref.html">Ref</a>&lt; long &gt; value, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; long &gt; min=0L, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; long &gt; max=100L, <a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; long &gt; increment=5L)</td></tr>
+<tr class="separator:aba34419b025c881c07808816c81c5230"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce41caeafc35dedc5c7da5347386e80" id="r_a5ce41caeafc35dedc5c7da5347386e80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a5ce41caeafc35dedc5c7da5347386e80">ResizableSplit</a> (<a class="el" href="structftxui_1_1ResizableSplitOption.html">ResizableSplitOption</a> options)</td></tr>
+<tr class="memdesc:a5ce41caeafc35dedc5c7da5347386e80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una división entre dos componentes.  <br /></td></tr>
+<tr class="separator:a5ce41caeafc35dedc5c7da5347386e80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae2205fc172615b43e1e3307bb614be4c" id="r_gae2205fc172615b43e1e3307bb614be4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gae2205fc172615b43e1e3307bb614be4c">ResizableSplitLeft</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="el" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> back, int *main_size)</td></tr>
+<tr class="memdesc:gae2205fc172615b43e1e3307bb614be4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una división horizontal entre dos componentes, configurable usando el ratón.  <br /></td></tr>
+<tr class="separator:gae2205fc172615b43e1e3307bb614be4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9030d0beb64f653603cab382b02750a8" id="r_ga9030d0beb64f653603cab382b02750a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga9030d0beb64f653603cab382b02750a8">ResizableSplitRight</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="el" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> back, int *main_size)</td></tr>
+<tr class="memdesc:ga9030d0beb64f653603cab382b02750a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una división horizontal entre dos componentes, configurable usando el ratón.  <br /></td></tr>
+<tr class="separator:ga9030d0beb64f653603cab382b02750a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga238b4b650aca14716b82b2198695e008" id="r_ga238b4b650aca14716b82b2198695e008"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga238b4b650aca14716b82b2198695e008">ResizableSplitTop</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="el" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> back, int *main_size)</td></tr>
+<tr class="memdesc:ga238b4b650aca14716b82b2198695e008"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una división vertical entre dos componentes, configurable usando el ratón.  <br /></td></tr>
+<tr class="separator:ga238b4b650aca14716b82b2198695e008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gacb75e6e61a021829893f7b57aeb7e3a2" id="r_gacb75e6e61a021829893f7b57aeb7e3a2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gacb75e6e61a021829893f7b57aeb7e3a2">ResizableSplitBottom</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="el" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> back, int *main_size)</td></tr>
+<tr class="memdesc:gacb75e6e61a021829893f7b57aeb7e3a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una división vertical entre dos componentes, configurable usando el ratón.  <br /></td></tr>
+<tr class="separator:gacb75e6e61a021829893f7b57aeb7e3a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga533e883e2aeea28de2b60564fcaf0361" id="r_ga533e883e2aeea28de2b60564fcaf0361"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> child, std::function&lt; <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>()&gt; render)</td></tr>
+<tr class="memdesc:ga533e883e2aeea28de2b60564fcaf0361"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retorna un nuevo Componente, similar a |child|, pero usando |render| como el evento Component::Render().  <br /></td></tr>
+<tr class="separator:ga533e883e2aeea28de2b60564fcaf0361"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf03d3df7243bf71bb1a73686628f7f2b" id="r_gaf03d3df7243bf71bb1a73686628f7f2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gaf03d3df7243bf71bb1a73686628f7f2b">Renderer</a> (std::function&lt; <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>()&gt; render)</td></tr>
+<tr class="memdesc:gaf03d3df7243bf71bb1a73686628f7f2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retorna un componente, usando |render| para renderizar su interfaz.  <br /></td></tr>
+<tr class="separator:gaf03d3df7243bf71bb1a73686628f7f2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga099cb57274a99396ee10f38acbfe62a7" id="r_ga099cb57274a99396ee10f38acbfe62a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga099cb57274a99396ee10f38acbfe62a7">Renderer</a> (std::function&lt; <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>(bool)&gt; render)</td></tr>
+<tr class="memdesc:ga099cb57274a99396ee10f38acbfe62a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retorna un componente enfocable, usando |render| para renderizar su interfaz.  <br /></td></tr>
+<tr class="separator:ga099cb57274a99396ee10f38acbfe62a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga41d63b7af41dee1570b54915821abd30" id="r_ga41d63b7af41dee1570b54915821abd30"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga41d63b7af41dee1570b54915821abd30">Renderer</a> (<a class="el" href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ElementDecorator</a> decorator)</td></tr>
+<tr class="memdesc:ga41d63b7af41dee1570b54915821abd30"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora un componente, decorando lo que renderiza.  <br /></td></tr>
+<tr class="separator:ga41d63b7af41dee1570b54915821abd30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa5872ba3f9889c7487e57e745e56857" id="r_afa5872ba3f9889c7487e57e745e56857"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#afa5872ba3f9889c7487e57e745e56857">CatchEvent</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> child, std::function&lt; bool(<a class="el" href="group__component.html#structftxui_1_1Event">Event</a>)&gt;)</td></tr>
+<tr class="separator:afa5872ba3f9889c7487e57e745e56857"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad2948235799c010c76c6de861c050c59" id="r_gad2948235799c010c76c6de861c050c59"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gad2948235799c010c76c6de861c050c59">CatchEvent</a> (std::function&lt; bool(<a class="el" href="group__component.html#structftxui_1_1Event">Event</a>)&gt; on_event)</td></tr>
+<tr class="memdesc:gad2948235799c010c76c6de861c050c59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora un componente, usando |on_event| para capturar eventos. Esta función debe retornar true cuando el evento ha sido manejado, false en caso contrario.  <br /></td></tr>
+<tr class="separator:gad2948235799c010c76c6de861c050c59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga20b66a70c1cd4ff3f0ff571a4507d2b4" id="r_ga20b66a70c1cd4ff3f0ff571a4507d2b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga20b66a70c1cd4ff3f0ff571a4507d2b4">Maybe</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> child, const bool *show)</td></tr>
+<tr class="memdesc:ga20b66a70c1cd4ff3f0ff571a4507d2b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora un componente |child|. Se muestra solo cuando |show| es verdadero.  <br /></td></tr>
+<tr class="separator:ga20b66a70c1cd4ff3f0ff571a4507d2b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga70afe9695167fb736631173201969730" id="r_ga70afe9695167fb736631173201969730"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga70afe9695167fb736631173201969730">Maybe</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> child, std::function&lt; bool()&gt; show)</td></tr>
+<tr class="memdesc:ga70afe9695167fb736631173201969730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora un componente |child|. Se muestra solo cuando |show| devuelve verdadero.  <br /></td></tr>
+<tr class="separator:ga70afe9695167fb736631173201969730"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga83b6fd5e1524023722a7450f987f15d0" id="r_ga83b6fd5e1524023722a7450f987f15d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga83b6fd5e1524023722a7450f987f15d0">Maybe</a> (const bool *show)</td></tr>
+<tr class="memdesc:ga83b6fd5e1524023722a7450f987f15d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora un componente. Se muestra solo cuando |show| es verdadero.  <br /></td></tr>
+<tr class="separator:ga83b6fd5e1524023722a7450f987f15d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae39ad8b223e6bb7704c77a3708571a7d" id="r_gae39ad8b223e6bb7704c77a3708571a7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gae39ad8b223e6bb7704c77a3708571a7d">Maybe</a> (std::function&lt; bool()&gt; show)</td></tr>
+<tr class="memdesc:gae39ad8b223e6bb7704c77a3708571a7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora un componente. Se muestra solo cuando la función |show| devuelve verdadero.  <br /></td></tr>
+<tr class="separator:gae39ad8b223e6bb7704c77a3708571a7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5185342fbba215496cb8a6805f36089c" id="r_ga5185342fbba215496cb8a6805f36089c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga5185342fbba215496cb8a6805f36089c">Modal</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="el" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> modal, const bool *show_modal)</td></tr>
+<tr class="separator:ga5185342fbba215496cb8a6805f36089c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5babae0bb25f8cada57784cc5d27fb74" id="r_ga5babae0bb25f8cada57784cc5d27fb74"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga5babae0bb25f8cada57784cc5d27fb74">Modal</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> modal, const bool *show_modal)</td></tr>
+<tr class="separator:ga5babae0bb25f8cada57784cc5d27fb74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a760cd5eb9a72c008ca18f1e6b366c796" id="r_a760cd5eb9a72c008ca18f1e6b366c796"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a760cd5eb9a72c008ca18f1e6b366c796">Collapsible</a> (<a class="el" href="classftxui_1_1ConstStringRef.html">ConstStringRef</a> label, <a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> child, <a class="el" href="classftxui_1_1Ref.html">Ref</a>&lt; bool &gt; show)</td></tr>
+<tr class="memdesc:a760cd5eb9a72c008ca18f1e6b366c796"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un componente plegable. Muestra una casilla de verificación con una flecha. Una vez activado, se muestra el componente hijo.  <br /></td></tr>
+<tr class="separator:a760cd5eb9a72c008ca18f1e6b366c796"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga562d984d3830d63285643565cd55d16f" id="r_ga562d984d3830d63285643565cd55d16f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga562d984d3830d63285643565cd55d16f">Hoverable</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component, bool *hover)</td></tr>
+<tr class="memdesc:ga562d984d3830d63285643565cd55d16f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envuelve un componente. Permite saber si el ratón lo está "hovering".  <br /></td></tr>
+<tr class="separator:ga562d984d3830d63285643565cd55d16f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga92ec2f5ccb509da2e2c24ae6a1f6b12b" id="r_ga92ec2f5ccb509da2e2c24ae6a1f6b12b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga92ec2f5ccb509da2e2c24ae6a1f6b12b">Hoverable</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component, std::function&lt; void()&gt; on_enter, std::function&lt; void()&gt; on_leave)</td></tr>
+<tr class="memdesc:ga92ec2f5ccb509da2e2c24ae6a1f6b12b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envuelve un componente. Utiliza callbacks.  <br /></td></tr>
+<tr class="separator:ga92ec2f5ccb509da2e2c24ae6a1f6b12b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga91cac81077c483efdb952268aee9a523" id="r_ga91cac81077c483efdb952268aee9a523"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga91cac81077c483efdb952268aee9a523">Hoverable</a> (<a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component, std::function&lt; void(bool)&gt; on_change)</td></tr>
+<tr class="memdesc:ga91cac81077c483efdb952268aee9a523"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envuelve un componente. Permite saber si el ratón lo está "hovering".  <br /></td></tr>
+<tr class="separator:ga91cac81077c483efdb952268aee9a523"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d94b37352be13d3551a9d5785f75439" id="r_ga9d94b37352be13d3551a9d5785f75439"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga9d94b37352be13d3551a9d5785f75439">Hoverable</a> (bool *hover)</td></tr>
+<tr class="memdesc:ga9d94b37352be13d3551a9d5785f75439"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envuelve un componente. Permite saber si el ratón lo está "hovering".  <br /></td></tr>
+<tr class="separator:ga9d94b37352be13d3551a9d5785f75439"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga34adfc9c76cf3603156cba32ad5d7142" id="r_ga34adfc9c76cf3603156cba32ad5d7142"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga34adfc9c76cf3603156cba32ad5d7142">Hoverable</a> (std::function&lt; void()&gt; on_enter, std::function&lt; void()&gt; on_leave)</td></tr>
+<tr class="memdesc:ga34adfc9c76cf3603156cba32ad5d7142"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envuelve un componente. Permite saber si el ratón lo está "hovering".  <br /></td></tr>
+<tr class="separator:ga34adfc9c76cf3603156cba32ad5d7142"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafd7cbaef5378a907111a64ee69aed56a" id="r_gafd7cbaef5378a907111a64ee69aed56a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#gafd7cbaef5378a907111a64ee69aed56a">Hoverable</a> (std::function&lt; void(bool)&gt; on_change)</td></tr>
+<tr class="memdesc:gafd7cbaef5378a907111a64ee69aed56a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Envuelve un componente. Permite saber si el ratón lo está "hovering".  <br /></td></tr>
+<tr class="separator:gafd7cbaef5378a907111a64ee69aed56a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga638693abef9289912f5fa39606390b20" id="r_ga638693abef9289912f5fa39606390b20"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__component.html#ga638693abef9289912f5fa39606390b20">Window</a> (<a class="el" href="structftxui_1_1WindowOptions.html">WindowOptions</a> option)</td></tr>
+<tr class="memdesc:ga638693abef9289912f5fa39606390b20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una ventana arrastrable y redimensionable. Para usar varias, deben apilarse usando el componente <code>Container::Stacked({...})</code>;.  <br /></td></tr>
+<tr class="separator:ga638693abef9289912f5fa39606390b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "es";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>
