@@ -229,47 +229,28 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
     }
   }
 
-  auto get_color = [](const Color& color,  //
-                      uint8_t* red, uint8_t* green, uint8_t* blue) {
+  auto to_rgb = [](const Color& color) -> std::tuple<uint8_t, uint8_t, uint8_t> {
     switch (color.type_) {
       case ColorType::Palette1: {
-        return;
+        return {0, 0, 0};
       }
-
       case ColorType::Palette16: {
         const ColorInfo info = GetColorInfo(Color::Palette16(color.red_));
-        *red = info.red;
-        *green = info.green;
-        *blue = info.blue;
-        return;
+        return {info.red, info.green, info.blue};
       }
-
       case ColorType::Palette256: {
         const ColorInfo info = GetColorInfo(Color::Palette256(color.red_));
-        *red = info.red;
-        *green = info.green;
-        *blue = info.blue;
-        return;
+        return {info.red, info.green, info.blue};
       }
-
       case ColorType::TrueColor:
       default: {
-        *red = color.red_;
-        *green = color.green_;
-        *blue = color.blue_;
-        return;
+        return {color.red_, color.green_, color.blue_};
       }
     }
   };
 
-  uint8_t a_r = 0;
-  uint8_t a_g = 0;
-  uint8_t a_b = 0;
-  uint8_t b_r = 0;
-  uint8_t b_g = 0;
-  uint8_t b_b = 0;
-  get_color(a, &a_r, &a_g, &a_b);
-  get_color(b, &b_r, &b_g, &b_b);
+  const auto [a_r, a_g, a_b] = to_rgb(a);
+  const auto [b_r, b_g, b_b] = to_rgb(b);
 
   // Gamma correction:
   // https://en.wikipedia.org/wiki/Gamma_correction
