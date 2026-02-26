@@ -33,6 +33,7 @@ Next
   avoids unnecessary copies. Thanks @mikomikotaishi for PR #1154
 
 ### Component
+- Fix `Input` cursor positioning and scroll stability. See #1196. Thanks @739C1AE2.
 - Feature: POSIX Piped Input Handling.
   - Allows FTXUI applications to read data from stdin (when piped) while still receiving keyboard input from the terminal.
   - Enabled by default.

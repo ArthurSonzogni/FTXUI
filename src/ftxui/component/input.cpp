@@ -98,7 +98,7 @@ class InputBase : public ComponentBase, public InputOption {
   // Component implementation:
   Element OnRender() override {
     const bool is_focused = Focused();
-    const auto focused = (!is_focused && !hovered_) ? nothing
+    const auto focused = (!is_focused && !hovered_) ? focus
                          : insert()                 ? focusCursorBarBlinking
                                                     : focusCursorBlockBlinking;
 
@@ -107,13 +107,12 @@ class InputBase : public ComponentBase, public InputOption {
 
     // placeholder.
     if (content->empty()) {
-      auto element = text(placeholder()) | xflex | frame;
+      auto element = text(placeholder()) | focused | xflex | frame;
 
       return transform_func({
                  std::move(element), hovered_, is_focused,
                  true  // placeholder
-             }) |
-             focus | reflect(box_);
+             }) | reflect(box_);
     }
 
     Elements elements;

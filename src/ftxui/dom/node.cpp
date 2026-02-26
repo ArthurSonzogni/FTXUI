@@ -145,8 +145,8 @@ void Render(Screen& screen, Node* node, Selection& selection) {
 #endif
   ) {
     screen.SetCursor(Screen::Cursor{
-        node->requirement().focused.node->box_.x_max,
-        node->requirement().focused.node->box_.y_max,
+        node->requirement().focused.node->box_.x_min,
+        node->requirement().focused.node->box_.y_min,
         node->requirement().focused.cursor_shape,
     });
   } else {
