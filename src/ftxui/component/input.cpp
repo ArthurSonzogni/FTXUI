@@ -112,7 +112,8 @@ class InputBase : public ComponentBase, public InputOption {
       return transform_func({
                  std::move(element), hovered_, is_focused,
                  true  // placeholder
-             }) | reflect(box_);
+             }) |
+             reflect(box_);
     }
 
     Elements elements;
@@ -185,9 +186,10 @@ class InputBase : public ComponentBase, public InputOption {
       return text(input);
     }
 
+    const size_t glyph_count = GlyphCount(input);
     std::string out;
-    out.reserve(10 + input.size() * 3 / 2);
-    for (size_t i = 0; i < input.size(); ++i) {
+    out.reserve(glyph_count * 3);
+    for (size_t i = 0; i < glyph_count; ++i) {
       out += "•";
     }
     return text(out);
@@ -254,7 +256,11 @@ class InputBase : public ComponentBase, public InputOption {
       if (content()[iter] == '\n') {
         break;
       }
-      width += static_cast<int>(GlyphWidth(content(), iter));
+      if (password()) {
+        width += 1;
+      } else {
+        width += static_cast<int>(GlyphWidth(content(), iter));
+      }
     }
     return width;
   }
@@ -267,7 +273,11 @@ class InputBase : public ComponentBase, public InputOption {
         return;
       }
 
-      columns -= static_cast<int>(GlyphWidth(content(), cursor_position()));
+      if (password()) {
+        columns -= 1;
+      } else {
+        columns -= static_cast<int>(GlyphWidth(content(), cursor_position()));
+      }
       cursor_position() =
           static_cast<int>(GlyphNext(content(), cursor_position()));
     }
@@ -494,7 +504,9 @@ class InputBase : public ComponentBase, public InputOption {
       cursor_line++;
     }
     const int cursor_column =
-        string_width(lines[cursor_line].substr(0, cursor_char_index));
+        password()
+            ? GlyphCount(lines[cursor_line].substr(0, cursor_char_index))
+            : string_width(lines[cursor_line].substr(0, cursor_char_index));
 
     int new_cursor_column = cursor_column + event.mouse().x - cursor_box_.x_min;
     int new_cursor_line = cursor_line + event.mouse().y - cursor_box_.y_min;
@@ -506,7 +518,9 @@ class InputBase : public ComponentBase, public InputOption {
     const std::string& line = new_cursor_line < (int)lines.size()
                                   ? lines[new_cursor_line]
                                   : empty_string;
-    new_cursor_column = util::clamp(new_cursor_column, 0, string_width(line));
+    new_cursor_column =
+        util::clamp(new_cursor_column, 0,
+                    password() ? GlyphCount(line) : string_width(line));
 
     if (new_cursor_column == cursor_column &&  //
         new_cursor_line == cursor_line) {
@@ -519,8 +533,12 @@ class InputBase : public ComponentBase, public InputOption {
       cursor_position() += static_cast<int>(lines[i].size() + 1);
     }
     while (new_cursor_column > 0) {
-      new_cursor_column -=
-          static_cast<int>(GlyphWidth(content(), cursor_position()));
+      if (password()) {
+        new_cursor_column -= 1;
+      } else {
+        new_cursor_column -=
+            static_cast<int>(GlyphWidth(content(), cursor_position()));
+      }
       cursor_position() =
           static_cast<int>(GlyphNext(content(), cursor_position()));
     }

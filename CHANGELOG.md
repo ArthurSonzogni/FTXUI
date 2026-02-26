@@ -34,6 +34,7 @@ Next
 
 ### Component
 - Fix `Input` cursor positioning and scroll stability. See #1196. Thanks @739C1AE2.
+- Fix `Input` support for non-ASCII characters in password mode. See #1196. Thanks @739C1AE2.
 - Feature: POSIX Piped Input Handling.
   - Allows FTXUI applications to read data from stdin (when piped) while still receiving keyboard input from the terminal.
   - Enabled by default.
