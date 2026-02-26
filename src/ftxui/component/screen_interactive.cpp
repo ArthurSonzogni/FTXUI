@@ -916,6 +916,9 @@ void ScreenInteractive::Draw(Component component) {
       break;
   }
 
+  // Hide cursor to prevent flickering during reset.
+  std::cout << "\033[?25l";
+
   const bool resized = frame_count_ == 0 || (dimx != dimx_) || (dimy != dimy_);
   ResetCursorPosition();
   std::cout << ResetPosition(/*clear=*/resized);
