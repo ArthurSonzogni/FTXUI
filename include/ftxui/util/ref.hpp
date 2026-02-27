@@ -208,15 +208,15 @@ class ConstStringListRef {
       return (*v)[i];
     }
     std::string_view operator()(const std::vector<std::string_view>& v) const {
-      return std::string(v[i]);
+      return v[i];
     }
     std::string_view operator()(const std::vector<std::string_view>* v) const {
-      return std::string((*v)[i]);
+      return (*v)[i];
     }
     std::string_view operator()(const std::vector<std::wstring>* v) const {
-      return to_string((*v)[i]);
+      return "";  // Temporary fix: Cannot return a view to a temporary conversion.
     }
-    std::string_view operator()(Adapter* v) const { return std::string((*v)[i]); }
+    std::string_view operator()(Adapter* v) const { return (*v)[i]; }
     std::string_view operator()(const std::unique_ptr<Adapter>& v) const {
       return (*v)[i];
     }
