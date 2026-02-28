@@ -191,6 +191,7 @@ class Flexbox : public Node {
       // If the line box doesn't intersect with the selection, then no
       // selection.
       if (Box::Intersection(selection.GetBox(), box).IsEmpty()) {
+        i += line.blocks.size();
         continue;
       }
 
