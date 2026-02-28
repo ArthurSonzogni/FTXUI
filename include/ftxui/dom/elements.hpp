@@ -61,7 +61,7 @@ Element separatorHeavy();
 Element separatorDouble();
 Element separatorEmpty();
 Element separatorStyled(BorderStyle);
-Element separator(Pixel);
+Element separator(Cell);
 Element separatorCharacter(std::string_view);
 Element separatorHSelector(float left,
                            float right,
@@ -87,7 +87,7 @@ Element borderEmpty(Element);
 Decorator borderStyled(BorderStyle);
 Decorator borderStyled(BorderStyle, Color);
 Decorator borderStyled(Color);
-Decorator borderWith(const Pixel&);
+Decorator borderWith(const Cell&);
 Element window(Element title, Element content, BorderStyle border = ROUNDED);
 Element spinner(int charset_index, size_t image_index);
 Element paragraph(std::string_view text);
@@ -127,7 +127,7 @@ Element selectionStyleReset(Element);
 Decorator selectionColor(Color foreground);
 Decorator selectionBackgroundColor(Color foreground);
 Decorator selectionForegroundColor(Color foreground);
-Decorator selectionStyle(std::function<void(Pixel&)> style);
+Decorator selectionStyle(std::function<void(Cell&)> style);
 
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.

@@ -10,7 +10,7 @@
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Button, Mouse::Left, Mouse::Motion, Mouse::Pressed
 #include "ftxui/dom/elements.hpp"   // for Fit
 #include "ftxui/dom/node.hpp"       // for Render
-#include "ftxui/screen/screen.hpp"  // for Fixed, Screen, Pixel
+#include "ftxui/screen/screen.hpp"  // for Fixed, Screen, Cell
 #include "ftxui/util/ref.hpp"       // for Ref
 #include "gtest/gtest.h"  // for AssertionResult, Message, TestPartResult, EXPECT_EQ, EXPECT_TRUE, Test, EXPECT_FALSE, TEST
 
@@ -53,10 +53,10 @@ TEST(InputTest, Type) {
 
   auto screen = Screen::Create(Dimension::Fixed(10), Dimension::Fixed(2));
   Render(screen, document);
-  EXPECT_EQ(screen.PixelAt(0, 0).character, "a");
-  EXPECT_EQ(screen.PixelAt(1, 0).character, "b");
-  EXPECT_EQ(screen.PixelAt(0, 1).character, "c");
-  EXPECT_EQ(screen.PixelAt(1, 1).character, " ");
+  EXPECT_EQ(screen.CellAt(0, 0).character, "a");
+  EXPECT_EQ(screen.CellAt(1, 0).character, "b");
+  EXPECT_EQ(screen.CellAt(0, 1).character, "c");
+  EXPECT_EQ(screen.CellAt(1, 1).character, " ");
 }
 
 TEST(InputTest, ArrowLeftRight) {
@@ -586,8 +586,8 @@ TEST(InputTest, TypePassword) {
   auto document = input->Render();
   auto screen = Screen::Create(Dimension::Fit(document));
   Render(screen, document);
-  EXPECT_EQ(screen.PixelAt(0, 0).character, "•");
-  EXPECT_EQ(screen.PixelAt(1, 0).character, "•");
+  EXPECT_EQ(screen.CellAt(0, 0).character, "•");
+  EXPECT_EQ(screen.CellAt(1, 0).character, "•");
 }
 
 TEST(InputTest, MouseClick) {

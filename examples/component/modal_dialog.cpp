@@ -6,8 +6,8 @@
 #include <functional>                             // for function
 #include <memory>                                 // for allocator, shared_ptr
 
+#include "ftxui/component/app.hpp"  // for App, Component
 #include "ftxui/component/component.hpp"  // for Button, operator|=, Renderer, Vertical, Modal
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
 #include "ftxui/dom/elements.hpp"  // for operator|, separator, text, size, Element, vbox, border, GREATER_THAN, WIDTH, center, HEIGHT
 
 using namespace ftxui;
@@ -57,7 +57,7 @@ Component ModalComponent(std::function<void()> do_nothing,
 }
 
 int main(int argc, const char* argv[]) {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   // State of the application:
   bool modal_shown = false;

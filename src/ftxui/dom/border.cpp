@@ -13,8 +13,8 @@
 #include "ftxui/dom/node.hpp"      // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/pixel.hpp"     // for Pixel
-#include "ftxui/screen/screen.hpp"    // for Pixel, Screen
+#include "ftxui/screen/cell.hpp"      // for Cell
+#include "ftxui/screen/screen.hpp"    // for Cell, Screen
 
 namespace ftxui {
 
@@ -93,16 +93,16 @@ class Border : public Node {
     screen.at(box_.x_max, box_.y_max) = charset_[3];  // NOLINT
 
     for (int x = box_.x_min + 1; x < box_.x_max; ++x) {
-      Pixel& p1 = screen.PixelAt(x, box_.y_min);
-      Pixel& p2 = screen.PixelAt(x, box_.y_max);
+      Cell& p1 = screen.CellAt(x, box_.y_min);
+      Cell& p2 = screen.CellAt(x, box_.y_max);
       p1.character = charset_[4];  // NOLINT
       p2.character = charset_[4];  // NOLINT
       p1.automerge = true;
       p2.automerge = true;
     }
     for (int y = box_.y_min + 1; y < box_.y_max; ++y) {
-      Pixel& p3 = screen.PixelAt(box_.x_min, y);
-      Pixel& p4 = screen.PixelAt(box_.x_max, y);
+      Cell& p3 = screen.CellAt(box_.x_min, y);
+      Cell& p4 = screen.CellAt(box_.x_max, y);
       p3.character = charset_[5];  // NOLINT
       p4.character = charset_[5];  // NOLINT
       p3.automerge = true;
@@ -117,25 +117,25 @@ class Border : public Node {
     // Draw the border color.
     if (foreground_color_) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, box_.y_min).foreground_color = *foreground_color_;
-        screen.PixelAt(x, box_.y_max).foreground_color = *foreground_color_;
+        screen.CellAt(x, box_.y_min).foreground_color = *foreground_color_;
+        screen.CellAt(x, box_.y_max).foreground_color = *foreground_color_;
       }
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
-        screen.PixelAt(box_.x_min, y).foreground_color = *foreground_color_;
-        screen.PixelAt(box_.x_max, y).foreground_color = *foreground_color_;
+        screen.CellAt(box_.x_min, y).foreground_color = *foreground_color_;
+        screen.CellAt(box_.x_max, y).foreground_color = *foreground_color_;
       }
     }
   }
 };
 
 // For reference, here is the charset for normal border:
-class BorderPixel : public Node {
+class BorderCell : public Node {
  public:
-  BorderPixel(Elements children, Pixel pixel)
+  BorderCell(Elements children, Cell pixel)
       : Node(std::move(children)), pixel_(std::move(pixel)) {}
 
  private:
-  Pixel pixel_;
+  Cell pixel_;
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -176,18 +176,18 @@ class BorderPixel : public Node {
       return;
     }
 
-    screen.PixelAt(box_.x_min, box_.y_min) = pixel_;
-    screen.PixelAt(box_.x_max, box_.y_min) = pixel_;
-    screen.PixelAt(box_.x_min, box_.y_max) = pixel_;
-    screen.PixelAt(box_.x_max, box_.y_max) = pixel_;
+    screen.CellAt(box_.x_min, box_.y_min) = pixel_;
+    screen.CellAt(box_.x_max, box_.y_min) = pixel_;
+    screen.CellAt(box_.x_min, box_.y_max) = pixel_;
+    screen.CellAt(box_.x_max, box_.y_max) = pixel_;
 
     for (int x = box_.x_min + 1; x < box_.x_max; ++x) {
-      screen.PixelAt(x, box_.y_min) = pixel_;
-      screen.PixelAt(x, box_.y_max) = pixel_;
+      screen.CellAt(x, box_.y_min) = pixel_;
+      screen.CellAt(x, box_.y_max) = pixel_;
     }
     for (int y = box_.y_min + 1; y < box_.y_max; ++y) {
-      screen.PixelAt(box_.x_min, y) = pixel_;
-      screen.PixelAt(box_.x_max, y) = pixel_;
+      screen.CellAt(box_.x_min, y) = pixel_;
+      screen.CellAt(box_.x_max, y) = pixel_;
     }
   }
 };
@@ -228,12 +228,12 @@ Element border(Element child) {
   return std::make_shared<Border>(unpack(std::move(child)), ROUNDED);
 }
 
-/// @brief Same as border but with a constant Pixel around the element.
+/// @brief Same as border but with a constant Cell around the element.
 /// @ingroup dom
 /// @see border
-Decorator borderWith(const Pixel& pixel) {
+Decorator borderWith(const Cell& pixel) {
   return [pixel](Element child) {
-    return std::make_shared<BorderPixel>(unpack(std::move(child)), pixel);
+    return std::make_shared<BorderCell>(unpack(std::move(child)), pixel);
   };
 }
 

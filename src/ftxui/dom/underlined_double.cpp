@@ -8,7 +8,7 @@
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
@@ -22,7 +22,7 @@ Element underlinedDouble(Element child) {
     void Render(Screen& screen) override {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
-          screen.PixelAt(x, y).underlined_double = true;
+          screen.CellAt(x, y).underlined_double = true;
         }
       }
       Node::Render(screen);

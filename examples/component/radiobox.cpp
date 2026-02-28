@@ -4,9 +4,9 @@
 #include <string>  // for string, allocator, basic_string
 #include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Radiobox
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Radiobox
 
 using namespace ftxui;
 
@@ -19,7 +19,7 @@ int main() {
   };
   int selected = 0;
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(Radiobox(&radiobox_list, &selected));
   return 0;
 }

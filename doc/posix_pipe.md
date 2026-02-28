@@ -39,7 +39,7 @@ This feature is **turned on by default**.
 If your FTXUI application needs to read piped data and also respond to keyboard input, you typically don't need to do anything special:
 
 ```cpp
-auto screen = ScreenInteractive::Fullscreen();
+auto screen = App::Fullscreen();
 // screen.HandlePipedInput(true); // This is enabled by default
 screen.Loop(component);
 ```
@@ -52,7 +52,7 @@ If you don't need this feature, or if it conflicts with your custom input handli
 To disable it, call `HandlePipedInput(false)` before starting your application's main loop:
 
 ```cpp
-auto screen = ScreenInteractive::Fullscreen();
+auto screen = App::Fullscreen();
 screen.HandlePipedInput(false); // Turn off piped input handling
 screen.Loop(component);
 ```

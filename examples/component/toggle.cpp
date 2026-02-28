@@ -5,11 +5,11 @@
 #include <string>  // for string, basic_string
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Toggle, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"  // for text, hbox, vbox, Element
+#include "ftxui/dom/elements.hpp"              // for text, hbox, vbox, Element
 
 using namespace ftxui;
 
@@ -59,6 +59,6 @@ int main() {
     });
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(renderer);
 }

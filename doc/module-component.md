@@ -8,7 +8,7 @@ components that respond to user events (keyboard, mouse, etc.).
 
 The @subpage module-component-examples section provides a collection of examples.
 
-A `ftxui::ScreenInteractive` defines a main loop that renders a component.
+A `ftxui::App` defines a main loop that renders a component.
 
 A `ftxui::Component` is a shared pointer to a `ftxui::ComponentBase`. The latter defines:
   - `ftxui::ComponentBase::Render()`: How to render the interface.
@@ -179,7 +179,7 @@ This component decorate others, catching events before the underlying component.
 
 Examples:
 ```cpp
-auto screen = ScreenInteractive::TerminalOutput();
+auto screen = App::TerminalOutput();
 auto renderer = Renderer([] {
   return text("My interface");
 });
@@ -289,11 +289,11 @@ from "ftxui/component/component.hpp"
 
 # Force a frame redraw. {#component-force-redraw}
 
-Typically, `ftxui::ScreenInteractive::Loop()` is responsible for drawing a new
+Typically, `ftxui::App::Loop()` is responsible for drawing a new
 frame whenever a new group of events (e.g keyboard, mouse, window resize, etc.)
 has been processed. However, you might want to react to arbitrary events that
 are unknown to FTXUI. To accomplish this, you must post events using
-`ftxui::ScreenInteractive::PostEvent` (**this is thread safe**) via a thread.
+`ftxui::App::PostEvent` (**this is thread safe**) via a thread.
 You will have to post the event `ftxui::Event::Custom`.
 
 Example:

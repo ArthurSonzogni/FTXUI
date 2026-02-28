@@ -38,7 +38,7 @@ class CatchEventBase : public ComponentBase {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// auto renderer = Renderer([] {
 ///   return text("My interface");
 /// });
@@ -66,7 +66,7 @@ Component CatchEvent(Component child,
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// auto renderer = Renderer([] { return text("Hello world"); });
 /// renderer |= CatchEvent([&](Event event) {
 ///   if (event == Event::Character('q')) {

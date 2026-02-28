@@ -15,7 +15,7 @@ FTXUI is organized into three modules, each building upon the previous:
 Defines:
 
 - **`ftxui::Screen`**: a 2D grid of styled characters.
-- **`ftxui::Pixel`**: the unit of rendering.
+- **`ftxui::Cell`**: the unit of rendering.
 - Helpers like `ftxui::Color` and `Dimension`.
 
 Use for direct terminal drawing and styling.

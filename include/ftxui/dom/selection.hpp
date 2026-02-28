@@ -8,8 +8,8 @@
 #include <functional>
 
 #include <sstream>
-#include "ftxui/screen/box.hpp"    // for Box
-#include "ftxui/screen/pixel.hpp"  // for Pixel
+#include "ftxui/screen/box.hpp"   // for Box
+#include "ftxui/screen/cell.hpp"  // for Cell
 
 namespace ftxui {
 

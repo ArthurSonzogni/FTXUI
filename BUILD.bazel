@@ -35,7 +35,7 @@ ftxui_cc_library(
         "src/ftxui/screen/box.cpp",
         "src/ftxui/screen/color.cpp",
         "src/ftxui/screen/color_info.cpp",
-        "src/ftxui/screen/image.cpp",
+        "src/ftxui/screen/surface.cpp",
         "src/ftxui/screen/screen.cpp",
         "src/ftxui/screen/string.cpp",
         "src/ftxui/screen/string_internal.hpp",
@@ -44,6 +44,7 @@ ftxui_cc_library(
     ],
     hdrs = [
         "include/ftxui/screen/box.hpp",
+        "include/ftxui/screen/cell.hpp",
         "include/ftxui/screen/color.hpp",
         "include/ftxui/screen/color_info.hpp",
         "include/ftxui/screen/deprecated.hpp",
@@ -51,6 +52,7 @@ ftxui_cc_library(
         "include/ftxui/screen/pixel.hpp",
         "include/ftxui/screen/screen.hpp",
         "include/ftxui/screen/string.hpp",
+        "include/ftxui/screen/surface.hpp",
         "include/ftxui/screen/terminal.hpp",
         "include/ftxui/util/autoreset.hpp",
         "include/ftxui/util/ref.hpp",
@@ -160,7 +162,7 @@ ftxui_cc_library(
         "src/ftxui/component/radiobox.cpp",
         "src/ftxui/component/renderer.cpp",
         "src/ftxui/component/resizable_split.cpp",
-        "src/ftxui/component/screen_interactive.cpp",
+        "src/ftxui/component/app.cpp",
         "src/ftxui/component/slider.cpp",
         "src/ftxui/component/task.cpp",
         "src/ftxui/component/task_internal.hpp",
@@ -182,6 +184,7 @@ ftxui_cc_library(
     ],
     hdrs = [
         "include/ftxui/component/animation.hpp",
+        "include/ftxui/component/app.hpp",
         "include/ftxui/component/captured_mouse.hpp",
         "include/ftxui/component/component.hpp",
         "include/ftxui/component/component_base.hpp",
@@ -243,6 +246,7 @@ cc_test(
         "src/ftxui/dom/underlined_test.cpp",
         "src/ftxui/dom/vbox_test.cpp",
         "src/ftxui/screen/color_test.cpp",
+        "src/ftxui/screen/compatibility_test.cpp",
         "src/ftxui/screen/string_test.cpp",
         "src/ftxui/util/ref_test.cpp",
 
@@ -257,7 +261,7 @@ cc_test(
         # flexbox_helper_test.cpp.
         "src/ftxui/dom/flexbox_helper.hpp",
 
-        "src/ftxui/component/screen_interactive_test.cpp",
+        "src/ftxui/component/app_test.cpp",
         "src/ftxui/dom/selection_test.cpp",
     ],
     includes = [

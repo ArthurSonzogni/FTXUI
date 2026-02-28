@@ -1,7 +1,7 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/app.hpp"
 #include <algorithm>  // for copy, max, min
 #include <array>      // for array
 #include <atomic>
@@ -10,7 +10,7 @@
 #include <cstdint>
 #include <cstdio>                    // for fileno, stdin
 #include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
-#include <ftxui/screen/screen.hpp>  // for Pixel, Screen::Cursor, Screen, Screen::Cursor::Hidden
+#include <ftxui/screen/screen.hpp>  // for Cell, Screen::Cursor, Screen, Screen::Cursor::Hidden
 #include <functional>        // for function
 #include <initializer_list>  // for initializer_list
 #include <iostream>  // for cout, ostream, operator<<, basic_ostream, endl, flush
@@ -57,14 +57,14 @@ namespace ftxui {
 
 namespace animation {
 void RequestAnimationFrame() {
-  auto* screen = ScreenInteractive::Active();
+  auto* screen = App::Active();
   if (screen) {
     screen->RequestAnimationFrame();
   }
 }
 }  // namespace animation
 
-struct ScreenInteractive::Internal {
+struct App::Internal {
   // Convert char to Event.
   TerminalInputParser terminal_input_parser;
 
@@ -87,7 +87,7 @@ struct ScreenInteractive::Internal {
 
 namespace {
 
-ScreenInteractive* g_active_screen = nullptr;  // NOLINT
+App* g_active_screen = nullptr;  // NOLINT
 
 std::stack<Closure> on_exit_functions;  // NOLINT
 
@@ -163,18 +163,18 @@ void RecordSignal(int signal) {
 void ExecuteSignalHandlers() {
   int signal_exit_count = g_signal_exit_count.exchange(0);
   while (signal_exit_count--) {
-    ScreenInteractive::Private::Signal(*g_active_screen, SIGABRT);
+    App::Private::Signal(*g_active_screen, SIGABRT);
   }
 
 #if !defined(_WIN32)
   int signal_stop_count = g_signal_stop_count.exchange(0);
   while (signal_stop_count--) {
-    ScreenInteractive::Private::Signal(*g_active_screen, SIGTSTP);
+    App::Private::Signal(*g_active_screen, SIGTSTP);
   }
 
   int signal_resize_count = g_signal_resize_count.exchange(0);
   while (signal_resize_count--) {
-    ScreenInteractive::Private::Signal(*g_active_screen, SIGWINCH);
+    App::Private::Signal(*g_active_screen, SIGWINCH);
   }
 #endif
 }
@@ -265,10 +265,7 @@ class CapturedMouseImpl : public CapturedMouseInterface {
 
 }  // namespace
 
-ScreenInteractive::ScreenInteractive(Dimension dimension,
-                                     int dimx,
-                                     int dimy,
-                                     bool use_alternative_screen)
+App::App(Dimension dimension, int dimx, int dimy, bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
       use_alternative_screen_(use_alternative_screen) {
@@ -277,7 +274,7 @@ ScreenInteractive::ScreenInteractive(Dimension dimension,
 }
 
 // static
-ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
+App App::FixedSize(int dimx, int dimy) {
   return {
       Dimension::Fixed,
       dimx,
@@ -286,19 +283,19 @@ ScreenInteractive ScreenInteractive::FixedSize(int dimx, int dimy) {
   };
 }
 
-/// Create a ScreenInteractive taking the full terminal size. This is using the
+/// Create a App taking the full terminal size. This is using the
 /// alternate screen buffer to avoid messing with the terminal content.
-/// @note This is the same as `ScreenInteractive::FullscreenAlternateScreen()`
+/// @note This is the same as `App::FullscreenAlternateScreen()`
 // static
-ScreenInteractive ScreenInteractive::Fullscreen() {
+App App::Fullscreen() {
   return FullscreenAlternateScreen();
 }
 
-/// Create a ScreenInteractive taking the full terminal size. The primary screen
+/// Create a App taking the full terminal size. The primary screen
 /// buffer is being used. It means if the terminal is resized, the previous
 /// content might mess up with the terminal content.
 // static
-ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
+App App::FullscreenPrimaryScreen() {
   auto terminal = Terminal::Size();
   return {
       Dimension::Fullscreen,
@@ -308,10 +305,10 @@ ScreenInteractive ScreenInteractive::FullscreenPrimaryScreen() {
   };
 }
 
-/// Create a ScreenInteractive taking the full terminal size. This is using the
+/// Create a App taking the full terminal size. This is using the
 /// alternate screen buffer to avoid messing with the terminal content.
 // static
-ScreenInteractive ScreenInteractive::FullscreenAlternateScreen() {
+App App::FullscreenAlternateScreen() {
   auto terminal = Terminal::Size();
   return {
       Dimension::Fullscreen,
@@ -321,10 +318,10 @@ ScreenInteractive ScreenInteractive::FullscreenAlternateScreen() {
   };
 }
 
-/// Create a ScreenInteractive whose width match the terminal output width and
+/// Create a App whose width match the terminal output width and
 /// the height matches the component being drawn.
 // static
-ScreenInteractive ScreenInteractive::TerminalOutput() {
+App App::TerminalOutput() {
   auto terminal = Terminal::Size();
   return {
       Dimension::TerminalOutput,
@@ -334,12 +331,12 @@ ScreenInteractive ScreenInteractive::TerminalOutput() {
   };
 }
 
-ScreenInteractive::~ScreenInteractive() = default;
+App::~App() = default;
 
-/// Create a ScreenInteractive whose width and height match the component being
+/// Create a App whose width and height match the component being
 /// drawn.
 // static
-ScreenInteractive ScreenInteractive::FitComponent() {
+App App::FitComponent() {
   auto terminal = Terminal::Size();
   return {
       Dimension::FitComponent,
@@ -350,21 +347,21 @@ ScreenInteractive ScreenInteractive::FitComponent() {
 }
 
 /// @brief Set whether mouse is tracked and events reported.
-/// called outside of the main loop. E.g `ScreenInteractive::Loop(...)`.
+/// called outside of the main loop. E.g `App::Loop(...)`.
 /// @param enable Whether to enable mouse event tracking.
 /// @note This muse be called outside of the main loop. E.g. before calling
-/// `ScreenInteractive::Loop`.
+/// `App::Loop`.
 /// @note Mouse tracking is enabled by default.
 /// @note Mouse tracking is only supported on terminals that supports it.
 ///
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// screen.TrackMouse(false);
 /// screen.Loop(component);
 /// ```
-void ScreenInteractive::TrackMouse(bool enable) {
+void App::TrackMouse(bool enable) {
   track_mouse_ = enable;
 }
 
@@ -376,13 +373,13 @@ void ScreenInteractive::TrackMouse(bool enable) {
 /// @note This must be called before Loop().
 /// @note This feature is enabled by default.
 /// @note This feature is only available on POSIX systems (Linux/macOS).
-void ScreenInteractive::HandlePipedInput(bool enable) {
+void App::HandlePipedInput(bool enable) {
   handle_piped_input_ = enable;
 }
 
 /// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
-void ScreenInteractive::Post(Task task) {
+void App::Post(Task task) {
   internal_->task_runner.PostTask([this, task = std::move(task)]() mutable {
     HandleTask(component_, task);
   });
@@ -390,13 +387,13 @@ void ScreenInteractive::Post(Task task) {
 
 /// @brief Add an event to the main loop.
 /// It will be executed later, after every other scheduled events.
-void ScreenInteractive::PostEvent(Event event) {
+void App::PostEvent(Event event) {
   Post(event);
 }
 
 /// @brief Add a task to draw the screen one more time, until all the animations
 /// are done.
-void ScreenInteractive::RequestAnimationFrame() {
+void App::RequestAnimationFrame() {
   if (animation_requested_) {
     return;
   }
@@ -411,7 +408,7 @@ void ScreenInteractive::RequestAnimationFrame() {
 /// @brief Try to get the unique lock about behing able to capture the mouse.
 /// @return A unique lock if the mouse is not already captured, otherwise a
 /// null.
-CapturedMouse ScreenInteractive::CaptureMouse() {
+CapturedMouse App::CaptureMouse() {
   if (mouse_captured) {
     return nullptr;
   }
@@ -422,18 +419,18 @@ CapturedMouse ScreenInteractive::CaptureMouse() {
 
 /// @brief Execute the main loop.
 /// @param component The component to draw.
-void ScreenInteractive::Loop(Component component) {  // NOLINT
+void App::Loop(Component component) {  // NOLINT
   class Loop loop(this, std::move(component));
   loop.Run();
 }
 
 /// @brief Return whether the main loop has been quit.
-bool ScreenInteractive::HasQuitted() {
+bool App::HasQuitted() {
   return quit_;
 }
 
 // private
-void ScreenInteractive::PreMain() {
+void App::PreMain() {
   // Suspend previously active screen:
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
@@ -456,7 +453,7 @@ void ScreenInteractive::PreMain() {
 }
 
 // private
-void ScreenInteractive::PostMain() {
+void App::PostMain() {
   // Put cursor position at the end of the drawing.
   TerminalSend(ResetCursorPosition());
 
@@ -487,7 +484,7 @@ void ScreenInteractive::PostMain() {
 /// @brief Decorate a function. It executes the same way, but with the currently
 /// active screen terminal hooks temporarilly uninstalled during its execution.
 /// @param fn The function to decorate.
-Closure ScreenInteractive::WithRestoredIO(Closure fn) {  // NOLINT
+Closure App::WithRestoredIO(Closure fn) {  // NOLINT
   return [this, fn] {
     Uninstall();
     fn();
@@ -497,36 +494,36 @@ Closure ScreenInteractive::WithRestoredIO(Closure fn) {  // NOLINT
 
 /// @brief Force FTXUI to handle or not handle Ctrl-C, even if the component
 /// catches the Event::CtrlC.
-void ScreenInteractive::ForceHandleCtrlC(bool force) {
+void App::ForceHandleCtrlC(bool force) {
   force_handle_ctrl_c_ = force;
 }
 
 /// @brief Force FTXUI to handle or not handle Ctrl-Z, even if the component
 /// catches the Event::CtrlZ.
-void ScreenInteractive::ForceHandleCtrlZ(bool force) {
+void App::ForceHandleCtrlZ(bool force) {
   force_handle_ctrl_z_ = force;
 }
 
 /// @brief Returns the content of the current selection
-std::string ScreenInteractive::GetSelection() {
+std::string App::GetSelection() {
   if (!selection_) {
     return "";
   }
   return selection_->GetParts();
 }
 
-void ScreenInteractive::SelectionChange(std::function<void()> callback) {
+void App::SelectionChange(std::function<void()> callback) {
   selection_on_change_ = std::move(callback);
 }
 
 /// @brief Return the currently active screen, or null if none.
 // static
-ScreenInteractive* ScreenInteractive::Active() {
+App* App::Active() {
   return g_active_screen;
 }
 
 // private
-void ScreenInteractive::Install() {
+void App::Install() {
   frame_valid_ = false;
 
   // Flush the buffer for stdout to ensure whatever the user has printed before
@@ -675,7 +672,7 @@ void ScreenInteractive::Install() {
   PostAnimationTask();
 }
 
-void ScreenInteractive::InstallPipedInputHandling() {
+void App::InstallPipedInputHandling() {
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
   tty_fd_ = STDIN_FILENO;
   // Handle piped input redirection if explicitly enabled by the application.
@@ -707,14 +704,14 @@ void ScreenInteractive::InstallPipedInputHandling() {
 }
 
 // private
-void ScreenInteractive::Uninstall() {
+void App::Uninstall() {
   ExitNow();
   OnExit();
 }
 
 // private
 // NOLINTNEXTLINE
-void ScreenInteractive::RunOnceBlocking(Component component) {
+void App::RunOnceBlocking(Component component) {
   // Set FPS to 60 at most.
   const auto time_per_frame = std::chrono::microseconds(16666);  // 1s / 60fps
 
@@ -738,7 +735,7 @@ void ScreenInteractive::RunOnceBlocking(Component component) {
 }
 
 // private
-void ScreenInteractive::RunOnce(Component component) {
+void App::RunOnce(Component component) {
   AutoReset set_component(&component_, component);
   ExecuteSignalHandlers();
   FetchTerminalEvents();
@@ -765,7 +762,7 @@ void ScreenInteractive::RunOnce(Component component) {
 
 // private
 // NOLINTNEXTLINE
-void ScreenInteractive::HandleTask(Component component, Task& task) {
+void App::HandleTask(Component component, Task& task) {
   std::visit(
       [&](auto&& arg) {
         using T = std::decay_t<decltype(arg)>;
@@ -838,7 +835,7 @@ void ScreenInteractive::HandleTask(Component component, Task& task) {
 }
 
 // private
-bool ScreenInteractive::HandleSelection(bool handled, Event event) {
+bool App::HandleSelection(bool handled, Event event) {
   if (handled) {
     selection_pending_ = nullptr;
     selection_data_.empty = true;
@@ -892,7 +889,7 @@ bool ScreenInteractive::HandleSelection(bool handled, Event event) {
 
 // private
 // NOLINTNEXTLINE
-void ScreenInteractive::Draw(Component component) {
+void App::Draw(Component component) {
   if (frame_valid_) {
     return;
   }
@@ -938,7 +935,7 @@ void ScreenInteractive::Draw(Component component) {
   if (resized) {
     dimx_ = dimx;
     dimy_ = dimy;
-    pixels_ = std::vector<std::vector<Pixel>>(dimy, std::vector<Pixel>(dimx));
+    cells_ = std::vector<std::vector<Cell>>(dimy, std::vector<Cell>(dimx));
     cursor_.x = dimx_ - 1;
     cursor_.y = dimy_ - 1;
   }
@@ -1010,19 +1007,19 @@ void ScreenInteractive::Draw(Component component) {
 }
 
 // private
-std::string ScreenInteractive::ResetCursorPosition() {
+std::string App::ResetCursorPosition() {
   std::string result = std::move(reset_cursor_position);
   reset_cursor_position = "";
   return result;
 }
 
 // private
-void ScreenInteractive::TerminalSend(std::string_view s) {
+void App::TerminalSend(std::string_view s) {
   internal_->output_buffer += s;
 }
 
 // private
-void ScreenInteractive::TerminalFlush() {
+void App::TerminalFlush() {
   // Emscripten doesn't implement flush. We interpret zero as flush.
   internal_->output_buffer += '\0';
   std::cout << internal_->output_buffer << std::flush;
@@ -1030,22 +1027,22 @@ void ScreenInteractive::TerminalFlush() {
 }
 
 /// @brief Return a function to exit the main loop.
-Closure ScreenInteractive::ExitLoopClosure() {
+Closure App::ExitLoopClosure() {
   return [this] { Exit(); };
 }
 
 /// @brief Exit the main loop.
-void ScreenInteractive::Exit() {
+void App::Exit() {
   Post([this] { ExitNow(); });
 }
 
 // private:
-void ScreenInteractive::ExitNow() {
+void App::ExitNow() {
   quit_ = true;
 }
 
 // private:
-void ScreenInteractive::Signal(int signal) {
+void App::Signal(int signal) {
   if (signal == SIGABRT) {
     Exit();
     return;
@@ -1060,7 +1057,7 @@ void ScreenInteractive::Signal(int signal) {
       Uninstall();
       dimx_ = 0;
       dimy_ = 0;
-      std::ignore = std::raise(SIGTSTP);
+      std::raise(SIGTSTP);
       Install();
     });
     return;
@@ -1073,7 +1070,7 @@ void ScreenInteractive::Signal(int signal) {
 #endif
 }
 
-void ScreenInteractive::FetchTerminalEvents() {
+void App::FetchTerminalEvents() {
 #if defined(_WIN32)
   auto get_input_records = [&]() -> std::vector<INPUT_RECORD> {
     // Check if there is input in the console.
@@ -1182,7 +1179,7 @@ void ScreenInteractive::FetchTerminalEvents() {
 #endif
 }
 
-void ScreenInteractive::PostAnimationTask() {
+void App::PostAnimationTask() {
   Post(AnimationTask());
 
   // Repeat the animation task every 15ms. This correspond to a frame rate
@@ -1191,8 +1188,7 @@ void ScreenInteractive::PostAnimationTask() {
                                          std::chrono::milliseconds(15));
 }
 
-bool ScreenInteractive::SelectionData::operator==(
-    const ScreenInteractive::SelectionData& other) const {
+bool App::SelectionData::operator==(const App::SelectionData& other) const {
   if (empty && other.empty) {
     return true;
   }
@@ -1203,9 +1199,8 @@ bool ScreenInteractive::SelectionData::operator==(
          end_x == other.end_x && end_y == other.end_y;
 }
 
-bool ScreenInteractive::SelectionData::operator!=(
-    const ScreenInteractive::SelectionData& other) const {
+bool App::SelectionData::operator!=(const App::SelectionData& other) const {
   return !(*this == other);
 }
 
-}  // namespace ftxui.
+}  // namespace ftxui

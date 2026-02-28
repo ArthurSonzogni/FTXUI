@@ -9,7 +9,7 @@
 #include <string>      // for string, basic_string, allocator
 #include <vector>      // for vector
 
-#include "ftxui/screen/image.hpp"     // for Pixel, Image
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
 
 namespace ftxui {
@@ -21,9 +21,9 @@ Dimensions Fixed(int);
 Dimensions Full();
 }  // namespace Dimension
 
-/// @brief A rectangular grid of Pixel.
+/// @brief A rectangular grid of Cell.
 /// @ingroup screen
-class Screen : public Image {
+class Screen : public Surface {
  public:
   // Constructors:
   Screen(int dimx, int dimy);
@@ -73,7 +73,7 @@ class Screen : public Image {
   uint8_t RegisterHyperlink(std::string_view link);
   const std::string& Hyperlink(uint8_t id) const;
 
-  using SelectionStyle = std::function<void(Pixel&)>;
+  using SelectionStyle = std::function<void(Cell&)>;
   const SelectionStyle& GetSelectionStyle() const;
   void SetSelectionStyle(SelectionStyle decorator);
 
@@ -82,9 +82,7 @@ class Screen : public Image {
   std::vector<std::string> hyperlinks_ = {""};
 
   // The current selection style. This is overridden by various dom elements.
-  SelectionStyle selection_style_ = [](Pixel& pixel) {
-    pixel.inverted ^= true;
-  };
+  SelectionStyle selection_style_ = [](Cell& cell) { cell.inverted ^= true; };
 };
 
 }  // namespace ftxui

@@ -140,8 +140,8 @@ TEST(ScrollIndicator, VerticalColorable) {
   Screen screen(6, 6);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 4).foreground_color, Color::Red);
-  EXPECT_EQ(screen.PixelAt(4, 4).background_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 4).foreground_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 4).background_color, Color());
 }
 
 TEST(ScrollIndicator, VerticalBackgroundColorable) {
@@ -157,8 +157,8 @@ TEST(ScrollIndicator, VerticalBackgroundColorable) {
   Screen screen(6, 6);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 4).foreground_color, Color());
-  EXPECT_EQ(screen.PixelAt(4, 4).background_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 4).foreground_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 4).background_color, Color::Red);
 }
 
 TEST(ScrollIndicator, VerticalFullColorable) {
@@ -175,8 +175,8 @@ TEST(ScrollIndicator, VerticalFullColorable) {
   Screen screen(6, 6);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 4).foreground_color, Color::Red);
-  EXPECT_EQ(screen.PixelAt(4, 4).background_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 4).foreground_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 4).background_color, Color::Red);
 }
 
 TEST(ScrollIndicator, BasicHorizontal) {
@@ -240,8 +240,8 @@ TEST(ScrollIndicator, HorizontalColorable) {
   Screen screen(6, 4);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color::Red);
-  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 2).foreground_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 2).background_color, Color());
 }
 
 TEST(ScrollIndicator, HorizontalBackgroundColorable) {
@@ -255,8 +255,8 @@ TEST(ScrollIndicator, HorizontalBackgroundColorable) {
   Screen screen(6, 4);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color());
-  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 2).foreground_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 2).background_color, Color::Red);
 }
 
 TEST(ScrollIndicator, HorizontalFullColorable) {
@@ -271,8 +271,8 @@ TEST(ScrollIndicator, HorizontalFullColorable) {
   Screen screen(6, 4);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(4, 2).foreground_color, Color::Red);
-  EXPECT_EQ(screen.PixelAt(4, 2).background_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 2).foreground_color, Color::Red);
+  EXPECT_EQ(screen.CellAt(4, 2).background_color, Color::Red);
 }
 
 namespace {

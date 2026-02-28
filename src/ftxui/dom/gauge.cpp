@@ -9,7 +9,7 @@
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/screen.hpp"    // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"    // for Screen, Cell
 
 namespace ftxui {
 
@@ -119,7 +119,7 @@ class Gauge : public Node {
 
     if (invert) {
       for (int x = box_.x_min; x <= box_.x_max; x++) {
-        screen.PixelAt(x, y).inverted ^= true;
+        screen.CellAt(x, y).inverted ^= true;
       }
     }
   }
@@ -149,7 +149,7 @@ class Gauge : public Node {
 
     if (invert) {
       for (int y = box_.y_min; y <= box_.y_max; y++) {
-        screen.PixelAt(x, y).inverted ^= true;
+        screen.CellAt(x, y).inverted ^= true;
       }
     }
   }

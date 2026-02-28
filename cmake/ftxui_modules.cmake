@@ -9,6 +9,7 @@ target_sources(ftxui-modules
   src/ftxui/ftxui.cppm
   src/ftxui/component.cppm
   src/ftxui/component/animation.cppm
+  src/ftxui/component/app.cppm
   src/ftxui/component/captured_mouse.cppm
   src/ftxui/component/component.cppm
   src/ftxui/component/component_base.cppm
@@ -32,6 +33,7 @@ target_sources(ftxui-modules
   src/ftxui/dom/table.cppm
   src/ftxui/screen.cppm
   src/ftxui/screen/box.cppm
+  src/ftxui/screen/cell.cppm
   src/ftxui/screen/color.cppm
   src/ftxui/screen/color_info.cppm
   src/ftxui/screen/deprecated.cppm
@@ -39,6 +41,7 @@ target_sources(ftxui-modules
   src/ftxui/screen/pixel.cppm
   src/ftxui/screen/screen.cppm
   src/ftxui/screen/string.cppm
+  src/ftxui/screen/surface.cppm
   src/ftxui/screen/terminal.cppm
   src/ftxui/util.cppm
   src/ftxui/util/autoreset.cppm

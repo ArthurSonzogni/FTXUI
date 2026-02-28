@@ -229,7 +229,8 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
     }
   }
 
-  auto to_rgb = [](const Color& color) -> std::tuple<uint8_t, uint8_t, uint8_t> {
+  auto to_rgb =
+      [](const Color& color) -> std::tuple<uint8_t, uint8_t, uint8_t> {
     switch (color.type_) {
       case ColorType::Palette1: {
         return {0, 0, 0};

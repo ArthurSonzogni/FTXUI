@@ -1,11 +1,11 @@
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Slider
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Slider
 
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   int value = 50;
   auto slider = Slider("Value:", &value, 0, 100, 1);
   screen.Loop(slider);

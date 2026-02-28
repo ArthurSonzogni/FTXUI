@@ -9,7 +9,7 @@
 #include "ftxui/dom/elements.hpp"        // for Element, Decorator, hyperlink
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"       // for Screen, Cell
 
 namespace ftxui {
 
@@ -23,7 +23,7 @@ class Hyperlink : public NodeDecorator {
     const uint8_t hyperlink_id = screen.RegisterHyperlink(link_);
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y).hyperlink = hyperlink_id;
+        screen.CellAt(x, y).hyperlink = hyperlink_id;
       }
     }
     NodeDecorator::Render(screen);
