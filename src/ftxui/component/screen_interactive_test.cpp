@@ -213,6 +213,7 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
       "\x1B[2K"  // Clear the line.
       "\x1B[1A"  // Move cursor up one line.
       "\x1B[2K"  // Clear the line.
+      "\x1B[?25l"  // Hide cursor.
 
       // Print the document.
       "AB\r\n"  // Print "AB" and move to the next line.
