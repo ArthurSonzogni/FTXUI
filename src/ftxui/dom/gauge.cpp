@@ -100,12 +100,13 @@ class Gauge : public Node {
       return;
     }
 
-    // Draw the progress bar horizontally.
-    {
-      const float progress = invert ? 1.F - progress_ : progress_;
-      const auto limit =
-          float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
-      const int limit_int = static_cast<int>(limit);
+    // Draw the progress bar horizontally across the full allocated height:
+    const float progress = invert ? 1.F - progress_ : progress_;
+    const auto limit =
+        float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
+    const int limit_int = static_cast<int>(limit);
+
+    for (int y = box_.y_min; y <= box_.y_max; y++) {
       int x = box_.x_min;
       while (x < limit_int) {
         screen.at(x++, y) = charset_horizontal[9];  // NOLINT
@@ -118,8 +119,10 @@ class Gauge : public Node {
     }
 
     if (invert) {
-      for (int x = box_.x_min; x <= box_.x_max; x++) {
-        screen.CellAt(x, y).inverted ^= true;
+      for (int y = box_.y_min; y <= box_.y_max; y++) {
+        for (int x = box_.x_min; x <= box_.x_max; x++) {
+          screen.CellAt(x, y).inverted ^= true;
+        }
       }
     }
   }
