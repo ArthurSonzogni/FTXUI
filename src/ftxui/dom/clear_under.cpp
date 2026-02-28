@@ -8,7 +8,7 @@
 #include "ftxui/dom/node.hpp"            // for Node
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
-#include "ftxui/screen/screen.hpp"       // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"       // for Cell, Screen
 
 namespace ftxui {
 
@@ -22,8 +22,8 @@ class ClearUnder : public NodeDecorator {
   void Render(Screen& screen) override {
     for (int y = box_.y_min; y <= box_.y_max; ++y) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        screen.PixelAt(x, y) = Pixel();
-        screen.PixelAt(x, y).character = " ";  // Consider the pixel written.
+        screen.CellAt(x, y) = Cell();
+        screen.CellAt(x, y).character = " ";  // Consider the Cell written.
       }
     }
     Node::Render(screen);
@@ -31,7 +31,7 @@ class ClearUnder : public NodeDecorator {
 };
 }  // namespace
 
-/// @brief Before drawing |child|, clear the pixels below. This is useful in
+/// @brief Before drawing |child|, clear the Cell below. This is useful in
 ///        combination with dbox.
 /// @see ftxui::dbox
 /// @ingroup dom

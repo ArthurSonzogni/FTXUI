@@ -7,7 +7,7 @@
 #include "ftxui/dom/elements.hpp"  // for operator|, text, bgcolor, color, Element
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/color.hpp"   // for Color, Color::RedLight, Color::Red
-#include "ftxui/screen/screen.hpp"  // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"  // for Screen, Cell
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -63,11 +63,11 @@ TEST(ColorTest, GradientForeground) {
   Color gradient_begin = Color::Interpolate(0, Color::RedLight, Color::Red);
   Color gradient_end = Color::Interpolate(1, Color::RedLight, Color::Red);
 
-  EXPECT_EQ(screen.PixelAt(0, 0).foreground_color, gradient_begin);
-  EXPECT_EQ(screen.PixelAt(0, 0).background_color, Color());
+  EXPECT_EQ(screen.CellAt(0, 0).foreground_color, gradient_begin);
+  EXPECT_EQ(screen.CellAt(0, 0).background_color, Color());
 
-  EXPECT_EQ(screen.PixelAt(4, 0).foreground_color, gradient_end);
-  EXPECT_EQ(screen.PixelAt(4, 0).background_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 0).foreground_color, gradient_end);
+  EXPECT_EQ(screen.CellAt(4, 0).background_color, Color());
 }
 
 TEST(ColorTest, GradientBackground) {
@@ -79,11 +79,11 @@ TEST(ColorTest, GradientBackground) {
   Color gradient_begin = Color::Interpolate(0, Color::RedLight, Color::Red);
   Color gradient_end = Color::Interpolate(1, Color::RedLight, Color::Red);
 
-  EXPECT_EQ(screen.PixelAt(0, 0).foreground_color, Color());
-  EXPECT_EQ(screen.PixelAt(0, 0).background_color, gradient_begin);
+  EXPECT_EQ(screen.CellAt(0, 0).foreground_color, Color());
+  EXPECT_EQ(screen.CellAt(0, 0).background_color, gradient_begin);
 
-  EXPECT_EQ(screen.PixelAt(4, 0).foreground_color, Color());
-  EXPECT_EQ(screen.PixelAt(4, 0).background_color, gradient_end);
+  EXPECT_EQ(screen.CellAt(4, 0).foreground_color, Color());
+  EXPECT_EQ(screen.CellAt(4, 0).background_color, gradient_end);
 }
 
 }  // namespace ftxui

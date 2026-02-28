@@ -8,7 +8,7 @@
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Collapsible, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
+#include "ftxui/component/app.hpp"  // for Component, App
 #include "ftxui/dom/elements.hpp"                  // for text, hbox, Element
 
 using namespace ftxui;
@@ -53,5 +53,5 @@ int main() {
                                   })),
                   }));
 
-  ScreenInteractive::FitComponent().Loop(component);
+  App::FitComponent().Loop(component);
 }

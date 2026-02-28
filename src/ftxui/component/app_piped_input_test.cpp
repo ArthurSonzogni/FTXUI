@@ -8,7 +8,7 @@
 #include <cstdio>
 
 #include "ftxui/component/component.hpp"
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/app.hpp"
 #include "ftxui/dom/elements.hpp"
 
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
@@ -69,7 +69,7 @@ TEST_F(PipedInputTest, DefaultBehaviorEnabled) {
     GTEST_SKIP() << "/dev/tty not available in this environment";
   }
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   auto component = Renderer([] { return text("test"); });
 
   SetupPipedStdin();
@@ -86,7 +86,7 @@ TEST_F(PipedInputTest, DefaultBehaviorEnabled) {
 
 TEST_F(PipedInputTest, ExplicitlyDisabled) {
   // Test that explicitly disabling works
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.HandlePipedInput(false);
   auto component = Renderer([] { return text("test"); });
 
@@ -106,7 +106,7 @@ TEST_F(PipedInputTest, ExplicitlyEnabled) {
     GTEST_SKIP() << "/dev/tty not available in this environment";
   }
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.HandlePipedInput(true);  // Explicitly enable
   auto component = Renderer([] { return text("test"); });
 
@@ -130,7 +130,7 @@ TEST_F(PipedInputTest, ExplicitlyEnabled) {
 
 TEST_F(PipedInputTest, NormalStdinUnchanged) {
   // Test that normal stdin (not piped) is not affected
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   auto component = Renderer([] { return text("test"); });
 
   // Don't setup piped stdin - use normal stdin
@@ -152,7 +152,7 @@ TEST_F(PipedInputTest, MultipleInstallUninstallCycles) {
     GTEST_SKIP() << "/dev/tty not available in this environment";
   }
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   auto component = Renderer([] { return text("test"); });
 
   SetupPipedStdin();
@@ -172,7 +172,7 @@ TEST_F(PipedInputTest, MultipleInstallUninstallCycles) {
 }
 
 TEST_F(PipedInputTest, HandlePipedInputMethodBehavior) {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   // Test method can be called multiple times
   screen.HandlePipedInput(true);
@@ -194,7 +194,7 @@ TEST_F(PipedInputTest, HandlePipedInputMethodBehavior) {
 // This test simulates environments like containers where /dev/tty might not
 // exist
 TEST_F(PipedInputTest, GracefulFallbackWhenTtyUnavailable) {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   auto component = Renderer([] { return text("test"); });
 
   SetupPipedStdin();

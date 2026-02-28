@@ -12,12 +12,12 @@
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Horizontal, Slider, operator|=
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"  // for App
 
 using namespace ftxui;
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   std::array<int, 30> values;
   for (size_t i = 0; i < values.size(); ++i) {
     values[i] = 50 + 20 * std::sin(i * 0.3);

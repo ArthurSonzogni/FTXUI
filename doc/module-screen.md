@@ -16,11 +16,11 @@ It provides a @ref ftxui::Screen.
 
 The @ref ftxui::Screen class represents a 2D grid of styled characters that can
 be rendered to a terminal.  
-It provides methods to create a screen, access pixels, and render elements.
+It provides methods to create a screen, access cells, and render elements.
 
-You can access the individual cells (@ref ftxui::Pixel) of the screen using 
-the @ref ftxui::Screen::PixelAt method, which returns a reference
-to the pixel at the specified coordinates.
+You can access the individual cells (@ref ftxui::Cell) of the screen using 
+the @ref ftxui::Screen::CellAt method, which returns a reference
+to the cell at the specified coordinates.
 
 **Example**
 ```cpp
@@ -33,20 +33,20 @@ void main() {
         ftxui::Dimension::Fixed(10) // Fixed height of 10 rows
     );
 
-    // Access a specific pixel at (10, 5)
-    auto& pixel = screen.PixelAt(10, 5);
+    // Access a specific cell at (10, 5)
+    auto& cell = screen.CellAt(10, 5);
 
-    // Set properties of the pixel.
-    pixel.character = U'X';
-    pixel.foreground_color = ftxui::Color::Red;
-    pixel.background_color = ftxui::Color::RGB(0, 255, 0);
-    pixel.bold = true; // Set bold style
+    // Set properties of the cell.
+    cell.character = "X";
+    cell.foreground_color = ftxui::Color::Red;
+    cell.background_color = ftxui::Color::RGB(0, 255, 0);
+    cell.bold = true; // Set bold style
     screen.Print(); // Print the screen to the terminal
 }
 ```
 
 > [!note]
-> If the coordinates are out of bounds, a dummy pixel is returned.
+> If the coordinates are out of bounds, a dummy cell is returned.
 
 The screen can be printed to the terminal using @ref ftxui::Screen::Print() or
 converted to a std::string with @ref ftxui::Screen::ToString().
@@ -120,9 +120,9 @@ screen.Print();
 
 ---
 
-# ftxui::Pixel
+# ftxui::Cell
 
-Each cell in the screen grid is a @ref ftxui::Pixel, which holds:
+Each cell in the screen grid is a @ref ftxui::Cell, which holds:
 
 - Unicode codepoint.
     - `character`
@@ -146,35 +146,35 @@ auto screen = ftxui::Screen::Create(
   ftxui::Dimension::Fixed(5),
 );
 
-auto& pixel = screen.PixelAt(3, 3);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = ftxui::Color::Red;
-pixel.background_color = ftxui::Color::RGB(0, 255, 0);
+auto& cell = screen.CellAt(3, 3);
+cell.character = U'X';
+cell.bold = true;
+cell.foreground_color = ftxui::Color::Red;
+cell.background_color = ftxui::Color::RGB(0, 255, 0);
 
 screen.Print();
 ```
 
 > [!note]
-> `PixelAt(x, y)` performs bounds checking and returns a reference to the pixel
-> at the specified coordinate. If out-of-bounds, a dummy pixel reference is
+> `CellAt(x, y)` performs bounds checking and returns a reference to the cell
+> at the specified coordinate. If out-of-bounds, a dummy cell reference is
 > returned.
 
 
-Each cell in the screen is a @ref ftxui::Pixel. You can modify them using:
+Each cell in the screen is a @ref ftxui::Cell. You can modify them using:
 
 ```cpp
-auto& pixel = screen.PixelAt(x, y);
-pixel.character = U'X';
-pixel.bold = true;
-pixel.foreground_color = Color::Red;
+auto& cell = screen.CellAt(x, y);
+cell.character = U'X';
+cell.bold = true;
+cell.foreground_color = Color::Red;
 ```
 
 ---
 
 # ftxui::Color
 
-The @ref ftxui::Color class is used to define foreground and background colors for each @ref ftxui::Pixel.
+The @ref ftxui::Color class is used to define foreground and background colors for each @ref ftxui::Cell.
 
 It supports various color spaces and predefined palettes. FTXUI will
 dynamically fallback to the closest available color in the terminal if the

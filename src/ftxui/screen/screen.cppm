@@ -21,6 +21,6 @@ export namespace ftxui {
         using ftxui::Dimension::Full;
     }
 
-    using ftxui::Image;
+    using ftxui::Surface;
     using ftxui::Screen;
 }

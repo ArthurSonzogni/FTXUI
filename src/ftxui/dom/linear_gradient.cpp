@@ -14,7 +14,7 @@
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 #include "ftxui/screen/box.hpp"          // for Box
 #include "ftxui/screen/color.hpp"   // for Color, Color::Default, Color::Blue
-#include "ftxui/screen/screen.hpp"  // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"  // for Cell, Screen
 
 namespace ftxui {
 namespace {
@@ -157,14 +157,14 @@ class LinearGradientColor : public NodeDecorator {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
           const float t = float(x) * dX + float(y) * dY + dZ;
-          screen.PixelAt(x, y).background_color = Interpolate(gradient_, t);
+          screen.CellAt(x, y).background_color = Interpolate(gradient_, t);
         }
       }
     } else {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         for (int x = box_.x_min; x <= box_.x_max; ++x) {
           const float t = float(x) * dX + float(y) * dY + dZ;
-          screen.PixelAt(x, y).foreground_color = Interpolate(gradient_, t);
+          screen.CellAt(x, y).foreground_color = Interpolate(gradient_, t);
         }
       }
     }

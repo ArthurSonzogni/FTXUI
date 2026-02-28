@@ -12,24 +12,24 @@ namespace ftxui {
 class ComponentBase;
 
 using Component = std::shared_ptr<ComponentBase>;
-class ScreenInteractive;
+class App;
 
 /// @brief Loop is a class that manages the event loop for a component.
 ///
 /// It is responsible for running the component, handling events, and
 /// updating the screen.
 ///
-/// The Loop class is designed to be used with a ScreenInteractive object,
+/// The Loop class is designed to be used with a App object,
 /// which represents the terminal screen.
 ///
 /// **Example**
 /// ```cpp
 /// #include <ftxui/component/component.hpp>
-/// #include <ftxui/component/screen_interactive.hpp>
+/// #include <ftxui/component/app.hpp>
 /// #include <ftxui/component/loop.hpp>
 ///
 /// int main() {
-///  auto screen = ftxui::ScreenInteractive::TerminalOutput();
+///  auto screen = ftxui::App::TerminalOutput();
 ///  auto component = ftxui::Button("Click me", [] { ... });
 ///
 ///  ftxui::Loop loop(screen.get(), component);
@@ -55,7 +55,7 @@ class ScreenInteractive;
 /// @ingroup component
 class Loop {
  public:
-  Loop(ScreenInteractive* screen, Component component);
+  Loop(App* screen, Component component);
   ~Loop();
 
   bool HasQuitted();
@@ -64,14 +64,13 @@ class Loop {
   void Run();
 
   // This class is non copyable/movable.
-  Loop(const Loop&) = default;
-  Loop(Loop&&) = delete;
   Loop& operator=(Loop&&) = delete;
-  Loop(const ScreenInteractive&) = delete;
   Loop& operator=(const Loop&) = delete;
+  Loop(Loop&&) = delete;
+  Loop(const Loop&) = delete;
 
  private:
-  ScreenInteractive* screen_;
+  App* screen_;
   Component component_;
 };
 

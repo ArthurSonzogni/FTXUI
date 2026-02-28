@@ -9,7 +9,7 @@
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, size, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
 
 using namespace ftxui;
@@ -25,7 +25,7 @@ int main() {
       Checkbox("Ping", &ping),
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(container);
 
   std::cout << "---" << std::endl;

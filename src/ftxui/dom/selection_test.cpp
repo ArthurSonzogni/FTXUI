@@ -8,7 +8,7 @@
 #include "ftxui/component/event.hpp"      // for Event
 #include "ftxui/component/loop.hpp"       // for Loop
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/app.hpp"
 #include "ftxui/dom/elements.hpp"   // for text
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
@@ -57,7 +57,7 @@ Event MouseMove(int x, int y) {
 
 TEST(SelectionTest, DefaultSelection) {
   auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
-  auto screen = ScreenInteractive::FixedSize(20, 1);
+  auto screen = App::FixedSize(20, 1);
   EXPECT_EQ(screen.GetSelection(), "");
   Loop loop(&screen, component);
   screen.PostEvent(MousePressed(3, 1));
@@ -70,7 +70,7 @@ TEST(SelectionTest, DefaultSelection) {
 TEST(SelectionTest, SelectionChange) {
   int selectionChangeCounter = 0;
   auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
-  auto screen = ScreenInteractive::FixedSize(20, 1);
+  auto screen = App::FixedSize(20, 1);
   screen.SelectionChange([&] { selectionChangeCounter++; });
 
   Loop loop(&screen, component);
@@ -105,7 +105,7 @@ TEST(SelectionTest, SelectionChange) {
 TEST(SelectionTest, SelectionOnChangeSquashedEvents) {
   int selectionChangeCounter = 0;
   auto component = Renderer([&] { return text("Lorem ipsum dolor"); });
-  auto screen = ScreenInteractive::FixedSize(20, 1);
+  auto screen = App::FixedSize(20, 1);
   screen.SelectionChange([&] { selectionChangeCounter++; });
 
   Loop loop(&screen, component);
@@ -133,21 +133,21 @@ TEST(SelectionTest, StyleSelection) {
       text(" dolor"),
   });
 
-  auto screen = ScreenInteractive::FixedSize(20, 1);
+  auto screen = App::FixedSize(20, 1);
   Selection selection(2, 0, 9, 0);
 
   Render(screen, element.get(), selection);
   for (int i = 0; i < 20; i++) {
     if (i >= 2 && i <= 9) {
-      EXPECT_EQ(screen.PixelAt(i, 0).inverted, true);
+      EXPECT_EQ(screen.CellAt(i, 0).inverted, true);
     } else {
-      EXPECT_EQ(screen.PixelAt(i, 0).inverted, false);
+      EXPECT_EQ(screen.CellAt(i, 0).inverted, false);
     }
 
     if (i >= 6 && i <= 9) {
-      EXPECT_EQ(screen.PixelAt(i, 0).foreground_color, Color::Red);
+      EXPECT_EQ(screen.CellAt(i, 0).foreground_color, Color::Red);
     } else {
-      EXPECT_EQ(screen.PixelAt(i, 0).foreground_color, Color::Default);
+      EXPECT_EQ(screen.CellAt(i, 0).foreground_color, Color::Default);
     }
   }
 }
@@ -158,7 +158,7 @@ TEST(SelectionTest, VBoxSelection) {
       text("Ut enim ad minim"),
   });
 
-  auto screen = ScreenInteractive::FixedSize(20, 2);
+  auto screen = App::FixedSize(20, 2);
 
   Selection selection(2, 0, 2, 1);
   Render(screen, element.get(), selection);
@@ -176,7 +176,7 @@ TEST(SelectionTest, VBoxSaturatedSelection) {
       text("Duis aute irure"),
   });
 
-  auto screen = ScreenInteractive::FixedSize(20, 3);
+  auto screen = App::FixedSize(20, 3);
   Selection selection(2, 0, 2, 2);
   Render(screen, element.get(), selection);
   EXPECT_EQ(selection.GetParts(), "rem ipsum dolor\nUt enim ad minim\nDui");
@@ -193,7 +193,7 @@ TEST(SelectionTest, HBoxSelection) {
       text("Ut enim ad minim"),
   });
 
-  auto screen = ScreenInteractive::FixedSize(40, 1);
+  auto screen = App::FixedSize(40, 1);
   Selection selection(2, 0, 20, 0);
   Render(screen, element.get(), selection);
   EXPECT_EQ(selection.GetParts(), "rem ipsum dolorUt e");
@@ -208,7 +208,7 @@ TEST(SelectionTest, HBoxSaturatedSelection) {
       text("Duis aute irure"),
   });
 
-  auto screen = ScreenInteractive::FixedSize(60, 1);
+  auto screen = App::FixedSize(60, 1);
 
   Selection selection(2, 0, 35, 0);
   Render(screen, element.get(), selection);

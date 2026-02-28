@@ -12,11 +12,11 @@
 
 #include "ftxui/component/component.hpp"  // for CatchEvent, Renderer, operator|=
 #include "ftxui/component/loop.hpp"       // for Loop
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"  // for App
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
 
   // Create a component counting the number of frames drawn and event handled.
   int custom_loop_count = 0;

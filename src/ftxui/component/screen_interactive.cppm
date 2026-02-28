@@ -7,17 +7,13 @@ module;
 
 export module ftxui.component:ScreenInteractive;
 
+export import :App;
+
 /**
  * @namespace ftxui
  * @brief The FTXUI ftxui:: namespace
  */
 export namespace ftxui {
-    using ftxui::ComponentBase;
-    using ftxui::Loop;
-    using ftxui::Event;
-    using ftxui::Component;
-
-    using ftxui::Screen;
-    using ftxui::ScreenInteractivePrivate;
+    // Deprecated: Please use App instead.
     using ftxui::ScreenInteractive;
 }

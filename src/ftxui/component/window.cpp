@@ -6,7 +6,7 @@
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/component_options.hpp>
-#include <ftxui/component/screen_interactive.hpp>  // for ScreenInteractive
+#include <ftxui/component/app.hpp>  // for App
 #include <memory>
 #include <utility>
 #include "ftxui/dom/elements.hpp"  // for text, window, hbox, vbox, size, clear_under, reflect, emptyElement
@@ -56,28 +56,28 @@ class ResizeDecorator : public NodeDecorator {
 
     if (resize_left_) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
-        auto& cell = screen.PixelAt(box_.x_min, y);
+        auto& cell = screen.CellAt(box_.x_min, y);
         cell.foreground_color = color_;
         cell.automerge = false;
       }
     }
     if (resize_right_) {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
-        auto& cell = screen.PixelAt(box_.x_max, y);
+        auto& cell = screen.CellAt(box_.x_max, y);
         cell.foreground_color = color_;
         cell.automerge = false;
       }
     }
     if (resize_top_) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        auto& cell = screen.PixelAt(x, box_.y_min);
+        auto& cell = screen.CellAt(x, box_.y_min);
         cell.foreground_color = color_;
         cell.automerge = false;
       }
     }
     if (resize_down_) {
       for (int x = box_.x_min; x <= box_.x_max; ++x) {
-        auto& cell = screen.PixelAt(x, box_.y_max);
+        auto& cell = screen.CellAt(x, box_.y_max);
         cell.foreground_color = color_;
         cell.automerge = false;
       }
@@ -128,7 +128,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
     auto element = ComponentBase::Render();
 
     const bool captureable =
-        captured_mouse_ || ScreenInteractive::Active()->CaptureMouse();
+        captured_mouse_ || App::Active()->CaptureMouse();
 
     const WindowRenderState state = {
         element,

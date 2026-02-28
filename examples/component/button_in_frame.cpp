@@ -8,7 +8,7 @@
 #include "ftxui/component/component.hpp"       // for Button, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"   // for ButtonOption
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/dom/elements.hpp"  // for operator|, text, Element, hbox, separator, size, vbox, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
 #include "ftxui/screen/color.hpp"  // for Color, Color::Default, Color::GrayDark, Color::White
 
@@ -40,7 +40,7 @@ int main() {
            border;
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(renderer);
 
   return 0;

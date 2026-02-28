@@ -6,6 +6,7 @@ module;
 #include <ftxui/screen/image.hpp>
 
 export module ftxui.screen:Image;
+export import :Surface;
 
 /**
  * @namespace ftxui

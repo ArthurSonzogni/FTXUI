@@ -5,19 +5,19 @@
 
 #include <utility>  // for move
 
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
+#include "ftxui/component/app.hpp"  // for App, Component
 
 namespace ftxui {
 
-/// @brief A Loop is a wrapper around a Component and a ScreenInteractive.
+/// @brief A Loop is a wrapper around a Component and a App.
 /// It is used to run a Component in a terminal.
-/// @see Component, ScreenInteractive.
-/// @see ScreenInteractive::Loop().
-/// @see ScreenInteractive::ExitLoop().
+/// @see Component, App.
+/// @see App::Loop().
+/// @see App::Exit().
 /// @param[in] screen The screen to use.
 /// @param[in] component The component to run.
 // NOLINTNEXTLINE
-Loop::Loop(ScreenInteractive* screen, Component component)
+Loop::Loop(App* screen, Component component)
     : screen_(screen), component_(std::move(component)) {
   screen_->PreMain();
 }

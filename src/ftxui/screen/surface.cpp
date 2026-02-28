@@ -5,57 +5,57 @@
 #include <string>
 #include <vector>
 
-#include "ftxui/screen/image.hpp"
-#include "ftxui/screen/pixel.hpp"
+#include "ftxui/screen/surface.hpp"
+#include "ftxui/screen/cell.hpp"
 
 namespace ftxui {
 
 namespace {
-Pixel& dev_null_pixel() {
-  static Pixel pixel;
-  return pixel;
+Cell& dev_null_cell() {
+  static Cell cell;
+  return cell;
 }
 }  // namespace
 
-Image::Image(int dimx, int dimy)
+Surface::Surface(int dimx, int dimy)
     : stencil{0, dimx - 1, 0, dimy - 1},
       dimx_(dimx),
       dimy_(dimy),
-      pixels_(dimy, std::vector<Pixel>(dimx)) {}
+      cells_(dimy, std::vector<Cell>(dimx)) {}
 
 /// @brief Access a character in a cell at a given position.
 /// @param x The cell position along the x-axis.
 /// @param y The cell position along the y-axis.
-std::string& Image::at(int x, int y) {
-  return PixelAt(x, y).character;
+std::string& Surface::at(int x, int y) {
+  return CellAt(x, y).character;
 }
 
 /// @brief Access a character in a cell at a given position.
 /// @param x The cell position along the x-axis.
 /// @param y The cell position along the y-axis.
-const std::string& Image::at(int x, int y) const {
-  return PixelAt(x, y).character;
+const std::string& Surface::at(int x, int y) const {
+  return CellAt(x, y).character;
 }
 
-/// @brief Access a cell (Pixel) at a given position.
+/// @brief Access a cell (Cell) at a given position.
 /// @param x The cell position along the x-axis.
 /// @param y The cell position along the y-axis.
-Pixel& Image::PixelAt(int x, int y) {
-  return stencil.Contain(x, y) ? pixels_[y][x] : dev_null_pixel();
+Cell& Surface::CellAt(int x, int y) {
+  return stencil.Contain(x, y) ? cells_[y][x] : dev_null_cell();
 }
 
-/// @brief Access a cell (Pixel) at a given position.
+/// @brief Access a cell (Cell) at a given position.
 /// @param x The cell position along the x-axis.
 /// @param y The cell position along the y-axis.
-const Pixel& Image::PixelAt(int x, int y) const {
-  return stencil.Contain(x, y) ? pixels_[y][x] : dev_null_pixel();
+const Cell& Surface::CellAt(int x, int y) const {
+  return stencil.Contain(x, y) ? cells_[y][x] : dev_null_cell();
 }
 
-/// @brief Clear all the pixel from the screen.
-void Image::Clear() {
-  for (auto& line : pixels_) {
+/// @brief Clear all the cells from the surface.
+void Surface::Clear() {
+  for (auto& line : cells_) {
     for (auto& cell : line) {
-      cell = Pixel();
+      cell = Cell();
     }
   }
 }

@@ -4,6 +4,8 @@
 export module ftxui.component;
 
 export import :Animation;
+export import :App;
+export import :App;
 export import :CapturedMouse;
 export import :Component;
 export import :ComponentBase;
@@ -12,5 +14,7 @@ export import :Event;
 export import :Loop;
 export import :Mouse;
 export import :Receiver;
-export import :ScreenInteractive;
 export import :Task;
+
+// Deprecated:
+export import :ScreenInteractive;

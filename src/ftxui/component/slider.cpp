@@ -12,7 +12,7 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include "ftxui/component/screen_interactive.hpp"  // for Component
+#include "ftxui/component/app.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, text, Element, xflex, hbox, color, underlined, reflect, Decorator, dim, vcenter, focus, nothing, select, yflex, gaugeDirection
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White
@@ -245,7 +245,7 @@ class SliderWithLabel : public ComponentBase {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// int value = 50;
 /// auto slider = Slider("Value:", &value, 0, 100, 1);
 /// screen.Loop(slider);
@@ -302,7 +302,7 @@ Component Slider(ConstStringRef label,
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// int value = 50;
 /// auto slider = Slider({
 ///   .value = &value,

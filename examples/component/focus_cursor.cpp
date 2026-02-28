@@ -5,7 +5,7 @@
 #include <string>  // for allocator, operator+, char_traits, string
 
 #include "ftxui/component/component.hpp"           // for Renderer, Vertical
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive, Component
+#include "ftxui/component/app.hpp"  // for App, Component
 #include "ftxui/dom/elements.hpp"  // for text, Decorator, focus, focusCursorBar, focusCursorBarBlinking, focusCursorBlock, focusCursorBlockBlinking, focusCursorUnderline, focusCursorUnderlineBlinking, hbox, Element
 
 using namespace ftxui;
@@ -23,7 +23,7 @@ Component Instance(std::string label, Decorator focusCursor) {
 };
 
 int main() {
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
   screen.Loop(Container::Vertical({
       Instance("focus", focus),
       Instance("focusCursorBlock", focusCursorBlock),

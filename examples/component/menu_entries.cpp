@@ -10,7 +10,7 @@
 #include "ftxui/component/component.hpp"  // for MenuEntry, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"      // for ComponentBase
 #include "ftxui/component/component_options.hpp"   // for MenuEntryOption
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, separator, text, hbox, size, frame, color, vbox, HEIGHT, LESS_THAN, bold, border, inverted
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::Green, Color::Red, Color::Yellow
 
@@ -34,7 +34,7 @@ MenuEntryOption Colored(ftxui::Color c) {
 }
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   int selected = 0;
   auto menu = Container::Vertical(

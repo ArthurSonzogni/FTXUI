@@ -7,8 +7,13 @@ export import :Box;
 export import :Color;
 export import :ColorInfo;
 export import :Deprecated;
-export import :Image;
-export import :Pixel;
+export import :Surface;
+export import :Cell;
 export import :Screen;
 export import :String;
 export import :Terminal;
+export import :Surface;
+export import :Pixel;
+
+// Deprecated:
+export import :Image;

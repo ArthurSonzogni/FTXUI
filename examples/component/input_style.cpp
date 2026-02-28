@@ -10,7 +10,7 @@
 #include "ftxui/component/component.hpp"  // for Input, Horizontal, Vertical, operator|
 #include "ftxui/component/component_base.hpp"     // for Component
 #include "ftxui/component/component_options.hpp"  // for InputState, InputOption
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/dom/elements.hpp"  // for operator|=, Element, bgcolor, operator|, separatorEmpty, color, borderEmpty, separator, text, center, dim, hbox, vbox, border, borderDouble, borderRounded
 
 int main() {
@@ -92,6 +92,6 @@ int main() {
       generateUiFromStyle(style_4),
   });
 
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   screen.Loop(ui);
 }

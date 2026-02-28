@@ -14,7 +14,7 @@
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/dom/selection.hpp"    // for Selection
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/screen.hpp"    // for Pixel, Screen
+#include "ftxui/screen/screen.hpp"    // for Cell, Screen
 #include "ftxui/screen/string.hpp"  // for string_width, Utf8ToGlyphs, to_string
 
 namespace ftxui {
@@ -73,12 +73,12 @@ class Text : public Node {
       if (cell == "\n") {
         continue;
       }
-      screen.PixelAt(x, y).character = cell;
+      screen.CellAt(x, y).character = cell;
 
       if (has_selection) {
         auto selectionTransform = screen.GetSelectionStyle();
         if ((x >= selection_start_) && (x <= selection_end_)) {
-          selectionTransform(screen.PixelAt(x, y));
+          selectionTransform(screen.CellAt(x, y));
         }
       }
 
@@ -115,7 +115,7 @@ class VText : public Node {
       if (y > box_.y_max) {
         return;
       }
-      screen.PixelAt(x, y).character = it;
+      screen.CellAt(x, y).character = it;
       y += 1;
     }
   }

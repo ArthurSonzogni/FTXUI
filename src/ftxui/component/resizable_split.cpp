@@ -181,7 +181,7 @@ Component ResizableSplit(ResizableSplitOption options) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int left_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
@@ -215,7 +215,7 @@ Component ResizableSplitLeft(Component main, Component back, int* main_size) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int right_size = 10;
 /// auto left = Renderer([] { return text("Left") | center;});
 /// auto right = Renderer([] { return text("right") | center;});
@@ -249,7 +249,7 @@ Component ResizableSplitRight(Component main, Component back, int* main_size) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int top_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});
@@ -283,7 +283,7 @@ Component ResizableSplitTop(Component main, Component back, int* main_size) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::Fullscreen();
+/// auto screen = App::Fullscreen();
 /// int bottom_size = 1;
 /// auto top = Renderer([] { return text("Top") | center;});
 /// auto bottom = Renderer([] { return text("Bottom") | center;});

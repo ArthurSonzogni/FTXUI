@@ -14,7 +14,7 @@ export module ftxui.component:Loop;
 export namespace ftxui {
     using ftxui::ComponentBase;
     using ftxui::Component;
-    using ftxui::ScreenInteractive;
+    using ftxui::App;
 
     using ftxui::Loop;
 }

@@ -4,11 +4,11 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/screen/screen.hpp>
 #include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/app.hpp>
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
   auto component = Button("Quit", screen.ExitLoopClosure());
   screen.Loop(component);
   return 0;

@@ -28,6 +28,13 @@ Next
 - Bugfix: Bazel target @ftxui is now visible. Thanks @dskkato in #1157.
 
 ### General
+- Breaking (Renames):
+  - `Pixel` is renamed to `Cell`.
+  - `Image` is renamed to `Surface`.
+  - `ScreenInteractive` is renamed to `App`.
+  - `PixelAt` method is renamed to `CellAt`.
+  Compatibility aliases and headers are provided to avoid breaking existing code.
+
 - Breaking. Move to `std::string_view` instead of `const std::string&` where
   applicable. This yields better interoperability with string literals and
   avoids unnecessary copies. Thanks @mikomikotaishi for PR #1154
@@ -35,14 +42,14 @@ Next
 ### Component
 - Fix `Input` cursor positioning and scroll stability. See #1196. Thanks @739C1AE2.
 - Fix `Input` support for non-ASCII characters in password mode. See #1196. Thanks @739C1AE2.
-- Performance: Mitigate cursor flickering during redraw in `ScreenInteractive`. See #1196. Thanks @739C1AE2.
+- Performance: Mitigate cursor flickering during redraw in `App`. See #1196. Thanks @739C1AE2.
 - Feature: POSIX Piped Input Handling.
   - Allows FTXUI applications to read data from stdin (when piped) while still receiving keyboard input from the terminal.
   - Enabled by default.
-  - Can be disabled using `ScreenInteractive::HandlePipedInput(false)`.
+  - Can be disabled using `App::HandlePipedInput(false)`.
   - Only available on Linux and macOS.
   Thanks @HarryPehkonen for PR #1094.
-- Fix ScreenInteractive::FixedSize screen stomps on the preceding terminal
+- Fix App::FixedSize screen stomps on the preceding terminal
   output. Thanks @zozowell in #1064.
 - Fix vertical `ftxui::Slider`. The "up" key was previously decreasing the
   value. Thanks @its-pablo in #1093 for reporting the issue.
@@ -51,7 +58,7 @@ Next
   in #1160 for fixing the issue.
 - Fix Input style is now colorschem agnostic. Thanks @Smail in #1170 for reporting
   and fixing the issue.
-- Fix `ScreenInteractive::Post(..)` is now thread safe. Thanks @739C1AE2 in
+- Fix `App::Post(..)` is now thread safe. Thanks @739C1AE2 in
   ~1183 for reporting the issue. This regressed in non released versions.
 
 ### Dom
@@ -149,9 +156,9 @@ See #1017 and #1019.
 
 ### Component
 - Feature: Add support for raw input. Allowing more keys to be detected.
-- Feature: Add `ScreenInteractive::ForceHandleCtrlC(false)` to allow component
+- Feature: Add `App::ForceHandleCtrlC(false)` to allow component
   to fully override the default `Ctrl+C` handler.
-- Feature: Add `ScreenInteractive::ForceHandleCtrlZ(false)` to allow component
+- Feature: Add `App::ForceHandleCtrlZ(false)` to allow component
   to fully override the default `Ctrl+Z` handler.
 - Feature: Add `Mouse::WeelLeft` and `Mouse::WeelRight` events on supported
   terminals.
@@ -160,8 +167,8 @@ See #1017 and #1019.
   option. Added by @mingsheng13.
 - Feature: Add `DropdownOption` to configure the dropdown. See #826.
 - Feature: Add support for Selection. Thanks @clement-roblot. See #926.
-  - See `ScreenInteractive::GetSelection()`.
-  - See `ScreenInteractive::SelectionChange(...)` listener.
+  - See `App::GetSelection()`.
+  - See `App::SelectionChange(...)` listener.
 - Bugfix/Breaking change: `Mouse transition`:
   - Detect when the mouse move, as opposed to being pressed.
     The Mouse::Moved motion was added.
@@ -172,7 +179,7 @@ See #1017 and #1019.
   This fixes: https://github.com/ArthurSonzogni/FTXUI/issues/773
   This fixes: https://github.com/ArthurSonzogni/FTXUI/issues/792
 - Bugfix: mouse.control is now reported correctly.
-- Feature: Add `ScreenInteractive::FullscreenPrimaryScreen()`. This allows
+- Feature: Add `App::FullscreenPrimaryScreen()`. This allows
   displaying a fullscreen component on the primary screen, as opposed to the
   alternate screen.
 - Bugfix: `Input` `onchange` was not called on backspace or delete key.
@@ -258,7 +265,7 @@ See #1017 and #1019.
   Component Slider(SliderOption<T> options);
   Component ResizableSplit(ResizableSplitOption options);
   ```
-- Feature: Add `ScreenInteractive::TrackMouse(false)` disable mouse support.
+- Feature: Add `App::TrackMouse(false)` disable mouse support.
 
 ### Dom
 - Feature: Add `hyperlink` decorator. For instance:
@@ -336,7 +343,7 @@ This version is abandonned and must not be used. It introduced a breaking change
     - multiple directions.
     - multiple colors.
     - various values (value, min, max, increment).
-- Feature: Define `ScreenInteractive::Exit()`.
+- Feature: Define `App::Exit()`.
 - Feature: Add `Loop` to give developers a better control on the main loop. This
   can be used to integrate FTXUI into another main loop, without taking the full
   control.
@@ -371,7 +378,7 @@ This version is abandonned and must not be used. It introduced a breaking change
   - `Menu` now support animations.
   - `Button` now supports animations.
 - Support SIGTSTP. (ctrl+z).
-- Support task posting. `ScreenInteractive::Post(Task)`.
+- Support task posting. `App::Post(Task)`.
 - `Menu` can now be used in the 4 directions, using `MenuOption.direction`.
 - `Menu` can display an animated underline, using
   `MenuOption.underline.enabled`.
@@ -445,7 +452,7 @@ Element gaugeDirection(float ratio, GaugeDirection);
 
 #### Component 
 - Add the `collapsible` component.
-- Add the `ScreenInteractive::WithRestoredIO`. This decorates a callback. This
+- Add the `App::WithRestoredIO`. This decorates a callback. This
   runs it with the terminal hooks temporarilly uninstalled. This is useful if
   you want to execute command using directly stdin/stdout/sterr.
 

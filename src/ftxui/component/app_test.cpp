@@ -7,7 +7,7 @@
 #include <tuple>                      // for _Swallow_assign, ignore
 
 #include "ftxui/component/component.hpp"  // for Renderer
-#include "ftxui/component/screen_interactive.hpp"
+#include "ftxui/component/app.hpp"
 #include "ftxui/dom/elements.hpp"  // for text, Element
 
 #if defined(__unix__)
@@ -72,7 +72,7 @@ bool TestSignal(int signal) {
     return text("");
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(component);
 
   EXPECT_EQ(called, 2);
@@ -80,41 +80,41 @@ bool TestSignal(int signal) {
 }
 }  // namespace
 
-TEST(ScreenInteractive, Signal_SIGTERM) {
+TEST(App, Signal_SIGTERM) {
   TestSignal(SIGTERM);
 }
-TEST(ScreenInteractive, Signal_SIGSEGV) {
+TEST(App, Signal_SIGSEGV) {
   TestSignal(SIGSEGV);
 }
-TEST(ScreenInteractive, Signal_SIGINT) {
+TEST(App, Signal_SIGINT) {
   TestSignal(SIGINT);
 }
-TEST(ScreenInteractive, Signal_SIGILL) {
+TEST(App, Signal_SIGILL) {
   TestSignal(SIGILL);
 }
-TEST(ScreenInteractive, Signal_SIGABRT) {
+TEST(App, Signal_SIGABRT) {
   TestSignal(SIGABRT);
 }
-TEST(ScreenInteractive, Signal_SIGFPE) {
+TEST(App, Signal_SIGFPE) {
   TestSignal(SIGFPE);
 }
 
 // Regression test for:
 // https://github.com/ArthurSonzogni/FTXUI/issues/402
-TEST(ScreenInteractive, PostEventToNonActive) {
-  auto screen = ScreenInteractive::FitComponent();
+TEST(App, PostEventToNonActive) {
+  auto screen = App::FitComponent();
   screen.Post(Event::Custom);
 }
 
 // Regression test for:
 // https://github.com/ArthurSonzogni/FTXUI/issues/402
-TEST(ScreenInteractive, PostTaskToNonActive) {
-  auto screen = ScreenInteractive::FitComponent();
+TEST(App, PostTaskToNonActive) {
+  auto screen = App::FitComponent();
   screen.Post([] {});
 }
 
-TEST(ScreenInteractive, CtrlC) {
-  auto screen = ScreenInteractive::FitComponent();
+TEST(App, CtrlC) {
+  auto screen = App::FitComponent();
   bool called = false;
   auto component = Renderer([&] {
     if (!called) {
@@ -126,8 +126,8 @@ TEST(ScreenInteractive, CtrlC) {
   screen.Loop(component);
 }
 
-TEST(ScreenInteractive, CtrlC_Forced) {
-  auto screen = ScreenInteractive::FitComponent();
+TEST(App, CtrlC_Forced) {
+  auto screen = App::FitComponent();
   screen.ForceHandleCtrlC(true);
   auto component = Renderer([&] {
     screen.PostEvent(Event::CtrlC);
@@ -153,8 +153,8 @@ TEST(ScreenInteractive, CtrlC_Forced) {
   ASSERT_LE(ctrl_c_count, 50);
 }
 
-TEST(ScreenInteractive, CtrlC_NotForced) {
-  auto screen = ScreenInteractive::FitComponent();
+TEST(App, CtrlC_NotForced) {
+  auto screen = App::FitComponent();
   screen.ForceHandleCtrlC(false);
   auto component = Renderer([&] {
     screen.PostEvent(Event::CtrlC);
@@ -182,13 +182,13 @@ TEST(ScreenInteractive, CtrlC_NotForced) {
 
 // Regression test for:
 // https://github.com/ArthurSonzogni/FTXUI/pull/1064/files
-TEST(ScreenInteractive, FixedSizeInitialFrame) {
+TEST(App, FixedSizeInitialFrame) {
 #if defined(__unix__)
   std::string output;
   {
     auto capture = StdCapture(&output);
 
-    auto screen = ScreenInteractive::FixedSize(2, 2);
+    auto screen = App::FixedSize(2, 2);
     auto component = Renderer([&] { return text("AB"); });
 
     Loop loop(&screen, component);
@@ -197,7 +197,7 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
   using namespace std::string_view_literals;
 
   auto expected =
-      // Install the ScreenInteractive.
+      // Install the App.
       "\0"           // Flush stdout.
       "\x1BP$q q"    // Set cursor shape to 1 (block).
       "\x1B\\"       // Reset cursor position.
@@ -225,7 +225,7 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
       // Flush
       "\0"  // Flush stdout.
 
-      // Uninstall the ScreenInteractive.
+      // Uninstall the App.
       "\x1B[1C"      // Move cursor right one character.
       "\x1B[?1006l"  // Disable SGR mouse tracking.
       "\x1B[?1015l"  // Disable mouse wheel tracking.

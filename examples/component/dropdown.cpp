@@ -6,7 +6,7 @@
 
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Dropdown, Horizontal, Vertical
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/app.hpp"  // for App
 
 int main() {
   using namespace ftxui;
@@ -39,6 +39,6 @@ int main() {
       }),
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(layout);
 }

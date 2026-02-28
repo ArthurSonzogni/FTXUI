@@ -5,7 +5,7 @@
 
 #include "ftxui/dom/elements.hpp"   // for operator|, text, bold, Element
 #include "ftxui/dom/node.hpp"       // for Render
-#include "ftxui/screen/screen.hpp"  // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"  // for Screen, Cell
 #include "gtest/gtest.h"  // for Test, AssertionResult, EXPECT_TRUE, Message, TEST, TestPartResult
 
 // NOLINTBEGIN
@@ -15,7 +15,7 @@ TEST(ItalicTest, Basic) {
   auto element = text("text") | italic;
   Screen screen(5, 1);
   Render(screen, element);
-  EXPECT_TRUE(screen.PixelAt(0, 0).italic);
+  EXPECT_TRUE(screen.CellAt(0, 0).italic);
 }
 
 }  // namespace ftxui
