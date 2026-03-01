@@ -190,6 +190,7 @@ const std::string CSI = "\x1b[";  // NOLINT
                                   //
 // DCS: Device Control String
 const std::string DCS = "\x1bP";  // NOLINT
+
 // ST: String Terminator
 const std::string ST = "\x1b\\";  // NOLINT
 
@@ -922,13 +923,18 @@ void App::Draw(Component component) {
 
   const bool resized = frame_count_ == 0 || (dimx != dimx_) || (dimy != dimy_);
   TerminalSend(ResetCursorPosition());
-  ResetPosition(internal_->output_buffer, resized);
 
-  // If the terminal width decrease, the terminal emulator will start wrapping
-  // lines and make the display dirty. We should clear it completely.
-  if ((dimx < dimx_) && !use_alternative_screen_) {
-    TerminalSend("\033[J");  // clear terminal output
-    TerminalSend("\033[H");  // move cursor to home position
+  if (frame_count_ != 0) {
+    // Reset the cursor position to the lower left corner to start drawing the
+    // new frame. 
+    ResetPosition(internal_->output_buffer, resized);
+
+    // If the terminal width decrease, the terminal emulator will start wrapping
+    // lines and make the display dirty. We should clear it completely.
+    if ((dimx < dimx_) && !use_alternative_screen_) {
+      TerminalSend("\033[J");  // clear terminal output
+      TerminalSend("\033[H");  // move cursor to home position
+    }
   }
 
   // Resize the screen if needed.
@@ -977,28 +983,28 @@ void App::Draw(Component component) {
     const int dx = dimx_ - 1 - cursor_.x + int(dimx_ != terminal.dimx);
     const int dy = dimy_ - 1 - cursor_.y;
 
-    set_cursor_position.clear();
-    reset_cursor_position.clear();
+    set_cursor_position_.clear();
+    reset_cursor_position_.clear();
 
     if (dy != 0) {
-      set_cursor_position += "\x1B[" + std::to_string(dy) + "A";
-      reset_cursor_position += "\x1B[" + std::to_string(dy) + "B";
+      set_cursor_position_ += "\x1B[" + std::to_string(dy) + "A";
+      reset_cursor_position_ += "\x1B[" + std::to_string(dy) + "B";
     }
 
     if (dx != 0) {
-      set_cursor_position += "\x1B[" + std::to_string(dx) + "D";
-      reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
+      set_cursor_position_ += "\x1B[" + std::to_string(dx) + "D";
+      reset_cursor_position_ += "\x1B[" + std::to_string(dx) + "C";
     }
 
     if (cursor_.shape != Cursor::Hidden) {
-      set_cursor_position += "\033[?25h";
-      set_cursor_position +=
+      set_cursor_position_ += "\033[?25h";
+      set_cursor_position_ +=
           "\033[" + std::to_string(int(cursor_.shape)) + " q";
     }
   }
 
   ToString(internal_->output_buffer);
-  TerminalSend(set_cursor_position);
+  TerminalSend(set_cursor_position_);
   TerminalFlush();
 
   Clear();
@@ -1008,8 +1014,8 @@ void App::Draw(Component component) {
 
 // private
 std::string App::ResetCursorPosition() {
-  std::string result = std::move(reset_cursor_position);
-  reset_cursor_position = "";
+  std::string result = std::move(reset_cursor_position_);
+  reset_cursor_position_= "";
   return result;
 }
 
