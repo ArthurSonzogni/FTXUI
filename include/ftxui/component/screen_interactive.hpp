@@ -99,7 +99,10 @@ class ScreenInteractive : public Screen {
   bool HandleSelection(bool handled, Event event);
   void RefreshSelection();
   void Draw(Component component);
-  void ResetCursorPosition();
+  std::string ResetCursorPosition();
+
+  void TerminalSend(std::string_view);
+  void TerminalFlush();
 
   void InstallPipedInputHandling();
 

@@ -17,6 +17,7 @@
 #include <memory>
 #include <stack>  // for stack
 #include <string>
+#include <string_view>
 #include <thread>   // for thread, sleep_for
 #include <tuple>    // for _Swallow_assign, ignore
 #include <utility>  // for move, swap
@@ -54,6 +55,15 @@
 
 namespace ftxui {
 
+namespace animation {
+void RequestAnimationFrame() {
+  auto* screen = ScreenInteractive::Active();
+  if (screen) {
+    screen->RequestAnimationFrame();
+  }
+}
+}  // namespace animation
+
 struct ScreenInteractive::Internal {
   // Convert char to Event.
   TerminalInputParser terminal_input_parser;
@@ -64,31 +74,30 @@ struct ScreenInteractive::Internal {
   std::chrono::time_point<std::chrono::steady_clock> last_char_time =
       std::chrono::steady_clock::now();
 
+  // The buffer used to output the screen to the terminal.
+  // Unlike for std::vector::clear, the C++ standard does not explicitly require
+  // that capacity is unchanged by this function, but existing implementations
+  // do not change capacity. This means that they do not release the allocated
+  // memory (see also shrink_to_fit).
+  std::string output_buffer;
+
   explicit Internal(std::function<void(Event)> out)
       : terminal_input_parser(std::move(out)) {}
 };
-
-namespace animation {
-void RequestAnimationFrame() {
-  auto* screen = ScreenInteractive::Active();
-  if (screen) {
-    screen->RequestAnimationFrame();
-  }
-}
-}  // namespace animation
 
 namespace {
 
 ScreenInteractive* g_active_screen = nullptr;  // NOLINT
 
-void Flush() {
-  // Emscripten doesn't implement flush. We interpret zero as flush.
-  std::cout << '\0' << std::flush;
+std::stack<Closure> on_exit_functions;  // NOLINT
+
+void OnExit() {
+  while (!on_exit_functions.empty()) {
+    on_exit_functions.top()();
+    on_exit_functions.pop();
+  }
 }
 
-constexpr int timeout_milliseconds = 20;
-[[maybe_unused]] constexpr int timeout_microseconds =
-    timeout_milliseconds * 1000;
 #if defined(_WIN32)
 
 #elif defined(__EMSCRIPTEN__)
@@ -117,14 +126,6 @@ int CheckStdinReady(int fd) {
 }
 
 #endif
-
-std::stack<Closure> on_exit_functions;  // NOLINT
-void OnExit() {
-  while (!on_exit_functions.empty()) {
-    on_exit_functions.top()();
-    on_exit_functions.pop();
-  }
-}
 
 std::atomic<int> g_signal_exit_count = 0;  // NOLINT
 #if !defined(_WIN32)
@@ -437,8 +438,9 @@ void ScreenInteractive::PreMain() {
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
     // Reset cursor position to the top of the screen and clear the screen.
-    suspended_screen_->ResetCursorPosition();
-    std::cout << suspended_screen_->ResetPosition(/*clear=*/true);
+    suspended_screen_->TerminalSend(suspended_screen_->ResetCursorPosition());
+    suspended_screen_->ResetPosition(suspended_screen_->internal_->output_buffer,
+                                     /*clear=*/true);
     suspended_screen_->dimx_ = 0;
     suspended_screen_->dimy_ = 0;
 
@@ -456,14 +458,14 @@ void ScreenInteractive::PreMain() {
 // private
 void ScreenInteractive::PostMain() {
   // Put cursor position at the end of the drawing.
-  ResetCursorPosition();
+  TerminalSend(ResetCursorPosition());
 
   g_active_screen = nullptr;
 
   // Restore suspended screen.
   if (suspended_screen_) {
     // Clear screen, and put the cursor at the beginning of the drawing.
-    std::cout << ResetPosition(/*clear=*/true);
+    ResetPosition(internal_->output_buffer, /*clear=*/true);
     dimx_ = 0;
     dimy_ = 0;
     Uninstall();
@@ -472,13 +474,13 @@ void ScreenInteractive::PostMain() {
   } else {
     Uninstall();
 
-    std::cout << '\r';
+    std::cout << "\r";
     // On final exit, keep the current drawing and reset cursor position one
     // line after it.
     if (!use_alternative_screen_) {
-      std::cout << '\n';
-      std::cout << std::flush;
+      std::cout << "\n";
     }
+    std::cout << std::flush;
   }
 }
 
@@ -532,20 +534,20 @@ void ScreenInteractive::Install() {
   // is important, because we are using two different channels (stdout vs
   // termios/WinAPI) to communicate with the terminal emulator below. See
   // https://github.com/ArthurSonzogni/FTXUI/issues/846
-  Flush();
+  TerminalFlush();
 
   InstallPipedInputHandling();
 
   // After uninstalling the new configuration, flush it to the terminal to
   // ensure it is fully applied:
-  on_exit_functions.emplace([] { Flush(); });
+  on_exit_functions.emplace([this] { TerminalFlush(); });
 
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
-  std::cout << DECRQSS_DECSCUSR;
+  TerminalSend(DECRQSS_DECSCUSR);
   on_exit_functions.emplace([this] {
-    std::cout << "\033[?25h";  // Enable cursor.
-    std::cout << "\033[" + std::to_string(cursor_reset_shape_) + " q";
+    TerminalSend("\033[?25h");  // Enable cursor.
+    TerminalSend("\033[" + std::to_string(cursor_reset_shape_) + " q");
   });
 
   // Install signal handlers to restore the terminal state on exit. The default
@@ -635,13 +637,15 @@ void ScreenInteractive::Install() {
 #endif
 
   auto enable = [&](const std::vector<DECMode>& parameters) {
-    std::cout << Set(parameters);
-    on_exit_functions.emplace([=] { std::cout << Reset(parameters); });
+    TerminalSend(Set(parameters));
+    on_exit_functions.emplace(
+        [this, parameters] { TerminalSend(Reset(parameters)); });
   };
 
   auto disable = [&](const std::vector<DECMode>& parameters) {
-    std::cout << Reset(parameters);
-    on_exit_functions.emplace([=] { std::cout << Set(parameters); });
+    TerminalSend(Reset(parameters));
+    on_exit_functions.emplace(
+        [this, parameters] { TerminalSend(Set(parameters)); });
   };
 
   if (use_alternative_screen_) {
@@ -664,7 +668,7 @@ void ScreenInteractive::Install() {
 
   // After installing the new configuration, flush it to the terminal to
   // ensure it is fully applied:
-  Flush();
+  TerminalFlush();
 
   quit_ = false;
 
@@ -917,17 +921,17 @@ void ScreenInteractive::Draw(Component component) {
   }
 
   // Hide cursor to prevent flickering during reset.
-  std::cout << "\033[?25l";
+  TerminalSend("\033[?25l");
 
   const bool resized = frame_count_ == 0 || (dimx != dimx_) || (dimy != dimy_);
-  ResetCursorPosition();
-  std::cout << ResetPosition(/*clear=*/resized);
+  TerminalSend(ResetCursorPosition());
+  ResetPosition(internal_->output_buffer, resized);
 
   // If the terminal width decrease, the terminal emulator will start wrapping
   // lines and make the display dirty. We should clear it completely.
   if ((dimx < dimx_) && !use_alternative_screen_) {
-    std::cout << "\033[J";  // clear terminal output
-    std::cout << "\033[H";  // move cursor to home position
+    TerminalSend("\033[J");  // clear terminal output
+    TerminalSend("\033[H");  // move cursor to home position
   }
 
   // Resize the screen if needed.
@@ -952,14 +956,14 @@ void ScreenInteractive::Draw(Component component) {
   static int i = -3;
   ++i;
   if (!use_alternative_screen_ && (i % 150 == 0)) {  // NOLINT
-    std::cout << DeviceStatusReport(DSRMode::kCursor);
+    TerminalSend(DeviceStatusReport(DSRMode::kCursor));
   }
 #else
   static int i = -3;
   ++i;
   if (!use_alternative_screen_ &&
       (previous_frame_resized_ || i % 40 == 0)) {  // NOLINT
-    std::cout << DeviceStatusReport(DSRMode::kCursor);
+    TerminalSend(DeviceStatusReport(DSRMode::kCursor));
   }
 #endif
   previous_frame_resized_ = resized;
@@ -996,17 +1000,33 @@ void ScreenInteractive::Draw(Component component) {
     }
   }
 
-  std::cout << ToString() << set_cursor_position;
-  Flush();
+  ToString(internal_->output_buffer);
+  TerminalSend(set_cursor_position);
+  TerminalFlush();
+
   Clear();
   frame_valid_ = true;
   frame_count_++;
 }
 
 // private
-void ScreenInteractive::ResetCursorPosition() {
-  std::cout << reset_cursor_position;
+std::string ScreenInteractive::ResetCursorPosition() {
+  std::string result = std::move(reset_cursor_position);
   reset_cursor_position = "";
+  return result;
+}
+
+// private
+void ScreenInteractive::TerminalSend(std::string_view s) {
+  internal_->output_buffer += s;
+}
+
+// private
+void ScreenInteractive::TerminalFlush() {
+  // Emscripten doesn't implement flush. We interpret zero as flush.
+  internal_->output_buffer += '\0';
+  std::cout << internal_->output_buffer << std::flush;
+  internal_->output_buffer.clear();
 }
 
 /// @brief Return a function to exit the main loop.
@@ -1035,12 +1055,11 @@ void ScreenInteractive::Signal(int signal) {
 #if !defined(_WIN32)
   if (signal == SIGTSTP) {
     Post([&] {
-      ResetCursorPosition();
-      std::cout << ResetPosition(/*clear*/ true);  // Cursor to the beginning
+      TerminalSend(ResetCursorPosition());
+      ResetPosition(internal_->output_buffer, /*clear*/ true);
       Uninstall();
       dimx_ = 0;
       dimy_ = 0;
-      Flush();
       std::ignore = std::raise(SIGTSTP);
       Install();
     });

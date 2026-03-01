@@ -34,6 +34,7 @@ class Screen : public Image {
   ~Screen() override = default;
 
   std::string ToString() const;
+  void ToString(std::string& ss) const;
 
   // Print the Screen on to the terminal.
   void Print() const;
@@ -44,6 +45,7 @@ class Screen : public Image {
 
   // Move the terminal cursor n-lines up with n = dimy().
   std::string ResetPosition(bool clear = false) const;
+  void ResetPosition(std::string& ss, bool clear = false) const;
 
   void ApplyShader();
 
