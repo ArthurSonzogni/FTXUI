@@ -209,11 +209,11 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
       "\0"           // Flush stdout.
 
       // Reset the screen.
-      "\r"       // Reset cursor position.
-      "\x1B[2K"  // Clear the line.
-      "\x1B[1A"  // Move cursor up one line.
-      "\x1B[2K"  // Clear the line.
       "\x1B[?25l"  // Hide cursor.
+      "\r"         // Reset cursor position.
+      "\x1B[2K"    // Clear the line.
+      "\x1B[1A"    // Move cursor up one line.
+      "\x1B[2K"    // Clear the line.
 
       // Print the document.
       "AB\r\n"  // Print "AB" and move to the next line.
@@ -221,7 +221,6 @@ TEST(ScreenInteractive, FixedSizeInitialFrame) {
 
       // Set cursor position.
       "\x1B[1D"    // Move cursor left one character.
-      "\x1B[?25l"  // Hide cursor.
 
       // Flush
       "\0"  // Flush stdout.

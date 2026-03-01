@@ -916,12 +916,12 @@ void ScreenInteractive::Draw(Component component) {
       break;
   }
 
+  // Hide cursor to prevent flickering during reset.
+  std::cout << "\033[?25l";
+
   const bool resized = frame_count_ == 0 || (dimx != dimx_) || (dimy != dimy_);
   ResetCursorPosition();
   std::cout << ResetPosition(/*clear=*/resized);
-
-  // Hide cursor to prevent flickering during reset.
-  std::cout << "\033[?25l";
 
   // If the terminal width decrease, the terminal emulator will start wrapping
   // lines and make the display dirty. We should clear it completely.
@@ -989,9 +989,7 @@ void ScreenInteractive::Draw(Component component) {
       reset_cursor_position += "\x1B[" + std::to_string(dx) + "C";
     }
 
-    if (cursor_.shape == Cursor::Hidden) {
-      set_cursor_position += "\033[?25l";
-    } else {
+    if (cursor_.shape != Cursor::Hidden) {
       set_cursor_position += "\033[?25h";
       set_cursor_position +=
           "\033[" + std::to_string(int(cursor_.shape)) + " q";
