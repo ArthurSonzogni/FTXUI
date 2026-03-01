@@ -147,7 +147,7 @@ auto screen = ftxui::Screen::Create(
 );
 
 auto& cell = screen.CellAt(3, 3);
-cell.character = U'X';
+cell.character = "X";
 cell.bold = true;
 cell.foreground_color = ftxui::Color::Red;
 cell.background_color = ftxui::Color::RGB(0, 255, 0);
@@ -165,7 +165,7 @@ Each cell in the screen is a @ref ftxui::Cell. You can modify them using:
 
 ```cpp
 auto& cell = screen.CellAt(x, y);
-cell.character = U'X';
+cell.character = "X";
 cell.bold = true;
 cell.foreground_color = Color::Red;
 ```

@@ -18,10 +18,10 @@
 #include "ftxui/dom/node.hpp"         // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/surface.hpp"     // for Surface
-#include "ftxui/screen/cell.hpp"     // for Cell
+#include "ftxui/screen/cell.hpp"      // for Cell
 #include "ftxui/screen/screen.hpp"    // for Cell, Screen
 #include "ftxui/screen/string.hpp"    // for Utf8ToGlyphs
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/util/ref.hpp"         // for ConstRef
 
 namespace ftxui {

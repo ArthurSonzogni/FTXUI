@@ -3,10 +3,10 @@
 // the LICENSE file.
 #define NOMINMAX
 #include <algorithm>
+#include <ftxui/component/app.hpp>  // for App
 #include <ftxui/component/component.hpp>
 #include <ftxui/component/component_base.hpp>
 #include <ftxui/component/component_options.hpp>
-#include <ftxui/component/app.hpp>  // for App
 #include <memory>
 #include <utility>
 #include "ftxui/dom/elements.hpp"  // for text, window, hbox, vbox, size, clear_under, reflect, emptyElement
@@ -127,8 +127,7 @@ class WindowImpl : public ComponentBase, public WindowOptions {
   Element OnRender() final {
     auto element = ComponentBase::Render();
 
-    const bool captureable =
-        captured_mouse_ || App::Active()->CaptureMouse();
+    const bool captureable = captured_mouse_ || App::Active()->CaptureMouse();
 
     const WindowRenderState state = {
         element,

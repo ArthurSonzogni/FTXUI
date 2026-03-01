@@ -9,7 +9,7 @@
 
 namespace ftxui {
 
-/// @brief A Loop is a wrapper around a Component and a App.
+/// @brief A Loop is a wrapper around a Component and an App.
 /// It is used to run a Component in a terminal.
 /// @see Component, App.
 /// @see App::Loop().

@@ -8,10 +8,10 @@
 #include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
 #include <utility>  // for pair
 
-#include "ftxui/screen/surface.hpp"  // for Surface
-#include "ftxui/screen/cell.hpp"     // for Cell
+#include "ftxui/screen/cell.hpp"  // for Cell
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"    // for string_width
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/screen/terminal.hpp"  // for Dimensions, Size
 
 #if defined(_WIN32)
@@ -410,9 +410,9 @@ Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 #if defined(_WIN32)
   // The placement of this call is a bit weird, however we can assume that
   // anybody who instantiates a Screen object eventually wants to output
-  // something to the console. If that is not the case, use an instance of Surface
-  // instead. As we require UTF8 for all input/output operations we will just
-  // switch to UTF8 encoding here
+  // something to the console. If that is not the case, use an instance of
+  // Surface instead. As we require UTF8 for all input/output operations we will
+  // just switch to UTF8 encoding here
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
   WindowsEmulateVT100Terminal();
@@ -493,7 +493,7 @@ std::string Screen::ResetPosition(bool clear) const {
   std::string ss;
   ss.reserve(static_cast<size_t>(dimy_) * 12);
   if (clear) {
-    ss += '\r';        // MOVE_LEFT;
+    ss += '\r';       // MOVE_LEFT;
     ss += "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
       ss += "\x1B[1A";  // MOVE_UP;

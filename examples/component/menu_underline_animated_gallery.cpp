@@ -7,11 +7,11 @@
 #include <vector>  // for vector
 
 #include "ftxui/component/animation.hpp"       // for BackOut, Duration
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/component.hpp"       // for Menu, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for MenuOption, UnderlineOption
 #include "ftxui/component/mouse.hpp"              // for ftxui
-#include "ftxui/component/app.hpp"  // for Component, App
 #include "ftxui/dom/elements.hpp"  // for text, Element, operator|, borderEmpty, inverted
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Red
 

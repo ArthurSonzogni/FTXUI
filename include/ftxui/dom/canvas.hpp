@@ -9,7 +9,7 @@
 #include <string>         // for string
 #include <unordered_map>  // for unordered_map
 
-#include "ftxui/screen/color.hpp"  // for Color
+#include "ftxui/screen/color.hpp"    // for Color
 #include "ftxui/screen/surface.hpp"  // for Cell, Surface
 
 #ifdef DrawText

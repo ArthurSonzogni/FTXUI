@@ -4,10 +4,10 @@
 #include <string>  // for string, allocator, basic_string
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for operator|, Maybe, Checkbox, Radiobox, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"      // for Component
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component_base.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for Element, border, color, operator|, text
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
 

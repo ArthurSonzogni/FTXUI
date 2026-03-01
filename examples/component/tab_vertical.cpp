@@ -5,10 +5,10 @@
 #include <string>  // for string, basic_string
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Radiobox, Horizontal, Menu, Renderer, Tab
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for Element, separator, hbox, operator|, border
 
 using namespace ftxui;

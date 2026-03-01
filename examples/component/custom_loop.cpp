@@ -10,9 +10,9 @@
 #include <string>                  // for operator+, to_string
 #include <thread>                  // for sleep_for
 
+#include "ftxui/component/app.hpp"        // for App
 #include "ftxui/component/component.hpp"  // for CatchEvent, Renderer, operator|=
 #include "ftxui/component/loop.hpp"       // for Loop
-#include "ftxui/component/app.hpp"  // for App
 
 int main() {
   using namespace ftxui;

@@ -9,12 +9,12 @@
 #include <utility>  // for move
 #include <vector>   // for vector, __alloc_traits<>::value_type
 
-#include "ftxui/component/component.hpp"  // for Renderer, CatchEvent, Horizontal, Menu, Tab
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/event.hpp"               // for Event
-#include "ftxui/component/mouse.hpp"               // for Mouse
 #include "ftxui/component/app.hpp"  // for App
-#include "ftxui/dom/canvas.hpp"                    // for Canvas
+#include "ftxui/component/component.hpp"  // for Renderer, CatchEvent, Horizontal, Menu, Tab
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/component/event.hpp"           // for Event
+#include "ftxui/component/mouse.hpp"           // for Mouse
+#include "ftxui/dom/canvas.hpp"                // for Canvas
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Blue, Color::Green, ftxui
 
 int main() {

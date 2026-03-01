@@ -115,10 +115,7 @@ class App : public Screen {
     Fullscreen,
     TerminalOutput,
   };
-  App(Dimension dimension,
-      int dimx,
-      int dimy,
-      bool use_alternative_screen);
+  App(Dimension dimension, int dimx, int dimy, bool use_alternative_screen);
 
   const Dimension dimension_;
   const bool use_alternative_screen_;

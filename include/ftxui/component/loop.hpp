@@ -19,7 +19,7 @@ class App;
 /// It is responsible for running the component, handling events, and
 /// updating the screen.
 ///
-/// The Loop class is designed to be used with a App object,
+/// The Loop class is designed to be used with an App object,
 /// which represents the terminal screen.
 ///
 /// **Example**

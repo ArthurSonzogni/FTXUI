@@ -4,10 +4,10 @@
 #include <memory>  // for allocator, shared_ptr, __shared_ptr_access
 #include <string>  // for operator+, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for text, separator, Element, operator|, vbox, border
 
 using namespace ftxui;

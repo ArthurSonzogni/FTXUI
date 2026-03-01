@@ -5,11 +5,11 @@
 #include <memory>    // for shared_ptr, __shared_ptr_access
 #include <string>    // for to_string, allocator
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for MenuEntryAnimated, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/component_options.hpp"   // for MenuEntryAnimated
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component_base.hpp"     // for ComponentBase
+#include "ftxui/component/component_options.hpp"  // for MenuEntryAnimated
 #include "ftxui/dom/elements.hpp"  // for operator|, separator, Element, Decorator, color, text, hbox, size, bold, frame, inverted, vbox, HEIGHT, LESS_THAN, border
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Cyan, Color::Green, Color::Red, Color::Yellow
 

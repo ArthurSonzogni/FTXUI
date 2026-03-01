@@ -7,8 +7,8 @@
 #include <unistd.h>
 #include <cstdio>
 
-#include "ftxui/component/component.hpp"
 #include "ftxui/component/app.hpp"
+#include "ftxui/component/component.hpp"
 #include "ftxui/dom/elements.hpp"
 
 #if !defined(_WIN32) && !defined(__EMSCRIPTEN__)

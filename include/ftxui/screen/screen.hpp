@@ -80,9 +80,7 @@ class Screen : public Surface {
   std::vector<std::string> hyperlinks_ = {""};
 
   // The current selection style. This is overridden by various dom elements.
-  SelectionStyle selection_style_ = [](Cell& cell) {
-    cell.inverted ^= true;
-  };
+  SelectionStyle selection_style_ = [](Cell& cell) { cell.inverted ^= true; };
 };
 
 }  // namespace ftxui

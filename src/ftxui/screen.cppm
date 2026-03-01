@@ -12,7 +12,6 @@ export import :Cell;
 export import :Screen;
 export import :String;
 export import :Terminal;
-export import :Surface;
 export import :Pixel;
 
 // Deprecated:

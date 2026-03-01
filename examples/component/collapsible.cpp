@@ -5,11 +5,11 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Collapsible, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/app.hpp"  // for Component, App
-#include "ftxui/dom/elements.hpp"                  // for text, hbox, Element
+#include "ftxui/dom/elements.hpp"              // for text, hbox, Element
 
 using namespace ftxui;
 

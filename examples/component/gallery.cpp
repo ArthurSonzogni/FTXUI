@@ -6,10 +6,10 @@
 #include <string>      // for string, basic_string
 #include <vector>      // for vector
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Slider, Checkbox, Vertical, Renderer, Button, Input, Menu, Radiobox, Toggle
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
-#include "ftxui/component/app.hpp"  // for Component, App
 #include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, size, xflex, text, WIDTH, hbox, vbox, EQUAL, border, GREATER_THAN
 
 using namespace ftxui;

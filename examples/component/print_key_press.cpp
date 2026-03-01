@@ -9,11 +9,11 @@
 #include <utility>  // for move
 #include <vector>   // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for CatchEvent, Renderer
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Middle, Mouse::None, Mouse::Pressed, Mouse::Released, Mouse::Right, Mouse::WheelDown, Mouse::WheelUp
-#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/dom/elements.hpp"  // for text, vbox, window, Element, Elements
 
 using namespace ftxui;

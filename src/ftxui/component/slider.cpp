@@ -7,12 +7,12 @@
 #include <string>                   // for allocator
 #include <utility>                  // for move
 
+#include "ftxui/component/app.hpp"             // for Component
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse
 #include "ftxui/component/component.hpp"       // for Make, Slider
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include "ftxui/component/app.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, text, Element, xflex, hbox, color, underlined, reflect, Decorator, dim, vcenter, focus, nothing, select, yflex, gaugeDirection
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color, Color::GrayDark, Color::White

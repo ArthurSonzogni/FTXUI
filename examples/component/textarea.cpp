@@ -4,10 +4,10 @@
 #include <memory>  // for allocator, __shared_ptr_access, shared_ptr
 #include <string>  // for string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Input, Renderer, ResizableSplitLeft
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
-#include "ftxui/component/app.hpp"  // for App
 #include "ftxui/dom/elements.hpp"  // for operator|, separator, text, Element, flex, vbox, border
 
 int main() {

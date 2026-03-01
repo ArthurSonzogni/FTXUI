@@ -5,12 +5,12 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
+#include "ftxui/component/app.hpp"                // for Component
 #include "ftxui/component/component.hpp"          // for Make, Radiobox
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for RadioboxOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::WheelDown, Mouse::WheelUp, Mouse::Left, Mouse::Released
-#include "ftxui/component/app.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element, vbox, Elements, focus, nothing, select
 #include "ftxui/screen/box.hpp"   // for Box
 #include "ftxui/screen/util.hpp"  // for clamp

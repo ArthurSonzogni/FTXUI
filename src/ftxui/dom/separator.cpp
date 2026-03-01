@@ -10,8 +10,8 @@
 #include "ftxui/dom/node.hpp"      // for Node
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
+#include "ftxui/screen/cell.hpp"      // for Cell
 #include "ftxui/screen/color.hpp"     // for Color
-#include "ftxui/screen/cell.hpp"     // for Cell
 #include "ftxui/screen/screen.hpp"    // for Cell, Screen
 
 namespace ftxui {

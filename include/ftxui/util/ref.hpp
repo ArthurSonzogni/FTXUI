@@ -23,7 +23,7 @@ class ConstRef {
   ConstRef(T t) : variant_(std::move(t)) {}  // NOLINT
 
   // Referencing constructors:
-  ConstRef(const T* t) : variant_(t) {}      // NOLINT
+  ConstRef(const T* t) : variant_(t) {}  // NOLINT
 
   ConstRef& operator=(ConstRef&&) noexcept = default;
   ConstRef(const ConstRef<T>&) = default;
@@ -54,11 +54,13 @@ class Ref {
   Ref() = default;
 
   // Owning constructors:
-  Ref(T t) : variant_(std::move(t)) {}  // NOLINT
-                                        //
+  Ref(T t)
+      : variant_(std::move(t)) {}  // NOLINT
+                                   //
   // Referencing constructors:
-  Ref(T* t) : variant_(t) {}            // NOLINT
-                                        //
+  Ref(T* t)
+      : variant_(t) {}  // NOLINT
+                        //
   ~Ref() = default;
   Ref& operator=(Ref&&) noexcept = default;
   Ref(const Ref<T>&) = default;
@@ -169,19 +171,19 @@ class ConstStringListRef {
   ConstStringListRef(std::vector<std::string> value) {  // NOLINT
     variant_ = std::make_shared<Variant>(value);
   }
-  ConstStringListRef(const std::vector<std::string>* value)  {// NOLINT
+  ConstStringListRef(const std::vector<std::string>* value) {  // NOLINT
     variant_ = std::make_shared<Variant>(value);
   }
-  ConstStringListRef(std::vector<std::string_view> value) { // NOLINT
+  ConstStringListRef(std::vector<std::string_view> value) {  // NOLINT
     variant_ = std::make_shared<Variant>(value);
   }
-  ConstStringListRef(const std::vector<std::string_view>* value) { // NOLINT
+  ConstStringListRef(const std::vector<std::string_view>* value) {  // NOLINT
     variant_ = std::make_shared<Variant>(value);
   }
-  ConstStringListRef(const std::vector<std::wstring>* value) { // NOLINT
+  ConstStringListRef(const std::vector<std::wstring>* value) {  // NOLINT
     variant_ = std::make_shared<Variant>(value);
   }
-  ConstStringListRef(Adapter* adapter) { // NOLINT
+  ConstStringListRef(Adapter* adapter) {  // NOLINT
     variant_ = std::make_shared<Variant>(adapter);
   }
   template <typename AdapterType>
@@ -214,7 +216,8 @@ class ConstStringListRef {
       return (*v)[i];
     }
     std::string_view operator()(const std::vector<std::wstring>* v) const {
-      return "";  // Temporary fix: Cannot return a view to a temporary conversion.
+      return "";  // Temporary fix: Cannot return a view to a temporary
+                  // conversion.
     }
     std::string_view operator()(Adapter* v) const { return (*v)[i]; }
     std::string_view operator()(const std::unique_ptr<Adapter>& v) const {

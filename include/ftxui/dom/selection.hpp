@@ -8,7 +8,7 @@
 #include <functional>
 
 #include <sstream>
-#include "ftxui/screen/box.hpp"    // for Box
+#include "ftxui/screen/box.hpp"   // for Box
 #include "ftxui/screen/cell.hpp"  // for Cell
 
 namespace ftxui {

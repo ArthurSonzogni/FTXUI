@@ -4,11 +4,11 @@
 #include <gtest/gtest.h>
 #include <csignal>  // for raise, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM
 
+#include "ftxui/component/app.hpp"
 #include "ftxui/component/component.hpp"  // for Input, Renderer, Vertical
 #include "ftxui/component/event.hpp"      // for Event
 #include "ftxui/component/loop.hpp"       // for Loop
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed, Mouse::Released
-#include "ftxui/component/app.hpp"
 #include "ftxui/dom/elements.hpp"   // for text
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen

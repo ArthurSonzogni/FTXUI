@@ -6,9 +6,9 @@
 #include <ftxui/component/event.hpp>  // for Event, Event::Custom
 #include <tuple>                      // for _Swallow_assign, ignore
 
-#include "ftxui/component/component.hpp"  // for Renderer
 #include "ftxui/component/app.hpp"
-#include "ftxui/dom/elements.hpp"  // for text, Element
+#include "ftxui/component/component.hpp"  // for Renderer
+#include "ftxui/dom/elements.hpp"         // for text, Element
 
 #if defined(__unix__)
 #include <fcntl.h>
@@ -220,7 +220,7 @@ TEST(App, FixedSizeInitialFrame) {
       "  "      // Print two spaces to fill the line.
 
       // Set cursor position.
-      "\x1B[1D"    // Move cursor left one character.
+      "\x1B[1D"  // Move cursor left one character.
 
       // Flush
       "\0"  // Flush stdout.

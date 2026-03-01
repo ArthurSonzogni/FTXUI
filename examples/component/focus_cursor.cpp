@@ -4,8 +4,8 @@
 #include <ftxui/component/captured_mouse.hpp>  // for ftxui
 #include <string>  // for allocator, operator+, char_traits, string
 
-#include "ftxui/component/component.hpp"           // for Renderer, Vertical
-#include "ftxui/component/app.hpp"  // for App, Component
+#include "ftxui/component/app.hpp"        // for App, Component
+#include "ftxui/component/component.hpp"  // for Renderer, Vertical
 #include "ftxui/dom/elements.hpp"  // for text, Decorator, focus, focusCursorBar, focusCursorBarBlinking, focusCursorBlock, focusCursorBlockBlinking, focusCursorUnderline, focusCursorUnderlineBlinking, hbox, Element
 
 using namespace ftxui;

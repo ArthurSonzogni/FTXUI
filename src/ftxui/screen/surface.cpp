@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
-#include "ftxui/screen/surface.hpp"
 #include "ftxui/screen/cell.hpp"
+#include "ftxui/screen/surface.hpp"
 
 namespace ftxui {
 

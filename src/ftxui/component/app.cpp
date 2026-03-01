@@ -264,10 +264,7 @@ class CapturedMouseImpl : public CapturedMouseInterface {
 
 }  // namespace
 
-App::App(Dimension dimension,
-                                     int dimx,
-                                     int dimy,
-                                     bool use_alternative_screen)
+App::App(Dimension dimension, int dimx, int dimy, bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
       use_alternative_screen_(use_alternative_screen) {
@@ -1172,8 +1169,7 @@ void App::PostAnimationTask() {
                                          std::chrono::milliseconds(15));
 }
 
-bool App::SelectionData::operator==(
-    const App::SelectionData& other) const {
+bool App::SelectionData::operator==(const App::SelectionData& other) const {
   if (empty && other.empty) {
     return true;
   }
@@ -1184,8 +1180,7 @@ bool App::SelectionData::operator==(
          end_x == other.end_x && end_y == other.end_y;
 }
 
-bool App::SelectionData::operator!=(
-    const App::SelectionData& other) const {
+bool App::SelectionData::operator!=(const App::SelectionData& other) const {
   return !(*this == other);
 }
 

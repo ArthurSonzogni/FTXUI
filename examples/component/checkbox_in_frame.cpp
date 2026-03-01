@@ -5,10 +5,10 @@
 #include <memory>  // for shared_ptr, __shared_ptr_access
 #include <string>  // for operator+, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Vertical
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, size, border, frame, vscroll_indicator, HEIGHT, LESS_THAN
 
 using namespace ftxui;

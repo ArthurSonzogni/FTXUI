@@ -4,9 +4,9 @@
 #include <string>  // for basic_string, string, allocator
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Dropdown, Horizontal, Vertical
-#include "ftxui/component/app.hpp"  // for App
 
 int main() {
   using namespace ftxui;

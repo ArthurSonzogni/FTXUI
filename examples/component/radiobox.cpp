@@ -4,9 +4,9 @@
 #include <string>  // for string, allocator, basic_string
 #include <vector>  // for vector
 
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Radiobox
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/app.hpp"             // for App
+#include "ftxui/component/captured_mouse.hpp"  // for ftxui
+#include "ftxui/component/component.hpp"       // for Radiobox
 
 using namespace ftxui;
 

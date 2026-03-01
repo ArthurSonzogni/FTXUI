@@ -6,10 +6,10 @@
 #include <string>    // for string, basic_string, allocator
 #include <vector>    // for vector
 
-#include "ftxui/component/captured_mouse.hpp"      // for ftxui
-#include "ftxui/component/component.hpp"           // for Menu
-#include "ftxui/component/component_options.hpp"   // for MenuOption
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/app.hpp"                // for App
+#include "ftxui/component/captured_mouse.hpp"     // for ftxui
+#include "ftxui/component/component.hpp"          // for Menu
+#include "ftxui/component/component_options.hpp"  // for MenuOption
 
 int main() {
   using namespace ftxui;

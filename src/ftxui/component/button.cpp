@@ -6,12 +6,12 @@
 #include <utility>     // for move
 
 #include "ftxui/component/animation.hpp"  // for Animator, Params (ptr only)
+#include "ftxui/component/app.hpp"        // for Component
 #include "ftxui/component/component.hpp"  // for Make, Button
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, AnimatedColorOption, AnimatedColorsOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/component/app.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, Decorator, Element, operator|=, bgcolor, color, reflect, text, bold, border, inverted, nothing
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color

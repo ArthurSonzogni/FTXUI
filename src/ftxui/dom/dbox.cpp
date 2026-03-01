@@ -11,7 +11,7 @@
 #include "ftxui/dom/node.hpp"         // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/cell.hpp"     // for Cell
+#include "ftxui/screen/cell.hpp"      // for Cell
 
 namespace ftxui {
 

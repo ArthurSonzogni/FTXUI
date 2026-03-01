@@ -4,11 +4,11 @@
 #include <functional>  // for function
 #include <utility>     // for move
 
+#include "ftxui/component/app.hpp"        // for Component, App
 #include "ftxui/component/component.hpp"  // for ComponentDecorator, Hoverable, Make
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"           // for Mouse
-#include "ftxui/component/app.hpp"  // for Component, App
 #include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element
 #include "ftxui/screen/box.hpp"    // for Box
 

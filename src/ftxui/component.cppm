@@ -5,7 +5,6 @@ export module ftxui.component;
 
 export import :Animation;
 export import :App;
-export import :App;
 export import :CapturedMouse;
 export import :Component;
 export import :ComponentBase;

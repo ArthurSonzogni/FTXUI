@@ -31,7 +31,7 @@ class ClearUnder : public NodeDecorator {
 };
 }  // namespace
 
-/// @brief Before drawing |child|, clear the Cell below. This is useful in
+/// @brief Before drawing |child|, clear the cells below. This is useful in
 ///        combination with dbox.
 /// @see ftxui::dbox
 /// @ingroup dom

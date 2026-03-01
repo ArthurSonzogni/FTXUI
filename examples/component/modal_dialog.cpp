@@ -6,8 +6,8 @@
 #include <functional>                             // for function
 #include <memory>                                 // for allocator, shared_ptr
 
-#include "ftxui/component/component.hpp"  // for Button, operator|=, Renderer, Vertical, Modal
 #include "ftxui/component/app.hpp"  // for App, Component
+#include "ftxui/component/component.hpp"  // for Button, operator|=, Renderer, Vertical, Modal
 #include "ftxui/dom/elements.hpp"  // for operator|, separator, text, size, Element, vbox, border, GREATER_THAN, WIDTH, center, HEIGHT
 
 using namespace ftxui;

@@ -10,9 +10,9 @@
 #include <ftxui/util/ref.hpp>       // for ConstRef, Ref
 #include <memory>                   // for shared_ptr, __shared_ptr_access
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Horizontal, Slider, operator|=
-#include "ftxui/component/app.hpp"  // for App
 
 using namespace ftxui;
 

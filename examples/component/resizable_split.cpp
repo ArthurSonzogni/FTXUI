@@ -3,9 +3,9 @@
 // the LICENSE file.
 #include <memory>  // for shared_ptr, allocator, __shared_ptr_access
 
+#include "ftxui/component/app.hpp"        // for App
 #include "ftxui/component/component.hpp"  // for Renderer, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for Element, operator|, text, center, border
 
 using namespace ftxui;

@@ -7,8 +7,8 @@
 
 #include "ftxui/dom/elements.hpp"  // for Element, Decorator, bgcolor, color
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
+#include "ftxui/screen/cell.hpp"         // for Cell
 #include "ftxui/screen/color.hpp"        // for Color
-#include "ftxui/screen/cell.hpp"        // for Cell
 #include "ftxui/screen/screen.hpp"       // for Screen
 
 namespace ftxui {

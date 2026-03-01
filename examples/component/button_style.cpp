@@ -3,11 +3,11 @@
 // the LICENSE file.
 #include <string>  // for operator+, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Vertical, Renderer, Horizontal, operator|
-#include "ftxui/component/component_base.hpp"      // for Component
-#include "ftxui/component/component_options.hpp"   // for ButtonOption
-#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component_base.hpp"     // for Component
+#include "ftxui/component/component_options.hpp"  // for ButtonOption
 #include "ftxui/dom/elements.hpp"  // for Element, separator, text, border
 #include "ftxui/screen/color.hpp"  // for Color, Color::Blue, Color::Green, Color::Red
 
