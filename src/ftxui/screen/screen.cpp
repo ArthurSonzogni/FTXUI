@@ -427,7 +427,14 @@ std::string Screen::ToString() const {
   // Pre-allocate: ~30 bytes per pixel for character + escape codes.
   std::string ss;
   ss.reserve(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_) * 30);
+  ToString(ss);
+  return ss;
+}
 
+/// Produce a std::string that can be used to print the Screen on the
+/// terminal.
+/// @param ss The string to append to.
+void Screen::ToString(std::string& ss) const {
   const Pixel default_pixel;
   const Pixel* previous_pixel_ref = &default_pixel;
 
@@ -461,8 +468,6 @@ std::string Screen::ToString() const {
 
   // Reset the style to default:
   UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
-
-  return ss;
 }
 
 // Print the Screen to the terminal.
@@ -492,6 +497,15 @@ void Screen::Print() const {
 std::string Screen::ResetPosition(bool clear) const {
   std::string ss;
   ss.reserve(static_cast<size_t>(dimy_) * 12);
+  ResetPosition(ss, clear);
+  return ss;
+}
+
+/// @brief Append to a string in order to reset the cursor position to the
+///        beginning of the screen.
+/// @param ss The string to append to.
+/// @param clear Whether to clear the screen or not.
+void Screen::ResetPosition(std::string& ss, bool clear) const {
   if (clear) {
     ss += '\r';        // MOVE_LEFT;
     ss += "\x1b[2K";  // CLEAR_SCREEN;
@@ -505,7 +519,6 @@ std::string Screen::ResetPosition(bool clear) const {
       ss += "\x1B[1A";  // MOVE_UP;
     }
   }
-  return ss;
 }
 
 /// @brief Clear all the pixel from the screen.
