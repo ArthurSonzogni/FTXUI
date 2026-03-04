@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <cstdio>  // for snprintf
 #include <string>
+#include <tuple>
 
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
 #include "ftxui/screen/terminal.hpp"  // for ColorSupport, Color, Palette256, TrueColor
