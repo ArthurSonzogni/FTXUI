@@ -35,11 +35,11 @@ Then, in your own code you can consume the modules and code as normal:
 import ftxui;
 
 using ftxui::Button;
-using ftxui::ScreenInteractive;
+using ftxui::App;
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
-  auto button = Button("Click me", screen.QuitClosure());
+  auto screen = App::TerminalOutput();
+  auto button = Button("Click me", screen.ExitLoopClosure());
   screen.Loop(button);
   return 0;
 }

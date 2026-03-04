@@ -10,12 +10,12 @@
 #include <utility>     // for move
 #include <vector>      // for vector
 
+#include "ftxui/component/app.hpp"                // for Component
 #include "ftxui/component/component.hpp"          // for Make, Input
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for InputOption
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowLeftCtrl, Event::ArrowRight, Event::ArrowRightCtrl, Event::ArrowUp, Event::Backspace, Event::Delete, Event::End, Event::Home, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, reflect, text, Element, xflex, hbox, Elements, frame, operator|=, vbox, focus, focusCursorBarBlinking, select
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/string.hpp"           // for string_width
@@ -570,7 +570,7 @@ class InputBase : public ComponentBase, public InputOption {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string content= "";
 /// std::string placeholder = "placeholder";
 /// Component input = Input({
@@ -598,7 +598,7 @@ Component Input(InputOption option) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string content= "";
 /// std::string placeholder = "placeholder";
 /// Component input = Input(content, {
@@ -628,7 +628,7 @@ Component Input(StringRef content, InputOption option) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string content= "";
 /// std::string placeholder = "placeholder";
 /// Component input = Input(content, placeholder);

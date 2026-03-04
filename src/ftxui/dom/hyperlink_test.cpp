@@ -6,7 +6,7 @@
 
 #include "ftxui/dom/elements.hpp"  // for text, hyperlink, operator|, Element, hbox
 #include "ftxui/dom/node.hpp"      // for Render
-#include "ftxui/screen/screen.hpp"  // for Screen, Pixel
+#include "ftxui/screen/screen.hpp"  // for Screen, Cell
 
 namespace ftxui {
 
@@ -21,10 +21,10 @@ TEST(HyperlinkTest, Basic) {
   Screen screen(6 * 4, 1);
   Render(screen, element);
 
-  EXPECT_EQ(screen.PixelAt(0, 0).hyperlink, 1u);
-  EXPECT_EQ(screen.PixelAt(5, 0).hyperlink, 1u);
-  EXPECT_EQ(screen.PixelAt(6, 0).hyperlink, 2u);
-  EXPECT_EQ(screen.PixelAt(11, 0).hyperlink, 2u);
+  EXPECT_EQ(screen.CellAt(0, 0).hyperlink, 1u);
+  EXPECT_EQ(screen.CellAt(5, 0).hyperlink, 1u);
+  EXPECT_EQ(screen.CellAt(6, 0).hyperlink, 2u);
+  EXPECT_EQ(screen.CellAt(11, 0).hyperlink, 2u);
 
   std::string output = screen.ToString();
   EXPECT_EQ(output,

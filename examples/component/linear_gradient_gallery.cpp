@@ -8,13 +8,13 @@
 #include <memory>                         // for __shared_ptr_access, shared_ptr
 #include <string>  // for allocator, operator+, char_traits, string, to_string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"       // for Slider, Renderer, Vertical
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 int main() {
   using namespace ftxui;
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   int angle = 180.f;
   float start = 0.f;

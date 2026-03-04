@@ -496,7 +496,8 @@ void TableSelection::SeparatorVertical(BorderStyle border) {
 /// @brief Draw some vertical separator lines in the selection.
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
-void TableSelection::SeparatorVertical(BorderStyle border, Decorator decorator) {
+void TableSelection::SeparatorVertical(BorderStyle border,
+                                       Decorator decorator) {
   SeparatorVertical(border);
   DecorateSeparatorVertical(std::move(decorator));
 }

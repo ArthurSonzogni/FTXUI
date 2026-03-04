@@ -8,10 +8,10 @@
 #include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
 #include <utility>  // for pair
 
-#include "ftxui/screen/image.hpp"  // for Image
-#include "ftxui/screen/pixel.hpp"  // for Pixel
+#include "ftxui/screen/cell.hpp"  // for Cell
 #include "ftxui/screen/screen.hpp"
 #include "ftxui/screen/string.hpp"    // for string_width
+#include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/screen/terminal.hpp"  // for Dimensions, Size
 
 #if defined(_WIN32)
@@ -68,10 +68,10 @@ void WindowsEmulateVT100Terminal() {
 #endif
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void UpdatePixelStyle(const Screen* screen,
-                      std::string& ss,
-                      const Pixel& prev,
-                      const Pixel& next) {
+void UpdateCellStyle(const Screen* screen,
+                     std::string& ss,
+                     const Cell& prev,
+                     const Cell& next) {
   // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
   if (FTXUI_UNLIKELY(next.hyperlink != prev.hyperlink)) {
     ss += "\x1B]8;;";
@@ -374,8 +374,8 @@ void UpgradeTopDown(std::string& top, std::string& down) {
   }
 }
 
-bool ShouldAttemptAutoMerge(Pixel& pixel) {
-  return pixel.automerge && pixel.character.size() == 3;
+bool ShouldAttemptAutoMerge(Cell& cell) {
+  return cell.automerge && cell.character.size() == 3;
 }
 
 }  // namespace
@@ -406,13 +406,13 @@ Screen Screen::Create(Dimensions dimension) {
   return {dimension.dimx, dimension.dimy};
 }
 
-Screen::Screen(int dimx, int dimy) : Image{dimx, dimy} {
+Screen::Screen(int dimx, int dimy) : Surface{dimx, dimy} {
 #if defined(_WIN32)
   // The placement of this call is a bit weird, however we can assume that
   // anybody who instantiates a Screen object eventually wants to output
-  // something to the console. If that is not the case, use an instance of Image
-  // instead. As we require UTF8 for all input/output operations we will just
-  // switch to UTF8 encoding here
+  // something to the console. If that is not the case, use an instance of
+  // Surface instead. As we require UTF8 for all input/output operations we will
+  // just switch to UTF8 encoding here
   SetConsoleOutputCP(CP_UTF8);
   SetConsoleCP(CP_UTF8);
   WindowsEmulateVT100Terminal();
@@ -424,7 +424,7 @@ Screen::Screen(int dimx, int dimy) : Image{dimx, dimy} {
 /// @note Don't forget to flush stdout. Alternatively, you can use
 /// Screen::Print();
 std::string Screen::ToString() const {
-  // Pre-allocate: ~30 bytes per pixel for character + escape codes.
+  // Pre-allocate: ~30 bytes per cell for character + escape codes.
   std::string ss;
   ss.reserve(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_) * 30);
   ToString(ss);
@@ -435,39 +435,39 @@ std::string Screen::ToString() const {
 /// terminal.
 /// @param ss The string to append to.
 void Screen::ToString(std::string& ss) const {
-  const Pixel default_pixel;
-  const Pixel* previous_pixel_ref = &default_pixel;
+  const Cell default_cell;
+  const Cell* previous_cell_ref = &default_cell;
 
   for (int y = 0; y < dimy_; ++y) {
     // New line in between two lines.
     if (y != 0) {
-      UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
-      previous_pixel_ref = &default_pixel;
+      UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
+      previous_cell_ref = &default_cell;
       ss += "\r\n";
     }
 
     // After printing a fullwith character, we need to skip the next cell.
     bool previous_fullwidth = false;
-    for (const auto& pixel : pixels_[y]) {
+    for (const auto& cell : cells_[y]) {
       if (!previous_fullwidth) {
-        UpdatePixelStyle(this, ss, *previous_pixel_ref, pixel);
-        previous_pixel_ref = &pixel;
-        if (pixel.character.empty()) {
+        UpdateCellStyle(this, ss, *previous_cell_ref, cell);
+        previous_cell_ref = &cell;
+        if (cell.character.empty()) {
           ss += ' ';
         } else {
-          ss += pixel.character;
+          ss += cell.character;
         }
       }
-      if (pixel.character.size() <= 1) {
+      if (cell.character.size() <= 1) {
         previous_fullwidth = false;
       } else {
-        previous_fullwidth = (string_width(pixel.character) == 2);
+        previous_fullwidth = (string_width(cell.character) == 2);
       }
     }
   }
 
   // Reset the style to default:
-  UpdatePixelStyle(this, ss, *previous_pixel_ref, default_pixel);
+  UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
 }
 
 // Print the Screen to the terminal.
@@ -507,7 +507,7 @@ std::string Screen::ResetPosition(bool clear) const {
 /// @param clear Whether to clear the screen or not.
 void Screen::ResetPosition(std::string& ss, bool clear) const {
   if (clear) {
-    ss += '\r';        // MOVE_LEFT;
+    ss += '\r';       // MOVE_LEFT;
     ss += "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
       ss += "\x1B[1A";  // MOVE_UP;
@@ -521,9 +521,9 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
   }
 }
 
-/// @brief Clear all the pixel from the screen.
+/// @brief Clear all the cells from the screen.
 void Screen::Clear() {
-  Image::Clear();
+  Surface::Clear();
 
   cursor_.x = dimx_ - 1;
   cursor_.y = dimy_ - 1;
@@ -539,19 +539,19 @@ void Screen::ApplyShader() {
   for (int y = 0; y < dimy_; ++y) {
     for (int x = 0; x < dimx_; ++x) {
       // Box drawing character uses exactly 3 byte.
-      Pixel& cur = pixels_[y][x];
+      Cell& cur = cells_[y][x];
       if (!ShouldAttemptAutoMerge(cur)) {
         continue;
       }
 
       if (x > 0) {
-        Pixel& left = pixels_[y][x-1];
+        Cell& left = cells_[y][x-1];
         if (ShouldAttemptAutoMerge(left)) {
           UpgradeLeftRight(left.character, cur.character);
         }
       }
       if (y > 0) {
-        Pixel& top = pixels_[y-1][x];
+        Cell& top = cells_[y-1][x];
         if (ShouldAttemptAutoMerge(top)) {
           UpgradeTopDown(top.character, cur.character);
         }

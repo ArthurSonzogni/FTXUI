@@ -9,11 +9,11 @@
 #include <vector>      // for vector
 
 #include "ftxui/component/animation.hpp"  // for ElasticOut, Linear
+#include "ftxui/component/app.hpp"        // for Component, App
 #include "ftxui/component/component.hpp"  // for Menu, Horizontal, Renderer, Vertical
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for MenuOption, EntryState, MenuEntryOption, AnimatedColorOption, AnimatedColorsOption, UnderlineOption
 #include "ftxui/component/mouse.hpp"              // for ftxui
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
 #include "ftxui/dom/elements.hpp"  // for separator, operator|, Element, text, bgcolor, hbox, bold, color, filler, border, vbox, borderDouble, dim, flex, hcenter
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red, Color::Black, Color::Yellow, Color::Blue, Color::Default, Color::White
 
@@ -34,7 +34,7 @@ Component HMenu4(std::vector<std::string>* entries, int* selected);
 Component HMenu5(std::vector<std::string>* entries, int* selected);
 
 int main() {
-  auto screen = ScreenInteractive::TerminalOutput();
+  auto screen = App::TerminalOutput();
 
   std::vector<std::string> entries{
       "Monkey", "Dog", "Cat", "Bird", "Elephant", "Cat",

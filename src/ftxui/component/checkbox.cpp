@@ -91,7 +91,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// CheckboxOption option;
 /// option.label = "Make a sandwidth";
 /// option.checked = false;
@@ -119,7 +119,7 @@ Component Checkbox(CheckboxOption option) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::FitComponent();
+/// auto screen = App::FitComponent();
 /// std::string label = "Make a sandwidth";
 /// bool checked = false;
 /// Component checkbox = Checkbox(&label, &checked);

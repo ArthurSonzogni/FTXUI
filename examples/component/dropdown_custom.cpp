@@ -4,9 +4,9 @@
 #include <string>  // for basic_string, string, allocator
 #include <vector>  // for vector
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Dropdown, Horizontal, Vertical
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
 
 int main() {
   using namespace ftxui;
@@ -95,7 +95,7 @@ int main() {
           },
   });
 
-  auto screen = ScreenInteractive::FitComponent();
+  auto screen = App::FitComponent();
   screen.Loop(Container::Horizontal({
       dropdown_1,
       dropdown_2,

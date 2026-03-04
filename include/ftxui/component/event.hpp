@@ -10,7 +10,7 @@
 
 namespace ftxui {
 
-class ScreenInteractive;
+class App;
 class ComponentBase;
 
 /// @brief Represent an event. It can be key press event, a terminal resize, or
@@ -123,11 +123,11 @@ struct Event {
   std::string DebugString() const;
 
   //--- State section ----------------------------------------------------------
-  ScreenInteractive* screen_ = nullptr;
+  App* screen_ = nullptr;
 
  private:
   friend ComponentBase;
-  friend ScreenInteractive;
+  friend App;
   enum class Type {
     Unknown,
     Character,

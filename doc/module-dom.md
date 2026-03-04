@@ -131,7 +131,7 @@ namespace ftxui {
     Element borderRounded(Element);
     Element borderEmpty(Element);
     Decorator borderStyled(BorderStyle);
-    Decorator borderWith(Pixel);
+    Decorator borderWith(Cell);
 }
 ```
 
@@ -185,7 +185,7 @@ namespace ftxui {
     Element separatorDouble();
     Element separatorEmpty();
     Element separatorStyled(BorderStyle);
-    Element separator(Pixel);
+    Element separator(Cell);
     Element separatorCharacter(std::string);
     Element separatorHSelector(float left,
                                float right,

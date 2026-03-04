@@ -39,16 +39,18 @@ include(cmake/ftxui_message.cmake)
 
 add_library(screen
   include/ftxui/screen/box.hpp
+  include/ftxui/screen/cell.hpp
   include/ftxui/screen/color.hpp
   include/ftxui/screen/color_info.hpp
   include/ftxui/screen/image.hpp
   include/ftxui/screen/pixel.hpp
   include/ftxui/screen/screen.hpp
   include/ftxui/screen/string.hpp
+  include/ftxui/screen/surface.hpp
   src/ftxui/screen/box.cpp
   src/ftxui/screen/color.cpp
   src/ftxui/screen/color_info.cpp
-  src/ftxui/screen/image.cpp
+  src/ftxui/screen/surface.cpp
   src/ftxui/screen/screen.cpp
   src/ftxui/screen/string.cpp
   src/ftxui/screen/terminal.cpp
@@ -112,6 +114,7 @@ add_library(dom
 
 add_library(component
   include/ftxui/component/animation.hpp
+  include/ftxui/component/app.hpp
   include/ftxui/component/captured_mouse.hpp
   include/ftxui/component/component.hpp
   include/ftxui/component/component_base.hpp
@@ -141,7 +144,7 @@ add_library(component
   src/ftxui/component/radiobox.cpp
   src/ftxui/component/renderer.cpp
   src/ftxui/component/resizable_split.cpp
-  src/ftxui/component/screen_interactive.cpp
+  src/ftxui/component/app.cpp
   src/ftxui/component/slider.cpp
   src/ftxui/component/task.cpp
   src/ftxui/component/task_internal.hpp

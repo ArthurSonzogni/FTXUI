@@ -6,16 +6,16 @@
 #include <memory>    // for shared_ptr, __shared_ptr_access, allocator
 #include <string>    // for getline, string
 
+#include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
 #include "ftxui/component/component.hpp"  // for Button, Horizontal, Renderer
-#include "ftxui/component/component_base.hpp"      // for ComponentBase
-#include "ftxui/component/screen_interactive.hpp"  // for ScreenInteractive
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for operator|, filler, Element, borderEmpty, hbox, size, paragraph, vbox, LESS_THAN, border, center, HEIGHT, WIDTH
 
 int main() {
   using namespace ftxui;
 
-  auto screen = ScreenInteractive::Fullscreen();
+  auto screen = App::Fullscreen();
 
   // When pressing this button, "screen.WithRestoredIO" will execute the
   // temporarily uninstall the terminal hook and execute the provided callback
@@ -38,7 +38,7 @@ int main() {
 
   auto renderer = Renderer(layout, [&] {
     auto explanation = paragraph(
-        "After clicking this button, the ScreenInteractive will be "
+        "After clicking this button, the App will be "
         "suspended and access to stdin/stdout will temporarilly be "
         "restore for running a function.");
     auto element = vbox({

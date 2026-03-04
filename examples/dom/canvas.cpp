@@ -4,7 +4,7 @@
 #include <stdio.h>                 // for getchar
 #include <cmath>                   // for cos
 #include <ftxui/dom/elements.hpp>  // for Fit, canvas, operator|, border, Element
-#include <ftxui/screen/screen.hpp>  // for Pixel, Screen
+#include <ftxui/screen/screen.hpp>  // for Cell, Screen
 #include <vector>                   // for vector, allocator
 
 #include "ftxui/dom/canvas.hpp"  // for Canvas
@@ -16,7 +16,7 @@ int main() {
 
   auto c = Canvas(100, 100);
 
-  c.DrawText(0, 0, "This is a canvas", [](Pixel& p) {
+  c.DrawText(0, 0, "This is a canvas", [](Cell& p) {
     p.foreground_color = Color::Red;
     p.underlined = true;
   });

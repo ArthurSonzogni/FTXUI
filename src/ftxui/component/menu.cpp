@@ -10,12 +10,12 @@
 #include <vector>                   // for vector, __alloc_traits<>::value_type
 
 #include "ftxui/component/animation.hpp"  // for Animator, Linear
+#include "ftxui/component/app.hpp"        // for Component
 #include "ftxui/component/component.hpp"  // for Make, Menu, MenuEntry, Toggle
 #include "ftxui/component/component_base.hpp"     // for ComponentBase
 #include "ftxui/component/component_options.hpp"  // for MenuOption, MenuEntryOption, UnderlineOption, AnimatedColorOption, AnimatedColorsOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp, Event::Return, Event::Tab, Event::TabReverse
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Released, Mouse::WheelDown, Mouse::WheelUp, Mouse::None
-#include "ftxui/component/screen_interactive.hpp"  // for Component
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, Decorator, nothing, Elements, bgcolor, color, hbox, separatorHSelector, separatorVSelector, vbox, xflex, yflex, text, bold, focus, inverted, select
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color
@@ -125,7 +125,7 @@ class MenuBase : public ComponentBase, public MenuOption {
       const bool is_selected = (selected() == i);
 
       const EntryState state = {
-        std::string(entries[i]), false, is_selected, is_focused, i,
+          std::string(entries[i]), false, is_selected, is_focused, i,
       };
 
       Element element = (entries_option.transform ? entries_option.transform
@@ -488,7 +488,7 @@ class MenuBase : public ComponentBase, public MenuOption {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// std::vector<std::string> entries = {
 ///     "entry 1",
 ///     "entry 2",
@@ -523,7 +523,7 @@ Component Menu(MenuOption option) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// std::vector<std::string> entries = {
 ///     "entry 1",
 ///     "entry 2",
@@ -565,7 +565,7 @@ Component Toggle(ConstStringListRef entries, int* selected) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// int selected = 0;
 /// auto menu = Container::Vertical({
 ///    MenuEntry("entry 1"),
@@ -595,7 +595,7 @@ Component MenuEntry(ConstStringRef label, MenuEntryOption option) {
 /// ### Example
 ///
 /// ```cpp
-/// auto screen = ScreenInteractive::TerminalOutput();
+/// auto screen = App::TerminalOutput();
 /// int selected = 0;
 /// auto menu = Container::Vertical({
 ///    MenuEntry({.label = "entry 1"}),

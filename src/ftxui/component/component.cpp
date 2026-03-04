@@ -9,14 +9,14 @@
 #include <utility>    // for move
 #include <vector>     // for vector, __alloc_traits<>::value_type
 
+#include "ftxui/component/app.hpp"             // for Component, App
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component.hpp"
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Components
 #include "ftxui/component/event.hpp"           // for Event
-#include "ftxui/component/screen_interactive.hpp"  // for Component, ScreenInteractive
-#include "ftxui/dom/elements.hpp"                  // for text, Element
-#include "ftxui/dom/node.hpp"                      // for Node, Elements
-#include "ftxui/screen/box.hpp"                    // for Box
+#include "ftxui/dom/elements.hpp"              // for text, Element
+#include "ftxui/dom/node.hpp"                  // for Node, Elements
+#include "ftxui/screen/box.hpp"                // for Box
 
 namespace ftxui::animation {
 class Params;

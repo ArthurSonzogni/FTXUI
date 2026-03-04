@@ -12,7 +12,7 @@ export module ftxui.component:Event;
  * @brief The FTXUI ftxui:: namespace
  */
 export namespace ftxui {
-    using ftxui::ScreenInteractive;
+    using ftxui::App;
     using ftxui::ComponentBase;
 
     using ftxui::Event;
