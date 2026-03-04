@@ -119,11 +119,7 @@ class Gauge : public Node {
     }
 
     if (invert) {
-      for (int y = box_.y_min; y <= box_.y_max; y++) {
-        for (int x = box_.x_min; x <= box_.x_max; x++) {
-          screen.CellAt(x, y).inverted ^= true;
-        }
-      }
+      Invert(screen);
     }
   }
 
@@ -150,12 +146,15 @@ class Gauge : public Node {
         screen.at(x, y++) = charset_vertical[0];
       }
     }
-
     if (invert) {
-      for (int y = box_.y_min; y <= box_.y_max; y++) {
-        for (int x = box_.x_min; x <= box_.x_max; x++) {
-          screen.CellAt(x, y).inverted ^= true;
-        }
+      Invert(screen);
+    }
+  }
+
+  void Invert(Screen& screen) {
+    for (int y = box_.y_min; y <= box_.y_max; y++) {
+      for (int x = box_.x_min; x <= box_.x_max; x++) {
+        screen.CellAt(x, y).inverted ^= true;
       }
     }
   }
