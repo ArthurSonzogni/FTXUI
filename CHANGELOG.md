@@ -71,6 +71,8 @@ Next
 - Bugfix: In the gridbox, add the children to the tree so that the default
   behaviors inherited from Node are correctly implemented. Thanks KenReneris for
   #1070.
+- Update: The `gauge` in a flexible now takes the available space in the
+  opposite direction. Thanks @Ardet696 in #1203.
 
 ### Screen
 - Performance: Optimize `Screen::ToString()`, `Color::Print()` and
