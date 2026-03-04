@@ -198,22 +198,17 @@ TEST(App, FixedSizeInitialFrame) {
 
   auto expected =
       // Install the App.
-      "\0"           // Flush stdout.
-      "\x1BP$q q"    // Set cursor shape to 1 (block).
-      "\x1B\\"       // Reset cursor position.
-      "\x1B[?7l"     // Disable line wrapping.
-      "\x1B[?1000h"  // Enable mouse tracking.
-      "\x1B[?1003h"  // Enable mouse motion tracking.
-      "\x1B[?1015h"  // Enable mouse wheel tracking.
-      "\x1B[?1006h"  // Enable SGR mouse tracking.
-      "\0"           // Flush stdout.
+      "\0"               // Flush stdout.
+      "\x1BP$q q\x1B\\"  // Request cursor shape.
+      "\x1B[?7l"         // Disable line wrapping.
+      "\x1B[?1000h"      // Enable mouse tracking.
+      "\x1B[?1003h"      // Enable mouse motion tracking.
+      "\x1B[?1015h"      // Enable mouse wheel tracking.
+      "\x1B[?1006h"      // Enable SGR mouse tracking.
+      "\0"               // Flush stdout.
 
       // Reset the screen.
       "\x1B[?25l"  // Hide cursor.
-      "\r"         // Reset cursor position.
-      "\x1B[2K"    // Clear the line.
-      "\x1B[1A"    // Move cursor up one line.
-      "\x1B[2K"    // Clear the line.
 
       // Print the document.
       "AB\r\n"  // Print "AB" and move to the next line.

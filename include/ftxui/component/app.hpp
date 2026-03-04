@@ -125,8 +125,8 @@ class App : public Screen {
 
   bool track_mouse_ = true;
 
-  std::string set_cursor_position;
-  std::string reset_cursor_position;
+  std::string set_cursor_position_;
+  std::string reset_cursor_position_;
 
   std::atomic<bool> quit_{false};
   bool animation_requested_ = false;
