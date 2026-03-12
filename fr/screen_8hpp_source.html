@@ -1,0 +1,456 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI:  Fichier source de screen.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('screen_8hpp_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">screen.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="screen_8hpp.html">Aller à la documentation de ce fichier.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2020 Arthur Sonzogni. Tous droits réservés.</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// L&#39;utilisation de ce code source est régie par la licence MIT qui peut être trouvée dans</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// le fichier LICENSE.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef FTXUI_SCREEN_SCREEN_HPP</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#define FTXUI_SCREEN_SCREEN_HPP</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;cstdint&gt;</span>     <span class="comment">// for uint8_t</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;functional&gt;</span>  <span class="comment">// for function</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;string&gt;</span>      <span class="comment">// for string, basic_string, allocator</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;vector&gt;</span>      <span class="comment">// for vector</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="image_8hpp.html">ftxui/screen/image.hpp</a>&quot;</span>     <span class="comment">// for Pixel, Image</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="terminal_8hpp.html">ftxui/screen/terminal.hpp</a>&quot;</span>  <span class="comment">// for Dimensions</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment"></span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">/// @brief Définit l&#39;apparence des dimensions de l&#39;écran.</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">/// @ingroup screen</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceDimension.html">Dimension</a> {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="namespaceftxui_1_1Dimension.html#a36e539ed36f88d7f01233974da485937">   20</a></span><a class="code hl_struct" href="group__screen.html#structftxui_1_1Dimensions">Dimensions</a> <a class="code hl_function" href="namespaceftxui_1_1Dimension.html#a36e539ed36f88d7f01233974da485937">Fixed</a>(<span class="keywordtype">int</span>);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="namespaceftxui_1_1Dimension.html#af795790b995132f62de607ddfd07f9fa">   21</a></span><a class="code hl_struct" href="group__screen.html#structftxui_1_1Dimensions">Dimensions</a> <a class="code hl_function" href="namespaceftxui_1_1Dimension.html#af795790b995132f62de607ddfd07f9fa">Full</a>();</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>}  <span class="comment">// namespace Dimension</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"></span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">/// @brief Une grille rectangulaire de pixels.</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">/// @ingroup screen</span></div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="group__screen.html">   26</a></span><span class="comment"></span><span class="keyword">class </span><a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a> : <span class="keyword">public</span> <a class="code hl_class" href="group__screen.html#classftxui_1_1Image">Image</a> {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  <span class="comment">// Constructors:</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="group__screen.html#a7ecf7c5fb3d90a1620098a60cfafc215">   29</a></span>  <a class="code hl_function" href="group__screen.html#a7ecf7c5fb3d90a1620098a60cfafc215">Screen</a>(<span class="keywordtype">int</span> <a class="code hl_function" href="group__screen.html#ae7a460c9dacd70ed81b1adfea46b492e">dimx</a>, <span class="keywordtype">int</span> <a class="code hl_function" href="group__screen.html#a0d283cfb1ec16b3fc13d344ebfea93d4">dimy</a>);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="group__screen.html#ad86415567756c73e0f58fa4feb094388">   30</a></span>  <span class="keyword">static</span> <a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a> <a class="code hl_function" href="group__screen.html#ad86415567756c73e0f58fa4feb094388">Create</a>(<a class="code hl_struct" href="group__screen.html#structftxui_1_1Dimensions">Dimensions</a> dimension);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="group__screen.html#a9d0bd3f6af46c79b0c56b2a8bba57ac9">   31</a></span>  <span class="keyword">static</span> <a class="code hl_class" href="group__screen.html#classftxui_1_1Screen">Screen</a> <a class="code hl_function" href="group__screen.html#a9d0bd3f6af46c79b0c56b2a8bba57ac9">Create</a>(<a class="code hl_struct" href="group__screen.html#structftxui_1_1Dimensions">Dimensions</a> width, <a class="code hl_struct" href="group__screen.html#structftxui_1_1Dimensions">Dimensions</a> height);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  <span class="comment">// Destructor:</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="group__screen.html#a20d80448fe5bd4ce01dcd821d4d67a5b">   34</a></span>  <a class="code hl_function" href="group__screen.html#a20d80448fe5bd4ce01dcd821d4d67a5b">~Screen</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="group__screen.html#a19c380b03cea21d7ac7325136a131ff0">   36</a></span>  std::string <a class="code hl_function" href="group__screen.html#a19c380b03cea21d7ac7325136a131ff0">ToString</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="comment">// Affiche l&#39;écran sur le terminal.</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="group__screen.html#ad93edbe885499a712129356f1ffd506b">   39</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="group__screen.html#ad93edbe885499a712129356f1ffd506b">Print</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  <span class="comment">// Remplit l&#39;écran avec des espaces et réinitialise tout état de l&#39;écran, comme les hyperliens, et</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <span class="comment">// le curseur.</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="group__screen.html#aa71d36872f416feaa853788a7a7a7ef8">   43</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="group__screen.html#aa71d36872f416feaa853788a7a7a7ef8">Clear</a>();</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  <span class="comment">// Déplace le curseur du terminal de n lignes vers le haut, où n = dimy().</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="group__screen.html#a9677c078c4270afdb7451cdc0b0871d4">   46</a></span>  std::string <a class="code hl_function" href="group__screen.html#a9677c078c4270afdb7451cdc0b0871d4">ResetPosition</a>(<span class="keywordtype">bool</span> clear = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="group__screen.html#a04d18c0cb0df3ed7a01ca5c3b8711ff7">   48</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="group__screen.html#a04d18c0cb0df3ed7a01ca5c3b8711ff7">ApplyShader</a>();</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="foldopen" id="foldopen00050" data-start="{" data-end="};">
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html">   50</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="structftxui_1_1Screen_1_1Cursor.html">Cursor</a> {</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a6150e0515f7202e2fb518f7206ed97dc">   51</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structftxui_1_1Screen_1_1Cursor.html#a6150e0515f7202e2fb518f7206ed97dc">x</a> = 0;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a0a2f84ed7838f07779ae24c5a9086d33">   52</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structftxui_1_1Screen_1_1Cursor.html#a0a2f84ed7838f07779ae24c5a9086d33">y</a> = 0;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="foldopen" id="foldopen00054" data-start="{" data-end="};">
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37c">   54</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37c">Shape</a> {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cacf46e529658ebc6532c204f3246929f4">   55</a></span>      <a class="code hl_enumvalue" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cacf46e529658ebc6532c204f3246929f4">Hidden</a> = 0,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37ca2f4a0b3cacb4468d8467dc0746ea23aa">   56</a></span>      <a class="code hl_enumvalue" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37ca2f4a0b3cacb4468d8467dc0746ea23aa">BlockBlinking</a> = 1,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37caa00f801460e81f86eab56d86fe627551">   57</a></span>      <a class="code hl_enumvalue" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37caa00f801460e81f86eab56d86fe627551">Block</a> = 2,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cad7df11ee39d53d4ee2da1b22b2238abc">   58</a></span>      <a class="code hl_enumvalue" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cad7df11ee39d53d4ee2da1b22b2238abc">UnderlineBlinking</a> = 3,</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37caa909c5f2b588ba35fcc40b3b504ad2ed">   59</a></span>      <a class="code hl_enumvalue" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37caa909c5f2b588ba35fcc40b3b504ad2ed">Underline</a> = 4,</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cae7dfc08d4e90b88e0cb1cea7a54796c1">   60</a></span>      <a class="code hl_enumvalue" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cae7dfc08d4e90b88e0cb1cea7a54796c1">BarBlinking</a> = 5,</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37ca6424dbda22da2f105580d1c8095600d3">   61</a></span>      <a class="code hl_enumvalue" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37ca6424dbda22da2f105580d1c8095600d3">Bar</a> = 6,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    };</div>
+</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="structftxui_1_1Screen_1_1Cursor.html#a8b9f7758a8bd2bef680aeecc40bcfe04">   63</a></span>    <a class="code hl_enumeration" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37c">Shape</a> <a class="code hl_variable" href="structftxui_1_1Screen_1_1Cursor.html#a8b9f7758a8bd2bef680aeecc40bcfe04">shape</a> = <a class="code hl_enumvalue" href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cacf46e529658ebc6532c204f3246929f4">Hidden</a>;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  };</div>
+</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="group__screen.html#a94febaac347b83267ff6a10b7837d612">   66</a></span>  <a class="code hl_struct" href="structftxui_1_1Screen_1_1Cursor.html">Cursor</a> <a class="code hl_function" href="group__screen.html#a94febaac347b83267ff6a10b7837d612">cursor</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="group__screen.html#a9df9d1ae7ed66857ca987963b2365904">cursor_</a>; }</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="group__screen.html#a1aa24862a3d050b3aea2ade1300d51a7">   67</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="group__screen.html#a1aa24862a3d050b3aea2ade1300d51a7">SetCursor</a>(<a class="code hl_struct" href="structftxui_1_1Screen_1_1Cursor.html">Cursor</a> <a class="code hl_function" href="group__screen.html#a94febaac347b83267ff6a10b7837d612">cursor</a>) { <a class="code hl_variable" href="group__screen.html#a9df9d1ae7ed66857ca987963b2365904">cursor_</a> = <a class="code hl_function" href="group__screen.html#a94febaac347b83267ff6a10b7837d612">cursor</a>; }</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="comment">// Stocke un hyperlien dans l&#39;écran. Retourne l&#39;identifiant de l&#39;hyperlien. L&#39;identifiant est</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <span class="comment">// utilisé pour identifier l&#39;hyperlien lorsque l&#39;utilisateur clique dessus.</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="group__screen.html#a937f1d3d98e2c4152fae2ffb8d31e4a9">   71</a></span>  uint8_t <a class="code hl_function" href="group__screen.html#a937f1d3d98e2c4152fae2ffb8d31e4a9">RegisterHyperlink</a>(<span class="keyword">const</span> std::string&amp; link);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="group__screen.html#a0b55b16969dfccc79195fe61c5ba6d1a">   72</a></span>  <span class="keyword">const</span> std::string&amp; <a class="code hl_function" href="group__screen.html#a0b55b16969dfccc79195fe61c5ba6d1a">Hyperlink</a>(uint8_t <span class="keywordtype">id</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="group__screen.html#a0424ec9a980000671f12bfa39fc32273">   74</a></span>  <span class="keyword">using </span><a class="code hl_typedef" href="group__screen.html#a0424ec9a980000671f12bfa39fc32273">SelectionStyle</a> = std::function&lt;void(<a class="code hl_struct" href="group__screen.html#structftxui_1_1Pixel">Pixel</a>&amp;)&gt;;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="group__screen.html#ab70339daedfb134dacb28474a756b1a9">   75</a></span>  <span class="keyword">const</span> <a class="code hl_typedef" href="group__screen.html#a0424ec9a980000671f12bfa39fc32273">SelectionStyle</a>&amp; <a class="code hl_function" href="group__screen.html#ab70339daedfb134dacb28474a756b1a9">GetSelectionStyle</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="group__screen.html#aba0d30b90db17d6b7561f704ed63b5e6">   76</a></span>  <span class="keywordtype">void</span> <a class="code hl_function" href="group__screen.html#aba0d30b90db17d6b7561f704ed63b5e6">SetSelectionStyle</a>(<a class="code hl_typedef" href="group__screen.html#a0424ec9a980000671f12bfa39fc32273">SelectionStyle</a> decorator);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="group__screen.html#a9df9d1ae7ed66857ca987963b2365904">   79</a></span>  <a class="code hl_struct" href="structftxui_1_1Screen_1_1Cursor.html">Cursor</a> <a class="code hl_variable" href="group__screen.html#a9df9d1ae7ed66857ca987963b2365904">cursor_</a>;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="group__screen.html#acff83d382ef60ad2a0fca3ba68e9397f">   80</a></span>  std::vector&lt;std::string&gt; <a class="code hl_variable" href="group__screen.html#acff83d382ef60ad2a0fca3ba68e9397f">hyperlinks_</a> = {<span class="stringliteral">&quot;&quot;</span>};</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <span class="comment">// Le style de sélection actuel. Ceci est remplacé par divers éléments DOM.</span></div>
+<div class="foldopen" id="foldopen00083" data-start="{" data-end="};">
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="group__screen.html#ab9f757d5d67255f61e27950be4131be1">   83</a></span>  <a class="code hl_typedef" href="group__screen.html#a0424ec9a980000671f12bfa39fc32273">SelectionStyle</a> <a class="code hl_variable" href="group__screen.html#ab9f757d5d67255f61e27950be4131be1">selection_style_</a> = [](<a class="code hl_struct" href="group__screen.html#structftxui_1_1Pixel">Pixel</a>&amp; pixel) {</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    pixel.inverted ^= <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  };</div>
+</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>};</div>
+</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>}  <span class="comment">// namespace ftxui</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="preprocessor">#endif  </span><span class="comment">// FTXUI_SCREEN_SCREEN_HPP</span></div>
+<div class="ttc" id="agroup__screen_html_a0424ec9a980000671f12bfa39fc32273"><div class="ttname"><a href="group__screen.html#a0424ec9a980000671f12bfa39fc32273">ftxui::Screen::SelectionStyle</a></div><div class="ttdeci">std::function&lt; void(Pixel &amp;)&gt; SelectionStyle</div><div class="ttdef"><b>Definition</b> <a href="#l00074">screen.hpp:74</a></div></div>
+<div class="ttc" id="agroup__screen_html_a04d18c0cb0df3ed7a01ca5c3b8711ff7"><div class="ttname"><a href="group__screen.html#a04d18c0cb0df3ed7a01ca5c3b8711ff7">ftxui::Screen::ApplyShader</a></div><div class="ttdeci">void ApplyShader()</div></div>
+<div class="ttc" id="agroup__screen_html_a0b55b16969dfccc79195fe61c5ba6d1a"><div class="ttname"><a href="group__screen.html#a0b55b16969dfccc79195fe61c5ba6d1a">ftxui::Screen::Hyperlink</a></div><div class="ttdeci">const std::string &amp; Hyperlink(uint8_t id) const</div></div>
+<div class="ttc" id="agroup__screen_html_a0d283cfb1ec16b3fc13d344ebfea93d4"><div class="ttname"><a href="group__screen.html#a0d283cfb1ec16b3fc13d344ebfea93d4">ftxui::Image::dimy</a></div><div class="ttdeci">int dimy() const</div><div class="ttdef"><b>Definition</b> <a href="image_8hpp_source.html#l00036">image.hpp:36</a></div></div>
+<div class="ttc" id="agroup__screen_html_a19c380b03cea21d7ac7325136a131ff0"><div class="ttname"><a href="group__screen.html#a19c380b03cea21d7ac7325136a131ff0">ftxui::Screen::ToString</a></div><div class="ttdeci">std::string ToString() const</div></div>
+<div class="ttc" id="agroup__screen_html_a1aa24862a3d050b3aea2ade1300d51a7"><div class="ttname"><a href="group__screen.html#a1aa24862a3d050b3aea2ade1300d51a7">ftxui::Screen::SetCursor</a></div><div class="ttdeci">void SetCursor(Cursor cursor)</div><div class="ttdef"><b>Definition</b> <a href="#l00067">screen.hpp:67</a></div></div>
+<div class="ttc" id="agroup__screen_html_a20d80448fe5bd4ce01dcd821d4d67a5b"><div class="ttname"><a href="group__screen.html#a20d80448fe5bd4ce01dcd821d4d67a5b">ftxui::Screen::~Screen</a></div><div class="ttdeci">~Screen() override=default</div></div>
+<div class="ttc" id="agroup__screen_html_a7ecf7c5fb3d90a1620098a60cfafc215"><div class="ttname"><a href="group__screen.html#a7ecf7c5fb3d90a1620098a60cfafc215">ftxui::Screen::Screen</a></div><div class="ttdeci">Screen(int dimx, int dimy)</div></div>
+<div class="ttc" id="agroup__screen_html_a937f1d3d98e2c4152fae2ffb8d31e4a9"><div class="ttname"><a href="group__screen.html#a937f1d3d98e2c4152fae2ffb8d31e4a9">ftxui::Screen::RegisterHyperlink</a></div><div class="ttdeci">uint8_t RegisterHyperlink(const std::string &amp;link)</div></div>
+<div class="ttc" id="agroup__screen_html_a94febaac347b83267ff6a10b7837d612"><div class="ttname"><a href="group__screen.html#a94febaac347b83267ff6a10b7837d612">ftxui::Screen::cursor</a></div><div class="ttdeci">Cursor cursor() const</div><div class="ttdef"><b>Definition</b> <a href="#l00066">screen.hpp:66</a></div></div>
+<div class="ttc" id="agroup__screen_html_a9677c078c4270afdb7451cdc0b0871d4"><div class="ttname"><a href="group__screen.html#a9677c078c4270afdb7451cdc0b0871d4">ftxui::Screen::ResetPosition</a></div><div class="ttdeci">std::string ResetPosition(bool clear=false) const</div></div>
+<div class="ttc" id="agroup__screen_html_a9d0bd3f6af46c79b0c56b2a8bba57ac9"><div class="ttname"><a href="group__screen.html#a9d0bd3f6af46c79b0c56b2a8bba57ac9">ftxui::Screen::Create</a></div><div class="ttdeci">static Screen Create(Dimensions width, Dimensions height)</div></div>
+<div class="ttc" id="agroup__screen_html_a9df9d1ae7ed66857ca987963b2365904"><div class="ttname"><a href="group__screen.html#a9df9d1ae7ed66857ca987963b2365904">ftxui::Screen::cursor_</a></div><div class="ttdeci">Cursor cursor_</div><div class="ttdef"><b>Definition</b> <a href="#l00079">screen.hpp:79</a></div></div>
+<div class="ttc" id="agroup__screen_html_aa71d36872f416feaa853788a7a7a7ef8"><div class="ttname"><a href="group__screen.html#aa71d36872f416feaa853788a7a7a7ef8">ftxui::Screen::Clear</a></div><div class="ttdeci">void Clear()</div></div>
+<div class="ttc" id="agroup__screen_html_ab70339daedfb134dacb28474a756b1a9"><div class="ttname"><a href="group__screen.html#ab70339daedfb134dacb28474a756b1a9">ftxui::Screen::GetSelectionStyle</a></div><div class="ttdeci">const SelectionStyle &amp; GetSelectionStyle() const</div></div>
+<div class="ttc" id="agroup__screen_html_ab9f757d5d67255f61e27950be4131be1"><div class="ttname"><a href="group__screen.html#ab9f757d5d67255f61e27950be4131be1">ftxui::Screen::selection_style_</a></div><div class="ttdeci">SelectionStyle selection_style_</div><div class="ttdef"><b>Definition</b> <a href="#l00083">screen.hpp:83</a></div></div>
+<div class="ttc" id="agroup__screen_html_aba0d30b90db17d6b7561f704ed63b5e6"><div class="ttname"><a href="group__screen.html#aba0d30b90db17d6b7561f704ed63b5e6">ftxui::Screen::SetSelectionStyle</a></div><div class="ttdeci">void SetSelectionStyle(SelectionStyle decorator)</div></div>
+<div class="ttc" id="agroup__screen_html_acff83d382ef60ad2a0fca3ba68e9397f"><div class="ttname"><a href="group__screen.html#acff83d382ef60ad2a0fca3ba68e9397f">ftxui::Screen::hyperlinks_</a></div><div class="ttdeci">std::vector&lt; std::string &gt; hyperlinks_</div><div class="ttdef"><b>Definition</b> <a href="#l00080">screen.hpp:80</a></div></div>
+<div class="ttc" id="agroup__screen_html_ad86415567756c73e0f58fa4feb094388"><div class="ttname"><a href="group__screen.html#ad86415567756c73e0f58fa4feb094388">ftxui::Screen::Create</a></div><div class="ttdeci">static Screen Create(Dimensions dimension)</div></div>
+<div class="ttc" id="agroup__screen_html_ad93edbe885499a712129356f1ffd506b"><div class="ttname"><a href="group__screen.html#ad93edbe885499a712129356f1ffd506b">ftxui::Screen::Print</a></div><div class="ttdeci">void Print() const</div></div>
+<div class="ttc" id="agroup__screen_html_ae7a460c9dacd70ed81b1adfea46b492e"><div class="ttname"><a href="group__screen.html#ae7a460c9dacd70ed81b1adfea46b492e">ftxui::Image::dimx</a></div><div class="ttdeci">int dimx() const</div><div class="ttdef"><b>Definition</b> <a href="image_8hpp_source.html#l00035">image.hpp:35</a></div></div>
+<div class="ttc" id="agroup__screen_html_classftxui_1_1Image"><div class="ttname"><a href="group__screen.html#classftxui_1_1Image">ftxui::Image</a></div><div class="ttdoc">Une grille rectangulaire de pixels.</div><div class="ttdef"><b>Definition</b> <a href="image_8hpp_source.html#l00017">image.hpp:17</a></div></div>
+<div class="ttc" id="agroup__screen_html_classftxui_1_1Screen"><div class="ttname"><a href="group__screen.html#classftxui_1_1Screen">ftxui::Screen</a></div><div class="ttdoc">Une grille rectangulaire de pixels.</div><div class="ttdef"><b>Definition</b> <a href="#l00026">screen.hpp:26</a></div></div>
+<div class="ttc" id="agroup__screen_html_structftxui_1_1Dimensions"><div class="ttname"><a href="group__screen.html#structftxui_1_1Dimensions">ftxui::Dimensions</a></div><div class="ttdoc">Dimensions est une structure qui représente la taille du terminal.</div><div class="ttdef"><b>Definition</b> <a href="terminal_8hpp_source.html#l00011">terminal.hpp:11</a></div></div>
+<div class="ttc" id="agroup__screen_html_structftxui_1_1Pixel"><div class="ttname"><a href="group__screen.html#structftxui_1_1Pixel">ftxui::Pixel</a></div><div class="ttdoc">Un caractère Unicode et son style associé.</div><div class="ttdef"><b>Definition</b> <a href="pixel_8hpp_source.html#l00015">pixel.hpp:15</a></div></div>
+<div class="ttc" id="aimage_8hpp_html"><div class="ttname"><a href="image_8hpp.html">image.hpp</a></div></div>
+<div class="ttc" id="anamespaceDimension_html"><div class="ttname"><a href="namespaceDimension.html">Dimension</a></div><div class="ttdoc">L'espace de noms FTXUI ftxui::Dimension::</div></div>
+<div class="ttc" id="anamespaceftxui_1_1Dimension_html_a36e539ed36f88d7f01233974da485937"><div class="ttname"><a href="namespaceftxui_1_1Dimension.html#a36e539ed36f88d7f01233974da485937">ftxui::Dimension::Fixed</a></div><div class="ttdeci">Dimensions Fixed(int)</div></div>
+<div class="ttc" id="anamespaceftxui_1_1Dimension_html_af795790b995132f62de607ddfd07f9fa"><div class="ttname"><a href="namespaceftxui_1_1Dimension.html#af795790b995132f62de607ddfd07f9fa">ftxui::Dimension::Full</a></div><div class="ttdeci">Dimensions Full()</div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">L'espace de noms FTXUI ftxui::</div><div class="ttdef"><b>Definition</b> <a href="animation_8hpp_source.html#l00010">animation.hpp:10</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html">ftxui::Screen::Cursor</a></div><div class="ttdef"><b>Definition</b> <a href="#l00050">screen.hpp:50</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a0a2f84ed7838f07779ae24c5a9086d33"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a0a2f84ed7838f07779ae24c5a9086d33">ftxui::Screen::Cursor::y</a></div><div class="ttdeci">int y</div><div class="ttdef"><b>Definition</b> <a href="#l00052">screen.hpp:52</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a55b506070847a13554f8b879c1bfb37c"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37c">ftxui::Screen::Cursor::Shape</a></div><div class="ttdeci">Shape</div><div class="ttdef"><b>Definition</b> <a href="#l00054">screen.hpp:54</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a55b506070847a13554f8b879c1bfb37ca2f4a0b3cacb4468d8467dc0746ea23aa"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37ca2f4a0b3cacb4468d8467dc0746ea23aa">ftxui::Screen::Cursor::BlockBlinking</a></div><div class="ttdeci">@ BlockBlinking</div><div class="ttdef"><b>Definition</b> <a href="#l00056">screen.hpp:56</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a55b506070847a13554f8b879c1bfb37ca6424dbda22da2f105580d1c8095600d3"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37ca6424dbda22da2f105580d1c8095600d3">ftxui::Screen::Cursor::Bar</a></div><div class="ttdeci">@ Bar</div><div class="ttdef"><b>Definition</b> <a href="#l00061">screen.hpp:61</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a55b506070847a13554f8b879c1bfb37caa00f801460e81f86eab56d86fe627551"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37caa00f801460e81f86eab56d86fe627551">ftxui::Screen::Cursor::Block</a></div><div class="ttdeci">@ Block</div><div class="ttdef"><b>Definition</b> <a href="#l00057">screen.hpp:57</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a55b506070847a13554f8b879c1bfb37caa909c5f2b588ba35fcc40b3b504ad2ed"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37caa909c5f2b588ba35fcc40b3b504ad2ed">ftxui::Screen::Cursor::Underline</a></div><div class="ttdeci">@ Underline</div><div class="ttdef"><b>Definition</b> <a href="#l00059">screen.hpp:59</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a55b506070847a13554f8b879c1bfb37cacf46e529658ebc6532c204f3246929f4"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cacf46e529658ebc6532c204f3246929f4">ftxui::Screen::Cursor::Hidden</a></div><div class="ttdeci">@ Hidden</div><div class="ttdef"><b>Definition</b> <a href="#l00055">screen.hpp:55</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a55b506070847a13554f8b879c1bfb37cad7df11ee39d53d4ee2da1b22b2238abc"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cad7df11ee39d53d4ee2da1b22b2238abc">ftxui::Screen::Cursor::UnderlineBlinking</a></div><div class="ttdeci">@ UnderlineBlinking</div><div class="ttdef"><b>Definition</b> <a href="#l00058">screen.hpp:58</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a55b506070847a13554f8b879c1bfb37cae7dfc08d4e90b88e0cb1cea7a54796c1"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a55b506070847a13554f8b879c1bfb37cae7dfc08d4e90b88e0cb1cea7a54796c1">ftxui::Screen::Cursor::BarBlinking</a></div><div class="ttdeci">@ BarBlinking</div><div class="ttdef"><b>Definition</b> <a href="#l00060">screen.hpp:60</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a6150e0515f7202e2fb518f7206ed97dc"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a6150e0515f7202e2fb518f7206ed97dc">ftxui::Screen::Cursor::x</a></div><div class="ttdeci">int x</div><div class="ttdef"><b>Definition</b> <a href="#l00051">screen.hpp:51</a></div></div>
+<div class="ttc" id="astructftxui_1_1Screen_1_1Cursor_html_a8b9f7758a8bd2bef680aeecc40bcfe04"><div class="ttname"><a href="structftxui_1_1Screen_1_1Cursor.html#a8b9f7758a8bd2bef680aeecc40bcfe04">ftxui::Screen::Cursor::shape</a></div><div class="ttdeci">Shape shape</div><div class="ttdef"><b>Definition</b> <a href="#l00063">screen.hpp:63</a></div></div>
+<div class="ttc" id="aterminal_8hpp_html"><div class="ttname"><a href="terminal_8hpp.html">terminal.hpp</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "fr";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

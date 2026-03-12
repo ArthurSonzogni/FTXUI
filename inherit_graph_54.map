@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" href="$group__screen.html#classftxui_1_1Surface" title="A rectangular grid of Cell." alt="" coords="5,5,76,31"/>
+<area shape="rect" id="Node000001" href="$group__screen.html#classftxui_1_1Screen" title="A rectangular grid of Cell." alt="" coords="124,5,191,31"/>
+<area shape="poly" id="edge4_Node000000_Node000001" title=" " alt="" coords="90,15,124,15,124,21,90,21"/>
+<area shape="rect" id="Node000002" href="$group__component.html#classftxui_1_1App" title="App is a Screen that can handle events, run a main loop, and manage components." alt="" coords="239,5,285,31"/>
+<area shape="poly" id="edge5_Node000001_Node000002" title=" " alt="" coords="204,15,238,15,238,21,204,21"/>
+</map>
