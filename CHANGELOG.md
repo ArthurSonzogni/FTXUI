@@ -62,6 +62,8 @@ Next
   ~1183 for reporting the issue. This regressed in non released versions.
 
 ### Dom
+- Bugfix: `dbox` now propagates focus from top-most layers to bottom-most
+  layers, matching the visual representation. See #1213. Thanks @vtnerd.
 - Feature: Support for table border decorators. This allows for instance to
   color the border of a table. Thanks @Sckab in #1186 for proposing it.
 - Fix integer overflow in `ComputeShrinkHard`. Thanks @its-pablo in #1137 for

@@ -25,16 +25,22 @@ class DBox : public Node {
     for (auto& child : children_) {
       child->ComputeRequirement();
 
-      // Propagate the focused requirement.
-      if (requirement_.focused.Prefer(child->requirement().focused)) {
-        requirement_.focused = child->requirement().focused;
-      }
-
       // Extend the min_x and min_y to contain all the children
       requirement_.min_x =
           std::max(requirement_.min_x, child->requirement().min_x);
       requirement_.min_y =
           std::max(requirement_.min_y, child->requirement().min_y);
+    }
+
+    // Propagate the focused requirement.
+    // We iterate in reverse order because children are rendered from first to
+    // last, meaning the last child is on top of the others. We want the
+    // top-most child to be prioritized for focus.
+    for (auto it = children_.rbegin(); it != children_.rend(); ++it) {
+      auto& child = *it;
+      if (requirement_.focused.Prefer(child->requirement().focused)) {
+        requirement_.focused = child->requirement().focused;
+      }
     }
   }
 

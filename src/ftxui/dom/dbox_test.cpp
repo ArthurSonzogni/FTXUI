@@ -32,5 +32,16 @@ TEST(DBoxTest, Basic) {
             "╰────╯  ");
 }
 
+// Ensures that the focused element is the one with the longest text, even if it
+// is not the first one in the list.
+TEST(DBoxTest, FocusPropagation) {
+  auto bottom = text("bottom--------------") | focus;
+  auto middle = text("middle--------") | focus;
+  auto top = text("top----") | focus;
+  auto root = dbox({bottom, middle, top});
+  root->ComputeRequirement();
+  EXPECT_EQ(root->requirement().focused.box.x_max, 6);
+}
+
 }  // namespace ftxui
 // NOLINTEND
