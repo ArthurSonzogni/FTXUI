@@ -98,7 +98,7 @@ class InputBase : public ComponentBase, public InputOption {
   // Component implementation:
   Element OnRender() override {
     const bool is_focused = Focused();
-    const auto focused = (!is_focused && !hovered_) ? focus
+    const auto focused = (!is_focused && !hovered_) ? nothing
                          : insert()                 ? focusCursorBarBlinking
                                                     : focusCursorBlockBlinking;
 
