@@ -62,6 +62,8 @@ Next
   ~1183 for reporting the issue. This regressed in non released versions.
 
 ### Dom
+- Feature: Support newline `\n` within `text()` and `vtext()`. Thanks
+  @mikomikotaishi in #1215.
 - Bugfix: `dbox` now propagates focus from top-most layers to bottom-most
   layers, matching the visual representation. See #1213. Thanks @vtnerd.
 - Feature: Support for table border decorators. This allows for instance to
