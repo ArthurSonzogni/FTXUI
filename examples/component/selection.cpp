@@ -13,12 +13,11 @@
 using namespace ftxui;
 
 Element LoremIpsum() {
-  return vbox({
-      text("FTXUI: A powerful library for building user interfaces."),
-      text("Enjoy a rich set of components and a declarative style."),
-      text("Create beautiful and responsive UIs with minimal effort."),
-      text("Join the community and experience the power of FTXUI."),
-  });
+  return text(
+      "FTXUI: A powerful library for building user interfaces.\n"
+      "Enjoy a rich set of components and a declarative style.\n"
+      "Create beautiful and responsive UIs with minimal effort.\n"
+      "Join the community and experience the power of FTXUI.");
 }
 
 int main() {
