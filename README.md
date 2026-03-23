@@ -379,6 +379,7 @@ Feel free to add your projects here:
 - [typing-speed-test](https://github.com/ymcx/typing-speed-test)
 - [vantage](https://github.com/gokulmaxi/vantage)
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
+- [C++ Process Manager](https://github.com/ondrejhonus/cpp_proc)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
