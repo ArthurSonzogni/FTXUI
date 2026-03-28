@@ -91,6 +91,7 @@ class App : public Screen {
   void PostMain();
 
   bool HasQuitted();
+  friend class ThrottledRequest;
   void RunOnce(Component component);
   void RunOnceBlocking(Component component);
 
@@ -100,6 +101,9 @@ class App : public Screen {
   void Draw(Component component);
   std::string ResetCursorPosition();
 
+  void RequestCursorPosition(bool force = false);
+  void RequestCursorShape();
+
   void TerminalSend(std::string_view);
   void TerminalFlush();
 
@@ -107,7 +111,7 @@ class App : public Screen {
 
   void Signal(int signal);
 
-  void FetchTerminalEvents();
+  size_t FetchTerminalEvents();
 
   void PostAnimationTask();
 
@@ -129,6 +133,7 @@ class App : public Screen {
   std::string reset_cursor_position_;
 
   std::atomic<bool> quit_{false};
+  bool installed_ = false;
   bool animation_requested_ = false;
   animation::TimePoint previous_animation_time_;
 
@@ -146,6 +151,7 @@ class App : public Screen {
 
   // Piped input handling state (POSIX only)
   bool handle_piped_input_ = true;
+  bool is_a_tty_ = false;
   // File descriptor for /dev/tty, used for piped input handling.
   int tty_fd_ = -1;
 

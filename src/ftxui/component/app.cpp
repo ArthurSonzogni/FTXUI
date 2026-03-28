@@ -42,6 +42,7 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
+#include <io.h>
 #ifndef UNICODE
 #error Must be compiled in UNICODE mode
 #endif
@@ -64,6 +65,78 @@ void RequestAnimationFrame() {
 }
 }  // namespace animation
 
+class ThrottledRequest {
+ public:
+  ThrottledRequest(App* app,
+                   std::function<void()> send,
+                   task::TaskRunner& task_runner)
+      : app_(app), send_(std::move(send)), task_runner_(task_runner) {}
+
+  void Request(bool force = false) {
+    if (!app_->is_a_tty_) {
+      return;
+    }
+
+    if (force) {
+      Send();
+      return;
+    }
+
+    // Allow only one pending request at a time. This is to avoid flooding the
+    // terminal with requests.
+    if (HasPending()) {
+      return;
+    }
+
+    const auto now = std::chrono::steady_clock::now();
+    const auto delta = now - last_request_time_;
+    const auto delay = std::chrono::milliseconds(500) - delta;
+
+    if (delay <= std::chrono::milliseconds(0)) {
+      Send();
+      return;
+    }
+
+    request_queued_ = true;
+    task_runner_.PostDelayedTask(
+        [this] {
+          request_queued_ = false;
+          Request();
+        },
+        delay);
+  }
+
+  void OnReply() { pending_request_ = false; }
+
+  bool HasPending() const {
+    if (pending_request_) {
+      const auto now = std::chrono::steady_clock::now();
+      if (now - last_sent_time_ < std::chrono::seconds(5)) {
+        return true;
+      }
+    }
+    return request_queued_;
+  }
+
+ private:
+
+  void Send() {
+    last_sent_time_ = std::chrono::steady_clock::now();
+    pending_request_ = true;
+    send_();
+  }
+
+  App* app_;
+  std::function<void()> send_;
+  task::TaskRunner& task_runner_;
+  bool pending_request_ = false;
+  std::chrono::steady_clock::time_point last_request_time_ =
+      std::chrono::steady_clock::now() - std::chrono::hours(1);
+  std::chrono::steady_clock::time_point last_sent_time_ =
+      std::chrono::steady_clock::now() - std::chrono::hours(1);
+  bool request_queued_ = false;
+};
+
 struct App::Internal {
   // Convert char to Event.
   TerminalInputParser terminal_input_parser;
@@ -81,8 +154,10 @@ struct App::Internal {
   // memory (see also shrink_to_fit).
   std::string output_buffer;
 
-  explicit Internal(std::function<void(Event)> out)
-      : terminal_input_parser(std::move(out)) {}
+  ThrottledRequest cursor_position_request;
+  ThrottledRequest cursor_shape_request;
+
+  explicit Internal(App* app, std::function<void(Event)> out);
 };
 
 namespace {
@@ -266,12 +341,23 @@ class CapturedMouseImpl : public CapturedMouseInterface {
 
 }  // namespace
 
+App::Internal::Internal(App* app, std::function<void(Event)> out)
+    : terminal_input_parser(std::move(out)),
+      cursor_position_request(
+          app,
+          [app] { app->TerminalSend(DeviceStatusReport(DSRMode::kCursor)); },
+          task_runner),
+      cursor_shape_request(
+          app,
+          [app] { app->TerminalSend(DECRQSS_DECSCUSR); },
+          task_runner) {}
+
 App::App(Dimension dimension, int dimx, int dimy, bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
       use_alternative_screen_(use_alternative_screen) {
   internal_ = std::make_unique<Internal>(
-      [&](Event event) { PostEvent(std::move(event)); });
+      this, [&](Event event) { PostEvent(std::move(event)); });
 }
 
 // static
@@ -437,8 +523,9 @@ void App::PreMain() {
     std::swap(suspended_screen_, g_active_screen);
     // Reset cursor position to the top of the screen and clear the screen.
     suspended_screen_->TerminalSend(suspended_screen_->ResetCursorPosition());
-    suspended_screen_->ResetPosition(suspended_screen_->internal_->output_buffer,
-                                     /*clear=*/true);
+    suspended_screen_->ResetPosition(
+        suspended_screen_->internal_->output_buffer,
+        /*clear=*/true);
     suspended_screen_->dimx_ = 0;
     suspended_screen_->dimy_ = 0;
 
@@ -483,7 +570,7 @@ void App::PostMain() {
 }
 
 /// @brief Decorate a function. It executes the same way, but with the currently
-/// active screen terminal hooks temporarilly uninstalled during its execution.
+/// active screen terminal hooks temporarily uninstalled during its execution.
 /// @param fn The function to decorate.
 Closure App::WithRestoredIO(Closure fn) {  // NOLINT
   return [this, fn] {
@@ -542,7 +629,7 @@ void App::Install() {
 
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
-  TerminalSend(DECRQSS_DECSCUSR);
+  RequestCursorShape();
   on_exit_functions.emplace([this] {
     TerminalSend("\033[?25h");  // Enable cursor.
     TerminalSend("\033[" + std::to_string(cursor_reset_shape_) + " q");
@@ -671,20 +758,29 @@ void App::Install() {
   quit_ = false;
 
   PostAnimationTask();
+
+  installed_ = true;
 }
 
 void App::InstallPipedInputHandling() {
-#if !defined(_WIN32) && !defined(__EMSCRIPTEN__)
+  is_a_tty_ = false;
+#if defined(__EMSCRIPTEN__)
+  is_a_tty_ = true;
+#elif defined(_WIN32)
+  is_a_tty_ = _isatty(_fileno(stdin));
+#else
   tty_fd_ = STDIN_FILENO;
   // Handle piped input redirection if explicitly enabled by the application.
   // This allows applications to read data from stdin while still receiving
   // keyboard input from the terminal for interactive use.
   if (!handle_piped_input_) {
+    is_a_tty_ = isatty(STDIN_FILENO);
     return;
   }
 
   // If stdin is a terminal, we don't need to open /dev/tty.
   if (isatty(STDIN_FILENO)) {
+    is_a_tty_ = true;
     return;
   }
 
@@ -693,8 +789,11 @@ void App::InstallPipedInputHandling() {
   if (tty_fd_ < 0) {
     // Failed to open /dev/tty (containers, headless systems, etc.)
     tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
+    is_a_tty_ = isatty(STDIN_FILENO);
     return;
   }
+
+  is_a_tty_ = true;
 
   // Close the /dev/tty file descriptor on exit.
   on_exit_functions.emplace([this] {
@@ -706,7 +805,20 @@ void App::InstallPipedInputHandling() {
 
 // private
 void App::Uninstall() {
-  ExitNow();
+  installed_ = false;
+  // During shutdown, wait for all of the replies.
+  auto start = std::chrono::steady_clock::now();
+  while (internal_->cursor_position_request.HasPending() ||
+         internal_->cursor_shape_request.HasPending()) {
+    FetchTerminalEvents();
+    internal_->task_runner.RunUntilIdle();
+
+    if (std::chrono::steady_clock::now() - start > std::chrono::seconds(1)) {
+      break;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  }
+
   OnExit();
 }
 
@@ -767,19 +879,25 @@ void App::HandleTask(Component component, Task& task) {
   std::visit(
       [&](auto&& arg) {
         using T = std::decay_t<decltype(arg)>;
-
         // clang-format off
+
     // Handle Event.
     if constexpr (std::is_same_v<T, Event>) {
 
       if (arg.is_cursor_position()) {
         cursor_x_ = arg.cursor_x();
         cursor_y_ = arg.cursor_y();
+        internal_->cursor_position_request.OnReply();
         return;
       }
 
       if (arg.is_cursor_shape()) {
         cursor_reset_shape_= arg.cursor_shape();
+        internal_->cursor_shape_request.OnReply();
+        return;
+      }
+
+      if (quit_ || !installed_) {
         return;
       }
 
@@ -810,12 +928,20 @@ void App::HandleTask(Component component, Task& task) {
 
     // Handle callback
     if constexpr (std::is_same_v<T, Closure>) {
+      if (quit_ || !installed_) {
+        return;
+      }
+
       arg();
       return;
     }
 
     // Handle Animation
     if constexpr (std::is_same_v<T, AnimationTask>) {
+      if (quit_ || !installed_) {
+        return;
+      }
+
       if (!animation_requested_) {
         return;
       }
@@ -926,7 +1052,7 @@ void App::Draw(Component component) {
 
   if (frame_count_ != 0) {
     // Reset the cursor position to the lower left corner to start drawing the
-    // new frame. 
+    // new frame.
     ResetPosition(internal_->output_buffer, resized);
 
     // If the terminal width decrease, the terminal emulator will start wrapping
@@ -949,26 +1075,9 @@ void App::Draw(Component component) {
   // Periodically request the terminal emulator the frame position relative to
   // the screen. This is useful for converting mouse position reported in
   // screen's coordinates to frame's coordinates.
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-  // Microsoft's terminal suffers from a [bug]. When reporting the cursor
-  // position, several output sequences are mixed together into garbage.
-  // This causes FTXUI user to see some "1;1;R" sequences into the Input
-  // component. See [issue]. Solution is to request cursor position less
-  // often. [bug]: https://github.com/microsoft/terminal/pull/7583 [issue]:
-  // https://github.com/ArthurSonzogni/FTXUI/issues/136
-  static int i = -3;
-  ++i;
-  if (!use_alternative_screen_ && (i % 150 == 0)) {  // NOLINT
-    TerminalSend(DeviceStatusReport(DSRMode::kCursor));
+  if (!use_alternative_screen_) {
+    RequestCursorPosition(previous_frame_resized_);
   }
-#else
-  static int i = -3;
-  ++i;
-  if (!use_alternative_screen_ &&
-      (previous_frame_resized_ || i % 40 == 0)) {  // NOLINT
-    TerminalSend(DeviceStatusReport(DSRMode::kCursor));
-  }
-#endif
   previous_frame_resized_ = resized;
 
   selection_ = selection_data_.empty
@@ -1015,8 +1124,18 @@ void App::Draw(Component component) {
 // private
 std::string App::ResetCursorPosition() {
   std::string result = std::move(reset_cursor_position_);
-  reset_cursor_position_= "";
+  reset_cursor_position_ = "";
   return result;
+}
+
+// private
+void App::RequestCursorPosition(bool force) {
+  internal_->cursor_position_request.Request(force);
+}
+
+// private
+void App::RequestCursorShape() {
+  internal_->cursor_shape_request.Request();
 }
 
 // private
@@ -1076,7 +1195,7 @@ void App::Signal(int signal) {
 #endif
 }
 
-void App::FetchTerminalEvents() {
+size_t App::FetchTerminalEvents() {
 #if defined(_WIN32)
   auto get_input_records = [&]() -> std::vector<INPUT_RECORD> {
     // Check if there is input in the console.
@@ -1107,7 +1226,7 @@ void App::FetchTerminalEvents() {
     const size_t timeout_microseconds =
         std::chrono::duration_cast<std::chrono::microseconds>(timeout).count();
     internal_->terminal_input_parser.Timeout(timeout_microseconds);
-    return;
+    return 0;
   }
   internal_->last_char_time = std::chrono::steady_clock::now();
 
@@ -1144,6 +1263,7 @@ void App::FetchTerminalEvents() {
         break;
     }
   }
+  return records.size();
 #elif defined(__EMSCRIPTEN__)
   // Read chars from the terminal.
   // We configured it to be non blocking.
@@ -1155,7 +1275,7 @@ void App::FetchTerminalEvents() {
     const size_t timeout_microseconds =
         std::chrono::duration_cast<std::chrono::microseconds>(timeout).count();
     internal_->terminal_input_parser.Timeout(timeout_microseconds);
-    return;
+    return 0;
   }
   internal_->last_char_time = std::chrono::steady_clock::now();
 
@@ -1163,6 +1283,7 @@ void App::FetchTerminalEvents() {
   for (size_t i = 0; i < l; ++i) {
     internal_->terminal_input_parser.Add(out[i]);
   }
+  return l;
 #else  // POSIX (Linux & Mac)
   if (!CheckStdinReady(tty_fd_)) {
     const auto timeout =
@@ -1170,7 +1291,7 @@ void App::FetchTerminalEvents() {
     const size_t timeout_ms =
         std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
     internal_->terminal_input_parser.Timeout(timeout_ms);
-    return;
+    return 0;
   }
   internal_->last_char_time = std::chrono::steady_clock::now();
 
@@ -1182,6 +1303,7 @@ void App::FetchTerminalEvents() {
   for (size_t i = 0; i < l; ++i) {
     internal_->terminal_input_parser.Add(out[i]);
   }
+  return l;
 #endif
 }
 
