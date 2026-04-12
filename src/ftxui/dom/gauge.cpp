@@ -95,8 +95,8 @@ class Gauge : public Node {
   }
 
   void RenderHorizontal(Screen& screen, bool invert) {
-    const int y = box_.y_min;
-    if (y > box_.y_max) {
+     
+    if (box_.y_min > box_.y_max) {
       return;
     }
 
@@ -124,8 +124,8 @@ class Gauge : public Node {
   }
 
   void RenderVertical(Screen& screen, bool invert) {
-    const int x = box_.x_min;
-    if (x > box_.x_max) {
+     
+    if (box_.x_min > box_.x_max) {
       return;
     }
 

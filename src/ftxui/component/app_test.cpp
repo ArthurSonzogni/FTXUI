@@ -184,6 +184,15 @@ TEST(App, CtrlC_NotForced) {
 // https://github.com/ArthurSonzogni/FTXUI/pull/1064/files
 TEST(App, FixedSizeInitialFrame) {
 #if defined(__unix__)
+  bool is_tty = isatty(STDIN_FILENO);
+  if (!is_tty) {
+    int fd = open("/dev/tty", O_RDWR | O_NOCTTY);
+    if (fd >= 0) {
+      is_tty = true;
+      close(fd);
+    }
+  }
+
   std::string output;
   {
     auto capture = StdCapture(&output);
@@ -194,45 +203,50 @@ TEST(App, FixedSizeInitialFrame) {
     Loop loop(&screen, component);
     loop.RunOnce();
   }
-  using namespace std::string_view_literals;
+  using namespace std::string_literals;
 
-  auto expected =
-      // Install the App.
-      "\0"               // Flush stdout.
-      "\x1BP$q q\x1B\\"  // Request cursor shape.
-      "\x1B[?7l"         // Disable line wrapping.
-      "\x1B[?1000h"      // Enable mouse tracking.
-      "\x1B[?1003h"      // Enable mouse motion tracking.
-      "\x1B[?1015h"      // Enable mouse wheel tracking.
-      "\x1B[?1006h"      // Enable SGR mouse tracking.
-      "\0"               // Flush stdout.
+  std::string expected;
+  // Install the App.
+  expected += "\0"s;              // Flush stdout.
+  if (is_tty) {
+    expected += "\x1BP$q q\x1B\\"s; // Query cursor shape.
+  }
+  expected += "\x1B[?7l"s;        // Disable line wrapping.
+  expected += "\x1B[?1000h"s;     // Enable mouse tracking.
+  expected += "\x1B[?1003h"s;     // Enable mouse motion tracking.
+  expected += "\x1B[?1015h"s;     // Enable mouse wheel tracking.
+  expected += "\x1B[?1006h"s;     // Enable SGR mouse tracking.
+  expected += "\0"s;              // Flush stdout.
 
-      // Reset the screen.
-      "\x1B[?25l"  // Hide cursor.
+  // Reset the screen.
+  expected += "\x1B[?25l"s;  // Hide cursor.
+  if (is_tty) {
+    expected += "\x1B[6n"s;    // Query cursor position.
+  }
 
-      // Print the document.
-      "AB\r\n"  // Print "AB" and move to the next line.
-      "  "      // Print two spaces to fill the line.
+  // Print the document.
+  expected += "AB\r\n"s;  // Print "AB" and move to the next line.
+  expected += "  "s;      // Print two spaces to fill the line.
 
-      // Set cursor position.
-      "\x1B[1D"  // Move cursor left one character.
+  // Set cursor position.
+  expected += "\x1B[1D"s;  // Move cursor left one character.
 
-      // Flush
-      "\0"  // Flush stdout.
+  // Flush
+  expected += "\0"s;  // Flush stdout.
 
-      // Uninstall the App.
-      "\x1B[1C"      // Move cursor right one character.
-      "\x1B[?1006l"  // Disable SGR mouse tracking.
-      "\x1B[?1015l"  // Disable mouse wheel tracking.
-      "\x1B[?1003l"  // Disable mouse motion tracking.
-      "\x1B[?1000l"  // Disable mouse tracking.
-      "\x1B[?7h"     // Enable line wrapping.
-      "\x1B[?25h"    // Show cursor.
-      "\x1B[1 q"     // Set cursor shape to 1 (block).
-      "\0"           // Flush stdout.
+  // Uninstall the App.
+  expected += "\x1B[1C"s;      // Move cursor right one character.
+  expected += "\x1B[?1006l"s;  // Disable SGR mouse tracking.
+  expected += "\x1B[?1015l"s;  // Disable mouse wheel tracking.
+  expected += "\x1B[?1003l"s;  // Disable mouse motion tracking.
+  expected += "\x1B[?1000l"s;  // Disable mouse tracking.
+  expected += "\x1B[?7h"s;     // Enable line wrapping.
+  expected += "\x1B[?25h"s;    // Show cursor.
+  expected += "\x1B[1 q"s;     // Set cursor shape to 1 (block).
+  expected += "\0"s;           // Flush stdout.
 
-      // Skip one line to avoid the prompt to be printed over the last drawing.
-      "\r\n"sv;
+  // Skip one line to avoid the prompt to be printed over the last drawing.
+  expected += "\r\n"s;
   ASSERT_EQ(expected, output);
 #endif
 }
