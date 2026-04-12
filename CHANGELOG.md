@@ -24,6 +24,7 @@ Next
   import ftxui.util;
   ```
   Thanks @mikomikotaishi for PR #1015.
+- Consolidate C++20 code into named modules to reduce compile times and improve flexibility. Thanks @mikomikotaishi in #1221.
 - Remove dependency on 'pthread'.
 - Bugfix: Bazel target @ftxui is now visible. Thanks @dskkato in #1157.
 

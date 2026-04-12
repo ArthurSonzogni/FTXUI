@@ -1,15 +1,159 @@
 /// @module ftxui.dom
 /// @brief Module file for FTXUI DOM operations.
 
+module;
+
+#include <ftxui/dom/canvas.hpp>
+#include <ftxui/dom/deprecated.hpp>
+#include <ftxui/dom/direction.hpp>
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/dom/flexbox_config.hpp>
+#include <ftxui/dom/linear_gradient.hpp>
+#include <ftxui/dom/node.hpp>
+#include <ftxui/dom/requirement.hpp>
+#include <ftxui/dom/selection.hpp>
+#include <ftxui/dom/table.hpp>
+
 export module ftxui.dom;
 
-export import :Canvas;
-export import :Deprecated;
-export import :Direction;
-export import :Elements;
-export import :FlexboxConfig;
-export import :LinearGradient;
-export import :Node;
-export import :Requirement;
-export import :Selection;
-export import :Table;
+/**
+ * @namespace ftxui
+ * @brief The FTXUI ftxui:: namespace
+ */
+export namespace ftxui {
+    using ftxui::BorderStyle;
+    using ftxui::Canvas;
+    using ftxui::Constraint;
+    using ftxui::Direction;
+    using ftxui::Decorator;
+    using ftxui::Element;
+    using ftxui::Elements;
+    using ftxui::FlexboxConfig;
+    using ftxui::GraphFunction;
+    using ftxui::LinearGradient;
+    using ftxui::Node;
+    using ftxui::Requirement;
+    using ftxui::Screen;
+    using ftxui::Selection;
+    using ftxui::Table;
+    using ftxui::TableSelection;
+    using ftxui::WidthOrHeight;
+
+    using ftxui::operator|;
+    using ftxui::operator|=;
+
+    using ftxui::GetNodeSelectedContent;
+    using ftxui::Render;
+
+    using ftxui::text;
+    using ftxui::vtext;
+    using ftxui::separator;
+    using ftxui::separatorLight;
+    using ftxui::separatorDashed;
+    using ftxui::separatorHeavy;
+    using ftxui::separatorDouble;
+    using ftxui::separatorEmpty;
+    using ftxui::separatorStyled;
+    using ftxui::separatorCharacter;
+    using ftxui::separatorHSelector;
+    using ftxui::separatorVSelector;
+    using ftxui::gauge;
+    using ftxui::gaugeLeft;
+    using ftxui::gaugeRight;
+    using ftxui::gaugeUp;
+    using ftxui::gaugeDown;
+    using ftxui::gaugeDirection;
+    using ftxui::border;
+    using ftxui::borderLight;
+    using ftxui::borderDashed;
+    using ftxui::borderHeavy;
+    using ftxui::borderDouble;
+    using ftxui::borderRounded;
+    using ftxui::borderEmpty;
+    using ftxui::borderStyled;
+    using ftxui::borderWith;
+    using ftxui::window;
+    using ftxui::spinner;
+    using ftxui::paragraph;
+    using ftxui::paragraphAlignLeft;
+    using ftxui::paragraphAlignRight;
+    using ftxui::paragraphAlignCenter;
+    using ftxui::paragraphAlignJustify;
+    using ftxui::graph;
+    using ftxui::emptyElement;
+    using ftxui::canvas;
+
+    using ftxui::bold;
+    using ftxui::dim;
+    using ftxui::italic;
+    using ftxui::inverted;
+    using ftxui::underlined;
+    using ftxui::underlinedDouble;
+    using ftxui::blink;
+    using ftxui::strikethrough;
+    using ftxui::color;
+    using ftxui::bgcolor;
+    using ftxui::focusPosition;
+    using ftxui::focusPositionRelative;
+    using ftxui::automerge;
+    using ftxui::hyperlink;
+    using ftxui::selectionStyleReset;
+    using ftxui::selectionColor;
+    using ftxui::selectionBackgroundColor;
+    using ftxui::selectionForegroundColor;
+    using ftxui::selectionStyle;
+
+    using ftxui::hbox;
+    using ftxui::vbox;
+    using ftxui::dbox;
+    using ftxui::flexbox;
+    using ftxui::gridbox;
+    using ftxui::hflow;
+    using ftxui::vflow;
+
+    using ftxui::flex;
+    using ftxui::flex_grow;
+    using ftxui::flex_shrink;
+    using ftxui::xflex;
+    using ftxui::xflex_grow;
+    using ftxui::xflex_shrink;
+    using ftxui::yflex;
+    using ftxui::yflex_grow;
+    using ftxui::yflex_shrink;
+    using ftxui::notflex;
+    using ftxui::filler;
+
+    using ftxui::size;
+
+    using ftxui::frame;
+    using ftxui::xframe;
+    using ftxui::yframe;
+    using ftxui::focus;
+    using ftxui::select;
+
+    using ftxui::focusCursorBlock;
+    using ftxui::focusCursorBlockBlinking;
+    using ftxui::focusCursorBar;
+    using ftxui::focusCursorBarBlinking;
+    using ftxui::focusCursorUnderline;
+    using ftxui::focusCursorUnderlineBlinking;
+
+    using ftxui::vscroll_indicator;
+    using ftxui::hscroll_indicator;
+    using ftxui::reflect;
+    using ftxui::clear_under;
+
+    using ftxui::hcenter;
+    using ftxui::vcenter;
+    using ftxui::center;
+    using ftxui::align_right;
+    using ftxui::nothing;
+
+    /**
+     * @namespace Dimension
+     * @brief The FTXUI ftxui::Dimension:: namespace
+     */
+    namespace Dimension {
+        using ftxui::Dimension::Fit;
+    }
+}
