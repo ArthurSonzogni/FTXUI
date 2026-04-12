@@ -12,7 +12,7 @@ FTXUI experimentally supports
 compilation times and improve code organization. Each part of the library has a
 corresponding module, split into partitions per each header.
 
-Use the FTXUI_BUILD_MODULES option to build the FTXUI project itself to provide C++20 modules,
+Use the `FTXUI_BUILD_MODULES` option to build the FTXUI project itself to provide C++20 modules,
 for example with CMake and Ninja:
 
 ```sh
@@ -34,26 +34,20 @@ Then, in your own code you can consume the modules and code as normal:
 ```cpp
 import ftxui;
 
-using ftxui::Button;
 using ftxui::App;
+using ftxui::Button;
+using ftxui::Component;
 
 int main() {
-  auto screen = App::TerminalOutput();
-  auto button = Button("Click me", screen.ExitLoopClosure());
+  App app = App::TerminalOutput();
+  Component button = Button("Click me", app.ExitLoopClosure());
   screen.Loop(button);
   return 0;
 }
 ```
 
-Note, the `ftxui` convenience module which simply pulls together all the modules:
-
-```cpp
-export import ftxui.component;
-export import ftxui.dom;
-export import ftxui.screen;
-export import ftxui.util;
-```
-You can instead import only the module(s) you need if desired.
+Writing `import ftxui;` is equivalent to including all `<ftxui/**/*.hpp>` headers, and provides
+the entire library through the singular module.
 
 To properly find and link the modules with CMake, use `target_link_libraries` to get the right
 compiler, linker, etc. flags.
@@ -67,12 +61,18 @@ target_link_libraries(my_executable
 
 ### Module list
 
-The modules directly reference the corresponding header, or a group of related
-headers to provide a more convenient interface. The following modules
-are available:
+While `import ftxui;` provides the entire library, FTXUI is designed in layers. If you only need specific functionalities, you can import the independent modules directly:
 
-- `ftxui`
-    - `ftxui.component`
-    - `ftxui.dom`
-    - `ftxui.screen`
-    - `ftxui.util`
+- `ftxui` (Convenience module that re-exports all of the below)
+    - `ftxui.component` (Interactive components, events, and event loops)
+    - `ftxui.dom` (Layout and styling via Elements)
+    - `ftxui.screen` (Terminal rendering, pixels, and colors)
+    - `ftxui.util` (Internal utilities)
+
+For example:
+```cpp
+import ftxui.screen;
+import ftxui.dom;
+
+// Use only screen and dom functionalities...
+```
