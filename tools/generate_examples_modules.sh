@@ -14,7 +14,7 @@ for file in ./examples_modules/**/*.cpp; do
 
   sed -i '/#include "ftxui/d' "$file"
   sed -i '/#include <ftxui/d' "$file"
-  last_include=$(grep -n '#include' "$file" | tail -n 1 | cut -d: -f1)
+  last_include=$(grep -n '#include <' "$file" | tail -n 1 | cut -d: -f1)
   if [ -z "$last_include" ]; then
     sed -i '1i\import ftxui.component;\nimport ftxui.dom;\nimport ftxui.screen;\nimport ftxui.util;\n' "$file"
   else
