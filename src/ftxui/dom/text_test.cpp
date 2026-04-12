@@ -130,5 +130,33 @@ TEST(TextTest, WithStringViews) {
   EXPECT_EQ(t, screen.ToString());
 }
 
+TEST(TextTest, Newline) {
+  auto element = text("foo\nbar");
+  Screen screen(3, 2);
+  Render(screen, element);
+  EXPECT_EQ("foo\r\nbar", screen.ToString());
+}
+
+TEST(TextTest, NewlineScreenSmaller) {
+  auto element = text("foo\nbar");
+  Screen screen(2, 2);
+  Render(screen, element);
+  EXPECT_EQ("fo\r\nba", screen.ToString());
+}
+
+TEST(TextTest, NewlineScreenTaller) {
+  auto element = text("foo\nbar");
+  Screen screen(3, 3);
+  Render(screen, element);
+  EXPECT_EQ("foo\r\nbar\r\n   ", screen.ToString());
+}
+
+TEST(TextTest, NewlineMultiple) {
+  auto element = text("a\nb\nc");
+  Screen screen(1, 3);
+  Render(screen, element);
+  EXPECT_EQ("a\r\nb\r\nc", screen.ToString());
+}
+
 }  // namespace ftxui
 // NOLINTEND
