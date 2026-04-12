@@ -329,6 +329,7 @@ Component Vertical(Components children) {
 /// ### Example
 ///
 /// ```cpp
+/// int selected_children = 2;
 /// auto container = Container::Vertical({
 ///   children_1,
 ///   children_2,
@@ -349,7 +350,6 @@ Component Vertical(Components children, int* selector) {
 /// ### Example
 ///
 /// ```cpp
-/// int selected_children = 2;
 /// auto container = Container::Horizontal({
 ///   children_1,
 ///   children_2,
