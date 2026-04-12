@@ -129,7 +129,7 @@ Element ComponentBase::Render() {
     }
   };
 
-  return std::make_shared<Wrapper>(std::move(element), Active());
+  return std::make_shared<Wrapper>(std::move(element), Focused());
 }
 
 /// @brief Draw the component.

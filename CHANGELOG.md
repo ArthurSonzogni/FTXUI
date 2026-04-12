@@ -41,6 +41,7 @@ Next
   avoids unnecessary copies. Thanks @mikomikotaishi for PR #1154
 
 ### Component
+- Bugfix: Fix `Input` cursor visibility when using a custom `Renderer` on nested containers. See #1220. Thanks @nmarks99.
 - Fix `Input` cursor positioning and scroll stability. See #1196. Thanks @739C1AE2.
 - Fix `Input` support for non-ASCII characters in password mode. See #1196. Thanks @739C1AE2.
 - Performance: Mitigate cursor flickering during redraw in `App`. See #1196. Thanks @739C1AE2.

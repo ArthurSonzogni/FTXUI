@@ -781,4 +781,44 @@ TEST(InputTest, InsertMode) {
   EXPECT_EQ(content, "axyz\nefgX");
 }
 
+TEST(InputTest, NestedRendererCursorVisibility) {
+  std::string text1 = "T1";
+  std::string text2 = "T2";
+  std::string text3 = "T3";
+  std::string text4 = "T4";
+
+  auto inp1 = Input(&text1, "Input 1");
+  auto inp2 = Input(&text2, "Input 2");
+  auto inp3 = Input(&text3, "Input 3");
+  auto inp4 = Input(&text4, "Input 4");
+
+  auto container = Container::Horizontal({
+      Container::Vertical({inp1, inp2}),
+      Container::Vertical({inp3, inp4}),
+  });
+
+  auto renderer = Renderer(container, [&] {
+    return hbox({
+        vbox({inp1->Render(), separatorEmpty(), inp2->Render()}),
+        vbox({inp3->Render(), separatorEmpty(), inp4->Render()}),
+    });
+  });
+
+  // Focus inp1
+  inp1->TakeFocus();
+  auto doc1 = renderer->Render();
+  auto screen1 = Screen::Create(Dimension::Fixed(80), Dimension::Fixed(24));
+  Render(screen1, doc1);
+  EXPECT_NE(screen1.cursor().shape, Screen::Cursor::Hidden);
+
+  // Focus inp3
+  inp3->TakeFocus();
+  auto doc3 = renderer->Render();
+  auto screen3 = Screen::Create(Dimension::Fixed(80), Dimension::Fixed(24));
+  Render(screen3, doc3);
+
+  // Bug #1220: Cursor should not be hidden on the second nested component.
+  EXPECT_NE(screen3.cursor().shape, Screen::Cursor::Hidden);
+}
+
 }  // namespace ftxui
