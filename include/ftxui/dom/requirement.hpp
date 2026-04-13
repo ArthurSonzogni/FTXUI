@@ -35,6 +35,7 @@ struct Requirement {
 
     // Internal for interactions with components.
     bool component_active = false;
+    bool component_focused = false;
 
     // Return whether this requirement should be preferred over the other.
     bool Prefer(const Focused& other) const {
@@ -43,6 +44,9 @@ struct Requirement {
       }
       if (!enabled) {
         return true;
+      }
+      if (other.component_focused != component_focused) {
+        return other.component_focused;
       }
 
       return other.component_active && !component_active;

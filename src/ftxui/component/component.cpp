@@ -114,9 +114,10 @@ Element ComponentBase::Render() {
   class Wrapper : public Node {
    public:
     bool active_ = false;
+    bool focused_ = false;
 
-    Wrapper(Element child, bool active)
-        : Node({std::move(child)}), active_(active) {}
+    Wrapper(Element child, bool active, bool focused)
+        : Node({std::move(child)}), active_(active), focused_(focused) {}
 
     void SetBox(Box box) override {
       Node::SetBox(box);
@@ -126,10 +127,11 @@ Element ComponentBase::Render() {
     void ComputeRequirement() override {
       Node::ComputeRequirement();
       requirement_.focused.component_active = active_;
+      requirement_.focused.component_focused = focused_;
     }
   };
 
-  return std::make_shared<Wrapper>(std::move(element), Focused());
+  return std::make_shared<Wrapper>(std::move(element), Active(), Focused());
 }
 
 /// @brief Draw the component.
