@@ -11,6 +11,9 @@
 namespace ftxui {
 
 /// @brief A Unicode character and its associated style.
+///
+/// @note This struct was previously named Pixel.
+///
 /// @ingroup screen
 struct Cell {
   Cell()

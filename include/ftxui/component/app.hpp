@@ -30,6 +30,8 @@ class TaskRunner;
 /// @brief App is a `Screen` that can handle events, run a main
 /// loop, and manage components.
 ///
+/// @note This class was previously named ScreenInteractive.
+///
 /// @ingroup component
 class App : public Screen {
  public:

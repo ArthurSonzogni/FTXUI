@@ -13,6 +13,9 @@
 namespace ftxui {
 
 /// @brief A rectangular grid of Cell.
+///
+/// @note This class was previously named Image.
+///
 /// @ingroup screen
 class Surface {
  public:
