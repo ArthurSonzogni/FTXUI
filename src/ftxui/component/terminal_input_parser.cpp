@@ -47,6 +47,10 @@ const std::map<std::string, std::string> g_uniformize = {
     {"\x1BOH", "\x1B[H"},  // HOME
     {"\x1BOF", "\x1B[F"},  // END
 
+    // Common Home/End sequences from terminals and multiplexers.
+    {"\x1B[1~", "\x1B[H"},  // HOME
+    {"\x1B[4~", "\x1B[F"},  // END
+
     // Variations around the FN keys.
     // Internally, we are using:
     // vt220, xterm-vt200, xterm-xf86-v44, xterm-new, mgt, screen

@@ -372,6 +372,10 @@ TEST(Event, Special) {
       {str("\x1BOH"), Event::Home},
       {str("\x1BOF"), Event::End},
 
+      // Home/End variants.
+      {str("\x1B[1~"), Event::Home},
+      {str("\x1B[4~"), Event::End},
+
       // Backspace & Quirk for:
       // https://github.com/ArthurSonzogni/FTXUI/issues/508
       {{127}, Event::Backspace},
