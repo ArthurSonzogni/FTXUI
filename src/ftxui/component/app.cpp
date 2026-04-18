@@ -492,7 +492,7 @@ void App::RequestAnimationFrame() {
   }
 }
 
-/// @brief Try to get the unique lock about behing able to capture the mouse.
+/// @brief Try to get the unique lock about being able to capture the mouse.
 /// @return A unique lock if the mouse is not already captured, otherwise a
 /// null.
 CapturedMouse App::CaptureMouse() {

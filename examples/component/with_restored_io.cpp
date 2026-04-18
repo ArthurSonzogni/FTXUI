@@ -39,7 +39,7 @@ int main() {
   auto renderer = Renderer(layout, [&] {
     auto explanation = paragraph(
         "After clicking this button, the App will be "
-        "suspended and access to stdin/stdout will temporarilly be "
+        "suspended and access to stdin/stdout will temporarily be "
         "restore for running a function.");
     auto element = vbox({
         explanation | borderEmpty,

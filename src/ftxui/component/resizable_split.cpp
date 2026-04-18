@@ -95,7 +95,7 @@ class ResizableSplitBase : public ComponentBase, public ResizableSplitOption {
         return RenderBottom();
     }
     // NOTREACHED()
-    return text("unreacheable");
+    return text("unreachable");
   }
 
   Element RenderLeft() {

@@ -32,7 +32,7 @@ int main() {
       Radiobox(&entries, &menu_2_selected) | border | Maybe(&menu_2_show),
 
       Renderer([] {
-        return text("You found the secret combinaison!") | color(Color::Red);
+        return text("You found the secret combination!") | color(Color::Red);
       }) | Maybe([&] { return menu_1_selected == 1 && menu_2_selected == 2; }),
   });
 

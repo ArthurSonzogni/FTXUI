@@ -213,7 +213,7 @@ ButtonOption ButtonOption::Animated(Color color) {
 ButtonOption ButtonOption::Animated(Color background, Color foreground) {
   // NOLINTBEGIN
   return ButtonOption::Animated(
-      /*bakground=*/background,
+      /*background=*/background,
       /*foreground=*/foreground,
       /*background_active=*/foreground,
       /*foreground_active=*/background);

@@ -131,7 +131,7 @@ ftxui_cc_library(
     deps = [":screen"],
 )
 
-# @ftxui:component is a library to create "dynamic" component renderering and
+# @ftxui:component is a library to create "dynamic" component rendering and
 # updating a ftxui::dom document on the screen. It is a higher level API than
 # ftxui:dom.
 #

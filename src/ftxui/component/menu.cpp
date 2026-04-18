@@ -482,7 +482,7 @@ class MenuBase : public ComponentBase, public MenuOption {
 };
 
 /// @brief A list of text. The focused element is selected.
-/// @param option a structure containing all the paramters.
+/// @param option a structure containing all the parameters.
 /// @ingroup component
 ///
 /// ### Example

@@ -41,7 +41,7 @@ TEST(ColorTest, FallbackTo16) {
   EXPECT_EQ(Color::RGB(1, 2, 3).Print(false), "30");
 }
 
-TEST(ColorTest, Litterals) {
+TEST(ColorTest, Literals) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   using namespace ftxui::literals;
   EXPECT_EQ(Color(0xABCDEF_rgb).Print(false), "38;2;171;205;239");

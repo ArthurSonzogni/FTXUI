@@ -192,7 +192,7 @@ See #1017 and #1019.
   alternate screen.
 - Bugfix: `Input` `onchange` was not called on backspace or delete key.
   Fixed by @chrysante in chrysante in PR #776.
-- Bugfix: Propertly restore cursor shape on exit. See #792.
+- Bugfix: Properly restore cursor shape on exit. See #792.
 - Bugfix: Fix cursor position in when in the last column. See #831.
 - Bugfix: Fix `ResizeableSplit` keyboard navigation. Fixed by #842.
 - Bugfix: Fix `Menu` focus. See #841
@@ -260,7 +260,7 @@ See #1017 and #1019.
 - Breaking: `Ref<{Component}Option>` becomes `{Component}Option` in component constructors.
 - Feature: `ResizeableSplit` now support arbitrary element as a separator.
 - Feature: `input` is now supporting multiple lines.
-- Feature: `input` style is now customizeable.
+- Feature: `input` style is now customizable.
 - Bugfix: Support F1-F5 from OS terminal.
 - Feature: Add struct based constructor:
   ```cpp
@@ -317,9 +317,9 @@ See #1017 and #1019.
 - Expose the pkg-config file
 - Check version compatibility when using cmake find_package()
 
-4.1.0  (Abandonned)
+4.1.0  (Abandoned)
 -----
-This version is abandonned and must not be used. It introduced a breaking change in the API.
+This version is abandoned and must not be used. It introduced a breaking change in the API.
 
 4.0.0
 -----
@@ -342,7 +342,7 @@ This version is abandonned and must not be used. It introduced a breaking change
 - Bugfix: Forward the selected/focused area from the child in gridbox.
 - Bugfix: Fix incorrect Canvas computed dimensions.
 - Bugfix: Support `vscroll_indicator` with a zero inner size.
-- Bugfix: Fix `vscroll_indicator` hidding the last column.
+- Bugfix: Fix `vscroll_indicator` hiding the last column.
 
 ### Component:
 - Feature: Add the `Modal` component.
@@ -407,7 +407,7 @@ This version is abandonned and must not be used. It introduced a breaking change
   - Add the `Maybe` decorator.
   - Add the `CatchEvent` decorator.
   - Add the `Renderer` decorator.
-- **breaking** remove the "deprectated.hpp" header and Input support for wide
+- **breaking** remove the "deprecated.hpp" header and Input support for wide
     string.
 
 ### DOM:
@@ -461,7 +461,7 @@ Element gaugeDirection(float ratio, GaugeDirection);
 #### Component 
 - Add the `collapsible` component.
 - Add the `App::WithRestoredIO`. This decorates a callback. This
-  runs it with the terminal hooks temporarilly uninstalled. This is useful if
+  runs it with the terminal hooks temporarily uninstalled. This is useful if
   you want to execute command using directly stdin/stdout/sterr.
 
 ### Bug
@@ -515,7 +515,7 @@ Element gaugeDirection(float ratio, GaugeDirection);
 - `separatorFixed`. A separator drawing the provided character.
 
 ### Component
-- `Maybe`: Display an component conditionnally based on a boolean.
+- `Maybe`: Display an component conditionally based on a boolean.
 - `Dropdown`: A dropdown select list.
 
 0.9 (2021-09-26)

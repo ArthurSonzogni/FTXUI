@@ -102,7 +102,7 @@ void Table::Initialize(std::vector<std::vector<Element>> input) {
     elements_[y].resize(dim_x_);
   }
 
-  // Transfert elements_ from |input| toward |elements_|.
+  // Transfer elements_ from |input| toward |elements_|.
   {
     int y = 1;
     for (auto& row : input) {

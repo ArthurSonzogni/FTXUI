@@ -187,7 +187,7 @@ Element vscroll_indicator(Element);
 Element hscroll_indicator(Element);
 Decorator reflect(Box& box);
 // Before drawing the |element| clear the pixel below. This is useful in
-// combinaison with dbox.
+// combination with dbox.
 Element clear_under(Element element);
 
 // --- Util --------------------------------------------------------------------

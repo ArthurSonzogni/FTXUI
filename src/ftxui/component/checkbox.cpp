@@ -102,7 +102,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
 /// ### Output
 ///
 /// ```bash
-/// ☐ Make a sandwitch
+/// ☐ Make a sandwich
 /// ```
 // NOLINTNEXTLINE
 Component Checkbox(CheckboxOption option) {
@@ -129,7 +129,7 @@ Component Checkbox(CheckboxOption option) {
 /// ### Output
 ///
 /// ```bash
-/// ☐ Make a sandwitch
+/// ☐ Make a sandwich
 /// ```
 // NOLINTNEXTLINE
 Component Checkbox(ConstStringRef label, bool* checked, CheckboxOption option) {

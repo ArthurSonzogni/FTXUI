@@ -65,7 +65,7 @@ class Node {
   virtual std::string GetSelectedContent(Selection& selection);
 
   // Layout may not resolve within a single iteration for some elements. This
-  // allows them to request additionnal iterations. This signal must be
+  // allows them to request additional iterations. This signal must be
   // forwarded to children at least once.
   struct Status {
     int iteration = 0;
