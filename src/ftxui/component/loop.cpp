@@ -26,7 +26,7 @@ Loop::~Loop() {
   screen_->PostMain();
 }
 
-/// @brief Whether the loop has quitted.
+/// @brief Whether the loop has quit.
 bool Loop::HasQuitted() {
   return screen_->HasQuitted();
 }
@@ -45,7 +45,7 @@ void Loop::RunOnceBlocking() {
 }
 
 /// Execute the loop, blocking the current thread, up until the loop has
-/// quitted.
+/// quit.
 void Loop::Run() {
   while (!HasQuitted()) {
     RunOnceBlocking();

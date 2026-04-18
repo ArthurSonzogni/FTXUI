@@ -68,7 +68,7 @@ int main(int argc, const char* argv[]) {
   auto exit = screen.ExitLoopClosure();
   auto do_nothing = [&] {};
 
-  // Instanciate the main and modal components:
+  // Instantiate the main and modal components:
   auto main_component = MainComponent(show_modal, exit);
   auto modal_component = ModalComponent(do_nothing, hide_modal);
 

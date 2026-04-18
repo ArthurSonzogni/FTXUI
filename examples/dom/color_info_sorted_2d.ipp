@@ -19,7 +19,7 @@ std::vector<std::vector<ftxui::ColorInfo>> ColorInfoSorted2D() {
       info_color.begin(), info_color.end(),
       [](const ftxui::ColorInfo& A, const ftxui::ColorInfo& B) { return A.hue < B.hue; });
 
-  // Make 8 colums, one gray and seven colored.
+  // Make 8 columns, one gray and seven colored.
   std::vector<std::vector<ftxui::ColorInfo>> info_columns(8);
   info_columns[0] = info_gray;
   for (size_t i = 0; i < info_color.size(); ++i) {

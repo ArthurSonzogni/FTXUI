@@ -23,7 +23,7 @@ project(ftxui
 
 
 set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
-terminal used will be one of Microsoft and use a set of reasonnable fallback \
+terminal used will be one of Microsoft and use a set of reasonable fallback \
 to counteract its implementations problems.")
 if (WIN32)
   option(FTXUI_MICROSOFT_TERMINAL_FALLBACK

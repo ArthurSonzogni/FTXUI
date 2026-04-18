@@ -418,7 +418,7 @@ TerminalInputParser::Output TerminalInputParser::ParseMouse(  // NOLINT
   Output output(MOUSE);
   output.mouse.motion = Mouse::Motion(pressed);  // NOLINT
 
-  // Bits value Modifer  Comment
+  // Bits value Modifier  Comment
   // ---- ----- ------- ---------
   // 0 1  1 2   button   0 = Left, 1 = Middle, 2 = Right, 3 = Release
   // 2    4     Shift
