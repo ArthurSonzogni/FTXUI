@@ -30,6 +30,7 @@
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/loop.hpp"            // for Loop
 #include "ftxui/component/task_runner.hpp"
+#include "ftxui/component/multi_receiver_buffer.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
 #include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
@@ -65,118 +66,6 @@ void RequestAnimationFrame() {
   }
 }
 }  // namespace animation
-
-class EventBuffer {
- public:
-  class Receiver {
-   public:
-    explicit Receiver(EventBuffer* buffer)
-        : buffer_(buffer), index_(buffer->next_index_) {
-      buffer_->receivers_.push_back(this);
-    }
-
-    Receiver(EventBuffer* buffer, size_t index)
-        : buffer_(buffer), index_(index) {
-      buffer_->receivers_.push_back(this);
-    }
-
-    ~Receiver() {
-      if (buffer_) {
-        buffer_->RemoveReceiver(this);
-      }
-    }
-
-    Receiver(const Receiver&) = delete;
-    Receiver(Receiver&& other) noexcept
-        : buffer_(other.buffer_), index_(other.index_) {
-      other.buffer_ = nullptr;
-      if (buffer_) {
-        std::replace(buffer_->receivers_.begin(), buffer_->receivers_.end(),
-                     &other, this);
-      }
-    }
-
-    Receiver& operator=(const Receiver&) = delete;
-    Receiver& operator=(Receiver&& other) noexcept {
-      if (this != &other) {
-        if (buffer_) {
-          buffer_->RemoveReceiver(this);
-        }
-        buffer_ = other.buffer_;
-        index_ = other.index_;
-        other.buffer_ = nullptr;
-        if (buffer_) {
-          std::replace(buffer_->receivers_.begin(), buffer_->receivers_.end(),
-                       &other, this);
-        }
-      }
-      return *this;
-    }
-
-    bool HasEvent() const { return buffer_ && index_ < buffer_->next_index_; }
-
-    Event Pop() {
-      if (!HasEvent()) {
-        return {};
-      }
-      Event event = buffer_->GetEvent(index_);
-      index_++;
-      buffer_->Prune();
-      return event;
-    }
-
-    size_t index() const { return index_; }
-
-   private:
-    friend class EventBuffer;
-    EventBuffer* buffer_;
-    size_t index_;
-  };
-
-  std::unique_ptr<Receiver> CreateReceiver() {
-    return std::make_unique<Receiver>(this);
-  }
-
-  std::unique_ptr<Receiver> CreateReceiverAt(size_t index) {
-    return std::make_unique<Receiver>(this, index);
-  }
-
-  void Push(Event event) {
-    events_.push_back(std::move(event));
-    next_index_++;
-  }
-
- private:
-  void RemoveReceiver(Receiver* receiver) {
-    receivers_.erase(
-        std::remove(receivers_.begin(), receivers_.end(), receiver),
-        receivers_.end());
-    Prune();
-  }
-
-  void Prune() {
-    if (receivers_.empty()) {
-      events_.clear();
-      start_index_ = next_index_;
-      return;
-    }
-    size_t min_index = next_index_;
-    for (auto* r : receivers_) {
-      min_index = std::min(min_index, r->index_);
-    }
-    while (start_index_ < min_index) {
-      events_.pop_front();
-      start_index_++;
-    }
-  }
-
-  Event GetEvent(size_t index) const { return events_[index - start_index_]; }
-
-  std::deque<Event> events_;
-  std::vector<Receiver*> receivers_;
-  size_t start_index_ = 0;
-  size_t next_index_ = 0;
-};
 
 class ThrottledRequest {
  public:
@@ -270,9 +159,9 @@ struct App::Internal {
   ThrottledRequest cursor_position_request;
 
 
-  EventBuffer event_buffer;
-  std::unique_ptr<EventBuffer::Receiver> setup_receiver;
-  std::unique_ptr<EventBuffer::Receiver> main_loop_receiver;
+  MultiReceiverBuffer<Event> event_buffer;
+  std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> setup_receiver;
+  std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> main_loop_receiver;
 
   explicit Internal(App* app, std::function<void(Event)> out);
 };
@@ -937,7 +826,7 @@ void App::InstallCursorShape() {
     bool received = false;
     while (!received) {
       FetchTerminalEvents();
-      while (internal_->setup_receiver->HasEvent()) {
+      while (internal_->setup_receiver->Has()) {
         Event event = internal_->setup_receiver->Pop();
         if (event.is_cursor_shape()) {
           cursor_reset_shape = event.cursor_shape();
@@ -972,7 +861,7 @@ void App::Uninstall() {
     while (internal_->cursor_position_request.HasPending()) {
       FetchTerminalEvents();
 
-      while (closing_receiver->HasEvent()) {
+      while (closing_receiver->Has()) {
         Event event = closing_receiver->Pop();
         if (event.is_cursor_position()) {
           cursor_x_ = event.cursor_x();
@@ -1026,7 +915,7 @@ void App::RunOnce(Component component) {
   ExecuteSignalHandlers();
   FetchTerminalEvents();
 
-  while (!quit_ && internal_->main_loop_receiver->HasEvent()) {
+  while (!quit_ && internal_->main_loop_receiver->Has()) {
     Post(internal_->main_loop_receiver->Pop());
   }
 
