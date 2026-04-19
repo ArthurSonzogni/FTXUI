@@ -21,18 +21,6 @@ project(ftxui
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
-
-set(FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT "On windows, assume the \
-terminal used will be one of Microsoft and use a set of reasonable fallback \
-to counteract its implementations problems.")
-if (WIN32)
-  option(FTXUI_MICROSOFT_TERMINAL_FALLBACK
-    ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} ON)
-else()
-  option(FTXUI_MICROSOFT_TERMINAL_FALLBACK
-    ${FTXUI_MICROSOFT_TERMINAL_FALLBACK_HELP_TEXT} OFF)
-endif()
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(cmake/ftxui_message.cmake)

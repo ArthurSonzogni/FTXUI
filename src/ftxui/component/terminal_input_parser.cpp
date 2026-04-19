@@ -537,7 +537,7 @@ TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
       output.terminal_version = arguments[1];
       switch (arguments[0]) {
         case 0:
-          output.terminal_name = "vt100";
+          output.terminal_name = "xterm";
           break;
         case 1:
           output.terminal_name = "vt220";
@@ -568,6 +568,9 @@ TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
           break;
         case 84:
           output.terminal_name = "tmux";
+          break;
+        case 85:
+          output.terminal_name = "urxvt";
           break;
         default:
           output.terminal_name = "unknown";

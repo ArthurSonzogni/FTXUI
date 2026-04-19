@@ -4,6 +4,7 @@
 #include "ftxui/component/component_options.hpp"
 
 #include <ftxui/screen/color.hpp>  // for Color, Color::White, Color::Black, Color::GrayDark, Color::Blue, Color::GrayLight, Color::Red
+#include <ftxui/screen/terminal.hpp>
 #include <memory>                  // for shared_ptr
 #include <utility>                 // for move
 #include "ftxui/component/animation.hpp"  // for Function, Duration
@@ -244,13 +245,9 @@ ButtonOption ButtonOption::Animated(Color background,
 CheckboxOption CheckboxOption::Simple() {
   auto option = CheckboxOption();
   option.transform = [](const EntryState& s) {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // Microsoft terminal do not use fonts able to render properly the default
-    // radiobox glyph.
-    auto prefix = text(s.state ? "[X] " : "[ ] ");  // NOLINT
-#else
-    auto prefix = text(s.state ? "▣ " : "☐ ");  // NOLINT
-#endif
+    auto prefix = (Terminal::GetQuirks().component_ascii)
+                      ? text(s.state ? "[X] " : "[ ] ")  // NOLINT
+                      : text(s.state ? "▣ " : "☐ ");    // NOLINT
     auto t = text(s.label);
     if (s.active) {
       t |= bold;
@@ -268,13 +265,9 @@ CheckboxOption CheckboxOption::Simple() {
 RadioboxOption RadioboxOption::Simple() {
   auto option = RadioboxOption();
   option.transform = [](const EntryState& s) {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // Microsoft terminal do not use fonts able to render properly the default
-    // radiobox glyph.
-    auto prefix = text(s.state ? "(*) " : "( ) ");  // NOLINT
-#else
-    auto prefix = text(s.state ? "◉ " : "○ ");  // NOLINT
-#endif
+    auto prefix = (Terminal::GetQuirks().component_ascii)
+                      ? text(s.state ? "(*) " : "( ) ")  // NOLINT
+                      : text(s.state ? "◉ " : "○ ");    // NOLINT
     auto t = text(s.label);
     if (s.active) {
       t |= bold;

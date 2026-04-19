@@ -92,11 +92,6 @@ function(ftxui_set_options library)
     endif()
   endif()
 
-
-  if (FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    target_compile_definitions(${library}
-      PRIVATE "FTXUI_MICROSOFT_TERMINAL_FALLBACK")
-  endif()
 endfunction()
 
 if (EMSCRIPTEN)

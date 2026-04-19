@@ -12,28 +12,9 @@ def windows_copts():
       # Microsoft Visual Studio must interpret the codepoint using unicode.
       "/DUNICODE",
       "/D_UNICODE",
-
-      # Fallback for Microsoft Terminal.
-      # This
-      # - Replace missing font symbols by others.
-      # - Reduce screen position pooling frequency to deals against a Microsoft
-      #   race condition. This was fixed in 2020, but clients never not updated.
-      #   - https://github.com/microsoft/terminal/pull/7583
-      #   - https://github.com/ArthurSonzogni/FTXUI/issues/136
-      "/DFTXUI_MICROSOFT_TERMINAL_FALLBACK",
     ]
 
-    WINDOWS_COPTS = [
-      # Fallback for Microsoft Terminal.
-      # This
-      # - Replace missing font symbols by others.
-      # - Reduce screen position pooling frequency to deals against a Microsoft
-      #   race condition. This was fixed in 2020, but clients are still using
-      #   old versions.
-      #   - https://github.com/microsoft/terminal/pull/7583
-      #   - https://github.com/ArthurSonzogni/FTXUI/issues/136
-      "-DFTXUI_MICROSOFT_TERMINAL_FALLBACK",
-    ];
+    WINDOWS_COPTS = [];
     
     return select({
         # MSVC:

@@ -89,7 +89,6 @@ FTXUI supports the following CMake options:
 | FTXUI_BUILD_DOCS                  | Build the documentation       | OFF     |
 | FTXUI_BUILD_TESTS                 | Enable tests                  | OFF     |
 | FTXUI_ENABLE_INSTALL              | Generate install targets      | ON      |
-| FTXUI_MICROSOFT_TERMINAL_FALLBACK | Improve Windows compatibility | ON/OFF  |
 
 To enable an option:
 

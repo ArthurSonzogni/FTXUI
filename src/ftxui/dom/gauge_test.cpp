@@ -6,6 +6,7 @@
 #include "ftxui/dom/elements.hpp"   // for gauge, gaugeUp
 #include "ftxui/dom/node.hpp"       // for Render
 #include "ftxui/screen/screen.hpp"  // for Screen
+#include "ftxui/screen/terminal.hpp"
 
 // NOLINTBEGIN
 namespace ftxui {
@@ -23,11 +24,11 @@ TEST(GaugeTest, HalfHorizontal) {
   Screen screen(11, 1);
   Render(screen, root);
 
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-  EXPECT_EQ("█████▌     ", screen.ToString());
-#else
-  EXPECT_EQ("█████▍     ", screen.ToString());
-#endif
+  if (Terminal::GetQuirks().block_characters) {
+    EXPECT_EQ("█████▍     ", screen.ToString());
+  } else {
+    EXPECT_EQ("█████▌     ", screen.ToString());
+  }
 }
 
 TEST(GaugeTest, OneHorizontal) {

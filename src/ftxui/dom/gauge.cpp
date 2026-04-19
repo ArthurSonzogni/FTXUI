@@ -11,18 +11,21 @@
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"    // for Screen, Cell
 
+#include "ftxui/screen/terminal.hpp"  // for Quirks, GetQuirks
+
 namespace ftxui {
 
 namespace {
 // NOLINTNEXTLINE
 static const std::string charset_horizontal[11] = {
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-    // Microsoft's terminals often use fonts not handling the 8 unicode
-    // characters for representing the whole gauge. Fallback with less.
-    " ", " ", " ", " ", "▌", "▌", "▌", "█", "█", "█",
-#else
     " ", " ", "▏", "▎", "▍", "▌", "▋", "▊", "▉", "█",
-#endif
+    // An extra character in case when the fuzzer manage to have:
+    // int(9 * (limit - limit_int) = 9
+    "█"};
+
+// NOLINTNEXTLINE
+static const std::string charset_horizontal_microsoft[11] = {
+    " ", " ", " ", " ", "▌", "▌", "▌", "█", "█", "█",
     // An extra character in case when the fuzzer manage to have:
     // int(9 * (limit - limit_int) = 9
     "█"};
@@ -95,10 +98,13 @@ class Gauge : public Node {
   }
 
   void RenderHorizontal(Screen& screen, bool invert) {
-     
     if (box_.y_min > box_.y_max) {
       return;
     }
+
+    const auto* charset = Terminal::GetQuirks().block_characters
+                              ? charset_horizontal
+                              : charset_horizontal_microsoft;
 
     // Draw the progress bar horizontally across the full allocated height:
     const float progress = invert ? 1.F - progress_ : progress_;
@@ -109,12 +115,12 @@ class Gauge : public Node {
     for (int y = box_.y_min; y <= box_.y_max; y++) {
       int x = box_.x_min;
       while (x < limit_int) {
-        screen.at(x++, y) = charset_horizontal[9];  // NOLINT
+        screen.at(x++, y) = charset[9];  // NOLINT
       }
       // NOLINTNEXTLINE
-      screen.at(x++, y) = charset_horizontal[int(9 * (limit - limit_int))];
+      screen.at(x++, y) = charset[int(9 * (limit - limit_int))];
       while (x <= box_.x_max) {
-        screen.at(x++, y) = charset_horizontal[0];
+        screen.at(x++, y) = charset[0];
       }
     }
 

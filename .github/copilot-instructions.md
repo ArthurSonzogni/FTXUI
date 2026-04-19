@@ -128,7 +128,6 @@ FTXUI is organized into three main modules that depend on each other:
 | FTXUI_BUILD_TESTS                 | Build and enable tests          | OFF     |
 | FTXUI_BUILD_MODULES               | Build C++20 modules             | OFF     |
 | FTXUI_ENABLE_INSTALL              | Generate install targets        | ON      |
-| FTXUI_MICROSOFT_TERMINAL_FALLBACK | Windows terminal compatibility  | ON/OFF  |
 
 ## Common Tasks
 

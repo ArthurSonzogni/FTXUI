@@ -29,6 +29,22 @@ enum Color {
 Color ColorSupport();
 void SetColorSupport(Color color);
 
+/// @brief Quirks is a structure that represents various terminal-specific
+/// behaviors that may require fallbacks.
+/// @ingroup screen
+struct Quirks {
+  /// @brief Whether the terminal font supports the 8 Unicode block characters.
+  bool block_characters = true;
+  /// @brief Whether the terminal correctly handles hiding the cursor.
+  bool cursor_hiding = true;
+  /// @brief Whether the terminal should use ASCII characters for components.
+  bool component_ascii = false;
+  /// @brief The level of color support of the terminal.
+  Color color_support = Palette256;
+};
+Quirks GetQuirks();
+void SetQuirks(const Quirks& quirks);
+
 }  // namespace Terminal
 
 }  // namespace ftxui

@@ -1,8 +1,11 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <cstdlib>  // for getenv
-#include <string>   // for string, allocator
+#include <algorithm>  // for std::search
+#include <cctype>     // for std::tolower
+#include <cstdlib>    // for getenv
+#include <string>      // for string, allocator
+#include <string_view> // for string_view
 
 #include "ftxui/screen/terminal.hpp"
 
@@ -23,8 +26,16 @@ namespace ftxui {
 
 namespace {
 
-bool g_cached = false;                     // NOLINT
-Terminal::Color g_cached_supported_color;  // NOLINT
+bool g_color_support_detected = false;
+Terminal::Quirks g_quirks = [] {
+  Terminal::Quirks quirks;
+#if defined(_WIN32)
+  quirks.block_characters = false;
+  quirks.cursor_hiding = false;
+  quirks.component_ascii = true;
+#endif
+  return quirks;
+}();
 
 Dimensions& FallbackSize() {
 #if defined(__EMSCRIPTEN__)
@@ -52,8 +63,26 @@ const char* Safe(const char* c) {
   return (c != nullptr) ? c : "";
 }
 
-bool Contains(const std::string& s, const char* key) {
-  return s.find(key) != std::string::npos;
+bool Contains(std::string_view s, std::string_view key) {
+  if (key.empty()) {
+    return true;
+  }
+  auto it = std::search(
+      s.begin(), s.end(), key.begin(), key.end(),
+      [](char a, char b) {
+        return std::tolower(static_cast<unsigned char>(a)) ==
+               std::tolower(static_cast<unsigned char>(b));
+      });
+  return it != s.end();
+}
+
+bool ContainsAny(std::string_view s, std::initializer_list<std::string_view> keys) {
+  for (std::string_view key : keys) {
+    if (Contains(s, key)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 Terminal::Color ComputeColorSupport() {
@@ -61,25 +90,31 @@ Terminal::Color ComputeColorSupport() {
   return Terminal::Color::TrueColor;
 #endif
 
-  std::string COLORTERM = Safe(std::getenv("COLORTERM"));  // NOLINT
-  if (Contains(COLORTERM, "24bit") || Contains(COLORTERM, "truecolor")) {
+  std::string_view COLORTERM = Safe(std::getenv("COLORTERM"));  // NOLINT
+  if (ContainsAny(COLORTERM, {"24bit", "truecolor"})) {
     return Terminal::Color::TrueColor;
   }
 
-  std::string TERM = Safe(std::getenv("TERM"));  // NOLINT
-  if (Contains(COLORTERM, "256") || Contains(TERM, "256")) {
+  std::string_view TERM_PROGRAM = Safe(std::getenv("TERM_PROGRAM"));  // NOLINT
+  if (ContainsAny(TERM_PROGRAM, {"iterm", "apple_terminal", "vscode", "warp",
+                                 "ghostty", "wezterm"})) {
+    return Terminal::Color::TrueColor;
+  }
+
+  std::string_view TERM = Safe(std::getenv("TERM"));  // NOLINT
+  if (ContainsAny(TERM, {"direct", "truecolor", "kitty", "alacritty", "foot"})) {
+    return Terminal::Color::TrueColor;
+  }
+
+  if (Contains(TERM, "xterm") && !ContainsAny(TERM, {"rxvt", "urxvt"})) {
+    return Terminal::Color::TrueColor;
+  }
+
+  if (ContainsAny(COLORTERM, {"256"}) ||
+      ContainsAny(TERM, {"256", "xterm", "screen", "tmux"}) ||
+      Contains(TERM_PROGRAM, "iterm")) {
     return Terminal::Color::Palette256;
   }
-
-#if defined(FTXUI_MICROSOFT_TERMINAL_FALLBACK)
-  // Microsoft terminals do not properly declare themselves supporting true
-  // colors: https://github.com/microsoft/terminal/issues/1040
-  // As a fallback, assume microsoft terminal are the ones not setting those
-  // variables, and enable true colors.
-  if (TERM.empty() && COLORTERM.empty()) {
-    return Terminal::Color::TrueColor;
-  }
-#endif
 
   return Terminal::Color::Palette16;
 }
@@ -128,18 +163,35 @@ void SetFallbackSize(const Dimensions& fallbackSize) {
 /// @brief Get the color support of the terminal.
 /// @ingroup screen
 Color ColorSupport() {
-  if (!g_cached) {
-    g_cached = true;
-    g_cached_supported_color = ComputeColorSupport();
+  if (!g_color_support_detected) {
+    g_quirks.color_support = ComputeColorSupport();
+    g_color_support_detected = true;
   }
-  return g_cached_supported_color;
+  return g_quirks.color_support;
 }
 
 /// @brief Override terminal color support in case auto-detection fails
 /// @ingroup dom
 void SetColorSupport(Color color) {
-  g_cached = true;
-  g_cached_supported_color = color;
+  g_quirks.color_support = color;
+  g_color_support_detected = true;
+}
+
+/// @brief Get the terminal quirks.
+/// @ingroup screen
+Quirks GetQuirks() {
+  if (!g_color_support_detected) {
+    g_quirks.color_support = ComputeColorSupport();
+    g_color_support_detected = true;
+  }
+  return g_quirks;
+}
+
+/// @brief Override terminal quirks.
+/// @ingroup screen
+void SetQuirks(const Quirks& quirks) {
+  g_quirks = quirks;
+  g_color_support_detected = true;
 }
 
 }  // namespace Terminal

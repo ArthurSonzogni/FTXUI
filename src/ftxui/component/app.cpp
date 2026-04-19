@@ -50,6 +50,8 @@
 #endif
 #else
 #include <fcntl.h>
+#include <poll.h>
+#include <sys/types.h>
 #include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set, timeval
 #include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
 #include <unistd.h>  // for STDIN_FILENO, read
@@ -196,15 +198,6 @@ void ftxui_on_resize(int columns, int rows) {
 }
 
 #else  // POSIX (Linux & Mac)
-
-int CheckStdinReady(int fd) {
-  timeval tv = {0, 0};  // NOLINT
-  fd_set fds;
-  FD_ZERO(&fds);                                // NOLINT
-  FD_SET(fd, &fds);                             // NOLINT
-  select(fd + 1, &fds, nullptr, nullptr, &tv);  // NOLINT
-  return FD_ISSET(fd, &fds);                    // NOLINT
-}
 
 #endif
 
@@ -861,8 +854,9 @@ void App::InstallTerminalInfo() {
     bool cursor_shape_received = false;
     bool da1_received = false;
     bool da2_received = false;
-    // xtversion is optional as many terminals don't support it.
-    while (!cursor_shape_received || !da1_received || !da2_received) {
+    bool xtversion_received = false;
+    // Wait for the cursor shape reply using the setup head.
+    while (true) {
       FetchTerminalEvents();
       while (internal_->setup_receiver->Has()) {
         Event event = internal_->setup_receiver->Pop();
@@ -882,15 +876,83 @@ void App::InstallTerminalInfo() {
         if (event.IsTerminalEmulator()) {
           terminal_emulator_name_ = event.TerminalEmulatorName();
           terminal_emulator_version_ = event.TerminalEmulatorVersion();
+          xtversion_received = true;
         }
       }
+
+      if (cursor_shape_received && da1_received && da2_received) {
+        break;
+      }
+
       if (std::chrono::steady_clock::now() - start >
-          std::chrono::milliseconds(400)) {
+          std::chrono::milliseconds(1000)) {
         break;
       }
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+
+    // If we received DA1, DA2 and cursor shape, but not XTVERSION yet,
+    // wait a tiny bit more for XTVERSION as it is usually sent last.
+    if (!xtversion_received && cursor_shape_received && da1_received &&
+        da2_received) {
+      for (int i = 0; i < 10; ++i) {
+        FetchTerminalEvents();
+        while (internal_->setup_receiver->Has()) {
+          Event event = internal_->setup_receiver->Pop();
+          if (event.IsTerminalEmulator()) {
+            terminal_emulator_name_ = event.TerminalEmulatorName();
+            terminal_emulator_version_ = event.TerminalEmulatorVersion();
+            xtversion_received = true;
+          }
+        }
+        if (xtversion_received) {
+          break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+      }
+    }
   }
+
+  // Set quirks and color support based on terminal identification.
+  Terminal::Quirks quirks = Terminal::GetQuirks();
+
+  const bool is_modern_emulator = (TerminalEmulatorName() != "unknown");
+  const bool is_urxvt = (TerminalName() == "urxvt");
+  const bool is_vt220_plus =
+      (TerminalName() != "vt100" && TerminalName() != "unknown");
+  const bool reports_utf8 =
+      std::find(terminal_capabilities_.begin(), terminal_capabilities_.end(),
+                108) != terminal_capabilities_.end();
+  const bool reports_color =
+      std::find(terminal_capabilities_.begin(), terminal_capabilities_.end(),
+                22) != terminal_capabilities_.end();
+
+  // Heuristic:
+  // 1. If it's a modern emulator, we can trust it supports TrueColor.
+  if (is_modern_emulator) {
+    if (quirks.color_support < Terminal::Color::TrueColor) {
+      quirks.color_support = Terminal::Color::TrueColor;
+    }
+    quirks.block_characters = true;
+    quirks.cursor_hiding = true;
+    quirks.component_ascii = false;
+  } else if (is_vt220_plus || reports_utf8 || reports_color) {
+    // For VT220+ (including urxvt) or terminals reporting color support:
+    // - Enable modern quirks.
+    // - Ensure at least 256 colors.
+    // - If it's NOT urxvt, we can also upgrade to TrueColor as most modern
+    //   terminals identifying as VT220 support it.
+    quirks.block_characters = true;
+    quirks.cursor_hiding = true;
+    quirks.component_ascii = false;
+    if (!is_urxvt && quirks.color_support < Terminal::Color::TrueColor) {
+      quirks.color_support = Terminal::Color::TrueColor;
+    } else if (quirks.color_support < Terminal::Color::Palette256) {
+      quirks.color_support = Terminal::Color::Palette256;
+    }
+  }
+
+  Terminal::SetQuirks(quirks);
 
   on_exit_functions.emplace([this, cursor_reset_shape] {
     TerminalSend("\033[?25h");  // Enable cursor.
@@ -1365,8 +1427,8 @@ size_t App::FetchTerminalEvents() {
   // Read chars from the terminal.
   // We configured it to be non blocking.
   std::array<char, 128> out{};
-  size_t l = read(STDIN_FILENO, out.data(), out.size());
-  if (l == 0) {
+  const ssize_t l = read(STDIN_FILENO, out.data(), out.size());
+  if (l <= 0) {
     const auto timeout =
         std::chrono::steady_clock::now() - internal_->last_char_time;
     const size_t timeout_microseconds =
@@ -1377,12 +1439,14 @@ size_t App::FetchTerminalEvents() {
   internal_->last_char_time = std::chrono::steady_clock::now();
 
   // Convert the chars to events.
-  for (size_t i = 0; i < l; ++i) {
+  for (ssize_t i = 0; i < l; ++i) {
     internal_->terminal_input_parser.Add(out[i]);
   }
-  return l;
+  return (size_t)l;
 #else  // POSIX (Linux & Mac)
-  if (!CheckStdinReady(tty_fd_)) {
+  pollfd pfd = {tty_fd_, POLLIN, 0};
+  const int poll_result = poll(&pfd, 1, 0);
+  if (poll_result <= 0) {
     const auto timeout =
         std::chrono::steady_clock::now() - internal_->last_char_time;
     const size_t timeout_ms =
@@ -1394,13 +1458,16 @@ size_t App::FetchTerminalEvents() {
 
   // Read chars from the terminal.
   std::array<char, 128> out{};
-  size_t l = read(tty_fd_, out.data(), out.size());
+  const ssize_t l = read(tty_fd_, out.data(), out.size());
+  if (l <= 0) {
+    return 0;
+  }
 
   // Convert the chars to events.
-  for (size_t i = 0; i < l; ++i) {
+  for (ssize_t i = 0; i < l; ++i) {
     internal_->terminal_input_parser.Add(out[i]);
   }
-  return l;
+  return (size_t)l;
 #endif
 }
 
