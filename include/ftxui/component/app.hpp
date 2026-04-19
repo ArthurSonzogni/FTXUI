@@ -104,12 +104,12 @@ class App : public Screen {
   std::string ResetCursorPosition();
 
   void RequestCursorPosition(bool force = false);
-  void RequestCursorShape();
 
   void TerminalSend(std::string_view);
   void TerminalFlush();
 
   void InstallPipedInputHandling();
+  void InstallCursorShape();
 
   void Signal(int signal);
 
@@ -153,12 +153,12 @@ class App : public Screen {
 
   // Piped input handling state (POSIX only)
   bool handle_piped_input_ = true;
-  bool is_a_tty_ = false;
+  bool is_stdin_a_tty_ = false;
+  bool is_stdout_a_tty_ = false;
   // File descriptor for /dev/tty, used for piped input handling.
   int tty_fd_ = -1;
 
-  // The style of the cursor to restore on exit.
-  int cursor_reset_shape_ = 1;
+
 
   // Selection API:
   CapturedMouse selection_pending_;

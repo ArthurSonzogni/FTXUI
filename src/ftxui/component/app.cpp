@@ -18,6 +18,7 @@
 #include <stack>  // for stack
 #include <string>
 #include <string_view>
+#include <deque>
 #include <thread>   // for thread, sleep_for
 #include <tuple>    // for _Swallow_assign, ignore
 #include <utility>  // for move, swap
@@ -65,6 +66,118 @@ void RequestAnimationFrame() {
 }
 }  // namespace animation
 
+class EventBuffer {
+ public:
+  class Receiver {
+   public:
+    explicit Receiver(EventBuffer* buffer)
+        : buffer_(buffer), index_(buffer->next_index_) {
+      buffer_->receivers_.push_back(this);
+    }
+
+    Receiver(EventBuffer* buffer, size_t index)
+        : buffer_(buffer), index_(index) {
+      buffer_->receivers_.push_back(this);
+    }
+
+    ~Receiver() {
+      if (buffer_) {
+        buffer_->RemoveReceiver(this);
+      }
+    }
+
+    Receiver(const Receiver&) = delete;
+    Receiver(Receiver&& other) noexcept
+        : buffer_(other.buffer_), index_(other.index_) {
+      other.buffer_ = nullptr;
+      if (buffer_) {
+        std::replace(buffer_->receivers_.begin(), buffer_->receivers_.end(),
+                     &other, this);
+      }
+    }
+
+    Receiver& operator=(const Receiver&) = delete;
+    Receiver& operator=(Receiver&& other) noexcept {
+      if (this != &other) {
+        if (buffer_) {
+          buffer_->RemoveReceiver(this);
+        }
+        buffer_ = other.buffer_;
+        index_ = other.index_;
+        other.buffer_ = nullptr;
+        if (buffer_) {
+          std::replace(buffer_->receivers_.begin(), buffer_->receivers_.end(),
+                       &other, this);
+        }
+      }
+      return *this;
+    }
+
+    bool HasEvent() const { return buffer_ && index_ < buffer_->next_index_; }
+
+    Event Pop() {
+      if (!HasEvent()) {
+        return {};
+      }
+      Event event = buffer_->GetEvent(index_);
+      index_++;
+      buffer_->Prune();
+      return event;
+    }
+
+    size_t index() const { return index_; }
+
+   private:
+    friend class EventBuffer;
+    EventBuffer* buffer_;
+    size_t index_;
+  };
+
+  std::unique_ptr<Receiver> CreateReceiver() {
+    return std::make_unique<Receiver>(this);
+  }
+
+  std::unique_ptr<Receiver> CreateReceiverAt(size_t index) {
+    return std::make_unique<Receiver>(this, index);
+  }
+
+  void Push(Event event) {
+    events_.push_back(std::move(event));
+    next_index_++;
+  }
+
+ private:
+  void RemoveReceiver(Receiver* receiver) {
+    receivers_.erase(
+        std::remove(receivers_.begin(), receivers_.end(), receiver),
+        receivers_.end());
+    Prune();
+  }
+
+  void Prune() {
+    if (receivers_.empty()) {
+      events_.clear();
+      start_index_ = next_index_;
+      return;
+    }
+    size_t min_index = next_index_;
+    for (auto* r : receivers_) {
+      min_index = std::min(min_index, r->index_);
+    }
+    while (start_index_ < min_index) {
+      events_.pop_front();
+      start_index_++;
+    }
+  }
+
+  Event GetEvent(size_t index) const { return events_[index - start_index_]; }
+
+  std::deque<Event> events_;
+  std::vector<Receiver*> receivers_;
+  size_t start_index_ = 0;
+  size_t next_index_ = 0;
+};
+
 class ThrottledRequest {
  public:
   ThrottledRequest(App* app,
@@ -73,7 +186,7 @@ class ThrottledRequest {
       : app_(app), send_(std::move(send)), task_runner_(task_runner) {}
 
   void Request(bool force = false) {
-    if (!app_->is_a_tty_) {
+    if (!app_->is_stdin_a_tty_) {
       return;
     }
 
@@ -155,7 +268,11 @@ struct App::Internal {
   std::string output_buffer;
 
   ThrottledRequest cursor_position_request;
-  ThrottledRequest cursor_shape_request;
+
+
+  EventBuffer event_buffer;
+  std::unique_ptr<EventBuffer::Receiver> setup_receiver;
+  std::unique_ptr<EventBuffer::Receiver> main_loop_receiver;
 
   explicit Internal(App* app, std::function<void(Event)> out);
 };
@@ -346,19 +463,21 @@ App::Internal::Internal(App* app, std::function<void(Event)> out)
       cursor_position_request(
           app,
           [app] { app->TerminalSend(DeviceStatusReport(DSRMode::kCursor)); },
-          task_runner),
-      cursor_shape_request(
-          app,
-          [app] { app->TerminalSend(DECRQSS_DECSCUSR); },
-          task_runner) {}
+          task_runner) {
+  setup_receiver = event_buffer.CreateReceiver();
+  main_loop_receiver = event_buffer.CreateReceiver();
+}
 
 App::App(Dimension dimension, int dimx, int dimy, bool use_alternative_screen)
     : Screen(dimx, dimy),
       dimension_(dimension),
       use_alternative_screen_(use_alternative_screen) {
-  internal_ = std::make_unique<Internal>(
-      this, [&](Event event) { PostEvent(std::move(event)); });
+  internal_ = std::make_unique<Internal>(this, [&](Event event) {
+    internal_->event_buffer.Push(std::move(event));
+    RequestAnimationFrame();
+  });
 }
+
 
 // static
 App App::FixedSize(int dimx, int dimy) {
@@ -468,14 +587,23 @@ void App::HandlePipedInput(bool enable) {
 /// It will be executed later, after every other scheduled tasks.
 void App::Post(Task task) {
   internal_->task_runner.PostTask([this, task = std::move(task)]() mutable {
-    HandleTask(component_, task);
+    if (component_) {
+      HandleTask(component_, task);
+      return;
+    }
+
+    // If there is no component, we can still execute closures.
+    if (std::holds_alternative<Closure>(task)) {
+      std::get<Closure>(task)();
+    }
   });
 }
 
 /// @brief Add an event to the main loop.
 /// It will be executed later, after every other scheduled events.
 void App::PostEvent(Event event) {
-  Post(event);
+  internal_->event_buffer.Push(std::move(event));
+  RequestAnimationFrame();
 }
 
 /// @brief Add a task to draw the screen one more time, until all the animations
@@ -627,13 +755,7 @@ void App::Install() {
   // ensure it is fully applied:
   on_exit_functions.emplace([this] { TerminalFlush(); });
 
-  // Request the terminal to report the current cursor shape. We will restore it
-  // on exit.
-  RequestCursorShape();
-  on_exit_functions.emplace([this] {
-    TerminalSend("\033[?25h");  // Enable cursor.
-    TerminalSend("\033[" + std::to_string(cursor_reset_shape_) + " q");
-  });
+  InstallCursorShape();
 
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
@@ -763,60 +885,111 @@ void App::Install() {
 }
 
 void App::InstallPipedInputHandling() {
-  is_a_tty_ = false;
+  is_stdin_a_tty_ = false;
+  is_stdout_a_tty_ = false;
 #if defined(__EMSCRIPTEN__)
-  is_a_tty_ = true;
+  is_stdin_a_tty_ = true;
+  is_stdout_a_tty_ = true;
 #elif defined(_WIN32)
-  is_a_tty_ = _isatty(_fileno(stdin));
+  is_stdin_a_tty_ = _isatty(_fileno(stdin));
+  is_stdout_a_tty_ = _isatty(_fileno(stdout));
 #else
   tty_fd_ = STDIN_FILENO;
+  is_stdout_a_tty_ = isatty(STDOUT_FILENO);
   // Handle piped input redirection if explicitly enabled by the application.
   // This allows applications to read data from stdin while still receiving
   // keyboard input from the terminal for interactive use.
   if (!handle_piped_input_) {
-    is_a_tty_ = isatty(STDIN_FILENO);
-    return;
+    is_stdin_a_tty_ = isatty(STDIN_FILENO);
+  } else if (isatty(STDIN_FILENO)) {
+    is_stdin_a_tty_ = true;
+  } else {
+    // Open /dev/tty for keyboard input.
+    tty_fd_ = open("/dev/tty", O_RDONLY);
+    if (tty_fd_ < 0) {
+      // Failed to open /dev/tty (containers, headless systems, etc.)
+      tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
+      is_stdin_a_tty_ = isatty(STDIN_FILENO);
+    } else {
+      is_stdin_a_tty_ = true;
+      // Close the /dev/tty file descriptor on exit.
+      on_exit_functions.emplace([this] {
+        close(tty_fd_);
+        tty_fd_ = -1;
+      });
+    }
   }
-
-  // If stdin is a terminal, we don't need to open /dev/tty.
-  if (isatty(STDIN_FILENO)) {
-    is_a_tty_ = true;
-    return;
-  }
-
-  // Open /dev/tty for keyboard input.
-  tty_fd_ = open("/dev/tty", O_RDONLY);
-  if (tty_fd_ < 0) {
-    // Failed to open /dev/tty (containers, headless systems, etc.)
-    tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
-    is_a_tty_ = isatty(STDIN_FILENO);
-    return;
-  }
-
-  is_a_tty_ = true;
-
-  // Close the /dev/tty file descriptor on exit.
-  on_exit_functions.emplace([this] {
-    close(tty_fd_);
-    tty_fd_ = -1;
-  });
 #endif
+}
+
+void App::InstallCursorShape() {
+  // Request the terminal to report the current cursor shape. We will restore it
+  // on exit.
+  if (is_stdout_a_tty_) {
+    TerminalSend(DECRQSS_DECSCUSR);
+  }
+
+  int cursor_reset_shape = 1;
+
+  // Wait for the cursor shape reply using the setup head.
+  if (is_stdin_a_tty_ && is_stdout_a_tty_) {
+    auto start = std::chrono::steady_clock::now();
+    bool received = false;
+    while (!received) {
+      FetchTerminalEvents();
+      while (internal_->setup_receiver->HasEvent()) {
+        Event event = internal_->setup_receiver->Pop();
+        if (event.is_cursor_shape()) {
+          cursor_reset_shape = event.cursor_shape();
+          received = true;
+        }
+      }
+      if (std::chrono::steady_clock::now() - start >
+          std::chrono::milliseconds(400)) {
+        break;
+      }
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+  }
+
+  on_exit_functions.emplace([this, cursor_reset_shape] {
+    TerminalSend("\033[?25h");  // Enable cursor.
+    if (is_stdout_a_tty_) {
+      TerminalSend("\033[" + std::to_string(cursor_reset_shape) + " q");
+    }
+  });
 }
 
 // private
 void App::Uninstall() {
   installed_ = false;
-  // During shutdown, wait for all of the replies.
-  auto start = std::chrono::steady_clock::now();
-  while (internal_->cursor_position_request.HasPending() ||
-         internal_->cursor_shape_request.HasPending()) {
-    FetchTerminalEvents();
-    internal_->task_runner.RunUntilIdle();
 
-    if (std::chrono::steady_clock::now() - start > std::chrono::seconds(1)) {
-      break;
+  // During shutdown, wait for all of the replies.
+  if (is_stdin_a_tty_ && is_stdout_a_tty_) {
+    auto closing_receiver = internal_->event_buffer.CreateReceiverAt(
+        internal_->main_loop_receiver->index());
+    auto start = std::chrono::steady_clock::now();
+    while (internal_->cursor_position_request.HasPending()) {
+      FetchTerminalEvents();
+
+      while (closing_receiver->HasEvent()) {
+        Event event = closing_receiver->Pop();
+        if (event.is_cursor_position()) {
+          cursor_x_ = event.cursor_x();
+          cursor_y_ = event.cursor_y();
+          internal_->cursor_position_request.OnReply();
+        }
+
+      }
+
+      internal_->task_runner.RunUntilIdle();
+
+      if (std::chrono::steady_clock::now() - start >
+          std::chrono::milliseconds(400)) {
+        break;
+      }
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   OnExit();
@@ -852,6 +1025,10 @@ void App::RunOnce(Component component) {
   AutoReset set_component(&component_, component);
   ExecuteSignalHandlers();
   FetchTerminalEvents();
+
+  while (!quit_ && internal_->main_loop_receiver->HasEvent()) {
+    Post(internal_->main_loop_receiver->Pop());
+  }
 
   // Execute the pending tasks from the queue.
   const size_t executed_task = internal_->task_runner.ExecutedTasks();
@@ -891,15 +1068,7 @@ void App::HandleTask(Component component, Task& task) {
         return;
       }
 
-      if (arg.is_cursor_shape()) {
-        cursor_reset_shape_= arg.cursor_shape();
-        internal_->cursor_shape_request.OnReply();
-        return;
-      }
 
-      if (quit_ || !installed_) {
-        return;
-      }
 
       if (arg.is_mouse()) {
         arg.mouse().x -= cursor_x_;
@@ -909,7 +1078,6 @@ void App::HandleTask(Component component, Task& task) {
       arg.screen_ = this;
 
       bool handled = component->OnEvent(arg);
-
       handled = HandleSelection(handled, arg);
 
       if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
@@ -928,20 +1096,12 @@ void App::HandleTask(Component component, Task& task) {
 
     // Handle callback
     if constexpr (std::is_same_v<T, Closure>) {
-      if (quit_ || !installed_) {
-        return;
-      }
-
       arg();
       return;
     }
 
     // Handle Animation
     if constexpr (std::is_same_v<T, AnimationTask>) {
-      if (quit_ || !installed_) {
-        return;
-      }
-
       if (!animation_requested_) {
         return;
       }
@@ -1075,7 +1235,7 @@ void App::Draw(Component component) {
   // Periodically request the terminal emulator the frame position relative to
   // the screen. This is useful for converting mouse position reported in
   // screen's coordinates to frame's coordinates.
-  if (!use_alternative_screen_) {
+  if (!use_alternative_screen_ && is_stdout_a_tty_) {
     RequestCursorPosition(previous_frame_resized_);
   }
   previous_frame_resized_ = resized;
@@ -1134,9 +1294,6 @@ void App::RequestCursorPosition(bool force) {
 }
 
 // private
-void App::RequestCursorShape() {
-  internal_->cursor_shape_request.Request();
-}
 
 // private
 void App::TerminalSend(std::string_view s) {

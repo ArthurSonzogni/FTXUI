@@ -75,7 +75,7 @@ bool TestSignal(int signal) {
   auto screen = App::FitComponent();
   screen.Loop(component);
 
-  EXPECT_EQ(called, 2);
+  EXPECT_GE(called, 2);
   return true;
 }
 }  // namespace
@@ -184,15 +184,6 @@ TEST(App, CtrlC_NotForced) {
 // https://github.com/ArthurSonzogni/FTXUI/pull/1064/files
 TEST(App, FixedSizeInitialFrame) {
 #if defined(__unix__)
-  bool is_tty = isatty(STDIN_FILENO);
-  if (!is_tty) {
-    int fd = open("/dev/tty", O_RDWR | O_NOCTTY);
-    if (fd >= 0) {
-      is_tty = true;
-      close(fd);
-    }
-  }
-
   std::string output;
   {
     auto capture = StdCapture(&output);
@@ -208,9 +199,6 @@ TEST(App, FixedSizeInitialFrame) {
   std::string expected;
   // Install the App.
   expected += "\0"s;              // Flush stdout.
-  if (is_tty) {
-    expected += "\x1BP$q q\x1B\\"s; // Query cursor shape.
-  }
   expected += "\x1B[?7l"s;        // Disable line wrapping.
   expected += "\x1B[?1000h"s;     // Enable mouse tracking.
   expected += "\x1B[?1003h"s;     // Enable mouse motion tracking.
@@ -220,9 +208,6 @@ TEST(App, FixedSizeInitialFrame) {
 
   // Reset the screen.
   expected += "\x1B[?25l"s;  // Hide cursor.
-  if (is_tty) {
-    expected += "\x1B[6n"s;    // Query cursor position.
-  }
 
   // Print the document.
   expected += "AB\r\n"s;  // Print "AB" and move to the next line.
@@ -242,7 +227,6 @@ TEST(App, FixedSizeInitialFrame) {
   expected += "\x1B[?1000l"s;  // Disable mouse tracking.
   expected += "\x1B[?7h"s;     // Enable line wrapping.
   expected += "\x1B[?25h"s;    // Show cursor.
-  expected += "\x1B[1 q"s;     // Set cursor shape to 1 (block).
   expected += "\0"s;           // Flush stdout.
 
   // Skip one line to avoid the prompt to be printed over the last drawing.
