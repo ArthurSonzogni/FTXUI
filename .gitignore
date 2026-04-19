@@ -15,6 +15,7 @@ out/
 !CMakeLists.txt
 !LICENSE
 !README.md
+!GEMINI.md
 !codecov.yml
 !flake.lock
 !flake.nix
