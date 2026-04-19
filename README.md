@@ -95,20 +95,20 @@ A simple cross-platform C++ library for terminal based user interfaces!
 
 #### DOM
 
-This module defines a hierarchical set of Element. An Element manages layout and can be responsive to the terminal dimensions.
+This module defines a hierarchical set of `Element`. An `Element` manages layout and can be responsive to the terminal dimensions.
 
-They are declared in [<ftxui/dom/elements.hpp>](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
+They are declared in [`<ftxui/dom/elements.hpp>`](https://arthursonzogni.github.io/FTXUI/elements_8hpp_source.html
 )
   
 <details><summary>Layout</summary>
 
-Element can be arranged together:
+`Element` can be arranged together:
   - horizontally with `hbox`
   - vertically with `vbox`
   - inside a grid with `gridbox`
   - wrap along one direction using the `flexbox`.
   
-Element can become flexible using the `flex` decorator.
+`Element` can become flexible using the `flex` decorator.
   
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html) using `hbox`, `vbox` and `filler`.
 
@@ -152,7 +152,7 @@ FTXUI supports the pipe operator. It means: `decorator1(decorator2(element))` an
 
 <details><summary>Colors</summary>
 
-FTXUI support every color palette:
+FTXUI supports every color palette:
 
 Color [gallery](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gallery_8cpp-example.html):
 ![image](https://user-images.githubusercontent.com/4759106/147248595-04c7245a-5b85-4544-809d-a5984fc6f9e7.png)
@@ -161,10 +161,10 @@ Color [gallery](https://arthursonzogni.github.io/FTXUI/examples_2dom_2color_gall
   
 <details><summary>Border and separator</summary>
 
-Use decorator border and element separator() to subdivide your UI:
+Use decorator `border` and element `separator()` to subdivide your UI:
   
 ```cpp
-auto document = vbox({
+Element document = vbox({
     text("top"),
     separator(),
     text("bottom"),
@@ -184,11 +184,11 @@ A simple piece of text is represented using `text("content")`.
 
 To support text wrapping following spaces the following functions are provided:
 ```cpp
-Element paragraph(std::string text);
-Element paragraphAlignLeft(std::string text);
-Element paragraphAlignRight(std::string text);
-Element paragraphAlignCenter(std::string text);
-Element paragraphAlignJustify(std::string text);
+Element paragraph(string text);
+Element paragraphAlignLeft(string text);
+Element paragraphAlignRight(string text);
+Element paragraphAlignCenter(string text);
+Element paragraphAlignJustify(string text);
 ```
   
 [Paragraph example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2paragraph_8cpp-example.html)
@@ -209,7 +209,7 @@ A class to easily style a table of data.
 
 <details><summary>Canvas</summary>
 
-Drawing can be made on a Canvas, using braille, block, or simple characters:
+Drawing can be made on a `Canvas`, using braille, block, or simple characters:
   
 Simple [example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/dom/canvas.cpp):
   
@@ -222,9 +222,9 @@ Complex [examples](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/
 
 #### Component
 
-ftxui/component produces dynamic UI, reactive to the user's input. It defines a set of ftxui::Component. A component reacts to Events (keyboard, mouse, resize, ...) and Renders as an Element (see previous section).
+`ftxui/component` produces dynamic UI, reactive to the user's input. It defines a set of `ftxui::Component`. A component reacts to `Event`s (keyboard, mouse, resize, ...) and `Render`s as an `Element` (see previous section).
 
-Prebuilt components are declared in [<ftxui/component/component.hpp>](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
+Prebuilt components are declared in [`<ftxui/component/component.hpp>`](https://arthursonzogni.github.io/FTXUI/component_8hpp_source.html)
 
 <details><summary>Gallery</summary>
 
