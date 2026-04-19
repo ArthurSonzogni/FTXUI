@@ -117,9 +117,9 @@ Component Renderer(std::function<Element(bool)> render) {
 /// ```cpp
 /// auto screen = App::TerminalOutput();
 /// auto renderer =
-//     Renderer([] { return text("Hello");)
-///  | Renderer(bold)
-///  | Renderer(inverted);
+///   Renderer([] { return text("Hello"); })
+///   | Renderer(bold)
+///   | Renderer(inverted);
 /// screen.Loop(renderer);
 /// ```
 ComponentDecorator Renderer(ElementDecorator decorator) {  // NOLINT
