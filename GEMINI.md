@@ -61,8 +61,8 @@ To save tokens, always use quiet modes when possible.
 ### CMake Build
 If the `./build` directory exists, a CMake build has been configured.
 - **Configure**: `cmake -B build -DFTXUI_BUILD_TESTS=ON`
-- **Build**: `cmake --build build --quiet`
-- **Note**: If `./build/Makefile` exists, `make -C build -s` can be used. If not, `ninja -C build` is the likely alternative.
+- **Build**: `cmake --build build` (Note: `cmake --build` does not support `--quiet`)
+- **Note**: If `./build/Makefile` exists, `make -C build -s` is preferred for quiet output. If not, `ninja -C build` is the likely alternative.
 
 ### Running Tests
 - **All tests**: `ctest --test-dir build --output-on-failure --quiet`

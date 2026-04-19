@@ -477,5 +477,173 @@ TEST(Event, DeviceControlString) {
   EXPECT_EQ(1, received_events[0].cursor_shape());
 }
 
+TEST(Event, PrimaryDeviceAttributes) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('\x1B');
+  parser.Add('[');
+  parser.Add('?');
+  parser.Add('6');
+  parser.Add('2');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add(';');
+  parser.Add('2');
+  parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalCapabilities());
+  EXPECT_EQ(3u, received_events[0].TerminalCapabilities().size());
+  EXPECT_EQ(62, received_events[0].TerminalCapabilities()[0]);
+  EXPECT_EQ(1, received_events[0].TerminalCapabilities()[1]);
+  EXPECT_EQ(2, received_events[0].TerminalCapabilities()[2]);
+}
+
+TEST(Event, SecondaryDeviceAttributes) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  parser.Add('\x1B');
+  parser.Add('[');
+  parser.Add('>');
+  parser.Add('0');
+  parser.Add(';');
+  parser.Add('1');
+  parser.Add('2');
+  parser.Add('3');
+  parser.Add(';');
+  parser.Add('0');
+  parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalNameVersion());
+  EXPECT_EQ("vt100", received_events[0].TerminalName());
+  EXPECT_EQ(123, received_events[0].TerminalVersion());
+}
+
+TEST(Event, TerminalIdentification_XTerm) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  
+  // XTerm often identifies as VT220 (1) or VT420 (41)
+  // DA2: ESC [ > 41 ; 370 ; 0 c
+  parser.Add('\x1B'); parser.Add('['); parser.Add('>'); 
+  parser.Add('4'); parser.Add('1'); parser.Add(';'); 
+  parser.Add('3'); parser.Add('7'); parser.Add('0'); parser.Add(';'); 
+  parser.Add('0'); parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalNameVersion());
+  EXPECT_EQ("vt420", received_events[0].TerminalName());
+  EXPECT_EQ(370, received_events[0].TerminalVersion());
+}
+
+TEST(Event, TerminalIdentification_VT525) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  
+  // DA2: ESC [ > 65 ; 1 ; 0 c
+  parser.Add('\x1B'); parser.Add('['); parser.Add('>'); 
+  parser.Add('6'); parser.Add('5'); parser.Add(';'); 
+  parser.Add('1'); parser.Add(';'); 
+  parser.Add('0'); parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalNameVersion());
+  EXPECT_EQ("vt525", received_events[0].TerminalName());
+  EXPECT_EQ(1, received_events[0].TerminalVersion());
+}
+
+TEST(Event, TerminalCapabilities_Rich) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+  
+  // DA1: ESC [ ? 62 ; 1 ; 2 ; 4 ; 6 ; 22 c
+  // 62: VT220, 1: 132 cols, 2: Printer, 4: Sixel, 6: Selective Erase, 22: Color
+  parser.Add('\x1B'); parser.Add('['); parser.Add('?'); 
+  parser.Add('6'); parser.Add('2'); parser.Add(';'); 
+  parser.Add('1'); parser.Add(';'); 
+  parser.Add('2'); parser.Add(';'); 
+  parser.Add('4'); parser.Add(';'); 
+  parser.Add('6'); parser.Add(';'); 
+  parser.Add('2'); parser.Add('2'); parser.Add('c');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalCapabilities());
+  
+  auto names = received_events[0].TerminalCapabilityNames();
+  EXPECT_EQ(6u, names.size());
+  EXPECT_EQ("VT220", names[0]);
+  EXPECT_EQ("132-columns", names[1]);
+  EXPECT_EQ("Printer-port", names[2]);
+  EXPECT_EQ("Sixel-graphics", names[3]);
+  EXPECT_EQ("Selective-erase", names[4]);
+  EXPECT_EQ("ANSI-color", names[5]);
+}
+
+TEST(Event, XTVERSION) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  // DCS > | name version ST
+  parser.Add('\x1B');
+  parser.Add('P');
+  parser.Add('>');
+  parser.Add('|');
+  parser.Add('x');
+  parser.Add('t');
+  parser.Add('e');
+  parser.Add('r');
+  parser.Add('m');
+  parser.Add(' ');
+  parser.Add('3');
+  parser.Add('7');
+  parser.Add('0');
+  parser.Add('\x1B');
+  parser.Add('\\');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalEmulator());
+  EXPECT_EQ("xterm", received_events[0].TerminalEmulatorName());
+  EXPECT_EQ("370", received_events[0].TerminalEmulatorVersion());
+}
+
+TEST(Event, XTVERSION_Kitty) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  // DCS > | name(version) ST
+  parser.Add('\x1B');
+  parser.Add('P');
+  parser.Add('>');
+  parser.Add('|');
+  parser.Add('k');
+  parser.Add('i');
+  parser.Add('t');
+  parser.Add('t');
+  parser.Add('y');
+  parser.Add('(');
+  parser.Add('0');
+  parser.Add('.');
+  parser.Add('3');
+  parser.Add('9');
+  parser.Add('.');
+  parser.Add('1');
+  parser.Add(')');
+  parser.Add('\x1B');
+  parser.Add('\\');
+
+  EXPECT_EQ(1u, received_events.size());
+  EXPECT_TRUE(received_events[0].IsTerminalEmulator());
+  EXPECT_EQ("kitty", received_events[0].TerminalEmulatorName());
+  EXPECT_EQ("0.39.1", received_events[0].TerminalEmulatorVersion());
+}
+
 }  // namespace ftxui
    // NOLINTEND

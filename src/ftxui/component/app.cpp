@@ -644,8 +644,6 @@ void App::Install() {
   // ensure it is fully applied:
   on_exit_functions.emplace([this] { TerminalFlush(); });
 
-  InstallCursorShape();
-
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
   for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
@@ -766,6 +764,8 @@ void App::Install() {
   // ensure it is fully applied:
   TerminalFlush();
 
+  InstallTerminalInfo();
+
   quit_ = false;
 
   PostAnimationTask();
@@ -811,11 +811,46 @@ void App::InstallPipedInputHandling() {
 #endif
 }
 
-void App::InstallCursorShape() {
+/// @brief Return the names of the terminal capabilities.
+std::vector<std::string> App::TerminalCapabilityNames() const {
+  return Event::TerminalCapabilities("", terminal_capabilities_)
+      .TerminalCapabilityNames();
+}
+
+/// @brief Return the terminal name.
+const std::string& App::TerminalName() const {
+  return terminal_name_;
+}
+
+/// @brief Return the terminal version.
+int App::TerminalVersion() const {
+  return terminal_version_;
+}
+
+/// @brief Return the terminal emulator name.
+const std::string& App::TerminalEmulatorName() const {
+  return terminal_emulator_name_;
+}
+
+/// @brief Return the terminal emulator version.
+const std::string& App::TerminalEmulatorVersion() const {
+  return terminal_emulator_version_;
+}
+
+/// @brief Return the terminal capabilities.
+const std::vector<int>& App::TerminalCapabilities() const {
+  return terminal_capabilities_;
+}
+
+void App::InstallTerminalInfo() {
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
   if (is_stdout_a_tty_) {
     TerminalSend(DECRQSS_DECSCUSR);
+    TerminalSend("\033[c");   // DA1
+    TerminalSend("\033[>c");  // DA2
+    TerminalSend("\033[>q");  // XTVERSION
+    TerminalFlush();
   }
 
   int cursor_reset_shape = 1;
@@ -823,14 +858,30 @@ void App::InstallCursorShape() {
   // Wait for the cursor shape reply using the setup head.
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
     auto start = std::chrono::steady_clock::now();
-    bool received = false;
-    while (!received) {
+    bool cursor_shape_received = false;
+    bool da1_received = false;
+    bool da2_received = false;
+    // xtversion is optional as many terminals don't support it.
+    while (!cursor_shape_received || !da1_received || !da2_received) {
       FetchTerminalEvents();
       while (internal_->setup_receiver->Has()) {
         Event event = internal_->setup_receiver->Pop();
         if (event.is_cursor_shape()) {
           cursor_reset_shape = event.cursor_shape();
-          received = true;
+          cursor_shape_received = true;
+        }
+        if (event.IsTerminalCapabilities()) {
+          terminal_capabilities_ = event.TerminalCapabilities();
+          da1_received = true;
+        }
+        if (event.IsTerminalNameVersion()) {
+          terminal_name_ = event.TerminalName();
+          terminal_version_ = event.TerminalVersion();
+          da2_received = true;
+        }
+        if (event.IsTerminalEmulator()) {
+          terminal_emulator_name_ = event.TerminalEmulatorName();
+          terminal_emulator_version_ = event.TerminalEmulatorVersion();
         }
       }
       if (std::chrono::steady_clock::now() - start >

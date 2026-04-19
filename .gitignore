@@ -80,3 +80,6 @@ out/
 !tools/**/*.py
 !tools/**/*.cpp
 build/
+build_asan/
+iwyu/
+examples_modules/

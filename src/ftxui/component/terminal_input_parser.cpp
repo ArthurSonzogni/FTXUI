@@ -161,6 +161,26 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       out_(Event::CursorShape(std::move(pending_), output.cursor_shape));
       pending_.clear();
       return;
+
+    case TERMINAL_NAME_VERSION:
+      out_(Event::TerminalNameVersion(std::move(pending_),
+                                      std::move(output.terminal_name),
+                                      output.terminal_version));
+      pending_.clear();
+      return;
+
+    case TERMINAL_EMULATOR:
+      out_(Event::TerminalEmulator(std::move(pending_),
+                                   std::move(output.terminal_name),
+                                   std::move(output.terminal_version_string)));
+      pending_.clear();
+      return;
+
+    case TERMINAL_CAPABILITIES:
+      out_(Event::TerminalCapabilities(std::move(pending_),
+                                       std::move(output.terminal_capabilities)));
+      pending_.clear();
+      return;
   }
   // NOT_REACHED().
 }
@@ -317,6 +337,31 @@ TerminalInputParser::Output TerminalInputParser::ParseDCS() {
       continue;
     }
 
+    // XTVERSION: ESC P > | name version ST
+    if (pending_.size() >= 5 && pending_[2] == '>' && pending_[3] == '|') {
+      // ESC P > | name (version) ST
+      // 0   1 2 3 4
+      std::string content = pending_.substr(4, pending_.size() - 6);
+      Output output(TERMINAL_EMULATOR);
+      size_t space = content.find(' ');
+      size_t open_paren = content.find('(');
+      if (space != std::string::npos) {
+        output.terminal_name = content.substr(0, space);
+        output.terminal_version_string = content.substr(space + 1);
+      } else if (open_paren != std::string::npos) {
+        output.terminal_name = content.substr(0, open_paren);
+        output.terminal_version_string = content.substr(open_paren + 1);
+        if (!output.terminal_version_string.empty() &&
+            output.terminal_version_string.back() == ')') {
+          output.terminal_version_string.pop_back();
+        }
+      } else {
+        output.terminal_name = content;
+        output.terminal_version_string = "unknown";
+      }
+      return output;
+    }
+
     if (pending_.size() == 10 &&  //
         pending_[2] == '1' &&     //
         pending_[3] == '$' &&     //
@@ -332,7 +377,9 @@ TerminalInputParser::Output TerminalInputParser::ParseDCS() {
 }
 
 TerminalInputParser::Output TerminalInputParser::ParseCSI() {
-  bool altered = false;
+  bool altered_less = false;
+  bool altered_greater = false;
+  bool altered_question = false;
   int argument = 0;
   std::vector<int> arguments;
   while (true) {
@@ -341,7 +388,17 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
     }
 
     if (Current() == '<') {
-      altered = true;
+      altered_less = true;
+      continue;
+    }
+
+    if (Current() == '>') {
+      altered_greater = true;
+      continue;
+    }
+
+    if (Current() == '?') {
+      altered_question = true;
       continue;
     }
 
@@ -369,11 +426,14 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
 
       switch (Current()) {
         case 'M':
-          return ParseMouse(altered, true, std::move(arguments));
+          return ParseMouse(altered_less, true, std::move(arguments));
         case 'm':
-          return ParseMouse(altered, false, std::move(arguments));
+          return ParseMouse(altered_less, false, std::move(arguments));
         case 'R':
           return ParseCursorPosition(std::move(arguments));
+        case 'c':
+          return ParseDeviceAttributes(altered_greater, altered_question,
+                                       std::move(arguments));
         default:
           return SPECIAL;
       }
@@ -459,6 +519,72 @@ TerminalInputParser::Output TerminalInputParser::ParseCursorPosition(
   output.cursor.y = arguments[0];  // NOLINT
   output.cursor.x = arguments[1];  // NOLINT
   return output;
+}
+
+// NOLINTNEXTLINE
+TerminalInputParser::Output TerminalInputParser::ParseDeviceAttributes(
+    bool altered_greater,
+    bool altered_question,
+    std::vector<int> arguments) {
+  if (altered_greater) {
+    // Secondary Device Attributes (DA2)
+    // ESC [ > Pp ; Pv ; Pc c
+    if (arguments.size() >= 3) {
+      // Pp: Terminal type
+      // Pv: Firmware version
+      // Pc: Hardware options
+      Output output(TERMINAL_NAME_VERSION);
+      output.terminal_version = arguments[1];
+      switch (arguments[0]) {
+        case 0:
+          output.terminal_name = "vt100";
+          break;
+        case 1:
+          output.terminal_name = "vt220";
+          break;
+        case 2:
+          output.terminal_name = "vt240";
+          break;
+        case 18:
+          output.terminal_name = "vt330";
+          break;
+        case 19:
+          output.terminal_name = "vt340";
+          break;
+        case 24:
+          output.terminal_name = "vt320";
+          break;
+        case 41:
+          output.terminal_name = "vt420";
+          break;
+        case 61:
+          output.terminal_name = "vt510";
+          break;
+        case 64:
+          output.terminal_name = "vt520";
+          break;
+        case 65:
+          output.terminal_name = "vt525";
+          break;
+        case 84:
+          output.terminal_name = "tmux";
+          break;
+        default:
+          output.terminal_name = "unknown";
+          break;
+      }
+      // Special case for xterm which often returns 0;pv;0 or similar
+      // but it's not strictly following DEC VT types.
+      return output;
+    }
+  } else if (altered_question) {
+    // Primary Device Attributes (DA1)
+    // ESC [ ? Pp ; ... c
+    Output output(TERMINAL_CAPABILITIES);
+    output.terminal_capabilities = std::move(arguments);
+    return output;
+  }
+  return SPECIAL;
 }
 
 }  // namespace ftxui

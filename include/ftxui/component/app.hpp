@@ -83,6 +83,14 @@ class App : public Screen {
   std::string GetSelection();
   void SelectionChange(std::function<void()> callback);
 
+  // Terminal info.
+  const std::string& TerminalName() const;
+  int TerminalVersion() const;
+  const std::string& TerminalEmulatorName() const;
+  const std::string& TerminalEmulatorVersion() const;
+  const std::vector<int>& TerminalCapabilities() const;
+  std::vector<std::string> TerminalCapabilityNames() const;
+
  private:
   void ExitNow();
 
@@ -109,7 +117,7 @@ class App : public Screen {
   void TerminalFlush();
 
   void InstallPipedInputHandling();
-  void InstallCursorShape();
+  void InstallTerminalInfo();
 
   void Signal(int signal);
 
@@ -158,7 +166,13 @@ class App : public Screen {
   // File descriptor for /dev/tty, used for piped input handling.
   int tty_fd_ = -1;
 
+  std::string terminal_name_ = "unknown";
+  int terminal_version_ = 0;
 
+  std::string terminal_emulator_name_ = "unknown";
+  std::string terminal_emulator_version_ = "unknown";
+
+  std::vector<int> terminal_capabilities_;
 
   // Selection API:
   CapturedMouse selection_pending_;

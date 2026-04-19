@@ -5,8 +5,10 @@
 #define FTXUI_COMPONENT_EVENT_HPP
 
 #include <ftxui/component/mouse.hpp>  // for Mouse
+#include <memory>
 #include <string>                     // for string, operator==
 #include <string_view>
+#include <vector>
 
 namespace ftxui {
 
@@ -37,6 +39,9 @@ struct Event {
   static Event Mouse(std::string_view, Mouse mouse);
   static Event CursorPosition(std::string_view, int x, int y);  // Internal
   static Event CursorShape(std::string_view, int shape);        // Internal
+  static Event TerminalNameVersion(std::string_view, std::string name, int version);
+  static Event TerminalEmulator(std::string_view, std::string name, std::string version);
+  static Event TerminalCapabilities(std::string_view, std::vector<int> capabilities);
 
   // --- Arrow ---
   static const Event ArrowLeft;
@@ -119,6 +124,18 @@ struct Event {
   bool is_cursor_shape() const { return type_ == Type::CursorShape; }
   int cursor_shape() const { return data_.cursor_shape; }
 
+  bool IsTerminalNameVersion() const;
+  const std::string& TerminalName() const;
+  int TerminalVersion() const;
+
+  bool IsTerminalEmulator() const;
+  const std::string& TerminalEmulatorName() const;
+  const std::string& TerminalEmulatorVersion() const;
+
+  bool IsTerminalCapabilities() const;
+  const std::vector<int>& TerminalCapabilities() const;
+  std::vector<std::string> TerminalCapabilityNames() const;
+
   // Debug
   std::string DebugString() const;
 
@@ -134,6 +151,9 @@ struct Event {
     Mouse,
     CursorPosition,
     CursorShape,
+    TerminalNameVersion,
+    TerminalEmulator,
+    TerminalCapabilities,
   };
   Type type_ = Type::Unknown;
 
@@ -146,9 +166,13 @@ struct Event {
     struct Mouse mouse;
     struct Cursor cursor;
     int cursor_shape;
+    int terminal_version;
   } data_ = {};
 
   std::string input_;
+  std::shared_ptr<std::string> terminal_name_;
+  std::shared_ptr<std::string> terminal_emulator_version_;
+  std::shared_ptr<std::vector<int>> terminal_capabilities_;
 };
 
 }  // namespace ftxui

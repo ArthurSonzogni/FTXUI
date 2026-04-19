@@ -31,6 +31,9 @@ class TerminalInputParser {
     MOUSE,
     CURSOR_POSITION,
     CURSOR_SHAPE,
+    TERMINAL_NAME_VERSION,
+    TERMINAL_EMULATOR,
+    TERMINAL_CAPABILITIES,
     SPECIAL,
   };
 
@@ -39,13 +42,31 @@ class TerminalInputParser {
     int y;
   };
 
+  struct TerminalNameVersion {
+    std::string name;
+    int version;
+  };
+
+  struct TerminalEmulator {
+    std::string name;
+    std::string version;
+  };
+
+  struct TerminalCapabilities {
+    std::vector<int> capabilities;
+  };
+
   struct Output {
     Type type;
     union {
       Mouse mouse;
       CursorPosition cursor{};
       int cursor_shape;
+      int terminal_version;
     };
+    std::string terminal_name;
+    std::string terminal_version_string;
+    std::vector<int> terminal_capabilities;
 
     Output(Type t)  // NOLINT
         : type(t) {}
@@ -60,6 +81,9 @@ class TerminalInputParser {
   Output ParseOSC();
   Output ParseMouse(bool altered, bool pressed, std::vector<int> arguments);
   Output ParseCursorPosition(std::vector<int> arguments);
+  Output ParseDeviceAttributes(bool altered_greater,
+                               bool altered_question,
+                               std::vector<int> arguments);
 
   std::function<void(Event)> out_;
   int position_ = -1;

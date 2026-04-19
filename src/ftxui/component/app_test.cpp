@@ -221,12 +221,12 @@ TEST(App, FixedSizeInitialFrame) {
 
   // Uninstall the App.
   expected += "\x1B[1C"s;      // Move cursor right one character.
+  expected += "\x1B[?25h"s;    // Show cursor.
   expected += "\x1B[?1006l"s;  // Disable SGR mouse tracking.
   expected += "\x1B[?1015l"s;  // Disable mouse wheel tracking.
   expected += "\x1B[?1003l"s;  // Disable mouse motion tracking.
   expected += "\x1B[?1000l"s;  // Disable mouse tracking.
   expected += "\x1B[?7h"s;     // Enable line wrapping.
-  expected += "\x1B[?25h"s;    // Show cursor.
   expected += "\0"s;           // Flush stdout.
 
   // Skip one line to avoid the prompt to be printed over the last drawing.
