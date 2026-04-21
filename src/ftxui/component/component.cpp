@@ -80,7 +80,7 @@ void ComponentBase::Detach() {
   if (parent_ == nullptr) {
     return;
   }
-  auto it = std::find_if(std::begin(parent_->children_),  //
+  auto it = std::find_if(std::begin(parent_->children_),  // NOLINT
                          std::end(parent_->children_),    //
                          [this](const Component& that) {  //
                            return this == that.get();

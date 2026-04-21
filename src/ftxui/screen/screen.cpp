@@ -5,8 +5,10 @@
 #include <cstdint>
 #include <iostream>  // for cout, flush
 #include <limits>
-#include <map>      // for _Rb_tree_const_iterator, map, operator!=, operator==
-#include <utility>  // for pair
+#include <map>     // for _Rb_tree_const_iterator, map, operator!=, operator==
+#include <string>  // for string
+#include <string_view>  // for string_view
+#include <utility>      // for pair
 
 #include "ftxui/screen/cell.hpp"  // for Cell
 #include "ftxui/screen/screen.hpp"
@@ -305,7 +307,7 @@ const std::map<std::string, TileEncoding> tile_encoding = { // NOLINT
 // clang-format on
 
 template <class A, class B>
-std::map<B, A> InvertMap(const std::map<A, B> input) {
+std::map<B, A> InvertMap(const std::map<A, B>& input) {
   std::map<B, A> output;
   for (const auto& it : input) {
     output[it.second] = it.first;
@@ -570,7 +572,7 @@ std::uint8_t Screen::RegisterHyperlink(std::string_view link) {
   if (hyperlinks_.size() == std::numeric_limits<std::uint8_t>::max()) {
     return 0;
   }
-  hyperlinks_.push_back(std::string(link));
+  hyperlinks_.emplace_back(link);
   return hyperlinks_.size() - 1;
 }
 

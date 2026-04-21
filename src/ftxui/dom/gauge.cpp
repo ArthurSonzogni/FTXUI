@@ -130,7 +130,6 @@ class Gauge : public Node {
   }
 
   void RenderVertical(Screen& screen, bool invert) {
-     
     if (box_.x_min > box_.x_max) {
       return;
     }

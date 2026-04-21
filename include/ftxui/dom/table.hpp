@@ -36,7 +36,7 @@ class TableSelection;
 class Table {
  public:
   Table();
-  explicit Table(std::vector<std::vector<std::string>>);
+  explicit Table(const std::vector<std::vector<std::string>>&);
   explicit Table(std::vector<std::vector<Element>>);
   Table(std::initializer_list<std::vector<std::string>> init);
   TableSelection SelectAll();
@@ -64,47 +64,51 @@ class Table {
 class TableSelection {
  public:
   // Decorate the whole selection with a decorator.
-  void Decorate(Decorator);
-  void DecorateAlternateRow(Decorator, int modulo = 2, int shift = 0);
-  void DecorateAlternateColumn(Decorator, int modulo = 2, int shift = 0);
+  void Decorate(const Decorator&);
+  void DecorateAlternateRow(const Decorator&, int modulo = 2, int shift = 0);
+  void DecorateAlternateColumn(const Decorator&, int modulo = 2, int shift = 0);
 
   // Decorate only the cells of the selection with a decorator.
-  void DecorateCells(Decorator);
-  void DecorateCellsAlternateColumn(Decorator, int modulo = 2, int shift = 0);
-  void DecorateCellsAlternateRow(Decorator, int modulo = 2, int shift = 0);
+  void DecorateCells(const Decorator&);
+  void DecorateCellsAlternateColumn(const Decorator&,
+                                    int modulo = 2,
+                                    int shift = 0);
+  void DecorateCellsAlternateRow(const Decorator&,
+                                 int modulo = 2,
+                                 int shift = 0);
 
   // Decorate only the border of the selection with a decorator.
-  void DecorateBorder(Decorator);
-  void DecorateBorderLeft(Decorator);
-  void DecorateBorderRight(Decorator);
-  void DecorateBorderTop(Decorator);
-  void DecorateBorderBottom(Decorator);
+  void DecorateBorder(const Decorator&);
+  void DecorateBorderLeft(const Decorator&);
+  void DecorateBorderRight(const Decorator&);
+  void DecorateBorderTop(const Decorator&);
+  void DecorateBorderBottom(const Decorator&);
 
   // Decorate only the separator of the selection with a decorator.
-  void DecorateSeparator(Decorator);
-  void DecorateSeparatorVertical(Decorator);
-  void DecorateSeparatorHorizontal(Decorator);
+  void DecorateSeparator(const Decorator&);
+  void DecorateSeparatorVertical(const Decorator&);
+  void DecorateSeparatorHorizontal(const Decorator&);
 
   // Decorate the border of the selection with a border style and a decorator.
   void Border(BorderStyle border = LIGHT);
-  void Border(BorderStyle, Decorator);
+  void Border(BorderStyle, const Decorator&);
   void BorderLeft(BorderStyle border = LIGHT);
-  void BorderLeft(BorderStyle, Decorator);
+  void BorderLeft(BorderStyle, const Decorator&);
   void BorderRight(BorderStyle border = LIGHT);
-  void BorderRight(BorderStyle, Decorator);
+  void BorderRight(BorderStyle, const Decorator&);
   void BorderTop(BorderStyle border = LIGHT);
-  void BorderTop(BorderStyle, Decorator);
+  void BorderTop(BorderStyle, const Decorator&);
   void BorderBottom(BorderStyle border = LIGHT);
-  void BorderBottom(BorderStyle, Decorator);
+  void BorderBottom(BorderStyle, const Decorator&);
 
   // Decorate the separator of the selection with a border style and a
   // decorator.
   void Separator(BorderStyle border = LIGHT);
-  void Separator(BorderStyle, Decorator);
+  void Separator(BorderStyle, const Decorator&);
   void SeparatorVertical(BorderStyle border = LIGHT);
-  void SeparatorVertical(BorderStyle, Decorator);
+  void SeparatorVertical(BorderStyle, const Decorator&);
   void SeparatorHorizontal(BorderStyle border = LIGHT);
-  void SeparatorHorizontal(BorderStyle, Decorator);
+  void SeparatorHorizontal(BorderStyle, const Decorator&);
 
  private:
   friend Table;

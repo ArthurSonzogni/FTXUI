@@ -143,7 +143,7 @@ class MenuBase : public ComponentBase, public MenuOption {
     }
 
     if (IsInverted(direction)) {
-      std::reverse(elements.begin(), elements.end());
+      std::reverse(elements.begin(), elements.end());  // NOLINT
     }
 
     const Element bar =

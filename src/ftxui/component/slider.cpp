@@ -4,7 +4,6 @@
 #include <algorithm>                              // for max, min
 #include <ftxui/component/component_options.hpp>  // for SliderOption
 #include <ftxui/dom/direction.hpp>  // for Direction, Direction::Down, Direction::Left, Direction::Right, Direction::Up
-#include <string>                   // for allocator
 #include <utility>                  // for move
 
 #include "ftxui/component/app.hpp"             // for Component
@@ -50,7 +49,8 @@ Direction Opposite(Direction d) {
 template <class T>
 class SliderBase : public SliderOption<T>, public ComponentBase {
  public:
-  explicit SliderBase(SliderOption<T> options) : SliderOption<T>(options) {}
+  explicit SliderBase(SliderOption<T> options)
+      : SliderOption<T>(std::move(options)) {}
 
   Element OnRender() override {
     auto gauge_color =
@@ -314,7 +314,7 @@ Component Slider(ConstStringRef label,
 /// ```
 template <typename T>
 Component Slider(SliderOption<T> options) {
-  return Make<SliderBase<T>>(options);
+  return Make<SliderBase<T>>(std::move(options));
 }
 
 template Component Slider(SliderOption<int8_t>);

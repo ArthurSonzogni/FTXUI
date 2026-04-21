@@ -102,7 +102,7 @@ class App : public Screen {
 
   bool HasQuitted();
   friend class ThrottledRequest;
-  void RunOnce(Component component);
+  void RunOnce(const Component& component);
   void RunOnceBlocking(Component component);
 
   void HandleTask(Component component, Task& task);

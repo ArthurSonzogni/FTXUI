@@ -3,6 +3,7 @@
 // the LICENSE file.
 
 #include <functional>  // for function
+#include <string>      // for string
 #include <utility>     // for move
 
 #include "ftxui/component/animation.hpp"  // for Animator, Params (ptr only)

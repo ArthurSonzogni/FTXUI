@@ -6,6 +6,7 @@ option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
 option(FTXUI_CLANG_TIDY "Execute clang-tidy" OFF)
 option(FTXUI_DEV_WARNINGS "Enable more compiler warnings and warnings as errors" OFF)
 option(FTXUI_ENABLE_COVERAGE "Execute code coverage" OFF)
+
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
 

@@ -7,9 +7,9 @@
 
 #include <cstddef>
 #include "ftxui/dom/node.hpp"
-#include "ftxui/dom/selection.hpp"  // for Selection
-#include "ftxui/screen/screen.hpp"   // for Screen
-#include "ftxui/screen/terminal.hpp" // for GetQuirks
+#include "ftxui/dom/selection.hpp"    // for Selection
+#include "ftxui/screen/screen.hpp"    // for Screen
+#include "ftxui/screen/terminal.hpp"  // for GetQuirks
 
 namespace ftxui {
 

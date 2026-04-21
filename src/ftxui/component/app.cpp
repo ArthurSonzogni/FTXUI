@@ -2,7 +2,7 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include "ftxui/component/app.hpp"
-#include <algorithm>  // for copy, max, min
+#include <algorithm>  // for any_of, copy, max, min
 #include <array>      // for array
 #include <atomic>
 #include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
@@ -18,9 +18,9 @@
 #include <stack>  // for stack
 #include <string>
 #include <string_view>
-#include <deque>
-#include <thread>   // for thread, sleep_for
-#include <tuple>    // for _Swallow_assign, ignore
+#include <thread>  // for thread, sleep_for
+#include <tuple>   // for _Swallow_assign, ignore
+#include <type_traits>
 #include <utility>  // for move, swap
 #include <variant>  // for visit, variant
 #include <vector>   // for vector
@@ -29,10 +29,11 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/loop.hpp"            // for Loop
-#include "ftxui/component/task_runner.hpp"
 #include "ftxui/component/multi_receiver_buffer.hpp"
+#include "ftxui/component/task_runner.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
 #include "ftxui/dom/node.hpp"                         // for Node, Render
+#include "ftxui/screen/cell.hpp"                      // for Cell
 #include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
 #include "ftxui/screen/util.hpp"                      // for util::clamp
 #include "ftxui/util/autoreset.hpp"                   // for AutoReset
@@ -43,19 +44,18 @@
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
-#include <windows.h>
 #include <io.h>
+#include <windows.h>
 #ifndef UNICODE
 #error Must be compiled in UNICODE mode
 #endif
 #else
 #include <fcntl.h>
 #include <poll.h>
+#include <sys/poll.h>
 #include <sys/types.h>
-#include <sys/select.h>  // for select, FD_ISSET, FD_SET, FD_ZERO, fd_set, timeval
 #include <termios.h>  // for tcsetattr, termios, tcgetattr, TCSANOW, cc_t, ECHO, ICANON, VMIN, VTIME
-#include <unistd.h>  // for STDIN_FILENO, read
-#include <cerrno>
+#include <unistd.h>  // for STDIN_FILENO, STDOUT_FILENO, read
 #endif
 
 namespace ftxui {
@@ -74,7 +74,7 @@ class ThrottledRequest {
   ThrottledRequest(App* app,
                    std::function<void()> send,
                    task::TaskRunner& task_runner)
-      : app_(app), send_(std::move(send)), task_runner_(task_runner) {}
+      : app_(app), send_(std::move(send)), task_runner_(&task_runner) {}
 
   void Request(bool force = false) {
     if (!app_->is_stdin_a_tty_) {
@@ -102,7 +102,7 @@ class ThrottledRequest {
     }
 
     request_queued_ = true;
-    task_runner_.PostDelayedTask(
+    task_runner_->PostDelayedTask(
         [this] {
           request_queued_ = false;
           Request();
@@ -123,7 +123,6 @@ class ThrottledRequest {
   }
 
  private:
-
   void Send() {
     last_sent_time_ = std::chrono::steady_clock::now();
     pending_request_ = true;
@@ -132,7 +131,7 @@ class ThrottledRequest {
 
   App* app_;
   std::function<void()> send_;
-  task::TaskRunner& task_runner_;
+  task::TaskRunner* task_runner_;
   bool pending_request_ = false;
   std::chrono::steady_clock::time_point last_request_time_ =
       std::chrono::steady_clock::now() - std::chrono::hours(1);
@@ -159,7 +158,6 @@ struct App::Internal {
   std::string output_buffer;
 
   ThrottledRequest cursor_position_request;
-
 
   MultiReceiverBuffer<Event> event_buffer;
   std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> setup_receiver;
@@ -359,7 +357,6 @@ App::App(Dimension dimension, int dimx, int dimy, bool use_alternative_screen)
     RequestAnimationFrame();
   });
 }
-
 
 // static
 App App::FixedSize(int dimx, int dimy) {
@@ -787,7 +784,7 @@ void App::InstallPipedInputHandling() {
     is_stdin_a_tty_ = true;
   } else {
     // Open /dev/tty for keyboard input.
-    tty_fd_ = open("/dev/tty", O_RDONLY);
+    tty_fd_ = open("/dev/tty", O_RDONLY);  // NOLINT
     if (tty_fd_ < 0) {
       // Failed to open /dev/tty (containers, headless systems, etc.)
       tty_fd_ = STDIN_FILENO;  // Fallback to stdin.
@@ -835,6 +832,7 @@ const std::vector<int>& App::TerminalCapabilities() const {
   return terminal_capabilities_;
 }
 
+// NOLINTNEXTLINE
 void App::InstallTerminalInfo() {
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
@@ -859,7 +857,7 @@ void App::InstallTerminalInfo() {
     while (true) {
       FetchTerminalEvents();
       while (internal_->setup_receiver->Has()) {
-        Event event = internal_->setup_receiver->Pop();
+        const auto event = internal_->setup_receiver->Pop();
         if (event.is_cursor_shape()) {
           cursor_reset_shape = event.cursor_shape();
           cursor_shape_received = true;
@@ -898,7 +896,7 @@ void App::InstallTerminalInfo() {
       for (int i = 0; i < 10; ++i) {
         FetchTerminalEvents();
         while (internal_->setup_receiver->Has()) {
-          Event event = internal_->setup_receiver->Pop();
+          const auto event = internal_->setup_receiver->Pop();
           if (event.IsTerminalEmulator()) {
             terminal_emulator_name_ = event.TerminalEmulatorName();
             terminal_emulator_version_ = event.TerminalEmulatorVersion();
@@ -920,19 +918,26 @@ void App::InstallTerminalInfo() {
   const bool is_urxvt = (TerminalName() == "urxvt");
   const bool is_vt220_plus =
       (TerminalName() != "vt100" && TerminalName() != "unknown");
-  const bool reports_utf8 =
-      std::find(terminal_capabilities_.begin(), terminal_capabilities_.end(),
-                108) != terminal_capabilities_.end();
-  const bool reports_color =
-      std::find(terminal_capabilities_.begin(), terminal_capabilities_.end(),
-                22) != terminal_capabilities_.end();
+  bool reports_utf8 = false;
+  for (const int x : terminal_capabilities_) {
+    if (x == 42) {
+      reports_utf8 = true;
+      break;
+    }
+  }
+  bool reports_color = false;
+  for (const int x : terminal_capabilities_) {
+    if (x == 22) {
+      reports_color = true;
+      break;
+    }
+  }
 
   // Heuristic:
   // 1. If it's a modern emulator, we can trust it supports TrueColor.
   if (is_modern_emulator) {
-    if (quirks.color_support < Terminal::Color::TrueColor) {
-      quirks.color_support = Terminal::Color::TrueColor;
-    }
+    quirks.color_support =
+        std::max(quirks.color_support, Terminal::Color::TrueColor);
     quirks.block_characters = true;
     quirks.cursor_hiding = true;
     quirks.component_ascii = false;
@@ -975,13 +980,12 @@ void App::Uninstall() {
       FetchTerminalEvents();
 
       while (closing_receiver->Has()) {
-        Event event = closing_receiver->Pop();
+        const auto event = closing_receiver->Pop();
         if (event.is_cursor_position()) {
           cursor_x_ = event.cursor_x();
           cursor_y_ = event.cursor_y();
           internal_->cursor_position_request.OnReply();
         }
-
       }
 
       internal_->task_runner.RunUntilIdle();
@@ -1004,7 +1008,7 @@ void App::RunOnceBlocking(Component component) {
   const auto time_per_frame = std::chrono::microseconds(16666);  // 1s / 60fps
 
   auto time = std::chrono::steady_clock::now();
-  size_t executed_task = internal_->task_runner.ExecutedTasks();
+  const size_t executed_task = internal_->task_runner.ExecutedTasks();
 
   // Wait for at least one task to execute.
   while (executed_task == internal_->task_runner.ExecutedTasks() &&
@@ -1023,8 +1027,8 @@ void App::RunOnceBlocking(Component component) {
 }
 
 // private
-void App::RunOnce(Component component) {
-  AutoReset set_component(&component_, component);
+void App::RunOnce(const Component& component) {
+  const AutoReset set_component(&component_, component);
   ExecuteSignalHandlers();
   FetchTerminalEvents();
 
@@ -1341,7 +1345,7 @@ void App::Signal(int signal) {
       Uninstall();
       dimx_ = 0;
       dimy_ = 0;
-      std::raise(SIGTSTP);
+      (void)std::raise(SIGTSTP);
       Install();
     });
     return;
@@ -1440,18 +1444,18 @@ size_t App::FetchTerminalEvents() {
 
   // Convert the chars to events.
   for (ssize_t i = 0; i < l; ++i) {
-    internal_->terminal_input_parser.Add(out[i]);
+    internal_->terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
   }
   return (size_t)l;
 #else  // POSIX (Linux & Mac)
-  pollfd pfd = {tty_fd_, POLLIN, 0};
+  struct pollfd pfd = {tty_fd_, POLLIN, 0};
   const int poll_result = poll(&pfd, 1, 0);
   if (poll_result <= 0) {
     const auto timeout =
         std::chrono::steady_clock::now() - internal_->last_char_time;
     const size_t timeout_ms =
         std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
-    internal_->terminal_input_parser.Timeout(timeout_ms);
+    internal_->terminal_input_parser.Timeout(static_cast<int>(timeout_ms));
     return 0;
   }
   internal_->last_char_time = std::chrono::steady_clock::now();
@@ -1465,7 +1469,7 @@ size_t App::FetchTerminalEvents() {
 
   // Convert the chars to events.
   for (ssize_t i = 0; i < l; ++i) {
-    internal_->terminal_input_parser.Add(out[i]);
+    internal_->terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
   }
   return (size_t)l;
 #endif

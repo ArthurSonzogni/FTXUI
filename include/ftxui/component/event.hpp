@@ -6,7 +6,7 @@
 
 #include <ftxui/component/mouse.hpp>  // for Mouse
 #include <memory>
-#include <string>                     // for string, operator==
+#include <string>  // for string, operator==
 #include <string_view>
 #include <vector>
 
@@ -39,9 +39,14 @@ struct Event {
   static Event Mouse(std::string_view, Mouse mouse);
   static Event CursorPosition(std::string_view, int x, int y);  // Internal
   static Event CursorShape(std::string_view, int shape);        // Internal
-  static Event TerminalNameVersion(std::string_view, std::string name, int version);
-  static Event TerminalEmulator(std::string_view, std::string name, std::string version);
-  static Event TerminalCapabilities(std::string_view, std::vector<int> capabilities);
+  static Event TerminalNameVersion(std::string_view,
+                                   std::string name,
+                                   int version);
+  static Event TerminalEmulator(std::string_view,
+                                std::string name,
+                                std::string version);
+  static Event TerminalCapabilities(std::string_view,
+                                    std::vector<int> capabilities);
 
   // --- Arrow ---
   static const Event ArrowLeft;

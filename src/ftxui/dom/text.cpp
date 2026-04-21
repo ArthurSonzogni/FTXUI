@@ -2,7 +2,8 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <algorithm>  // for min, max
-#include <memory>     // for make_shared
+#include <cstddef>
+#include <memory>       // for make_shared
 #include <string>       // for string, wstring
 #include <string_view>  // for string_view
 #include <utility>      // for move
@@ -24,7 +25,7 @@ using ftxui::Screen;
 
 class Text : public Node {
  public:
-  explicit Text(std::string text) : glyphs_(Utf8ToGlyphs(text)) {}
+  explicit Text(const std::string& text) : glyphs_(Utf8ToGlyphs(text)) {}
   explicit Text(std::string_view sv) : Text(std::string(sv)) {}
 
   void ComputeRequirement() override {
@@ -134,7 +135,7 @@ class Text : public Node {
 
 class VText : public Node {
  public:
-  explicit VText(std::string text) : glyphs_(Utf8ToGlyphs(text)) {
+  explicit VText(const std::string& text) : glyphs_(Utf8ToGlyphs(text)) {
     for (const auto& g : glyphs_) {
       if (g != "\n") {
         width_ = 1;
@@ -228,8 +229,8 @@ Element text(std::string_view text) {
 /// ```bash
 /// Hello world!
 /// ```
-Element text(std::wstring_view sv) {
-  return text(to_string(sv));
+Element text(std::wstring_view text) {
+  return ftxui::text(to_string(text));
 }
 
 /// @brief Display a piece of unicode text vertically.

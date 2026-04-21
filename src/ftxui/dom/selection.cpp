@@ -4,8 +4,8 @@
 
 #include "ftxui/dom/selection.hpp"  // for Selection
 #include <algorithm>                // for max, min
-#include <string>                   // for string
-#include <tuple>                    // for ignore
+#include <string_view>
+#include <tuple>  // for ignore
 
 #include "ftxui/dom/node_decorator.hpp"  // for NodeDecorator
 

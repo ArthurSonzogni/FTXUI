@@ -177,8 +177,8 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
       return;
 
     case TERMINAL_CAPABILITIES:
-      out_(Event::TerminalCapabilities(std::move(pending_),
-                                       std::move(output.terminal_capabilities)));
+      out_(Event::TerminalCapabilities(
+          std::move(pending_), std::move(output.terminal_capabilities)));
       pending_.clear();
       return;
   }
@@ -341,10 +341,10 @@ TerminalInputParser::Output TerminalInputParser::ParseDCS() {
     if (pending_.size() >= 5 && pending_[2] == '>' && pending_[3] == '|') {
       // ESC P > | name (version) ST
       // 0   1 2 3 4
-      std::string content = pending_.substr(4, pending_.size() - 6);
+      const std::string content = pending_.substr(4, pending_.size() - 6);
       Output output(TERMINAL_EMULATOR);
-      size_t space = content.find(' ');
-      size_t open_paren = content.find('(');
+      const size_t space = content.find(' ');
+      const size_t open_paren = content.find('(');
       if (space != std::string::npos) {
         output.terminal_name = content.substr(0, space);
         output.terminal_version_string = content.substr(space + 1);

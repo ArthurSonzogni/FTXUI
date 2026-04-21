@@ -13,12 +13,13 @@ int main() {
 
   // The `text()` element now supports newlines `\n`.
   // It will be rendered on multiple lines.
-  auto document = text(
-      "FTXUI is a C++ library for terminal-based user interfaces.\n"
-      "It is functional, responsive, and cross-platform.\n"
-      "You can now use newlines directly within a single text() element,\n"
-      "making it easier to display multi-line strings without needing\n"
-      "to manually split them into a vbox() of multiple text() elements.") |
+  auto document =
+      text(
+          "FTXUI is a C++ library for terminal-based user interfaces.\n"
+          "It is functional, responsive, and cross-platform.\n"
+          "You can now use newlines directly within a single text() element,\n"
+          "making it easier to display multi-line strings without needing\n"
+          "to manually split them into a vbox() of multiple text() elements.") |
       border | center;
 
   auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));

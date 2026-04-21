@@ -4,6 +4,7 @@
 #include <cstdint>  // for uint8_t
 #include <memory>   // for make_shared
 #include <string>   // for string
+#include <string_view>
 #include <utility>  // for move
 
 #include "ftxui/dom/elements.hpp"        // for Element, Decorator, hyperlink

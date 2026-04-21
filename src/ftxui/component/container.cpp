@@ -250,7 +250,7 @@ class StackedContainer : public ContainerBase {
       elements.push_back(child->Render());
     }
     // Reverse the order of the elements.
-    std::reverse(elements.begin(), elements.end());
+    std::reverse(elements.begin(), elements.end());  // NOLINT
     return dbox(std::move(elements));
   }
 
@@ -278,7 +278,7 @@ class StackedContainer : public ContainerBase {
     // Find `child` and put it at the beginning without change the order of the
     // other children.
     auto it =
-        std::find_if(children_.begin(), children_.end(),
+        std::find_if(children_.begin(), children_.end(),  // NOLINT
                      [child](const Component& c) { return c.get() == child; });
     if (it == children_.end()) {
       return;

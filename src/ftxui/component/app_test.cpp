@@ -198,13 +198,13 @@ TEST(App, FixedSizeInitialFrame) {
 
   std::string expected;
   // Install the App.
-  expected += "\0"s;              // Flush stdout.
-  expected += "\x1B[?7l"s;        // Disable line wrapping.
-  expected += "\x1B[?1000h"s;     // Enable mouse tracking.
-  expected += "\x1B[?1003h"s;     // Enable mouse motion tracking.
-  expected += "\x1B[?1015h"s;     // Enable mouse wheel tracking.
-  expected += "\x1B[?1006h"s;     // Enable SGR mouse tracking.
-  expected += "\0"s;              // Flush stdout.
+  expected += "\0"s;           // Flush stdout.
+  expected += "\x1B[?7l"s;     // Disable line wrapping.
+  expected += "\x1B[?1000h"s;  // Enable mouse tracking.
+  expected += "\x1B[?1003h"s;  // Enable mouse motion tracking.
+  expected += "\x1B[?1015h"s;  // Enable mouse wheel tracking.
+  expected += "\x1B[?1006h"s;  // Enable SGR mouse tracking.
+  expected += "\0"s;           // Flush stdout.
 
   // Reset the screen.
   expected += "\x1B[?25l"s;  // Hide cursor.

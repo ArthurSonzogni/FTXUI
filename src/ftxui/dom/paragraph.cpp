@@ -1,10 +1,11 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <functional>  // for function
-#include <sstream>     // for basic_istream, stringstream
-#include <string>      // for string, allocator, getline
-#include <utility>     // for move
+#include <functional>   // for function
+#include <sstream>      // for basic_istream, stringstream
+#include <string>       // for string, allocator, getline
+#include <string_view>  // for string_view
+#include <utility>      // for move
 
 #include "ftxui/dom/elements.hpp"  // for flexbox, Element, text, Elements, operator|, xflex, paragraph, paragraphAlignCenter, paragraphAlignJustify, paragraphAlignLeft, paragraphAlignRight
 #include "ftxui/dom/flexbox_config.hpp"  // for FlexboxConfig, FlexboxConfig::JustifyContent, FlexboxConfig::JustifyContent::Center, FlexboxConfig::JustifyContent::FlexEnd, FlexboxConfig::JustifyContent::SpaceBetween

@@ -1,19 +1,19 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <chrono>  // for chrono
-#include <cmath>   // for sin
-#include <memory>  // for shared_ptr, __shared_ptr_access
-#include <string>  // for string, to_string
-#include <utility> // for move
-#include <vector>  // for vector
+#include <chrono>   // for chrono
+#include <cmath>    // for sin
+#include <memory>   // for shared_ptr, __shared_ptr_access
+#include <string>   // for string, to_string
+#include <utility>  // for move
+#include <vector>   // for vector
 
-#include "ftxui/component/app.hpp"            // for App
-#include "ftxui/component/component.hpp"      // for Renderer, Button, Vertical, Checkbox, Radiobox
-#include "ftxui/component/component_base.hpp" // for ComponentBase
-#include "ftxui/dom/elements.hpp"             // for operator|, Element, text, vbox, border, window, separator, hbox
-#include "ftxui/screen/color.hpp"             // for Color
-#include "ftxui/screen/terminal.hpp"          // for Quirks, GetQuirks, SetQuirks
+#include "ftxui/component/app.hpp"  // for App
+#include "ftxui/component/component.hpp"  // for Renderer, Button, Vertical, Checkbox, Radiobox
+#include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, text, vbox, border, window, separator, hbox
+#include "ftxui/screen/color.hpp"     // for Color
+#include "ftxui/screen/terminal.hpp"  // for Quirks, GetQuirks, SetQuirks
 
 int main() {
   using namespace ftxui;
@@ -21,7 +21,8 @@ int main() {
 
   auto quirks = Terminal::GetQuirks();
 
-  auto cb_block = Checkbox("Support 8 Unicode block characters", &quirks.block_characters);
+  auto cb_block =
+      Checkbox("Support 8 Unicode block characters", &quirks.block_characters);
   auto cb_cursor = Checkbox("Support cursor hiding", &quirks.cursor_hiding);
   auto cb_ascii = Checkbox("Use ASCII for components", &quirks.component_ascii);
 
@@ -33,7 +34,8 @@ int main() {
   };
   auto rb_color = Radiobox(&color_names, (int*)&quirks.color_support);
 
-  auto btn_quit = Button("Quit", screen.ExitLoopClosure(), ButtonOption::Animated());
+  auto btn_quit =
+      Button("Quit", screen.ExitLoopClosure(), ButtonOption::Animated());
 
   bool dummy_checked = true;
   int dummy_selected = 0;
@@ -86,8 +88,8 @@ int main() {
     for (int value = 0; value < 255; value += 20) {
       Elements line;
       for (int hue = 0; hue < 255; hue += 6) {
-        line.push_back(text("▀")                                   //
-                       | color(Color::HSV(hue, saturation, value)) //
+        line.push_back(text("▀")                                    //
+                       | color(Color::HSV(hue, saturation, value))  //
                        | bgcolor(Color::HSV(hue, saturation, value + 10)));
       }
       hsv_rows.push_back(hbox(std::move(line)));
@@ -117,12 +119,15 @@ int main() {
     return hbox({
         vbox({
             window(text(" Terminal Info "), info_pane),
-            window(text(" Exit "), vbox({
-                                       text("Press 'q' or click the button to exit."),
-                                       btn_quit->Render(),
-                                   })),
+            window(text(" Exit "),
+                   vbox({
+                       text("Press 'q' or click the button to exit."),
+                       btn_quit->Render(),
+                   })),
         }) | size(WIDTH, EQUAL, 40),
-        window(text(" Runtime Quirk Overrides & Visual Verification "), overrides_pane) | flex,
+        window(text(" Runtime Quirk Overrides & Visual Verification "),
+               overrides_pane) |
+            flex,
     });
   });
 

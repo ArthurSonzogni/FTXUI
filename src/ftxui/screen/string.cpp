@@ -11,11 +11,12 @@
 
 #include "ftxui/screen/string.hpp"
 
-#include <array>    // for array
-#include <cstddef>  // for size_t
-#include <cstdint>  // for uint32_t, uint8_t, uint16_t, int32_t
-#include <string>   // for string, basic_string, wstring
-#include <tuple>    // for _Swallow_assign, ignore
+#include <array>        // for array
+#include <cstddef>      // for size_t
+#include <cstdint>      // for uint32_t, uint8_t, uint16_t, int32_t
+#include <string>       // for string, basic_string, wstring
+#include <string_view>  // for string_view
+#include <tuple>        // for _Swallow_assign, ignore
 #include <vector>
 
 #include "ftxui/screen/deprecated.hpp"       // for wchar_width, wstring_width
@@ -1354,7 +1355,7 @@ int string_width(std::string_view input) {
     }
   }
   if (is_pure_ascii) {
-    return input.size();
+    return static_cast<int>(input.size());
   }
 
   int width = 0;
@@ -1414,13 +1415,13 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
     // Fullwidth characters take two cells. The second is made of the empty
     // string to reserve the space the first is taking.
     if (IsFullWidth(codepoint)) {
-      out.push_back(std::string(append));
+      out.emplace_back(append);
       out.emplace_back("");
       continue;
     }
 
     // Normal characters:
-    out.push_back(std::string(append));
+    out.emplace_back(append);
   }
   return out;
 }

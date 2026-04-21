@@ -4,8 +4,8 @@
 #include <algorithm>  // for std::search
 #include <cctype>     // for std::tolower
 #include <cstdlib>    // for getenv
-#include <string>      // for string, allocator
-#include <string_view> // for string_view
+#include <initializer_list>
+#include <string_view>  // for string_view
 
 #include "ftxui/screen/terminal.hpp"
 
@@ -26,8 +26,8 @@ namespace ftxui {
 
 namespace {
 
-bool g_color_support_detected = false;
-Terminal::Quirks g_quirks = [] {
+bool g_color_support_detected = false;  // NOLINT
+Terminal::Quirks g_quirks = [] {        // NOLINT
   Terminal::Quirks quirks;
 #if defined(_WIN32)
   quirks.block_characters = false;
@@ -67,17 +67,17 @@ bool Contains(std::string_view s, std::string_view key) {
   if (key.empty()) {
     return true;
   }
-  auto it = std::search(
-      s.begin(), s.end(), key.begin(), key.end(),
-      [](char a, char b) {
+  const auto* it = std::search(  // NOLINT
+      s.begin(), s.end(), key.begin(), key.end(), [](char a, char b) {
         return std::tolower(static_cast<unsigned char>(a)) ==
                std::tolower(static_cast<unsigned char>(b));
       });
   return it != s.end();
 }
 
-bool ContainsAny(std::string_view s, std::initializer_list<std::string_view> keys) {
-  for (std::string_view key : keys) {
+bool ContainsAny(std::string_view s,
+                 std::initializer_list<std::string_view> keys) {
+  for (const std::string_view key : keys) {
     if (Contains(s, key)) {
       return true;
     }
@@ -102,7 +102,8 @@ Terminal::Color ComputeColorSupport() {
   }
 
   std::string_view TERM = Safe(std::getenv("TERM"));  // NOLINT
-  if (ContainsAny(TERM, {"direct", "truecolor", "kitty", "alacritty", "foot"})) {
+  if (ContainsAny(TERM,
+                  {"direct", "truecolor", "kitty", "alacritty", "foot"})) {
     return Terminal::Color::TrueColor;
   }
 

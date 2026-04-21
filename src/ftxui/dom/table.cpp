@@ -50,14 +50,14 @@ Table::Table() {
 
 /// @brief Create a table from a vector of vector of string.
 /// @param input The input data.
-Table::Table(std::vector<std::vector<std::string>> input) {
+Table::Table(const std::vector<std::vector<std::string>>& input) {
   std::vector<std::vector<Element>> output;
   output.reserve(input.size());
-  for (auto& row : input) {
+  for (const auto& row : input) {
     output.emplace_back();
     auto& output_row = output.back();
     output_row.reserve(row.size());
-    for (auto& cell : row) {
+    for (const auto& cell : row) {
       output_row.push_back(text(std::move(cell)));
     }
   }
@@ -239,7 +239,7 @@ Element Table::Render() {
 /// This decorate both the cells, the lines and the corners.
 /// @param decorator The decorator to apply.
 // NOLINTNEXTLINE
-void TableSelection::Decorate(Decorator decorator) {
+void TableSelection::Decorate(const Decorator& decorator) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
       Element& e = table_->elements_[y][x];
@@ -252,7 +252,7 @@ void TableSelection::Decorate(Decorator decorator) {
 /// @param decorator The decorator to apply.
 /// This decorate only the cells.
 // NOLINTNEXTLINE
-void TableSelection::DecorateCells(Decorator decorator) {
+void TableSelection::DecorateCells(const Decorator& decorator) {
   for (int y = y_min_; y <= y_max_; ++y) {
     for (int x = x_min_; x <= x_max_; ++x) {
       if (y % 2 == 1 && x % 2 == 1) {
@@ -269,7 +269,7 @@ void TableSelection::DecorateCells(Decorator decorator) {
 /// @param modulo The modulo of the lines to decorate.
 /// @param shift The shift of the lines to decorate.
 // NOLINTNEXTLINE
-void TableSelection::DecorateAlternateColumn(Decorator decorator,
+void TableSelection::DecorateAlternateColumn(const Decorator& decorator,
                                              int modulo,
                                              int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
@@ -288,7 +288,7 @@ void TableSelection::DecorateAlternateColumn(Decorator decorator,
 /// @param modulo The modulo of the lines to decorate.
 /// @param shift The shift of the lines to decorate.
 // NOLINTNEXTLINE
-void TableSelection::DecorateAlternateRow(Decorator decorator,
+void TableSelection::DecorateAlternateRow(const Decorator& decorator,
                                           int modulo,
                                           int shift) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
@@ -307,7 +307,7 @@ void TableSelection::DecorateAlternateRow(Decorator decorator,
 /// @param modulo The modulo of the corners to decorate.
 /// @param shift The shift of the corners to decorate.
 // NOLINTNEXTLINE
-void TableSelection::DecorateCellsAlternateColumn(Decorator decorator,
+void TableSelection::DecorateCellsAlternateColumn(const Decorator& decorator,
                                                   int modulo,
                                                   int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
@@ -326,7 +326,7 @@ void TableSelection::DecorateCellsAlternateColumn(Decorator decorator,
 /// @param modulo The modulo of the corners to decorate.
 /// @param shift The shift of the corners to decorate.
 // NOLINTNEXTLINE
-void TableSelection::DecorateCellsAlternateRow(Decorator decorator,
+void TableSelection::DecorateCellsAlternateRow(const Decorator& decorator,
                                                int modulo,
                                                int shift) {
   for (int y = y_min_; y <= y_max_; ++y) {
@@ -341,7 +341,7 @@ void TableSelection::DecorateCellsAlternateRow(Decorator decorator,
 
 /// @brief Apply the `decorator` to the border of the selection.
 /// @param decorator The decorator to apply.
-void TableSelection::DecorateBorder(Decorator decorator) {
+void TableSelection::DecorateBorder(const Decorator& decorator) {
   for (int x = x_min_; x <= x_max_; ++x) {
     table_->elements_[y_min_][x] =
         std::move(table_->elements_[y_min_][x]) | decorator;
@@ -358,7 +358,7 @@ void TableSelection::DecorateBorder(Decorator decorator) {
 
 /// @brief Apply the `decorator` to the left border of the selection.
 /// @param decorator The decorator to apply.
-void TableSelection::DecorateBorderLeft(Decorator decorator) {
+void TableSelection::DecorateBorderLeft(const Decorator& decorator) {
   for (int y = y_min_; y <= y_max_; y++) {
     table_->elements_[y][x_min_] =
         std::move(table_->elements_[y][x_min_]) | decorator;
@@ -367,7 +367,7 @@ void TableSelection::DecorateBorderLeft(Decorator decorator) {
 
 /// @brief Apply the `decorator` to the right border of the selection.
 /// @param decorator The decorator to apply.
-void TableSelection::DecorateBorderRight(Decorator decorator) {
+void TableSelection::DecorateBorderRight(const Decorator& decorator) {
   for (int y = y_min_; y <= y_max_; y++) {
     table_->elements_[y][x_max_] =
         std::move(table_->elements_[y][x_max_]) | decorator;
@@ -376,7 +376,7 @@ void TableSelection::DecorateBorderRight(Decorator decorator) {
 
 /// @brief Apply the `decorator` to the top border of the selection.
 /// @param decorator The decorator to apply.
-void TableSelection::DecorateBorderTop(Decorator decorator) {
+void TableSelection::DecorateBorderTop(const Decorator& decorator) {
   for (int x = x_min_; x <= x_max_; x++) {
     table_->elements_[y_min_][x] =
         std::move(table_->elements_[y_min_][x]) | decorator;
@@ -385,7 +385,7 @@ void TableSelection::DecorateBorderTop(Decorator decorator) {
 
 /// @brief Apply the `decorator` to the bottom border of the selection.
 /// @param decorator The decorator to apply.
-void TableSelection::DecorateBorderBottom(Decorator decorator) {
+void TableSelection::DecorateBorderBottom(const Decorator& decorator) {
   for (int x = x_min_; x <= x_max_; x++) {
     table_->elements_[y_max_][x] =
         std::move(table_->elements_[y_max_][x]) | decorator;
@@ -394,7 +394,7 @@ void TableSelection::DecorateBorderBottom(Decorator decorator) {
 
 /// @brief Apply the `decorator` to the separators of the selection.
 /// @param decorator The decorator to apply.
-void TableSelection::DecorateSeparator(Decorator decorator) {
+void TableSelection::DecorateSeparator(const Decorator& decorator) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0 || x % 2 == 0) {
@@ -407,7 +407,7 @@ void TableSelection::DecorateSeparator(Decorator decorator) {
 
 /// @brief Apply the `decorator` to the vertical separators of the selection.
 /// @param decorator The decorator to apply.
-void TableSelection::DecorateSeparatorVertical(Decorator decorator) {
+void TableSelection::DecorateSeparatorVertical(const Decorator& decorator) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (x % 2 == 0) {
@@ -420,7 +420,7 @@ void TableSelection::DecorateSeparatorVertical(Decorator decorator) {
 
 /// @brief Apply the `decorator` to the horizontal separators of the selection.
 /// @param decorator The decorator to apply.
-void TableSelection::DecorateSeparatorHorizontal(Decorator decorator) {
+void TableSelection::DecorateSeparatorHorizontal(const Decorator& decorator) {
   for (int y = y_min_ + 1; y <= y_max_ - 1; ++y) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0) {
@@ -452,9 +452,9 @@ void TableSelection::Border(BorderStyle border) {
 /// @brief Apply a `border` around the selection.
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
-void TableSelection::Border(BorderStyle border, Decorator decorator) {
+void TableSelection::Border(BorderStyle border, const Decorator& decorator) {
   Border(border);
-  DecorateBorder(std::move(decorator));
+  DecorateBorder(decorator);
 }
 
 /// @brief Draw some separator lines in the selection.
@@ -475,9 +475,9 @@ void TableSelection::Separator(BorderStyle border) {
 /// @brief Draw some separator lines in the selection.
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
-void TableSelection::Separator(BorderStyle border, Decorator decorator) {
+void TableSelection::Separator(BorderStyle border, const Decorator& decorator) {
   Separator(border);
-  DecorateSeparator(std::move(decorator));
+  DecorateSeparator(decorator);
 }
 
 /// @brief Draw some vertical separator lines in the selection.
@@ -497,9 +497,9 @@ void TableSelection::SeparatorVertical(BorderStyle border) {
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
 void TableSelection::SeparatorVertical(BorderStyle border,
-                                       Decorator decorator) {
+                                       const Decorator& decorator) {
   SeparatorVertical(border);
-  DecorateSeparatorVertical(std::move(decorator));
+  DecorateSeparatorVertical(decorator);
 }
 
 /// @brief Draw some horizontal separator lines in the selection.
@@ -519,9 +519,9 @@ void TableSelection::SeparatorHorizontal(BorderStyle border) {
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
 void TableSelection::SeparatorHorizontal(BorderStyle border,
-                                         Decorator decorator) {
+                                         const Decorator& decorator) {
   SeparatorHorizontal(border);
-  DecorateSeparatorHorizontal(std::move(decorator));
+  DecorateSeparatorHorizontal(decorator);
 }
 
 /// @brief Draw some separator lines to the left side of the selection.
@@ -536,9 +536,10 @@ void TableSelection::BorderLeft(BorderStyle border) {
 /// @brief Draw some separator lines to the left side of the selection.
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
-void TableSelection::BorderLeft(BorderStyle border, Decorator decorator) {
+void TableSelection::BorderLeft(BorderStyle border,
+                                const Decorator& decorator) {
   BorderLeft(border);
-  DecorateBorderLeft(std::move(decorator));
+  DecorateBorderLeft(decorator);
 }
 
 /// @brief Draw some separator lines to the right side of the selection.
@@ -553,9 +554,10 @@ void TableSelection::BorderRight(BorderStyle border) {
 /// @brief Draw some separator lines to the right side of the selection.
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
-void TableSelection::BorderRight(BorderStyle border, Decorator decorator) {
+void TableSelection::BorderRight(BorderStyle border,
+                                 const Decorator& decorator) {
   BorderRight(border);
-  DecorateBorderRight(std::move(decorator));
+  DecorateBorderRight(decorator);
 }
 
 /// @brief Draw some separator lines to the top side of the selection.
@@ -570,9 +572,9 @@ void TableSelection::BorderTop(BorderStyle border) {
 /// @brief Draw some separator lines to the top side of the selection.
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
-void TableSelection::BorderTop(BorderStyle border, Decorator decorator) {
+void TableSelection::BorderTop(BorderStyle border, const Decorator& decorator) {
   BorderTop(border);
-  DecorateBorderTop(std::move(decorator));
+  DecorateBorderTop(decorator);
 }
 
 /// @brief Draw some separator lines to the bottom side of the selection.
@@ -587,9 +589,10 @@ void TableSelection::BorderBottom(BorderStyle border) {
 /// @brief Draw some separator lines to the bottom side of the selection.
 /// @param border The border style to apply.
 /// @param decorator The decorator to apply.
-void TableSelection::BorderBottom(BorderStyle border, Decorator decorator) {
+void TableSelection::BorderBottom(BorderStyle border,
+                                  const Decorator& decorator) {
   BorderBottom(border);
-  DecorateBorderBottom(std::move(decorator));
+  DecorateBorderBottom(decorator);
 }
 
 }  // namespace ftxui

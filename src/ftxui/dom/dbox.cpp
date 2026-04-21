@@ -2,16 +2,14 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <algorithm>  // for max
-#include <cstddef>    // for size_t
 #include <memory>     // for __shared_ptr_access, shared_ptr, make_shared
 #include <utility>    // for move
-#include <vector>
 
-#include "ftxui/dom/elements.hpp"     // for Element, Elements, dbox
+#include "ftxui/dom/elements.hpp"  // for Element, dbox
+
 #include "ftxui/dom/node.hpp"         // for Node, Elements
 #include "ftxui/dom/requirement.hpp"  // for Requirement
 #include "ftxui/screen/box.hpp"       // for Box
-#include "ftxui/screen/cell.hpp"      // for Cell
 
 namespace ftxui {
 

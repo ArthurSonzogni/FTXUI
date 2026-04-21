@@ -5,8 +5,9 @@
 
 #include <ftxui/screen/color.hpp>  // for Color, Color::White, Color::Black, Color::GrayDark, Color::Blue, Color::GrayLight, Color::Red
 #include <ftxui/screen/terminal.hpp>
-#include <memory>                  // for shared_ptr
-#include <utility>                 // for move
+#include <memory>  // for shared_ptr
+#include <string>
+#include <utility>                        // for move
 #include "ftxui/component/animation.hpp"  // for Function, Duration
 #include "ftxui/dom/direction.hpp"
 #include "ftxui/dom/elements.hpp"  // for operator|=, Element, text, bgcolor, inverted, bold, dim, operator|, color, borderEmpty, hbox, automerge, border, borderLight
@@ -247,7 +248,7 @@ CheckboxOption CheckboxOption::Simple() {
   option.transform = [](const EntryState& s) {
     auto prefix = (Terminal::GetQuirks().component_ascii)
                       ? text(s.state ? "[X] " : "[ ] ")  // NOLINT
-                      : text(s.state ? "▣ " : "☐ ");    // NOLINT
+                      : text(s.state ? "▣ " : "☐ ");     // NOLINT
     auto t = text(s.label);
     if (s.active) {
       t |= bold;
@@ -267,7 +268,7 @@ RadioboxOption RadioboxOption::Simple() {
   option.transform = [](const EntryState& s) {
     auto prefix = (Terminal::GetQuirks().component_ascii)
                       ? text(s.state ? "(*) " : "( ) ")  // NOLINT
-                      : text(s.state ? "◉ " : "○ ");    // NOLINT
+                      : text(s.state ? "◉ " : "○ ");     // NOLINT
     auto t = text(s.label);
     if (s.active) {
       t |= bold;

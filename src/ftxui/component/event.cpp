@@ -1,9 +1,14 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#include <cstddef>
+#include <initializer_list>
 #include <map>  // for map
+#include <memory>
 #include <string>
+#include <string_view>
 #include <utility>  // for move
+#include <vector>
 
 #include "ftxui/component/event.hpp"
 #include "ftxui/component/mouse.hpp"  // for Mouse
@@ -114,75 +119,75 @@ std::vector<std::string> Event::TerminalCapabilityNames() const {
   }
 
   std::vector<std::string> names;
-  for (int cap : *terminal_capabilities_) {
+  for (const int cap : *terminal_capabilities_) {
     switch (cap) {
       case 0:
         break;
       case 1:
-        names.push_back("132-columns");
+        names.emplace_back("132-columns");
         break;
       case 2:
-        names.push_back("Printer-port");
+        names.emplace_back("Printer-port");
         break;
       case 3:
-        names.push_back("ReGIS-graphics");
+        names.emplace_back("ReGIS-graphics");
         break;
       case 4:
-        names.push_back("Sixel-graphics");
+        names.emplace_back("Sixel-graphics");
         break;
       case 6:
-        names.push_back("Selective-erase");
+        names.emplace_back("Selective-erase");
         break;
       case 7:
-        names.push_back("Soft-character-set-(DRCS)");
+        names.emplace_back("Soft-character-set-(DRCS)");
         break;
       case 8:
-        names.push_back("User-defined-keys-(UDK)");
+        names.emplace_back("User-defined-keys-(UDK)");
         break;
       case 9:
-        names.push_back("National-replacement-character-sets-(NRC)");
+        names.emplace_back("National-replacement-character-sets-(NRC)");
         break;
       case 12:
-        names.push_back("Local-editing");
+        names.emplace_back("Local-editing");
         break;
       case 15:
-        names.push_back("Technical-character-set");
+        names.emplace_back("Technical-character-set");
         break;
       case 18:
-        names.push_back("Windowing-capability");
+        names.emplace_back("Windowing-capability");
         break;
       case 21:
-        names.push_back("Horizontal-scrolling");
+        names.emplace_back("Horizontal-scrolling");
         break;
       case 22:
-        names.push_back("ANSI-color");
+        names.emplace_back("ANSI-color");
         break;
       case 28:
-        names.push_back("Font-loading");
+        names.emplace_back("Font-loading");
         break;
       case 29:
-        names.push_back("ANSI-text-locator-(Mouse)");
+        names.emplace_back("ANSI-text-locator-(Mouse)");
         break;
       case 52:
-        names.push_back("UTF-8");
+        names.emplace_back("UTF-8");
         break;
       case 61:
-        names.push_back("VT510");
+        names.emplace_back("VT510");
         break;
       case 62:
-        names.push_back("VT220");
+        names.emplace_back("VT220");
         break;
       case 63:
-        names.push_back("VT320");
+        names.emplace_back("VT320");
         break;
       case 64:
-        names.push_back("VT420");
+        names.emplace_back("VT420");
         break;
       case 65:
-        names.push_back("VT525");
+        names.emplace_back("VT525");
         break;
       default:
-        names.push_back("Unknown-" + std::to_string(cap));
+        names.emplace_back("Unknown-" + std::to_string(cap));
         break;
     }
   }
