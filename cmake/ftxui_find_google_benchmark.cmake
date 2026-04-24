@@ -17,16 +17,7 @@ FetchContent_Declare(googlebenchmark
   GIT_PROGRESS   TRUE
 )
 
-FetchContent_GetProperties(googlebenchmark)
 set (BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE INTERNAL "")
 set (BENCHMARK_ENABLE_TESTING OFF CACHE INTERNAL "")
-if(googlebenchmark_POPULATED)
-  return()
-endif()
 
-FetchContent_Populate(googlebenchmark)
-add_subdirectory(
-  ${googlebenchmark_SOURCE_DIR}
-  ${googlebenchmark_BINARY_DIR}
-  EXCLUDE_FROM_ALL
-)
+FetchContent_MakeAvailable(googlebenchmark)
