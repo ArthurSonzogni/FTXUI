@@ -163,6 +163,7 @@ ftxui_cc_library(
         "src/ftxui/component/renderer.cpp",
         "src/ftxui/component/resizable_split.cpp",
         "src/ftxui/component/app.cpp",
+        "src/ftxui/component/multi_receiver_buffer.hpp",
         "src/ftxui/component/slider.cpp",
         "src/ftxui/component/task.cpp",
         "src/ftxui/component/task_internal.hpp",
