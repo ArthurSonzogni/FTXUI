@@ -14,6 +14,7 @@ for file in ./examples_modules/**/*.cpp; do
 
   sed -i '/#include "ftxui/d' "$file"
   sed -i '/#include <ftxui/d' "$file"
+  sed -i '1i#include <algorithm>\n#include <typeinfo>\n#include <ftxui/component/component.hpp>\n#include <ftxui/dom/elements.hpp>' "$file"
   last_include=$(grep -n '#include <' "$file" | tail -n 1 | cut -d: -f1)
   if [ -z "$last_include" ]; then
     sed -i '1i\import ftxui.component;\nimport ftxui.dom;\nimport ftxui.screen;\nimport ftxui.util;\n' "$file"
@@ -22,9 +23,14 @@ for file in ./examples_modules/**/*.cpp; do
   fi
 done
 
-# Modify the CMakeLists.txt file to link against ftxui-modules
-sed -i 's/${DIRECTORY_LIB}/ftxui-modules/g' ./examples_modules/CMakeLists.txt
+  sed -i 's/${DIRECTORY_LIB}/ftxui-modules/g' ./examples_modules/CMakeLists.txt
 sed -i 's/ftxui_example_/ftxui_modules_example_/g' ./examples_modules/CMakeLists.txt
+
+# Remove problematic header inclusions from .ipp files in module examples.
+for file in ./examples_modules/**/*.ipp; do
+  sed -i '/#include "ftxui/d' "$file"
+  sed -i '/#include <ftxui/d' "$file"
+done
 
 
 
