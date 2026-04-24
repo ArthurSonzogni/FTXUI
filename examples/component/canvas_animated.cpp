@@ -171,20 +171,24 @@ int main() {
       for (int x = 0; x < size; x++) {
         float dx = x - mx;
         float dy = y - my;
-        ys[y][x] = -1.5 + 3.0 * std::exp(-0.2f * (dx * dx + dy * dy));
+        ys[y][x] = -1.5f + 3.0f * std::exp(-0.2f * (dx * dx + dy * dy));
       }
     }
     for (int y = 0; y < size; y++) {
       for (int x = 0; x < size; x++) {
         if (x != 0) {
           c.DrawPointLine(
-              5 * (x - 1) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x - 1],
-              5 * (x - 0) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x]);
+              static_cast<int>(5 * (x - 1) + 3 * (y - 0)),
+              static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x - 1]),
+              static_cast<int>(5 * (x - 0) + 3 * (y - 0)),
+              static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x]));
         }
         if (y != 0) {
           c.DrawPointLine(
-              5 * (x - 0) + 3 * (y - 1), 90 - 5 * (y - 1) - 5 * ys[y - 1][x],
-              5 * (x - 0) + 3 * (y - 0), 90 - 5 * (y - 0) - 5 * ys[y][x]);
+              static_cast<int>(5 * (x - 0) + 3 * (y - 1)),
+              static_cast<int>(90 - 5 * (y - 1) - 5 * ys[y - 1][x]),
+              static_cast<int>(5 * (x - 0) + 3 * (y - 0)),
+              static_cast<int>(90 - 5 * (y - 0) - 5 * ys[y][x]));
         }
       }
     }

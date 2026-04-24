@@ -16,7 +16,7 @@ int main() {
   using namespace ftxui;
   auto screen = App::Fullscreen();
 
-  int angle = 180.f;
+  int angle = 180;
   float start = 0.f;
   float end = 1.f;
 

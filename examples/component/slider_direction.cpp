@@ -20,7 +20,7 @@ int main() {
   auto screen = App::TerminalOutput();
   std::array<int, 30> values;
   for (size_t i = 0; i < values.size(); ++i) {
-    values[i] = 50 + 20 * std::sin(i * 0.3);
+    values[i] = static_cast<int>(50.0 + 20.0 * std::sin(i * 0.3));
   }
 
   auto layout_horizontal = Container::Horizontal({});
