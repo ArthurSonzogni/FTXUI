@@ -53,7 +53,7 @@ class DBox : public Node {
 }  // namespace
 
 /// @brief Stack several element on top of each other.
-/// @param children_ The input element.
+/// @param children_ The input elements.
 /// @return The right aligned element.
 /// @ingroup dom
 Element dbox(Elements children_) {

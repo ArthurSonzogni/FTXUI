@@ -66,7 +66,7 @@ int ComponentBase::Index() const {
 }
 
 /// @brief Add a child.
-/// @@param child The child to be attached.
+/// @param child The child to be attached.
 void ComponentBase::Add(Component child) {
   child->Detach();
   child->parent_ = this;

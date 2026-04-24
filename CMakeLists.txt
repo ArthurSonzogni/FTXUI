@@ -174,6 +174,6 @@ add_subdirectory(doc)
 
 # You can generate ./examples_modules/ by running
 # ./tools/generate_examples_modules.sh
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples_modules/CMakeLists.txt")
+if(FTXUI_BUILD_MODULES AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples_modules/CMakeLists.txt")
   add_subdirectory(examples_modules)
 endif()
