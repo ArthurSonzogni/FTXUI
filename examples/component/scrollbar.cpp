@@ -10,8 +10,8 @@ using namespace ftxui;
 Component DummyWindowContent() {
   class Impl : public ComponentBase {
    private:
-    float scroll_x = 0.1;
-    float scroll_y = 0.1;
+    float scroll_x = 0.1f;
+    float scroll_y = 0.1f;
 
    public:
     Impl() {
