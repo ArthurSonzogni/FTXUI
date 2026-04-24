@@ -1,0 +1,7 @@
+<map id="Screen" name="Screen">
+<area shape="rect" id="Node000001" title="A rectangular grid of Cell." alt="" coords="7,79,74,104"/>
+<area shape="rect" id="Node000003" href="$group__component.html#classftxui_1_1App" title="App is a Screen that can handle events, run a main loop, and manage components." alt="" coords="17,152,64,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="43,118,43,152,38,152,38,118"/>
+<area shape="rect" id="Node000002" href="$group__screen.html#classftxui_1_1Surface" title="A rectangular grid of Cell." alt="" coords="5,5,76,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="43,44,43,79,38,79,38,44"/>
+</map>
