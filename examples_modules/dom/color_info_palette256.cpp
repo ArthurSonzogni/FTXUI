@@ -1,4 +1,3 @@
-module;
 #include <algorithm>
 #include <typeinfo>
 #include <initializer_list>
@@ -8,6 +7,7 @@ import ftxui.component;
 import ftxui.dom;
 import ftxui.screen;
 import ftxui.util;
+
 #include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in

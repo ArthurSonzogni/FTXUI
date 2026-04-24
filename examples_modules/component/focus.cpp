@@ -1,0 +1,70 @@
+#include <typeinfo>
+#include <initializer_list>
+#include <memory>  // for allocator, shared_ptr, __shared_ptr_access
+#include <string>  // for operator+, char_traits, to_string, string
+#include <vector>  // for vector
+import ftxui.component;
+import ftxui.dom;
+import ftxui.screen;
+import ftxui.util;
+
+// Copyright 2020 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+
+
+using namespace ftxui;
+
+Element make_box(int x, int y) {
+  std::string title = "(" + std::to_string(x) + ", " + std::to_string(y) + ")";
+  return text(title) | center | size(WIDTH, EQUAL, 18) |
+         size(HEIGHT, EQUAL, 9) | border |
+         bgcolor(Color::HSV(x * 255 / 15, 255, y * 255 / 15));
+};
+
+Element make_grid() {
+  std::vector<Elements> rows;
+  for (int i = 0; i < 15; i++) {
+    std::vector<Element> cols;
+    for (int j = 0; j < 15; j++) {
+      cols.push_back(make_box(i, j));
+    }
+    rows.push_back(cols);
+  }
+
+  return gridbox(rows);
+};
+
+int main() {
+  float focus_x = 0.5f;
+  float focus_y = 0.5f;
+
+  auto slider_x = Slider("x", &focus_x, 0.f, 1.f, 0.01f);
+  auto slider_y = Slider("y", &focus_y, 0.f, 1.f, 0.01f);
+
+  auto renderer = Renderer(
+      Container::Vertical({
+          slider_x,
+          slider_y,
+      }),
+      [&] {
+        auto title = "focusPositionRelative(" +        //
+                     std::to_string(focus_x) + ", " +  //
+                     std::to_string(focus_y) + ")";    //
+        return vbox({
+                   text(title),
+                   separator(),
+                   slider_x->Render(),
+                   slider_y->Render(),
+                   separator(),
+                   make_grid() | focusPositionRelative(focus_x, focus_y) |
+                       frame | flex,
+               }) |
+               border;
+      });
+
+  auto screen = App::Fullscreen();
+  screen.Loop(renderer);
+
+  return 0;
+}
