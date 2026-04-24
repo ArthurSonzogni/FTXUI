@@ -67,7 +67,7 @@ bool Contains(std::string_view s, std::string_view key) {
   if (key.empty()) {
     return true;
   }
-  const auto* it = std::search(  // NOLINT
+  const auto it = std::search(  // NOLINT
       s.begin(), s.end(), key.begin(), key.end(), [](char a, char b) {
         return std::tolower(static_cast<unsigned char>(a)) ==
                std::tolower(static_cast<unsigned char>(b));
