@@ -67,7 +67,7 @@ converted to a std::string with @ref ftxui::Screen::ToString().
 </div>
 
 Note that you can reset the cursor position to the top-left corner of the
-screen after printing by calling @ref ftxui::Screen::ResetCursorPosition().
+screen after printing by calling @ref ftxui::Screen::ResetPosition().
 
 **Example**
 ```cpp
@@ -79,7 +79,7 @@ while(true) {
   // Print the screen to the terminal. Then reset the cursor position and the
   // screen content.
   std::cout << screen.ToString();
-  std::cout << screen.ResetCursorPosition(/*clear=*/true);
+  std::cout << screen.ResetPosition(/*clear=*/true);
   std::cout << std::flush;
 
   // Sleep for a short duration to control the refresh rate.
