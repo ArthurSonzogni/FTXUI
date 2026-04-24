@@ -60,6 +60,9 @@ export namespace ftxui {
         using ftxui::Terminal::SetFallbackSize;
         using ftxui::Terminal::ColorSupport;
         using ftxui::Terminal::SetColorSupport;
+        using ftxui::Terminal::Quirks;
+        using ftxui::Terminal::GetQuirks;
+        using ftxui::Terminal::SetQuirks;
     }
 
     /**
