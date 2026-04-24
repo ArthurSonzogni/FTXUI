@@ -857,6 +857,8 @@ void Canvas::DrawSurface(int x, int y, const Surface& image) {
 }
 
 /// @brief Modify a pixel at a given location.
+/// @param x The x-coordinate of the pixel.
+/// @param y The y-coordinate of the pixel.
 /// @param style a function that modifies the pixel.
 void Canvas::Style(int x, int y, const Stylizer& style) {
   if (IsIn(x, y)) {
