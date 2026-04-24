@@ -50,7 +50,7 @@ int main() {
            border;
   });
 
-  // Container groups components togethers. To render a Container::Horizontal,
+  // Container groups components together. To render a Container::Horizontal,
   // it render its children side by side. It maintains their interactiveness and
   // provide the logic to navigate from one to the other using the arrow keys.
   auto composition = Container::Horizontal({leftpane, rightpane});

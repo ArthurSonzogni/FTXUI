@@ -42,7 +42,7 @@ enum BorderStyle {
   EMPTY,
 };
 
-// Pipe elements into decorator togethers.
+// Pipe elements into decorator together.
 // For instance the next lines are equivalents:
 // -> text("ftxui") | bold | underlined
 // -> underlined(bold(text("FTXUI")))

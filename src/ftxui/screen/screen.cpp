@@ -537,7 +537,7 @@ void Screen::Clear() {
 
 // clang-format off
 void Screen::ApplyShader() {
-  // Merge box characters togethers.
+  // Merge box characters together.
   for (int y = 0; y < dimy_; ++y) {
     for (int x = 0; x < dimx_; ++x) {
       // Box drawing character uses exactly 3 byte.
