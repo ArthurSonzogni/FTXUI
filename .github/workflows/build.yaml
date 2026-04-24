@@ -42,7 +42,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Build with Bazel"
         env:
@@ -94,7 +94,7 @@ jobs:
         id: cpu-cores
 
       - name: "Checkout repository"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Setup Cpp"
         uses: aminya/setup-cpp@v1
@@ -167,7 +167,7 @@ jobs:
           ctest -C Debug --rerun-failed --output-on-failure;
 
       - name: Publish to codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           flags: ${{ runner.os }}
           name: ${{ runner.os }}-coverage
@@ -184,7 +184,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Setup Cpp"
         uses: aminya/setup-cpp@v1
