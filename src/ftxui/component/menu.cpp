@@ -74,15 +74,11 @@ class MenuBase : public ComponentBase, public MenuOption {
 
   bool IsHorizontal() { return ftxui::IsHorizontal(direction); }
   void OnChange() {
-    if (on_change) {
-      on_change();
-    }
+    App::PostEventOrExecute(on_change);
   }
 
   void OnEnter() {
-    if (on_enter) {
-      on_enter();
-    }
+    App::PostEventOrExecute(on_enter);
   }
 
   void Clamp() {

@@ -100,9 +100,7 @@ class ButtonBase : public ComponentBase, public ButtonOption {
     animation_foreground_ = 0.5F;  // NOLINT
     SetAnimationTarget(1.F);       // NOLINT
 
-    // TODO(arthursonzogni): Consider posting the task to the main loop, instead
-    // of invoking it immediately.
-    on_click();  // May delete this.
+    App::PostEventOrExecute(on_click);
   }
 
   bool OnEvent(Event event) override {

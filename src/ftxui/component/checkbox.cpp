@@ -13,6 +13,7 @@
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, focus, nothing, select
 #include "ftxui/screen/box.hpp"  // for Box
 #include "ftxui/util/ref.hpp"    // for Ref, ConstStringRef
+#include "ftxui/component/app.hpp"
 
 namespace ftxui {
 
@@ -49,7 +50,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     hovered_ = false;
     if (event == Event::Character(' ') || event == Event::Return) {
       *checked = !*checked;
-      on_change();
+      App::PostEventOrExecute(on_change);
       TakeFocus();
       return true;
     }
@@ -70,7 +71,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     if (event.mouse().button == Mouse::Left &&
         event.mouse().motion == Mouse::Pressed) {
       *checked = !*checked;
-      on_change();
+      App::PostEventOrExecute(on_change);
       return true;
     }
 

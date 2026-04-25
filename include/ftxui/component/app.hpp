@@ -61,6 +61,7 @@ class App : public Screen {
   // Post tasks to be executed by the loop.
   void Post(Task task);
   void PostEvent(Event event);
+  static void PostEventOrExecute(Closure closure);
   void RequestAnimationFrame();
 
   CapturedMouse CaptureMouse();

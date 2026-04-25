@@ -464,6 +464,18 @@ void App::HandlePipedInput(bool enable) {
 
 /// @brief Add a task to the main loop.
 /// It will be executed later, after every other scheduled tasks.
+
+void App::PostEventOrExecute(Closure closure) {
+  if (!closure) {
+    return;
+  }
+  if (auto* app = App::Active()) {
+    app->Post(std::move(closure));
+  } else {
+    closure();
+  }
+}
+
 void App::Post(Task task) {
   internal_->task_runner.PostTask([this, task = std::move(task)]() mutable {
     if (component_) {

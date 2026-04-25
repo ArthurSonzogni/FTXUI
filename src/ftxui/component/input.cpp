@@ -204,7 +204,7 @@ class InputBase : public ComponentBase, public InputOption {
     const size_t end = cursor_position();
     content->erase(start, end - start);
     cursor_position() = static_cast<int>(start);
-    on_change();
+    App::PostEventOrExecute(on_change);
     return true;
   }
 
@@ -220,7 +220,7 @@ class InputBase : public ComponentBase, public InputOption {
 
   bool HandleDelete() {
     if (DeleteImpl()) {
-      on_change();
+      App::PostEventOrExecute(on_change);
       return true;
     }
     return false;
@@ -358,7 +358,7 @@ class InputBase : public ComponentBase, public InputOption {
     if (multiline()) {
       HandleCharacter("\n");
     }
-    on_enter();
+    App::PostEventOrExecute(on_enter);
     return true;
   }
 
@@ -369,7 +369,7 @@ class InputBase : public ComponentBase, public InputOption {
     }
     content->insert(cursor_position(), character);
     cursor_position() += static_cast<int>(character.size());
-    on_change();
+    App::PostEventOrExecute(on_change);
     return true;
   }
 
@@ -544,7 +544,7 @@ class InputBase : public ComponentBase, public InputOption {
           static_cast<int>(GlyphNext(content(), cursor_position()));
     }
 
-    on_change();
+    App::PostEventOrExecute(on_change);
     return true;
   }
 

@@ -94,9 +94,7 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
 
     this->value() = std::max(this->min(), std::min(this->max(), this->value()));
     if (old_value != this->value()) {
-      if (this->on_change) {
-        this->on_change();
-      }
+      App::PostEventOrExecute(this->on_change);
       return true;
     }
 
@@ -140,8 +138,8 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
 
     this->value() = std::max(this->min(), std::min(this->max(), this->value()));
 
-    if (old_value != this->value() && this->on_change) {
-      this->on_change();
+    if (old_value != this->value()) {
+      App::PostEventOrExecute(this->on_change);
     }
     return true;
   }

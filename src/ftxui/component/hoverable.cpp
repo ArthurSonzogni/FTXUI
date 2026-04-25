@@ -16,14 +16,6 @@ namespace ftxui {
 
 namespace {
 
-void Post(std::function<void()> f) {
-  if (auto* screen = App::Active()) {
-    screen->Post(std::move(f));
-    return;
-  }
-  f();
-}
-
 }  // namespace
 
 /// @brief Wrap a component. Gives the ability to know if it is hovered by the
@@ -107,7 +99,7 @@ Component Hoverable(Component component,
         const bool hover = box_.Contain(event.mouse().x, event.mouse().y) &&
                            CaptureMouse(event);
         if (hover != hover_) {
-          Post(hover ? on_enter_ : on_leave_);
+          App::PostEventOrExecute(hover ? on_enter_ : on_leave_);
         }
         hover_ = hover;
       }
