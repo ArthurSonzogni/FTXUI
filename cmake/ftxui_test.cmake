@@ -9,15 +9,19 @@ include(cmake/ftxui_find_google_test.cmake)
 add_executable(ftxui-tests
   src/ftxui/component/animation_test.cpp
   src/ftxui/component/button_test.cpp
+  src/ftxui/component/catch_event_test.cpp
+  src/ftxui/component/checkbox_test.cpp
   src/ftxui/component/collapsible_test.cpp
   src/ftxui/component/component_test.cpp
   src/ftxui/component/container_test.cpp
   src/ftxui/component/dropdown_test.cpp
   src/ftxui/component/hoverable_test.cpp
   src/ftxui/component/input_test.cpp
+  src/ftxui/component/maybe_test.cpp
   src/ftxui/component/menu_test.cpp
   src/ftxui/component/modal_test.cpp
   src/ftxui/component/radiobox_test.cpp
+  src/ftxui/component/renderer_test.cpp
   src/ftxui/component/resizable_split_test.cpp
   src/ftxui/component/app_test.cpp
   src/ftxui/component/slider_test.cpp
@@ -28,25 +32,33 @@ add_executable(ftxui-tests
   src/ftxui/dom/bold_test.cpp
   src/ftxui/dom/border_test.cpp
   src/ftxui/dom/canvas_test.cpp
+  src/ftxui/dom/clear_under_test.cpp
   src/ftxui/dom/color_test.cpp
   src/ftxui/dom/dbox_test.cpp
   src/ftxui/dom/dim_test.cpp
   src/ftxui/dom/flexbox_helper_test.cpp
   src/ftxui/dom/flexbox_test.cpp
   src/ftxui/dom/gauge_test.cpp
+  src/ftxui/dom/graph_test.cpp
   src/ftxui/dom/gridbox_test.cpp
   src/ftxui/dom/hbox_test.cpp
   src/ftxui/dom/hyperlink_test.cpp
+  src/ftxui/dom/inverted_test.cpp
   src/ftxui/dom/italic_test.cpp
   src/ftxui/dom/linear_gradient_test.cpp
+  src/ftxui/dom/paragraph_test.cpp
   src/ftxui/dom/scroll_indicator_test.cpp
   src/ftxui/dom/selection_test.cpp
   src/ftxui/dom/separator_test.cpp
+  src/ftxui/dom/size_test.cpp
   src/ftxui/dom/spinner_test.cpp
+  src/ftxui/dom/strikethrough_test.cpp
   src/ftxui/dom/table_test.cpp
   src/ftxui/dom/text_test.cpp
+  src/ftxui/dom/underlined_double_test.cpp
   src/ftxui/dom/underlined_test.cpp
   src/ftxui/dom/vbox_test.cpp
+  src/ftxui/screen/box_test.cpp
   src/ftxui/screen/color_test.cpp
   src/ftxui/screen/compatibility_test.cpp
   src/ftxui/screen/string_test.cpp
