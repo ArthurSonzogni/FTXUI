@@ -150,11 +150,12 @@ class InputBase : public ComponentBase, public InputOption {
       // The cursor is at the end of the line.
       const std::string cursor_cell = is_focused ? " " : "";
       if (cursor_char_index >= (int)line.size()) {
-        elements.push_back(hbox({
-                               Text(line),
-                               text(cursor_cell) | focused | reflect(cursor_box_),
-                           }) |
-                           xflex);
+        elements.push_back(
+            hbox({
+                Text(line),
+                text(cursor_cell) | focused | reflect(cursor_box_),
+            }) |
+            xflex);
         continue;
       }
 
