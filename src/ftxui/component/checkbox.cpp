@@ -5,6 +5,7 @@
 #include <string>      // for string
 #include <utility>     // for move
 
+#include "ftxui/component/app.hpp"
 #include "ftxui/component/component.hpp"       // for Make, Checkbox
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
@@ -13,7 +14,6 @@
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, focus, nothing, select
 #include "ftxui/screen/box.hpp"  // for Box
 #include "ftxui/util/ref.hpp"    // for Ref, ConstStringRef
-#include "ftxui/component/app.hpp"
 
 namespace ftxui {
 

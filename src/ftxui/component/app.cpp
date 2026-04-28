@@ -1,14 +1,14 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include "ftxui/component/app.hpp"
 #include <algorithm>  // for any_of, copy, max, min
 #include <array>      // for array
 #include <atomic>
 #include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
 #include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
 #include <cstdint>
-#include <cstdio>                    // for fileno, stdin
+#include <cstdio>  // for fileno, stdin
+#include <ftxui/component/app.hpp>
 #include <ftxui/component/task.hpp>  // for Task, Closure, AnimationTask
 #include <ftxui/screen/screen.hpp>  // for Cell, Screen::Cursor, Screen, Screen::Cursor::Hidden
 #include <functional>        // for function
@@ -24,6 +24,7 @@
 #include <utility>  // for move, swap
 #include <variant>  // for visit, variant
 #include <vector>   // for vector
+
 #include "ftxui/component/animation.hpp"  // for TimePoint, Clock, Duration, Params, RequestAnimationFrame
 #include "ftxui/component/captured_mouse.hpp"  // for CapturedMouse, CapturedMouseInterface
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
@@ -60,6 +61,13 @@
 
 namespace ftxui {
 
+enum class AppDimension {
+  FitComponent,
+  Fixed,
+  Fullscreen,
+  TerminalOutput,
+};
+
 namespace animation {
 void RequestAnimationFrame() {
   auto* screen = App::Active();
@@ -69,93 +77,153 @@ void RequestAnimationFrame() {
 }
 }  // namespace animation
 
-class ThrottledRequest {
- public:
-  ThrottledRequest(App* app,
-                   std::function<void()> send,
-                   task::TaskRunner& task_runner)
-      : app_(app), send_(std::move(send)), task_runner_(&task_runner) {}
+struct App::Internal {
+  App* public_;
 
-  void Request(bool force = false) {
-    if (!app_->is_stdin_a_tty_) {
-      return;
-    }
+  App* suspended_screen_ = nullptr;
+  const AppDimension dimension_;
+  const bool use_alternative_screen_;
 
-    if (force) {
-      Send();
-      return;
-    }
+  bool track_mouse_ = true;
 
-    // Allow only one pending request at a time. This is to avoid flooding the
-    // terminal with requests.
-    if (HasPending()) {
-      return;
-    }
+  std::string set_cursor_position_;
+  std::string reset_cursor_position_;
 
-    const auto now = std::chrono::steady_clock::now();
-    const auto delta = now - last_request_time_;
-    const auto delay = std::chrono::milliseconds(500) - delta;
+  std::atomic<bool> quit_{false};
+  bool installed_ = false;
+  bool animation_requested_ = false;
+  animation::TimePoint previous_animation_time_;
 
-    if (delay <= std::chrono::milliseconds(0)) {
-      Send();
-      return;
-    }
+  int cursor_x_ = 1;
+  int cursor_y_ = 1;
 
-    request_queued_ = true;
-    task_runner_->PostDelayedTask(
-        [this] {
-          request_queued_ = false;
-          Request();
-        },
-        delay);
-  }
+  std::uint64_t frame_count_ = 0;
+  bool mouse_captured = false;
+  bool previous_frame_resized_ = false;
 
-  void OnReply() { pending_request_ = false; }
+  bool frame_valid_ = false;
 
-  bool HasPending() const {
-    if (pending_request_) {
-      const auto now = std::chrono::steady_clock::now();
-      if (now - last_sent_time_ < std::chrono::seconds(5)) {
+  bool force_handle_ctrl_c_ = true;
+  bool force_handle_ctrl_z_ = true;
+
+  // Piped input handling state (POSIX only)
+  bool handle_piped_input_ = true;
+  bool is_stdin_a_tty_ = false;
+  bool is_stdout_a_tty_ = false;
+  // File descriptor for /dev/tty, used for piped input handling.
+  int tty_fd_ = -1;
+
+  std::string terminal_name_ = "unknown";
+  int terminal_version_ = 0;
+
+  std::string terminal_emulator_name_ = "unknown";
+  std::string terminal_emulator_version_ = "unknown";
+
+  std::vector<int> terminal_capabilities_;
+
+  // Selection API:
+  CapturedMouse selection_pending_;
+  struct SelectionData {
+    int start_x = -1;
+    int start_y = -1;
+    int end_x = -2;
+    int end_y = -2;
+    bool empty = true;
+    bool operator==(const SelectionData& other) const {
+      if (empty && other.empty) {
         return true;
       }
+      if (empty || other.empty) {
+        return false;
+      }
+      return start_x == other.start_x && start_y == other.start_y &&
+             end_x == other.end_x && end_y == other.end_y;
     }
-    return request_queued_;
-  }
+    bool operator!=(const SelectionData& other) const {
+      return !(*this == other);
+    }
+  };
+  SelectionData selection_data_;
+  SelectionData selection_data_previous_;
+  std::unique_ptr<Selection> selection_;
+  std::function<void()> selection_on_change_;
 
- private:
-  void Send() {
-    last_sent_time_ = std::chrono::steady_clock::now();
-    pending_request_ = true;
-    send_();
-  }
+  Component component_;
 
-  App* app_;
-  std::function<void()> send_;
-  task::TaskRunner* task_runner_;
-  bool pending_request_ = false;
-  std::chrono::steady_clock::time_point last_request_time_ =
-      std::chrono::steady_clock::now() - std::chrono::hours(1);
-  std::chrono::steady_clock::time_point last_sent_time_ =
-      std::chrono::steady_clock::now() - std::chrono::hours(1);
-  bool request_queued_ = false;
-};
-
-struct App::Internal {
-  // Convert char to Event.
+  // Pre-existing in Internal:
   TerminalInputParser terminal_input_parser;
-
   task::TaskRunner task_runner;
-
-  // The last time a character was received.
   std::chrono::time_point<std::chrono::steady_clock> last_char_time =
       std::chrono::steady_clock::now();
-
-  // The buffer used to output the screen to the terminal.
-  // Unlike for std::vector::clear, the C++ standard does not explicitly require
-  // that capacity is unchanged by this function, but existing implementations
-  // do not change capacity. This means that they do not release the allocated
-  // memory (see also shrink_to_fit).
   std::string output_buffer;
+
+  class ThrottledRequest {
+   public:
+    ThrottledRequest(App::Internal* internal, std::function<void()> send)
+        : internal_(internal), send_(std::move(send)) {}
+
+    void Request(bool force = false) {
+      if (!internal_->is_stdin_a_tty_) {
+        return;
+      }
+
+      if (force) {
+        Send();
+        return;
+      }
+
+      // Allow only one pending request at a time. This is to avoid flooding the
+      // terminal with requests.
+      if (HasPending()) {
+        return;
+      }
+
+      const auto now = std::chrono::steady_clock::now();
+      const auto delta = now - last_request_time_;
+      const auto delay = std::chrono::milliseconds(500) - delta;
+
+      if (delay <= std::chrono::milliseconds(0)) {
+        Send();
+        return;
+      }
+
+      request_queued_ = true;
+      internal_->task_runner.PostDelayedTask(
+          [this] {
+            request_queued_ = false;
+            Request();
+          },
+          delay);
+    }
+
+    void OnReply() { pending_request_ = false; }
+
+    bool HasPending() const {
+      if (pending_request_) {
+        const auto now = std::chrono::steady_clock::now();
+        if (now - last_sent_time_ < std::chrono::seconds(5)) {
+          return true;
+        }
+      }
+      return request_queued_;
+    }
+
+   private:
+    void Send() {
+      last_sent_time_ = std::chrono::steady_clock::now();
+      pending_request_ = true;
+      send_();
+    }
+
+    App::Internal* internal_;
+    std::function<void()> send_;
+    bool pending_request_ = false;
+    std::chrono::steady_clock::time_point last_request_time_ =
+        std::chrono::steady_clock::now() - std::chrono::hours(1);
+    std::chrono::steady_clock::time_point last_sent_time_ =
+        std::chrono::steady_clock::now() - std::chrono::hours(1);
+    bool request_queued_ = false;
+  };
 
   ThrottledRequest cursor_position_request;
 
@@ -163,7 +231,28 @@ struct App::Internal {
   std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> setup_receiver;
   std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> main_loop_receiver;
 
-  explicit Internal(App* app, std::function<void(Event)> out);
+  Internal(App* app, AppDimension dimension, bool use_alternative_screen);
+
+  void ExitNow();
+  void Install();
+  void Uninstall();
+  void PreMain();
+  void PostMain();
+  bool HasQuitted();
+  void RunOnce(const Component& component);
+  void RunOnceBlocking(Component component);
+  void HandleTask(Component component, Task& task);
+  bool HandleSelection(bool handled, Event event);
+  void Draw(Component component);
+  std::string ResetCursorPosition();
+  void RequestCursorPosition(bool force = false);
+  void TerminalSend(std::string_view);
+  void TerminalFlush();
+  void InstallPipedInputHandling();
+  void InstallTerminalInfo();
+  void Signal(int signal);
+  size_t FetchTerminalEvents();
+  void PostAnimationTask();
 };
 
 namespace {
@@ -177,84 +266,6 @@ void OnExit() {
     on_exit_functions.top()();
     on_exit_functions.pop();
   }
-}
-
-#if defined(_WIN32)
-
-#elif defined(__EMSCRIPTEN__)
-#include <emscripten.h>
-
-extern "C" {
-EMSCRIPTEN_KEEPALIVE
-void ftxui_on_resize(int columns, int rows) {
-  Terminal::SetFallbackSize({
-      columns,
-      rows,
-  });
-  std::raise(SIGWINCH);
-}
-}
-
-#else  // POSIX (Linux & Mac)
-
-#endif
-
-std::atomic<int> g_signal_exit_count = 0;  // NOLINT
-#if !defined(_WIN32)
-std::atomic<int> g_signal_stop_count = 0;    // NOLINT
-std::atomic<int> g_signal_resize_count = 0;  // NOLINT
-#endif
-
-// Async signal safe function
-void RecordSignal(int signal) {
-  switch (signal) {
-    case SIGABRT:
-    case SIGFPE:
-    case SIGILL:
-    case SIGINT:
-    case SIGSEGV:
-    case SIGTERM:
-      g_signal_exit_count++;
-      break;
-
-#if !defined(_WIN32)
-    case SIGTSTP:  // NOLINT
-      g_signal_stop_count++;
-      break;
-
-    case SIGWINCH:  // NOLINT
-      g_signal_resize_count++;
-      break;
-#endif
-
-    default:
-      break;
-  }
-}
-
-void ExecuteSignalHandlers() {
-  int signal_exit_count = g_signal_exit_count.exchange(0);
-  while (signal_exit_count--) {
-    App::Private::Signal(*g_active_screen, SIGABRT);
-  }
-
-#if !defined(_WIN32)
-  int signal_stop_count = g_signal_stop_count.exchange(0);
-  while (signal_stop_count--) {
-    App::Private::Signal(*g_active_screen, SIGTSTP);
-  }
-
-  int signal_resize_count = g_signal_resize_count.exchange(0);
-  while (signal_resize_count--) {
-    App::Private::Signal(*g_active_screen, SIGWINCH);
-  }
-#endif
-}
-
-void InstallSignalHandler(int sig) {
-  auto old_signal_handler = std::signal(sig, RecordSignal);
-  on_exit_functions.emplace(
-      [=] { std::ignore = std::signal(sig, old_signal_handler); });
 }
 
 // CSI: Control Sequence Introducer
@@ -336,301 +347,90 @@ class CapturedMouseImpl : public CapturedMouseInterface {
   std::function<void(void)> callback_;
 };
 
+#if !defined(_WIN32)
+std::atomic<int> g_signal_exit_count = 0;    // NOLINT
+std::atomic<int> g_signal_stop_count = 0;    // NOLINT
+std::atomic<int> g_signal_resize_count = 0;  // NOLINT
+#else
+std::atomic<int> g_signal_exit_count = 0;  // NOLINT
+#endif
+
+// Async signal safe function
+void RecordSignal(int signal) {
+  switch (signal) {
+    case SIGABRT:
+    case SIGFPE:
+    case SIGILL:
+    case SIGINT:
+    case SIGSEGV:
+    case SIGTERM:
+      g_signal_exit_count++;
+      break;
+
+#if !defined(_WIN32)
+    case SIGTSTP:  // NOLINT
+      g_signal_stop_count++;
+      break;
+
+    case SIGWINCH:  // NOLINT
+      g_signal_resize_count++;
+      break;
+#endif
+
+    default:
+      break;
+  }
+}
+
+void ExecuteSignalHandlers() {
+  int signal_exit_count = g_signal_exit_count.exchange(0);
+  while (signal_exit_count--) {
+    App::Private::Signal(*g_active_screen, SIGABRT);
+  }
+
+#if !defined(_WIN32)
+  int signal_stop_count = g_signal_stop_count.exchange(0);
+  while (signal_stop_count--) {
+    App::Private::Signal(*g_active_screen, SIGTSTP);
+  }
+
+  int signal_resize_count = g_signal_resize_count.exchange(0);
+  while (signal_resize_count--) {
+    App::Private::Signal(*g_active_screen, SIGWINCH);
+  }
+#endif
+}
+
+void InstallSignalHandler(int sig) {
+  auto old_signal_handler = std::signal(sig, RecordSignal);
+  on_exit_functions.emplace(
+      [=] { std::ignore = std::signal(sig, old_signal_handler); });
+}
+
 }  // namespace
 
-App::Internal::Internal(App* app, std::function<void(Event)> out)
-    : terminal_input_parser(std::move(out)),
-      cursor_position_request(
-          app,
-          [app] { app->TerminalSend(DeviceStatusReport(DSRMode::kCursor)); },
-          task_runner) {
+App::Internal::Internal(App* app,
+                        AppDimension dimension,
+                        bool use_alternative_screen)
+    : public_(app),
+      dimension_(dimension),
+      use_alternative_screen_(use_alternative_screen),
+      terminal_input_parser([&](Event event) {
+        event_buffer.Push(std::move(event));
+        public_->RequestAnimationFrame();
+      }),
+      cursor_position_request(this, [this] {
+        TerminalSend(DeviceStatusReport(DSRMode::kCursor));
+      }) {
   setup_receiver = event_buffer.CreateReceiver();
   main_loop_receiver = event_buffer.CreateReceiver();
 }
 
-App::App(Dimension dimension, int dimx, int dimy, bool use_alternative_screen)
-    : Screen(dimx, dimy),
-      dimension_(dimension),
-      use_alternative_screen_(use_alternative_screen) {
-  internal_ = std::make_unique<Internal>(this, [&](Event event) {
-    internal_->event_buffer.Push(std::move(event));
-    RequestAnimationFrame();
-  });
+void App::Internal::ExitNow() {
+  quit_ = true;
 }
 
-// static
-App App::FixedSize(int dimx, int dimy) {
-  return {
-      Dimension::Fixed,
-      dimx,
-      dimy,
-      /*use_alternative_screen=*/false,
-  };
-}
-
-/// Create a App taking the full terminal size. This is using the
-/// alternate screen buffer to avoid messing with the terminal content.
-/// @note This is the same as `App::FullscreenAlternateScreen()`
-// static
-App App::Fullscreen() {
-  return FullscreenAlternateScreen();
-}
-
-/// Create a App taking the full terminal size. The primary screen
-/// buffer is being used. It means if the terminal is resized, the previous
-/// content might mess up with the terminal content.
-// static
-App App::FullscreenPrimaryScreen() {
-  auto terminal = Terminal::Size();
-  return {
-      Dimension::Fullscreen,
-      terminal.dimx,
-      terminal.dimy,
-      /*use_alternative_screen=*/false,
-  };
-}
-
-/// Create a App taking the full terminal size. This is using the
-/// alternate screen buffer to avoid messing with the terminal content.
-// static
-App App::FullscreenAlternateScreen() {
-  auto terminal = Terminal::Size();
-  return {
-      Dimension::Fullscreen,
-      terminal.dimx,
-      terminal.dimy,
-      /*use_alternative_screen=*/true,
-  };
-}
-
-/// Create a App whose width match the terminal output width and
-/// the height matches the component being drawn.
-// static
-App App::TerminalOutput() {
-  auto terminal = Terminal::Size();
-  return {
-      Dimension::TerminalOutput,
-      terminal.dimx,
-      terminal.dimy,  // Best guess.
-      /*use_alternative_screen=*/false,
-  };
-}
-
-App::~App() = default;
-
-/// Create a App whose width and height match the component being
-/// drawn.
-// static
-App App::FitComponent() {
-  auto terminal = Terminal::Size();
-  return {
-      Dimension::FitComponent,
-      terminal.dimx,  // Best guess.
-      terminal.dimy,  // Best guess.
-      false,
-  };
-}
-
-/// @brief Set whether mouse is tracked and events reported.
-/// called outside of the main loop. E.g `App::Loop(...)`.
-/// @param enable Whether to enable mouse event tracking.
-/// @note This muse be called outside of the main loop. E.g. before calling
-/// `App::Loop`.
-/// @note Mouse tracking is enabled by default.
-/// @note Mouse tracking is only supported on terminals that supports it.
-///
-/// ### Example
-///
-/// ```cpp
-/// auto screen = App::TerminalOutput();
-/// screen.TrackMouse(false);
-/// screen.Loop(component);
-/// ```
-void App::TrackMouse(bool enable) {
-  track_mouse_ = enable;
-}
-
-/// @brief Enable or disable automatic piped input handling.
-/// When enabled, FTXUI will detect piped input and redirect stdin from /dev/tty
-/// for keyboard input, allowing applications to read piped data while still
-/// receiving interactive keyboard events.
-/// @param enable Whether to enable piped input handling. Default is true.
-/// @note This must be called before Loop().
-/// @note This feature is enabled by default.
-/// @note This feature is only available on POSIX systems (Linux/macOS).
-void App::HandlePipedInput(bool enable) {
-  handle_piped_input_ = enable;
-}
-
-/// @brief Add a task to the main loop.
-/// It will be executed later, after every other scheduled tasks.
-
-void App::PostEventOrExecute(Closure closure) {
-  if (!closure) {
-    return;
-  }
-  if (auto* app = App::Active()) {
-    app->Post(std::move(closure));
-  } else {
-    closure();
-  }
-}
-
-void App::Post(Task task) {
-  internal_->task_runner.PostTask([this, task = std::move(task)]() mutable {
-    if (component_) {
-      HandleTask(component_, task);
-      return;
-    }
-
-    // If there is no component, we can still execute closures.
-    if (std::holds_alternative<Closure>(task)) {
-      std::get<Closure>(task)();
-    }
-  });
-}
-
-/// @brief Add an event to the main loop.
-/// It will be executed later, after every other scheduled events.
-void App::PostEvent(Event event) {
-  internal_->event_buffer.Push(std::move(event));
-  RequestAnimationFrame();
-}
-
-/// @brief Add a task to draw the screen one more time, until all the animations
-/// are done.
-void App::RequestAnimationFrame() {
-  if (animation_requested_) {
-    return;
-  }
-  animation_requested_ = true;
-  auto now = animation::Clock::now();
-  const auto time_histeresis = std::chrono::milliseconds(33);
-  if (now - previous_animation_time_ >= time_histeresis) {
-    previous_animation_time_ = now;
-  }
-}
-
-/// @brief Try to get the unique lock about being able to capture the mouse.
-/// @return A unique lock if the mouse is not already captured, otherwise a
-/// null.
-CapturedMouse App::CaptureMouse() {
-  if (mouse_captured) {
-    return nullptr;
-  }
-  mouse_captured = true;
-  return std::make_unique<CapturedMouseImpl>(
-      [this] { mouse_captured = false; });
-}
-
-/// @brief Execute the main loop.
-/// @param component The component to draw.
-void App::Loop(Component component) {  // NOLINT
-  class Loop loop(this, std::move(component));
-  loop.Run();
-}
-
-/// @brief Return whether the main loop has been quit.
-bool App::HasQuitted() {
-  return quit_;
-}
-
-// private
-void App::PreMain() {
-  // Suspend previously active screen:
-  if (g_active_screen) {
-    std::swap(suspended_screen_, g_active_screen);
-    // Reset cursor position to the top of the screen and clear the screen.
-    suspended_screen_->TerminalSend(suspended_screen_->ResetCursorPosition());
-    suspended_screen_->ResetPosition(
-        suspended_screen_->internal_->output_buffer,
-        /*clear=*/true);
-    suspended_screen_->dimx_ = 0;
-    suspended_screen_->dimy_ = 0;
-
-    // Reset dimensions to force drawing the screen again next time:
-    suspended_screen_->Uninstall();
-  }
-
-  // This screen is now active:
-  g_active_screen = this;
-  g_active_screen->Install();
-
-  previous_animation_time_ = animation::Clock::now();
-}
-
-// private
-void App::PostMain() {
-  // Put cursor position at the end of the drawing.
-  TerminalSend(ResetCursorPosition());
-
-  g_active_screen = nullptr;
-
-  // Restore suspended screen.
-  if (suspended_screen_) {
-    // Clear screen, and put the cursor at the beginning of the drawing.
-    ResetPosition(internal_->output_buffer, /*clear=*/true);
-    dimx_ = 0;
-    dimy_ = 0;
-    Uninstall();
-    std::swap(g_active_screen, suspended_screen_);
-    g_active_screen->Install();
-  } else {
-    Uninstall();
-
-    std::cout << "\r";
-    // On final exit, keep the current drawing and reset cursor position one
-    // line after it.
-    if (!use_alternative_screen_) {
-      std::cout << "\n";
-    }
-    std::cout << std::flush;
-  }
-}
-
-/// @brief Decorate a function. It executes the same way, but with the currently
-/// active screen terminal hooks temporarily uninstalled during its execution.
-/// @param fn The function to decorate.
-Closure App::WithRestoredIO(Closure fn) {  // NOLINT
-  return [this, fn] {
-    Uninstall();
-    fn();
-    Install();
-  };
-}
-
-/// @brief Force FTXUI to handle or not handle Ctrl-C, even if the component
-/// catches the Event::CtrlC.
-void App::ForceHandleCtrlC(bool force) {
-  force_handle_ctrl_c_ = force;
-}
-
-/// @brief Force FTXUI to handle or not handle Ctrl-Z, even if the component
-/// catches the Event::CtrlZ.
-void App::ForceHandleCtrlZ(bool force) {
-  force_handle_ctrl_z_ = force;
-}
-
-/// @brief Returns the content of the current selection
-std::string App::GetSelection() {
-  if (!selection_) {
-    return "";
-  }
-  return selection_->GetParts();
-}
-
-void App::SelectionChange(std::function<void()> callback) {
-  selection_on_change_ = std::move(callback);
-}
-
-/// @brief Return the currently active screen, or null if none.
-// static
-App* App::Active() {
-  return g_active_screen;
-}
-
-// private
-void App::Install() {
+void App::Internal::Install() {
   frame_valid_ = false;
 
   // Flush the buffer for stdout to ensure whatever the user has printed before
@@ -684,14 +484,6 @@ void App::Install() {
   SetConsoleMode(stdin_handle, in_mode);
   SetConsoleMode(stdout_handle, out_mode);
 #else  // POSIX (Linux & Mac)
-  // #if defined(__EMSCRIPTEN__)
-  //// Reading stdin isn't blocking.
-  // int flags = fcntl(0, F_GETFL, 0);
-  // fcntl(0, F_SETFL, flags | O_NONBLOCK);
-
-  //// Restore the terminal configuration on exit.
-  // on_exit_functions.emplace([flags] { fcntl(0, F_SETFL, flags); });
-  // #endif
   for (const int signal : {SIGWINCH, SIGTSTP}) {
     InstallSignalHandler(signal);
   }
@@ -751,7 +543,6 @@ void App::Install() {
   }
 
   disable({
-      // DECMode::kCursor,
       DECMode::kLineWrap,
   });
 
@@ -775,7 +566,399 @@ void App::Install() {
   installed_ = true;
 }
 
-void App::InstallPipedInputHandling() {
+void App::Internal::Uninstall() {
+  installed_ = false;
+
+  // During shutdown, wait for all of the replies.
+  if (is_stdin_a_tty_ && is_stdout_a_tty_) {
+    auto closing_receiver =
+        event_buffer.CreateReceiverAt(main_loop_receiver->index());
+    auto start = std::chrono::steady_clock::now();
+    while (cursor_position_request.HasPending()) {
+      FetchTerminalEvents();
+
+      while (closing_receiver->Has()) {
+        const auto event = closing_receiver->Pop();
+        if (event.is_cursor_position()) {
+          cursor_x_ = event.cursor_x();
+          cursor_y_ = event.cursor_y();
+          cursor_position_request.OnReply();
+        }
+      }
+
+      task_runner.RunUntilIdle();
+
+      if (std::chrono::steady_clock::now() - start >
+          std::chrono::milliseconds(400)) {
+        break;
+      }
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+  }
+
+  OnExit();
+}
+
+void App::Internal::PreMain() {
+  // Suspend previously active screen:
+  if (g_active_screen) {
+    std::swap(suspended_screen_, g_active_screen);
+    // Reset cursor position to the top of the screen and clear the screen.
+    suspended_screen_->internal_->TerminalSend(
+        suspended_screen_->internal_->ResetCursorPosition());
+    suspended_screen_->ResetPosition(
+        suspended_screen_->internal_->output_buffer,
+        /*clear=*/true);
+    suspended_screen_->dimx_ = 0;
+    suspended_screen_->dimy_ = 0;
+
+    // Reset dimensions to force drawing the screen again next time:
+    suspended_screen_->internal_->Uninstall();
+  }
+
+  // This screen is now active:
+  g_active_screen = public_;
+  g_active_screen->internal_->Install();
+
+  previous_animation_time_ = animation::Clock::now();
+}
+
+void App::Internal::PostMain() {
+  // Put cursor position at the end of the drawing.
+  TerminalSend(ResetCursorPosition());
+
+  g_active_screen = nullptr;
+
+  // Restore suspended screen.
+  if (suspended_screen_) {
+    // Clear screen, and put the cursor at the beginning of the drawing.
+    public_->ResetPosition(output_buffer, /*clear=*/true);
+    public_->dimx_ = 0;
+    public_->dimy_ = 0;
+    Uninstall();
+    std::swap(g_active_screen, suspended_screen_);
+    g_active_screen->internal_->Install();
+  } else {
+    Uninstall();
+
+    std::cout << "\r";
+    // On final exit, keep the current drawing and reset cursor position one
+    // line after it.
+    if (!use_alternative_screen_) {
+      std::cout << "\n";
+    }
+    std::cout << std::flush;
+  }
+}
+
+bool App::Internal::HasQuitted() {
+  return quit_;
+}
+
+void App::Internal::RunOnce(const Component& component) {
+  const AutoReset set_component(&component_, component);
+  ExecuteSignalHandlers();
+  FetchTerminalEvents();
+
+  while (!quit_ && main_loop_receiver->Has()) {
+    public_->Post(main_loop_receiver->Pop());
+  }
+
+  // Execute the pending tasks from the queue.
+  const size_t executed_task = task_runner.ExecutedTasks();
+  task_runner.RunUntilIdle();
+  // If no executed task, we can return early without redrawing the screen.
+  if (executed_task == task_runner.ExecutedTasks()) {
+    return;
+  }
+
+  ExecuteSignalHandlers();
+  Draw(component);
+
+  if (selection_data_previous_ != selection_data_) {
+    selection_data_previous_ = selection_data_;
+    if (selection_on_change_) {
+      selection_on_change_();
+      public_->Post(Event::Custom);
+    }
+  }
+}
+
+void App::Internal::RunOnceBlocking(Component component) {
+  // Set FPS to 60 at most.
+  const auto time_per_frame = std::chrono::microseconds(16666);  // 1s / 60fps
+
+  auto time = std::chrono::steady_clock::now();
+  const size_t executed_task = task_runner.ExecutedTasks();
+
+  // Wait for at least one task to execute.
+  while (executed_task == task_runner.ExecutedTasks() && !HasQuitted()) {
+    RunOnce(component);
+
+    const auto now = std::chrono::steady_clock::now();
+    const auto delta = now - time;
+    time = now;
+
+    if (delta < time_per_frame) {
+      const auto sleep_duration = time_per_frame - delta;
+      std::this_thread::sleep_for(sleep_duration);
+    }
+  }
+}
+
+void App::Internal::HandleTask(Component component, Task& task) {
+  std::visit(
+      [&](auto&& arg) {
+        using T = std::decay_t<decltype(arg)>;
+        // clang-format off
+
+    // Handle Event.
+    if constexpr (std::is_same_v<T, Event>) {
+
+      if (arg.is_cursor_position()) {
+        cursor_x_ = arg.cursor_x();
+        cursor_y_ = arg.cursor_y();
+        cursor_position_request.OnReply();
+        return;
+      }
+
+
+
+      if (arg.is_mouse()) {
+        arg.mouse().x -= cursor_x_;
+        arg.mouse().y -= cursor_y_;
+      }
+
+      arg.screen_ = public_;
+
+      bool handled = component->OnEvent(arg);
+      handled = HandleSelection(handled, arg);
+
+      if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
+        RecordSignal(SIGABRT);
+      }
+
+#if !defined(_WIN32)
+      if (arg == Event::CtrlZ && (!handled || force_handle_ctrl_z_)) {
+        RecordSignal(SIGTSTP);
+      }
+#endif
+      
+      frame_valid_ = false;
+      return;
+    }
+
+    // Handle callback
+    if constexpr (std::is_same_v<T, Closure>) {
+      arg();
+      return;
+    }
+
+    // Handle Animation
+    if constexpr (std::is_same_v<T, AnimationTask>) {
+      if (!animation_requested_) {
+        return;
+      }
+
+      animation_requested_ = false;
+      const animation::TimePoint now = animation::Clock::now();
+      const animation::Duration delta = now - previous_animation_time_;
+      previous_animation_time_ = now;
+
+      animation::Params params(delta);
+      component->OnAnimation(params);
+      frame_valid_ = false;
+      return;
+    }
+  },
+  task);
+  // clang-format on
+}
+
+bool App::Internal::HandleSelection(bool handled, Event event) {
+  if (handled) {
+    selection_pending_ = nullptr;
+    selection_data_.empty = true;
+    selection_ = nullptr;
+    return true;
+  }
+
+  if (!event.is_mouse()) {
+    return false;
+  }
+
+  auto& mouse = event.mouse();
+  if (mouse.button != Mouse::Left) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Pressed) {
+    selection_pending_ = public_->CaptureMouse();
+    selection_data_.start_x = mouse.x;
+    selection_data_.start_y = mouse.y;
+    selection_data_.end_x = mouse.x;
+    selection_data_.end_y = mouse.y;
+    return false;
+  }
+
+  if (!selection_pending_) {
+    return false;
+  }
+
+  if (mouse.motion == Mouse::Moved) {
+    if ((mouse.x != selection_data_.end_x) ||
+        (mouse.y != selection_data_.end_y)) {
+      selection_data_.end_x = mouse.x;
+      selection_data_.end_y = mouse.y;
+      selection_data_.empty = false;
+    }
+
+    return true;
+  }
+
+  if (mouse.motion == Mouse::Released) {
+    selection_pending_ = nullptr;
+    selection_data_.end_x = mouse.x;
+    selection_data_.end_y = mouse.y;
+    selection_data_.empty = false;
+    return true;
+  }
+
+  return false;
+}
+
+void App::Internal::Draw(Component component) {
+  if (frame_valid_) {
+    return;
+  }
+  auto document = component->Render();
+  int dimx = 0;
+  int dimy = 0;
+  auto terminal = Terminal::Size();
+  document->ComputeRequirement();
+  switch (dimension_) {
+    case AppDimension::Fixed:
+      dimx = public_->dimx_;
+      dimy = public_->dimy_;
+      break;
+    case AppDimension::TerminalOutput:
+      dimx = terminal.dimx;
+      dimy = util::clamp(document->requirement().min_y, 0, terminal.dimy);
+      break;
+    case AppDimension::Fullscreen:
+      dimx = terminal.dimx;
+      dimy = terminal.dimy;
+      break;
+    case AppDimension::FitComponent:
+      dimx = util::clamp(document->requirement().min_x, 0, terminal.dimx);
+      dimy = util::clamp(document->requirement().min_y, 0, terminal.dimy);
+      break;
+  }
+
+  // Hide cursor to prevent flickering during reset.
+  TerminalSend("\033[?25l");
+
+  const bool resized =
+      frame_count_ == 0 || (dimx != public_->dimx_) || (dimy != public_->dimy_);
+  TerminalSend(ResetCursorPosition());
+
+  if (frame_count_ != 0) {
+    // Reset the cursor position to the lower left corner to start drawing the
+    // new frame.
+    public_->ResetPosition(output_buffer, resized);
+
+    // If the terminal width decrease, the terminal emulator will start wrapping
+    // lines and make the display dirty. We should clear it completely.
+    if ((dimx < public_->dimx_) && !use_alternative_screen_) {
+      TerminalSend("\033[J");  // clear terminal output
+      TerminalSend("\033[H");  // move cursor to home position
+    }
+  }
+
+  // Resize the screen if needed.
+  if (resized) {
+    public_->dimx_ = dimx;
+    public_->dimy_ = dimy;
+    public_->cells_ =
+        std::vector<std::vector<Cell>>(dimy, std::vector<Cell>(dimx));
+    Cursor cursor = public_->cursor_;
+    cursor.x = dimx - 1;
+    cursor.y = dimy - 1;
+    public_->SetCursor(cursor);
+  }
+
+  // Periodically request the terminal emulator the frame position relative to
+  // the screen. This is useful for converting mouse position reported in
+  // screen's coordinates to frame's coordinates.
+  if (!use_alternative_screen_ && is_stdout_a_tty_) {
+    RequestCursorPosition(previous_frame_resized_);
+  }
+  previous_frame_resized_ = resized;
+
+  selection_ = selection_data_.empty
+                   ? std::make_unique<Selection>()
+                   : std::make_unique<Selection>(
+                         selection_data_.start_x, selection_data_.start_y,  //
+                         selection_data_.end_x, selection_data_.end_y);
+  Render(*public_, document.get(), *selection_);
+
+  // Set cursor position for user using tools to insert CJK characters.
+  {
+    const int dx = public_->dimx_ - 1 - public_->cursor_.x +
+                   int(public_->dimx_ != terminal.dimx);
+    const int dy = public_->dimy_ - 1 - public_->cursor_.y;
+
+    set_cursor_position_.clear();
+    reset_cursor_position_.clear();
+
+    if (dy != 0) {
+      set_cursor_position_ += "\x1B[" + std::to_string(dy) + "A";
+      reset_cursor_position_ += "\x1B[" + std::to_string(dy) + "B";
+    }
+
+    if (dx != 0) {
+      set_cursor_position_ += "\x1B[" + std::to_string(dx) + "D";
+      reset_cursor_position_ += "\x1B[" + std::to_string(dx) + "C";
+    }
+
+    if (public_->cursor_.shape != Screen::Cursor::Hidden) {
+      set_cursor_position_ += "\033[?25h";
+      set_cursor_position_ +=
+          "\033[" + std::to_string(int(public_->cursor_.shape)) + " q";
+    }
+  }
+
+  public_->ToString(output_buffer);
+  TerminalSend(set_cursor_position_);
+  TerminalFlush();
+
+  public_->Clear();
+  frame_valid_ = true;
+  frame_count_++;
+}
+
+std::string App::Internal::ResetCursorPosition() {
+  std::string result = std::move(reset_cursor_position_);
+  reset_cursor_position_ = "";
+  return result;
+}
+
+void App::Internal::RequestCursorPosition(bool force) {
+  cursor_position_request.Request(force);
+}
+
+void App::Internal::TerminalSend(std::string_view s) {
+  output_buffer += s;
+}
+
+void App::Internal::TerminalFlush() {
+  // Emscripten doesn't implement flush. We interpret zero as flush.
+  output_buffer += '\0';
+  std::cout << output_buffer << std::flush;
+  output_buffer.clear();
+}
+
+void App::Internal::InstallPipedInputHandling() {
   is_stdin_a_tty_ = false;
   is_stdout_a_tty_ = false;
 #if defined(__EMSCRIPTEN__)
@@ -813,39 +996,7 @@ void App::InstallPipedInputHandling() {
 #endif
 }
 
-/// @brief Return the names of the terminal capabilities.
-std::vector<std::string> App::TerminalCapabilityNames() const {
-  return Event::TerminalCapabilities("", terminal_capabilities_)
-      .TerminalCapabilityNames();
-}
-
-/// @brief Return the terminal name.
-const std::string& App::TerminalName() const {
-  return terminal_name_;
-}
-
-/// @brief Return the terminal version.
-int App::TerminalVersion() const {
-  return terminal_version_;
-}
-
-/// @brief Return the terminal emulator name.
-const std::string& App::TerminalEmulatorName() const {
-  return terminal_emulator_name_;
-}
-
-/// @brief Return the terminal emulator version.
-const std::string& App::TerminalEmulatorVersion() const {
-  return terminal_emulator_version_;
-}
-
-/// @brief Return the terminal capabilities.
-const std::vector<int>& App::TerminalCapabilities() const {
-  return terminal_capabilities_;
-}
-
-// NOLINTNEXTLINE
-void App::InstallTerminalInfo() {
+void App::Internal::InstallTerminalInfo() {
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
   if (is_stdout_a_tty_) {
@@ -868,8 +1019,8 @@ void App::InstallTerminalInfo() {
     // Wait for the cursor shape reply using the setup head.
     while (true) {
       FetchTerminalEvents();
-      while (internal_->setup_receiver->Has()) {
-        const auto event = internal_->setup_receiver->Pop();
+      while (setup_receiver->Has()) {
+        const auto event = setup_receiver->Pop();
         if (event.is_cursor_shape()) {
           cursor_reset_shape = event.cursor_shape();
           cursor_shape_received = true;
@@ -907,8 +1058,8 @@ void App::InstallTerminalInfo() {
         da2_received) {
       for (int i = 0; i < 10; ++i) {
         FetchTerminalEvents();
-        while (internal_->setup_receiver->Has()) {
-          const auto event = internal_->setup_receiver->Pop();
+        while (setup_receiver->Has()) {
+          const auto event = setup_receiver->Pop();
           if (event.IsTerminalEmulator()) {
             terminal_emulator_name_ = event.TerminalEmulatorName();
             terminal_emulator_version_ = event.TerminalEmulatorVersion();
@@ -926,10 +1077,10 @@ void App::InstallTerminalInfo() {
   // Set quirks and color support based on terminal identification.
   Terminal::Quirks quirks = Terminal::GetQuirks();
 
-  const bool is_modern_emulator = (TerminalEmulatorName() != "unknown");
-  const bool is_urxvt = (TerminalName() == "urxvt");
+  const bool is_modern_emulator = (terminal_emulator_name_ != "unknown");
+  const bool is_urxvt = (terminal_name_ == "urxvt");
   const bool is_vt220_plus =
-      (TerminalName() != "vt100" && TerminalName() != "unknown");
+      (terminal_name_ != "vt100" && terminal_name_ != "unknown");
   bool reports_utf8 = false;
   for (const int x : terminal_capabilities_) {
     if (x == 42) {
@@ -979,384 +1130,21 @@ void App::InstallTerminalInfo() {
   });
 }
 
-// private
-void App::Uninstall() {
-  installed_ = false;
-
-  // During shutdown, wait for all of the replies.
-  if (is_stdin_a_tty_ && is_stdout_a_tty_) {
-    auto closing_receiver = internal_->event_buffer.CreateReceiverAt(
-        internal_->main_loop_receiver->index());
-    auto start = std::chrono::steady_clock::now();
-    while (internal_->cursor_position_request.HasPending()) {
-      FetchTerminalEvents();
-
-      while (closing_receiver->Has()) {
-        const auto event = closing_receiver->Pop();
-        if (event.is_cursor_position()) {
-          cursor_x_ = event.cursor_x();
-          cursor_y_ = event.cursor_y();
-          internal_->cursor_position_request.OnReply();
-        }
-      }
-
-      internal_->task_runner.RunUntilIdle();
-
-      if (std::chrono::steady_clock::now() - start >
-          std::chrono::milliseconds(400)) {
-        break;
-      }
-      std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-  }
-
-  OnExit();
-}
-
-// private
-// NOLINTNEXTLINE
-void App::RunOnceBlocking(Component component) {
-  // Set FPS to 60 at most.
-  const auto time_per_frame = std::chrono::microseconds(16666);  // 1s / 60fps
-
-  auto time = std::chrono::steady_clock::now();
-  const size_t executed_task = internal_->task_runner.ExecutedTasks();
-
-  // Wait for at least one task to execute.
-  while (executed_task == internal_->task_runner.ExecutedTasks() &&
-         !HasQuitted()) {
-    RunOnce(component);
-
-    const auto now = std::chrono::steady_clock::now();
-    const auto delta = now - time;
-    time = now;
-
-    if (delta < time_per_frame) {
-      const auto sleep_duration = time_per_frame - delta;
-      std::this_thread::sleep_for(sleep_duration);
-    }
-  }
-}
-
-// private
-void App::RunOnce(const Component& component) {
-  const AutoReset set_component(&component_, component);
-  ExecuteSignalHandlers();
-  FetchTerminalEvents();
-
-  while (!quit_ && internal_->main_loop_receiver->Has()) {
-    Post(internal_->main_loop_receiver->Pop());
-  }
-
-  // Execute the pending tasks from the queue.
-  const size_t executed_task = internal_->task_runner.ExecutedTasks();
-  internal_->task_runner.RunUntilIdle();
-  // If no executed task, we can return early without redrawing the screen.
-  if (executed_task == internal_->task_runner.ExecutedTasks()) {
-    return;
-  }
-
-  ExecuteSignalHandlers();
-  Draw(component);
-
-  if (selection_data_previous_ != selection_data_) {
-    selection_data_previous_ = selection_data_;
-    if (selection_on_change_) {
-      selection_on_change_();
-      Post(Event::Custom);
-    }
-  }
-}
-
-// private
-// NOLINTNEXTLINE
-void App::HandleTask(Component component, Task& task) {
-  std::visit(
-      [&](auto&& arg) {
-        using T = std::decay_t<decltype(arg)>;
-        // clang-format off
-
-    // Handle Event.
-    if constexpr (std::is_same_v<T, Event>) {
-
-      if (arg.is_cursor_position()) {
-        cursor_x_ = arg.cursor_x();
-        cursor_y_ = arg.cursor_y();
-        internal_->cursor_position_request.OnReply();
-        return;
-      }
-
-
-
-      if (arg.is_mouse()) {
-        arg.mouse().x -= cursor_x_;
-        arg.mouse().y -= cursor_y_;
-      }
-
-      arg.screen_ = this;
-
-      bool handled = component->OnEvent(arg);
-      handled = HandleSelection(handled, arg);
-
-      if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
-        RecordSignal(SIGABRT);
-      }
-
-#if !defined(_WIN32)
-      if (arg == Event::CtrlZ && (!handled || force_handle_ctrl_z_)) {
-        RecordSignal(SIGTSTP);
-      }
-#endif
-      
-      frame_valid_ = false;
-      return;
-    }
-
-    // Handle callback
-    if constexpr (std::is_same_v<T, Closure>) {
-      arg();
-      return;
-    }
-
-    // Handle Animation
-    if constexpr (std::is_same_v<T, AnimationTask>) {
-      if (!animation_requested_) {
-        return;
-      }
-
-      animation_requested_ = false;
-      const animation::TimePoint now = animation::Clock::now();
-      const animation::Duration delta = now - previous_animation_time_;
-      previous_animation_time_ = now;
-
-      animation::Params params(delta);
-      component->OnAnimation(params);
-      frame_valid_ = false;
-      return;
-    }
-  },
-  task);
-  // clang-format on
-}
-
-// private
-bool App::HandleSelection(bool handled, Event event) {
-  if (handled) {
-    selection_pending_ = nullptr;
-    selection_data_.empty = true;
-    selection_ = nullptr;
-    return true;
-  }
-
-  if (!event.is_mouse()) {
-    return false;
-  }
-
-  auto& mouse = event.mouse();
-  if (mouse.button != Mouse::Left) {
-    return false;
-  }
-
-  if (mouse.motion == Mouse::Pressed) {
-    selection_pending_ = CaptureMouse();
-    selection_data_.start_x = mouse.x;
-    selection_data_.start_y = mouse.y;
-    selection_data_.end_x = mouse.x;
-    selection_data_.end_y = mouse.y;
-    return false;
-  }
-
-  if (!selection_pending_) {
-    return false;
-  }
-
-  if (mouse.motion == Mouse::Moved) {
-    if ((mouse.x != selection_data_.end_x) ||
-        (mouse.y != selection_data_.end_y)) {
-      selection_data_.end_x = mouse.x;
-      selection_data_.end_y = mouse.y;
-      selection_data_.empty = false;
-    }
-
-    return true;
-  }
-
-  if (mouse.motion == Mouse::Released) {
-    selection_pending_ = nullptr;
-    selection_data_.end_x = mouse.x;
-    selection_data_.end_y = mouse.y;
-    selection_data_.empty = false;
-    return true;
-  }
-
-  return false;
-}
-
-// private
-// NOLINTNEXTLINE
-void App::Draw(Component component) {
-  if (frame_valid_) {
-    return;
-  }
-  auto document = component->Render();
-  int dimx = 0;
-  int dimy = 0;
-  auto terminal = Terminal::Size();
-  document->ComputeRequirement();
-  switch (dimension_) {
-    case Dimension::Fixed:
-      dimx = dimx_;
-      dimy = dimy_;
-      break;
-    case Dimension::TerminalOutput:
-      dimx = terminal.dimx;
-      dimy = util::clamp(document->requirement().min_y, 0, terminal.dimy);
-      break;
-    case Dimension::Fullscreen:
-      dimx = terminal.dimx;
-      dimy = terminal.dimy;
-      break;
-    case Dimension::FitComponent:
-      dimx = util::clamp(document->requirement().min_x, 0, terminal.dimx);
-      dimy = util::clamp(document->requirement().min_y, 0, terminal.dimy);
-      break;
-  }
-
-  // Hide cursor to prevent flickering during reset.
-  TerminalSend("\033[?25l");
-
-  const bool resized = frame_count_ == 0 || (dimx != dimx_) || (dimy != dimy_);
-  TerminalSend(ResetCursorPosition());
-
-  if (frame_count_ != 0) {
-    // Reset the cursor position to the lower left corner to start drawing the
-    // new frame.
-    ResetPosition(internal_->output_buffer, resized);
-
-    // If the terminal width decrease, the terminal emulator will start wrapping
-    // lines and make the display dirty. We should clear it completely.
-    if ((dimx < dimx_) && !use_alternative_screen_) {
-      TerminalSend("\033[J");  // clear terminal output
-      TerminalSend("\033[H");  // move cursor to home position
-    }
-  }
-
-  // Resize the screen if needed.
-  if (resized) {
-    dimx_ = dimx;
-    dimy_ = dimy;
-    cells_ = std::vector<std::vector<Cell>>(dimy, std::vector<Cell>(dimx));
-    cursor_.x = dimx_ - 1;
-    cursor_.y = dimy_ - 1;
-  }
-
-  // Periodically request the terminal emulator the frame position relative to
-  // the screen. This is useful for converting mouse position reported in
-  // screen's coordinates to frame's coordinates.
-  if (!use_alternative_screen_ && is_stdout_a_tty_) {
-    RequestCursorPosition(previous_frame_resized_);
-  }
-  previous_frame_resized_ = resized;
-
-  selection_ = selection_data_.empty
-                   ? std::make_unique<Selection>()
-                   : std::make_unique<Selection>(
-                         selection_data_.start_x, selection_data_.start_y,  //
-                         selection_data_.end_x, selection_data_.end_y);
-  Render(*this, document.get(), *selection_);
-
-  // Set cursor position for user using tools to insert CJK characters.
-  {
-    const int dx = dimx_ - 1 - cursor_.x + int(dimx_ != terminal.dimx);
-    const int dy = dimy_ - 1 - cursor_.y;
-
-    set_cursor_position_.clear();
-    reset_cursor_position_.clear();
-
-    if (dy != 0) {
-      set_cursor_position_ += "\x1B[" + std::to_string(dy) + "A";
-      reset_cursor_position_ += "\x1B[" + std::to_string(dy) + "B";
-    }
-
-    if (dx != 0) {
-      set_cursor_position_ += "\x1B[" + std::to_string(dx) + "D";
-      reset_cursor_position_ += "\x1B[" + std::to_string(dx) + "C";
-    }
-
-    if (cursor_.shape != Cursor::Hidden) {
-      set_cursor_position_ += "\033[?25h";
-      set_cursor_position_ +=
-          "\033[" + std::to_string(int(cursor_.shape)) + " q";
-    }
-  }
-
-  ToString(internal_->output_buffer);
-  TerminalSend(set_cursor_position_);
-  TerminalFlush();
-
-  Clear();
-  frame_valid_ = true;
-  frame_count_++;
-}
-
-// private
-std::string App::ResetCursorPosition() {
-  std::string result = std::move(reset_cursor_position_);
-  reset_cursor_position_ = "";
-  return result;
-}
-
-// private
-void App::RequestCursorPosition(bool force) {
-  internal_->cursor_position_request.Request(force);
-}
-
-// private
-
-// private
-void App::TerminalSend(std::string_view s) {
-  internal_->output_buffer += s;
-}
-
-// private
-void App::TerminalFlush() {
-  // Emscripten doesn't implement flush. We interpret zero as flush.
-  internal_->output_buffer += '\0';
-  std::cout << internal_->output_buffer << std::flush;
-  internal_->output_buffer.clear();
-}
-
-/// @brief Return a function to exit the main loop.
-Closure App::ExitLoopClosure() {
-  return [this] { Exit(); };
-}
-
-/// @brief Exit the main loop.
-void App::Exit() {
-  Post([this] { ExitNow(); });
-}
-
-// private:
-void App::ExitNow() {
-  quit_ = true;
-}
-
-// private:
-void App::Signal(int signal) {
+void App::Internal::Signal(int signal) {
   if (signal == SIGABRT) {
-    Exit();
+    public_->Exit();
     return;
   }
 
 // Windows do no support SIGTSTP / SIGWINCH
 #if !defined(_WIN32)
   if (signal == SIGTSTP) {
-    Post([&] {
+    public_->Post([&] {
       TerminalSend(ResetCursorPosition());
-      ResetPosition(internal_->output_buffer, /*clear*/ true);
+      public_->ResetPosition(output_buffer, /*clear*/ true);
       Uninstall();
-      dimx_ = 0;
-      dimy_ = 0;
+      public_->dimx_ = 0;
+      public_->dimy_ = 0;
       (void)std::raise(SIGTSTP);
       Install();
     });
@@ -1364,13 +1152,13 @@ void App::Signal(int signal) {
   }
 
   if (signal == SIGWINCH) {
-    Post(Event::Special({0}));
+    public_->Post(Event::Special({0}));
     return;
   }
 #endif
 }
 
-size_t App::FetchTerminalEvents() {
+size_t App::Internal::FetchTerminalEvents() {
 #if defined(_WIN32)
   auto get_input_records = [&]() -> std::vector<INPUT_RECORD> {
     // Check if there is input in the console.
@@ -1396,14 +1184,13 @@ size_t App::FetchTerminalEvents() {
 
   auto records = get_input_records();
   if (records.size() == 0) {
-    const auto timeout =
-        std::chrono::steady_clock::now() - internal_->last_char_time;
+    const auto timeout = std::chrono::steady_clock::now() - last_char_time;
     const size_t timeout_microseconds =
         std::chrono::duration_cast<std::chrono::microseconds>(timeout).count();
-    internal_->terminal_input_parser.Timeout(timeout_microseconds);
+    terminal_input_parser.Timeout(timeout_microseconds);
     return 0;
   }
-  internal_->last_char_time = std::chrono::steady_clock::now();
+  last_char_time = std::chrono::steady_clock::now();
 
   // Convert the input events to FTXUI events.
   // For each event, we call the terminal input parser to convert it to
@@ -1424,12 +1211,12 @@ size_t App::FetchTerminalEvents() {
           continue;
         }
         for (auto it : to_string(wstring)) {
-          internal_->terminal_input_parser.Add(it);
+          terminal_input_parser.Add(it);
         }
         wstring.clear();
       } break;
       case WINDOW_BUFFER_SIZE_EVENT:
-        Post(Event::Special({0}));
+        public_->Post(Event::Special({0}));
         break;
       case MENU_EVENT:
       case FOCUS_EVENT:
@@ -1445,32 +1232,30 @@ size_t App::FetchTerminalEvents() {
   std::array<char, 128> out{};
   const ssize_t l = read(STDIN_FILENO, out.data(), out.size());
   if (l <= 0) {
-    const auto timeout =
-        std::chrono::steady_clock::now() - internal_->last_char_time;
+    const auto timeout = std::chrono::steady_clock::now() - last_char_time;
     const size_t timeout_microseconds =
         std::chrono::duration_cast<std::chrono::microseconds>(timeout).count();
-    internal_->terminal_input_parser.Timeout(timeout_microseconds);
+    terminal_input_parser.Timeout(timeout_microseconds);
     return 0;
   }
-  internal_->last_char_time = std::chrono::steady_clock::now();
+  last_char_time = std::chrono::steady_clock::now();
 
   // Convert the chars to events.
   for (ssize_t i = 0; i < l; ++i) {
-    internal_->terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
+    terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
   }
   return (size_t)l;
 #else  // POSIX (Linux & Mac)
   struct pollfd pfd = {tty_fd_, POLLIN, 0};
   const int poll_result = poll(&pfd, 1, 0);
   if (poll_result <= 0) {
-    const auto timeout =
-        std::chrono::steady_clock::now() - internal_->last_char_time;
+    const auto timeout = std::chrono::steady_clock::now() - last_char_time;
     const size_t timeout_ms =
         std::chrono::duration_cast<std::chrono::milliseconds>(timeout).count();
-    internal_->terminal_input_parser.Timeout(static_cast<int>(timeout_ms));
+    terminal_input_parser.Timeout(static_cast<int>(timeout_ms));
     return 0;
   }
-  internal_->last_char_time = std::chrono::steady_clock::now();
+  last_char_time = std::chrono::steady_clock::now();
 
   // Read chars from the terminal.
   std::array<char, 128> out{};
@@ -1481,34 +1266,306 @@ size_t App::FetchTerminalEvents() {
 
   // Convert the chars to events.
   for (ssize_t i = 0; i < l; ++i) {
-    internal_->terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
+    terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
   }
   return (size_t)l;
 #endif
 }
 
-void App::PostAnimationTask() {
-  Post(AnimationTask());
+void App::Internal::PostAnimationTask() {
+  public_->Post(AnimationTask());
 
   // Repeat the animation task every 15ms. This correspond to a frame rate
   // of around 66fps.
-  internal_->task_runner.PostDelayedTask([this] { PostAnimationTask(); },
-                                         std::chrono::milliseconds(15));
+  task_runner.PostDelayedTask([this] { PostAnimationTask(); },
+                              std::chrono::milliseconds(15));
 }
 
-bool App::SelectionData::operator==(const App::SelectionData& other) const {
-  if (empty && other.empty) {
-    return true;
-  }
-  if (empty || other.empty) {
-    return false;
-  }
-  return start_x == other.start_x && start_y == other.start_y &&
-         end_x == other.end_x && end_y == other.end_y;
+App::App(std::unique_ptr<Internal> internal, int dimx, int dimy)
+    : Screen(dimx, dimy), internal_(std::move(internal)) {
+  internal_->public_ = this;
 }
 
-bool App::SelectionData::operator!=(const App::SelectionData& other) const {
-  return !(*this == other);
+App::App(App&& other) noexcept : Screen(std::move(other)) {
+  internal_ = std::move(other.internal_);
+  if (internal_) {
+    internal_->public_ = this;
+  }
+}
+
+App& App::operator=(App&& other) noexcept {
+  Screen::operator=(std::move(other));
+  internal_ = std::move(other.internal_);
+  if (internal_) {
+    internal_->public_ = this;
+  }
+  return *this;
+}
+
+App::~App() = default;
+
+// static
+App App::FixedSize(int dimx, int dimy) {
+  auto internal =
+      std::make_unique<Internal>(nullptr, AppDimension::Fixed, false);
+  return App(std::move(internal), dimx, dimy);
+}
+
+// static
+App App::Fullscreen() {
+  return FullscreenAlternateScreen();
+}
+
+// static
+App App::FullscreenPrimaryScreen() {
+  auto terminal = Terminal::Size();
+  auto internal =
+      std::make_unique<Internal>(nullptr, AppDimension::Fullscreen, false);
+  return App(std::move(internal), terminal.dimx, terminal.dimy);
+}
+
+// static
+App App::FullscreenAlternateScreen() {
+  auto terminal = Terminal::Size();
+  auto internal =
+      std::make_unique<Internal>(nullptr, AppDimension::Fullscreen, true);
+  return App(std::move(internal), terminal.dimx, terminal.dimy);
+}
+
+// static
+App App::FitComponent() {
+  auto terminal = Terminal::Size();
+  auto internal =
+      std::make_unique<Internal>(nullptr, AppDimension::FitComponent, false);
+  return App(std::move(internal), terminal.dimx, terminal.dimy);
+}
+
+// static
+App App::TerminalOutput() {
+  auto terminal = Terminal::Size();
+  auto internal =
+      std::make_unique<Internal>(nullptr, AppDimension::TerminalOutput, false);
+  return App(std::move(internal), terminal.dimx, terminal.dimy);
+}
+
+void App::TrackMouse(bool enable) {
+  internal_->track_mouse_ = enable;
+}
+
+void App::HandlePipedInput(bool enable) {
+  internal_->handle_piped_input_ = enable;
+}
+
+// static
+App* App::Active() {
+  return g_active_screen;
+}
+
+void App::Loop(Component component) {
+  class Loop loop(this, std::move(component));
+  loop.Run();
+}
+
+void App::Exit() {
+  Post([this] { internal_->ExitNow(); });
+}
+
+Closure App::ExitLoopClosure() {
+  return [this] { Exit(); };
+}
+
+void App::Post(Task task) {
+  internal_->task_runner.PostTask([this, task = std::move(task)]() mutable {
+    if (internal_->component_) {
+      internal_->HandleTask(internal_->component_, task);
+      return;
+    }
+
+    // If there is no component, we can still execute closures.
+    if (std::holds_alternative<Closure>(task)) {
+      std::get<Closure>(task)();
+    }
+  });
+}
+
+void App::PostEvent(Event event) {
+  internal_->event_buffer.Push(std::move(event));
+  RequestAnimationFrame();
+}
+
+// static
+void App::PostEventOrExecute(Closure closure) {
+  if (!closure) {
+    return;
+  }
+  if (auto* app = App::Active()) {
+    app->Post(std::move(closure));
+  } else {
+    closure();
+  }
+}
+
+void App::RequestAnimationFrame() {
+  if (internal_->animation_requested_) {
+    return;
+  }
+  internal_->animation_requested_ = true;
+  auto now = animation::Clock::now();
+  const auto time_histeresis = std::chrono::milliseconds(33);
+  if (now - internal_->previous_animation_time_ >= time_histeresis) {
+    internal_->previous_animation_time_ = now;
+  }
+}
+
+CapturedMouse App::CaptureMouse() {
+  if (internal_->mouse_captured) {
+    return nullptr;
+  }
+  internal_->mouse_captured = true;
+  return std::make_unique<CapturedMouseImpl>(
+      [this] { internal_->mouse_captured = false; });
+}
+
+Closure App::WithRestoredIO(Closure fn) {
+  return [this, fn] {
+    internal_->Uninstall();
+    fn();
+    internal_->Install();
+  };
+}
+
+void App::ForceHandleCtrlC(bool force) {
+  internal_->force_handle_ctrl_c_ = force;
+}
+
+void App::ForceHandleCtrlZ(bool force) {
+  internal_->force_handle_ctrl_z_ = force;
+}
+
+std::string App::GetSelection() {
+  if (!internal_->selection_) {
+    return "";
+  }
+  return internal_->selection_->GetParts();
+}
+
+void App::SelectionChange(std::function<void()> callback) {
+  internal_->selection_on_change_ = std::move(callback);
+}
+
+const std::string& App::TerminalName() const {
+  return internal_->terminal_name_;
+}
+
+int App::TerminalVersion() const {
+  return internal_->terminal_version_;
+}
+
+const std::string& App::TerminalEmulatorName() const {
+  return internal_->terminal_emulator_name_;
+}
+
+const std::string& App::TerminalEmulatorVersion() const {
+  return internal_->terminal_emulator_version_;
+}
+
+const std::vector<int>& App::TerminalCapabilities() const {
+  return internal_->terminal_capabilities_;
+}
+
+std::vector<std::string> App::TerminalCapabilityNames() const {
+  return Event::TerminalCapabilities("", internal_->terminal_capabilities_)
+      .TerminalCapabilityNames();
+}
+
+// Loop calls these:
+
+void App::ExitNow() {
+  internal_->ExitNow();
+}
+void App::Install() {
+  internal_->Install();
+}
+void App::Uninstall() {
+  internal_->Uninstall();
+}
+void App::PreMain() {
+  internal_->PreMain();
+}
+void App::PostMain() {
+  internal_->PostMain();
+}
+bool App::HasQuitted() {
+  return internal_->HasQuitted();
+}
+void App::RunOnce(const Component& component) {
+  internal_->RunOnce(component);
+}
+void App::RunOnceBlocking(Component component) {
+  internal_->RunOnceBlocking(component);
+}
+void App::HandleTask(Component component, Task& task) {
+  internal_->HandleTask(component, task);
+}
+bool App::HandleSelection(bool handled, Event event) {
+  return internal_->HandleSelection(handled, event);
+}
+void App::Draw(Component component) {
+  internal_->Draw(component);
+}
+std::string App::ResetCursorPosition() {
+  return internal_->ResetCursorPosition();
+}
+void App::RequestCursorPosition(bool force) {
+  internal_->RequestCursorPosition(force);
+}
+void App::TerminalSend(std::string_view s) {
+  internal_->TerminalSend(s);
+}
+void App::TerminalFlush() {
+  internal_->TerminalFlush();
+}
+void App::InstallPipedInputHandling() {
+  internal_->InstallPipedInputHandling();
+}
+void App::InstallTerminalInfo() {
+  internal_->InstallTerminalInfo();
+}
+void App::Signal(int signal) {
+  internal_->Signal(signal);
+}
+size_t App::FetchTerminalEvents() {
+  return internal_->FetchTerminalEvents();
+}
+void App::PostAnimationTask() {
+  internal_->PostAnimationTask();
+}
+
+Loop::Loop(App* screen, Component component)
+    : screen_(screen), component_(std::move(component)) {
+  screen_->PreMain();
+}
+
+Loop::~Loop() {
+  screen_->PostMain();
+}
+
+bool Loop::HasQuitted() {
+  return screen_->HasQuitted();
+}
+
+void Loop::RunOnce() {
+  screen_->RunOnce(component_);
+}
+
+void Loop::RunOnceBlocking() {
+  screen_->RunOnceBlocking(component_);
+}
+
+void Loop::Run() {
+  while (!HasQuitted()) {
+    RunOnceBlocking();
+  }
 }
 
 }  // namespace ftxui

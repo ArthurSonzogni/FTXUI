@@ -14,9 +14,7 @@
 
 namespace ftxui {
 
-namespace {
-
-}  // namespace
+namespace {}  // namespace
 
 /// @brief Wrap a component. Gives the ability to know if it is hovered by the
 /// mouse.

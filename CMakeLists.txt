@@ -126,7 +126,6 @@ add_library(component
   src/ftxui/component/event.cpp
   src/ftxui/component/hoverable.cpp
   src/ftxui/component/input.cpp
-  src/ftxui/component/loop.cpp
   src/ftxui/component/maybe.cpp
   src/ftxui/component/menu.cpp
   src/ftxui/component/modal.cpp

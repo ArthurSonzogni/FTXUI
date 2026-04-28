@@ -73,13 +73,9 @@ class MenuBase : public ComponentBase, public MenuOption {
   }
 
   bool IsHorizontal() { return ftxui::IsHorizontal(direction); }
-  void OnChange() {
-    App::PostEventOrExecute(on_change);
-  }
+  void OnChange() { App::PostEventOrExecute(on_change); }
 
-  void OnEnter() {
-    App::PostEventOrExecute(on_enter);
-  }
+  void OnEnter() { App::PostEventOrExecute(on_enter); }
 
   void Clamp() {
     if (selected() != selected_previous_) {
