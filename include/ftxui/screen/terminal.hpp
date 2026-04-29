@@ -4,6 +4,9 @@
 #ifndef FTXUI_SCREEN_TERMINAL_HPP
 #define FTXUI_SCREEN_TERMINAL_HPP
 
+#include <string_view>
+#include <vector>
+
 namespace ftxui {
 
 /// @brief Dimensions is a structure that represents the size of the terminal
@@ -44,6 +47,21 @@ struct Quirks {
 };
 Quirks GetQuirks();
 void SetQuirks(const Quirks& quirks);
+
+/// @brief Compute the color support based on environment variables and terminal
+/// identification.
+/// @param term The TERM environment variable.
+/// @param colorterm The COLORTERM environment variable.
+/// @param term_program The TERM_PROGRAM environment variable.
+/// @param terminal_name The terminal name (from DA2).
+/// @param terminal_emulator_name The terminal emulator name (from XTVERSION).
+/// @param capabilities The terminal capabilities (from DA1).
+Color ComputeColorSupport(std::string_view term,
+                          std::string_view colorterm,
+                          std::string_view term_program,
+                          std::string_view terminal_name,
+                          std::string_view terminal_emulator_name,
+                          const std::vector<int>& capabilities);
 
 }  // namespace Terminal
 
