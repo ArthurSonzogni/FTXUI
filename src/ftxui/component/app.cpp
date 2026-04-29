@@ -59,6 +59,10 @@
 #include <unistd.h>  // for STDIN_FILENO, STDOUT_FILENO, read
 #endif
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 namespace ftxui {
 
 enum class AppDimension {
@@ -76,6 +80,19 @@ void RequestAnimationFrame() {
   }
 }
 }  // namespace animation
+
+#if defined(__EMSCRIPTEN__)
+extern "C" {
+EMSCRIPTEN_KEEPALIVE
+void ftxui_on_resize(int columns, int rows) {
+  Terminal::SetFallbackSize({
+      columns,
+      rows,
+  });
+  std::raise(SIGWINCH);
+}
+}
+#endif
 
 struct App::Internal {
   App* public_;

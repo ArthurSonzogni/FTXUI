@@ -235,4 +235,35 @@ TEST(App, FixedSizeInitialFrame) {
 #endif
 }
 
+TEST(App, MoveConstructor) {
+  auto screen = App::FixedSize(10, 10);
+  App screen2 = std::move(screen);
+
+  int called = 0;
+  auto component = Renderer([&] {
+    called++;
+    return text("Hello");
+  });
+
+  Loop loop(&screen2, component);
+  loop.RunOnce();
+  EXPECT_EQ(called, 1);
+}
+
+TEST(App, MoveAssignment) {
+  auto screen = App::FixedSize(10, 10);
+  auto screen2 = App::FixedSize(5, 5);
+  screen2 = std::move(screen);
+
+  int called = 0;
+  auto component = Renderer([&] {
+    called++;
+    return text("Hello");
+  });
+
+  Loop loop(&screen2, component);
+  loop.RunOnce();
+  EXPECT_EQ(called, 1);
+}
+
 }  // namespace ftxui

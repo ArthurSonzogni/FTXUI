@@ -7,7 +7,7 @@
 #include <atomic>      // for atomic
 #include <chrono>      // for steady_clock, time_point
 #include <functional>  // for function
-#include <memory>      // for unique_ptr
+#include <memory>      // for shared_ptr, unique_ptr
 #include <string>      // for string, basic_string, allocator
 #include <vector>      // for vector
 
