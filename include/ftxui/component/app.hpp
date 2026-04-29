@@ -20,7 +20,7 @@
 namespace ftxui {
 class ComponentBase;
 using Component = std::shared_ptr<ComponentBase>;
-class Event;
+struct Event;
 class Selection;
 class TaskRunner;
 
