@@ -8,14 +8,14 @@
 
 #include "ftxui/component/app.hpp"
 #include "ftxui/component/component.hpp"  // for Renderer
-#include "ftxui/dom/elements.hpp"         // for text, Element
+#include "ftxui/component/loop.hpp"
+#include "ftxui/dom/elements.hpp"  // for text, Element
 
 #if defined(__unix__)
 #include <fcntl.h>
 #include <unistd.h>
 #include <array>
 #include <cstdio>
-#include <ftxui/component/loop.hpp>
 #include <string>
 #endif
 
