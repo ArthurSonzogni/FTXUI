@@ -123,6 +123,8 @@ struct App::Internal {
   bool force_handle_ctrl_c_ = true;
   bool force_handle_ctrl_z_ = true;
 
+  int cursor_reset_shape_ = 1;
+
   // Piped input handling state (POSIX only)
   bool handle_piped_input_ = true;
   bool is_stdin_a_tty_ = false;
@@ -739,7 +741,27 @@ void App::Internal::HandleTask(Component component, Task& task) {
         return;
       }
 
+      if (arg.is_cursor_shape()) {
+        cursor_reset_shape_ = arg.cursor_shape();
+        return;
+      }
 
+      if (arg.IsTerminalCapabilities()) {
+        terminal_capabilities_ = arg.TerminalCapabilities();
+        return;
+      }
+
+      if (arg.IsTerminalNameVersion()) {
+        terminal_name_ = arg.TerminalName();
+        terminal_version_ = arg.TerminalVersion();
+        return;
+      }
+
+      if (arg.IsTerminalEmulator()) {
+        terminal_emulator_name_ = arg.TerminalEmulatorName();
+        terminal_emulator_version_ = arg.TerminalEmulatorVersion();
+        return;
+      }
 
       if (arg.is_mouse()) {
         arg.mouse().x -= cursor_x_;
@@ -1024,8 +1046,6 @@ void App::Internal::InstallTerminalInfo() {
     TerminalFlush();
   }
 
-  int cursor_reset_shape = 1;
-
   // Wait for the cursor shape reply using the setup head.
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
     auto start = std::chrono::steady_clock::now();
@@ -1039,18 +1059,21 @@ void App::Internal::InstallTerminalInfo() {
       while (setup_receiver->Has()) {
         const auto event = setup_receiver->Pop();
         if (event.is_cursor_shape()) {
-          cursor_reset_shape = event.cursor_shape();
+          cursor_reset_shape_ = event.cursor_shape();
           cursor_shape_received = true;
         }
+
         if (event.IsTerminalCapabilities()) {
           terminal_capabilities_ = event.TerminalCapabilities();
           da1_received = true;
         }
+
         if (event.IsTerminalNameVersion()) {
           terminal_name_ = event.TerminalName();
           terminal_version_ = event.TerminalVersion();
           da2_received = true;
         }
+
         if (event.IsTerminalEmulator()) {
           terminal_emulator_name_ = event.TerminalEmulatorName();
           terminal_emulator_version_ = event.TerminalEmulatorVersion();
@@ -1058,7 +1081,10 @@ void App::Internal::InstallTerminalInfo() {
         }
       }
 
-      if (cursor_shape_received && da1_received && da2_received) {
+      // Response are expected to be received in order, so we can break when
+      // the last one (XTVERSION) is received. We also set a timeout to prevent
+      // waiting forever in case the terminal doesn't support these queries.
+      if (xtversion_received) {
         break;
       }
 
@@ -1068,39 +1094,27 @@ void App::Internal::InstallTerminalInfo() {
       }
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
-
-    // If we received DA1, DA2 and cursor shape, but not XTVERSION yet,
-    // wait a tiny bit more for XTVERSION as it is usually sent last.
-    if (!xtversion_received && cursor_shape_received && da1_received &&
-        da2_received) {
-      for (int i = 0; i < 10; ++i) {
-        FetchTerminalEvents();
-        while (setup_receiver->Has()) {
-          const auto event = setup_receiver->Pop();
-          if (event.IsTerminalEmulator()) {
-            terminal_emulator_name_ = event.TerminalEmulatorName();
-            terminal_emulator_version_ = event.TerminalEmulatorVersion();
-            xtversion_received = true;
-          }
-        }
-        if (xtversion_received) {
-          break;
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-      }
-    }
   }
 
   // Set quirks and color support based on terminal identification.
   Terminal::Quirks quirks = Terminal::GetQuirks();
 
+  auto safe_getenv = [](const char* name) -> std::string_view {
+    const char* value = std::getenv(name);
+    return value ? value : "";
+  };
+
+  quirks.color_support = Terminal::ComputeColorSupport(
+      safe_getenv("TERM"), safe_getenv("COLORTERM"),
+      safe_getenv("TERM_PROGRAM"), terminal_name_, terminal_emulator_name_,
+      terminal_capabilities_);
+
   const bool is_modern_emulator = (terminal_emulator_name_ != "unknown");
-  const bool is_urxvt = (terminal_name_ == "urxvt");
   const bool is_vt220_plus =
       (terminal_name_ != "vt100" && terminal_name_ != "unknown");
   bool reports_utf8 = false;
   for (const int x : terminal_capabilities_) {
-    if (x == 42) {
+    if (x == 52) {
       reports_utf8 = true;
       break;
     }
@@ -1113,36 +1127,24 @@ void App::Internal::InstallTerminalInfo() {
     }
   }
 
-  // Heuristic:
-  // 1. If it's a modern emulator, we can trust it supports TrueColor.
-  if (is_modern_emulator) {
-    quirks.color_support =
-        std::max(quirks.color_support, Terminal::Color::TrueColor);
+  // Heuristic: If the terminal emulator is modern, or it reports supporting
+  // UTF-8 or color, we can assume it supports block characters and cursor
+  // hiding, which are essential for a good experience. This is a heuristic, but
+  // it allows us to work around some older terminal emulators that don't
+  // support these features, while still providing a good experience on modern
+  // terminal emulators that do support these features.
+  if (is_modern_emulator || is_vt220_plus || reports_utf8 || reports_color) {
     quirks.block_characters = true;
     quirks.cursor_hiding = true;
     quirks.component_ascii = false;
-  } else if (is_vt220_plus || reports_utf8 || reports_color) {
-    // For VT220+ (including urxvt) or terminals reporting color support:
-    // - Enable modern quirks.
-    // - Ensure at least 256 colors.
-    // - If it's NOT urxvt, we can also upgrade to TrueColor as most modern
-    //   terminals identifying as VT220 support it.
-    quirks.block_characters = true;
-    quirks.cursor_hiding = true;
-    quirks.component_ascii = false;
-    if (!is_urxvt && quirks.color_support < Terminal::Color::TrueColor) {
-      quirks.color_support = Terminal::Color::TrueColor;
-    } else if (quirks.color_support < Terminal::Color::Palette256) {
-      quirks.color_support = Terminal::Color::Palette256;
-    }
   }
 
   Terminal::SetQuirks(quirks);
 
-  on_exit_functions.emplace([this, cursor_reset_shape] {
+  on_exit_functions.emplace([this] {
     TerminalSend("\033[?25h");  // Enable cursor.
     if (is_stdout_a_tty_) {
-      TerminalSend("\033[" + std::to_string(cursor_reset_shape) + " q");
+      TerminalSend("\033[" + std::to_string(cursor_reset_shape_) + " q");
     }
   });
 }

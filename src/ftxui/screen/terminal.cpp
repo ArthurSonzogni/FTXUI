@@ -85,44 +85,84 @@ bool ContainsAny(std::string_view s,
   return false;
 }
 
-Terminal::Color ComputeColorSupport() {
-#if defined(__EMSCRIPTEN__)
-  return Terminal::Color::TrueColor;
-#endif
-
-  std::string_view COLORTERM = Safe(std::getenv("COLORTERM"));  // NOLINT
-  if (ContainsAny(COLORTERM, {"24bit", "truecolor"})) {
-    return Terminal::Color::TrueColor;
-  }
-
-  std::string_view TERM_PROGRAM = Safe(std::getenv("TERM_PROGRAM"));  // NOLINT
-  if (ContainsAny(TERM_PROGRAM, {"iterm", "apple_terminal", "vscode", "warp",
-                                 "ghostty", "wezterm"})) {
-    return Terminal::Color::TrueColor;
-  }
-
-  std::string_view TERM = Safe(std::getenv("TERM"));  // NOLINT
-  if (ContainsAny(TERM,
-                  {"direct", "truecolor", "kitty", "alacritty", "foot"})) {
-    return Terminal::Color::TrueColor;
-  }
-
-  if (Contains(TERM, "xterm") && !ContainsAny(TERM, {"rxvt", "urxvt"})) {
-    return Terminal::Color::TrueColor;
-  }
-
-  if (ContainsAny(COLORTERM, {"256"}) ||
-      ContainsAny(TERM, {"256", "xterm", "screen", "tmux"}) ||
-      Contains(TERM_PROGRAM, "iterm")) {
-    return Terminal::Color::Palette256;
-  }
-
-  return Terminal::Color::Palette16;
+Terminal::Color ComputeColorSupportInternal() {
+  static const std::vector<int> empty_capabilities;
+  return Terminal::ComputeColorSupport(Safe(std::getenv("TERM")),          // NOLINT
+                                       Safe(std::getenv("COLORTERM")),     // NOLINT
+                                       Safe(std::getenv("TERM_PROGRAM")),  // NOLINT
+                                       "unknown", "unknown",
+                                       empty_capabilities);
 }
 
 }  // namespace
 
 namespace Terminal {
+
+/// @brief Compute the color support based on environment variables and terminal
+/// identification.
+/// @param term The TERM environment variable.
+/// @param colorterm The COLORTERM environment variable.
+/// @param term_program The TERM_PROGRAM environment variable.
+/// @param terminal_name The terminal name (from DA2).
+/// @param terminal_emulator_name The terminal emulator name (from XTVERSION).
+/// @param capabilities The terminal capabilities (from DA1).
+Color ComputeColorSupport(std::string_view term,
+                          std::string_view colorterm,
+                          std::string_view term_program,
+                          std::string_view terminal_name,
+                          std::string_view terminal_emulator_name,
+                          const std::vector<int>& capabilities) {
+  // 0. Platform specific overrides.
+#if defined(__EMSCRIPTEN__)
+  return Terminal::Color::TrueColor;
+#endif
+
+  // 1. term / colorterm environment variables.
+  if (ContainsAny(colorterm, {"24bit", "truecolor"})) {
+    return Terminal::Color::TrueColor;
+  }
+  if (ContainsAny(term, {"direct", "truecolor", "kitty", "alacritty", "foot"})) {
+    return Terminal::Color::TrueColor;
+  }
+  if (ContainsAny(colorterm, {"256"}) ||
+      ContainsAny(term, {"256", "xterm", "screen", "tmux"})) {
+    return Terminal::Color::Palette256;
+  }
+
+  // 2. term_program
+  if (ContainsAny(term_program, {
+                                    "iterm",
+                                    "apple_terminal",
+                                    "vscode",
+                                    "warp",
+                                    "ghostty",
+                                    "wezterm",
+                                })) {
+    return Terminal::Color::TrueColor;
+  }
+  if (Contains(term_program, "iterm")) {
+    return Terminal::Color::Palette256;
+  }
+
+  // 3. terminal identification.
+  if (terminal_emulator_name != "unknown") {
+    return Terminal::Color::TrueColor;
+  }
+  if (terminal_name == "xterm") {
+    return Terminal::Color::TrueColor;
+  }
+  for (const int x : capabilities) {
+    // The value 22 is the SGR capability for 256 colors. If the terminal
+    // supports it, it is a strong indication that the terminal supports 256
+    // colors. This is not a perfect detection method, but it is a reasonable
+    // heuristic in the absence of more specific information.
+    if (x == 22) {
+      return Terminal::Color::Palette256;
+    }
+  }
+
+  return Terminal::Color::Palette16;
+}
 
 /// @brief Get the terminal size.
 /// @return The terminal size.
@@ -165,7 +205,7 @@ void SetFallbackSize(const Dimensions& fallbackSize) {
 /// @ingroup screen
 Color ColorSupport() {
   if (!g_color_support_detected) {
-    g_quirks.color_support = ComputeColorSupport();
+    g_quirks.color_support = ComputeColorSupportInternal();
     g_color_support_detected = true;
   }
   return g_quirks.color_support;
@@ -182,7 +222,7 @@ void SetColorSupport(Color color) {
 /// @ingroup screen
 Quirks GetQuirks() {
   if (!g_color_support_detected) {
-    g_quirks.color_support = ComputeColorSupport();
+    g_quirks.color_support = ComputeColorSupportInternal();
     g_color_support_detected = true;
   }
   return g_quirks;
