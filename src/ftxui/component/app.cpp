@@ -518,7 +518,7 @@ void App::Internal::Install() {
   terminal.c_iflag &= ~BRKINT;  // Disable break causing input and output to be
                                 // flushed
   terminal.c_iflag &= ~PARMRK;  // Disable marking parity errors.
-  terminal.c_iflag &= ~ISTRIP;  // Disable striping 8th bit off characters.
+  terminal.c_iflag &= ~ISTRIP;  // Disable stripping 8th bit off characters.
   terminal.c_iflag &= ~INLCR;   // Disable mapping NL to CR.
   terminal.c_iflag &= ~IGNCR;   // Disable ignoring CR.
   terminal.c_iflag &= ~ICRNL;   // Disable mapping CR to NL.
