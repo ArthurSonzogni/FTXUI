@@ -1049,9 +1049,6 @@ void App::Internal::InstallTerminalInfo() {
   // Wait for the cursor shape reply using the setup head.
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
     auto start = std::chrono::steady_clock::now();
-    bool cursor_shape_received = false;
-    bool da1_received = false;
-    bool da2_received = false;
     bool xtversion_received = false;
     // Wait for the cursor shape reply using the setup head.
     while (true) {
@@ -1060,18 +1057,15 @@ void App::Internal::InstallTerminalInfo() {
         const auto event = setup_receiver->Pop();
         if (event.is_cursor_shape()) {
           cursor_reset_shape_ = event.cursor_shape();
-          cursor_shape_received = true;
         }
 
         if (event.IsTerminalCapabilities()) {
           terminal_capabilities_ = event.TerminalCapabilities();
-          da1_received = true;
         }
 
         if (event.IsTerminalNameVersion()) {
           terminal_name_ = event.TerminalName();
           terminal_version_ = event.TerminalVersion();
-          da2_received = true;
         }
 
         if (event.IsTerminalEmulator()) {
