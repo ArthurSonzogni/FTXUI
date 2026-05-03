@@ -102,7 +102,7 @@ class Gauge : public Node {
       return;
     }
 
-    const auto* charset = Terminal::GetQuirks().block_characters
+    const auto* charset = Terminal::GetQuirks().BlockCharacters()
                               ? charset_horizontal
                               : charset_horizontal_microsoft;
 

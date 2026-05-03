@@ -21,10 +21,15 @@ int main() {
 
   auto quirks = Terminal::GetQuirks();
 
+  bool block_characters = quirks.BlockCharacters();
+  bool cursor_hiding = quirks.CursorHiding();
+  bool component_ascii = quirks.ComponentAscii();
+  int color_support = (int)quirks.ColorSupport();
+
   auto cb_block =
-      Checkbox("Support 8 Unicode block characters", &quirks.block_characters);
-  auto cb_cursor = Checkbox("Support cursor hiding", &quirks.cursor_hiding);
-  auto cb_ascii = Checkbox("Use ASCII for components", &quirks.component_ascii);
+      Checkbox("Support 8 Unicode block characters", &block_characters);
+  auto cb_cursor = Checkbox("Support cursor hiding", &cursor_hiding);
+  auto cb_ascii = Checkbox("Use ASCII for components", &component_ascii);
 
   std::vector<std::string> color_names = {
       "Palette1",
@@ -32,7 +37,7 @@ int main() {
       "Palette256",
       "TrueColor",
   };
-  auto rb_color = Radiobox(&color_names, (int*)&quirks.color_support);
+  auto rb_color = Radiobox(&color_names, &color_support);
 
   auto btn_quit =
       Button("Quit", screen.ExitLoopClosure(), ButtonOption::Animated());
@@ -74,6 +79,10 @@ int main() {
     // We only apply the quirks for the demo pane to see the effect.
     // Note: In FTXUI, Terminal settings are global. Applying them here
     // will affect the actual rendering of the returned element tree.
+    quirks.SetBlockCharacters(block_characters);
+    quirks.SetCursorHiding(cursor_hiding);
+    quirks.SetComponentAscii(component_ascii);
+    quirks.SetColorSupport((Terminal::Color)color_support);
     Terminal::SetQuirks(quirks);
 
     auto current_time = std::chrono::steady_clock::now();

@@ -4,6 +4,7 @@
 #ifndef FTXUI_SCREEN_TERMINAL_HPP
 #define FTXUI_SCREEN_TERMINAL_HPP
 
+#include <memory>
 #include <string_view>
 #include <vector>
 
@@ -35,18 +36,63 @@ void SetColorSupport(Color color);
 /// @brief Quirks is a structure that represents various terminal-specific
 /// behaviors that may require fallbacks.
 /// @ingroup screen
-struct Quirks {
+class Quirks {
+ public:
+  Quirks();
+  ~Quirks();
+  Quirks(const Quirks&);
+  Quirks& operator=(const Quirks&);
+  Quirks(Quirks&&) noexcept;
+  Quirks& operator=(Quirks&&) noexcept;
+
   /// @brief Whether the terminal font supports the 8 Unicode block characters.
-  bool block_characters = true;
+  bool BlockCharacters() const;
+  void SetBlockCharacters(bool v);
+
   /// @brief Whether the terminal correctly handles hiding the cursor.
-  bool cursor_hiding = true;
+  bool CursorHiding() const;
+  void SetCursorHiding(bool v);
+
   /// @brief Whether the terminal should use ASCII characters for components.
-  bool component_ascii = false;
+  bool ComponentAscii() const;
+  void SetComponentAscii(bool v);
+
   /// @brief The level of color support of the terminal.
-  Color color_support = Palette256;
+  Color ColorSupport() const;
+  void SetColorSupport(Color v);
+
+ private:
+  struct Impl;
+  std::unique_ptr<Impl> impl_;
 };
 Quirks GetQuirks();
 void SetQuirks(const Quirks& quirks);
+
+/// @brief TerminalInfo is a structure that contains information about the
+/// terminal.
+/// @ingroup screen
+class TerminalInfo {
+ public:
+  TerminalInfo();
+  ~TerminalInfo();
+  TerminalInfo(const TerminalInfo&) = delete;
+  TerminalInfo& operator=(const TerminalInfo&) = delete;
+  TerminalInfo(TerminalInfo&&) noexcept;
+  TerminalInfo& operator=(TerminalInfo&&) noexcept;
+
+  void SetTerm(std::string_view term);
+  void SetColorterm(std::string_view colorterm);
+  void SetTermProgram(std::string_view term_program);
+  void SetTerminalName(std::string_view terminal_name);
+  void SetTerminalEmulatorName(std::string_view terminal_emulator_name);
+  void SetCapabilities(std::vector<int> capabilities);
+
+  Color ComputeColorSupport() const;
+
+ private:
+  struct Impl;
+  std::unique_ptr<Impl> impl_;
+};
 
 /// @brief Compute the color support based on environment variables and terminal
 /// identification.

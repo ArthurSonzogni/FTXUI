@@ -50,7 +50,7 @@ class Graph : public Node {
     }
 
     const auto& current_charset =
-        Terminal::GetQuirks().block_characters ? charset : charset_microsoft;
+        Terminal::GetQuirks().BlockCharacters() ? charset : charset_microsoft;
 
     auto data = graph_function_(width, height);
     int i = 0;

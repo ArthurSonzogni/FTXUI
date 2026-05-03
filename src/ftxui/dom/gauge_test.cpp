@@ -24,7 +24,7 @@ TEST(GaugeTest, HalfHorizontal) {
   Screen screen(11, 1);
   Render(screen, root);
 
-  if (Terminal::GetQuirks().block_characters) {
+  if (Terminal::GetQuirks().BlockCharacters()) {
     EXPECT_EQ("█████▍     ", screen.ToString());
   } else {
     EXPECT_EQ("█████▌     ", screen.ToString());
