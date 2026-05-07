@@ -1083,7 +1083,7 @@ void App::Internal::InstallTerminalInfo() {
       }
 
       if (std::chrono::steady_clock::now() - start >
-          std::chrono::milliseconds(1000)) {
+          std::chrono::milliseconds(500)) {
         break;
       }
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
@@ -1098,10 +1098,12 @@ void App::Internal::InstallTerminalInfo() {
     return value ? value : "";
   };
 
-  quirks.color_support = Terminal::ComputeColorSupport(
+  auto color_support = Terminal::ComputeColorSupport(
       safe_getenv("TERM"), safe_getenv("COLORTERM"),
       safe_getenv("TERM_PROGRAM"), terminal_name_, terminal_emulator_name_,
       terminal_capabilities_);
+
+  quirks.SetColorSupport(color_support);
 
   const bool is_modern_emulator = (terminal_emulator_name_ != "unknown");
   const bool is_vt220_plus =
@@ -1113,13 +1115,6 @@ void App::Internal::InstallTerminalInfo() {
       break;
     }
   }
-  bool reports_color = false;
-  for (const int x : terminal_capabilities_) {
-    if (x == 22) {
-      reports_color = true;
-      break;
-    }
-  }
 
   // Heuristic: If the terminal emulator is modern, or it reports supporting
   // UTF-8 or color, we can assume it supports block characters and cursor
@@ -1127,10 +1122,11 @@ void App::Internal::InstallTerminalInfo() {
   // it allows us to work around some older terminal emulators that don't
   // support these features, while still providing a good experience on modern
   // terminal emulators that do support these features.
-  if (is_modern_emulator || is_vt220_plus || reports_utf8 || reports_color) {
-    quirks.block_characters = true;
-    quirks.cursor_hiding = true;
-    quirks.component_ascii = false;
+  bool modern = is_modern_emulator || is_vt220_plus || reports_utf8;
+  if (modern) {
+    quirks.SetBlockCharacters(true);
+    quirks.SetCursorHiding(true);
+    quirks.SetComponentAscii(false);
   }
 
   Terminal::SetQuirks(quirks);

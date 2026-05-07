@@ -122,7 +122,7 @@ void Render(Screen& screen, Node* node, Selection& selection) {
   }
 
   bool use_cursor = node->requirement().focused.enabled;
-  if (!Terminal::GetQuirks().cursor_hiding &&
+  if (!Terminal::GetQuirks().CursorHiding() &&
       node->requirement().focused.cursor_shape ==
           Screen::Cursor::Shape::Hidden) {
     // Setting the cursor to the right position allow folks using CJK (China,

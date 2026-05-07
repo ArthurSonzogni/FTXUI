@@ -246,7 +246,7 @@ ButtonOption ButtonOption::Animated(Color background,
 CheckboxOption CheckboxOption::Simple() {
   auto option = CheckboxOption();
   option.transform = [](const EntryState& s) {
-    auto prefix = (Terminal::GetQuirks().component_ascii)
+    auto prefix = (Terminal::GetQuirks().ComponentAscii())
                       ? text(s.state ? "[X] " : "[ ] ")  // NOLINT
                       : text(s.state ? "▣ " : "☐ ");     // NOLINT
     auto t = text(s.label);
@@ -266,7 +266,7 @@ CheckboxOption CheckboxOption::Simple() {
 RadioboxOption RadioboxOption::Simple() {
   auto option = RadioboxOption();
   option.transform = [](const EntryState& s) {
-    auto prefix = (Terminal::GetQuirks().component_ascii)
+    auto prefix = (Terminal::GetQuirks().ComponentAscii())
                       ? text(s.state ? "(*) " : "( ) ")  // NOLINT
                       : text(s.state ? "◉ " : "○ ");     // NOLINT
     auto t = text(s.label);

@@ -5,6 +5,7 @@
 #include <cctype>     // for std::tolower
 #include <cstdlib>    // for getenv
 #include <initializer_list>
+#include <string>
 #include <string_view>  // for string_view
 
 #include "ftxui/screen/terminal.hpp"
@@ -30,9 +31,9 @@ bool g_color_support_detected = false;  // NOLINT
 Terminal::Quirks g_quirks = [] {        // NOLINT
   Terminal::Quirks quirks;
 #if defined(_WIN32)
-  quirks.block_characters = false;
-  quirks.cursor_hiding = false;
-  quirks.component_ascii = true;
+  quirks.SetBlockCharacters(false);
+  quirks.SetCursorHiding(false);
+  quirks.SetComponentAscii(true);
 #endif
   return quirks;
 }();
@@ -87,16 +88,97 @@ bool ContainsAny(std::string_view s,
 
 Terminal::Color ComputeColorSupportInternal() {
   static const std::vector<int> empty_capabilities;
-  return Terminal::ComputeColorSupport(Safe(std::getenv("TERM")),          // NOLINT
-                                       Safe(std::getenv("COLORTERM")),     // NOLINT
-                                       Safe(std::getenv("TERM_PROGRAM")),  // NOLINT
-                                       "unknown", "unknown",
-                                       empty_capabilities);
+  return Terminal::ComputeColorSupport(
+      Safe(std::getenv("TERM")),          // NOLINT
+      Safe(std::getenv("COLORTERM")),     // NOLINT
+      Safe(std::getenv("TERM_PROGRAM")),  // NOLINT
+     "unknown", "unknown", empty_capabilities);
 }
 
 }  // namespace
 
 namespace Terminal {
+
+struct Quirks::Impl {
+  bool block_characters = true;
+  bool cursor_hiding = true;
+  bool component_ascii = false;
+  Color color_support = Palette256;
+};
+
+Quirks::Quirks() : impl_(new Impl) {}
+Quirks::~Quirks() = default;
+Quirks::Quirks(const Quirks& other) : impl_(new Impl(*other.impl_)) {}
+Quirks& Quirks::operator=(const Quirks& other) {
+  if (this != &other) {
+    *impl_ = *other.impl_;
+  }
+  return *this;
+}
+Quirks::Quirks(Quirks&&) noexcept = default;
+Quirks& Quirks::operator=(Quirks&&) noexcept = default;
+
+bool Quirks::BlockCharacters() const {
+  return impl_->block_characters;
+}
+void Quirks::SetBlockCharacters(bool v) {
+  impl_->block_characters = v;
+}
+
+bool Quirks::CursorHiding() const {
+  return impl_->cursor_hiding;
+}
+void Quirks::SetCursorHiding(bool v) {
+  impl_->cursor_hiding = v;
+}
+
+bool Quirks::ComponentAscii() const {
+  return impl_->component_ascii;
+}
+void Quirks::SetComponentAscii(bool v) {
+  impl_->component_ascii = v;
+}
+
+Color Quirks::ColorSupport() const {
+  return impl_->color_support;
+}
+void Quirks::SetColorSupport(Color v) {
+  impl_->color_support = v;
+}
+
+struct TerminalInfo::Impl {
+  std::string term;
+  std::string colorterm;
+  std::string term_program;
+  std::string terminal_name;
+  std::string terminal_emulator_name;
+  std::vector<int> capabilities;
+};
+
+TerminalInfo::TerminalInfo() : impl_(new Impl) {}
+TerminalInfo::~TerminalInfo() = default;
+TerminalInfo::TerminalInfo(TerminalInfo&&) noexcept = default;
+TerminalInfo& TerminalInfo::operator=(TerminalInfo&&) noexcept = default;
+
+void TerminalInfo::SetTerm(std::string_view term) {
+  impl_->term = term;
+}
+void TerminalInfo::SetColorterm(std::string_view colorterm) {
+  impl_->colorterm = colorterm;
+}
+void TerminalInfo::SetTermProgram(std::string_view term_program) {
+  impl_->term_program = term_program;
+}
+void TerminalInfo::SetTerminalName(std::string_view terminal_name) {
+  impl_->terminal_name = terminal_name;
+}
+void TerminalInfo::SetTerminalEmulatorName(
+    std::string_view terminal_emulator_name) {
+  impl_->terminal_emulator_name = terminal_emulator_name;
+}
+void TerminalInfo::SetCapabilities(std::vector<int> capabilities) {
+  impl_->capabilities = std::move(capabilities);
+}
 
 /// @brief Compute the color support based on environment variables and terminal
 /// identification.
@@ -112,46 +194,58 @@ Color ComputeColorSupport(std::string_view term,
                           std::string_view terminal_name,
                           std::string_view terminal_emulator_name,
                           const std::vector<int>& capabilities) {
+  TerminalInfo info;
+  info.SetTerm(term);
+  info.SetColorterm(colorterm);
+  info.SetTermProgram(term_program);
+  info.SetTerminalName(terminal_name);
+  info.SetTerminalEmulatorName(terminal_emulator_name);
+  info.SetCapabilities(capabilities);
+  return info.ComputeColorSupport();
+}
+
+Color TerminalInfo::ComputeColorSupport() const {
   // 0. Platform specific overrides.
 #if defined(__EMSCRIPTEN__)
   return Terminal::Color::TrueColor;
 #endif
 
   // 1. term / colorterm environment variables.
-  if (ContainsAny(colorterm, {"24bit", "truecolor"})) {
+  if (ContainsAny(impl_->colorterm, {"24bit", "truecolor"})) {
     return Terminal::Color::TrueColor;
   }
-  if (ContainsAny(term, {"direct", "truecolor", "kitty", "alacritty", "foot"})) {
+  if (ContainsAny(impl_->term,
+                  {"direct", "truecolor", "kitty", "alacritty", "foot"})) {
     return Terminal::Color::TrueColor;
   }
-  if (ContainsAny(colorterm, {"256"}) ||
-      ContainsAny(term, {"256", "xterm", "screen", "tmux"})) {
+  if (ContainsAny(impl_->colorterm, {"256"}) ||
+      ContainsAny(impl_->term, {"256", "xterm", "screen", "tmux"})) {
     return Terminal::Color::Palette256;
   }
 
   // 2. term_program
-  if (ContainsAny(term_program, {
-                                    "iterm",
-                                    "apple_terminal",
-                                    "vscode",
-                                    "warp",
-                                    "ghostty",
-                                    "wezterm",
-                                })) {
+  if (ContainsAny(impl_->term_program, {
+                                           "iterm",
+                                           "apple_terminal",
+                                           "vscode",
+                                           "warp",
+                                           "ghostty",
+                                           "wezterm",
+                                       })) {
     return Terminal::Color::TrueColor;
   }
-  if (Contains(term_program, "iterm")) {
+  if (Contains(impl_->term_program, "iterm")) {
     return Terminal::Color::Palette256;
   }
 
   // 3. terminal identification.
-  if (terminal_emulator_name != "unknown") {
+  if (impl_->terminal_emulator_name != "unknown") {
     return Terminal::Color::TrueColor;
   }
-  if (terminal_name == "xterm") {
+  if (impl_->terminal_name == "xterm") {
     return Terminal::Color::TrueColor;
   }
-  for (const int x : capabilities) {
+  for (const int x : impl_->capabilities) {
     // The value 22 is the SGR capability for 256 colors. If the terminal
     // supports it, it is a strong indication that the terminal supports 256
     // colors. This is not a perfect detection method, but it is a reasonable
@@ -205,16 +299,16 @@ void SetFallbackSize(const Dimensions& fallbackSize) {
 /// @ingroup screen
 Color ColorSupport() {
   if (!g_color_support_detected) {
-    g_quirks.color_support = ComputeColorSupportInternal();
+    g_quirks.SetColorSupport(ComputeColorSupportInternal());
     g_color_support_detected = true;
   }
-  return g_quirks.color_support;
+  return g_quirks.ColorSupport();
 }
 
 /// @brief Override terminal color support in case auto-detection fails
 /// @ingroup dom
 void SetColorSupport(Color color) {
-  g_quirks.color_support = color;
+  g_quirks.SetColorSupport(color);
   g_color_support_detected = true;
 }
 
@@ -222,7 +316,7 @@ void SetColorSupport(Color color) {
 /// @ingroup screen
 Quirks GetQuirks() {
   if (!g_color_support_detected) {
-    g_quirks.color_support = ComputeColorSupportInternal();
+    g_quirks.SetColorSupport(ComputeColorSupportInternal());
     g_color_support_detected = true;
   }
   return g_quirks;
