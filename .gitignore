@@ -83,3 +83,4 @@ build/
 build_asan/
 iwyu/
 examples_modules/
+examples_ftxui_hpp/

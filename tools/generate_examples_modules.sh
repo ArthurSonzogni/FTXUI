@@ -26,11 +26,5 @@ done
   sed -i 's/${DIRECTORY_LIB}/ftxui-modules/g' ./examples_modules/CMakeLists.txt
 sed -i 's/ftxui_example_/ftxui_modules_example_/g' ./examples_modules/CMakeLists.txt
 
-# Remove problematic header inclusions from .ipp files in module examples.
-for file in ./examples_modules/**/*.ipp; do
-  sed -i '/#include "ftxui/d' "$file"
-  sed -i '/#include <ftxui/d' "$file"
-done
-
 
 

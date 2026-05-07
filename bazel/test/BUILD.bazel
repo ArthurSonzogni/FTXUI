@@ -19,7 +19,5 @@ cc_binary(
 cc_binary(
     name = "smoke_single_dependency",
     srcs = ["smoke.cpp"],
-    deps = [
-        "@ftxui",
-    ],
+    deps = ["@ftxui"],
 )

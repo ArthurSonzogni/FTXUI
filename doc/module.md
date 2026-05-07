@@ -8,6 +8,12 @@ FTXUI is organized into three modules, each building upon the previous:
 2. [ftxui/dom](#module-dom) - Layout and composition
 3. [ftxui/component](#module-component) - User interaction
 
+Alternatively, you can use the **`ftxui`** umbrella module which includes everything:
+
+- **Header**: `#include <ftxui/ftxui.hpp>`
+- **CMake target**: `ftxui::ftxui`
+- **Bazel target**: `@ftxui//:ftxui`
+
 ---
 
 # ftxui/screen

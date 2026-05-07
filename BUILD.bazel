@@ -22,7 +22,11 @@ load(":bazel/ftxui.bzl", "windows_copts")
 ftxui_cc_library(
     name = "ftxui",
     hdrs = glob(["include/ftxui/**/*.hpp"]),
-    deps = [":component"],
+    deps = [
+        ":component",
+        ":dom",
+        ":screen",
+    ],
 )
 
 # @ftxui:screen is a module that provides a screen buffer and color management

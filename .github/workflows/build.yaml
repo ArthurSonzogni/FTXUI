@@ -219,3 +219,42 @@ jobs:
           -DFTXUI_ENABLE_INSTALL=ON
           -DFTXUI_DEV_WARNINGS=ON ;
           cmake --build .
+
+  test_umbrella_header:
+    name: "Test umbrella header"
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            compiler: llvm
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Setup Cpp"
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          cmake: true
+          ninja: true
+
+      - name: "Generate ./examples_ftxui_hpp"
+        run: >
+          ./tools/generate_examples_ftxui_hpp.sh
+
+      - name: "Build examples"
+        run: >
+          mkdir build;
+          cd build;
+          cmake ..
+          -DCMAKE_GENERATOR=Ninja
+          -DFTXUI_BUILD_EXAMPLES=ON
+          -DCMAKE_BUILD_TYPE=Release
+          -DFTXUI_BUILD_DOCS=OFF
+          -DFTXUI_BUILD_TESTS=OFF
+          -DFTXUI_BUILD_TESTS_FUZZER=OFF
+          -DFTXUI_ENABLE_INSTALL=ON
+          -DFTXUI_DEV_WARNINGS=ON ;
+          cmake --build .

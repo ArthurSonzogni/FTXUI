@@ -13,7 +13,6 @@
 #include "ftxui/screen/color.hpp"  // for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui
 
 using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
 int main() {
   // clang-format off
