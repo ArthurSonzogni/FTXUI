@@ -30,8 +30,8 @@
 #include "ftxui/screen/image.hpp"
 #include "ftxui/screen/pixel.hpp"
 #include "ftxui/screen/screen.hpp"
-#include "ftxui/screen/surface.hpp"
 #include "ftxui/screen/string.hpp"
+#include "ftxui/screen/surface.hpp"
 #include "ftxui/screen/terminal.hpp"
 #include "ftxui/util/ref.hpp"
 

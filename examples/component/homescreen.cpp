@@ -14,7 +14,7 @@
 #include <utility>  // for move
 #include <vector>
 
-#include "ftxui/component/app.hpp"          // for Component, App
+#include "ftxui/component/app.hpp"  // for Component, App
 
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, ResizableSplitLeft, Tab
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
