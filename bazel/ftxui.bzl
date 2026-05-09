@@ -30,17 +30,22 @@ def ftxui_cc_library(
         linkopts = [],
         visibility = ["//visibility:public"],
         deps = []):
+
+    copts = windows_copts()
+    defines = ["IS_FTXUI_" + name.upper() + "_IMPL=1"]
+
     cc_library(
         name = name,
         srcs = srcs,
         hdrs = hdrs,
+        defines = defines,
         linkopts = linkopts,
         deps = deps,
         strip_include_prefix = "include",
         includes = [
             "src",
         ],
-        copts = windows_copts(),
+        copts = copts,
         visibility = visibility,
     )
 

@@ -8,6 +8,7 @@
 #include <vector>  // for vector
 
 #include "ftxui/dom/elements.hpp"  // for Element, BorderStyle, LIGHT, Decorator
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -33,7 +34,7 @@ class TableSelection;
 /// ```
 ///
 /// @ingroup dom
-class Table {
+class FTXUI_EXPORT(DOM) Table {
  public:
   Table();
   explicit Table(const std::vector<std::vector<std::string>>&);
@@ -61,7 +62,7 @@ class Table {
   int dim_y_ = 0;
 };
 
-class TableSelection {
+class FTXUI_EXPORT(DOM) TableSelection {
  public:
   // Decorate the whole selection with a decorator.
   void Decorate(const Decorator&);

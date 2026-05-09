@@ -15,7 +15,7 @@
 
 namespace ftxui {
 namespace {
-const std::array<const char*, 33> palette16code = {
+const std::array<const char*, 32> palette16code = {
     "30", "40",   //
     "31", "41",   //
     "32", "42",   //

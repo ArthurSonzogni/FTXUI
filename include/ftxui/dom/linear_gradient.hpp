@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "ftxui/screen/color.hpp"  // for Colors
+#include "ftxui/util/export.hpp"   // for FTXUI_EXPORT
 
 namespace ftxui {
 
@@ -29,7 +30,7 @@ namespace ftxui {
 /// ```
 ///
 /// @ingroup dom
-struct LinearGradient {
+struct FTXUI_EXPORT(DOM) LinearGradient {
   float angle = 0.f;
 
   /// A stop is a color at a specific position in the gradient.

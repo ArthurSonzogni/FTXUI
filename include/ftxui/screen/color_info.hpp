@@ -8,6 +8,7 @@
 #include <vector>
 
 #include <ftxui/screen/color.hpp>
+#include <ftxui/util/export.hpp>
 
 namespace ftxui {
 
@@ -15,7 +16,7 @@ namespace ftxui {
 /// color palette.
 ///
 /// @ingroup screen
-struct ColorInfo {
+struct FTXUI_EXPORT(SCREEN) ColorInfo {
   const char* name;
   uint8_t index_256;
   uint8_t index_16;
@@ -27,13 +28,13 @@ struct ColorInfo {
   uint8_t value;
 };
 
-ColorInfo GetColorInfo(Color::Palette256 index);
-ColorInfo GetColorInfo(Color::Palette16 index);
+FTXUI_EXPORT(SCREEN) ColorInfo GetColorInfo(Color::Palette256 index);
+FTXUI_EXPORT(SCREEN) ColorInfo GetColorInfo(Color::Palette16 index);
 
 /// @brief Get the color information for the palette256, sorted in 2D.
 /// @return A 2D vector of ColorInfo.
 /// @ingroup screen
-std::vector<std::vector<ColorInfo>> ColorInfoSorted2D();
+FTXUI_EXPORT(SCREEN) std::vector<std::vector<ColorInfo>> ColorInfoSorted2D();
 
 }  // namespace ftxui
 

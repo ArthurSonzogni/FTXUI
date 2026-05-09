@@ -11,6 +11,8 @@
 #include <variant>
 #include <vector>
 
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
 /// @brief An adapter. Own or reference an immutable object.
@@ -98,7 +100,7 @@ class Ref {
 
 /// @brief An adapter. Own or reference a constant string. For convenience, this
 /// class convert multiple mutable string toward a shared representation.
-class StringRef : public Ref<std::string> {
+class FTXUI_EXPORT(SCREEN) StringRef : public Ref<std::string> {
  public:
   using Ref<std::string>::Ref;
 
@@ -115,7 +117,7 @@ class StringRef : public Ref<std::string> {
 
 /// @brief An adapter. Own or reference a constant string. For convenience, this
 /// class convert multiple immutable string toward a shared representation.
-class ConstStringRef : public ConstRef<std::string> {
+class FTXUI_EXPORT(SCREEN) ConstStringRef : public ConstRef<std::string> {
  public:
   using ConstRef<std::string>::ConstRef;
 
@@ -144,7 +146,7 @@ class ConstStringRef : public ConstRef<std::string> {
 /// - `std::vector<std::wstring>*`
 /// - `Adapter*`
 /// - `std::unique_ptr<Adapter>`
-class ConstStringListRef {
+class FTXUI_EXPORT(SCREEN) ConstStringListRef {
  public:
   // Bring your own adapter:
   class Adapter {

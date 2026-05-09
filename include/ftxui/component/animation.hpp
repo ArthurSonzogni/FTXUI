@@ -6,6 +6,7 @@
 
 #include <chrono>      // for milliseconds, duration, steady_clock, time_point
 #include <functional>  // for function
+#include "ftxui/util/export.hpp"
 
 namespace ftxui::animation {
 /// @brief RequestAnimationFrame is a function that requests a new frame to be
@@ -23,14 +24,14 @@ namespace ftxui::animation {
 /// drawn.
 ///
 /// @ingroup component
-void RequestAnimationFrame();
+FTXUI_EXPORT(COMPONENT) void RequestAnimationFrame();
 
 using Clock = std::chrono::steady_clock;
 using TimePoint = std::chrono::time_point<Clock>;
 using Duration = std::chrono::duration<float>;
 
 // Parameter of Component::OnAnimation(param).
-class Params {
+class FTXUI_EXPORT(COMPONENT) Params {
  public:
   explicit Params(Duration duration) : duration_(duration) {}
 
@@ -44,60 +45,60 @@ class Params {
 namespace easing {
 using Function = std::function<float(float)>;
 // Linear interpolation (no easing)
-float Linear(float p);
+FTXUI_EXPORT(COMPONENT) float Linear(float p);
 
 // Quadratic easing; p^2
-float QuadraticIn(float p);
-float QuadraticOut(float p);
-float QuadraticInOut(float p);
+FTXUI_EXPORT(COMPONENT) float QuadraticIn(float p);
+FTXUI_EXPORT(COMPONENT) float QuadraticOut(float p);
+FTXUI_EXPORT(COMPONENT) float QuadraticInOut(float p);
 
 // Cubic easing; p^3
-float CubicIn(float p);
-float CubicOut(float p);
-float CubicInOut(float p);
+FTXUI_EXPORT(COMPONENT) float CubicIn(float p);
+FTXUI_EXPORT(COMPONENT) float CubicOut(float p);
+FTXUI_EXPORT(COMPONENT) float CubicInOut(float p);
 
 // Quartic easing; p^4
-float QuarticIn(float p);
-float QuarticOut(float p);
-float QuarticInOut(float p);
+FTXUI_EXPORT(COMPONENT) float QuarticIn(float p);
+FTXUI_EXPORT(COMPONENT) float QuarticOut(float p);
+FTXUI_EXPORT(COMPONENT) float QuarticInOut(float p);
 
 // Quintic easing; p^5
-float QuinticIn(float p);
-float QuinticOut(float p);
-float QuinticInOut(float p);
+FTXUI_EXPORT(COMPONENT) float QuinticIn(float p);
+FTXUI_EXPORT(COMPONENT) float QuinticOut(float p);
+FTXUI_EXPORT(COMPONENT) float QuinticInOut(float p);
 
 // Sine wave easing; sin(p * PI/2)
-float SineIn(float p);
-float SineOut(float p);
-float SineInOut(float p);
+FTXUI_EXPORT(COMPONENT) float SineIn(float p);
+FTXUI_EXPORT(COMPONENT) float SineOut(float p);
+FTXUI_EXPORT(COMPONENT) float SineInOut(float p);
 
 // Circular easing; sqrt(1 - p^2)
-float CircularIn(float p);
-float CircularOut(float p);
-float CircularInOut(float p);
+FTXUI_EXPORT(COMPONENT) float CircularIn(float p);
+FTXUI_EXPORT(COMPONENT) float CircularOut(float p);
+FTXUI_EXPORT(COMPONENT) float CircularInOut(float p);
 
 // Exponential easing, base 2
-float ExponentialIn(float p);
-float ExponentialOut(float p);
-float ExponentialInOut(float p);
+FTXUI_EXPORT(COMPONENT) float ExponentialIn(float p);
+FTXUI_EXPORT(COMPONENT) float ExponentialOut(float p);
+FTXUI_EXPORT(COMPONENT) float ExponentialInOut(float p);
 
 // Exponentially-damped sine wave easing
-float ElasticIn(float p);
-float ElasticOut(float p);
-float ElasticInOut(float p);
+FTXUI_EXPORT(COMPONENT) float ElasticIn(float p);
+FTXUI_EXPORT(COMPONENT) float ElasticOut(float p);
+FTXUI_EXPORT(COMPONENT) float ElasticInOut(float p);
 
 // Overshooting cubic easing;
-float BackIn(float p);
-float BackOut(float p);
-float BackInOut(float p);
+FTXUI_EXPORT(COMPONENT) float BackIn(float p);
+FTXUI_EXPORT(COMPONENT) float BackOut(float p);
+FTXUI_EXPORT(COMPONENT) float BackInOut(float p);
 
 // Exponentially-decaying bounce easing
-float BounceIn(float p);
-float BounceOut(float p);
-float BounceInOut(float p);
+FTXUI_EXPORT(COMPONENT) float BounceIn(float p);
+FTXUI_EXPORT(COMPONENT) float BounceOut(float p);
+FTXUI_EXPORT(COMPONENT) float BounceInOut(float p);
 }  // namespace easing
 
-class Animator {
+class FTXUI_EXPORT(COMPONENT) Animator {
  public:
   explicit Animator(float* from,
                     float to = 0.f,

@@ -7,6 +7,8 @@
 #include <cstdint>  // for uint8_t
 #include <string>   // for string
 
+#include "ftxui/util/export.hpp"
+
 #ifdef RGB
 // Workaround for wingdi.h (via Windows.h) defining macros that break things.
 // https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-rgb
@@ -19,7 +21,7 @@ namespace ftxui {
 /// interface.
 ///
 /// @ingroup screen
-class Color {
+class FTXUI_EXPORT(SCREEN) Color {
  public:
   enum Palette1 : uint8_t;
   enum Palette16 : uint8_t;
@@ -339,7 +341,7 @@ inline namespace literals {
 
 /// @brief Creates a color from a combined hex RGB representation,
 /// e.g. 0x808000_rgb
-Color operator""_rgb(unsigned long long int combined);
+FTXUI_EXPORT(SCREEN) Color operator""_rgb(unsigned long long int combined);
 
 }  // namespace literals
 

@@ -10,6 +10,7 @@
 #include <sstream>
 #include "ftxui/screen/box.hpp"   // for Box
 #include "ftxui/screen/cell.hpp"  // for Cell
+#include "ftxui/util/export.hpp"  // for FTXUI_EXPORT
 
 namespace ftxui {
 
@@ -19,7 +20,7 @@ namespace ftxui {
 /// terminal user interface.
 ///
 /// @ingroup dom
-class Selection {
+class FTXUI_EXPORT(DOM) Selection {
  public:
   Selection();  // Empty selection.
   Selection(int start_x, int start_y, int end_x, int end_y);

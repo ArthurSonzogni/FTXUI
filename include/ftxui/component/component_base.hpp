@@ -9,6 +9,7 @@
 
 #include "ftxui/component/captured_mouse.hpp"  // for CaptureMouse
 #include "ftxui/dom/elements.hpp"              // for Element
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -27,7 +28,7 @@ using Components = std::vector<Component>;
 /// @brief It implement rendering itself as ftxui::Element. It implement
 /// keyboard navigation by responding to ftxui::Event.
 /// @ingroup component
-class ComponentBase {
+class FTXUI_EXPORT(COMPONENT) ComponentBase {
  public:
   explicit ComponentBase(Components children)
       : children_(std::move(children)) {}

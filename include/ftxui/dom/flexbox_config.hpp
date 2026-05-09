@@ -4,6 +4,8 @@
 #ifndef FTXUI_DOM_FLEXBOX_CONFIG_HPP
 #define FTXUI_DOM_FLEXBOX_CONFIG_HPP
 
+#include "ftxui/util/export.hpp"  // for FTXUI_EXPORT
+
 /*
   This replicate the CSS flexbox model.
   See guide for documentation:
@@ -24,7 +26,7 @@ namespace ftxui {
 /// containers in a terminal user interface.
 ///
 /// @ingroup dom
-struct FlexboxConfig {
+struct FTXUI_EXPORT(DOM) FlexboxConfig {
   /// This establishes the main-axis, thus defining the direction flex items are
   /// placed in the flex container. Flexbox is (aside wrapping) single-direction
   /// layout concept. Think of flex items as primarily laying out either in

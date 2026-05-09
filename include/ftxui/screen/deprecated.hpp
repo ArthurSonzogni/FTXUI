@@ -6,9 +6,11 @@
 
 #include <string>
 
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
-int wchar_width(wchar_t);
-int wstring_width(const std::wstring&);
+FTXUI_EXPORT(SCREEN) int wchar_width(wchar_t);
+FTXUI_EXPORT(SCREEN) int wstring_width(const std::wstring&);
 }  // namespace ftxui
 
 #endif  // FTXUI_SCREEN_DEPRECATED_HPP

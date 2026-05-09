@@ -4,6 +4,8 @@
 #ifndef FTXUI_SCREEN_BOX_HPP
 #define FTXUI_SCREEN_BOX_HPP
 
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
 /// @brief Box is a structure that represents a rectangular area in a 2D space.
@@ -13,7 +15,7 @@ namespace ftxui {
 /// the minimum and maximum values.
 ///
 /// @ingroup screen
-struct Box {
+struct FTXUI_EXPORT(SCREEN) Box {
   int x_min = 0;
   int x_max = 0;
   int y_min = 0;

@@ -10,6 +10,8 @@
 #include <string_view>
 #include <vector>
 
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
 class App;
@@ -29,7 +31,7 @@ class ComponentBase;
 /// https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 ///
 /// @ingroup component
-struct Event {
+struct FTXUI_EXPORT(COMPONENT) Event {
   // --- Constructor section ---------------------------------------------------
   static Event Character(std::string_view);
   static Event Character(char);

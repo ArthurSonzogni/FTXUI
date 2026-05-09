@@ -16,6 +16,7 @@
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/color.hpp"
 #include "ftxui/screen/terminal.hpp"
+#include "ftxui/util/export.hpp"
 #include "ftxui/util/ref.hpp"
 
 namespace ftxui {
@@ -46,159 +47,163 @@ enum BorderStyle {
 // For instance the next lines are equivalents:
 // -> text("ftxui") | bold | underlined
 // -> underlined(bold(text("FTXUI")))
-Element operator|(Element, Decorator);
-Element& operator|=(Element&, Decorator);
-Elements operator|(Elements, Decorator);
-Decorator operator|(Decorator, Decorator);
+FTXUI_EXPORT(DOM) Element operator|(Element, Decorator);
+FTXUI_EXPORT(DOM) Element& operator|=(Element&, Decorator);
+FTXUI_EXPORT(DOM) Elements operator|(Elements, Decorator);
+FTXUI_EXPORT(DOM) Decorator operator|(Decorator, Decorator);
 
 // --- Widget ---
-Element text(std::string_view text);
-Element vtext(std::string_view text);
-Element separator();
-Element separatorLight();
-Element separatorDashed();
-Element separatorHeavy();
-Element separatorDouble();
-Element separatorEmpty();
-Element separatorStyled(BorderStyle);
-Element separator(Cell);
-Element separatorCharacter(std::string_view);
+FTXUI_EXPORT(DOM) Element text(std::string_view text);
+FTXUI_EXPORT(DOM) Element vtext(std::string_view text);
+FTXUI_EXPORT(DOM) Element separator();
+FTXUI_EXPORT(DOM) Element separatorLight();
+FTXUI_EXPORT(DOM) Element separatorDashed();
+FTXUI_EXPORT(DOM) Element separatorHeavy();
+FTXUI_EXPORT(DOM) Element separatorDouble();
+FTXUI_EXPORT(DOM) Element separatorEmpty();
+FTXUI_EXPORT(DOM) Element separatorStyled(BorderStyle);
+FTXUI_EXPORT(DOM) Element separator(Cell);
+FTXUI_EXPORT(DOM) Element separatorCharacter(std::string_view);
+FTXUI_EXPORT(DOM)
 Element separatorHSelector(float left,
                            float right,
                            Color unselected_color,
                            Color selected_color);
+FTXUI_EXPORT(DOM)
 Element separatorVSelector(float up,
                            float down,
                            Color unselected_color,
                            Color selected_color);
-Element gauge(float progress);
-Element gaugeLeft(float progress);
-Element gaugeRight(float progress);
-Element gaugeUp(float progress);
-Element gaugeDown(float progress);
-Element gaugeDirection(float progress, Direction direction);
-Element border(Element);
-Element borderLight(Element);
-Element borderDashed(Element);
-Element borderHeavy(Element);
-Element borderDouble(Element);
-Element borderRounded(Element);
-Element borderEmpty(Element);
-Decorator borderStyled(BorderStyle);
-Decorator borderStyled(BorderStyle, Color);
-Decorator borderStyled(Color);
-Decorator borderWith(const Cell&);
+FTXUI_EXPORT(DOM) Element gauge(float progress);
+FTXUI_EXPORT(DOM) Element gaugeLeft(float progress);
+FTXUI_EXPORT(DOM) Element gaugeRight(float progress);
+FTXUI_EXPORT(DOM) Element gaugeUp(float progress);
+FTXUI_EXPORT(DOM) Element gaugeDown(float progress);
+FTXUI_EXPORT(DOM) Element gaugeDirection(float progress, Direction direction);
+FTXUI_EXPORT(DOM) Element border(Element);
+FTXUI_EXPORT(DOM) Element borderLight(Element);
+FTXUI_EXPORT(DOM) Element borderDashed(Element);
+FTXUI_EXPORT(DOM) Element borderHeavy(Element);
+FTXUI_EXPORT(DOM) Element borderDouble(Element);
+FTXUI_EXPORT(DOM) Element borderRounded(Element);
+FTXUI_EXPORT(DOM) Element borderEmpty(Element);
+FTXUI_EXPORT(DOM) Decorator borderStyled(BorderStyle);
+FTXUI_EXPORT(DOM) Decorator borderStyled(BorderStyle, Color);
+FTXUI_EXPORT(DOM) Decorator borderStyled(Color);
+FTXUI_EXPORT(DOM) Decorator borderWith(const Cell&);
+FTXUI_EXPORT(DOM)
 Element window(Element title, Element content, BorderStyle border = ROUNDED);
-Element spinner(int charset_index, size_t image_index);
-Element paragraph(std::string_view text);
-Element paragraphAlignLeft(std::string_view text);
-Element paragraphAlignRight(std::string_view text);
-Element paragraphAlignCenter(std::string_view text);
-Element paragraphAlignJustify(std::string_view text);
-Element graph(GraphFunction);
-Element emptyElement();
-Element canvas(ConstRef<Canvas>);
+FTXUI_EXPORT(DOM) Element spinner(int charset_index, size_t image_index);
+FTXUI_EXPORT(DOM) Element paragraph(std::string_view text);
+FTXUI_EXPORT(DOM) Element paragraphAlignLeft(std::string_view text);
+FTXUI_EXPORT(DOM) Element paragraphAlignRight(std::string_view text);
+FTXUI_EXPORT(DOM) Element paragraphAlignCenter(std::string_view text);
+FTXUI_EXPORT(DOM) Element paragraphAlignJustify(std::string_view text);
+FTXUI_EXPORT(DOM) Element graph(GraphFunction);
+FTXUI_EXPORT(DOM) Element emptyElement();
+FTXUI_EXPORT(DOM) Element canvas(ConstRef<Canvas>);
+FTXUI_EXPORT(DOM)
 Element canvas(int width, int height, std::function<void(Canvas&)>);
-Element canvas(std::function<void(Canvas&)>);
+FTXUI_EXPORT(DOM) Element canvas(std::function<void(Canvas&)>);
 
 // -- Decorator ---
-Element bold(Element);
-Element dim(Element);
-Element italic(Element);
-Element inverted(Element);
-Element underlined(Element);
-Element underlinedDouble(Element);
-Element blink(Element);
-Element strikethrough(Element);
-Decorator color(Color);
-Decorator bgcolor(Color);
-Decorator color(const LinearGradient&);
-Decorator bgcolor(const LinearGradient&);
-Element color(Color, Element);
-Element bgcolor(Color, Element);
-Element color(const LinearGradient&, Element);
-Element bgcolor(const LinearGradient&, Element);
-Decorator focusPosition(int x, int y);
-Decorator focusPositionRelative(float x, float y);
-Element automerge(Element child);
-Decorator hyperlink(std::string_view link);
-Element hyperlink(std::string_view link, Element child);
-Element selectionStyleReset(Element);
-Decorator selectionColor(Color foreground);
-Decorator selectionBackgroundColor(Color foreground);
-Decorator selectionForegroundColor(Color foreground);
-Decorator selectionStyle(std::function<void(Cell&)> style);
+FTXUI_EXPORT(DOM) Element bold(Element);
+FTXUI_EXPORT(DOM) Element dim(Element);
+FTXUI_EXPORT(DOM) Element italic(Element);
+FTXUI_EXPORT(DOM) Element inverted(Element);
+FTXUI_EXPORT(DOM) Element underlined(Element);
+FTXUI_EXPORT(DOM) Element underlinedDouble(Element);
+FTXUI_EXPORT(DOM) Element blink(Element);
+FTXUI_EXPORT(DOM) Element strikethrough(Element);
+FTXUI_EXPORT(DOM) Decorator color(Color);
+FTXUI_EXPORT(DOM) Decorator bgcolor(Color);
+FTXUI_EXPORT(DOM) Decorator color(const LinearGradient&);
+FTXUI_EXPORT(DOM) Decorator bgcolor(const LinearGradient&);
+FTXUI_EXPORT(DOM) Element color(Color, Element);
+FTXUI_EXPORT(DOM) Element bgcolor(Color, Element);
+FTXUI_EXPORT(DOM) Element color(const LinearGradient&, Element);
+FTXUI_EXPORT(DOM) Element bgcolor(const LinearGradient&, Element);
+FTXUI_EXPORT(DOM) Decorator focusPosition(int x, int y);
+FTXUI_EXPORT(DOM) Decorator focusPositionRelative(float x, float y);
+FTXUI_EXPORT(DOM) Element automerge(Element child);
+FTXUI_EXPORT(DOM) Decorator hyperlink(std::string_view link);
+FTXUI_EXPORT(DOM) Element hyperlink(std::string_view link, Element child);
+FTXUI_EXPORT(DOM) Element selectionStyleReset(Element);
+FTXUI_EXPORT(DOM) Decorator selectionColor(Color foreground);
+FTXUI_EXPORT(DOM) Decorator selectionBackgroundColor(Color foreground);
+FTXUI_EXPORT(DOM) Decorator selectionForegroundColor(Color foreground);
+FTXUI_EXPORT(DOM) Decorator selectionStyle(std::function<void(Cell&)> style);
 
 // --- Layout is
 // Horizontal, Vertical or stacked set of elements.
-Element hbox(Elements);
-Element vbox(Elements);
-Element dbox(Elements);
-Element flexbox(Elements, FlexboxConfig config = FlexboxConfig());
-Element gridbox(std::vector<Elements> lines);
+FTXUI_EXPORT(DOM) Element hbox(Elements);
+FTXUI_EXPORT(DOM) Element vbox(Elements);
+FTXUI_EXPORT(DOM) Element dbox(Elements);
+FTXUI_EXPORT(DOM) Element flexbox(Elements, FlexboxConfig config = FlexboxConfig());
+FTXUI_EXPORT(DOM) Element gridbox(std::vector<Elements> lines);
 
-Element hflow(Elements);  // Helper: default flexbox with row direction.
-Element vflow(Elements);  // Helper: default flexbox with column direction.
+FTXUI_EXPORT(DOM) Element hflow(Elements);  // Helper: default flexbox with row direction.
+FTXUI_EXPORT(DOM) Element vflow(Elements);  // Helper: default flexbox with column direction.
 
 // -- Flexibility ---
 // Define how to share the remaining space when not all of it is used inside a
 // container.
-Element flex(Element);         // Expand/Minimize if possible/needed.
-Element flex_grow(Element);    // Expand element if possible.
-Element flex_shrink(Element);  // Minimize element if needed.
+FTXUI_EXPORT(DOM) Element flex(Element);         // Expand/Minimize if possible/needed.
+FTXUI_EXPORT(DOM) Element flex_grow(Element);    // Expand element if possible.
+FTXUI_EXPORT(DOM) Element flex_shrink(Element);  // Minimize element if needed.
 
-Element xflex(Element);         // Expand/Minimize if possible/needed on X axis.
-Element xflex_grow(Element);    // Expand element if possible on X axis.
-Element xflex_shrink(Element);  // Minimize element if needed on X axis.
+FTXUI_EXPORT(DOM) Element xflex(Element);         // Expand/Minimize if possible/needed on X axis.
+FTXUI_EXPORT(DOM) Element xflex_grow(Element);    // Expand element if possible on X axis.
+FTXUI_EXPORT(DOM) Element xflex_shrink(Element);  // Minimize element if needed on X axis.
 
-Element yflex(Element);         // Expand/Minimize if possible/needed on Y axis.
-Element yflex_grow(Element);    // Expand element if possible on Y axis.
-Element yflex_shrink(Element);  // Minimize element if needed on Y axis.
+FTXUI_EXPORT(DOM) Element yflex(Element);         // Expand/Minimize if possible/needed on Y axis.
+FTXUI_EXPORT(DOM) Element yflex_grow(Element);    // Expand element if possible on Y axis.
+FTXUI_EXPORT(DOM) Element yflex_shrink(Element);  // Minimize element if needed on Y axis.
 
-Element notflex(Element);  // Reset the flex attribute.
-Element filler();          // A blank expandable element.
+FTXUI_EXPORT(DOM) Element notflex(Element);  // Reset the flex attribute.
+FTXUI_EXPORT(DOM) Element filler();          // A blank expandable element.
 
 // -- Size override;
 enum WidthOrHeight { WIDTH, HEIGHT };
 enum Constraint { LESS_THAN, EQUAL, GREATER_THAN };
-Decorator size(WidthOrHeight, Constraint, int value);
+FTXUI_EXPORT(DOM) Decorator size(WidthOrHeight, Constraint, int value);
 
 // --- Frame ---
 // A frame is a scrollable area. The internal area is potentially larger than
 // the external one. The internal area is scrolled in order to make visible the
 // focused element.
-Element frame(Element);
-Element xframe(Element);
-Element yframe(Element);
-Element focus(Element);
-Element select(Element e);  // Deprecated - Alias for focus.
+FTXUI_EXPORT(DOM) Element frame(Element);
+FTXUI_EXPORT(DOM) Element xframe(Element);
+FTXUI_EXPORT(DOM) Element yframe(Element);
+FTXUI_EXPORT(DOM) Element focus(Element);
+FTXUI_EXPORT(DOM) Element select(Element e);  // Deprecated - Alias for focus.
 
 // --- Cursor ---
 // Those are similar to `focus`, but also change the shape of the cursor.
-Element focusCursorBlock(Element);
-Element focusCursorBlockBlinking(Element);
-Element focusCursorBar(Element);
-Element focusCursorBarBlinking(Element);
-Element focusCursorUnderline(Element);
-Element focusCursorUnderlineBlinking(Element);
+FTXUI_EXPORT(DOM) Element focusCursorBlock(Element);
+FTXUI_EXPORT(DOM) Element focusCursorBlockBlinking(Element);
+FTXUI_EXPORT(DOM) Element focusCursorBar(Element);
+FTXUI_EXPORT(DOM) Element focusCursorBarBlinking(Element);
+FTXUI_EXPORT(DOM) Element focusCursorUnderline(Element);
+FTXUI_EXPORT(DOM) Element focusCursorUnderlineBlinking(Element);
 
 // --- Misc ---
-Element vscroll_indicator(Element);
-Element hscroll_indicator(Element);
-Decorator reflect(Box& box);
+FTXUI_EXPORT(DOM) Element vscroll_indicator(Element);
+FTXUI_EXPORT(DOM) Element hscroll_indicator(Element);
+FTXUI_EXPORT(DOM) Decorator reflect(Box& box);
 // Before drawing the |element| clear the pixel below. This is useful in
 // combination with dbox.
-Element clear_under(Element element);
+FTXUI_EXPORT(DOM) Element clear_under(Element element);
 
 // --- Util --------------------------------------------------------------------
-Element hcenter(Element);
-Element vcenter(Element);
-Element center(Element);
-Element align_right(Element);
-Element nothing(Element element);
+FTXUI_EXPORT(DOM) Element hcenter(Element);
+FTXUI_EXPORT(DOM) Element vcenter(Element);
+FTXUI_EXPORT(DOM) Element center(Element);
+FTXUI_EXPORT(DOM) Element align_right(Element);
+FTXUI_EXPORT(DOM) Element nothing(Element element);
 
 namespace Dimension {
-Dimensions Fit(Element&, bool extend_beyond_screen = false);
+FTXUI_EXPORT(DOM) Dimensions Fit(Element&, bool extend_beyond_screen = false);
 }  // namespace Dimension
 
 }  // namespace ftxui

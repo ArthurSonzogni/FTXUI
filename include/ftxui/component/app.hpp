@@ -16,6 +16,7 @@
 #include "ftxui/component/task.hpp"   // for Task, Closure
 #include "ftxui/screen/screen.hpp"    // for Screen
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 class ComponentBase;
@@ -31,7 +32,7 @@ class TaskRunner;
 /// @note This class was previously named ScreenInteractive.
 ///
 /// @ingroup component
-class App : public Screen {
+class FTXUI_EXPORT(COMPONENT) App : public Screen {
  public:
   // Constructors:
 

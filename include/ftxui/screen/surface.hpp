@@ -9,6 +9,7 @@
 
 #include "ftxui/screen/box.hpp"   // for Box
 #include "ftxui/screen/cell.hpp"  // for Cell
+#include "ftxui/util/export.hpp"  // for FTXUI_EXPORT
 
 namespace ftxui {
 
@@ -17,7 +18,7 @@ namespace ftxui {
 /// @note This class was previously named Image.
 ///
 /// @ingroup screen
-class Surface {
+class FTXUI_EXPORT(SCREEN) Surface {
  public:
   // Constructors:
   Surface() = delete;

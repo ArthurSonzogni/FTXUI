@@ -8,18 +8,20 @@
 #include <string_view>
 #include <vector>
 
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
 /// @brief Dimensions is a structure that represents the size of the terminal
 /// @ingroup screen
-struct Dimensions {
+struct FTXUI_EXPORT(SCREEN) Dimensions {
   int dimx;
   int dimy;
 };
 
 namespace Terminal {
-Dimensions Size();
-void SetFallbackSize(const Dimensions& fallbackSize);
+FTXUI_EXPORT(SCREEN) Dimensions Size();
+FTXUI_EXPORT(SCREEN) void SetFallbackSize(const Dimensions& fallbackSize);
 
 /// @brief Color is an enumeration that represents the color support of the
 /// terminal.
@@ -30,13 +32,13 @@ enum Color {
   Palette256,
   TrueColor,
 };
-Color ColorSupport();
-void SetColorSupport(Color color);
+FTXUI_EXPORT(SCREEN) Color ColorSupport();
+FTXUI_EXPORT(SCREEN) void SetColorSupport(Color color);
 
 /// @brief Quirks is a structure that represents various terminal-specific
 /// behaviors that may require fallbacks.
 /// @ingroup screen
-class Quirks {
+class FTXUI_EXPORT(SCREEN) Quirks {
  public:
   Quirks();
   ~Quirks();
@@ -65,13 +67,13 @@ class Quirks {
   struct Impl;
   std::unique_ptr<Impl> impl_;
 };
-Quirks GetQuirks();
-void SetQuirks(const Quirks& quirks);
+FTXUI_EXPORT(SCREEN) Quirks GetQuirks();
+FTXUI_EXPORT(SCREEN) void SetQuirks(const Quirks& quirks);
 
 /// @brief TerminalInfo is a structure that contains information about the
 /// terminal.
 /// @ingroup screen
-class TerminalInfo {
+class FTXUI_EXPORT(SCREEN) TerminalInfo {
  public:
   TerminalInfo();
   ~TerminalInfo();
@@ -102,6 +104,7 @@ class TerminalInfo {
 /// @param terminal_name The terminal name (from DA2).
 /// @param terminal_emulator_name The terminal emulator name (from XTVERSION).
 /// @param capabilities The terminal capabilities (from DA1).
+FTXUI_EXPORT(SCREEN)
 Color ComputeColorSupport(std::string_view term,
                           std::string_view colorterm,
                           std::string_view term_program,

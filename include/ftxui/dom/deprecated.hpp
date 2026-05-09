@@ -5,11 +5,12 @@
 #define FTXUI_DOM_DEPRECATED_HPP
 
 #include <ftxui/dom/node.hpp>
+#include <ftxui/util/export.hpp>
 #include <string>
 
 namespace ftxui {
-Element text(std::wstring_view text);
-Element vtext(std::wstring_view text);
+FTXUI_EXPORT(DOM) Element text(std::wstring_view text);
+FTXUI_EXPORT(DOM) Element vtext(std::wstring_view text);
 }  // namespace ftxui
 
 #endif  // FTXUI_DOM_DEPRECATED_HPP
