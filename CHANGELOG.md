@@ -10,6 +10,14 @@ Next
 - Break the documentation into several pages.
 
 ### Build
+- Feature: Support umbrella header and target.
+  Usage:
+  ```cpp
+  #include <ftxui/ftxui.hpp>
+  ```
+  CMake: `target_link_libraries(your_target PRIVATE ftxui::ftxui)`
+  Bazel: `deps = ["@ftxui//:ftxui"]`
+  See #1252.
 - Feature: Support C++20 modules. 
   This requires:
   - Using the Ninja or MSVC generator

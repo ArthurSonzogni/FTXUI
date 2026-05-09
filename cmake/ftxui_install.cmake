@@ -9,7 +9,7 @@ include(CMakePackageConfigHelpers)
 # Install the library and its public headers into the standard subdirectories
 # ------------------------------------------------------------------------------
 install(
-  TARGETS screen dom component
+  TARGETS screen dom component ftxui
   EXPORT ftxui-targets
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"

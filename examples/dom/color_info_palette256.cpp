@@ -11,7 +11,6 @@
 #include "ftxui/screen/color.hpp"  // for Color, Color::Palette256, ftxui
 
 using namespace ftxui;
-#include "./color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 
 int main() {
   std::vector<std::vector<ColorInfo>> info_columns = ColorInfoSorted2D();

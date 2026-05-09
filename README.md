@@ -76,6 +76,11 @@ A simple cross-platform C++ library for terminal based user interfaces!
 
 ## Example
 ~~~cpp
+#include <ftxui/ftxui.hpp>
+using namespace ftxui;
+
+int main() {
+  auto document =
     vbox({
       hbox({
         text("one") | border,
@@ -87,11 +92,28 @@ A simple cross-platform C++ library for terminal based user interfaces!
       gauge(0.50) | color(Color::White),
       gauge(0.75) | color(Color::Blue),
     });
+
+  auto screen = Screen::Create(Dimension::Full());
+  Render(screen, document);
+  screen.Print();
+
+  return 0;
+}
 ~~~
 
 ![image](https://github.com/ArthurSonzogni/FTXUI/assets/4759106/569bf043-4e85-4245-aad5-2324572135c4)
 
 ## Short gallery
+
+FTXUI is organized into three modules:
+1.  **screen**: Low-level rendering (colors, pixels, terminal)
+2.  **dom**: Layout and composition (hierarchical elements)
+3.  **component**: User interaction (widgets, events, main loop)
+
+For most users, including everything at once is the simplest way to start:
+- Header: `#include <ftxui/ftxui.hpp>`
+- CMake target: `ftxui::ftxui`
+- Bazel target: `@ftxui//:ftxui`
 
 #### DOM
 
@@ -409,10 +431,13 @@ FetchContent_Declare(ftxui
 FetchContent_MakeAvailable(ftxui)
 
 target_link_libraries(your_target PRIVATE
-    # Chose a submodule
-    ftxui::component
-    ftxui::dom
-    ftxui::screen
+    # Use the umbrella target (recommended)
+    ftxui::ftxui
+
+    # Or chose a submodule
+    # ftxui::component
+    # ftxui::dom
+    # ftxui::screen
 )
 ```
 

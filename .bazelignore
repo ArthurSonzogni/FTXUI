@@ -3,3 +3,13 @@ iwyu
 bazel/test
 build_asan
 build_emscripten
+build_main
+build_release
+build_release_main
+build_modules
+build_umbrella
+build_config.log
+build_make.log
+build_modules_config.log
+build_modules_gen.log
+build_modules_make.log

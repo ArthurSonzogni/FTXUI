@@ -12,10 +12,10 @@
 #include <string>  // for string, basic_string, char_traits, operator+, to_string
 #include <thread>   // for sleep_for, thread
 #include <utility>  // for move
-#include <vector>   // for vector
+#include <vector>
 
-#include "../dom/color_info_sorted_2d.ipp"  // for ColorInfoSorted2D
 #include "ftxui/component/app.hpp"          // for Component, App
+
 #include "ftxui/component/component.hpp"  // for Checkbox, Renderer, Horizontal, Vertical, Input, Menu, Radiobox, ResizableSplitLeft, Tab
 #include "ftxui/component/component_base.hpp"  // for ComponentBase, Component
 #include "ftxui/component/component_options.hpp"  // for MenuOption, InputOption

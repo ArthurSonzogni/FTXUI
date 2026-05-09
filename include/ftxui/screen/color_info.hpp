@@ -5,6 +5,8 @@
 #define FTXUI_SCREEN_COLOR_INFO_HPP
 
 #include <cstdint>
+#include <vector>
+
 #include <ftxui/screen/color.hpp>
 
 namespace ftxui {
@@ -27,6 +29,11 @@ struct ColorInfo {
 
 ColorInfo GetColorInfo(Color::Palette256 index);
 ColorInfo GetColorInfo(Color::Palette16 index);
+
+/// @brief Get the color information for the palette256, sorted in 2D.
+/// @return A 2D vector of ColorInfo.
+/// @ingroup screen
+std::vector<std::vector<ColorInfo>> ColorInfoSorted2D();
 
 }  // namespace ftxui
 

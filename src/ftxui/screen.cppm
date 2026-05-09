@@ -34,6 +34,7 @@ export namespace ftxui {
 
     using ftxui::CellToGlyphIndex;
     using ftxui::GetColorInfo;
+    using ftxui::ColorInfoSorted2D;
     using ftxui::Utf8ToGlyphs;
     using ftxui::string_width;
     using ftxui::to_string;

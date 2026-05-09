@@ -42,8 +42,10 @@ class ConstRef {
   std::variant<T, const T*> variant_ = T{};
 
   const T* Address() const {
-    return std::holds_alternative<T>(variant_) ? &std::get<T>(variant_)
-                                               : std::get<const T*>(variant_);
+    if (const T* t = std::get_if<T>(&variant_)) {
+      return t;
+    }
+    return std::get<const T*>(variant_);
   }
 };
 
@@ -81,12 +83,16 @@ class Ref {
   std::variant<T, T*> variant_ = T{};
 
   const T* Address() const {
-    return std::holds_alternative<T>(variant_) ? &std::get<T>(variant_)
-                                               : std::get<T*>(variant_);
+    if (const T* t = std::get_if<T>(&variant_)) {
+      return t;
+    }
+    return std::get<T*>(variant_);
   }
   T* Address() {
-    return std::holds_alternative<T>(variant_) ? &std::get<T>(variant_)
-                                               : std::get<T*>(variant_);
+    if (T* t = std::get_if<T>(&variant_)) {
+      return t;
+    }
+    return std::get<T*>(variant_);
   }
 };
 

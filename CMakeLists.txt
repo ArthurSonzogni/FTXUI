@@ -102,6 +102,7 @@ add_library(dom
 )
 
 add_library(component
+  include/ftxui/ftxui.hpp
   include/ftxui/component/animation.hpp
   include/ftxui/component/app.hpp
   include/ftxui/component/captured_mouse.hpp
@@ -149,6 +150,10 @@ add_library(component
 target_link_libraries(dom PUBLIC screen)
 target_link_libraries(component PUBLIC dom)
 
+add_library(ftxui INTERFACE)
+target_link_libraries(ftxui INTERFACE component)
+add_library(ftxui::ftxui ALIAS ftxui)
+
 include(cmake/ftxui_set_options.cmake)
 ftxui_set_options(screen)
 ftxui_set_options(dom)
@@ -175,4 +180,8 @@ add_subdirectory(doc)
 # ./tools/generate_examples_modules.sh
 if(FTXUI_BUILD_MODULES AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples_modules/CMakeLists.txt")
   add_subdirectory(examples_modules)
+endif()
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples_ftxui_hpp/CMakeLists.txt")
+  add_subdirectory(examples_ftxui_hpp)
 endif()
