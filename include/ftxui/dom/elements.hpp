@@ -191,6 +191,7 @@ FTXUI_EXPORT(DOM) Element focusCursorUnderlineBlinking(Element);
 FTXUI_EXPORT(DOM) Element vscroll_indicator(Element);
 FTXUI_EXPORT(DOM) Element hscroll_indicator(Element);
 FTXUI_EXPORT(DOM) Decorator reflect(Box& box);
+FTXUI_EXPORT(DOM) Decorator reflect(std::function<void(Box)> callback);
 // Before drawing the |element| clear the pixel below. This is useful in
 // combination with dbox.
 FTXUI_EXPORT(DOM) Element clear_under(Element element);
