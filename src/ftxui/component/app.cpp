@@ -1040,16 +1040,16 @@ void App::Internal::InstallTerminalInfo() {
   // on exit.
   if (is_stdout_a_tty_) {
     TerminalSend(DECRQSS_DECSCUSR);
-    TerminalSend("\033[c");   // DA1
-    TerminalSend("\033[>c");  // DA2
     TerminalSend("\033[>q");  // XTVERSION
+    TerminalSend("\033[>c");  // DA2
+    TerminalSend("\033[c");   // DA1
     TerminalFlush();
   }
 
   // Wait for the cursor shape reply using the setup head.
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
     auto start = std::chrono::steady_clock::now();
-    bool xtversion_received = false;
+    bool terminal_capabilities_received = false;
     // Wait for the cursor shape reply using the setup head.
     while (true) {
       FetchTerminalEvents();
@@ -1061,6 +1061,7 @@ void App::Internal::InstallTerminalInfo() {
 
         if (event.IsTerminalCapabilities()) {
           terminal_capabilities_ = event.TerminalCapabilities();
+          terminal_capabilities_received = true;
         }
 
         if (event.IsTerminalNameVersion()) {
@@ -1071,14 +1072,13 @@ void App::Internal::InstallTerminalInfo() {
         if (event.IsTerminalEmulator()) {
           terminal_emulator_name_ = event.TerminalEmulatorName();
           terminal_emulator_version_ = event.TerminalEmulatorVersion();
-          xtversion_received = true;
         }
       }
 
       // Response are expected to be received in order, so we can break when
       // the last one (XTVERSION) is received. We also set a timeout to prevent
       // waiting forever in case the terminal doesn't support these queries.
-      if (xtversion_received) {
+      if (terminal_capabilities_received) {
         break;
       }
 
