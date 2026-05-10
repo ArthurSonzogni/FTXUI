@@ -3,12 +3,15 @@
 // the LICENSE file.
 #ifndef FTXUI_COMPONENT_MOUSE_HPP
 #define FTXUI_COMPONENT_MOUSE_HPP
+
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
 /// @brief A mouse event. It contains the coordinate of the mouse, the button
 /// pressed and the modifier (shift, ctrl, meta).
 /// @ingroup component
-struct Mouse {
+struct FTXUI_EXPORT(COMPONENT) Mouse {
   enum Button {
     Left = 0,
     Middle = 1,

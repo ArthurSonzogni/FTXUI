@@ -11,19 +11,20 @@
 
 #include "ftxui/screen/surface.hpp"   // for Surface
 #include "ftxui/screen/terminal.hpp"  // for Dimensions
+#include "ftxui/util/export.hpp"      // for FTXUI_EXPORT
 
 namespace ftxui {
 
 /// @brief Define how the Screen's dimensions should look like.
 /// @ingroup screen
 namespace Dimension {
-Dimensions Fixed(int);
-Dimensions Full();
+FTXUI_EXPORT(SCREEN) Dimensions Fixed(int);
+FTXUI_EXPORT(SCREEN) Dimensions Full();
 }  // namespace Dimension
 
 /// @brief A rectangular grid of Cell.
 /// @ingroup screen
-class Screen : public Surface {
+class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:
   // Constructors:
   Screen(int dimx, int dimy);

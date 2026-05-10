@@ -284,7 +284,7 @@ std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
   std::vector<ColorInfo> info_gray;
   std::vector<ColorInfo> info_color;
   for (int i = 16; i < 256; ++i) {
-    ColorInfo info = GetColorInfo(Color::Palette256(i));
+    const ColorInfo info = GetColorInfo(Color::Palette256(i));
     if (info.saturation == 0) {
       info_gray.push_back(info);
     } else {
@@ -314,10 +314,10 @@ std::vector<std::vector<ColorInfo>> ColorInfoSorted2D() {
       int best_index = i + 1;
       int best_distance = 255 * 255 * 3;
       for (size_t j = i + 1; j < column.size(); ++j) {
-        int dx = (int)column[i].red - (int)column[j].red;
-        int dy = (int)column[i].green - (int)column[j].green;
-        int dz = (int)column[i].blue - (int)column[j].blue;
-        int distance = dx * dx + dy * dy + dz * dz;
+        const int dx = (int)column[i].red - (int)column[j].red;
+        const int dy = (int)column[i].green - (int)column[j].green;
+        const int dz = (int)column[i].blue - (int)column[j].blue;
+        const int distance = dx * dx + dy * dy + dz * dz;
         if (best_distance > distance) {
           best_distance = distance;
           best_index = (int)j;

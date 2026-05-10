@@ -6,6 +6,18 @@ function(ftxui_set_options library)
     set_target_properties(${library} PROPERTIES OUTPUT_NAME "ftxui-${library}")
   endif()
 
+  if (BUILD_SHARED_LIBS)
+    target_compile_definitions(${library} PUBLIC COMPONENT_BUILD)
+    set_target_properties(${library} PROPERTIES
+      CXX_VISIBILITY_PRESET hidden
+      VISIBILITY_INLINES_HIDDEN ON
+    )
+  endif()
+
+  string(TOUPPER ${library} LIBRARY_UPPER)
+  string(REPLACE "-" "_" LIBRARY_UPPER ${LIBRARY_UPPER})
+  target_compile_definitions(${library} PRIVATE IS_FTXUI_${LIBRARY_UPPER}_IMPL=1)
+
   if (FTXUI_CLANG_TIDY)
     if (NOT CLANG_TIDY_EXE)
       message(FATAL_ERROR "clang-tidy requested but executable not found")

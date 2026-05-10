@@ -11,6 +11,7 @@
 
 #include "ftxui/screen/color.hpp"    // for Color
 #include "ftxui/screen/surface.hpp"  // for Cell, Surface
+#include "ftxui/util/export.hpp"
 
 #ifdef DrawText
 // Workaround for WinUsr.h (via Windows.h) defining macros that break things.
@@ -35,7 +36,7 @@ namespace ftxui {
 /// get the correct position in the terminal.
 ///
 /// @ingroup dom
-struct Canvas {
+struct FTXUI_EXPORT(DOM) Canvas {
  public:
   Canvas() = default;
   Canvas(int width, int height);

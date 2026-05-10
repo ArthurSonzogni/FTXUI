@@ -11,6 +11,7 @@
 #include "ftxui/dom/selection.hpp"    // for Selection
 #include "ftxui/screen/box.hpp"       // for Box
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 
@@ -34,7 +35,7 @@ using Elements = std::vector<Element>;
 /// A list of builtin elements can be found in the `elements.hpp` file.
 ///
 /// @ingroup dom
-class Node {
+class FTXUI_EXPORT(DOM) Node {
  public:
   Node();
   explicit Node(Elements children);
@@ -81,9 +82,11 @@ class Node {
   Box box_;
 };
 
-void Render(Screen& screen, const Element& element);
-void Render(Screen& screen, Node* node);
+FTXUI_EXPORT(DOM) void Render(Screen& screen, const Element& element);
+FTXUI_EXPORT(DOM) void Render(Screen& screen, Node* node);
+FTXUI_EXPORT(DOM)
 void Render(Screen& screen, Node* node, Selection& selection);
+FTXUI_EXPORT(DOM)
 std::string GetNodeSelectedContent(Screen& screen,
                                    Node* node,
                                    Selection& selection);

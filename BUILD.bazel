@@ -59,6 +59,7 @@ ftxui_cc_library(
         "include/ftxui/screen/surface.hpp",
         "include/ftxui/screen/terminal.hpp",
         "include/ftxui/util/autoreset.hpp",
+        "include/ftxui/util/export.hpp",
         "include/ftxui/util/ref.hpp",
         "include/ftxui/util/warn_windows_macro.hpp",
     ],
@@ -130,6 +131,7 @@ ftxui_cc_library(
         "include/ftxui/dom/selection.hpp",
         "include/ftxui/dom/table.hpp",
         "include/ftxui/dom/take_any_args.hpp",
+        "include/ftxui/util/export.hpp",
         "include/ftxui/util/warn_windows_macro.hpp",
     ],
     deps = [":screen"],
@@ -199,6 +201,7 @@ ftxui_cc_library(
         "include/ftxui/component/receiver.hpp",
         "include/ftxui/component/screen_interactive.hpp",
         "include/ftxui/component/task.hpp",
+        "include/ftxui/util/export.hpp",
         "include/ftxui/util/warn_windows_macro.hpp",
     ],
     deps = [

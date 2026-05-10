@@ -7,6 +7,7 @@
 #include <memory>  // for shared_ptr
 
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
+#include "ftxui/util/export.hpp"               // for FTXUI_EXPORT
 
 namespace ftxui {
 class ComponentBase;
@@ -53,7 +54,7 @@ class App;
 /// ```
 ///
 /// @ingroup component
-class Loop {
+class FTXUI_EXPORT(COMPONENT) Loop {
  public:
   Loop(App* screen, Component component);
   ~Loop();

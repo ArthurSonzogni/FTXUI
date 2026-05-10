@@ -102,7 +102,7 @@ class Gauge : public Node {
       return;
     }
 
-    const auto* charset = Terminal::GetQuirks().BlockCharacters()
+    const auto* charset = Terminal::GetQuirks().BlockCharacters()  // NOLINT
                               ? charset_horizontal
                               : charset_horizontal_microsoft;
 
@@ -120,7 +120,7 @@ class Gauge : public Node {
       // NOLINTNEXTLINE
       screen.at(x++, y) = charset[int(9 * (limit - limit_int))];
       while (x <= box_.x_max) {
-        screen.at(x++, y) = charset[0];
+        screen.at(x++, y) = charset[0];  // NOLINT
       }
     }
 
@@ -148,7 +148,7 @@ class Gauge : public Node {
       // NOLINTNEXTLINE
       screen.at(x, y++) = charset_vertical[int(8 * (limit - limit_int))];
       while (y <= box_.y_max) {
-        screen.at(x, y++) = charset_vertical[0];
+        screen.at(x, y++) = charset_vertical[0];  // NOLINT
       }
     }
     if (invert) {

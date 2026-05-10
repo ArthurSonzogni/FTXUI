@@ -6,9 +6,11 @@
 
 #include <memory>
 
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 
-class CapturedMouseInterface {
+class FTXUI_EXPORT(COMPONENT) CapturedMouseInterface {
  public:
   CapturedMouseInterface() = default;
   CapturedMouseInterface(const CapturedMouseInterface&) = default;

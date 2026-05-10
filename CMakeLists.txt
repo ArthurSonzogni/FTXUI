@@ -36,6 +36,7 @@ add_library(screen
   include/ftxui/screen/screen.hpp
   include/ftxui/screen/string.hpp
   include/ftxui/screen/surface.hpp
+  include/ftxui/util/export.hpp
   src/ftxui/screen/box.cpp
   src/ftxui/screen/color.cpp
   src/ftxui/screen/color_info.cpp
@@ -55,6 +56,7 @@ add_library(dom
   include/ftxui/dom/requirement.hpp
   include/ftxui/dom/selection.hpp
   include/ftxui/dom/take_any_args.hpp
+  include/ftxui/util/export.hpp
   src/ftxui/dom/automerge.cpp
   src/ftxui/dom/selection_style.cpp
   src/ftxui/dom/blink.cpp
@@ -115,6 +117,7 @@ add_library(component
   include/ftxui/component/receiver.hpp
   include/ftxui/component/screen_interactive.hpp
   include/ftxui/component/task.hpp
+  include/ftxui/util/export.hpp
   src/ftxui/component/animation.cpp
   src/ftxui/component/button.cpp
   src/ftxui/component/catch_event.cpp

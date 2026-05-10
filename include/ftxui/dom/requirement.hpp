@@ -6,6 +6,7 @@
 
 #include "ftxui/screen/box.hpp"
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/util/export.hpp"
 
 namespace ftxui {
 class Node;
@@ -15,7 +16,7 @@ class Node;
 ///
 /// It specifies the minimum size required to fully draw the element,
 /// @ingroup dom
-struct Requirement {
+struct FTXUI_EXPORT(DOM) Requirement {
   // The required size to fully draw the element.
   int min_x = 0;
   int min_y = 0;
