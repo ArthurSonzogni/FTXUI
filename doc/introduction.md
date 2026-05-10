@@ -16,7 +16,7 @@
  * Support for [UTF8](https://en.wikipedia.org/wiki/UTF-8) and [fullwidth chars](https://en.wikipedia.org/wiki/Halfwidth_and_fullwidth_forms) (→ 测试)
  * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
  * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
- * Learn by [examples](#documentation), and [tutorials](#documentation)
+ * Learn by [installation](installation.html), and [getting started](getting-started.html) guide.
  * Multiple build system and packages: 
  * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
