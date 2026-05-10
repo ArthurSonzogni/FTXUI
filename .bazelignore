@@ -13,3 +13,4 @@ build_make.log
 build_modules_config.log
 build_modules_gen.log
 build_modules_make.log
+build_shared

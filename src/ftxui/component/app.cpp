@@ -47,9 +47,6 @@
 #endif
 #include <io.h>
 #include <windows.h>
-#ifndef UNICODE
-#error Must be compiled in UNICODE mode
-#endif
 #else
 #include <fcntl.h>
 #include <poll.h>

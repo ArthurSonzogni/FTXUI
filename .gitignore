@@ -64,6 +64,7 @@ out/
 !examples/**/*.mjs
 !examples/**/*.py
 !examples/**/*.txt
+!examples/**/Makefile
 
 # include directory:
 !include/ftxui/**/*.hpp

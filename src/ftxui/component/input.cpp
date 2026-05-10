@@ -27,7 +27,7 @@ namespace ftxui {
 
 namespace {
 
-std::vector<std::string> Split(const std::string& input) {
+std::vector<std::string> SplitLines(const std::string& input) {
   std::vector<std::string> output;
   std::stringstream ss(input);
   std::string line;
@@ -117,7 +117,7 @@ class InputBase : public ComponentBase, public InputOption {
     }
 
     Elements elements;
-    const std::vector<std::string> lines = Split(*content);
+    const std::vector<std::string> lines = SplitLines(*content);
 
     cursor_position() = util::clamp(cursor_position(), 0, (int)content->size());
 
@@ -494,7 +494,7 @@ class InputBase : public ComponentBase, public InputOption {
     }
 
     // Find the line and index of the cursor.
-    std::vector<std::string> lines = Split(*content);
+    std::vector<std::string> lines = SplitLines(*content);
     int cursor_line = 0;
     int cursor_char_index = cursor_position();
     for (const auto& line : lines) {

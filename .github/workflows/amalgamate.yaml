@@ -1,0 +1,92 @@
+name: Amalgamate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: "Amalgamate, ${{ matrix.compiler }}, ${{ matrix.os }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux GCC
+            os: ubuntu-latest
+            compiler: gcc
+            cxx: g++
+
+          - name: Linux Clang
+            os: ubuntu-latest
+            compiler: llvm
+            cxx: clang++
+
+          - name: MacOS clang
+            os: macos-latest
+            compiler: llvm
+            cxx: clang++
+
+          - name: Windows MSVC
+            os: windows-latest
+            compiler: cl
+            cxx: cl
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Setup Cpp"
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          cmake: true
+
+      - name: Amalgamate
+        run: python ./tools/amalgamate.py
+        
+      - name: Verify (Compile Split)
+        shell: bash
+        env:
+          MSYS_NO_PATHCONV: 1
+        run: |
+          cat <<EOF > test_split.cpp
+          #include "ftxui.hpp"
+          int main() { return 0; }
+          EOF
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            cl /std:c++17 test_split.cpp ftxui.cpp /I. /Fe:test_split /utf-8 /DUNICODE /D_UNICODE /DNOMINMAX
+          else
+            ${{ matrix.cxx }} -std=c++17 test_split.cpp ftxui.cpp -I. -o test_split -pthread
+          fi
+          
+      - name: Verify (Compile Header-Only)
+        shell: bash
+        env:
+          MSYS_NO_PATHCONV: 1
+        run: |
+          cat <<EOF > test_header_only.cpp
+          #define FTXUI_IMPLEMENTATION
+          #include "ftxui_all.hpp"
+          int main() { return 0; }
+          EOF
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            cl /std:c++17 test_header_only.cpp /I. /Fe:test_header_only /utf-8 /DUNICODE /D_UNICODE /DNOMINMAX
+          else
+            ${{ matrix.cxx }} -std=c++17 test_header_only.cpp -I. -o test_header_only -pthread
+          fi
+
+      - name: Upload Amalgamated Files
+        if: matrix.name == 'Linux GCC'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftxui-amalgamated
+          path: |
+            ftxui.hpp
+            ftxui.cpp
+            ftxui_all.hpp
+            LICENSE

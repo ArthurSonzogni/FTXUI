@@ -10,6 +10,12 @@ Next
 - Break the documentation into several pages.
 
 ### Build
+- Feature: Support amalgamated version.
+  This provides a single-header (`ftxui.hpp`) and single-source (`ftxui.cpp`)
+  version of the library, as well as a truly single-file header-only version
+  (`ftxui_all.hpp`).
+  This is the easiest way to vendor FTXUI into your project.
+  See #1252.
 - Feature: Support umbrella header and target.
   Usage:
   ```cpp

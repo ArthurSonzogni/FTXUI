@@ -21,11 +21,11 @@ namespace ftxui {
 
 namespace {
 // NOLINTNEXTLINE
-static const std::array<std::string, 9> charset = {" ", "▗", "▐", "▖", "▄",
+static const std::array<std::string, 9> graph_charset = {" ", "▗", "▐", "▖", "▄",
                                                    "▟", "▌", "▙", "█"};
 
 // NOLINTNEXTLINE
-static const std::array<std::string, 9> charset_microsoft = {
+static const std::array<std::string, 9> graph_charset_microsoft = {
     " ", " ", "█", " ", "█", "█", "█", "█", "█"};
 
 class Graph : public Node {
@@ -49,8 +49,8 @@ class Graph : public Node {
       return;
     }
 
-    const auto& current_charset =
-        Terminal::GetQuirks().BlockCharacters() ? charset : charset_microsoft;
+    const auto& current_graph_charset =
+        Terminal::GetQuirks().BlockCharacters() ? graph_charset : graph_charset_microsoft;
 
     auto data = graph_function_(width, height);
     int i = 0;
@@ -62,7 +62,7 @@ class Graph : public Node {
         const int i_1 = yy < height_1 ? 0 : yy == height_1 ? 3 : 6;  // NOLINT
         const int i_2 = yy < height_2 ? 0 : yy == height_2 ? 1 : 2;  // NOLINT
         screen.at(x, y) =
-            current_charset.at(static_cast<size_t>(i_1 + i_2));  // NOLINT
+            current_graph_charset.at(static_cast<size_t>(i_1 + i_2));  // NOLINT
       }
     }
   }

@@ -33,6 +33,8 @@
 #include "ftxui/screen/surface.hpp"
 #include "ftxui/screen/string.hpp"
 #include "ftxui/screen/terminal.hpp"
+#include "ftxui/util/autoreset.hpp"
+#include "ftxui/util/export.hpp"
 #include "ftxui/util/ref.hpp"
 
 #endif /* end of include guard: FTXUI_HPP */
