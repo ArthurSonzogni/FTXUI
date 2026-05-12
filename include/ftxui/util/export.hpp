@@ -5,6 +5,12 @@
 #ifndef FTXUI_UTIL_EXPORT_H_
 #define FTXUI_UTIL_EXPORT_H_
 
+// In an amalgamated build, we don't want any export/import annotations.
+#if defined(FTXUI_AMALGAMATED)
+#define FTXUI_EXPORT(component)
+#define INSIDE_FTXUI_COMPONENT_IMPL(component) 0
+#else
+
 // Used to annotate symbols which are exported by the component named
 // |component|. Note that this only does the right thing if the corresponding
 // component target's sources are compiled with |IS_FTXUI_$component_IMPL|
@@ -28,6 +34,8 @@
 // expands to |0| as expected.
 #define INSIDE_FTXUI_COMPONENT_IMPL(component) \
   FTXUI_MACRO_CONDITIONAL_(IS_FTXUI_##component##_IMPL, 1, 0)
+
+#endif
 
 // Compiler-specific macros to annotate for export or import of a symbol. No-op
 // in non-component builds. These should not see much if any direct use.

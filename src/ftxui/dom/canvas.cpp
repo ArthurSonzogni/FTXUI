@@ -3,6 +3,12 @@
 // the LICENSE file.
 #include "ftxui/dom/canvas.hpp"
 
+// On Windows, DrawText is a macro defined in windows.h. This conflicts with our
+// Canvas::DrawText method when building as a single translation unit.
+#ifdef DrawText
+#undef DrawText
+#endif
+
 #include <algorithm>               // for max, min
 #include <cmath>                   // for abs
 #include <cstdint>                 // for uint8_t

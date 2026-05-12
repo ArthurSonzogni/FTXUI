@@ -22,6 +22,7 @@ This page serves as an entry point for the available integration methods.
 - @subpage installation_arch
 - @subpage installation_opensuse
 - @subpage installation_xmake
+- @subpage installation_amalgamated
 
 ## Next Steps
 

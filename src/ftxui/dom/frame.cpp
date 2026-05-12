@@ -15,9 +15,9 @@
 namespace ftxui {
 
 namespace {
-class Focus : public Node {
+class FocusNode : public Node {
  public:
-  explicit Focus(Elements children) : Node(std::move(children)) {}
+  explicit FocusNode(Elements children) : Node(std::move(children)) {}
 
   void ComputeRequirement() override {
     Node::ComputeRequirement();
@@ -80,14 +80,14 @@ class Frame : public Node {
   bool y_frame_;
 };
 
-class FocusCursor : public Focus {
+class FocusCursorNode : public FocusNode {
  public:
-  FocusCursor(Elements children, Screen::Cursor::Shape shape)
-      : Focus(std::move(children)), shape_(shape) {}
+  FocusCursorNode(Elements children, Screen::Cursor::Shape shape)
+      : FocusNode(std::move(children)), shape_(shape) {}
 
  private:
   void ComputeRequirement() override {
-    Focus::ComputeRequirement();  // NOLINT
+    FocusNode::ComputeRequirement();  // NOLINT
     requirement_.focused.cursor_shape = shape_;
   }
   Screen::Cursor::Shape shape_;
@@ -99,7 +99,7 @@ class FocusCursor : public Focus {
 /// @param child The element to be focused.
 /// @ingroup dom
 Element focus(Element child) {
-  return std::make_shared<Focus>(unpack(std::move(child)));
+  return std::make_shared<FocusNode>(unpack(std::move(child)));
 }
 
 /// This is deprecated. Use `focus` instead.
@@ -145,7 +145,7 @@ Element yframe(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBlock(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
                                        Screen::Cursor::Block);
 }
 
@@ -159,7 +159,7 @@ Element focusCursorBlock(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBlockBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
                                        Screen::Cursor::BlockBlinking);
 }
 
@@ -173,7 +173,7 @@ Element focusCursorBlockBlinking(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBar(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
                                        Screen::Cursor::Bar);
 }
 
@@ -187,7 +187,7 @@ Element focusCursorBar(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorBarBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
                                        Screen::Cursor::BarBlinking);
 }
 
@@ -201,7 +201,7 @@ Element focusCursorBarBlinking(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorUnderline(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
                                        Screen::Cursor::Underline);
 }
 
@@ -215,7 +215,7 @@ Element focusCursorUnderline(Element child) {
 /// @see focusCursorUnderlineBlinking
 /// @ingroup dom
 Element focusCursorUnderlineBlinking(Element child) {
-  return std::make_shared<FocusCursor>(unpack(std::move(child)),
+  return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
                                        Screen::Cursor::UnderlineBlinking);
 }
 

@@ -101,3 +101,24 @@ jobs:
           upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: source.tar.gz
           overwrite: true
+
+  amalgamate:
+    name: "Amalgamate"
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Generate amalgamated files"
+        run: ./tools/amalgamate.py
+
+      - name: "Create archive"
+        run: zip ftxui-amalgamated.zip ftxui.hpp ftxui.cpp ftxui_all.hpp LICENSE
+
+      - name: "Upload ftxui-amalgamated.zip"
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: ftxui-amalgamated.zip
+          overwrite: true
