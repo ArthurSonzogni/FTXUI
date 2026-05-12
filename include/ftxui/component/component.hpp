@@ -45,7 +45,8 @@ namespace Container {
 FTXUI_EXPORT(COMPONENT) Component Vertical(Components children);
 FTXUI_EXPORT(COMPONENT) Component Vertical(Components children, int* selector);
 FTXUI_EXPORT(COMPONENT) Component Horizontal(Components children);
-FTXUI_EXPORT(COMPONENT) Component Horizontal(Components children, int* selector);
+FTXUI_EXPORT(COMPONENT)
+Component Horizontal(Components children, int* selector);
 FTXUI_EXPORT(COMPONENT) Component Tab(Components children, int* selector);
 FTXUI_EXPORT(COMPONENT) Component Stacked(Components children);
 }  // namespace Container
@@ -63,7 +64,8 @@ Component Checkbox(ConstStringRef label,
                    CheckboxOption options = CheckboxOption::Simple());
 
 FTXUI_EXPORT(COMPONENT) Component Input(InputOption options = {});
-FTXUI_EXPORT(COMPONENT) Component Input(StringRef content, InputOption options = {});
+FTXUI_EXPORT(COMPONENT)
+Component Input(StringRef content, InputOption options = {});
 FTXUI_EXPORT(COMPONENT)
 Component Input(StringRef content,
                 StringRef placeholder,
@@ -96,25 +98,20 @@ template <typename T>
 Component Slider(SliderOption<T> options);
 
 extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<int8_t>);
-extern template FTXUI_EXPORT(COMPONENT)
-    Component Slider(SliderOption<int16_t>);
-extern template FTXUI_EXPORT(COMPONENT)
-    Component Slider(SliderOption<int32_t>);
-extern template FTXUI_EXPORT(COMPONENT)
-    Component Slider(SliderOption<int64_t>);
+extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<int16_t>);
+extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<int32_t>);
+extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<int64_t>);
 
-extern template FTXUI_EXPORT(COMPONENT)
-    Component Slider(SliderOption<uint8_t>);
-extern template FTXUI_EXPORT(COMPONENT)
-    Component Slider(SliderOption<uint16_t>);
-extern template FTXUI_EXPORT(COMPONENT)
-    Component Slider(SliderOption<uint32_t>);
-extern template FTXUI_EXPORT(COMPONENT)
-    Component Slider(SliderOption<uint64_t>);
+extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<uint8_t>);
+extern template FTXUI_EXPORT(COMPONENT) Component
+    Slider(SliderOption<uint16_t>);
+extern template FTXUI_EXPORT(COMPONENT) Component
+    Slider(SliderOption<uint32_t>);
+extern template FTXUI_EXPORT(COMPONENT) Component
+    Slider(SliderOption<uint64_t>);
 
 extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<float>);
-extern template FTXUI_EXPORT(COMPONENT)
-    Component Slider(SliderOption<double>);
+extern template FTXUI_EXPORT(COMPONENT) Component Slider(SliderOption<double>);
 
 // Shorthand without the `SliderOption` constructor:
 FTXUI_EXPORT(COMPONENT)
