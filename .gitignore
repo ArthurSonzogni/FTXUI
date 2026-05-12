@@ -27,6 +27,10 @@ out/
 !.bazelrc
 !.bazelignore
 
+# Meson build files:
+!meson.build
+!meson.options
+
 # .github directory:
 !.github/**/*.yaml
 !.github/**/*.yml
@@ -64,7 +68,7 @@ out/
 !examples/**/*.mjs
 !examples/**/*.py
 !examples/**/*.txt
-!examples/**/Makefile
+!examples/meson.build
 
 # include directory:
 !include/ftxui/**/*.hpp
@@ -76,12 +80,19 @@ out/
 !src/ftxui/**/*.cpp
 !src/ftxui/**/*.cppm
 
+# subprojects directory (meson wraps only, not downloaded sources):
+/subprojects/*
+!subprojects/*.wrap
+
 # tools directory:
 !tools/**/*.sh
 !tools/**/*.py
 !tools/**/*.cpp
 build/
 build_asan/
+builddir/
+builddir_meson/
+build_meson/
 iwyu/
 examples_modules/
 examples_ftxui_hpp/

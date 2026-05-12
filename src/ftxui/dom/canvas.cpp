@@ -897,6 +897,10 @@ class CanvasNodeBase : public Node {
 /// @brief Produce an element from a Canvas, or a reference to a Canvas.
 // NOLINTNEXTLINE
 Element canvas(ConstRef<Canvas> canvas) {
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
   class Impl : public CanvasNodeBase {
    public:
     explicit Impl(ConstRef<Canvas> canvas) : canvas_(std::move(canvas)) {
@@ -907,6 +911,9 @@ Element canvas(ConstRef<Canvas> canvas) {
     ConstRef<Canvas> canvas_;
   };
   return std::make_shared<Impl>(canvas);
+#if defined(__GNUC__) && !defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 }
 
 /// @brief Produce an element drawing a canvas of requested size.

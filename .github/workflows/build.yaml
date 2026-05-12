@@ -258,3 +258,51 @@ jobs:
           -DFTXUI_ENABLE_INSTALL=ON
           -DFTXUI_DEV_WARNINGS=ON ;
           cmake --build .
+
+  test_meson:
+    name: "Meson, ${{ matrix.compiler }}, ${{ matrix.os }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            compiler: gcc
+
+          - os: ubuntu-latest
+            compiler: llvm
+
+          - os: macos-latest
+            compiler: llvm
+
+          - os: windows-latest
+            compiler: cl
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Setup Cpp"
+        uses: aminya/setup-cpp@v1
+        with:
+          compiler: ${{ matrix.compiler }}
+          vcvarsall: ${{ contains(matrix.os, 'windows' )}}
+          cmake: false
+          ninja: true
+
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: "Install Meson"
+        run: pip install meson
+
+      - name: "Configure Meson"
+        run: meson setup build_meson -Dtests=true -Dexamples=true
+
+      - name: "Build with Meson"
+        run: ninja -C build_meson
+
+      - name: "Test with Meson"
+        run: meson test -C build_meson

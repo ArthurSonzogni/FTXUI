@@ -74,6 +74,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
 - [Examples (WebAssembly)](https://arthursonzogni.github.io/FTXUI/examples/)
 - [Build using CMake](https://arthursonzogni.github.io/FTXUI/#build-cmake)
 - [Build using Bazel](https://arthursonzogni.github.io/FTXUI/#build-bazel)
+- [Build using Meson](doc/installation_meson.md)
 
 ## Example
 ~~~cpp
@@ -467,6 +468,20 @@ cc_binary(
         # "@ftxui//:ftxui",
     ],
 )
+```
+
+## Build using Meson
+
+FTXUI can also be built using [Meson](https://mesonbuild.com/). See [doc/installation_meson.md](doc/installation_meson.md) for detailed instructions.
+
+```bash
+meson setup builddir
+ninja -C builddir
+```
+
+To use FTXUI as a subproject in your Meson project, create a `subprojects/ftxui.wrap` file or use it as a dependency:
+```meson
+ftxui_dep = dependency('ftxui-component')
 ```
 
 

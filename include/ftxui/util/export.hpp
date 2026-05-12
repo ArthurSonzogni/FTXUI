@@ -23,8 +23,7 @@
 // annotated using the FTXUI_IMPORT_ANNOTATION macro.
 #define FTXUI_EXPORT(component)                         \
   FTXUI_MACRO_CONDITIONAL_(IS_FTXUI_##component##_IMPL, \
-                               FTXUI_EXPORT_ANNOTATION, \
-                               FTXUI_IMPORT_ANNOTATION)
+                           FTXUI_EXPORT_ANNOTATION, FTXUI_IMPORT_ANNOTATION)
 
 // Indicates whether the current compilation unit is being compiled as part of
 // the implementation of the component named |component|. Expands to |1| if

@@ -92,7 +92,7 @@ Terminal::Color ComputeColorSupportInternal() {
       Safe(std::getenv("TERM")),          // NOLINT
       Safe(std::getenv("COLORTERM")),     // NOLINT
       Safe(std::getenv("TERM_PROGRAM")),  // NOLINT
-     "unknown", "unknown", empty_capabilities);
+      "unknown", "unknown", empty_capabilities);
 }
 
 }  // namespace
