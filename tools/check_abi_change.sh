@@ -46,7 +46,8 @@ COMMIT2=$2
 
 get_version() {
     local commit=$1
-    git show "$commit:CMakeLists.txt" | grep "VERSION" | grep -v "REQUIRED" | head -n 1 | awk '{print $2}' | tr -d ')'
+    # Look for VERSION within the project() call
+    git show "$commit:CMakeLists.txt" | grep -A 5 "project(" | grep "VERSION" | head -n 1 | awk '{print $2}' | tr -d ')'
 }
 
 V1=$(get_version "$COMMIT1")
@@ -138,13 +139,13 @@ for lib in "${LIBS[@]}"; do
         IS_FORWARD_INCOMPATIBLE=0
 
         # Check for removals (Backward Incompatible)
-        if grep -q "removed" "$TEMP_DIR/diff_$lib" || grep -q "changed" "$TEMP_DIR/diff_$lib"; then
+        if grep -qE "([1-9][0-9]* (removed|changed))|Removed functions:|Changed functions:" "$TEMP_DIR/diff_$lib"; then
             echo -e "${RED}  - BACKWARD INCOMPATIBLE CHANGES DETECTED.${NC}"
             IS_BACKWARD_INCOMPATIBLE=1
         fi
         
         # Check for additions (Forward Incompatible)
-        if grep -q "added" "$TEMP_DIR/diff_$lib"; then
+        if grep -qE "([1-9][0-9]* added)|Added functions:" "$TEMP_DIR/diff_$lib"; then
             echo -e "${YELLOW}  - FORWARD INCOMPATIBLE CHANGES DETECTED.${NC}"
             IS_FORWARD_INCOMPATIBLE=1
         fi
