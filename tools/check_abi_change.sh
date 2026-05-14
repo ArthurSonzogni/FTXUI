@@ -23,13 +23,38 @@ for cmd in cmake git abidiff; do
     fi
 done
 
+if [ "$1" == "--accept" ]; then
+    if [ ! -d "build" ]; then
+        echo -e "${RED}Error: Build directory not found. Please build the project first.${NC}"
+        exit 1
+    fi
+    NEW_FP=$(./tools/generate_abi_fingerprint.sh build)
+    echo "$NEW_FP" > tools/abi_fingerprint.txt
+    echo -e "${GREEN}ABI fingerprint updated to $NEW_FP.${NC}"
+    exit 0
+fi
+
 if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <commit1> <commit2>"
+    echo "Usage:"
+    echo "  $0 <commit1> <commit2>    # Compare two versions"
+    echo "  $0 --accept               # Update the golden fingerprint from current build"
     exit 1
 fi
 
 COMMIT1=$1
 COMMIT2=$2
+
+get_version() {
+    local commit=$1
+    git show "$commit:CMakeLists.txt" | grep "VERSION" | grep -v "REQUIRED" | head -n 1 | awk '{print $2}' | tr -d ')'
+}
+
+V1=$(get_version "$COMMIT1")
+V2=$(get_version "$COMMIT2")
+V1_MAJOR=$(echo "$V1" | cut -d. -f1)
+V1_MINOR=$(echo "$V1" | cut -d. -f2)
+V2_MAJOR=$(echo "$V2" | cut -d. -f1)
+V2_MINOR=$(echo "$V2" | cut -d. -f2)
 
 # Create a temporary directory for the worktrees
 TEMP_DIR=$(mktemp -d)
@@ -109,14 +134,34 @@ for lib in "${LIBS[@]}"; do
     else
         echo -e "${RED}ABI changes detected for $SO_FILE!${NC}"
         
+        IS_BACKWARD_INCOMPATIBLE=0
+        IS_FORWARD_INCOMPATIBLE=0
+
         # Check for removals (Backward Incompatible)
         if grep -q "removed" "$TEMP_DIR/diff_$lib" || grep -q "changed" "$TEMP_DIR/diff_$lib"; then
             echo -e "${RED}  - BACKWARD INCOMPATIBLE CHANGES DETECTED.${NC}"
+            IS_BACKWARD_INCOMPATIBLE=1
         fi
         
         # Check for additions (Forward Incompatible)
         if grep -q "added" "$TEMP_DIR/diff_$lib"; then
             echo -e "${YELLOW}  - FORWARD INCOMPATIBLE CHANGES DETECTED.${NC}"
+            IS_FORWARD_INCOMPATIBLE=1
+        fi
+
+        # Version enforcement
+        if [ $IS_BACKWARD_INCOMPATIBLE -eq 1 ]; then
+            if [ "$V2_MAJOR" -le "$V1_MAJOR" ]; then
+                echo -e "${RED}  - ERROR: Major version bump required ($V1 -> $((V1_MAJOR + 1)).0.0).${NC}"
+                echo -e "${RED}    Backward incompatible changes detected but VERSION_MAJOR was not incremented.${NC}"
+                HAS_CHANGES=1
+            fi
+        elif [ $IS_FORWARD_INCOMPATIBLE -eq 1 ]; then
+            if [ "$V2_MAJOR" -eq "$V1_MAJOR" ] && [ "$V2_MINOR" -le "$V1_MINOR" ]; then
+                echo -e "${RED}  - ERROR: Minor version bump required ($V1 -> $V1_MAJOR.$((V1_MINOR + 1)).0).${NC}"
+                echo -e "${RED}    New features detected but VERSION_MINOR was not incremented.${NC}"
+                HAS_CHANGES=1
+            fi
         fi
 
         echo -e "\nSummary of changes:"
