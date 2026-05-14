@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script checks for ABI changes between two versions of the FTXUI library.
-# It uses 'abidiff' from the 'libabigail' package.
+# It uses 'abidiff' from the 'abigail-tools' package.
 #
 # Usage: ./tools/check_abi_change.sh <commit1> <commit2>
 # Example: ./tools/check_abi_change.sh v3.0.0 HEAD
@@ -18,7 +18,7 @@ NC='\033[0m' # No Color
 for cmd in cmake git abidiff; do
     if ! command -v "$cmd" &> /dev/null; then
         echo -e "${RED}Error: '$cmd' not found.${NC}"
-        [ "$cmd" == "abidiff" ] && echo "Please install 'libabigail-tools'."
+        [ "$cmd" == "abidiff" ] && echo "Please install 'abigail-tools'."
         exit 1
     fi
 done
