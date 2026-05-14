@@ -68,6 +68,11 @@ build_commit "$COMMIT2" "$PATH2"
 LIBS=("screen" "dom" "component")
 HAS_CHANGES=0
 
+count_lines() {
+    wc -l | xargs
+}
+
+# Compare the symbol lists
 for lib in "${LIBS[@]}"; do
     SO_FILE="libftxui-$lib.so"
     FILE1="$PATH1/build/$SO_FILE"
@@ -95,6 +100,21 @@ for lib in "${LIBS[@]}"; do
         echo -e "${GREEN}No exported symbol changes detected for $SO_FILE.${NC}"
     else
         echo -e "${RED}Symbol changes detected for $SO_FILE!${NC}"
+        
+        # Analyze the diff for compatibility
+        REMOVALS=$(grep "^-" "$TEMP_DIR/diff_$lib" | grep -v "^---" | count_lines || true)
+        ADDITIONS=$(grep "^+" "$TEMP_DIR/diff_$lib" | grep -v "^+++" | count_lines || true)
+
+        if [ "$REMOVALS" -gt 0 ]; then
+            echo -e "${RED}  - BACKWARD INCOMPATIBLE: $REMOVALS symbols removed or changed.${NC}"
+            echo -e "    (Binaries compiled against $COMMIT1 will NOT work with $COMMIT2)"
+        fi
+        if [ "$ADDITIONS" -gt 0 ]; then
+            echo -e "${YELLOW}  - FORWARD INCOMPATIBLE: $ADDITIONS symbols added.${NC}"
+            echo -e "    (Binaries compiled against $COMMIT2 will NOT work with $COMMIT1)"
+        fi
+        
+        echo -e "\nFull symbol diff:"
         cat "$TEMP_DIR/diff_$lib"
         HAS_CHANGES=1
     fi

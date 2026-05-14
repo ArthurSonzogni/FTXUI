@@ -1,0 +1,54 @@
+name: ABI Compatibility Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  pull-requests: write
+
+jobs:
+  check-abi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake build-essential
+
+      - name: Run ABI check
+        id: abi_check
+        run: |
+          # Ensure the base branch is fetched
+          git fetch origin ${{ github.base_ref }}
+          
+          # Run the script and capture output
+          ./tools/check_abi_change.sh origin/${{ github.base_ref }} HEAD > abi_report.txt 2>&1 || echo "ABI_FAILED=true" >> $GITHUB_ENV
+          
+          # Format the output for a PR comment
+          {
+            echo "### 🛡️ ABI Compatibility Report"
+            echo "Comparing \`${{ github.base_ref }}\` (base) with \`HEAD\` (PR)"
+            echo ""
+            echo "\`\`\`"
+            # Strip ANSI colors for the markdown comment
+            sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" abi_report.txt
+            echo "\`\`\`"
+          } > abi_comment.md
+
+      - name: Post comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: abi_comment.md
+
+      - name: Fail if ABI broken
+        if: env.ABI_FAILED == 'true'
+        run: |
+          echo "ABI changes detected. Please review the report in the PR comment."
+          exit 1
