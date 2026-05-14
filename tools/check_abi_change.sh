@@ -22,6 +22,12 @@ for cmd in cmake git nm; do
     fi
 done
 
+# Optional deep analysis tool
+HAS_ABIDIFF=0
+if command -v abidiff &> /dev/null; then
+    HAS_ABIDIFF=1
+fi
+
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <commit1> <commit2>"
     exit 1
@@ -36,6 +42,33 @@ trap "rm -rf $TEMP_DIR; git worktree prune &> /dev/null" EXIT
 
 echo -e "${YELLOW}Checking ABI changes between $COMMIT1 and $COMMIT2...${NC}"
 
+# Optimization: Check fingerprints if available
+# We assume COMMIT2 is usually the current state (HEAD)
+get_fingerprint() {
+    local commit=$1
+    # Try to read the fingerprint file from the commit
+    git show "$commit:tools/abi_fingerprint.txt" 2>/dev/null || echo ""
+}
+
+FP1=$(get_fingerprint "$COMMIT1")
+FP2=$(get_fingerprint "$COMMIT2")
+
+# If we are comparing against HEAD and it's not committed yet, we'll need to generate it
+if [ "$COMMIT2" == "HEAD" ] || [ "$COMMIT2" == "." ]; then
+    if [ -d "build" ] && [ -f "build/libftxui-screen.so" ]; then
+        FP2=$(./tools/generate_abi_fingerprint.sh build)
+    fi
+fi
+
+if [ -n "$FP1" ] && [ -n "$FP2" ] && [ "$FP1" == "$FP2" ]; then
+    echo -e "${GREEN}ABI fingerprints match ($FP1). No changes detected.${NC}"
+    exit 0
+fi
+
+if [ -n "$FP1" ] && [ -n "$FP2" ]; then
+    echo -e "${YELLOW}ABI fingerprints differ ($FP1 -> $FP2). Performing deep analysis...${NC}"
+fi
+
 build_commit() {
     local commit=$1
     local path=$2
@@ -48,7 +81,7 @@ build_commit() {
     # Configure and build
     cmake -B build \
           -DBUILD_SHARED_LIBS=ON \
-          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_BUILD_TYPE=Debug \
           -DFTXUI_BUILD_EXAMPLES=OFF \
           -DFTXUI_BUILD_TESTS=OFF \
           -DFTXUI_BUILD_MODULES=OFF \
@@ -90,34 +123,40 @@ for lib in "${LIBS[@]}"; do
         continue
     fi
 
-    # Extract exported symbols (T: global text, D: global data, V/W: weak)
-    # We use -C for demangling to make it readable
-    nm -C -D --defined-only "$FILE1" | cut -c 20- | sort > "$TEMP_DIR/symbols_$lib.1"
-    nm -C -D --defined-only "$FILE2" | cut -c 20- | sort > "$TEMP_DIR/symbols_$lib.2"
-
-    # Compare the symbol lists
-    if diff -u "$TEMP_DIR/symbols_$lib.1" "$TEMP_DIR/symbols_$lib.2" > "$TEMP_DIR/diff_$lib"; then
-        echo -e "${GREEN}No exported symbol changes detected for $SO_FILE.${NC}"
+    # Use abidiff for deep analysis if available
+    if [ $HAS_ABIDIFF -eq 1 ]; then
+        if abidiff "$FILE1" "$FILE2" > "$TEMP_DIR/diff_$lib"; then
+            echo -e "${GREEN}No ABI changes detected for $SO_FILE (via abidiff).${NC}"
+            continue
+        fi
     else
-        echo -e "${RED}Symbol changes detected for $SO_FILE!${NC}"
-        
-        # Analyze the diff for compatibility
-        REMOVALS=$(grep "^-" "$TEMP_DIR/diff_$lib" | grep -v "^---" | count_lines || true)
-        ADDITIONS=$(grep "^+" "$TEMP_DIR/diff_$lib" | grep -v "^+++" | count_lines || true)
-
-        if [ "$REMOVALS" -gt 0 ]; then
-            echo -e "${RED}  - BACKWARD INCOMPATIBLE: $REMOVALS symbols removed or changed.${NC}"
-            echo -e "    (Binaries compiled against $COMMIT1 will NOT work with $COMMIT2)"
+        # Fallback to nm for symbol comparison
+        nm -C -D --defined-only "$FILE1" | cut -c 20- | sort > "$TEMP_DIR/symbols_$lib.1"
+        nm -C -D --defined-only "$FILE2" | cut -c 20- | sort > "$TEMP_DIR/symbols_$lib.2"
+        if diff -u "$TEMP_DIR/symbols_$lib.1" "$TEMP_DIR/symbols_$lib.2" > "$TEMP_DIR/diff_$lib"; then
+             echo -e "${GREEN}No exported symbol changes detected for $SO_FILE.${NC}"
+             continue
         fi
-        if [ "$ADDITIONS" -gt 0 ]; then
-            echo -e "${YELLOW}  - FORWARD INCOMPATIBLE: $ADDITIONS symbols added.${NC}"
-            echo -e "    (Binaries compiled against $COMMIT2 will NOT work with $COMMIT1)"
-        fi
-        
-        echo -e "\nFull symbol diff:"
-        cat "$TEMP_DIR/diff_$lib"
-        HAS_CHANGES=1
     fi
+
+    echo -e "${RED}ABI changes detected for $SO_FILE!${NC}"
+    
+    # Analyze the diff for compatibility
+    REMOVALS=$(grep "^-" "$TEMP_DIR/diff_$lib" | grep -v "^---" | count_lines || true)
+    ADDITIONS=$(grep "^+" "$TEMP_DIR/diff_$lib" | grep -v "^+++" | count_lines || true)
+
+    if [ "$REMOVALS" -gt 0 ]; then
+        echo -e "${RED}  - BACKWARD INCOMPATIBLE: symbols removed or changed.${NC}"
+        echo -e "    (Binaries compiled against $COMMIT1 will NOT work with $COMMIT2)"
+    fi
+    if [ "$ADDITIONS" -gt 0 ]; then
+        echo -e "${YELLOW}  - FORWARD INCOMPATIBLE: symbols added.${NC}"
+        echo -e "    (Binaries compiled against $COMMIT2 will NOT work with $COMMIT1)"
+    fi
+    
+    echo -e "\nReport:"
+    cat "$TEMP_DIR/diff_$lib"
+    HAS_CHANGES=1
 done
 
 echo "--------------------------------------------------------------------------------"

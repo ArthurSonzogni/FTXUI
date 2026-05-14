@@ -28,19 +28,37 @@ jobs:
           # Ensure the base branch is fetched
           git fetch origin ${{ github.base_ref }}
           
-          # Run the script and capture output
-          ./tools/check_abi_change.sh origin/${{ github.base_ref }} HEAD > abi_report.txt 2>&1 || echo "ABI_FAILED=true" >> $GITHUB_ENV
+          # Optimization: Generate current fingerprint and compare with base
+          ./tools/generate_abi_fingerprint.sh build > current_fingerprint.txt
+          BASE_FINGERPRINT=$(git show origin/${{ github.base_ref }}:tools/abi_fingerprint.txt 2>/dev/null || echo "none")
+          CURRENT_FINGERPRINT=$(cat current_fingerprint.txt)
           
-          # Format the output for a PR comment
-          {
-            echo "### 🛡️ ABI Compatibility Report"
-            echo "Comparing \`${{ github.base_ref }}\` (base) with \`HEAD\` (PR)"
-            echo ""
-            echo "\`\`\`"
-            # Strip ANSI colors for the markdown comment
-            sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" abi_report.txt
-            echo "\`\`\`"
-          } > abi_comment.md
+          if [ "$BASE_FINGERPRINT" == "$CURRENT_FINGERPRINT" ]; then
+            echo "### ✅ ABI Compatibility Report" > abi_comment.md
+            echo "ABI fingerprints match (\`$CURRENT_FINGERPRINT\`). No changes detected." >> abi_comment.md
+            echo "ABI_STATUS=unchanged" >> $GITHUB_ENV
+          else
+            echo "ABI fingerprints differ. Performing deep analysis..."
+            # Run the script and capture output
+            ./tools/check_abi_change.sh origin/${{ github.base_ref }} HEAD > abi_report.txt 2>&1 || echo "ABI_FAILED=true" >> $GITHUB_ENV
+            
+            # Format the output for a PR comment
+            {
+              echo "### ⚠️ ABI Compatibility Report"
+              echo "Comparing \`${{ github.base_ref }}\` (base) with \`HEAD\` (PR)"
+              echo ""
+              echo "ABI fingerprints changed from \`$BASE_FINGERPRINT\` to \`$CURRENT_FINGERPRINT\`."
+              echo ""
+              echo "<details><summary>Detailed ABI Analysis</summary>"
+              echo ""
+              echo "\`\`\`"
+              # Strip ANSI colors for the markdown comment
+              sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g" abi_report.txt
+              echo "\`\`\`"
+              echo "</details>"
+            } > abi_comment.md
+            echo "ABI_STATUS=changed" >> $GITHUB_ENV
+          fi
 
       - name: Post comment
         uses: marocchino/sticky-pull-request-comment@v2

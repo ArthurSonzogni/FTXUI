@@ -88,6 +88,7 @@ out/
 !tools/**/*.sh
 !tools/**/*.py
 !tools/**/*.cpp
+!tools/abi_fingerprint.txt
 build/
 build_asan/
 builddir/
