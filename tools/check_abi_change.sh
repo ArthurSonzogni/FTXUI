@@ -103,7 +103,8 @@ for lib in "${LIBS[@]}"; do
     fi
 
     # abidiff returns 0 if no changes
-    if abidiff "$FILE1" "$FILE2" > "$TEMP_DIR/diff_$lib"; then
+    # Use suppressions to ignore STL noise and keep it focused on FTXUI
+    if abidiff --suppressions tools/abidiff_suppressions.ini "$FILE1" "$FILE2" > "$TEMP_DIR/diff_$lib" 2>/dev/null; then
         echo -e "${GREEN}No ABI changes detected for $SO_FILE.${NC}"
     else
         echo -e "${RED}ABI changes detected for $SO_FILE!${NC}"
@@ -118,8 +119,14 @@ for lib in "${LIBS[@]}"; do
             echo -e "${YELLOW}  - FORWARD INCOMPATIBLE CHANGES DETECTED.${NC}"
         fi
 
-        echo -e "\nDetailed Report:"
-        cat "$TEMP_DIR/diff_$lib"
+        echo -e "\nSummary of changes:"
+        grep -E "summary:|functions|variables|symbols" "$TEMP_DIR/diff_$lib" | head -n 5
+        
+        echo -e "\nDetailed Report (filtered for ftxui::):"
+        # Only show lines containing ftxui or the start of sections, and limit output
+        grep -E "ftxui::|Removed functions:|Changed functions:|Added functions:" "$TEMP_DIR/diff_$lib" | head -n 50
+        [ $(wc -l < "$TEMP_DIR/diff_$lib") -gt 50 ] && echo "... (see full log for details)"
+        
         HAS_CHANGES=1
     fi
 done
