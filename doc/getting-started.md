@@ -1,6 +1,8 @@
 @page getting-started Getting Started
 @tableofcontents
 
+![title-img](https://nsm09.casimages.com/img/2025/05/30//2505300816063242518595256.jpg)
+
 FTXUI is a functional, C++ library for terminal-based user interfaces. It is organized into three main modules, each building upon the previous one.
 
 # The Three Modules
@@ -65,7 +67,7 @@ int main() {
 
 # Adding Interactivity (Component)
 
-To handle user input and create a dynamic application, use the `Component` module and the `App` class.
+To handle user input and create a dynamic application, use the `Component` module and the `App` class. Components manage their own state and can be composed using containers.
 
 ```cpp
 #include <ftxui/component/component.hpp>
@@ -75,32 +77,22 @@ To handle user input and create a dynamic application, use the `Component` modul
 int main() {
   using namespace ftxui;
 
-  int counter = 0;
+  std::vector<std::string> entries = {
+      "Entry 1",
+      "Entry 2",
+      "Entry 3",
+  };
+  int selected = 0;
 
-  // Define components
-  auto btn_increment = Button("Increment", [&] { counter++; });
-  auto btn_decrement = Button("Decrement", [&] { counter--; });
-  auto btn_quit = Button("Quit", [] { exit(0); });
+  // Create a menu component
+  auto menu = Menu(&entries, &selected);
 
-  // Compose them into a container
-  auto container = Container::Vertical({
-    btn_increment,
-    btn_decrement,
-    btn_quit,
-  });
-
-  // Define the renderer
-  auto renderer = Renderer(container, [&] {
-    return vbox({
-      text("Counter: " + std::to_string(counter)) | border,
-      separator(),
-      container->Render(),
-    }) | border;
-  });
+  // You can decorate components using the pipe operator.
+  auto component = menu | border;
 
   // Start the main loop
   auto app = App::TerminalOutput();
-  app.Loop(renderer);
+  app.Loop(component);
 
   return 0;
 }
@@ -108,7 +100,6 @@ int main() {
 
 # Next Steps
 
-*   Explore the [Modules](modules.html) documentation for a deeper dive into each layer.
 *   Browse the [Examples](https://arthursonzogni.github.io/FTXUI/examples/) to see what's possible.
 *   Check out the [Starter Template](https://github.com/ArthurSonzogni/ftxui-starter) for a pre-configured project structure.
 
