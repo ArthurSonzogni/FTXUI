@@ -162,6 +162,10 @@ ftxui_set_options(screen)
 ftxui_set_options(dom)
 ftxui_set_options(component)
 
+set_target_properties(screen dom component PROPERTIES
+  SOVERSION ${PROJECT_VERSION_MAJOR}
+)
+
 include(cmake/ftxui_coverage.cmake)
 ftxui_check_coverage(screen)
 ftxui_check_coverage(dom)
