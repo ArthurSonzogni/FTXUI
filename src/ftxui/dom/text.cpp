@@ -25,8 +25,7 @@ using ftxui::Screen;
 
 class Text : public Node {
  public:
-  explicit Text(const std::string& text) : glyphs_(Utf8ToGlyphs(text)) {}
-  explicit Text(std::string_view sv) : Text(std::string(sv)) {}
+  explicit Text(std::string_view text) : glyphs_(Utf8ToGlyphs(text)) {}
 
   void ComputeRequirement() override {
     int max_width = 0;
@@ -135,7 +134,7 @@ class Text : public Node {
 
 class VText : public Node {
  public:
-  explicit VText(const std::string& text) : glyphs_(Utf8ToGlyphs(text)) {
+  explicit VText(std::string_view text) : glyphs_(Utf8ToGlyphs(text)) {
     for (const auto& g : glyphs_) {
       if (g != "\n") {
         width_ = 1;
@@ -143,7 +142,6 @@ class VText : public Node {
       }
     }
   }
-  explicit VText(std::string_view sv) : VText(std::string(sv)) {}
 
   void ComputeRequirement() override {
     int max_height = 0;
@@ -260,7 +258,7 @@ Element text(std::wstring_view text) {
 /// !
 /// ```
 Element vtext(std::string_view text) {
-  return std::make_shared<VText>(std::string(text));
+  return std::make_shared<VText>(text);
 }
 
 /// @brief Display a piece unicode text vertically.
