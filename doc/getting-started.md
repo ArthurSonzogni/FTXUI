@@ -9,9 +9,23 @@ FTXUI is a functional, C++ library for terminal-based user interfaces. It is org
 2.  **DOM**: The layout engine. It provides a set of `Element`s that can be composed to create complex, responsive layouts.
 3.  **Component**: The interactive layer. It handles user input (keyboard, mouse) and manages the application's main loop.
 
-# Installation
+# Installation and Dependency
 
-To set up FTXUI in your project, follow the [installation guide](installation.html). The most recommended way for CMake users is using `FetchContent`.
+To set up FTXUI in your project, follow the [installation guide](installation.html). 
+
+The most recommended way for CMake users is to use `FetchContent`. Add this to your `CMakeLists.txt`:
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(ftxui
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
+  GIT_TAG main # or a specific version like v6.1.9
+)
+FetchContent_MakeAvailable(ftxui)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE ftxui::ftxui)
+```
 
 # Your First Static UI (DOM)
 
@@ -51,11 +65,11 @@ int main() {
 
 # Adding Interactivity (Component)
 
-To handle user input and create a dynamic application, use the `Component` module.
+To handle user input and create a dynamic application, use the `Component` module and the `App` class.
 
 ```cpp
 #include <ftxui/component/component.hpp>
-#include <ftxui/component/screen_interactive.hpp>
+#include <ftxui/component/app.hpp>
 #include <ftxui/dom/elements.hpp>
 
 int main() {
@@ -85,8 +99,8 @@ int main() {
   });
 
   // Start the main loop
-  auto screen = ScreenInteractive::TerminalOutput();
-  screen.Loop(renderer);
+  auto app = App::TerminalOutput();
+  app.Loop(renderer);
 
   return 0;
 }
