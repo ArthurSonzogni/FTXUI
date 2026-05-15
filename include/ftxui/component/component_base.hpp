@@ -30,10 +30,9 @@ using Components = std::vector<Component>;
 /// @ingroup component
 class FTXUI_EXPORT(COMPONENT) ComponentBase {
  public:
-  explicit ComponentBase(Components children)
-      : children_(std::move(children)) {}
+  explicit ComponentBase(Components children);
   virtual ~ComponentBase();
-  ComponentBase() = default;
+  ComponentBase();
 
   // A component is not copyable/movable.
   ComponentBase(const ComponentBase&) = delete;
@@ -94,11 +93,12 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
  protected:
   CapturedMouse CaptureMouse(const Event& event);
 
-  Components children_;
+  Components& children();
+  const Components& children() const;
 
  private:
-  ComponentBase* parent_ = nullptr;
-  bool in_render = false;
+  struct Impl;
+  std::unique_ptr<Impl> impl_;
 };
 
 }  // namespace ftxui

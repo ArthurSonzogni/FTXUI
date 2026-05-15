@@ -7,6 +7,8 @@
 #include <vector>
 #include "ftxui/dom/flexbox_config.hpp"
 
+#include "ftxui/util/export.hpp"
+
 namespace ftxui::flexbox_helper {
 
 // A block is a rectangle in the flexbox.
@@ -46,7 +48,7 @@ struct Global {
   int size_y;
 };
 
-void Compute(Global& global);
+FTXUI_EXPORT(DOM) void Compute(Global& global);
 
 }  // namespace ftxui::flexbox_helper
 

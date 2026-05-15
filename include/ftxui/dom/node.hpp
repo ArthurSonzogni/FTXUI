@@ -74,6 +74,16 @@ class FTXUI_EXPORT(DOM) Node {
   };
   virtual void Check(Status* status);
 
+  // ABI Reserve:
+  virtual void Reserved1();
+  virtual void Reserved2();
+  virtual void Reserved3();
+  virtual void Reserved4();
+  virtual void Reserved5();
+  virtual void Reserved6();
+  virtual void Reserved7();
+  virtual void Reserved8();
+
   friend void Render(Screen& screen, Node* node, Selection& selection);
 
  protected:

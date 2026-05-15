@@ -28,35 +28,56 @@ namespace {
 class CaptureMouseImpl : public CapturedMouseInterface {};
 }  // namespace
 
+struct ComponentBase::Impl {
+  Components children;
+  ComponentBase* parent = nullptr;
+  bool in_render = false;
+};
+
+ComponentBase::ComponentBase() : impl_(std::make_unique<Impl>()) {}
+
+ComponentBase::ComponentBase(Components children)
+    : impl_(std::make_unique<Impl>()) {
+  impl_->children = std::move(children);
+}
+
 ComponentBase::~ComponentBase() {
   DetachAllChildren();
+}
+
+Components& ComponentBase::children() {
+  return impl_->children;
+}
+
+const Components& ComponentBase::children() const {
+  return impl_->children;
 }
 
 /// @brief Return the parent ComponentBase, or nul if any.
 /// @see Detach
 /// @see Parent
 ComponentBase* ComponentBase::Parent() const {
-  return parent_;
+  return impl_->parent;
 }
 
 /// @brief Access the child at index `i`.
 Component& ComponentBase::ChildAt(size_t i) {
   assert(i < ChildCount());  // NOLINT
-  return children_[i];
+  return impl_->children[i];
 }
 
 /// @brief Returns the number of children.
 size_t ComponentBase::ChildCount() const {
-  return children_.size();
+  return impl_->children.size();
 }
 
 /// @brief Return index of the component in its parent. -1 if no parent.
 int ComponentBase::Index() const {
-  if (parent_ == nullptr) {
+  if (impl_->parent == nullptr) {
     return -1;
   }
   int index = 0;
-  for (const Component& child : parent_->children_) {
+  for (const Component& child : impl_->parent->impl_->children) {
     if (child.get() == this) {
       return index;
     }
@@ -69,31 +90,31 @@ int ComponentBase::Index() const {
 /// @param child The child to be attached.
 void ComponentBase::Add(Component child) {
   child->Detach();
-  child->parent_ = this;
-  children_.push_back(std::move(child));
+  child->impl_->parent = this;
+  impl_->children.push_back(std::move(child));
 }
 
 /// @brief Detach this child from its parent.
 /// @see Detach
 /// @see Parent
 void ComponentBase::Detach() {
-  if (parent_ == nullptr) {
+  if (impl_->parent == nullptr) {
     return;
   }
-  auto it = std::find_if(std::begin(parent_->children_),  // NOLINT
-                         std::end(parent_->children_),    //
-                         [this](const Component& that) {  //
+  auto it = std::find_if(std::begin(impl_->parent->impl_->children),  // NOLINT
+                         std::end(impl_->parent->impl_->children),    //
+                         [this](const Component& that) {              //
                            return this == that.get();
                          });
-  ComponentBase* parent = parent_;
-  parent_ = nullptr;
-  parent->children_.erase(it);  // Might delete |this|.
+  ComponentBase* parent = impl_->parent;
+  impl_->parent = nullptr;
+  parent->impl_->children.erase(it);  // Might delete |this|.
 }
 
 /// @brief Remove all children.
 void ComponentBase::DetachAllChildren() {
-  while (!children_.empty()) {
-    children_[0]->Detach();
+  while (!impl_->children.empty()) {
+    impl_->children[0]->Detach();
   }
 }
 
@@ -103,13 +124,13 @@ void ComponentBase::DetachAllChildren() {
 Element ComponentBase::Render() {
   // Some users might call `ComponentBase::Render()` from
   // `T::OnRender()`. To avoid infinite recursion, we use a flag.
-  if (in_render) {
+  if (impl_->in_render) {
     return ComponentBase::OnRender();
   }
 
-  in_render = true;
+  impl_->in_render = true;
   Element element = OnRender();
-  in_render = false;
+  impl_->in_render = false;
 
   class Wrapper : public Node {
    public:
@@ -138,8 +159,8 @@ Element ComponentBase::Render() {
 /// Build a ftxui::Element to be drawn on the ftxi::Screen representing this
 /// ftxui::ComponentBase. This function is means to be overridden.
 Element ComponentBase::OnRender() {
-  if (children_.size() == 1) {
-    return children_.front()->Render();
+  if (impl_->children.size() == 1) {
+    return impl_->children.front()->Render();
   }
 
   return text("Not implemented component");
@@ -150,8 +171,8 @@ Element ComponentBase::OnRender() {
 /// @return True when the event has been handled.
 /// The default implementation called OnEvent on every child until one return
 /// true. If none returns true, return false.
-bool ComponentBase::OnEvent(Event event) {  // NOLINT
-  for (Component& child : children_) {      // NOLINT
+bool ComponentBase::OnEvent(Event event) {     // NOLINT
+  for (Component& child : impl_->children) {  // NOLINT
     if (child->OnEvent(event)) {
       return true;
     }
@@ -163,7 +184,7 @@ bool ComponentBase::OnEvent(Event event) {  // NOLINT
 /// @param params the parameters of the animation
 /// The default implementation dispatch the event to every child.
 void ComponentBase::OnAnimation(animation::Params& params) {
-  for (const Component& child : children_) {
+  for (const Component& child : impl_->children) {
     child->OnAnimation(params);
   }
 }
@@ -171,7 +192,7 @@ void ComponentBase::OnAnimation(animation::Params& params) {
 /// @brief Return the currently Active child.
 /// @return the currently Active child.
 Component ComponentBase::ActiveChild() {
-  for (auto& child : children_) {
+  for (auto& child : impl_->children) {
     if (child->Focusable()) {
       return child;
     }
@@ -183,7 +204,7 @@ Component ComponentBase::ActiveChild() {
 /// The non focusable Components will be skipped when navigating using the
 /// keyboard.
 bool ComponentBase::Focusable() const {
-  for (const Component& child : children_) {  // NOLINT
+  for (const Component& child : impl_->children) {  // NOLINT
     if (child->Focusable()) {
       return true;
     }
@@ -193,7 +214,7 @@ bool ComponentBase::Focusable() const {
 
 /// @brief Returns if the element if the currently active child of its parent.
 bool ComponentBase::Active() const {
-  return parent_ == nullptr || parent_->ActiveChild().get() == this;
+  return impl_->parent == nullptr || impl_->parent->ActiveChild().get() == this;
 }
 
 /// @brief Returns if the elements if focused by the user.
@@ -203,7 +224,7 @@ bool ComponentBase::Active() const {
 bool ComponentBase::Focused() const {
   const auto* current = this;
   while (current && current->Active()) {
-    current = current->parent_;
+    current = current->impl_->parent;
   }
   return !current && Focusable();
 }
@@ -221,7 +242,7 @@ void ComponentBase::SetActiveChild(Component child) {  // NOLINT
 /// @brief Configure all the ancestors to give focus to this component.
 void ComponentBase::TakeFocus() {
   ComponentBase* child = this;
-  while (ComponentBase* parent = child->parent_) {
+  while (ComponentBase* parent = child->impl_->parent) {
     parent->SetActiveChild(child);
     child = parent;
   }

@@ -9,11 +9,13 @@
 #include "ftxui/dom/elements.hpp"  // for Element, unpack
 #include "ftxui/dom/node.hpp"      // for Node
 
+#include "ftxui/util/export.hpp"
+
 namespace ftxui {
 struct Box;
 
 // Helper class.
-class NodeDecorator : public Node {
+class FTXUI_EXPORT(DOM) NodeDecorator : public Node {
  public:
   explicit NodeDecorator(Element child) : Node(unpack(std::move(child))) {}
   void ComputeRequirement() override;

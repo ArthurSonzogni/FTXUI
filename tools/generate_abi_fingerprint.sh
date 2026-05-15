@@ -7,6 +7,9 @@
 
 set -e
 
+# Disable debuginfod to avoid network delays
+export DEBUGINFOD_URLS=""
+
 if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <build_dir>"
     exit 1

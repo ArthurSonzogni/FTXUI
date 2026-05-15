@@ -42,16 +42,16 @@ class ContainerBase : public ComponentBase {
   }
 
   Component ActiveChild() override {
-    if (children_.empty()) {
+    if (children().empty()) {
       return nullptr;
     }
 
-    return children_[static_cast<size_t>(*selector_) % children_.size()];
+    return children()[static_cast<size_t>(*selector_) % children().size()];
   }
 
   void SetActiveChild(ComponentBase* child) override {
-    for (size_t i = 0; i < children_.size(); ++i) {
-      if (children_[i].get() == child) {
+    for (size_t i = 0; i < children().size(); ++i) {
+      if (children()[i].get() == child) {
         *selector_ = static_cast<int>(i);
         return;
       }
@@ -70,9 +70,9 @@ class ContainerBase : public ComponentBase {
   int* selector_ = nullptr;
 
   void MoveSelector(int dir) {
-    for (int i = *selector_ + dir; i >= 0 && i < int(children_.size());
+    for (int i = *selector_ + dir; i >= 0 && i < int(children().size());
          i += dir) {
-      if (children_[i]->Focusable()) {
+      if (children()[i]->Focusable()) {
         *selector_ = i;
         return;
       }
@@ -80,13 +80,13 @@ class ContainerBase : public ComponentBase {
   }
 
   void MoveSelectorWrap(int dir) {
-    if (children_.empty()) {
+    if (children().empty()) {
       return;
     }
-    for (size_t offset = 1; offset < children_.size(); ++offset) {
+    for (size_t offset = 1; offset < children().size(); ++offset) {
       const size_t i =
-          (*selector_ + offset * dir + children_.size()) % children_.size();
-      if (children_[i]->Focusable()) {
+          (*selector_ + offset * dir + children().size()) % children().size();
+      if (children()[i]->Focusable()) {
         *selector_ = int(i);
         return;
       }
@@ -100,8 +100,8 @@ class VerticalContainer : public ContainerBase {
 
   Element OnRender() override {
     Elements elements;
-    elements.reserve(children_.size());
-    for (auto& it : children_) {
+    elements.reserve(children().size());
+    for (auto& it : children()) {
       elements.push_back(it->Render());
     }
     if (elements.empty()) {
@@ -129,12 +129,12 @@ class VerticalContainer : public ContainerBase {
       }
     }
     if (event == Event::Home) {
-      for (size_t i = 0; i < children_.size(); ++i) {
+      for (size_t i = 0; i < children().size(); ++i) {
         MoveSelector(-1);
       }
     }
     if (event == Event::End) {
-      for (size_t i = 0; i < children_.size(); ++i) {
+      for (size_t i = 0; i < children().size(); ++i) {
         MoveSelector(1);
       }
     }
@@ -145,7 +145,7 @@ class VerticalContainer : public ContainerBase {
       MoveSelectorWrap(-1);
     }
 
-    *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+    *selector_ = std::max(0, std::min(int(children().size()) - 1, *selector_));
     return old_selected != *selector_;
   }
 
@@ -170,7 +170,7 @@ class VerticalContainer : public ContainerBase {
     if (event.mouse().button == Mouse::WheelDown) {
       MoveSelector(+1);
     }
-    *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+    *selector_ = std::max(0, std::min(int(children().size()) - 1, *selector_));
 
     return old_selected != *selector_;
   }
@@ -184,8 +184,8 @@ class HorizontalContainer : public ContainerBase {
 
   Element OnRender() override {
     Elements elements;
-    elements.reserve(children_.size());
-    for (auto& it : children_) {
+    elements.reserve(children().size());
+    for (auto& it : children()) {
       elements.push_back(it->Render());
     }
     if (elements.empty()) {
@@ -209,7 +209,7 @@ class HorizontalContainer : public ContainerBase {
       MoveSelectorWrap(-1);
     }
 
-    *selector_ = std::max(0, std::min(int(children_.size()) - 1, *selector_));
+    *selector_ = std::max(0, std::min(int(children().size()) - 1, *selector_));
     return old_selected != *selector_;
   }
 };
@@ -227,10 +227,10 @@ class TabContainer : public ContainerBase {
   }
 
   bool Focusable() const override {
-    if (children_.empty()) {
+    if (children().empty()) {
       return false;
     }
-    return children_[size_t(*selector_) % children_.size()]->Focusable();
+    return children()[size_t(*selector_) % children().size()]->Focusable();
   }
 
   bool OnMouseEvent(Event event) override {
@@ -246,7 +246,7 @@ class StackedContainer : public ContainerBase {
  private:
   Element OnRender() final {
     Elements elements;
-    for (auto& child : children_) {
+    for (auto& child : children()) {
       elements.push_back(child->Render());
     }
     // Reverse the order of the elements.
@@ -255,7 +255,7 @@ class StackedContainer : public ContainerBase {
   }
 
   bool Focusable() const final {
-    for (const auto& child : children_) {
+    for (const auto& child : children()) {
       if (child->Focusable()) {
         return true;
       }
@@ -264,30 +264,30 @@ class StackedContainer : public ContainerBase {
   }
 
   Component ActiveChild() final {
-    if (children_.empty()) {
+    if (children().empty()) {
       return nullptr;
     }
-    return children_[0];
+    return children()[0];
   }
 
   void SetActiveChild(ComponentBase* child) final {
-    if (children_.empty()) {
+    if (children().empty()) {
       return;
     }
 
     // Find `child` and put it at the beginning without change the order of the
     // other children.
     auto it =
-        std::find_if(children_.begin(), children_.end(),  // NOLINT
+        std::find_if(children().begin(), children().end(),  // NOLINT
                      [child](const Component& c) { return c.get() == child; });
-    if (it == children_.end()) {
+    if (it == children().end()) {
       return;
     }
-    std::rotate(children_.begin(), it, it + 1);
+    std::rotate(children().begin(), it, it + 1);
   }
 
   bool OnEvent(Event event) final {
-    for (auto& child : children_) {
+    for (auto& child : children()) {
       if (child->OnEvent(event)) {
         return true;
       }
