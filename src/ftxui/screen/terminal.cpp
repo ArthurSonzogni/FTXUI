@@ -106,9 +106,9 @@ struct Quirks::Impl {
   Color color_support = Palette256;
 };
 
-Quirks::Quirks() : impl_(new Impl) {}
+Quirks::Quirks() : impl_(std::make_unique<Impl>()) {}
 Quirks::~Quirks() = default;
-Quirks::Quirks(const Quirks& other) : impl_(new Impl(*other.impl_)) {}
+Quirks::Quirks(const Quirks& other) : impl_(std::make_unique<Impl>(*other.impl_)) {}
 Quirks& Quirks::operator=(const Quirks& other) {
   if (this != &other) {
     *impl_ = *other.impl_;
@@ -155,7 +155,7 @@ struct TerminalInfo::Impl {
   std::vector<int> capabilities;
 };
 
-TerminalInfo::TerminalInfo() : impl_(new Impl) {}
+TerminalInfo::TerminalInfo() : impl_(std::make_unique<Impl>()) {}
 TerminalInfo::~TerminalInfo() = default;
 TerminalInfo::TerminalInfo(TerminalInfo&&) noexcept = default;
 TerminalInfo& TerminalInfo::operator=(TerminalInfo&&) noexcept = default;
