@@ -24,14 +24,28 @@ LIBS=("screen" "dom" "component")
 FINGERPRINT_FILE=$(mktemp)
 
 # 1. Hash public headers
-find "$INCLUDE_DIR" -type f -name "*.hpp" -print0 | sort -z | xargs -0 sha256sum >> "$FINGERPRINT_FILE"
+# We hash only the content of the files to avoid being dependent on the path.
+find "$INCLUDE_DIR" -type f -name "*.hpp" | sort | xargs cat | sha256sum >> "$FINGERPRINT_FILE"
 
 # 2. Hash exported symbols
+# We use abidw (from libabigail) to get a semantic representation of the ABI.
+# We filter for ftxui symbols to avoid environment-specific noise.
 for lib in "${LIBS[@]}"; do
     SO_FILE="$BUILD_DIR/libftxui-$lib.so"
     if [ -f "$SO_FILE" ]; then
-        # We use mangled symbols here for the hash as they are more precise
-        nm -D --defined-only "$SO_FILE" | cut -c 20- | sort >> "$FINGERPRINT_FILE"
+        # abidw flags for stability:
+        # --no-architecture: avoid amd64 vs aarch64 noise
+        # --no-corpus-path: avoid absolute path noise
+        # --no-show-locs: avoid header path noise
+        # --no-comp-dir-path: avoid build dir noise
+        abidw --no-architecture \
+              --no-corpus-path \
+              --no-show-locs \
+              --no-comp-dir-path \
+              --suppressions tools/abidiff_suppressions.ini \
+              "$SO_FILE" | \
+              grep -oE "name='_ZNK?5ftxui[^']+'" | \
+              sort >> "$FINGERPRINT_FILE"
     else
         echo "Warning: $SO_FILE not found. Skipping symbol hash for $lib."
     fi
