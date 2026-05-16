@@ -64,6 +64,7 @@ A simple cross-platform C++ library for terminal based user interfaces!
     - [XMake](https://xmake.io) repository [package](https://github.com/xmake-io/xmake-repo/blob/dev/packages/f/ftxui/xmake.lua)
     - [Nix](https://github.com/ArthurSonzogni/FTXUI/blob/main/flake.nix)
     - [Amalgamated (single-header/source)](https://arthursonzogni.github.io/FTXUI/installation_amalgamated.html) (from 7.0.0)
+    - [conda-forge](https://anaconda.org/channels/conda-forge/packages/ftxui/overview)
  * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
 ## Documentation
