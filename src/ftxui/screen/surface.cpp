@@ -1,6 +1,7 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#include <algorithm>
 #include <sstream>  // IWYU pragma: keep
 #include <string>
 #include <vector>
@@ -69,7 +70,7 @@ const Cell& Surface::FastCellAt(int x, int y) const {
 
 /// @brief Clear all the cells from the surface.
 void Surface::Clear() {
-  cells_ = {};
+  std::fill(cells_.begin(), cells_.end(), Cell());
 }
 
 }  // namespace ftxui
