@@ -916,7 +916,7 @@ void App::Internal::Draw(Component component) {
     public_->dimx_ = dimx;
     public_->dimy_ = dimy;
     public_->cells_ =
-        std::vector<std::vector<Cell>>(dimy, std::vector<Cell>(dimx));
+        std::vector<Cell>(static_cast<size_t>(dimx) * static_cast<size_t>(dimy));
     Cursor cursor = public_->cursor_;
     cursor.x = dimx - 1;
     cursor.y = dimy - 1;

@@ -70,7 +70,7 @@
 // or absense of an extra comma can be used to conditionally shift subsequent
 // argument positions and thus influence which argument is selected.
 #define FTXUI_MACRO_CONDITIONAL_COMMA_(...) \
-  FTXUI_MACRO_EXPAND(FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_(__VA_ARGS__, ))
+  FTXUI_MACRO_EXPAND(FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_(__VA_ARGS__, dummy))
 #define FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_(x, ...) \
   FTXUI_MACRO_CONDITIONAL_COMMA_##x##_
 #define FTXUI_MACRO_CONDITIONAL_COMMA_1_ ,
@@ -79,7 +79,8 @@
 // |FTXUI_MACRO_CONDITIONAL_COMMA_()| above to implement conditional macro
 // expansion.
 #define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_(...) \
-  FTXUI_MACRO_EXPAND(FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_(__VA_ARGS__))
+  FTXUI_MACRO_EXPAND(                               \
+      FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_(__VA_ARGS__, dummy))
 #define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_(a, b, c, ...) c
 
 #endif  // FTXUI_UTIL_EXPORT_H_

@@ -1,6 +1,7 @@
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
+#include <algorithm>
 #include <sstream>  // IWYU pragma: keep
 #include <string>
 #include <vector>
@@ -21,7 +22,7 @@ Surface::Surface(int dimx, int dimy)
     : stencil{0, dimx - 1, 0, dimy - 1},
       dimx_(dimx),
       dimy_(dimy),
-      cells_(dimy, std::vector<Cell>(dimx)) {}
+      cells_(static_cast<size_t>(dimx) * static_cast<size_t>(dimy)) {}
 
 /// @brief Access a character in a cell at a given position.
 /// @param x The cell position along the x-axis.
@@ -41,23 +42,35 @@ const std::string& Surface::at(int x, int y) const {
 /// @param x The cell position along the x-axis.
 /// @param y The cell position along the y-axis.
 Cell& Surface::CellAt(int x, int y) {
-  return stencil.Contain(x, y) ? cells_[y][x] : dev_null_cell();
+  return stencil.Contain(x, y) ? FastCellAt(x, y) : dev_null_cell();
 }
 
 /// @brief Access a cell (Cell) at a given position.
 /// @param x The cell position along the x-axis.
 /// @param y The cell position along the y-axis.
 const Cell& Surface::CellAt(int x, int y) const {
-  return stencil.Contain(x, y) ? cells_[y][x] : dev_null_cell();
+  return stencil.Contain(x, y) ? FastCellAt(x, y) : dev_null_cell();
+}
+
+/// @brief Access a cell (Cell) at a given position, without stencil check.
+/// @param x The cell position along the x-axis.
+/// @param y The cell position along the y-axis.
+Cell& Surface::FastCellAt(int x, int y) {
+  return cells_[static_cast<size_t>(y) * static_cast<size_t>(dimx_) +
+                static_cast<size_t>(x)];
+}
+
+/// @brief Access a cell (Cell) at a given position, without stencil check.
+/// @param x The cell position along the x-axis.
+/// @param y The cell position along the y-axis.
+const Cell& Surface::FastCellAt(int x, int y) const {
+  return cells_[static_cast<size_t>(y) * static_cast<size_t>(dimx_) +
+                static_cast<size_t>(x)];
 }
 
 /// @brief Clear all the cells from the surface.
 void Surface::Clear() {
-  for (auto& line : cells_) {
-    for (auto& cell : line) {
-      cell = Cell();
-    }
-  }
+  std::fill(cells_.begin(), cells_.end(), Cell());
 }
 
 }  // namespace ftxui
