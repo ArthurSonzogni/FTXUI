@@ -69,9 +69,7 @@ const Cell& Surface::FastCellAt(int x, int y) const {
 
 /// @brief Clear all the cells from the surface.
 void Surface::Clear() {
-  for (auto& cell : cells_) {
-    cell = Cell();
-  }
+  cells_ = {};
 }
 
 }  // namespace ftxui
