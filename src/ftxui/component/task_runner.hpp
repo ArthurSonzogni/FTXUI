@@ -7,11 +7,9 @@
 #include "ftxui/component/task_internal.hpp"
 #include "ftxui/component/task_queue.hpp"
 
-#include "ftxui/util/export.hpp"
-
 namespace ftxui::task {
 
-class FTXUI_EXPORT(COMPONENT) TaskRunner {
+class TaskRunner {
  public:
   TaskRunner();
   ~TaskRunner();

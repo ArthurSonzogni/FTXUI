@@ -10,13 +10,11 @@
 
 #include "ftxui/component/mouse.hpp"  // for Mouse
 
-#include "ftxui/util/export.hpp"
-
 namespace ftxui {
 struct Event;
 
 // Parse a sequence of |char| across |time|. Produces |Event|.
-class FTXUI_EXPORT(COMPONENT) TerminalInputParser {
+class TerminalInputParser {
  public:
   explicit TerminalInputParser(std::function<void(Event)> out);
   void Timeout(int time);
