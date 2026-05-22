@@ -78,12 +78,18 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   const SelectionStyle& GetSelectionStyle() const;
   void SetSelectionStyle(SelectionStyle decorator);
 
+  using PostRenderCallback = std::function<void()>;
+  void RegisterPostRenderCallback(PostRenderCallback callback);
+  void RunPostRenderCallbacks();
+
  protected:
   Cursor cursor_;
   std::vector<std::string> hyperlinks_ = {""};
 
   // The current selection style. This is overridden by various dom elements.
   SelectionStyle selection_style_ = [](Cell& cell) { cell.inverted ^= true; };
+
+  std::vector<PostRenderCallback> post_render_callbacks_;
 };
 
 }  // namespace ftxui

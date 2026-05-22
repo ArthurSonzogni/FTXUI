@@ -165,6 +165,9 @@ void Render(Screen& screen, Node* node, Selection& selection) {
 
   // Step 5: Apply shaders
   screen.ApplyShader();
+
+  // Step 6: Run post-render callbacks
+  screen.RunPostRenderCallbacks();
 }
 
 std::string GetNodeSelectedContent(Screen& screen,

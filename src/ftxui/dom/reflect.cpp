@@ -58,13 +58,15 @@ class ReflectCallback : public Node {
   }
 
   void SetBox(Box box) final {
-    callback_(box);
     Node::SetBox(box);
     children_[0]->SetBox(box);
   }
 
   void Render(Screen& screen) final {
-    callback_(Box::Intersection(screen.stencil, Box{}));
+    Box visible_box = Box::Intersection(screen.stencil, box_);
+    screen.RegisterPostRenderCallback([callback = callback_, visible_box]() {
+      callback(visible_box);
+    });
     Node::Render(screen);
   }
 
