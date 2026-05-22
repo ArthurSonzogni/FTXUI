@@ -99,6 +99,7 @@ struct App::Internal {
   const bool use_alternative_screen_;
 
   bool track_mouse_ = true;
+  bool catch_signals_ = true;
 
   std::string set_cursor_position_;
   std::string reset_cursor_position_;
@@ -464,8 +465,11 @@ void App::Internal::Install() {
 
   // Install signal handlers to restore the terminal state on exit. The default
   // signal handlers are restored on exit.
-  for (const int signal : {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
-    InstallSignalHandler(signal);
+  if (catch_signals_) {
+    for (const int signal :
+         {SIGTERM, SIGSEGV, SIGINT, SIGILL, SIGABRT, SIGFPE}) {
+      InstallSignalHandler(signal);
+    }
   }
 
 // Save the old terminal configuration and restore it on exit.
@@ -915,8 +919,8 @@ void App::Internal::Draw(Component component) {
   if (resized) {
     public_->dimx_ = dimx;
     public_->dimy_ = dimy;
-    public_->cells_ =
-        std::vector<Cell>(static_cast<size_t>(dimx) * static_cast<size_t>(dimy));
+    public_->cells_ = std::vector<Cell>(static_cast<size_t>(dimx) *
+                                        static_cast<size_t>(dimy));
     Cursor cursor = public_->cursor_;
     cursor.x = dimx - 1;
     cursor.y = dimy - 1;
@@ -1360,6 +1364,10 @@ void App::TrackMouse(bool enable) {
 
 void App::HandlePipedInput(bool enable) {
   internal_->handle_piped_input_ = enable;
+}
+
+void App::CatchSignals(bool enable) {
+  internal_->catch_signals_ = enable;
 }
 
 // static
