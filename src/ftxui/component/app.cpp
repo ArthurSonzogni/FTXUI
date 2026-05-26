@@ -4,6 +4,7 @@
 #include <algorithm>  // for any_of, copy, max, min
 #include <array>      // for array
 #include <atomic>
+#include <map>
 #include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
 #include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
 #include <cstdint>
@@ -371,23 +372,130 @@ std::atomic<int> g_signal_resize_count = 0;  // NOLINT
 std::atomic<int> g_signal_exit_count = 0;  // NOLINT
 #endif
 
+// Tracks whether the terminal is currently configured in raw mode.
+// Used to prevent double-restoration in emergency and normal exits.
+std::atomic<bool> g_terminal_is_raw{false};
+
+// Stores the last received deferred signal (e.g. SIGINT, SIGTERM) to be
+// re-raised during uninstallation/exit.
+std::atomic<int> g_last_signal{0};  // NOLINT
+
+#if defined(_WIN32)
+using SignalHandler = void (*)(int);
+// Stores the original signal handlers before FTXUI installed its own.
+std::map<int, SignalHandler> g_old_signal_handlers;
+
+// Stores the original console modes to restore them during exit.
+DWORD g_original_stdout_mode = 0;
+DWORD g_original_stdin_mode = 0;
+bool g_has_original_console_mode = false;
+#else
+// Stores the original sigaction structures before FTXUI installed its own.
+std::map<int, struct sigaction> g_old_sigactions;
+
+// Stores the original termios terminal settings to restore them during exit.
+struct termios g_original_termios;
+bool g_has_original_termios = false;
+int g_tty_fd = -1;
+#endif
+
+// Restores the original signal handler for the given signal and re-raises it.
+// Async-signal-safe function.
+void RestoreSignalHandlerAndRaise(int signal) {
+#if defined(_WIN32)
+  auto it = g_old_signal_handlers.find(signal);
+  auto old_handler =
+      (it != g_old_signal_handlers.end()) ? it->second : SIG_DFL;
+  std::signal(signal, old_handler);
+#else
+  auto it = g_old_sigactions.find(signal);
+  if (it != g_old_sigactions.end()) {
+    sigaction(signal, &it->second, nullptr);
+  } else {
+    struct sigaction sa;
+    sa.sa_handler = SIG_DFL;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(signal, &sa, nullptr);
+  }
+#endif
+  std::raise(signal);
+}
+
+// Emergency terminal state restoration.
+// Async-signal-safe function.
+void RestoreTerminalEmergency() {
+  if (!g_terminal_is_raw.exchange(false)) {
+    return;
+  }
+#if defined(_WIN32)
+  if (g_has_original_console_mode) {
+    auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+    auto stdin_handle = GetStdHandle(STD_INPUT_HANDLE);
+    SetConsoleMode(stdout_handle, g_original_stdout_mode);
+    SetConsoleMode(stdin_handle, g_original_stdin_mode);
+  }
+#else
+  if (g_has_original_termios && g_tty_fd >= 0) {
+    const char restore_seq[] =
+        "\x1b[?25h"    // Show cursor.
+        "\x1b[?1049l"  // Switch to normal screen buffer.
+        "\x1b[?1000l"  // Disable normal mouse tracking.
+        "\x1b[?1002l"  // Disable button event mouse tracking.
+        "\x1b[?1003l"  // Disable all motion mouse tracking.
+        "\x1b[?1006l"  // Disable SGR mouse tracking.
+        "\x1b[?1015l"  // Disable Urxvt mouse tracking.
+        "\x1b[?7h";    // Enable line wrapping.
+    std::ignore = write(STDOUT_FILENO, restore_seq, sizeof(restore_seq) - 1);
+    tcsetattr(g_tty_fd, TCSANOW, &g_original_termios);
+  }
+#endif
+}
+
 // Async signal safe function
 void RecordSignal(int signal) {
   switch (signal) {
+    // Abnormal termination (e.g. abort() or assertion failure).
     case SIGABRT:
+    // Erroneous arithmetic operation (e.g. division by zero).
     case SIGFPE:
+    // Illegal instruction.
     case SIGILL:
-    case SIGINT:
+    // Invalid memory reference (segmentation fault).
     case SIGSEGV:
+#if !defined(_WIN32)
+    // Bus error (e.g. bad memory access alignment).
+    case SIGBUS:
+    // Bad system call.
+    case SIGSYS:
+#endif
+    {
+      RestoreTerminalEmergency();
+      RestoreSignalHandlerAndRaise(signal);
+      break;
+    }
+
+    // Terminal interrupt (e.g. Ctrl-C).
+    case SIGINT:
+    // Termination request.
     case SIGTERM:
+#if !defined(_WIN32)
+    // Terminal quit (e.g. Ctrl-\, produces core dump).
+    case SIGQUIT:
+    // Hangup detected on controlling terminal or death of controlling process.
+    case SIGHUP:
+#endif
+      g_last_signal.store(signal);
       g_signal_exit_count++;
       break;
 
 #if !defined(_WIN32)
+    // Terminal stop signal (e.g. Ctrl-Z).
     case SIGTSTP:  // NOLINT
       g_signal_stop_count++;
       break;
 
+    // Terminal window size change.
     case SIGWINCH:  // NOLINT
       g_signal_resize_count++;
       break;
@@ -399,6 +507,10 @@ void RecordSignal(int signal) {
 }
 
 void ExecuteSignalHandlers() {
+  if (g_last_signal.load() != 0) {
+    App::Private::Signal(*g_active_screen, SIGABRT);
+  }
+
   int signal_exit_count = g_signal_exit_count.exchange(0);
   while (signal_exit_count--) {
     App::Private::Signal(*g_active_screen, SIGABRT);
@@ -418,9 +530,22 @@ void ExecuteSignalHandlers() {
 }
 
 void InstallSignalHandler(int sig) {
+#if defined(_WIN32)
   auto old_signal_handler = std::signal(sig, RecordSignal);
+  g_old_signal_handlers[sig] = old_signal_handler;
   on_exit_functions.emplace(
       [=] { std::ignore = std::signal(sig, old_signal_handler); });
+#else
+  struct sigaction sa;
+  sa.sa_handler = RecordSignal;
+  sigemptyset(&sa.sa_mask);
+  sa.sa_flags = SA_RESTART;
+  struct sigaction old_sa;
+  sigaction(sig, &sa, &old_sa);
+  g_old_sigactions[sig] = old_sa;
+  on_exit_functions.emplace(
+      [=] { sigaction(sig, &old_sa, nullptr); });
+#endif
 }
 
 }  // namespace
@@ -478,6 +603,9 @@ void App::Internal::Install() {
   DWORD in_mode = 0;
   GetConsoleMode(stdout_handle, &out_mode);
   GetConsoleMode(stdin_handle, &in_mode);
+  g_original_stdout_mode = out_mode;
+  g_original_stdin_mode = in_mode;
+  g_has_original_console_mode = true;
   on_exit_functions.push([=] { SetConsoleMode(stdout_handle, out_mode); });
   on_exit_functions.push([=] { SetConsoleMode(stdin_handle, in_mode); });
 
@@ -500,12 +628,16 @@ void App::Internal::Install() {
   SetConsoleMode(stdin_handle, in_mode);
   SetConsoleMode(stdout_handle, out_mode);
 #else  // POSIX (Linux & Mac)
-  for (const int signal : {SIGWINCH, SIGTSTP}) {
+  for (const int signal :
+       {SIGWINCH, SIGTSTP, SIGBUS, SIGSYS, SIGQUIT, SIGHUP}) {
     InstallSignalHandler(signal);
   }
 
   struct termios terminal;  // NOLINT
   tcgetattr(tty_fd_, &terminal);
+  g_original_termios = terminal;
+  g_tty_fd = tty_fd_;
+  g_has_original_termios = true;
   on_exit_functions.emplace([terminal = terminal, tty_fd_ = tty_fd_] {
     tcsetattr(tty_fd_, TCSANOW, &terminal);
   });
@@ -580,9 +712,11 @@ void App::Internal::Install() {
   PostAnimationTask();
 
   installed_ = true;
+  g_terminal_is_raw = true;
 }
 
 void App::Internal::Uninstall() {
+  g_terminal_is_raw = false;
   installed_ = false;
 
   // During shutdown, wait for all of the replies.
@@ -664,6 +798,11 @@ void App::Internal::PostMain() {
       std::cout << "\n";
     }
     std::cout << std::flush;
+  }
+
+  int sig = g_last_signal.exchange(0);
+  if (sig != 0) {
+    RestoreSignalHandlerAndRaise(sig);
   }
 }
 
@@ -771,7 +910,7 @@ void App::Internal::HandleTask(Component component, Task& task) {
       handled = HandleSelection(handled, arg);
 
       if (arg == Event::CtrlC && (!handled || force_handle_ctrl_c_)) {
-        RecordSignal(SIGABRT);
+        RecordSignal(SIGINT);
       }
 
 #if !defined(_WIN32)
