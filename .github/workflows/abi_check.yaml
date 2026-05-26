@@ -24,7 +24,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake -B build -DBUILD_SHARED_LIBS=ON -DFTXUI_BUILD_EXAMPLES=OFF -DFTXUI_BUILD_TESTS=OFF -DFTXUI_BUILD_DOCS=OFF
+          cmake -B build -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Debug -DFTXUI_BUILD_EXAMPLES=OFF -DFTXUI_BUILD_TESTS=OFF -DFTXUI_BUILD_DOCS=OFF
           cmake --build build --parallel
 
       - name: Run ABI check
