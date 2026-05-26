@@ -13,7 +13,6 @@ if [ "$#" -ne 1 ]; then
 fi
 
 BUILD_DIR=$1
-INCLUDE_DIR="include"
 
 if [ ! -d "$BUILD_DIR" ]; then
     echo "Error: Build directory $BUILD_DIR not found."
@@ -23,13 +22,9 @@ fi
 LIBS=("screen" "dom" "component")
 FINGERPRINT_FILE=$(mktemp)
 
-# 1. Hash public headers
-# We hash only the content of the files to avoid being dependent on the path.
-find "$INCLUDE_DIR" -type f -name "*.hpp" | sort | xargs cat | sha256sum >> "$FINGERPRINT_FILE"
-
-# 2. Hash exported symbols
-# We use abidw (from libabigail) to get a semantic representation of the ABI.
-# We filter for ftxui symbols to avoid environment-specific noise.
+# Hash exported symbols using normalized abidw output.
+# This captures all public classes, structs, member variables, offsets, sizes,
+# and function signatures, while remaining stable across environments.
 for lib in "${LIBS[@]}"; do
     SO_FILE="$BUILD_DIR/libftxui-$lib.so"
     if [ -f "$SO_FILE" ]; then
@@ -44,8 +39,7 @@ for lib in "${LIBS[@]}"; do
               --no-comp-dir-path \
               --suppressions tools/abidiff_suppressions.ini \
               "$SO_FILE" | \
-              grep -oE "name='_ZNK?5ftxui[^']+'" | \
-              sort >> "$FINGERPRINT_FILE"
+              ./tools/normalize_abidw.py >> "$FINGERPRINT_FILE"
     else
         echo "Warning: $SO_FILE not found. Skipping symbol hash for $lib."
     fi

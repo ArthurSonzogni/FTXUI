@@ -23,12 +23,32 @@ for cmd in cmake git abidiff; do
     fi
 done
 
+build_commit() {
+    local commit=$1
+    local path=$2
+    
+    echo -e "${YELLOW}Building $commit...${NC}"
+    git worktree add "$path" "$commit" --detach > /dev/null 2>&1
+    
+    pushd "$path" > /dev/null
+    cmake -B build \
+          -DBUILD_SHARED_LIBS=ON \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DFTXUI_BUILD_EXAMPLES=OFF \
+          -DFTXUI_BUILD_TESTS=OFF \
+          -DFTXUI_BUILD_MODULES=OFF \
+          -DFTXUI_BUILD_DOCS=OFF \
+          -Wno-dev \
+          > /dev/null
+    cmake --build build --parallel > /dev/null
+    popd > /dev/null
+}
+
 if [ "$1" == "--accept" ]; then
-    if [ ! -d "build" ]; then
-        echo -e "${RED}Error: Build directory not found. Please build the project first.${NC}"
-        exit 1
-    fi
-    NEW_FP=$(./tools/generate_abi_fingerprint.sh build)
+    TEMP_DIR=$(mktemp -d)
+    trap "rm -rf $TEMP_DIR; git worktree prune &> /dev/null" EXIT
+    build_commit "HEAD" "$TEMP_DIR/head"
+    NEW_FP=$(./tools/generate_abi_fingerprint.sh "$TEMP_DIR/head/build")
     echo "$NEW_FP" > tools/abi_fingerprint.txt
     echo -e "${GREEN}ABI fingerprint updated to $NEW_FP.${NC}"
     exit 0
@@ -83,27 +103,6 @@ if [ -n "$FP1" ] && [ -n "$FP2" ] && [ "$FP1" == "$FP2" ]; then
     echo -e "${GREEN}ABI fingerprints match ($FP1). No changes detected.${NC}"
     exit 0
 fi
-
-build_commit() {
-    local commit=$1
-    local path=$2
-    
-    echo -e "${YELLOW}Building $commit...${NC}"
-    git worktree add "$path" "$commit" --detach > /dev/null 2>&1
-    
-    pushd "$path" > /dev/null
-    cmake -B build \
-          -DBUILD_SHARED_LIBS=ON \
-          -DCMAKE_BUILD_TYPE=Debug \
-          -DFTXUI_BUILD_EXAMPLES=OFF \
-          -DFTXUI_BUILD_TESTS=OFF \
-          -DFTXUI_BUILD_MODULES=OFF \
-          -DFTXUI_BUILD_DOCS=OFF \
-          -Wno-dev \
-          > /dev/null
-    cmake --build build --parallel > /dev/null
-    popd > /dev/null
-}
 
 PATH1="$TEMP_DIR/v1"
 PATH2="$TEMP_DIR/v2"
