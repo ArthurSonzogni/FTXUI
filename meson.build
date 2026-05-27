@@ -141,3 +141,9 @@ endif
 if ftxui_build_examples
   subdir('examples')
 endif
+
+summary({
+  'Version': meson.project_version(),
+  'Build Tests': ftxui_build_tests,
+  'Build Examples': ftxui_build_examples,
+}, section: 'Project Configuration')

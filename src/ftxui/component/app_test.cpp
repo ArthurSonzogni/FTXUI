@@ -62,7 +62,18 @@ class StdCapture {
 
 #endif
 
+static bool g_test_signal_called = false;
+void TestSignalHandler(int) {
+  g_test_signal_called = true;
+  if (App::Active()) {
+    App::Active()->Exit();
+  }
+}
+
 bool TestSignal(int signal) {
+  g_test_signal_called = false;
+  auto old_handler = std::signal(signal, TestSignalHandler);
+
   int called = 0;
   // The tree of components. This defines how to navigate using the keyboard.
   auto component = Renderer([&] {
@@ -75,6 +86,9 @@ bool TestSignal(int signal) {
   auto screen = App::FitComponent();
   screen.Loop(component);
 
+  std::signal(signal, old_handler);
+
+  EXPECT_TRUE(g_test_signal_called);
   EXPECT_GE(called, 2);
   return true;
 }
@@ -98,6 +112,20 @@ TEST(App, Signal_SIGABRT) {
 TEST(App, Signal_SIGFPE) {
   TestSignal(SIGFPE);
 }
+#if !defined(_WIN32)
+TEST(App, Signal_SIGBUS) {
+  TestSignal(SIGBUS);
+}
+TEST(App, Signal_SIGSYS) {
+  TestSignal(SIGSYS);
+}
+TEST(App, Signal_SIGQUIT) {
+  TestSignal(SIGQUIT);
+}
+TEST(App, Signal_SIGHUP) {
+  TestSignal(SIGHUP);
+}
+#endif
 
 // Regression test for:
 // https://github.com/ArthurSonzogni/FTXUI/issues/402
@@ -114,6 +142,9 @@ TEST(App, PostTaskToNonActive) {
 }
 
 TEST(App, CtrlC) {
+  auto old_handler = std::signal(SIGINT, [](int) {});
+  auto old_abrt_handler = std::signal(SIGABRT, [](int) {});
+
   auto screen = App::FitComponent();
   bool called = false;
   auto component = Renderer([&] {
@@ -124,9 +155,15 @@ TEST(App, CtrlC) {
     return text("");
   });
   screen.Loop(component);
+
+  std::signal(SIGINT, old_handler);
+  std::signal(SIGABRT, old_abrt_handler);
 }
 
 TEST(App, CtrlC_Forced) {
+  auto old_handler = std::signal(SIGINT, [](int) {});
+  auto old_abrt_handler = std::signal(SIGABRT, [](int) {});
+
   auto screen = App::FitComponent();
   screen.ForceHandleCtrlC(true);
   auto component = Renderer([&] {
@@ -151,9 +188,15 @@ TEST(App, CtrlC_Forced) {
   screen.Loop(component);
 
   ASSERT_LE(ctrl_c_count, 50);
+
+  std::signal(SIGINT, old_handler);
+  std::signal(SIGABRT, old_abrt_handler);
 }
 
 TEST(App, CtrlC_NotForced) {
+  auto old_handler = std::signal(SIGINT, [](int) {});
+  auto old_abrt_handler = std::signal(SIGABRT, [](int) {});
+
   auto screen = App::FitComponent();
   screen.ForceHandleCtrlC(false);
   auto component = Renderer([&] {
@@ -178,6 +221,9 @@ TEST(App, CtrlC_NotForced) {
   screen.Loop(component);
 
   ASSERT_GE(ctrl_c_count, 50);
+
+  std::signal(SIGINT, old_handler);
+  std::signal(SIGABRT, old_abrt_handler);
 }
 
 // Regression test for:

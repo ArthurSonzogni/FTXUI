@@ -56,6 +56,7 @@ Next
   avoids unnecessary copies. Thanks @mikomikotaishi for PR #1154
 
 ### Component
+- Feature: Improved signal handling. Upgrade signal interception to use POSIX `sigaction` for robust signal masking and cleanup handler preservation. Protect against double terminal restoration on exit using atomic raw-state tracking. Add support for additional POSIX signals (`SIGBUS`, `SIGSYS` as crash signals, and `SIGQUIT`, `SIGHUP` as deferred termination signals) and fix async-signal-safety issues in crash paths.
 - Bugfix: Fix `Input` cursor visibility when using a custom `Renderer` on nested containers. See #1220. Thanks @nmarks99.
 - Fix `Input` cursor positioning and scroll stability. See #1196. Thanks @739C1AE2.
 - Fix `Input` support for non-ASCII characters in password mode. See #1196. Thanks @739C1AE2.

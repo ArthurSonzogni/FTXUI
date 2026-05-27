@@ -4,7 +4,7 @@ function(ftxui_message msg)
   endif()
 endfunction()
 
-ftxui_message("┌─ FTXUI options ─────────────────────")
+ftxui_message("┌─ FTXUI ${PROJECT_VERSION} ────────────────────────")
 ftxui_message("│ FTXUI_BUILD_DOCS         : ${FTXUI_BUILD_DOCS}")
 ftxui_message("│ FTXUI_BUILD_EXAMPLES     : ${FTXUI_BUILD_EXAMPLES}")
 ftxui_message("│ FTXUI_BUILD_MODULES      : ${FTXUI_BUILD_MODULES}")

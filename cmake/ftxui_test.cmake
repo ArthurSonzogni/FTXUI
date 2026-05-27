@@ -2,6 +2,10 @@ if (NOT FTXUI_BUILD_TESTS)
   return()
 endif()
 
+if (BUILD_SHARED_LIBS)
+  message(FATAL_ERROR "FTXUI unit tests require access to internal symbols which are hidden when building as shared libraries. To run tests, please configure with -DBUILD_SHARED_LIBS=OFF.")
+endif()
+
 enable_testing()
 
 include(cmake/ftxui_find_google_test.cmake)

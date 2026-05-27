@@ -450,20 +450,25 @@ void Screen::ToString(std::string& ss) const {
 
     // After printing a fullwith character, we need to skip the next cell.
     bool previous_fullwidth = false;
-    for (const auto& cell : cells_[y]) {
-      if (!previous_fullwidth) {
-        UpdateCellStyle(this, ss, *previous_cell_ref, cell);
-        previous_cell_ref = &cell;
-        if (cell.character.empty()) {
-          ss += ' ';
-        } else {
-          ss += cell.character;
+    if (dimx_ > 0) {
+      const Cell* line_start = &FastCellAt(0, y);
+      const Cell* line_end = line_start + dimx_;
+      for (const Cell* it = line_start; it != line_end; ++it) {
+        const auto& cell = *it;
+        if (!previous_fullwidth) {
+          UpdateCellStyle(this, ss, *previous_cell_ref, cell);
+          previous_cell_ref = &cell;
+          if (cell.character.empty()) {
+            ss += ' ';
+          } else {
+            ss += cell.character;
+          }
         }
-      }
-      if (cell.character.size() <= 1) {
-        previous_fullwidth = false;
-      } else {
-        previous_fullwidth = (string_width(cell.character) == 2);
+        if (cell.character.size() <= 1) {
+          previous_fullwidth = false;
+        } else {
+          previous_fullwidth = (string_width(cell.character) == 2);
+        }
       }
     }
   }
@@ -541,19 +546,19 @@ void Screen::ApplyShader() {
   for (int y = 0; y < dimy_; ++y) {
     for (int x = 0; x < dimx_; ++x) {
       // Box drawing character uses exactly 3 byte.
-      Cell& cur = cells_[y][x];
+      Cell& cur = FastCellAt(x, y);
       if (!ShouldAttemptAutoMerge(cur)) {
         continue;
       }
 
       if (x > 0) {
-        Cell& left = cells_[y][x-1];
+        Cell& left = FastCellAt(x - 1, y);
         if (ShouldAttemptAutoMerge(left)) {
           UpgradeLeftRight(left.character, cur.character);
         }
       }
       if (y > 0) {
-        Cell& top = cells_[y-1][x];
+        Cell& top = FastCellAt(x, y - 1);
         if (ShouldAttemptAutoMerge(top)) {
           UpgradeTopDown(top.character, cur.character);
         }

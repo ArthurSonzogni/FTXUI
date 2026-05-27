@@ -49,9 +49,12 @@ class FTXUI_EXPORT(SCREEN) Surface {
   Box stencil;
 
  protected:
+  Cell& FastCellAt(int x, int y);
+  const Cell& FastCellAt(int x, int y) const;
+
   int dimx_;
   int dimy_;
-  std::vector<std::vector<Cell>> cells_;
+  std::vector<Cell> cells_;
 };
 
 }  // namespace ftxui
