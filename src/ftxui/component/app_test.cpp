@@ -312,4 +312,30 @@ TEST(App, MoveAssignment) {
   EXPECT_EQ(called, 1);
 }
 
+TEST(App, CatchSignals_False) {
+  static bool test_handler_called = false;
+  test_handler_called = false;
+
+  auto old_handler = std::signal(SIGTERM, [](int /*sig*/) {
+    test_handler_called = true;
+    if (App::Active()) {
+      App::Active()->Exit();
+    }
+  });
+
+  auto screen = App::FitComponent();
+  screen.CatchSignals(false);
+
+  auto component = Renderer([&] {
+    std::ignore = std::raise(SIGTERM);
+    return text("");
+  });
+
+  screen.Loop(component);
+
+  std::ignore = std::signal(SIGTERM, old_handler);
+
+  EXPECT_TRUE(test_handler_called);
+}
+
 }  // namespace ftxui

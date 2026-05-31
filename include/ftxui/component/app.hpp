@@ -90,6 +90,13 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   /// @note This feature is only available on POSIX systems (Linux/macOS).
   void HandlePipedInput(bool enable = true);
 
+  /// @brief Enable or disable installing signal handlers for SIGTERM, SIGSEGV,
+  /// SIGINT, SIGILL, SIGABRT, and SIGFPE to restore terminal state on exit.
+  /// @param enable Whether to enable signal handlers. Default is true.
+  /// @note This must be called before Loop().
+  /// @note Signal handlers are enabled by default.
+  void CatchSignals(bool enable = true);
+
   /// @brief Return the currently active app, nullptr if none.
   static App* Active();
 
