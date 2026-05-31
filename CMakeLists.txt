@@ -15,10 +15,11 @@ if (FTXUI_BUILD_MODULES)
 else()
   cmake_minimum_required(VERSION 3.12)
 endif()
-
 project(ftxui
   LANGUAGES CXX
-  VERSION 6.1.9
+  VERSION 6.2.0
+)
+
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
