@@ -1,0 +1,31 @@
+name: Shared Library Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-shared:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        env:
+          CC: clang
+          CXX: clang++
+        run: |
+          cmake -B build \
+            -DBUILD_SHARED_LIBS=ON \
+            -DFTXUI_BUILD_EXAMPLES=ON \
+            -DFTXUI_BUILD_TESTS=OFF \
+            -DFTXUI_BUILD_DOCS=OFF
+
+      - name: Build one example
+        run: |
+          cmake --build build --target ftxui_example_text
