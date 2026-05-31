@@ -1,0 +1,35 @@
+var string__internal_8hpp =
+[
+    [ "WordBreakProperty", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968a", [
+      [ "ALetter", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aab1bb481a6d76de94d35e1d67cb85d966", null ],
+      [ "CR", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa1d7b33fc26ca22c2011aaa97fecc43d8", null ],
+      [ "Double_Quote", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa3a1f5142815614aa554e376af7047de3", null ],
+      [ "Extend", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa3bc026b815790a05493fa56fc4b8d8bd", null ],
+      [ "ExtendNumLet", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aadcba983044c9eb2afae2e2eaef5fe818", null ],
+      [ "Format", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa520d0db389f362bf79ef56ca0af3dcab", null ],
+      [ "Hebrew_Letter", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa3b076a28de949c89c8443aa0cd42ef17", null ],
+      [ "Katakana", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aaedb097c9a1cb7aed483367f825211f75", null ],
+      [ "LF", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa618441d41cce47dbcfd9bed6e5ff64e6", null ],
+      [ "MidLetter", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aab681d24011467edf425478fed96fbcde", null ],
+      [ "MidNum", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa876e36e8a85514e9c141b2aa3a7bfb5c", null ],
+      [ "MidNumLet", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa4d4a2ec3c1ff2c647ff25b61136aabff", null ],
+      [ "Newline", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa755fee300780823fcf4df98383331745", null ],
+      [ "Numeric", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa87322391cc6e8948ce9fd5d6cb84fced", null ],
+      [ "Regional_Indicator", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa7f219844b91c2bb3bdb5fb7ffbdfca72", null ],
+      [ "Single_Quote", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aab6f9a00a0255e4da280686c4640c7671", null ],
+      [ "WSegSpace", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aa3ddc36a0c4e381a754fb00548d567d09", null ],
+      [ "ZWJ", "string__internal_8hpp.html#a5a8ec19f52346e9aad9dbab9108b968aacb4adf7b93435bdfbae8f32d5bcda514", null ]
+    ] ],
+    [ "EatCodePoint", "string__internal_8hpp.html#a7efbd107f6abc2b96d0200b4a37fd574", null ],
+    [ "EatCodePoint", "string__internal_8hpp.html#ae98476ff290e96d95633a98bc64adfcb", null ],
+    [ "IsCombining", "string__internal_8hpp.html#a506e6b467ddd8d11646942fd101d8e9e", null ],
+    [ "IsFullWidth", "string__internal_8hpp.html#abd13f584efddd3a7e5749c9c5e841a11", null ],
+    [ "IsControl", "string__internal_8hpp.html#a037df033cc26c960faa54b52bdbea900", null ],
+    [ "GlyphPrevious", "string__internal_8hpp.html#a25a17d287beaa61bec628f7073364f84", null ],
+    [ "GlyphNext", "string__internal_8hpp.html#afc8bf1526de42d4abc2f50e4fbb89fb1", null ],
+    [ "GlyphIterate", "string__internal_8hpp.html#ab10b9e02e5a17d8f4891c57cce833eaf", null ],
+    [ "GlyphCount", "string__internal_8hpp.html#a87801d5ec5681718564a489489898f5f", null ],
+    [ "CodepointToWordBreakProperty", "string__internal_8hpp.html#a191b3278846ceb6ac35d2e4eb26db759", null ],
+    [ "Utf8ToWordBreakProperty", "string__internal_8hpp.html#a9ee9578f712a71a935049ff463af0c38", null ],
+    [ "IsWordBreakingCharacter", "string__internal_8hpp.html#a73ee89874dcc529c3def34ee424b0549", null ]
+];

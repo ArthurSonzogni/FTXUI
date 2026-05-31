@@ -1,0 +1,727 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: elements.hpp File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ja",
+    "/ko"
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('elements_8hpp.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a>  </div>
+  <div class="headertitle"><div class="title">elements.hpp File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><a href="elements_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html">ftxui</a></td></tr>
+<tr class="memdesc:namespaceftxui"><td class="mdescLeft">&#160;</td><td class="mdescRight">El espacio de nombres ftxui:: de FTXUI. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui_1_1Dimension.html">ftxui::Dimension</a></td></tr>
+<tr class="memdesc:namespaceftxui_1_1Dimension"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define cómo deben ser las dimensiones de la pantalla. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a2bc31f2d685189e5c61d2293a1f51b4f" id="r_a2bc31f2d685189e5c61d2293a1f51b4f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> = std::shared_ptr&lt;<a class="el" href="group__dom.html#classftxui_1_1Node">Node</a>&gt;</td></tr>
+<tr class="separator:a2bc31f2d685189e5c61d2293a1f51b4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d4aa06ca6cc6a72e981bd5386f93f0a" id="r_a5d4aa06ca6cc6a72e981bd5386f93f0a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> = std::vector&lt;<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&gt;</td></tr>
+<tr class="separator:a5d4aa06ca6cc6a72e981bd5386f93f0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a164021903e9ac6f1357e4186582891e3" id="r_a164021903e9ac6f1357e4186582891e3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> = std::function&lt;<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>(<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>)&gt;</td></tr>
+<tr class="separator:a164021903e9ac6f1357e4186582891e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab07cb9a766f38fc867f8fe736ce2e6e3" id="r_ab07cb9a766f38fc867f8fe736ce2e6e3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#ab07cb9a766f38fc867f8fe736ce2e6e3">GraphFunction</a> = std::function&lt;std::vector&lt;int&gt;(int, int)&gt;</td></tr>
+<tr class="separator:ab07cb9a766f38fc867f8fe736ce2e6e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:gafe3103dd0b8240c5443892484ef5af9c" id="r_gafe3103dd0b8240c5443892484ef5af9c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a> { <br />
+&#160;&#160;<a class="el" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9caf917d6c11c85b4ac32e30d1cc9da25eb">LIGHT</a>
+, <br />
+&#160;&#160;<a class="el" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca830310bdfd296d7cd00c59773579b892">DASHED</a>
+, <br />
+&#160;&#160;<a class="el" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca34cd68a92c52759ed9b545969a11c2da">HEAVY</a>
+, <br />
+&#160;&#160;<a class="el" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca33465d1d419b1074fb259ef444609e92">DOUBLE</a>
+, <br />
+&#160;&#160;<a class="el" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca655074b92b285adff7d18a45748bf493">ROUNDED</a>
+, <br />
+&#160;&#160;<a class="el" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca2f0d18fc0d0fa4a6cd92dc328501874d">EMPTY</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:gafe3103dd0b8240c5443892484ef5af9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">BorderStyle es una enumeración que representa los diferentes estilos de bordes que se pueden aplicar a los elementos en la interfaz de usuario de la terminal.  <a href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">More...</a><br /></td></tr>
+<tr class="separator:gafe3103dd0b8240c5443892484ef5af9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04711c04f28aabfa0e5928a35baaec53" id="r_a04711c04f28aabfa0e5928a35baaec53"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53">WidthOrHeight</a> { <br />
+&#160;&#160;<a class="el" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a73c0818986b7c462c2977f57afd00522">WIDTH</a>
+, <br />
+&#160;&#160;<a class="el" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a38b9241136017b93ea2755a49cf0a000">HEIGHT</a>
+<br />
+ }</td></tr>
+<tr class="separator:a04711c04f28aabfa0e5928a35baaec53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae09f44b989d381a387329fd0a0935926" id="r_ae09f44b989d381a387329fd0a0935926"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926">Constraint</a> { <br />
+&#160;&#160;<a class="el" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a41b05932cd237b2b133fff1ade85bed5">LESS_THAN</a>
+, <br />
+&#160;&#160;<a class="el" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a59a84258a4cb9025b567ee5139455029">EQUAL</a>
+, <br />
+&#160;&#160;<a class="el" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a5fae95457121bd697edd588d1b64cc7c">GREATER_THAN</a>
+<br />
+ }</td></tr>
+<tr class="separator:ae09f44b989d381a387329fd0a0935926"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ga7e9a69f0592b4013bd725d662f4a76e7" id="r_ga7e9a69f0592b4013bd725d662f4a76e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga7e9a69f0592b4013bd725d662f4a76e7">operator|</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> element, <a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> decorator)</td></tr>
+<tr class="memdesc:ga7e9a69f0592b4013bd725d662f4a76e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">A partir de un elemento, aplica un decorador.  <br /></td></tr>
+<tr class="separator:ga7e9a69f0592b4013bd725d662f4a76e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0be26ac5dcbe6c707857c791d8eec720" id="r_ga0be26ac5dcbe6c707857c791d8eec720"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga0be26ac5dcbe6c707857c791d8eec720">operator|=</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> &amp;e, <a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> d)</td></tr>
+<tr class="memdesc:ga0be26ac5dcbe6c707857c791d8eec720"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplica un decorador a un elemento.  <br /></td></tr>
+<tr class="separator:ga0be26ac5dcbe6c707857c791d8eec720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6cbc84eb24a655ae084b3c7d26f9abfc" id="r_ga6cbc84eb24a655ae084b3c7d26f9abfc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga6cbc84eb24a655ae084b3c7d26f9abfc">operator|</a> (<a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> elements, <a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> decorator)</td></tr>
+<tr class="memdesc:ga6cbc84eb24a655ae084b3c7d26f9abfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">A partir de un conjunto de elementos, aplica un decorador a cada elemento.  <br /></td></tr>
+<tr class="separator:ga6cbc84eb24a655ae084b3c7d26f9abfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga027fbc9cf6fef9e86ae6a2a79e8bf23a" id="r_ga027fbc9cf6fef9e86ae6a2a79e8bf23a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga027fbc9cf6fef9e86ae6a2a79e8bf23a">operator|</a> (<a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> a, <a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> b)</td></tr>
+<tr class="memdesc:ga027fbc9cf6fef9e86ae6a2a79e8bf23a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compone dos decoradores en uno.  <br /></td></tr>
+<tr class="separator:ga027fbc9cf6fef9e86ae6a2a79e8bf23a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga366051704fd333c23460f7932598a5e3" id="r_ga366051704fd333c23460f7932598a5e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga366051704fd333c23460f7932598a5e3">text</a> (std::string text)</td></tr>
+<tr class="memdesc:ga366051704fd333c23460f7932598a5e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Muestra un fragmento de texto Unicode codificado en UTF8.  <br /></td></tr>
+<tr class="separator:ga366051704fd333c23460f7932598a5e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga64172a43b4b526afeb6313e6e1a6d5a1" id="r_ga64172a43b4b526afeb6313e6e1a6d5a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga64172a43b4b526afeb6313e6e1a6d5a1">vtext</a> (std::string text)</td></tr>
+<tr class="memdesc:ga64172a43b4b526afeb6313e6e1a6d5a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Muestra un fragmento de texto Unicode verticalmente.  <br /></td></tr>
+<tr class="separator:ga64172a43b4b526afeb6313e6e1a6d5a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac1ef1cf6bf7cd0759ffa195071edb2a0" id="r_gac1ef1cf6bf7cd0759ffa195071edb2a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gac1ef1cf6bf7cd0759ffa195071edb2a0">separator</a> ()</td></tr>
+<tr class="memdesc:gac1ef1cf6bf7cd0759ffa195071edb2a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una separación vertical u horizontal entre otros dos elementos.  <br /></td></tr>
+<tr class="separator:gac1ef1cf6bf7cd0759ffa195071edb2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga37c2b93daf557f68064bc9fbf93ebde0" id="r_ga37c2b93daf557f68064bc9fbf93ebde0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga37c2b93daf557f68064bc9fbf93ebde0">separatorLight</a> ()</td></tr>
+<tr class="memdesc:ga37c2b93daf557f68064bc9fbf93ebde0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una separación vertical u horizontal entre otros dos elementos, usando el estilo LIGERO.  <br /></td></tr>
+<tr class="separator:ga37c2b93daf557f68064bc9fbf93ebde0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga81f2d3256c0cfbc70f820129286f08c6" id="r_ga81f2d3256c0cfbc70f820129286f08c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga81f2d3256c0cfbc70f820129286f08c6">separatorDashed</a> ()</td></tr>
+<tr class="memdesc:ga81f2d3256c0cfbc70f820129286f08c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una separación vertical u horizontal entre otros dos elementos, usando el estilo DISCONTINUO.  <br /></td></tr>
+<tr class="separator:ga81f2d3256c0cfbc70f820129286f08c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf0649e89a9960f1c2703e48c1817645b" id="r_gaf0649e89a9960f1c2703e48c1817645b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaf0649e89a9960f1c2703e48c1817645b">separatorHeavy</a> ()</td></tr>
+<tr class="memdesc:gaf0649e89a9960f1c2703e48c1817645b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una separación vertical u horizontal entre otros dos elementos, usando el estilo GRUESO.  <br /></td></tr>
+<tr class="separator:gaf0649e89a9960f1c2703e48c1817645b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadd376830fdb51b0bf52672ef17515989" id="r_gadd376830fdb51b0bf52672ef17515989"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gadd376830fdb51b0bf52672ef17515989">separatorDouble</a> ()</td></tr>
+<tr class="memdesc:gadd376830fdb51b0bf52672ef17515989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una separación vertical u horizontal entre otros dos elementos, usando el estilo DOBLE.  <br /></td></tr>
+<tr class="separator:gadd376830fdb51b0bf52672ef17515989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1934703e56ab66f6f259b9f8da331f1b" id="r_ga1934703e56ab66f6f259b9f8da331f1b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga1934703e56ab66f6f259b9f8da331f1b">separatorEmpty</a> ()</td></tr>
+<tr class="memdesc:ga1934703e56ab66f6f259b9f8da331f1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una separación vertical u horizontal entre otros dos elementos, usando el estilo VACÍO.  <br /></td></tr>
+<tr class="separator:ga1934703e56ab66f6f259b9f8da331f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga13cb559cfc7e409b3f211f0bb35ea7fa" id="r_ga13cb559cfc7e409b3f211f0bb35ea7fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga13cb559cfc7e409b3f211f0bb35ea7fa">separatorStyled</a> (<a class="el" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a> style)</td></tr>
+<tr class="memdesc:ga13cb559cfc7e409b3f211f0bb35ea7fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una separación vertical u horizontal entre otros dos elementos.  <br /></td></tr>
+<tr class="separator:ga13cb559cfc7e409b3f211f0bb35ea7fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga71d9a6a32f65b6d172f9696b3b9579b4" id="r_ga71d9a6a32f65b6d172f9696b3b9579b4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga71d9a6a32f65b6d172f9696b3b9579b4">separator</a> (<a class="el" href="group__screen.html#structftxui_1_1Pixel">Pixel</a> pixel)</td></tr>
+<tr class="memdesc:ga71d9a6a32f65b6d172f9696b3b9579b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un separador entre dos elementos, rellenado con un píxel dado.  <br /></td></tr>
+<tr class="separator:ga71d9a6a32f65b6d172f9696b3b9579b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga97a10482d591aade2958da0f2f19b371" id="r_ga97a10482d591aade2958da0f2f19b371"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga97a10482d591aade2958da0f2f19b371">separatorCharacter</a> (std::string value)</td></tr>
+<tr class="memdesc:ga97a10482d591aade2958da0f2f19b371"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una separación vertical u horizontal entre otros dos elementos.  <br /></td></tr>
+<tr class="separator:ga97a10482d591aade2958da0f2f19b371"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50413065cee4757447b35c3a500667d3" id="r_a50413065cee4757447b35c3a500667d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a50413065cee4757447b35c3a500667d3">separatorHSelector</a> (float <a class="el" href="screen_8cpp.html#a972107f15f3c0c099eb9fd605e7f51c6">left</a>, float <a class="el" href="screen_8cpp.html#aa4b74e56e675912bbc06504407fc7a46">right</a>, <a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> unselected_color, <a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> selected_color)</td></tr>
+<tr class="memdesc:a50413065cee4757447b35c3a500667d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una barra horizontal, con el área entre izquierda/derecha coloreada de forma diferente.  <br /></td></tr>
+<tr class="separator:a50413065cee4757447b35c3a500667d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1a0211233bacd4eb4d31a8e3d58b5f48" id="r_a1a0211233bacd4eb4d31a8e3d58b5f48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a1a0211233bacd4eb4d31a8e3d58b5f48">separatorVSelector</a> (float up, float <a class="el" href="screen_8cpp.html#a9cdd0454d64ec151b59fdd7d22ed505a">down</a>, <a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> unselected_color, <a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> selected_color)</td></tr>
+<tr class="memdesc:a1a0211233bacd4eb4d31a8e3d58b5f48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una barra vertical, con el área entre arriba/abajo coloreada de forma diferente.  <br /></td></tr>
+<tr class="separator:a1a0211233bacd4eb4d31a8e3d58b5f48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae0b8041a60629fd790716038738c93ce" id="r_gae0b8041a60629fd790716038738c93ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gae0b8041a60629fd790716038738c93ce">gauge</a> (float <a class="el" href="homescreen_8cpp.html#ac7abb4766cd3f65c31f56279d7decff8">progress</a>)</td></tr>
+<tr class="memdesc:gae0b8041a60629fd790716038738c93ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una barra de progreso de alta definición.  <br /></td></tr>
+<tr class="separator:gae0b8041a60629fd790716038738c93ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga97898b9f77b3edd330eaef22fce7cf2b" id="r_ga97898b9f77b3edd330eaef22fce7cf2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga97898b9f77b3edd330eaef22fce7cf2b">gaugeLeft</a> (float <a class="el" href="homescreen_8cpp.html#ac7abb4766cd3f65c31f56279d7decff8">progress</a>)</td></tr>
+<tr class="memdesc:ga97898b9f77b3edd330eaef22fce7cf2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una barra de progreso de alta definición que avanza de derecha a izquierda.  <br /></td></tr>
+<tr class="separator:ga97898b9f77b3edd330eaef22fce7cf2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga333d781a44885ed4b5ea8444015b86f7" id="r_ga333d781a44885ed4b5ea8444015b86f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga333d781a44885ed4b5ea8444015b86f7">gaugeRight</a> (float <a class="el" href="homescreen_8cpp.html#ac7abb4766cd3f65c31f56279d7decff8">progress</a>)</td></tr>
+<tr class="memdesc:ga333d781a44885ed4b5ea8444015b86f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una barra de progreso de alta definición que avanza de izquierda a derecha.  <br /></td></tr>
+<tr class="separator:ga333d781a44885ed4b5ea8444015b86f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6e9a97b66c14404a2b3f95f4dae414c2" id="r_ga6e9a97b66c14404a2b3f95f4dae414c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga6e9a97b66c14404a2b3f95f4dae414c2">gaugeUp</a> (float <a class="el" href="homescreen_8cpp.html#ac7abb4766cd3f65c31f56279d7decff8">progress</a>)</td></tr>
+<tr class="memdesc:ga6e9a97b66c14404a2b3f95f4dae414c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una barra de progreso de alta definición que avanza de abajo hacia arriba.  <br /></td></tr>
+<tr class="separator:ga6e9a97b66c14404a2b3f95f4dae414c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gafe537f915cac5613261580bae3a8fe33" id="r_gafe537f915cac5613261580bae3a8fe33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gafe537f915cac5613261580bae3a8fe33">gaugeDown</a> (float <a class="el" href="homescreen_8cpp.html#ac7abb4766cd3f65c31f56279d7decff8">progress</a>)</td></tr>
+<tr class="memdesc:gafe537f915cac5613261580bae3a8fe33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una barra de progreso de alta definición que avanza de arriba hacia abajo.  <br /></td></tr>
+<tr class="separator:gafe537f915cac5613261580bae3a8fe33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1265cc8a52448e1b98d7abe84a04681e" id="r_ga1265cc8a52448e1b98d7abe84a04681e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga1265cc8a52448e1b98d7abe84a04681e">gaugeDirection</a> (float <a class="el" href="homescreen_8cpp.html#ac7abb4766cd3f65c31f56279d7decff8">progress</a>, <a class="el" href="group__dom.html#ga224b9163917ac32fc95a60d8c1eec3aa">Direction</a> direction)</td></tr>
+<tr class="memdesc:ga1265cc8a52448e1b98d7abe84a04681e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja una barra de progreso de alta definición que avanza en la dirección especificada.  <br /></td></tr>
+<tr class="separator:ga1265cc8a52448e1b98d7abe84a04681e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae8537acd423d47cf07e61bd774fb1098" id="r_gae8537acd423d47cf07e61bd774fb1098"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gae8537acd423d47cf07e61bd774fb1098">border</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gae8537acd423d47cf07e61bd774fb1098"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a border around the element.  <br /></td></tr>
+<tr class="separator:gae8537acd423d47cf07e61bd774fb1098"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa074cdab57eeb47b99f1699bcc8addd8" id="r_gaa074cdab57eeb47b99f1699bcc8addd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaa074cdab57eeb47b99f1699bcc8addd8">borderLight</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gaa074cdab57eeb47b99f1699bcc8addd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a light border around the element.  <br /></td></tr>
+<tr class="separator:gaa074cdab57eeb47b99f1699bcc8addd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga181c80f8ada12d1356f6bfa0ebb7219f" id="r_ga181c80f8ada12d1356f6bfa0ebb7219f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga181c80f8ada12d1356f6bfa0ebb7219f">borderDashed</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga181c80f8ada12d1356f6bfa0ebb7219f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a dashed border around the element.  <br /></td></tr>
+<tr class="separator:ga181c80f8ada12d1356f6bfa0ebb7219f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga666c31419cc31cdadc9f8178ed63529e" id="r_ga666c31419cc31cdadc9f8178ed63529e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga666c31419cc31cdadc9f8178ed63529e">borderHeavy</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga666c31419cc31cdadc9f8178ed63529e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a heavy border around the element.  <br /></td></tr>
+<tr class="separator:ga666c31419cc31cdadc9f8178ed63529e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga052b504344f3bc1ff86b3493cd934215" id="r_ga052b504344f3bc1ff86b3493cd934215"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga052b504344f3bc1ff86b3493cd934215">borderDouble</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga052b504344f3bc1ff86b3493cd934215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a double border around the element.  <br /></td></tr>
+<tr class="separator:ga052b504344f3bc1ff86b3493cd934215"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3cf2db223a5efaa370f0ca6bb405b80e" id="r_ga3cf2db223a5efaa370f0ca6bb405b80e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga3cf2db223a5efaa370f0ca6bb405b80e">borderRounded</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga3cf2db223a5efaa370f0ca6bb405b80e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw a rounded border around the element.  <br /></td></tr>
+<tr class="separator:ga3cf2db223a5efaa370f0ca6bb405b80e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf20f7d6fb275d109f0bdc01a2e4d3f3e" id="r_gaf20f7d6fb275d109f0bdc01a2e4d3f3e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaf20f7d6fb275d109f0bdc01a2e4d3f3e">borderEmpty</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gaf20f7d6fb275d109f0bdc01a2e4d3f3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw an empty border around the element.  <br /></td></tr>
+<tr class="separator:gaf20f7d6fb275d109f0bdc01a2e4d3f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabc9db79957d4dd36deb8ca79938e4c41" id="r_gabc9db79957d4dd36deb8ca79938e4c41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gabc9db79957d4dd36deb8ca79938e4c41">borderStyled</a> (<a class="el" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a> style)</td></tr>
+<tr class="memdesc:gabc9db79957d4dd36deb8ca79938e4c41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as border but with different styles.  <br /></td></tr>
+<tr class="separator:gabc9db79957d4dd36deb8ca79938e4c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5aab98b289d2e7b2ce8ca0eeee51ce78" id="r_ga5aab98b289d2e7b2ce8ca0eeee51ce78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga5aab98b289d2e7b2ce8ca0eeee51ce78">borderStyled</a> (<a class="el" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a> style, <a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> foreground_color)</td></tr>
+<tr class="memdesc:ga5aab98b289d2e7b2ce8ca0eeee51ce78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as border but with a foreground color and a different style.  <br /></td></tr>
+<tr class="separator:ga5aab98b289d2e7b2ce8ca0eeee51ce78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad1dbf36194dcb77674085df9e11c1e22" id="r_gad1dbf36194dcb77674085df9e11c1e22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gad1dbf36194dcb77674085df9e11c1e22">borderStyled</a> (<a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> foreground_color)</td></tr>
+<tr class="memdesc:gad1dbf36194dcb77674085df9e11c1e22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as border but with a foreground color.  <br /></td></tr>
+<tr class="separator:gad1dbf36194dcb77674085df9e11c1e22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa97cfcfbe6df92dac085454395ec7b2f" id="r_gaa97cfcfbe6df92dac085454395ec7b2f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaa97cfcfbe6df92dac085454395ec7b2f">borderWith</a> (const <a class="el" href="group__screen.html#structftxui_1_1Pixel">Pixel</a> &amp;pixel)</td></tr>
+<tr class="memdesc:gaa97cfcfbe6df92dac085454395ec7b2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as border but with a constant <a class="el" href="group__screen.html#structftxui_1_1Pixel" title="Un carácter Unicode y su estilo asociado.">Pixel</a> around the element.  <br /></td></tr>
+<tr class="separator:gaa97cfcfbe6df92dac085454395ec7b2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga03049def08fa7a5eaa4d5e897152bc1a" id="r_ga03049def08fa7a5eaa4d5e897152bc1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga03049def08fa7a5eaa4d5e897152bc1a">window</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="el" href="homescreen_8cpp.html#ac30fed21fe991cc8475ce543929f8b72">title</a>, <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> content, <a class="el" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a> border)</td></tr>
+<tr class="memdesc:ga03049def08fa7a5eaa4d5e897152bc1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draw window with a title and a border around the element.  <br /></td></tr>
+<tr class="separator:ga03049def08fa7a5eaa4d5e897152bc1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3b08e0030a0831d3ec3e2a505908273b" id="r_ga3b08e0030a0831d3ec3e2a505908273b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga3b08e0030a0831d3ec3e2a505908273b">spinner</a> (int charset_index, size_t image_index)</td></tr>
+<tr class="memdesc:ga3b08e0030a0831d3ec3e2a505908273b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Útil para representar el efecto del tiempo y/o eventos. Esto muestra un "video" de arte ASCII.  <br /></td></tr>
+<tr class="separator:ga3b08e0030a0831d3ec3e2a505908273b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3f9093ae1a2790d396fc2cff9990fbbd" id="r_ga3f9093ae1a2790d396fc2cff9990fbbd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga3f9093ae1a2790d396fc2cff9990fbbd">paragraph</a> (const std::string &amp;the_text)</td></tr>
+<tr class="memdesc:ga3f9093ae1a2790d396fc2cff9990fbbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Devuelve un elemento que dibuja el párrafo en varias líneas.  <br /></td></tr>
+<tr class="separator:ga3f9093ae1a2790d396fc2cff9990fbbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa334a836eccc573e1137a1ba29d07d8a" id="r_gaa334a836eccc573e1137a1ba29d07d8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaa334a836eccc573e1137a1ba29d07d8a">paragraphAlignLeft</a> (const std::string &amp;the_text)</td></tr>
+<tr class="memdesc:gaa334a836eccc573e1137a1ba29d07d8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Devuelve un elemento que dibuja el párrafo en varias líneas, alineado a la izquierda.  <br /></td></tr>
+<tr class="separator:gaa334a836eccc573e1137a1ba29d07d8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga28a69f06a88c89fe7a507e33ab486411" id="r_ga28a69f06a88c89fe7a507e33ab486411"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga28a69f06a88c89fe7a507e33ab486411">paragraphAlignRight</a> (const std::string &amp;the_text)</td></tr>
+<tr class="memdesc:ga28a69f06a88c89fe7a507e33ab486411"><td class="mdescLeft">&#160;</td><td class="mdescRight">Devuelve un elemento que dibuja el párrafo en varias líneas, alineado a la derecha.  <br /></td></tr>
+<tr class="separator:ga28a69f06a88c89fe7a507e33ab486411"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6a105f6b0d07d7933379ff1ae9282fb8" id="r_ga6a105f6b0d07d7933379ff1ae9282fb8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga6a105f6b0d07d7933379ff1ae9282fb8">paragraphAlignCenter</a> (const std::string &amp;the_text)</td></tr>
+<tr class="memdesc:ga6a105f6b0d07d7933379ff1ae9282fb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Devuelve un elemento que dibuja el párrafo en varias líneas, alineado al centro.  <br /></td></tr>
+<tr class="separator:ga6a105f6b0d07d7933379ff1ae9282fb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gae4de548aa67ab77cb345e4ddec6b248b" id="r_gae4de548aa67ab77cb345e4ddec6b248b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gae4de548aa67ab77cb345e4ddec6b248b">paragraphAlignJustify</a> (const std::string &amp;the_text)</td></tr>
+<tr class="memdesc:gae4de548aa67ab77cb345e4ddec6b248b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Devuelve un elemento que dibuja el párrafo en varias líneas, alineado utilizando una alineación justificada.  <br /></td></tr>
+<tr class="separator:gae4de548aa67ab77cb345e4ddec6b248b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae78c2b2b147e65701493465f8e3f4d89" id="r_ae78c2b2b147e65701493465f8e3f4d89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#ae78c2b2b147e65701493465f8e3f4d89">graph</a> (<a class="el" href="namespaceftxui.html#ab07cb9a766f38fc867f8fe736ce2e6e3">GraphFunction</a> graph_function)</td></tr>
+<tr class="memdesc:ae78c2b2b147e65701493465f8e3f4d89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dibuja un gráfico usando una GraphFunction.  <br /></td></tr>
+<tr class="separator:ae78c2b2b147e65701493465f8e3f4d89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga40451515a5b3049e7a1276cad8b9356c" id="r_ga40451515a5b3049e7a1276cad8b9356c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga40451515a5b3049e7a1276cad8b9356c">emptyElement</a> ()</td></tr>
+<tr class="separator:ga40451515a5b3049e7a1276cad8b9356c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacb7ba285683ede6799a7de7a936cb96" id="r_aacb7ba285683ede6799a7de7a936cb96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#aacb7ba285683ede6799a7de7a936cb96">canvas</a> (<a class="el" href="classftxui_1_1ConstRef.html">ConstRef</a>&lt; <a class="el" href="group__dom.html#structftxui_1_1Canvas">Canvas</a> &gt;)</td></tr>
+<tr class="separator:aacb7ba285683ede6799a7de7a936cb96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad34cc9974839beb319d8152a0c84a151" id="r_ad34cc9974839beb319d8152a0c84a151"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#ad34cc9974839beb319d8152a0c84a151">canvas</a> (int width, int height, std::function&lt; void(<a class="el" href="group__dom.html#structftxui_1_1Canvas">Canvas</a> &amp;)&gt;)</td></tr>
+<tr class="separator:ad34cc9974839beb319d8152a0c84a151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a793c02d38f45094ac346d8739cbc931e" id="r_a793c02d38f45094ac346d8739cbc931e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a793c02d38f45094ac346d8739cbc931e">canvas</a> (std::function&lt; void(<a class="el" href="group__dom.html#structftxui_1_1Canvas">Canvas</a> &amp;)&gt;)</td></tr>
+<tr class="separator:a793c02d38f45094ac346d8739cbc931e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga353c769068e25303eb41fa2da565c604" id="r_ga353c769068e25303eb41fa2da565c604"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga353c769068e25303eb41fa2da565c604">bold</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga353c769068e25303eb41fa2da565c604"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utiliza una fuente en negrita, para elementos con más énfasis.  <br /></td></tr>
+<tr class="separator:ga353c769068e25303eb41fa2da565c604"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac6a3b77604739516e809369810896646" id="r_gac6a3b77604739516e809369810896646"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gac6a3b77604739516e809369810896646">dim</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gac6a3b77604739516e809369810896646"><td class="mdescLeft">&#160;</td><td class="mdescRight">Usa una fuente clara para elementos con menos énfasis.  <br /></td></tr>
+<tr class="separator:gac6a3b77604739516e809369810896646"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8a8d190765de7bbd9e78f9e639c2a96d" id="r_ga8a8d190765de7bbd9e78f9e639c2a96d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga8a8d190765de7bbd9e78f9e639c2a96d">italic</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga8a8d190765de7bbd9e78f9e639c2a96d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplica un subrayado doble al texto.  <br /></td></tr>
+<tr class="separator:ga8a8d190765de7bbd9e78f9e639c2a96d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga672456b8f2091b615a30ff755418b37b" id="r_ga672456b8f2091b615a30ff755418b37b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga672456b8f2091b615a30ff755418b37b">inverted</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga672456b8f2091b615a30ff755418b37b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Agrega un filtro que invertirá los colores de primer plano y de fondo. colores.  <br /></td></tr>
+<tr class="separator:ga672456b8f2091b615a30ff755418b37b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5ad450c97c4d084b64ffb5b5ca942664" id="r_ga5ad450c97c4d084b64ffb5b5ca942664"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga5ad450c97c4d084b64ffb5b5ca942664">underlined</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga5ad450c97c4d084b64ffb5b5ca942664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subraya el elemento dado.  <br /></td></tr>
+<tr class="separator:ga5ad450c97c4d084b64ffb5b5ca942664"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga16d1b74107610750276499ddb3dde8da" id="r_ga16d1b74107610750276499ddb3dde8da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga16d1b74107610750276499ddb3dde8da">underlinedDouble</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga16d1b74107610750276499ddb3dde8da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplica un doble subrayado al texto.  <br /></td></tr>
+<tr class="separator:ga16d1b74107610750276499ddb3dde8da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad57613de5895e774218d91dea48d074b" id="r_gad57613de5895e774218d91dea48d074b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gad57613de5895e774218d91dea48d074b">blink</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gad57613de5895e774218d91dea48d074b"><td class="mdescLeft">&#160;</td><td class="mdescRight">El texto dibujado alterna entre visible y oculto.  <br /></td></tr>
+<tr class="separator:gad57613de5895e774218d91dea48d074b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8594d70f0491def903370e86132fbf01" id="r_ga8594d70f0491def903370e86132fbf01"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga8594d70f0491def903370e86132fbf01">strikethrough</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga8594d70f0491def903370e86132fbf01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplica un tachado al texto.  <br /></td></tr>
+<tr class="separator:ga8594d70f0491def903370e86132fbf01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf61b489da39ca5e24b68e6e1a2b09c0d" id="r_gaf61b489da39ca5e24b68e6e1a2b09c0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a> (<a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> c)</td></tr>
+<tr class="memdesc:gaf61b489da39ca5e24b68e6e1a2b09c0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora usando un color de primer plano.  <br /></td></tr>
+<tr class="separator:gaf61b489da39ca5e24b68e6e1a2b09c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga01d4c5aaf0447e862246849111782245" id="r_ga01d4c5aaf0447e862246849111782245"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga01d4c5aaf0447e862246849111782245">bgcolor</a> (<a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> color)</td></tr>
+<tr class="memdesc:ga01d4c5aaf0447e862246849111782245"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora usando un color de fondo.  <br /></td></tr>
+<tr class="separator:ga01d4c5aaf0447e862246849111782245"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8af6b5a06b03fd53bf30a6b050b96968" id="r_ga8af6b5a06b03fd53bf30a6b050b96968"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga8af6b5a06b03fd53bf30a6b050b96968">color</a> (const <a class="el" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a> &amp;gradient)</td></tr>
+<tr class="memdesc:ga8af6b5a06b03fd53bf30a6b050b96968"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora usando un efecto de gradiente lineal en el color de primer plano.  <br /></td></tr>
+<tr class="separator:ga8af6b5a06b03fd53bf30a6b050b96968"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaee41f3eaff28a123214e81231f8f4593" id="r_gaee41f3eaff28a123214e81231f8f4593"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaee41f3eaff28a123214e81231f8f4593">bgcolor</a> (const <a class="el" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a> &amp;gradient)</td></tr>
+<tr class="memdesc:gaee41f3eaff28a123214e81231f8f4593"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora usando un efecto de gradiente lineal en el color de fondo.  <br /></td></tr>
+<tr class="separator:gaee41f3eaff28a123214e81231f8f4593"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadef6e6e66199153de6d3b21b14dcf868" id="r_gadef6e6e66199153de6d3b21b14dcf868"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gadef6e6e66199153de6d3b21b14dcf868">color</a> (<a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> color, <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gadef6e6e66199153de6d3b21b14dcf868"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece el color de primer plano de un elemento.  <br /></td></tr>
+<tr class="separator:gadef6e6e66199153de6d3b21b14dcf868"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaae86eacae0a0626b41e9964ac7f4f532" id="r_gaae86eacae0a0626b41e9964ac7f4f532"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaae86eacae0a0626b41e9964ac7f4f532">bgcolor</a> (<a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> color, <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gaae86eacae0a0626b41e9964ac7f4f532"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece el color de fondo de un elemento.  <br /></td></tr>
+<tr class="separator:gaae86eacae0a0626b41e9964ac7f4f532"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga050df9c8ed04eec13309d6c0542c636d" id="r_ga050df9c8ed04eec13309d6c0542c636d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a> (const <a class="el" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a> &amp;gradient, <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga050df9c8ed04eec13309d6c0542c636d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece el color de primer plano de un elemento con efecto de gradiente lineal.  <br /></td></tr>
+<tr class="separator:ga050df9c8ed04eec13309d6c0542c636d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaaac1622d43662a6a02113d9230a4fdd4" id="r_gaaac1622d43662a6a02113d9230a4fdd4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a> (const <a class="el" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a> &amp;gradient, <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gaaac1622d43662a6a02113d9230a4fdd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece el color de fondo de un elemento con efecto de gradiente lineal.  <br /></td></tr>
+<tr class="separator:gaaac1622d43662a6a02113d9230a4fdd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga78447ba1ccb792963ad6d306f4ed1256" id="r_ga78447ba1ccb792963ad6d306f4ed1256"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga78447ba1ccb792963ad6d306f4ed1256">focusPosition</a> (int x, int y)</td></tr>
+<tr class="memdesc:ga78447ba1ccb792963ad6d306f4ed1256"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utilizado dentro de un <code>frame</code>, esto fuerza que la vista se desplace hacia una posición determinada. La posición se expresa en el número de celdas.  <br /></td></tr>
+<tr class="separator:ga78447ba1ccb792963ad6d306f4ed1256"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga13befad33cb4125e2143f2af3eddcc71" id="r_ga13befad33cb4125e2143f2af3eddcc71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga13befad33cb4125e2143f2af3eddcc71">focusPositionRelative</a> (float x, float y)</td></tr>
+<tr class="memdesc:ga13befad33cb4125e2143f2af3eddcc71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Utilizado dentro de un <code>frame</code>, esto fuerza que la vista se desplace hacia una posición determinada. La posición se expresa en proporción del tamaño solicitado.  <br /></td></tr>
+<tr class="separator:ga13befad33cb4125e2143f2af3eddcc71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaca42bd6c44d8d366d5c1014330402086" id="r_gaca42bd6c44d8d366d5c1014330402086"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaca42bd6c44d8d366d5c1014330402086">automerge</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gaca42bd6c44d8d366d5c1014330402086"><td class="mdescLeft">&#160;</td><td class="mdescRight">Permite que los caracteres se fusionen automáticamente con otros cercanos.  <br /></td></tr>
+<tr class="separator:gaca42bd6c44d8d366d5c1014330402086"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad0eac58eac9e6cd9a04879b20f8e123b" id="r_gad0eac58eac9e6cd9a04879b20f8e123b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gad0eac58eac9e6cd9a04879b20f8e123b">hyperlink</a> (std::string link)</td></tr>
+<tr class="memdesc:gad0eac58eac9e6cd9a04879b20f8e123b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decora usando un hipervínculo. El enlace se abrirá cuando el usuario haga clic en él. Esto solo es compatible con un conjunto limitado de emuladores de terminal. Lista: <a href="https://github.com/Alhadis/OSC8-Adoption/">https://github.com/Alhadis/OSC8-Adoption/</a>.  <br /></td></tr>
+<tr class="separator:gad0eac58eac9e6cd9a04879b20f8e123b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga8bacc04e0cbde663ccc4a4891e8b50d5" id="r_ga8bacc04e0cbde663ccc4a4891e8b50d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga8bacc04e0cbde663ccc4a4891e8b50d5">hyperlink</a> (std::string link, <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga8bacc04e0cbde663ccc4a4891e8b50d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hace que el área renderizada sea clicable usando un navegador web. El enlace se abrirá cuando el usuario haga clic en él. Esto solo es compatible con un conjunto limitado de emuladores de terminal. Lista: <a href="https://github.com/Alhadis/OSC8-Adoption/">https://github.com/Alhadis/OSC8-Adoption/</a>.  <br /></td></tr>
+<tr class="separator:ga8bacc04e0cbde663ccc4a4891e8b50d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7e1317c76cefc5018503de4f6e09ea3" id="r_aa7e1317c76cefc5018503de4f6e09ea3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#aa7e1317c76cefc5018503de4f6e09ea3">selectionStyleReset</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:aa7e1317c76cefc5018503de4f6e09ea3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restablece el estilo de selección de un elemento.  <br /></td></tr>
+<tr class="separator:aa7e1317c76cefc5018503de4f6e09ea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a925a73b7f0eb4b5bc11af23f4ca18019" id="r_a925a73b7f0eb4b5bc11af23f4ca18019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a925a73b7f0eb4b5bc11af23f4ca18019">selectionColor</a> (<a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> foreground)</td></tr>
+<tr class="memdesc:a925a73b7f0eb4b5bc11af23f4ca18019"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece el color de un elemento cuando está seleccionado.  <br /></td></tr>
+<tr class="separator:a925a73b7f0eb4b5bc11af23f4ca18019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c965b8f6450a50a938120b5f6ddea96" id="r_a6c965b8f6450a50a938120b5f6ddea96"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a6c965b8f6450a50a938120b5f6ddea96">selectionBackgroundColor</a> (<a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> foreground)</td></tr>
+<tr class="memdesc:a6c965b8f6450a50a938120b5f6ddea96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece el color de fondo de un elemento cuando está seleccionado. Tenga en cuenta que el estilo se aplica además del estilo existente.  <br /></td></tr>
+<tr class="separator:a6c965b8f6450a50a938120b5f6ddea96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d98498c51cfbc03f37e46d46ec8acf5" id="r_a5d98498c51cfbc03f37e46d46ec8acf5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a5d98498c51cfbc03f37e46d46ec8acf5">selectionForegroundColor</a> (<a class="el" href="group__screen.html#classftxui_1_1Color">Color</a> foreground)</td></tr>
+<tr class="memdesc:a5d98498c51cfbc03f37e46d46ec8acf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece el color de primer plano de un elemento cuando está seleccionado. Tenga en cuenta que el estilo se aplica además del estilo existente.  <br /></td></tr>
+<tr class="separator:a5d98498c51cfbc03f37e46d46ec8acf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4080865d947eea48cf695531f66a5160" id="r_a4080865d947eea48cf695531f66a5160"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a4080865d947eea48cf695531f66a5160">selectionStyle</a> (std::function&lt; void(<a class="el" href="group__screen.html#structftxui_1_1Pixel">Pixel</a> &amp;)&gt; style)</td></tr>
+<tr class="memdesc:a4080865d947eea48cf695531f66a5160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece el estilo de un elemento cuando está seleccionado.  <br /></td></tr>
+<tr class="separator:a4080865d947eea48cf695531f66a5160"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a552ba6d33b3c9bec586b99fba4c243ac" id="r_a552ba6d33b3c9bec586b99fba4c243ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">hbox</a> (<a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> children)</td></tr>
+<tr class="memdesc:a552ba6d33b3c9bec586b99fba4c243ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un contenedor que muestra elementos horizontalmente uno por uno.  <br /></td></tr>
+<tr class="separator:a552ba6d33b3c9bec586b99fba4c243ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8efa7828025f618b7cd2d1e53034e167" id="r_a8efa7828025f618b7cd2d1e53034e167"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a8efa7828025f618b7cd2d1e53034e167">vbox</a> (<a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>)</td></tr>
+<tr class="separator:a8efa7828025f618b7cd2d1e53034e167"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga901ab1b6b2e0e8c295552168ab206441" id="r_ga901ab1b6b2e0e8c295552168ab206441"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga901ab1b6b2e0e8c295552168ab206441">dbox</a> (<a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> children_)</td></tr>
+<tr class="memdesc:ga901ab1b6b2e0e8c295552168ab206441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apila varios elementos uno encima del otro.  <br /></td></tr>
+<tr class="separator:ga901ab1b6b2e0e8c295552168ab206441"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a168a235aa438b6c72df5861322154be3" id="r_a168a235aa438b6c72df5861322154be3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a168a235aa438b6c72df5861322154be3">flexbox</a> (<a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> children, <a class="el" href="group__dom.html#structftxui_1_1FlexboxConfig">FlexboxConfig</a> config)</td></tr>
+<tr class="memdesc:a168a235aa438b6c72df5861322154be3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un contenedor que muestra elementos en filas/columnas y es capaz de ajustarse a la siguiente columna/fila cuando está lleno.  <br /></td></tr>
+<tr class="separator:a168a235aa438b6c72df5861322154be3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcdf409d605edafd3191cd7ba47bcbd1" id="r_abcdf409d605edafd3191cd7ba47bcbd1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#abcdf409d605edafd3191cd7ba47bcbd1">gridbox</a> (std::vector&lt; <a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> &gt; lines)</td></tr>
+<tr class="memdesc:abcdf409d605edafd3191cd7ba47bcbd1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un contenedor que muestra una cuadrícula de elementos.  <br /></td></tr>
+<tr class="separator:abcdf409d605edafd3191cd7ba47bcbd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a345b31919048562675615d5af78e6322" id="r_a345b31919048562675615d5af78e6322"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a345b31919048562675615d5af78e6322">hflow</a> (<a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> children)</td></tr>
+<tr class="memdesc:a345b31919048562675615d5af78e6322"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un contenedor que muestra elementos en filas de izquierda a derecha. Cuando está lleno, comienza en una nueva fila debajo.  <br /></td></tr>
+<tr class="separator:a345b31919048562675615d5af78e6322"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0da51b614e95a0687727644b5898a23" id="r_ae0da51b614e95a0687727644b5898a23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#ae0da51b614e95a0687727644b5898a23">vflow</a> (<a class="el" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> children)</td></tr>
+<tr class="memdesc:ae0da51b614e95a0687727644b5898a23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un contenedor que muestra elementos en filas de arriba a abajo. Cuando está lleno, comienza en una nueva columna a la derecha.  <br /></td></tr>
+<tr class="separator:ae0da51b614e95a0687727644b5898a23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga257acd2bd47bab7db879cca2c0e67e23" id="r_ga257acd2bd47bab7db879cca2c0e67e23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga257acd2bd47bab7db879cca2c0e67e23">flex</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga257acd2bd47bab7db879cca2c0e67e23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hace que un elemento hijo se expanda proporcionalmente al espacio restante en un contenedor.  <br /></td></tr>
+<tr class="separator:ga257acd2bd47bab7db879cca2c0e67e23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga81ed6b31f512e849247f13d249f6f20e" id="r_ga81ed6b31f512e849247f13d249f6f20e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga81ed6b31f512e849247f13d249f6f20e">flex_grow</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga81ed6b31f512e849247f13d249f6f20e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expandir si es posible.  <br /></td></tr>
+<tr class="separator:ga81ed6b31f512e849247f13d249f6f20e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4629196b5ffc280054d35f2a9977e829" id="r_ga4629196b5ffc280054d35f2a9977e829"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga4629196b5ffc280054d35f2a9977e829">flex_shrink</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga4629196b5ffc280054d35f2a9977e829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimizar si es necesario.  <br /></td></tr>
+<tr class="separator:ga4629196b5ffc280054d35f2a9977e829"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0dbba98e14f63f1dd5163cbdc4f42da8" id="r_ga0dbba98e14f63f1dd5163cbdc4f42da8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga0dbba98e14f63f1dd5163cbdc4f42da8">xflex</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga0dbba98e14f63f1dd5163cbdc4f42da8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expandir/Minimizar si es posible/necesario en el eje X.  <br /></td></tr>
+<tr class="separator:ga0dbba98e14f63f1dd5163cbdc4f42da8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1618cb15307f29eb3d531e7b44c280d3" id="r_ga1618cb15307f29eb3d531e7b44c280d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga1618cb15307f29eb3d531e7b44c280d3">xflex_grow</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga1618cb15307f29eb3d531e7b44c280d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expandir si es posible en el eje X.  <br /></td></tr>
+<tr class="separator:ga1618cb15307f29eb3d531e7b44c280d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga95275a9271934cf76e970c6650cc224d" id="r_ga95275a9271934cf76e970c6650cc224d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga95275a9271934cf76e970c6650cc224d">xflex_shrink</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga95275a9271934cf76e970c6650cc224d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimizar si es necesario en el eje X.  <br /></td></tr>
+<tr class="separator:ga95275a9271934cf76e970c6650cc224d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga42c7a33df6d890de30fc1ebb2d1b3ca6" id="r_ga42c7a33df6d890de30fc1ebb2d1b3ca6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga42c7a33df6d890de30fc1ebb2d1b3ca6">yflex</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga42c7a33df6d890de30fc1ebb2d1b3ca6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expandir/Minimizar si es posible/necesario en el eje Y.  <br /></td></tr>
+<tr class="separator:ga42c7a33df6d890de30fc1ebb2d1b3ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7eac3f709e905af8f583aed52093b7ce" id="r_ga7eac3f709e905af8f583aed52093b7ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga7eac3f709e905af8f583aed52093b7ce">yflex_grow</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga7eac3f709e905af8f583aed52093b7ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Expandir si es posible en el eje Y.  <br /></td></tr>
+<tr class="separator:ga7eac3f709e905af8f583aed52093b7ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf7d0757f5965aa579bccc125ff909256" id="r_gaf7d0757f5965aa579bccc125ff909256"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaf7d0757f5965aa579bccc125ff909256">yflex_shrink</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gaf7d0757f5965aa579bccc125ff909256"><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimizar si es necesario en el eje Y.  <br /></td></tr>
+<tr class="separator:gaf7d0757f5965aa579bccc125ff909256"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga845b0ea50d51024aa4e050447b46e1dd" id="r_ga845b0ea50d51024aa4e050447b46e1dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga845b0ea50d51024aa4e050447b46e1dd">notflex</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga845b0ea50d51024aa4e050447b46e1dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hace que el elemento no sea flexible.  <br /></td></tr>
+<tr class="separator:ga845b0ea50d51024aa4e050447b46e1dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gac2a9ed2d22ec3c8811b61f4a901ed367" id="r_gac2a9ed2d22ec3c8811b61f4a901ed367"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gac2a9ed2d22ec3c8811b61f4a901ed367">filler</a> ()</td></tr>
+<tr class="memdesc:gac2a9ed2d22ec3c8811b61f4a901ed367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Un elemento que se expandirá proporcionalmente al espacio restante en un contenedor.  <br /></td></tr>
+<tr class="separator:gac2a9ed2d22ec3c8811b61f4a901ed367"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga201220986fbdc539e42efe067985cbdb" id="r_ga201220986fbdc539e42efe067985cbdb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga201220986fbdc539e42efe067985cbdb">size</a> (<a class="el" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53">WidthOrHeight</a> direction, <a class="el" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926">Constraint</a> constraint, int value)</td></tr>
+<tr class="memdesc:ga201220986fbdc539e42efe067985cbdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aplica una restricción al tamaño de un elemento.  <br /></td></tr>
+<tr class="separator:ga201220986fbdc539e42efe067985cbdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0d6a96f6e1fb6d67d9fa6323062a737" id="r_ad0d6a96f6e1fb6d67d9fa6323062a737"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#ad0d6a96f6e1fb6d67d9fa6323062a737">frame</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ad0d6a96f6e1fb6d67d9fa6323062a737"><td class="mdescLeft">&#160;</td><td class="mdescRight">Permite que un elemento se muestre dentro de un área 'virtual'. Su tamaño puede ser mayor que su contenedor. En este caso, solo se muestra una porción más pequeña. La vista es desplazable para hacer visible el elemento enfocado.  <br /></td></tr>
+<tr class="separator:ad0d6a96f6e1fb6d67d9fa6323062a737"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d0617c0912b732f059cf360ac951c49" id="r_a2d0617c0912b732f059cf360ac951c49"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a2d0617c0912b732f059cf360ac951c49">xframe</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:a2d0617c0912b732f059cf360ac951c49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Igual que <code>frame</code>, pero solo en el eje x.  <br /></td></tr>
+<tr class="separator:a2d0617c0912b732f059cf360ac951c49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ea9d3ceb2a977955125c6e4a6072325" id="r_a7ea9d3ceb2a977955125c6e4a6072325"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a7ea9d3ceb2a977955125c6e4a6072325">yframe</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:a7ea9d3ceb2a977955125c6e4a6072325"><td class="mdescLeft">&#160;</td><td class="mdescRight">Igual que <code>frame</code>, pero solo en el eje y.  <br /></td></tr>
+<tr class="separator:a7ea9d3ceb2a977955125c6e4a6072325"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa2d7d671f184f85e0f396f2610fa6c2e" id="r_gaa2d7d671f184f85e0f396f2610fa6c2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaa2d7d671f184f85e0f396f2610fa6c2e">focus</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gaa2d7d671f184f85e0f396f2610fa6c2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece que <code>child</code> sea el elemento enfocado entre sus hermanos.  <br /></td></tr>
+<tr class="separator:gaa2d7d671f184f85e0f396f2610fa6c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e3e2988ed61a129d82d634ad66f7eb1" id="r_a9e3e2988ed61a129d82d634ad66f7eb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#a9e3e2988ed61a129d82d634ad66f7eb1">select</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:a9e3e2988ed61a129d82d634ad66f7eb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establece que <code>child</code> sea el elemento enfocado entre sus hermanos.  <br /></td></tr>
+<tr class="separator:a9e3e2988ed61a129d82d634ad66f7eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga509ef7e7f8913ea3de7efd45e3301ea1" id="r_ga509ef7e7f8913ea3de7efd45e3301ea1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga509ef7e7f8913ea3de7efd45e3301ea1">focusCursorBlock</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga509ef7e7f8913ea3de7efd45e3301ea1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Igual que <code>focus</code>, pero establece la forma del cursor como un bloque fijo.  <br /></td></tr>
+<tr class="separator:ga509ef7e7f8913ea3de7efd45e3301ea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gadda589914ba8fe863c905b6566557768" id="r_gadda589914ba8fe863c905b6566557768"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gadda589914ba8fe863c905b6566557768">focusCursorBlockBlinking</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gadda589914ba8fe863c905b6566557768"><td class="mdescLeft">&#160;</td><td class="mdescRight">Igual que <code>focus</code>, pero establece la forma del cursor como un bloque parpadeante.  <br /></td></tr>
+<tr class="separator:gadda589914ba8fe863c905b6566557768"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4f89e72e7001064e3eb8189c8317e95b" id="r_ga4f89e72e7001064e3eb8189c8317e95b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga4f89e72e7001064e3eb8189c8317e95b">focusCursorBar</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga4f89e72e7001064e3eb8189c8317e95b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Igual que <code>focus</code>, pero establece la forma del cursor como un bloque fijo.  <br /></td></tr>
+<tr class="separator:ga4f89e72e7001064e3eb8189c8317e95b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga085a7c997e7364c5a54e73c7b84145db" id="r_ga085a7c997e7364c5a54e73c7b84145db"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga085a7c997e7364c5a54e73c7b84145db">focusCursorBarBlinking</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga085a7c997e7364c5a54e73c7b84145db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Igual que <code>focus</code>, pero establece la forma del cursor como una barra parpadeante.  <br /></td></tr>
+<tr class="separator:ga085a7c997e7364c5a54e73c7b84145db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga61e1fe02a18c2b18e31ccc9cd3943823" id="r_ga61e1fe02a18c2b18e31ccc9cd3943823"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga61e1fe02a18c2b18e31ccc9cd3943823">focusCursorUnderline</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga61e1fe02a18c2b18e31ccc9cd3943823"><td class="mdescLeft">&#160;</td><td class="mdescRight">Igual que <code>focus</code>, pero establece la forma del cursor como un subrayado fijo.  <br /></td></tr>
+<tr class="separator:ga61e1fe02a18c2b18e31ccc9cd3943823"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga33637d59d1e52aa06dd2a94162adbfe9" id="r_ga33637d59d1e52aa06dd2a94162adbfe9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga33637d59d1e52aa06dd2a94162adbfe9">focusCursorUnderlineBlinking</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga33637d59d1e52aa06dd2a94162adbfe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Igual que <code>focus</code>, pero establece la forma del cursor como un subrayado parpadeante.  <br /></td></tr>
+<tr class="separator:ga33637d59d1e52aa06dd2a94162adbfe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1974176e676afdb96d203e8e0f579219" id="r_ga1974176e676afdb96d203e8e0f579219"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga1974176e676afdb96d203e8e0f579219">vscroll_indicator</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga1974176e676afdb96d203e8e0f579219"><td class="mdescLeft">&#160;</td><td class="mdescRight">Muestra una barra de desplazamiento vertical a la derecha. Los colores siguen el contenido.  <br /></td></tr>
+<tr class="separator:ga1974176e676afdb96d203e8e0f579219"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga7f48136f949ccbde722dd93a6de4d0de" id="r_ga7f48136f949ccbde722dd93a6de4d0de"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga7f48136f949ccbde722dd93a6de4d0de">hscroll_indicator</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga7f48136f949ccbde722dd93a6de4d0de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Muestra una barra de desplazamiento horizontal en la parte inferior. Los colores siguen el contenido.  <br /></td></tr>
+<tr class="separator:ga7f48136f949ccbde722dd93a6de4d0de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaff8245861617a3d9e846e99de582a63" id="r_aaff8245861617a3d9e846e99de582a63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui.html#aaff8245861617a3d9e846e99de582a63">reflect</a> (<a class="el" href="group__screen.html#structftxui_1_1Box">Box</a> &amp;box)</td></tr>
+<tr class="separator:aaff8245861617a3d9e846e99de582a63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga17a89519e6b87e12b1e5811a702f7847" id="r_ga17a89519e6b87e12b1e5811a702f7847"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga17a89519e6b87e12b1e5811a702f7847">clear_under</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> element)</td></tr>
+<tr class="memdesc:ga17a89519e6b87e12b1e5811a702f7847"><td class="mdescLeft">&#160;</td><td class="mdescRight">Antes de dibujar |child|, limpia los píxeles de abajo. Esto es útil en combinación con dbox.  <br /></td></tr>
+<tr class="separator:ga17a89519e6b87e12b1e5811a702f7847"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaf7d0d1e44c1a5424e42a5cddceacf7f7" id="r_gaf7d0d1e44c1a5424e42a5cddceacf7f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gaf7d0d1e44c1a5424e42a5cddceacf7f7">hcenter</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gaf7d0d1e44c1a5424e42a5cddceacf7f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Centra un elemento horizontalmente.  <br /></td></tr>
+<tr class="separator:gaf7d0d1e44c1a5424e42a5cddceacf7f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad907a8a48bb9f9dfdb06402e9fc12316" id="r_gad907a8a48bb9f9dfdb06402e9fc12316"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#gad907a8a48bb9f9dfdb06402e9fc12316">vcenter</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:gad907a8a48bb9f9dfdb06402e9fc12316"><td class="mdescLeft">&#160;</td><td class="mdescRight">Centra un elemento verticalmente.  <br /></td></tr>
+<tr class="separator:gad907a8a48bb9f9dfdb06402e9fc12316"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga5b11656305fce8427b81daf1c35883f1" id="r_ga5b11656305fce8427b81daf1c35883f1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga5b11656305fce8427b81daf1c35883f1">center</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga5b11656305fce8427b81daf1c35883f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Centra un elemento horizontal y verticalmente.  <br /></td></tr>
+<tr class="separator:ga5b11656305fce8427b81daf1c35883f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga778e52afe28f1978f1f7ef065ed92d6d" id="r_ga778e52afe28f1978f1f7ef065ed92d6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga778e52afe28f1978f1f7ef065ed92d6d">align_right</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child)</td></tr>
+<tr class="memdesc:ga778e52afe28f1978f1f7ef065ed92d6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Alinea un elemento a la derecha.  <br /></td></tr>
+<tr class="separator:ga778e52afe28f1978f1f7ef065ed92d6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga1bfd3885ac8b40dc82a1103725003c07" id="r_ga1bfd3885ac8b40dc82a1103725003c07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__dom.html#ga1bfd3885ac8b40dc82a1103725003c07">nothing</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> element)</td></tr>
+<tr class="memdesc:ga1bfd3885ac8b40dc82a1103725003c07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Una decoración que no hace absolutamente nada.  <br /></td></tr>
+<tr class="separator:ga1bfd3885ac8b40dc82a1103725003c07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee138f0b60ddc07682a785f55eb5fda6" id="r_aee138f0b60ddc07682a785f55eb5fda6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__screen.html#structftxui_1_1Dimensions">Dimensions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceftxui_1_1Dimension.html#aee138f0b60ddc07682a785f55eb5fda6">Fit</a> (<a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> &amp;, bool extend_beyond_screen=false)</td></tr>
+<tr class="separator:aee138f0b60ddc07682a785f55eb5fda6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "es";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

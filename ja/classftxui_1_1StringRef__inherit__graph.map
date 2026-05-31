@@ -1,0 +1,5 @@
+<map id="StringRef" name="StringRef">
+<area shape="rect" id="Node000001" title="アダプター。定数文字列を所有または参照します。便宜上、このクラスは複数の可変文字列を共有表現に変換します。" alt="" coords="33,79,116,104"/>
+<area shape="rect" id="Node000002" href="$classftxui_1_1Ref.html" title=" " alt="" coords="5,5,144,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="77,44,77,79,72,79,72,44"/>
+</map>
