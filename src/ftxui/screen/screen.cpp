@@ -538,6 +538,7 @@ void Screen::Clear() {
   hyperlinks_ = {
       "",
   };
+  post_render_callbacks_.clear();
 }
 
 // clang-format off
@@ -598,6 +599,18 @@ const Screen::SelectionStyle& Screen::GetSelectionStyle() const {
 /// @see GetSelectionStyle
 void Screen::SetSelectionStyle(SelectionStyle decorator) {
   selection_style_ = std::move(decorator);
+}
+
+void Screen::RegisterPostRenderCallback(PostRenderCallback callback) {
+  post_render_callbacks_.push_back(std::move(callback));
+}
+
+void Screen::RunPostRenderCallbacks() {
+  std::vector<PostRenderCallback> callbacks;
+  std::swap(callbacks, post_render_callbacks_);
+  for (const auto& callback : callbacks) {
+    callback();
+  }
 }
 
 }  // namespace ftxui
