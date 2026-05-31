@@ -22,6 +22,9 @@
 #include <sys/ioctl.h>  // for winsize, ioctl, TIOCGWINSZ
 #include <unistd.h>     // for STDOUT_FILENO
 #endif
+#if defined(__sun) || defined(__illumos__)
+#include <sys/termios.h>  // for winsize on illumos
+#endif
 
 namespace ftxui {
 
@@ -108,7 +111,8 @@ struct Quirks::Impl {
 
 Quirks::Quirks() : impl_(std::make_unique<Impl>()) {}
 Quirks::~Quirks() = default;
-Quirks::Quirks(const Quirks& other) : impl_(std::make_unique<Impl>(*other.impl_)) {}
+Quirks::Quirks(const Quirks& other)
+    : impl_(std::make_unique<Impl>(*other.impl_)) {}
 Quirks& Quirks::operator=(const Quirks& other) {
   if (this != &other) {
     *impl_ = *other.impl_;
