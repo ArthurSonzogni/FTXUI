@@ -1,5 +1,5 @@
 project('ftxui', 'cpp',
-  version: run_command('python3', '-c', 'import re; print(re.search(r"project\(ftxui\s+.*?VERSION\s+([0-9.]+)", open("CMakeLists.txt").read(), re.DOTALL).group(1))', check: true).stdout().strip(),
+  version: run_command('python', '-c', 'import re; print(re.search(r"project\(ftxui\s+.*?VERSION\s+([0-9.]+)", open("CMakeLists.txt").read(), re.DOTALL).group(1))', check: true).stdout().strip(),
   license: 'MIT',
   default_options: [
     'cpp_std=c++17',
@@ -27,6 +27,12 @@ ftxui_build_tests = get_option('tests')
 ftxui_public_inc = include_directories('include')
 ftxui_private_inc = include_directories('src', 'include')
 
+# Export definitions for shared libraries
+ftxui_args = []
+if get_option('default_library') != 'static'
+  ftxui_args += '-DCOMPONENT_BUILD'
+endif
+
 # Subdirectories for sources
 subdir('src/ftxui/screen')
 subdir('src/ftxui/dom')
@@ -36,6 +42,7 @@ subdir('src/ftxui/component')
 ftxui_screen = library('ftxui-screen',
   screen_sources,
   include_directories: ftxui_private_inc,
+  cpp_args: ftxui_args + ['-DIS_FTXUI_SCREEN_IMPL=1'],
   install: true,
 )
 
@@ -48,6 +55,7 @@ ftxui_screen_dep = declare_dependency(
 ftxui_dom = library('ftxui-dom',
   dom_sources,
   include_directories: ftxui_private_inc,
+  cpp_args: ftxui_args + ['-DIS_FTXUI_DOM_IMPL=1'],
   link_with: ftxui_screen,
   install: true,
 )
@@ -61,6 +69,7 @@ ftxui_dom_dep = declare_dependency(
 ftxui_component = library('ftxui-component',
   component_sources,
   include_directories: ftxui_private_inc,
+  cpp_args: ftxui_args + ['-DIS_FTXUI_COMPONENT_IMPL=1'],
   link_with: [ftxui_dom, ftxui_screen],
   install: true,
 )
