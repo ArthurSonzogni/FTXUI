@@ -53,6 +53,7 @@ add_executable(ftxui-tests
   src/ftxui/dom/vbox_test.cpp
   src/ftxui/screen/color_test.cpp
   src/ftxui/screen/compatibility_test.cpp
+  src/ftxui/screen/screen_test.cpp
   src/ftxui/screen/string_test.cpp
   src/ftxui/util/ref_test.cpp
 )
