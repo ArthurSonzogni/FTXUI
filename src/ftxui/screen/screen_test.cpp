@@ -11,7 +11,7 @@ namespace ftxui {
 namespace {
 // The old, pre-optimization non-clear ResetPosition output: a leading '\r'
 // followed by one "\x1B[1A" cursor-up per extra row. Used as the reference
-// (equivalence) baseline for the collapsed single-CSI form.
+// baseline for the collapsed single-CSI form.
 std::string OldNonClearResetPosition(int dimy) {
   std::string ss;
   ss += '\r';  // MOVE_LEFT;
@@ -19,6 +19,30 @@ std::string OldNonClearResetPosition(int dimy) {
     ss += "\x1B[1A";  // MOVE_UP;
   }
   return ss;
+}
+
+// Decode the total upward cursor movement encoded by a ResetPosition string:
+// the leading '\r' moves to column 0, and the cursor-up CSIs (single "\x1B[1A"
+// moves or one parameterized "\x1B[<n>A") sum to the number of rows moved up.
+// This lets us compare the collapsed single-CSI form to the per-row walk by
+// terminal *effect* rather than by exact bytes.
+int RowsMovedUp(const std::string& s) {
+  int total = 0;
+  size_t i = 0;
+  while ((i = s.find("\x1B[", i)) != std::string::npos) {
+    i += 2;  // Skip the CSI introducer.
+    int n = 0;
+    bool has_digits = false;
+    while (i < s.size() && s[i] >= '0' && s[i] <= '9') {
+      n = n * 10 + (s[i] - '0');
+      has_digits = true;
+      ++i;
+    }
+    if (i < s.size() && s[i] == 'A') {  // Cursor-up final byte.
+      total += has_digits ? n : 1;     // No parameter defaults to 1.
+    }
+  }
+  return total;
 }
 }  // namespace
 
@@ -38,13 +62,17 @@ TEST(ScreenTest, ResetPositionNonClearSingleRow) {
   EXPECT_EQ(screen.ResetPosition(false), "\r");
 }
 
-// The collapsed form moves the cursor to exactly the same place as the old
-// per-row walk-up, for every height.
+// The collapsed single-CSI form moves the cursor to exactly the same place as
+// the old per-row walk-up, for every height. The byte sequences differ (that is
+// the whole point of the optimization), so equivalence is checked by terminal
+// *effect*: both forms move the cursor up by the same number of rows.
 TEST(ScreenTest, ResetPositionNonClearEquivalentToPerRowWalk) {
   for (int dimy : {1, 2, 3, 10, 24, 50, 100}) {
     Screen screen(10, dimy);
-    EXPECT_EQ(screen.ResetPosition(false), OldNonClearResetPosition(dimy))
+    const std::string new_form = screen.ResetPosition(false);
+    EXPECT_EQ(RowsMovedUp(new_form), RowsMovedUp(OldNonClearResetPosition(dimy)))
         << "dimy=" << dimy;
+    EXPECT_EQ(RowsMovedUp(new_form), dimy - 1) << "dimy=" << dimy;
   }
 }
 
