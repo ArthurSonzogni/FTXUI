@@ -514,6 +514,9 @@ std::string Screen::ResetPosition(bool clear) const {
 /// @param clear Whether to clear the screen or not.
 void Screen::ResetPosition(std::string& ss, bool clear) const {
   if (clear) {
+    // The clear branch must move up one row at a time, because each row needs
+    // its own CLEAR_LINE (\x1B[2K) erase. It cannot be collapsed into a single
+    // parameterized cursor-up.
     ss += '\r';       // MOVE_LEFT;
     ss += "\x1b[2K";  // CLEAR_SCREEN;
     for (int y = 1; y < dimy_; ++y) {
@@ -521,9 +524,12 @@ void Screen::ResetPosition(std::string& ss, bool clear) const {
       ss += "\x1B[2K";  // CLEAR_LINE;
     }
   } else {
+    // The non-clear branch only needs to reposition the cursor at the top-left,
+    // so the per-row walk-up is collapsed into a single parameterized
+    // CSI cursor-up (\x1B[<n>A), emitting far fewer bytes per frame.
     ss += '\r';  // MOVE_LEFT;
-    for (int y = 1; y < dimy_; ++y) {
-      ss += "\x1B[1A";  // MOVE_UP;
+    if (dimy_ > 1) {
+      ss += "\x1B[" + std::to_string(dimy_ - 1) + "A";  // MOVE_UP;
     }
   }
 }

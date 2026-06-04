@@ -97,6 +97,11 @@ Next
   opposite direction. Thanks @Ardet696 in #1203.
 
 ### Screen
+- Performance: Collapse the per-row cursor walk-up in the non-clear
+  `Screen::ResetPosition` into a single parameterized CSI cursor-up
+  (`\x1B[<n>A`) instead of emitting one `\x1B[1A` per row. This reduces the
+  per-frame escape bytes during steady-state redraw (e.g. ~197 -> 6 bytes for a
+  50-row screen, ~33x). On-screen output is unchanged.
 - Performance: Optimize `Screen::ToString()`, `Color::Print()` and
   `string_width()`. 
   This was achieved by:
