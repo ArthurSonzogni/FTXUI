@@ -258,4 +258,13 @@ CapturedMouse ComponentBase::CaptureMouse(const Event& event) {  // NOLINT
   return std::make_unique<CaptureMouseImpl>();
 }
 
+void ComponentBase::Reserved1() {}
+void ComponentBase::Reserved2() {}
+void ComponentBase::Reserved3() {}
+void ComponentBase::Reserved4() {}
+void ComponentBase::Reserved5() {}
+void ComponentBase::Reserved6() {}
+void ComponentBase::Reserved7() {}
+void ComponentBase::Reserved8() {}
+
 }  // namespace ftxui
