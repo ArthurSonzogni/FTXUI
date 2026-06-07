@@ -440,13 +440,17 @@ void TableSelection::Border(BorderStyle border) {
   BorderBottom(border);
 
   // NOLINTNEXTLINE
-  table_->elements_[y_min_][x_min_] = text(table_charset[border][0]) | automerge;
+  table_->elements_[y_min_][x_min_] =
+      text(table_charset[border][0]) | automerge;
   // NOLINTNEXTLINE
-  table_->elements_[y_min_][x_max_] = text(table_charset[border][1]) | automerge;
+  table_->elements_[y_min_][x_max_] =
+      text(table_charset[border][1]) | automerge;
   // NOLINTNEXTLINE
-  table_->elements_[y_max_][x_min_] = text(table_charset[border][2]) | automerge;
+  table_->elements_[y_max_][x_min_] =
+      text(table_charset[border][2]) | automerge;
   // NOLINTNEXTLINE
-  table_->elements_[y_max_][x_max_] = text(table_charset[border][3]) | automerge;
+  table_->elements_[y_max_][x_max_] =
+      text(table_charset[border][3]) | automerge;
 }
 
 /// @brief Apply a `border` around the selection.
@@ -464,9 +468,10 @@ void TableSelection::Separator(BorderStyle border) {
     for (int x = x_min_ + 1; x <= x_max_ - 1; ++x) {
       if (y % 2 == 0 || x % 2 == 0) {
         Element& e = table_->elements_[y][x];
-        e = (y % 2 == 1)
-                ? separatorCharacter(table_charset[border][5]) | automerge   // NOLINT
-                : separatorCharacter(table_charset[border][4]) | automerge;  // NOLINT
+        e = (y % 2 == 1) ? separatorCharacter(table_charset[border][5]) |
+                               automerge  // NOLINT
+                         : separatorCharacter(table_charset[border][4]) |
+                               automerge;  // NOLINT
       }
     }
   }

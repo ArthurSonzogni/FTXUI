@@ -127,7 +127,8 @@ class WindowImpl : public ComponentBase, public WindowOptions {
   Element OnRender() final {
     auto element = ComponentBase::Render();
 
-    const bool captureable = captured_mouse_ || App::Active()->CaptureMouse();
+    const bool captureable =
+        captured_mouse_ || (App::Active() && App::Active()->CaptureMouse());
 
     const WindowRenderState state = {
         element,

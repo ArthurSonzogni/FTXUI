@@ -39,7 +39,7 @@ int RowsMovedUp(const std::string& s) {
       ++i;
     }
     if (i < s.size() && s[i] == 'A') {  // Cursor-up final byte.
-      total += has_digits ? n : 1;     // No parameter defaults to 1.
+      total += has_digits ? n : 1;      // No parameter defaults to 1.
     }
   }
   return total;
@@ -50,8 +50,7 @@ int RowsMovedUp(const std::string& s) {
 TEST(ScreenTest, ResetPositionNonClearSingleCSI) {
   for (int dimy : {2, 3, 10, 24, 50, 100}) {
     Screen screen(10, dimy);
-    const std::string expected =
-        "\r\x1B[" + std::to_string(dimy - 1) + "A";
+    const std::string expected = "\r\x1B[" + std::to_string(dimy - 1) + "A";
     EXPECT_EQ(screen.ResetPosition(false), expected) << "dimy=" << dimy;
   }
 }
@@ -70,7 +69,8 @@ TEST(ScreenTest, ResetPositionNonClearEquivalentToPerRowWalk) {
   for (int dimy : {1, 2, 3, 10, 24, 50, 100}) {
     Screen screen(10, dimy);
     const std::string new_form = screen.ResetPosition(false);
-    EXPECT_EQ(RowsMovedUp(new_form), RowsMovedUp(OldNonClearResetPosition(dimy)))
+    EXPECT_EQ(RowsMovedUp(new_form),
+              RowsMovedUp(OldNonClearResetPosition(dimy)))
         << "dimy=" << dimy;
     EXPECT_EQ(RowsMovedUp(new_form), dimy - 1) << "dimy=" << dimy;
   }
@@ -100,6 +100,25 @@ TEST(ScreenTest, ResetPositionClearIsPerRow) {
     expected += "\x1B[2K";
   }
   EXPECT_EQ(screen.ResetPosition(true), expected);
+}
+
+// Regression test: negative/zero dimensions do not crash or throw.
+TEST(ScreenTest, NegativeAndZeroDimensions) {
+  EXPECT_NO_THROW({
+    Screen screen(-10, 20);
+    EXPECT_EQ(screen.dimx(), 0);
+    EXPECT_EQ(screen.dimy(), 20);
+  });
+  EXPECT_NO_THROW({
+    Screen screen(20, -10);
+    EXPECT_EQ(screen.dimx(), 20);
+    EXPECT_EQ(screen.dimy(), 0);
+  });
+  EXPECT_NO_THROW({
+    Screen screen(0, 0);
+    EXPECT_EQ(screen.dimx(), 0);
+    EXPECT_EQ(screen.dimy(), 0);
+  });
 }
 
 }  // namespace ftxui

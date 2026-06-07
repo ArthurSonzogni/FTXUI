@@ -19,10 +19,10 @@ Cell& dev_null_cell() {
 }  // namespace
 
 Surface::Surface(int dimx, int dimy)
-    : stencil{0, dimx - 1, 0, dimy - 1},
-      dimx_(dimx),
-      dimy_(dimy),
-      cells_(static_cast<size_t>(dimx) * static_cast<size_t>(dimy)) {}
+    : stencil{0, std::max(0, dimx) - 1, 0, std::max(0, dimy) - 1},
+      dimx_(std::max(0, dimx)),
+      dimy_(std::max(0, dimy)),
+      cells_(static_cast<size_t>(dimx_) * static_cast<size_t>(dimy_)) {}
 
 /// @brief Access a character in a cell at a given position.
 /// @param x The cell position along the x-axis.

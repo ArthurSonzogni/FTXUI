@@ -18,6 +18,9 @@ template <typename T>
 std::wstring to_wstring(T s) {
   return to_wstring(std::string_view(std::to_string(s)));
 }
+inline std::wstring to_wstring(const std::string& s) {
+  return to_wstring(std::string_view(s));
+}
 template <>
 inline std::wstring to_wstring(const char* s) {
   return to_wstring(std::string_view(s));

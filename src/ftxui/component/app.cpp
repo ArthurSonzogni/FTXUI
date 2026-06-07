@@ -4,7 +4,6 @@
 #include <algorithm>  // for any_of, copy, max, min
 #include <array>      // for array
 #include <atomic>
-#include <map>
 #include <chrono>  // for operator-, milliseconds, operator>=, duration, common_type<>::type, time_point
 #include <csignal>  // for signal, SIGTSTP, SIGABRT, SIGWINCH, raise, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM, __sighandler_t, size_t
 #include <cstdint>
@@ -15,6 +14,7 @@
 #include <functional>        // for function
 #include <initializer_list>  // for initializer_list
 #include <iostream>  // for cout, ostream, operator<<, basic_ostream, endl, flush
+#include <map>
 #include <memory>
 #include <stack>  // for stack
 #include <string>
@@ -404,8 +404,7 @@ int g_tty_fd = -1;
 void RestoreSignalHandlerAndRaise(int signal) {
 #if defined(_WIN32)
   auto it = g_old_signal_handlers.find(signal);
-  auto old_handler =
-      (it != g_old_signal_handlers.end()) ? it->second : SIG_DFL;
+  auto old_handler = (it != g_old_signal_handlers.end()) ? it->second : SIG_DFL;
   std::signal(signal, old_handler);
 #else
   auto it = g_old_sigactions.find(signal);
@@ -543,8 +542,7 @@ void InstallSignalHandler(int sig) {
   struct sigaction old_sa;
   sigaction(sig, &sa, &old_sa);
   g_old_sigactions[sig] = old_sa;
-  on_exit_functions.emplace(
-      [=] { sigaction(sig, &old_sa, nullptr); });
+  on_exit_functions.emplace([=] { sigaction(sig, &old_sa, nullptr); });
 #endif
 }
 
@@ -1054,8 +1052,8 @@ void App::Internal::Draw(Component component) {
   if (resized) {
     public_->dimx_ = dimx;
     public_->dimy_ = dimy;
-    public_->cells_ =
-        std::vector<Cell>(static_cast<size_t>(dimx) * static_cast<size_t>(dimy));
+    public_->cells_ = std::vector<Cell>(static_cast<size_t>(dimx) *
+                                        static_cast<size_t>(dimy));
     Cursor cursor = public_->cursor_;
     cursor.x = dimx - 1;
     cursor.y = dimy - 1;

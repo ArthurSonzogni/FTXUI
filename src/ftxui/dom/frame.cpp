@@ -146,7 +146,7 @@ Element yframe(Element child) {
 /// @ingroup dom
 Element focusCursorBlock(Element child) {
   return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
-                                       Screen::Cursor::Block);
+                                           Screen::Cursor::Block);
 }
 
 /// @brief Same as `focus`, but set the cursor shape to be a blinking block.
@@ -160,7 +160,7 @@ Element focusCursorBlock(Element child) {
 /// @ingroup dom
 Element focusCursorBlockBlinking(Element child) {
   return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
-                                       Screen::Cursor::BlockBlinking);
+                                           Screen::Cursor::BlockBlinking);
 }
 
 /// @brief Same as `focus`, but set the cursor shape to be a still block.
@@ -174,7 +174,7 @@ Element focusCursorBlockBlinking(Element child) {
 /// @ingroup dom
 Element focusCursorBar(Element child) {
   return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
-                                       Screen::Cursor::Bar);
+                                           Screen::Cursor::Bar);
 }
 
 /// @brief Same as `focus`, but set the cursor shape to be a blinking bar.
@@ -188,7 +188,7 @@ Element focusCursorBar(Element child) {
 /// @ingroup dom
 Element focusCursorBarBlinking(Element child) {
   return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
-                                       Screen::Cursor::BarBlinking);
+                                           Screen::Cursor::BarBlinking);
 }
 
 /// @brief Same as `focus`, but set the cursor shape to be a still underline.
@@ -202,7 +202,7 @@ Element focusCursorBarBlinking(Element child) {
 /// @ingroup dom
 Element focusCursorUnderline(Element child) {
   return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
-                                       Screen::Cursor::Underline);
+                                           Screen::Cursor::Underline);
 }
 
 /// @brief Same as `focus`, but set the cursor shape to be a blinking underline.
@@ -216,7 +216,7 @@ Element focusCursorUnderline(Element child) {
 /// @ingroup dom
 Element focusCursorUnderlineBlinking(Element child) {
   return std::make_shared<FocusCursorNode>(unpack(std::move(child)),
-                                       Screen::Cursor::UnderlineBlinking);
+                                           Screen::Cursor::UnderlineBlinking);
 }
 
 }  // namespace ftxui

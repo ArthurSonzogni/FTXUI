@@ -21,8 +21,8 @@ namespace ftxui {
 
 namespace {
 // NOLINTNEXTLINE
-static const std::array<std::string, 9> graph_charset = {" ", "▗", "▐", "▖", "▄",
-                                                   "▟", "▌", "▙", "█"};
+static const std::array<std::string, 9> graph_charset = {
+    " ", "▗", "▐", "▖", "▄", "▟", "▌", "▙", "█"};
 
 // NOLINTNEXTLINE
 static const std::array<std::string, 9> graph_charset_microsoft = {
@@ -49,8 +49,9 @@ class Graph : public Node {
       return;
     }
 
-    const auto& current_graph_charset =
-        Terminal::GetQuirks().BlockCharacters() ? graph_charset : graph_charset_microsoft;
+    const auto& current_graph_charset = Terminal::GetQuirks().BlockCharacters()
+                                            ? graph_charset
+                                            : graph_charset_microsoft;
 
     auto data = graph_function_(width, height);
     int i = 0;

@@ -104,5 +104,24 @@ TEST(CanvasTest, GoldText) {
   EXPECT_EQ(Hash(screen.ToString()), 1074960375u);
 }
 
+// Regression test: negative/zero Canvas dimensions do not crash.
+TEST(CanvasTest, NegativeAndZeroDimensions) {
+  EXPECT_NO_THROW({
+    Canvas c(-10, 20);
+    EXPECT_EQ(c.width(), 0);
+    EXPECT_EQ(c.height(), 20);
+  });
+  EXPECT_NO_THROW({
+    Canvas c(20, -10);
+    EXPECT_EQ(c.width(), 20);
+    EXPECT_EQ(c.height(), 0);
+  });
+  EXPECT_NO_THROW({
+    Canvas c(0, 0);
+    EXPECT_EQ(c.width(), 0);
+    EXPECT_EQ(c.height(), 0);
+  });
+}
+
 }  // namespace ftxui
 // NOLINTEND

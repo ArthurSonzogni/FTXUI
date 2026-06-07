@@ -79,7 +79,7 @@
 // |FTXUI_MACRO_CONDITIONAL_COMMA_()| above to implement conditional macro
 // expansion.
 #define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_(...) \
-  FTXUI_MACRO_EXPAND(                               \
+  FTXUI_MACRO_EXPAND(                           \
       FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_(__VA_ARGS__, dummy))
 #define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_(a, b, c, ...) c
 
