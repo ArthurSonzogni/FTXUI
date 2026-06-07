@@ -6,9 +6,22 @@ option(FTXUI_BUILD_TESTS_FUZZER "Set to ON to enable fuzzing" OFF)
 option(FTXUI_CLANG_TIDY "Execute clang-tidy" OFF)
 option(FTXUI_DEV_WARNINGS "Enable more compiler warnings and warnings as errors" OFF)
 option(FTXUI_ENABLE_COVERAGE "Execute code coverage" OFF)
-
 option(FTXUI_ENABLE_INSTALL "Generate the install target" ON)
 option(FTXUI_QUIET "Set to ON for FTXUI to be quiet" OFF)
+
+set(FTXUI_ENABLE_CCACHE_DEFAULT OFF)
+if (CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  set(FTXUI_ENABLE_CCACHE_DEFAULT ON)
+endif()
+option(FTXUI_ENABLE_CCACHE "Enable ccache support" ${FTXUI_ENABLE_CCACHE_DEFAULT})
+
+if (FTXUI_ENABLE_CCACHE)
+  find_program(CCACHE_PROGRAM ccache)
+  if (CCACHE_PROGRAM)
+    set(CMAKE_CXX_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+    set(CMAKE_C_COMPILER_LAUNCHER "${CCACHE_PROGRAM}")
+  endif()
+endif()
 
 if (FTXUI_BUILD_MODULES)
   cmake_minimum_required(VERSION 3.28.2)
