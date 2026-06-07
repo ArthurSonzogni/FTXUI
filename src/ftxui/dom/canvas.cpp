@@ -94,9 +94,10 @@ constexpr auto nostyle = [](Cell& /*pixel*/) {};
 /// @param width the width of the canvas. A cell is a 2x4 braille dot.
 /// @param height the height of the canvas. A cell is a 2x4 braille dot.
 Canvas::Canvas(int width, int height)
-    : width_(width),
-      height_(height),
-      storage_(width_ * height_ / 8 /* NOLINT */) {}
+    : width_(std::max(0, width)),
+      height_(std::max(0, height)),
+      storage_(static_cast<size_t>(width_) * static_cast<size_t>(height_) /
+               8 /* NOLINT */) {}
 
 /// @brief Get the content of a cell.
 /// @param x the x coordinate of the cell.

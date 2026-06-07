@@ -162,6 +162,10 @@ TEST(StringTest, to_wstring) {
   EXPECT_EQ(to_wstring("«»"), L"«»");
   EXPECT_EQ(to_wstring("嵰嵲嵫"), L"嵰嵲嵫");
   EXPECT_EQ(to_wstring("🎅🎄"), L"🎅🎄");
+
+  // Regression test: check that std::string is correctly matched
+  std::string std_str = "hello";
+  EXPECT_EQ(to_wstring(std_str), L"hello");
 }
 
 }  // namespace ftxui

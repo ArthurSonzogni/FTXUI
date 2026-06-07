@@ -18,10 +18,11 @@
 namespace ftxui {
 
 namespace {
-using SeparatorCharset = std::array<std::string, 2>;  // NOLINT
-using SeparatorCharsets = std::array<SeparatorCharset, 6>;     // NOLINT
+using SeparatorCharset = std::array<std::string, 2>;        // NOLINT
+using SeparatorCharsets = std::array<SeparatorCharset, 6>;  // NOLINT
 
-const SeparatorCharsets charsets = { // NOLINT
+const SeparatorCharsets charsets = {
+    // NOLINT
     SeparatorCharset{"│", "─"},  // LIGHT
     SeparatorCharset{"╏", "╍"},  // DASHED
     SeparatorCharset{"┃", "━"},  // HEAVY
