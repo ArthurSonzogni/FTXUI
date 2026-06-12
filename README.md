@@ -390,6 +390,7 @@ Feel free to add your projects here:
 - [ltuiny](https://github.com/adrianoviana87/ltuiny)
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
 - [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
+- [OvenbirdBT](https://github.com/ziptt/OvenbirdBT)
 - [pciex](https://github.com/s0nx/pciex)
 - [resource-monitor](https://github.com/catalincd/resource-monitor)
 - [rw-tui](https://github.com/LeeKyuHyuk/rw-tui)
