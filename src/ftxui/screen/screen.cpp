@@ -606,4 +606,13 @@ void Screen::SetSelectionStyle(SelectionStyle decorator) {
   selection_style_ = std::move(decorator);
 }
 
+void Screen::Reserved1() {}
+void Screen::Reserved2() {}
+void Screen::Reserved3() {}
+void Screen::Reserved4() {}
+void Screen::Reserved5() {}
+void Screen::Reserved6() {}
+void Screen::Reserved7() {}
+void Screen::Reserved8() {}
+
 }  // namespace ftxui

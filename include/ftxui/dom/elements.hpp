@@ -4,6 +4,7 @@
 #ifndef FTXUI_DOM_ELEMENTS_HPP
 #define FTXUI_DOM_ELEMENTS_HPP
 
+#include <cstdint>
 #include <functional>
 #include <memory>
 
@@ -34,7 +35,7 @@ using GraphFunction = std::function<std::vector<int>(int, int)>;
 /// It is used to define the visual appearance of borders around elements,
 /// such as windows, frames, or separators.
 /// @ingroup dom
-enum BorderStyle {
+enum BorderStyle : uint8_t {
   LIGHT,
   DASHED,
   HEAVY,
@@ -154,6 +155,9 @@ Element vflow(Elements);  // Helper: default flexbox with column direction.
 FTXUI_EXPORT(DOM) Element flex(Element);  // Expand/Minimize if possible/needed.
 FTXUI_EXPORT(DOM) Element flex_grow(Element);    // Expand element if possible.
 FTXUI_EXPORT(DOM) Element flex_shrink(Element);  // Minimize element if needed.
+FTXUI_EXPORT(DOM) Decorator flex_factor(int grow, int shrink);
+FTXUI_EXPORT(DOM) Decorator flex_grow_factor(int grow);
+FTXUI_EXPORT(DOM) Decorator flex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM)
 Element xflex(Element);  // Expand/Minimize if possible/needed on X axis.
@@ -161,6 +165,9 @@ FTXUI_EXPORT(DOM)
 Element xflex_grow(Element);  // Expand element if possible on X axis.
 FTXUI_EXPORT(DOM)
 Element xflex_shrink(Element);  // Minimize element if needed on X axis.
+FTXUI_EXPORT(DOM) Decorator xflex_factor(int grow, int shrink);
+FTXUI_EXPORT(DOM) Decorator xflex_grow_factor(int grow);
+FTXUI_EXPORT(DOM) Decorator xflex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM)
 Element yflex(Element);  // Expand/Minimize if possible/needed on Y axis.
@@ -168,13 +175,16 @@ FTXUI_EXPORT(DOM)
 Element yflex_grow(Element);  // Expand element if possible on Y axis.
 FTXUI_EXPORT(DOM)
 Element yflex_shrink(Element);  // Minimize element if needed on Y axis.
+FTXUI_EXPORT(DOM) Decorator yflex_factor(int grow, int shrink);
+FTXUI_EXPORT(DOM) Decorator yflex_grow_factor(int grow);
+FTXUI_EXPORT(DOM) Decorator yflex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM) Element notflex(Element);  // Reset the flex attribute.
 FTXUI_EXPORT(DOM) Element filler();          // A blank expandable element.
 
 // -- Size override;
-enum WidthOrHeight { WIDTH, HEIGHT };
-enum Constraint { LESS_THAN, EQUAL, GREATER_THAN };
+enum WidthOrHeight : uint8_t { WIDTH, HEIGHT };
+enum Constraint : uint8_t { LESS_THAN, EQUAL, GREATER_THAN };
 FTXUI_EXPORT(DOM) Decorator size(WidthOrHeight, Constraint, int value);
 
 // --- Frame ---

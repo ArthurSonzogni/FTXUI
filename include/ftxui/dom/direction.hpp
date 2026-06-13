@@ -4,13 +4,15 @@
 #ifndef FTXUI_DOM_DIRECTION_HPP
 #define FTXUI_DOM_DIRECTION_HPP
 
+#include <cstdint>
+
 namespace ftxui {
 
 /// @brief Direction is an enumeration that represents the four cardinal
 /// directions.
 ///
 /// @ingroup dom
-enum class Direction {
+enum class Direction : uint8_t {
   Up = 0,
   Down = 1,
   Left = 2,

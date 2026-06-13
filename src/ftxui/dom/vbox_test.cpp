@@ -368,5 +368,30 @@ TEST(VBoxText, FlexGrow_NoFlex_FlewShrink) {
   }
 }
 
+TEST(VBoxText, FlexFactor) {
+  auto root_grow = vbox({
+      vtext("012") | flex_grow_factor(2),
+      vtext("abc"),
+      vtext("ABC") | flex_grow_factor(1),
+  });
+  {
+    Screen screen(1, 12);
+    Render(screen, root_grow);
+    EXPECT_EQ("012  abcABC ", rotate(screen.ToString()));
+  }
+
+  auto root_shrink = vbox({
+      vtext("012") | flex_shrink_factor(2),
+      vtext("abc"),
+      vtext("ABC") | flex_shrink_factor(1),
+  });
+  {
+    Screen screen(1, 6);
+    Render(screen, root_shrink);
+    EXPECT_EQ("0abcAB", rotate(screen.ToString()));
+  }
+}
+
 }  // namespace ftxui
 // NOLINTEND
+

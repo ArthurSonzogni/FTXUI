@@ -46,6 +46,16 @@ class FTXUI_EXPORT(SCREEN) Surface {
   // Fill the surface with space and default style
   void Clear();
 
+  // ABI Reserve:
+  virtual void Reserved1();
+  virtual void Reserved2();
+  virtual void Reserved3();
+  virtual void Reserved4();
+  virtual void Reserved5();
+  virtual void Reserved6();
+  virtual void Reserved7();
+  virtual void Reserved8();
+
   Box stencil;
 
  protected:

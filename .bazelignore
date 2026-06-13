@@ -14,3 +14,10 @@ build_modules_config.log
 build_modules_gen.log
 build_modules_make.log
 build_shared
+build_static
+build_error
+build_meson
+build_meson_check
+build_meson_check_shared
+build_meson_shared
+build_meson_tests

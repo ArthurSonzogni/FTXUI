@@ -73,4 +73,13 @@ void Surface::Clear() {
   std::fill(cells_.begin(), cells_.end(), Cell());
 }
 
+void Surface::Reserved1() {}
+void Surface::Reserved2() {}
+void Surface::Reserved3() {}
+void Surface::Reserved4() {}
+void Surface::Reserved5() {}
+void Surface::Reserved6() {}
+void Surface::Reserved7() {}
+void Surface::Reserved8() {}
+
 }  // namespace ftxui
