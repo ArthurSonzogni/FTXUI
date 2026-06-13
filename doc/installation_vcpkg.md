@@ -14,7 +14,7 @@ To use it, you can add the following to your `vcpkg.json`:
   "dependencies": [
     {
         "name": "ftxui",
-        "version>=": "6.1.9"
+        "version>=": "7.0.0"
     }
   ]
 }
