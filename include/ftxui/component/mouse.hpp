@@ -4,6 +4,8 @@
 #ifndef FTXUI_COMPONENT_MOUSE_HPP
 #define FTXUI_COMPONENT_MOUSE_HPP
 
+#include <cstdint>
+
 #include "ftxui/util/export.hpp"
 
 namespace ftxui {
@@ -12,7 +14,7 @@ namespace ftxui {
 /// pressed and the modifier (shift, ctrl, meta).
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) Mouse {
-  enum Button {
+  enum Button : uint8_t {
     Left = 0,
     Middle = 1,
     Right = 2,
@@ -23,7 +25,7 @@ struct FTXUI_EXPORT(COMPONENT) Mouse {
     WheelRight = 7,  /// Supported terminal only.
   };
 
-  enum Motion {
+  enum Motion : uint8_t {
     Released = 0,
     Pressed = 1,
     Moved = 2,

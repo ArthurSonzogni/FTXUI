@@ -90,6 +90,16 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   // Configure all the ancestors to give focus to this component.
   void TakeFocus();
 
+  // ABI Reserve:
+  virtual void Reserved1();
+  virtual void Reserved2();
+  virtual void Reserved3();
+  virtual void Reserved4();
+  virtual void Reserved5();
+  virtual void Reserved6();
+  virtual void Reserved7();
+  virtual void Reserved8();
+
  protected:
   CapturedMouse CaptureMouse(const Event& event);
 

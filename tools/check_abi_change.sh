@@ -174,8 +174,6 @@ for lib in "${LIBS[@]}"; do
         # Only show lines containing ftxui or the start of sections, and limit output
         grep -E "ftxui::|Removed functions:|Changed functions:|Added functions:" "$TEMP_DIR/diff_$lib" | head -n 50
         [ $(wc -l < "$TEMP_DIR/diff_$lib") -gt 50 ] && echo "... (see full log for details)"
-        
-        HAS_CHANGES=1
     fi
 done
 

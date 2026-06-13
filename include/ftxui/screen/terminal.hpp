@@ -4,6 +4,8 @@
 #ifndef FTXUI_SCREEN_TERMINAL_HPP
 #define FTXUI_SCREEN_TERMINAL_HPP
 
+#include <cstdint>
+
 #include <memory>
 #include <string_view>
 #include <vector>
@@ -26,7 +28,7 @@ FTXUI_EXPORT(SCREEN) void SetFallbackSize(const Dimensions& fallbackSize);
 /// @brief Color is an enumeration that represents the color support of the
 /// terminal.
 /// @ingroup screen
-enum Color {
+enum Color : uint8_t {
   Palette1,
   Palette16,
   Palette256,

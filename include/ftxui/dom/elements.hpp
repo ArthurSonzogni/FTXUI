@@ -4,6 +4,7 @@
 #ifndef FTXUI_DOM_ELEMENTS_HPP
 #define FTXUI_DOM_ELEMENTS_HPP
 
+#include <cstdint>
 #include <functional>
 #include <memory>
 
@@ -34,7 +35,7 @@ using GraphFunction = std::function<std::vector<int>(int, int)>;
 /// It is used to define the visual appearance of borders around elements,
 /// such as windows, frames, or separators.
 /// @ingroup dom
-enum BorderStyle {
+enum BorderStyle : uint8_t {
   LIGHT,
   DASHED,
   HEAVY,
@@ -173,8 +174,8 @@ FTXUI_EXPORT(DOM) Element notflex(Element);  // Reset the flex attribute.
 FTXUI_EXPORT(DOM) Element filler();          // A blank expandable element.
 
 // -- Size override;
-enum WidthOrHeight { WIDTH, HEIGHT };
-enum Constraint { LESS_THAN, EQUAL, GREATER_THAN };
+enum WidthOrHeight : uint8_t { WIDTH, HEIGHT };
+enum Constraint : uint8_t { LESS_THAN, EQUAL, GREATER_THAN };
 FTXUI_EXPORT(DOM) Decorator size(WidthOrHeight, Constraint, int value);
 
 // --- Frame ---

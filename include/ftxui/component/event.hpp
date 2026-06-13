@@ -4,6 +4,7 @@
 #ifndef FTXUI_COMPONENT_EVENT_HPP
 #define FTXUI_COMPONENT_EVENT_HPP
 
+#include <cstdint>
 #include <ftxui/component/mouse.hpp>  // for Mouse
 #include <memory>
 #include <string>  // for string, operator==
@@ -152,7 +153,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
  private:
   friend ComponentBase;
   friend App;
-  enum class Type {
+  enum class Type : uint8_t {
     Unknown,
     Character,
     Mouse,
@@ -163,7 +164,6 @@ struct FTXUI_EXPORT(COMPONENT) Event {
     TerminalCapabilities,
   };
   Type type_ = Type::Unknown;
-
   struct Cursor {
     int x = 0;
     int y = 0;
