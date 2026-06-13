@@ -42,6 +42,9 @@ Next
 - Feature: Support Meson build system. Thanks @mintonmu in #1259.
 - Remove dependency on 'pthread'.
 - Bugfix: Bazel target @ftxui is now visible. Thanks @dskkato in #1157.
+- ABI: Explicitly size all public enums to `uint8_t` for ABI layout stability.
+- ABI: Add reserved virtual methods to `Screen` and `Node` for future
+  extensibility without breaking ABI.
 
 ### General
 - Breaking (Renames):
@@ -95,6 +98,11 @@ Next
   #1070.
 - Update: The `gauge` in a flexible now takes the available space in the
   opposite direction. Thanks @Ardet696 in #1203.
+- Feature: Add parameterized `_factor` variants of flex decorators. These allow
+  specifying custom grow/shrink factors:
+  `flex_factor(grow, shrink)`, `flex_grow_factor(grow)`,
+  `flex_shrink_factor(shrink)`, with `x` and `y` axis variants.
+  Usage: `element | flex_grow_factor(3)`.
 
 ### Screen
 - Performance: Collapse the per-row cursor walk-up in the non-clear
