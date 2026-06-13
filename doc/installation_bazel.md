@@ -7,7 +7,7 @@ The library is registered in the [Bazel Central Registry](https://registry.bazel
 
 **MODULE.bazel**
 ```starlark
-bazel_dep(name = "ftxui", version = "6.1.9")
+bazel_dep(name = "ftxui", version = "7.0.0")
 ```
 
 **BUILD.bazel**

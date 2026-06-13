@@ -4,6 +4,9 @@ Changelog
 Next
 ====
 
+7.0.0 (2026-06-13)
+------------------
+
 ### Doc
 - Fix broken Doxygen output. See @markmandel in #1029.
 - Use Doxygen awesome. Add our own theme.
