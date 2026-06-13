@@ -155,6 +155,9 @@ Element vflow(Elements);  // Helper: default flexbox with column direction.
 FTXUI_EXPORT(DOM) Element flex(Element);  // Expand/Minimize if possible/needed.
 FTXUI_EXPORT(DOM) Element flex_grow(Element);    // Expand element if possible.
 FTXUI_EXPORT(DOM) Element flex_shrink(Element);  // Minimize element if needed.
+FTXUI_EXPORT(DOM) Decorator flex_factor(int grow, int shrink);
+FTXUI_EXPORT(DOM) Decorator flex_grow_factor(int grow);
+FTXUI_EXPORT(DOM) Decorator flex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM)
 Element xflex(Element);  // Expand/Minimize if possible/needed on X axis.
@@ -162,6 +165,9 @@ FTXUI_EXPORT(DOM)
 Element xflex_grow(Element);  // Expand element if possible on X axis.
 FTXUI_EXPORT(DOM)
 Element xflex_shrink(Element);  // Minimize element if needed on X axis.
+FTXUI_EXPORT(DOM) Decorator xflex_factor(int grow, int shrink);
+FTXUI_EXPORT(DOM) Decorator xflex_grow_factor(int grow);
+FTXUI_EXPORT(DOM) Decorator xflex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM)
 Element yflex(Element);  // Expand/Minimize if possible/needed on Y axis.
@@ -169,6 +175,9 @@ FTXUI_EXPORT(DOM)
 Element yflex_grow(Element);  // Expand element if possible on Y axis.
 FTXUI_EXPORT(DOM)
 Element yflex_shrink(Element);  // Minimize element if needed on Y axis.
+FTXUI_EXPORT(DOM) Decorator yflex_factor(int grow, int shrink);
+FTXUI_EXPORT(DOM) Decorator yflex_grow_factor(int grow);
+FTXUI_EXPORT(DOM) Decorator yflex_shrink_factor(int shrink);
 
 FTXUI_EXPORT(DOM) Element notflex(Element);  // Reset the flex attribute.
 FTXUI_EXPORT(DOM) Element filler();          // A blank expandable element.

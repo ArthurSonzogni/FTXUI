@@ -13,62 +13,20 @@ namespace ftxui {
 
 namespace {
 
-using FlexFunction = void (*)(Requirement&);
-
-void function_flex_grow(Requirement& r) {
-  r.flex_grow_x = 1;
-  r.flex_grow_y = 1;
-}
-
-void function_xflex_grow(Requirement& r) {
-  r.flex_grow_x = 1;
-}
-
-void function_yflex_grow(Requirement& r) {
-  r.flex_grow_y = 1;
-}
-
-void function_flex_shrink(Requirement& r) {
-  r.flex_shrink_x = 1;
-  r.flex_shrink_y = 1;
-}
-
-void function_xflex_shrink(Requirement& r) {
-  r.flex_shrink_x = 1;
-}
-
-void function_yflex_shrink(Requirement& r) {
-  r.flex_shrink_y = 1;
-}
-
-void function_flex(Requirement& r) {
-  r.flex_grow_x = 1;
-  r.flex_grow_y = 1;
-  r.flex_shrink_x = 1;
-  r.flex_shrink_y = 1;
-}
-
-void function_xflex(Requirement& r) {
-  r.flex_grow_x = 1;
-  r.flex_shrink_x = 1;
-}
-
-void function_yflex(Requirement& r) {
-  r.flex_grow_y = 1;
-  r.flex_shrink_y = 1;
-}
-
-void function_not_flex(Requirement& r) {
-  r.flex_grow_x = 0;
-  r.flex_grow_y = 0;
-  r.flex_shrink_x = 0;
-  r.flex_shrink_y = 0;
-}
-
 class Flex : public Node {
  public:
-  explicit Flex(FlexFunction f) : f_(f) {}
-  Flex(FlexFunction f, Element child) : Node(unpack(std::move(child))), f_(f) {}
+  Flex(int grow_x, int grow_y, int shrink_x, int shrink_y)
+      : grow_x_(grow_x),
+        grow_y_(grow_y),
+        shrink_x_(shrink_x),
+        shrink_y_(shrink_y) {}
+  Flex(Element child, int grow_x, int grow_y, int shrink_x, int shrink_y)
+      : Node(unpack(std::move(child))),
+        grow_x_(grow_x),
+        grow_y_(grow_y),
+        shrink_x_(shrink_x),
+        shrink_y_(shrink_y) {}
+
   void ComputeRequirement() override {
     requirement_.min_x = 0;
     requirement_.min_y = 0;
@@ -76,7 +34,18 @@ class Flex : public Node {
       children_[0]->ComputeRequirement();
       requirement_ = children_[0]->requirement();
     }
-    f_(requirement_);
+    if (grow_x_ != -1) {
+      requirement_.flex_grow_x = grow_x_;
+    }
+    if (grow_y_ != -1) {
+      requirement_.flex_grow_y = grow_y_;
+    }
+    if (shrink_x_ != -1) {
+      requirement_.flex_shrink_x = shrink_x_;
+    }
+    if (shrink_y_ != -1) {
+      requirement_.flex_shrink_y = shrink_y_;
+    }
   }
 
   void SetBox(Box box) override {
@@ -87,16 +56,19 @@ class Flex : public Node {
     children_[0]->SetBox(box);
   }
 
-  FlexFunction f_;
+  int grow_x_;
+  int grow_y_;
+  int shrink_x_;
+  int shrink_y_;
 };
 
 }  // namespace
 
-/// @brief An element that will take expand proportionally to the space left in
+/// @brief An element that will expand proportionally to the space left in
 /// a container.
 /// @ingroup dom
 Element filler() {
-  return std::make_shared<Flex>(function_flex);
+  return std::make_shared<Flex>(1, 1, 1, 1);
 }
 
 /// @brief Make a child element to expand proportionally to the space left in a
@@ -121,61 +93,115 @@ Element filler() {
 /// └────┘└─────────────────────────────────────────────────────────┘└─────┘
 /// ~~~
 Element flex(Element child) {
-  return std::make_shared<Flex>(function_flex, std::move(child));
+  return std::make_shared<Flex>(std::move(child), 1, 1, 1, 1);
 }
 
 /// @brief Expand/Minimize if possible/needed on the X axis.
 /// @ingroup dom
 Element xflex(Element child) {
-  return std::make_shared<Flex>(function_xflex, std::move(child));
+  return std::make_shared<Flex>(std::move(child), 1, -1, 1, -1);
 }
 
 /// @brief Expand/Minimize if possible/needed on the Y axis.
 /// @ingroup dom
 Element yflex(Element child) {
-  return std::make_shared<Flex>(function_yflex, std::move(child));
+  return std::make_shared<Flex>(std::move(child), -1, 1, -1, 1);
 }
 
 /// @brief Expand if possible.
 /// @ingroup dom
 Element flex_grow(Element child) {
-  return std::make_shared<Flex>(function_flex_grow, std::move(child));
+  return std::make_shared<Flex>(std::move(child), 1, 1, -1, -1);
 }
 
 /// @brief Expand if possible on the X axis.
 /// @ingroup dom
 Element xflex_grow(Element child) {
-  return std::make_shared<Flex>(function_xflex_grow, std::move(child));
+  return std::make_shared<Flex>(std::move(child), 1, -1, -1, -1);
 }
 
 /// @brief Expand if possible on the Y axis.
 /// @ingroup dom
 Element yflex_grow(Element child) {
-  return std::make_shared<Flex>(function_yflex_grow, std::move(child));
+  return std::make_shared<Flex>(std::move(child), -1, 1, -1, -1);
 }
 
 /// @brief Minimize if needed.
 /// @ingroup dom
 Element flex_shrink(Element child) {
-  return std::make_shared<Flex>(function_flex_shrink, std::move(child));
+  return std::make_shared<Flex>(std::move(child), -1, -1, 1, 1);
 }
 
 /// @brief Minimize if needed on the X axis.
 /// @ingroup dom
 Element xflex_shrink(Element child) {
-  return std::make_shared<Flex>(function_xflex_shrink, std::move(child));
+  return std::make_shared<Flex>(std::move(child), -1, -1, 1, -1);
 }
 
 /// @brief Minimize if needed on the Y axis.
 /// @ingroup dom
 Element yflex_shrink(Element child) {
-  return std::make_shared<Flex>(function_yflex_shrink, std::move(child));
+  return std::make_shared<Flex>(std::move(child), -1, -1, -1, 1);
 }
 
 /// @brief Make the element not flexible.
 /// @ingroup dom
 Element notflex(Element child) {
-  return std::make_shared<Flex>(function_not_flex, std::move(child));
+  return std::make_shared<Flex>(std::move(child), 0, 0, 0, 0);
+}
+
+Decorator flex_factor(int grow, int shrink) {
+  return [grow, shrink](Element child) {
+    return std::make_shared<Flex>(std::move(child), grow, grow, shrink, shrink);
+  };
+}
+
+Decorator flex_grow_factor(int grow) {
+  return [grow](Element child) {
+    return std::make_shared<Flex>(std::move(child), grow, grow, -1, -1);
+  };
+}
+
+Decorator flex_shrink_factor(int shrink) {
+  return [shrink](Element child) {
+    return std::make_shared<Flex>(std::move(child), -1, -1, shrink, shrink);
+  };
+}
+
+Decorator xflex_factor(int grow, int shrink) {
+  return [grow, shrink](Element child) {
+    return std::make_shared<Flex>(std::move(child), grow, -1, shrink, -1);
+  };
+}
+
+Decorator xflex_grow_factor(int grow) {
+  return [grow](Element child) {
+    return std::make_shared<Flex>(std::move(child), grow, -1, -1, -1);
+  };
+}
+
+Decorator xflex_shrink_factor(int shrink) {
+  return [shrink](Element child) {
+    return std::make_shared<Flex>(std::move(child), -1, -1, shrink, -1);
+  };
+}
+
+Decorator yflex_factor(int grow, int shrink) {
+  return [grow, shrink](Element child) {
+    return std::make_shared<Flex>(std::move(child), -1, grow, -1, shrink);
+  };
+}
+
+Decorator yflex_grow_factor(int grow) {
+  return [grow](Element child) {
+    return std::make_shared<Flex>(std::move(child), -1, grow, -1, -1);
+  };
+}
+
+Decorator yflex_shrink_factor(int shrink) {
+  return [shrink](Element child) {
+    return std::make_shared<Flex>(std::move(child), -1, -1, -1, shrink);
+  };
 }
 
 }  // namespace ftxui

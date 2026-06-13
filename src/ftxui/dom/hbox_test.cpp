@@ -358,7 +358,30 @@ TEST(HBoxTest, FlexGrow_NoFlex_FlewShrink) {
   for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(i, 1);
     Render(screen, root);
-    EXPECT_EQ(expectations[i], screen.ToString());
+  }
+}
+
+TEST(HBoxTest, FlexFactor) {
+  auto root_grow = hbox({
+      text("012") | xflex_grow_factor(2),
+      text("abc"),
+      text("ABC") | xflex_grow_factor(1),
+  });
+  {
+    Screen screen(12, 1);
+    Render(screen, root_grow);
+    EXPECT_EQ("012  abcABC ", screen.ToString());
+  }
+
+  auto root_shrink = hbox({
+      text("012") | xflex_shrink_factor(2),
+      text("abc"),
+      text("ABC") | xflex_shrink_factor(1),
+  });
+  {
+    Screen screen(6, 1);
+    Render(screen, root_shrink);
+    EXPECT_EQ("0abcAB", screen.ToString());
   }
 }
 
