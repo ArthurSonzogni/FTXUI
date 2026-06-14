@@ -402,7 +402,7 @@ Feel free to add your projects here:
 - [tiles](https://github.com/tusharpm/tiles)
 - [todoman](https://github.com/aaleino/todoman)
 - [turing_cmd](https://github.com/DanArmor/turing_cmd)
-- [typing-speed-test](https://github.com/ymcx/typing-speed-test)
+- [typing-speed-test](https://codeberg.org/ymcx/typing-speed-test)
 - [vantage](https://github.com/gokulmaxi/vantage)
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
 - [C++ Process Manager](https://github.com/ondrejhonus/cpp_proc)
