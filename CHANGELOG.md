@@ -4,6 +4,13 @@ Changelog
 Next
 ====
 
+### Build
+- Bugfix: Fix build failure when an older FTXUI is installed in a system
+  include path (e.g. MacPorts upgrade). A CMake deduplication quirk was
+  promoting the project's own `-I include/` to `-isystem`, causing package
+  managers' `-I/opt/local/include` (which may contain stale headers) to
+  win. See #1299, #1300.
+
 7.0.0 (2026-06-13)
 ------------------
 
