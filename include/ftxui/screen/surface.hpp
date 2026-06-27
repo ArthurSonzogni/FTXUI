@@ -27,6 +27,10 @@ class FTXUI_EXPORT(SCREEN) Surface {
   // Destructor:
   virtual ~Surface() = default;
 
+  // Copy:
+  Surface(const Surface&) = default;
+  Surface& operator=(const Surface&) = default;
+
   // Access a character in the grid at a given position.
   std::string& at(int x, int y);
   const std::string& at(int x, int y) const;
