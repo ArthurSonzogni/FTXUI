@@ -81,7 +81,14 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_PARALLEL_LEVEL=${{ steps.cpu-cores.outputs.count }} -DFTXUI_BUILD_DOCS=OFF -DFTXUI_BUILD_EXAMPLES=OFF -DFTXUI_BUILD_TESTS=OFF -DFTXUI_BUILD_TESTS_FUZZER=OFF -DFTXUI_ENABLE_INSTALL=ON -DFTXUI_DEV_WARNINGS=ON
+          cmake .. `
+            -DCMAKE_BUILD_PARALLEL_LEVEL=${{ steps.cpu-cores.outputs.count }} `
+            -DFTXUI_BUILD_DOCS=OFF `
+            -DFTXUI_BUILD_EXAMPLES=OFF `
+            -DFTXUI_BUILD_TESTS=OFF `
+            -DFTXUI_BUILD_TESTS_FUZZER=OFF `
+            -DFTXUI_ENABLE_INSTALL=ON `
+            -DFTXUI_DEV_WARNINGS=OFF
           cmake --build . --config Debug
           cmake --build . --config Release
           cpack -C "Debug;Release"
