@@ -4,6 +4,9 @@ Changelog
 Next
 ====
 
+### Screen
+- Bugfix: Restore TrueColor support on Windows Terminal (default to TrueColor on Windows and check `WT_SESSION` environment variable for WSL compatibility). See #1305.
+
 7.0.0 (2026-06-13)
 ------------------
 

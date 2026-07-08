@@ -83,4 +83,39 @@ TEST(ColorTest, HSV) {
   EXPECT_EQ(Color::HSV(0, 255, 255).Print(false), "38;2;255;0;0");
 }
 
+TEST(ColorTest, ComputeColorSupport) {
+#if !defined(_WIN32)
+  // Only check Palette256/Palette16 expectations if WT_SESSION is not set.
+  const char* wt_session = std::getenv("WT_SESSION");  // NOLINT
+  if (wt_session == nullptr || wt_session[0] == '\0') {
+    EXPECT_EQ(Terminal::ComputeColorSupport("xterm", "256", "", "", "", {}),
+              Terminal::Color::Palette256);
+    EXPECT_EQ(Terminal::ComputeColorSupport("xterm-256color", "", "", "", "", {}),
+              Terminal::Color::Palette256);
+  }
+#endif
+  EXPECT_EQ(Terminal::ComputeColorSupport("xterm", "truecolor", "", "", "", {}),
+            Terminal::Color::TrueColor);
+  EXPECT_EQ(Terminal::ComputeColorSupport("kitty", "", "", "", "", {}),
+            Terminal::Color::TrueColor);
+}
+
+#if !defined(_WIN32)
+TEST(ColorTest, ComputeColorSupportWTSession) {
+  // Save the current WT_SESSION state.
+  const char* original = std::getenv("WT_SESSION");  // NOLINT
+  std::string original_str = original ? original : "";
+
+  setenv("WT_SESSION", "test_session_id", 1);
+  EXPECT_EQ(Terminal::ComputeColorSupport("", "", "", "", "", {}),
+            Terminal::Color::TrueColor);
+
+  if (original) {
+    setenv("WT_SESSION", original_str.c_str(), 1);
+  } else {
+    unsetenv("WT_SESSION");
+  }
+}
+#endif
+
 }  // namespace ftxui

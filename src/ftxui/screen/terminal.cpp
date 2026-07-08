@@ -213,6 +213,15 @@ Color TerminalInfo::ComputeColorSupport() const {
 #if defined(__EMSCRIPTEN__)
   return Terminal::Color::TrueColor;
 #endif
+#if defined(_WIN32)
+  return Terminal::Color::TrueColor;
+#endif
+
+  // Check WT_SESSION for Windows Terminal (e.g. when running under WSL).
+  const char* wt_session = std::getenv("WT_SESSION");  // NOLINT
+  if (wt_session != nullptr && wt_session[0] != '\0') {
+    return Terminal::Color::TrueColor;
+  }
 
   // 1. term / colorterm environment variables.
   if (ContainsAny(impl_->colorterm, {"24bit", "truecolor"})) {
