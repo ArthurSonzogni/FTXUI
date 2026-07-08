@@ -6,15 +6,42 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 # ------------------------------------------------------------------------------
-# Install the library and its public headers into the standard subdirectories
+# Install the library and its public headers into the standard subdirectories.
+# On multi-config generators (e.g. Visual Studio) both Debug and Release are
+# installed into separate lib/<config>/ subdirectories so they can coexist in
+# the same package without overwriting each other.  Single-config generators
+# (Ninja, Make) keep the traditional flat lib/ layout.
+# Generator expressions in DESTINATION require CMake 3.20.
 # ------------------------------------------------------------------------------
-install(
-  TARGETS screen dom component ftxui
-  EXPORT ftxui-targets
-  ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-  RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+get_property(_ftxui_isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(_ftxui_isMultiConfig)
+  if(CMAKE_VERSION VERSION_LESS "3.20")
+    message(WARNING
+      "FTXUI: CMake >= 3.20 is required to install Debug and Release "
+      "libraries into separate subdirectories on multi-config generators. "
+      "Falling back to a flat lib/ layout (the two configurations will "
+      "overwrite each other). Please upgrade CMake.")
+    set(_ftxui_isMultiConfig FALSE)
+  endif()
+endif()
+
+if(_ftxui_isMultiConfig)
+  install(
+    TARGETS screen dom component ftxui
+    EXPORT ftxui-targets
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}/$<CONFIG>"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}/$<CONFIG>"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}/$<CONFIG>"
   )
+else()
+  install(
+    TARGETS screen dom component ftxui
+    EXPORT ftxui-targets
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+  )
+endif()
 
 install(
   DIRECTORY include/ftxui
