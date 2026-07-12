@@ -209,11 +209,34 @@ Color ComputeColorSupport(std::string_view term,
 }
 
 Color TerminalInfo::ComputeColorSupport() const {
-  // 0. Platform specific overrides.
+  // TODO(v8): Read NO_COLOR and WT_SESSION from ComputeColorSupportInternal()
+  // and pass them in as parameters, so that this function remains a pure
+  // function of its inputs. This requires extending the public
+  // Terminal::ComputeColorSupport() signature, i.e. an API-breaking change.
+
+  // 0. User preference. See https://no-color.org.
+  const char* no_color = std::getenv("NO_COLOR");  // NOLINT
+  if (no_color != nullptr && no_color[0] != '\0') {
+    return Terminal::Color::Palette1;
+  }
+
+  // 1. Platform specific overrides.
 #if defined(__EMSCRIPTEN__)
   return Terminal::Color::TrueColor;
 #endif
 #if defined(_WIN32)
+  // Check if we are running in a console, and if that console supports VT processing.
+  auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
+  DWORD out_mode = 0;
+  if (GetConsoleMode(stdout_handle, &out_mode)) {
+    const int enable_virtual_terminal_processing = 0x0004;
+    const int disable_newline_auto_return = 0x0008;
+    out_mode |= enable_virtual_terminal_processing;
+    out_mode |= disable_newline_auto_return;
+    if (!SetConsoleMode(stdout_handle, out_mode)) {
+      return Terminal::Color::Palette16;
+    }
+  }
   return Terminal::Color::TrueColor;
 #endif
 
@@ -223,7 +246,7 @@ Color TerminalInfo::ComputeColorSupport() const {
     return Terminal::Color::TrueColor;
   }
 
-  // 1. term / colorterm environment variables.
+  // 2. term / colorterm environment variables.
   if (ContainsAny(impl_->colorterm, {"24bit", "truecolor"})) {
     return Terminal::Color::TrueColor;
   }
@@ -236,10 +259,9 @@ Color TerminalInfo::ComputeColorSupport() const {
     return Terminal::Color::Palette256;
   }
 
-  // 2. term_program
+  // 3. term_program
   if (ContainsAny(impl_->term_program, {
                                            "iterm",
-                                           "apple_terminal",
                                            "vscode",
                                            "warp",
                                            "ghostty",
@@ -247,12 +269,17 @@ Color TerminalInfo::ComputeColorSupport() const {
                                        })) {
     return Terminal::Color::TrueColor;
   }
-  if (Contains(impl_->term_program, "iterm")) {
+  // Apple's Terminal.app (TERM_PROGRAM=Apple_Terminal) supports 256 colors,
+  // but not 24bit ones.
+  if (Contains(impl_->term_program, "apple_terminal")) {
     return Terminal::Color::Palette256;
   }
 
-  // 3. terminal identification.
-  if (impl_->terminal_emulator_name != "unknown") {
+  // 4. terminal identification.
+  // An empty name means the terminal was not identified, the same as
+  // "unknown".
+  if (!impl_->terminal_emulator_name.empty() &&
+      impl_->terminal_emulator_name != "unknown") {
     return Terminal::Color::TrueColor;
   }
   if (impl_->terminal_name == "xterm") {

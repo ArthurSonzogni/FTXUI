@@ -6,6 +6,10 @@ Next
 
 ### Screen
 - Bugfix: Restore TrueColor support on Windows Terminal (default to TrueColor on Windows and check `WT_SESSION` environment variable for WSL compatibility). See #1305.
+- Feature: Honor the `NO_COLOR` environment variable (https://no-color.org). When set and non-empty, colors degrade to the terminal's default colors.
+- Bugfix: Apple's Terminal.app (`TERM_PROGRAM=Apple_Terminal`) is now reported as `Palette256` instead of `TrueColor`; it does not support 24bit colors.
+- Bugfix: An empty terminal name or terminal emulator name is now treated as unidentified by `Terminal::ComputeColorSupport`, instead of implying TrueColor support.
+- Bugfix (Windows): Downgrade color support when the console rejects VT processing (legacy consoles), instead of emitting TrueColor escape sequences.
 
 7.0.0 (2026-06-13)
 ------------------

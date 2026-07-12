@@ -57,7 +57,12 @@ void WindowsEmulateVT100Terminal() {
   auto stdout_handle = GetStdHandle(STD_OUTPUT_HANDLE);
 
   DWORD out_mode = 0;
-  GetConsoleMode(stdout_handle, &out_mode);
+  if (!GetConsoleMode(stdout_handle, &out_mode)) {
+    // The output is not a console (e.g. redirected to a file or a pipe). Keep
+    // the detected color support and let the consumer of the stream interpret
+    // the escape sequences.
+    return;
+  }
 
   // https://docs.microsoft.com/en-us/windows/console/setconsolemode
   const int enable_virtual_terminal_processing = 0x0004;
