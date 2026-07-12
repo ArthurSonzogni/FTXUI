@@ -34,6 +34,10 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   // Destructor:
   ~Screen() override = default;
 
+  // Copy:
+  Screen(const Screen&) = default;
+  Screen& operator=(const Screen&) = default;
+
   std::string ToString() const;
   void ToString(std::string& ss) const;
 

@@ -27,19 +27,34 @@ function(ftxui_set_options library)
       PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_EXE};-warnings-as-errors=*"
     )
 
-    # By using "PUBLIC" as opposed to "SYSTEM INTERFACE", the compiler warning
-    # are enforced on the headers. This is behind "FTXUI_CLANG_TIDY", so that it
-    # applies only when developing FTXUI and on the CI. User's of the library
-    # get only the SYSTEM INTERFACE instead.
+    # By using "PUBLIC" as opposed to "INTERFACE", the compiler warnings are
+    # enforced on the headers. This is behind "FTXUI_CLANG_TIDY", so that it
+    # applies only when developing FTXUI and on the CI. Users of the library
+    # get only the plain INTERFACE instead.
     target_include_directories(${library}
       PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     )
   else()
-    target_include_directories(${library} SYSTEM
-      INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    )
+    if (CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+      # Building FTXUI as a standalone project.  Do NOT mark as SYSTEM: if
+      # a sibling FTXUI target (e.g. dom depending on screen) inherits this
+      # path via INTERFACE_SYSTEM_INCLUDE_DIRECTORIES, CMake demotes the
+      # private -I to -isystem.  That path is then searched *after* any -I
+      # added by a package manager (e.g. MacPorts' -I/opt/local/include),
+      # letting a stale installed FTXUI shadow the sources being built.
+      target_include_directories(${library}
+        INTERFACE
+          $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      )
+    else()
+      # Consumed via add_subdirectory / FetchContent: keep SYSTEM so that
+      # consumers do not receive warnings from FTXUI headers.
+      target_include_directories(${library} SYSTEM
+        INTERFACE
+          $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      )
+    endif()
   endif()
 
   target_include_directories(${library} SYSTEM
