@@ -101,12 +101,20 @@ Color::Color(Palette1 /*value*/) : Color() {}
 
 /// @brief Build a color using the Palette16 colors.
 Color::Color(Palette16 index)
-    : type_(ColorType::Palette16), red_(index), alpha_(255) {}
+    : type_(ColorType::Palette16), red_(index), alpha_(255) {
+  if (Terminal::ColorSupport() == Terminal::Color::Palette1) {
+    type_ = ColorType::Palette1;
+  }
+}
 
 /// @brief Build a color using Palette256 colors.
 Color::Color(Palette256 index)
     : type_(ColorType::Palette256), red_(index), alpha_(255) {
   if (Terminal::ColorSupport() >= Terminal::Color::Palette256) {
+    return;
+  }
+  if (Terminal::ColorSupport() == Terminal::Color::Palette1) {
+    type_ = ColorType::Palette1;
     return;
   }
   type_ = ColorType::Palette16;
@@ -127,6 +135,10 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
       blue_(blue),
       alpha_(alpha) {
   if (Terminal::ColorSupport() == Terminal::Color::TrueColor) {
+    return;
+  }
+  if (Terminal::ColorSupport() == Terminal::Color::Palette1) {
+    type_ = ColorType::Palette1;
     return;
   }
 

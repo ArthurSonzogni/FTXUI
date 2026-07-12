@@ -88,8 +88,11 @@ out/
 !tools/**/*.sh
 !tools/**/*.py
 !tools/**/*.cpp
+!tools/**/*.ps1
 !tools/abi_fingerprint.txt
 !tools/abidiff_suppressions.ini
+# Windows VM disk images and ssh keys, created by tools/windows-vm.sh:
+tools/windows-vm/data/
 build/
 build_asan/
 builddir/
