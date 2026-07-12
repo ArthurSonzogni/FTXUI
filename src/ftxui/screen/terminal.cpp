@@ -30,16 +30,23 @@ namespace ftxui {
 
 namespace {
 
-bool g_color_support_detected = false;  // NOLINT
-Terminal::Quirks g_quirks = [] {        // NOLINT
-  Terminal::Quirks quirks;
+bool& ColorSupportDetected() {
+  static bool detected = false;
+  return detected;
+}
+
+Terminal::Quirks& GetQuirksInternal() {
+  static Terminal::Quirks quirks = [] {
+    Terminal::Quirks q;
 #if defined(_WIN32)
-  quirks.SetBlockCharacters(false);
-  quirks.SetCursorHiding(false);
-  quirks.SetComponentAscii(true);
+    q.SetBlockCharacters(false);
+    q.SetCursorHiding(false);
+    q.SetComponentAscii(true);
 #endif
+    return q;
+  }();
   return quirks;
-}();
+}
 
 Dimensions& FallbackSize() {
 #if defined(__EMSCRIPTEN__)
@@ -338,35 +345,35 @@ void SetFallbackSize(const Dimensions& fallbackSize) {
 /// @brief Get the color support of the terminal.
 /// @ingroup screen
 Color ColorSupport() {
-  if (!g_color_support_detected) {
-    g_quirks.SetColorSupport(ComputeColorSupportInternal());
-    g_color_support_detected = true;
+  if (!ColorSupportDetected()) {
+    GetQuirksInternal().SetColorSupport(ComputeColorSupportInternal());
+    ColorSupportDetected() = true;
   }
-  return g_quirks.ColorSupport();
+  return GetQuirksInternal().ColorSupport();
 }
 
 /// @brief Override terminal color support in case auto-detection fails
 /// @ingroup dom
 void SetColorSupport(Color color) {
-  g_quirks.SetColorSupport(color);
-  g_color_support_detected = true;
+  GetQuirksInternal().SetColorSupport(color);
+  ColorSupportDetected() = true;
 }
 
 /// @brief Get the terminal quirks.
 /// @ingroup screen
 Quirks GetQuirks() {
-  if (!g_color_support_detected) {
-    g_quirks.SetColorSupport(ComputeColorSupportInternal());
-    g_color_support_detected = true;
+  if (!ColorSupportDetected()) {
+    GetQuirksInternal().SetColorSupport(ComputeColorSupportInternal());
+    ColorSupportDetected() = true;
   }
-  return g_quirks;
+  return GetQuirksInternal();
 }
 
 /// @brief Override terminal quirks.
 /// @ingroup screen
 void SetQuirks(const Quirks& quirks) {
-  g_quirks = quirks;
-  g_color_support_detected = true;
+  GetQuirksInternal() = quirks;
+  ColorSupportDetected() = true;
 }
 
 }  // namespace Terminal

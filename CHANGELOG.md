@@ -10,6 +10,8 @@ Next
 - Bugfix: Apple's Terminal.app (`TERM_PROGRAM=Apple_Terminal`) is now reported as `Palette256` instead of `TrueColor`; it does not support 24bit colors.
 - Bugfix: An empty terminal name or terminal emulator name is now treated as unidentified by `Terminal::ComputeColorSupport`, instead of implying TrueColor support.
 - Bugfix (Windows): Downgrade color support when the console rejects VT processing (legacy consoles), instead of emitting TrueColor escape sequences.
+- Bugfix: Avoid segmentation fault / crash during static initialization if `Color::RGB` or other color constants are constructed globally/statically before `main()`. See #1303.
+
 
 ### Build
 - Bugfix: Fix build failure when an older FTXUI is installed in a system
