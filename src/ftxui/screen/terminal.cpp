@@ -30,22 +30,23 @@ namespace ftxui {
 
 namespace {
 
+std::unique_ptr<Terminal::Quirks> g_quirks;
+bool g_color_support_detected = false;
+
 bool& ColorSupportDetected() {
-  static bool detected = false;
-  return detected;
+  return g_color_support_detected;
 }
 
 Terminal::Quirks& GetQuirksInternal() {
-  static Terminal::Quirks quirks = [] {
-    Terminal::Quirks q;
+  if (!g_quirks) {
+    g_quirks = std::make_unique<Terminal::Quirks>();
 #if defined(_WIN32)
-    q.SetBlockCharacters(false);
-    q.SetCursorHiding(false);
-    q.SetComponentAscii(true);
+    g_quirks->SetBlockCharacters(false);
+    g_quirks->SetCursorHiding(false);
+    g_quirks->SetComponentAscii(true);
 #endif
-    return q;
-  }();
-  return quirks;
+  }
+  return *g_quirks;
 }
 
 Dimensions& FallbackSize() {
