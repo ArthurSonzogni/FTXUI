@@ -367,6 +367,7 @@ Feel free to add your projects here:
 - [Fallout terminal hacking](https://github.com/gshigin/yet-another-fallout-terminal-hacking-game)
 - [Lazylist](https://github.com/zhuyongqi9/lazylist)
 - [Memory game](https://github.com/mikolajlubiak/memory)
+- [nfolens](https://github.com/a4x7/nfolens)
 - [Path Finder](https://github.com/Ruebled/Path_Finder)
 - [Pigeon ROS TUI](https://github.com/PigeonSensei/Pigeon_ros_tui)
 - [SHOOT!](https://github.com/ShingZhanho/ENGG1340-Project-25Spring)
