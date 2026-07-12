@@ -10,6 +10,12 @@
 
 namespace ftxui {
 
+// Regression test to ensure Color can be constructed statically before main()
+// without causing a static initialization order crash.
+const Color g_test_static_color = Color::RGB(10, 20, 30);
+
+
+
 #if !defined(_WIN32)
 namespace {
 // Clear an environment variable for the duration of a scope, restoring its
