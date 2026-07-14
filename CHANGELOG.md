@@ -4,6 +4,9 @@ Changelog
 Next
 ====
 
+7.0.1 (2026-07-14)
+------------------
+
 ### Screen
 - Bugfix: Restore TrueColor support on Windows Terminal (default to TrueColor on Windows and check `WT_SESSION` environment variable for WSL compatibility). See #1305.
 - Feature: Honor the `NO_COLOR` environment variable (https://no-color.org). When set and non-empty, colors degrade to the terminal's default colors.

@@ -431,7 +431,7 @@ It is **highly** recommended to use CMake FetchContent to depend on FTXUI so you
 include(FetchContent)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  GIT_TAG v7.0.0
+  GIT_TAG v7.0.1
 )
 FetchContent_MakeAvailable(ftxui)
 
@@ -452,7 +452,7 @@ target_link_libraries(your_target PRIVATE
 ```starlark
 bazel_dep(
     name = "ftxui",
-    version = "7.0.0",
+    version = "7.0.1",
 )
 ```
 

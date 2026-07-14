@@ -21,7 +21,7 @@ The most recommended way for CMake users is to use `FetchContent`. Add this to y
 include(FetchContent)
 FetchContent_Declare(ftxui
   GIT_REPOSITORY https://github.com/ArthurSonzogni/ftxui
-  GIT_TAG main # or a specific version like v7.0.0
+  GIT_TAG main # or a specific version like v7.0.1
 )
 FetchContent_MakeAvailable(ftxui)
 

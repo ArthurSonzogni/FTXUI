@@ -1,7 +1,7 @@
 # FTXUI module.
 module(
     name = "ftxui",
-    version = "7.0.0",
+    version = "7.0.1",
 )
 
 # Build dependencies.
