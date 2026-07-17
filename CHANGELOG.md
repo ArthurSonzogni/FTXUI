@@ -4,6 +4,11 @@ Changelog
 Next
 ====
 
+### Dom
+- Performance: `text` computes its requirement once and renders only the
+  visible lines. This makes scrolling a large text inside a `frame`
+  significantly faster. Thanks @patlefort. See #1309.
+
 7.0.1 (2026-07-14)
 ------------------
 

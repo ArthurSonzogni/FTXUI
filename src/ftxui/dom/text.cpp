@@ -25,8 +25,7 @@ using ftxui::Screen;
 
 class Text : public Node {
  public:
-  explicit Text(std::string_view text) : glyphs_(Utf8ToGlyphs(text))
-  {
+  explicit Text(std::string_view text) : glyphs_(Utf8ToGlyphs(text)) {
     int max_width = 0;
     int current_width = 0;
     int lines_count = 1;
@@ -47,6 +46,14 @@ class Text : public Node {
 
     requirement_.min_x = max_width;
     requirement_.min_y = lines_count;
+  }
+
+  void ComputeRequirement() override {
+    // The requirement is computed once in the constructor. Only the selection
+    // state must be reset before every frame, because Select() is invoked
+    // only while a selection is active.
+    has_selection_ = false;
+    selection_rows_.clear();
   }
 
   void Select(Selection& selection) override {
@@ -89,23 +96,26 @@ class Text : public Node {
 
   void Render(Screen& screen) override {
     const auto visible_box = Box::Intersection(screen.stencil, box_);
-    if(visible_box.IsEmpty())
-			return;
+    if (visible_box.IsEmpty()) {
+      return;
+    }
 
     int y = visible_box.y_min;
 
     const size_t first_line = visible_box.y_min - box_.y_min;
-    const size_t last_line = std::min<size_t>(visible_box.y_max - box_.y_min + 1, lines_offsets_.size() - 1);
+    const size_t last_line = std::min<size_t>(
+        visible_box.y_max - box_.y_min + 1, lines_offsets_.size() - 1);
 
     for (size_t line = first_line; line < last_line; ++line, ++y) {
       int x = box_.x_min;
 
-      for (auto glyph = glyphs_.begin() + lines_offsets_[line]; glyph != glyphs_.end() && *glyph != "\n"; ++glyph, ++x) {
+      for (auto glyph = glyphs_.begin() + lines_offsets_[line];
+           glyph != glyphs_.end() && *glyph != "\n"; ++glyph, ++x) {
         if (x > box_.x_max) {
           break;
         }
 
-        auto &cell = screen.CellAt(x, y);
+        auto& cell = screen.CellAt(x, y);
         cell.character = *glyph;
 
         if (has_selection_ && line < selection_rows_.size()) {
