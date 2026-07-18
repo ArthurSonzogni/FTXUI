@@ -49,10 +49,9 @@ class Text : public Node {
   }
 
   void ComputeRequirement() override {
-    // The requirement is computed once in the constructor. Only the selection
-    // state must be reset before every frame, because Select() is invoked
-    // only while a selection is active.
-    has_selection_ = false;
+    // The requirement was computed once in the constructor. This hook still
+    // runs before every frame; use it to clear the selection, which Select()
+    // re-populates while a selection is active.
     selection_rows_.clear();
   }
 
@@ -61,7 +60,6 @@ class Text : public Node {
       return;
     }
 
-    has_selection_ = true;
     selection_rows_.assign(lines_offsets_.size() - 1, {-1, -1});
 
     for (size_t i = 0; i < lines_offsets_.size() - 1; ++i) {
@@ -118,7 +116,7 @@ class Text : public Node {
         auto& cell = screen.CellAt(x, y);
         cell.character = *glyph;
 
-        if (has_selection_ && line < selection_rows_.size()) {
+        if (line < selection_rows_.size()) {
           const auto& [sel_start, sel_end] = selection_rows_[line];
           if (sel_start != -1 && x >= sel_start && x <= sel_end) {
             screen.GetSelectionStyle()(cell);
@@ -131,7 +129,6 @@ class Text : public Node {
  private:
   std::vector<std::string> glyphs_;
   std::vector<int> lines_offsets_;
-  bool has_selection_ = false;
   std::vector<std::pair<int, int>> selection_rows_;
 };
 
