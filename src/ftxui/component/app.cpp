@@ -1532,7 +1532,9 @@ void App::Post(Task task) {
 }
 
 void App::PostEvent(Event event) {
-  internal_->event_buffer.Push(std::move(event));
+  // PostEvent is documented as thread safe: go through the mutex-protected
+  // task queue. The event_buffer is only safe to use from the main thread.
+  Post(Task(std::move(event)));
 }
 
 // static

@@ -2,8 +2,10 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <gtest/gtest.h>  // for Test, TestInfo (ptr only), TEST, EXPECT_EQ, Message, TestPartResult
+#include <chrono>  // for steady_clock, seconds
 #include <csignal>  // for raise, SIGABRT, SIGFPE, SIGILL, SIGINT, SIGSEGV, SIGTERM
 #include <ftxui/component/event.hpp>  // for Event, Event::Custom
+#include <thread>                     // for thread
 #include <tuple>                      // for _Swallow_assign, ignore
 
 #include "ftxui/component/app.hpp"
@@ -294,6 +296,36 @@ TEST(App, MoveConstructor) {
   Loop loop(&screen2, component);
   loop.RunOnce();
   EXPECT_EQ(called, 1);
+}
+
+// PostEvent is documented as thread safe. Posting from another thread while
+// the main loop runs must deliver every event, without data races.
+TEST(App, PostEventFromAnotherThread) {
+  int received = 0;
+  auto component =
+      CatchEvent(Renderer([] { return text(""); }), [&](const Event& event) {
+        if (event == Event::Custom) {
+          received++;
+        }
+        return true;
+      });
+  auto screen = App::FixedSize(10, 1);
+  Loop loop(&screen, component);
+
+  constexpr int kCount = 10000;
+  std::thread poster([&] {
+    for (int i = 0; i < kCount; ++i) {
+      screen.PostEvent(Event::Custom);
+    }
+  });
+
+  const auto deadline =
+      std::chrono::steady_clock::now() + std::chrono::seconds(10);
+  while (received < kCount && std::chrono::steady_clock::now() < deadline) {
+    loop.RunOnce();
+  }
+  poster.join();
+  EXPECT_EQ(received, kCount);
 }
 
 TEST(App, MoveAssignment) {
