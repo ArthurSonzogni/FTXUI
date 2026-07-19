@@ -246,7 +246,6 @@ struct App::Internal {
   ThrottledRequest cursor_position_request;
 
   MultiReceiverBuffer<Event> event_buffer;
-  std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> setup_receiver;
   std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> main_loop_receiver;
 
   Internal(App* app, AppDimension dimension, bool use_alternative_screen);
@@ -561,7 +560,6 @@ App::Internal::Internal(App* app,
       cursor_position_request(this, [this] {
         TerminalSend(DeviceStatusReport(DSRMode::kCursor));
       }) {
-  setup_receiver = event_buffer.CreateReceiver();
   main_loop_receiver = event_buffer.CreateReceiver();
 }
 
@@ -1170,6 +1168,8 @@ void App::Internal::InstallPipedInputHandling() {
 }
 
 void App::Internal::InstallTerminalInfo() {
+  auto setup_receiver = event_buffer.CreateReceiver();
+
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
   if (is_stdout_a_tty_) {
