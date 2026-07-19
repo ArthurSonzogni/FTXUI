@@ -15,6 +15,9 @@ Next
 - Bugfix: `App::PostEvent` is now thread safe again, as documented. Since the
   7.0.0 event loop rework it pushed into an unsynchronized buffer, racing with
   the main loop when called from another thread.
+- Bugfix: Fix unbounded memory growth in the event buffer. A receiver used
+  during terminal setup was kept for the whole `App` lifetime, retaining every
+  subsequent event (including every mouse move).
 
 ### Dom
 - Performance: `text` computes its requirement once and renders only the

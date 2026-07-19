@@ -246,7 +246,6 @@ struct App::Internal {
   ThrottledRequest cursor_position_request;
 
   MultiReceiverBuffer<Event> event_buffer;
-  std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> setup_receiver;
   std::unique_ptr<MultiReceiverBuffer<Event>::Receiver> main_loop_receiver;
 
   Internal(App* app, AppDimension dimension, bool use_alternative_screen);
@@ -561,7 +560,6 @@ App::Internal::Internal(App* app,
       cursor_position_request(this, [this] {
         TerminalSend(DeviceStatusReport(DSRMode::kCursor));
       }) {
-  setup_receiver = event_buffer.CreateReceiver();
   main_loop_receiver = event_buffer.CreateReceiver();
 }
 
@@ -1182,6 +1180,10 @@ void App::Internal::InstallTerminalInfo() {
 
   // Wait for the cursor shape reply using the setup head.
   if (is_stdin_a_tty_ && is_stdout_a_tty_) {
+    // A receiver scoped to the setup: keeping one alive after setup would pin
+    // every subsequent event in the buffer, growing it for the whole app
+    // lifetime.
+    auto setup_receiver = event_buffer.CreateReceiver();
     auto start = std::chrono::steady_clock::now();
     bool terminal_capabilities_received = false;
     // Wait for the cursor shape reply using the setup head.
