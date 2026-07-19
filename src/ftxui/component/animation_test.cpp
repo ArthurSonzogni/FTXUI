@@ -52,6 +52,13 @@ class AnimationCounter : public ComponentBase {
  private:
   Element OnRender() override { return text(""); }
   void OnAnimation(animation::Params& /*params*/) override { count++; }
+  bool OnEvent(Event event) override {
+    if (event == Event::Character('a')) {
+      animation::RequestAnimationFrame();
+      return true;
+    }
+    return false;
+  }
 };
 
 // Give the recurring AnimationTask (reposted every 15ms) time to become due,
@@ -63,29 +70,32 @@ void RunAnimationTask(Loop& loop) {
 
 }  // namespace
 
-// OnAnimation must tick once per handled event, and not tick for the
-// terminal's replies to FTXUI's own internal requests. See #1302.
-TEST(AnimationTest, EventRequestsAnimationFrame) {
+// OnAnimation must tick only when a frame was requested with
+// animation::RequestAnimationFrame(), typically by an Animator. In particular,
+// handling an event must not implicitly produce a tick: internal terminal
+// replies are events too, and animating on them caused the #1302 feedback
+// loop.
+TEST(AnimationTest, TicksOnlyWhenRequested) {
   auto component = Make<AnimationCounter>();
   auto screen = App::FixedSize(10, 1);
   Loop loop(&screen, component);
   loop.RunOnce();
 
-  // No event: the recurring AnimationTask is a no-op.
+  // No request: the recurring AnimationTask is a no-op.
   RunAnimationTask(loop);
   EXPECT_EQ(component->count, 0);
 
-  // A handled event grants exactly one animation tick.
+  // An event alone doesn't produce a tick.
   screen.PostEvent(Event::Custom);
   loop.RunOnce();
   RunAnimationTask(loop);
-  EXPECT_EQ(component->count, 1);
+  EXPECT_EQ(component->count, 0);
+
+  // A component requesting a frame gets exactly one tick.
+  screen.PostEvent(Event::Character('a'));
+  loop.RunOnce();
   RunAnimationTask(loop);
   EXPECT_EQ(component->count, 1);
-
-  // An internal terminal reply must not grant one.
-  screen.PostEvent(Event::CursorPosition("", 1, 1));
-  loop.RunOnce();
   RunAnimationTask(loop);
   EXPECT_EQ(component->count, 1);
 }

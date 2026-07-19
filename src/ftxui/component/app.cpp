@@ -918,13 +918,6 @@ void App::Internal::HandleTask(Component component, Task& task) {
 #endif
       
       frame_valid_ = false;
-
-      // Give animated components one tick in response to the event. This must
-      // stay below the early-returns above: requesting a frame for the
-      // terminal's replies to our own requests creates a redraw -> request ->
-      // reply -> redraw feedback loop.
-      // See https://github.com/ArthurSonzogni/FTXUI/issues/1302.
-      public_->RequestAnimationFrame();
       return;
     }
 
