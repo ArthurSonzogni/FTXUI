@@ -12,6 +12,9 @@ Next
   `animation::RequestAnimationFrame()` (e.g. by `animation::Animator`), as in
   FTXUI 6. Receiving an event no longer implicitly triggers an animation
   frame.
+- Bugfix: `App::PostEvent` is now thread safe again, as documented. Since the
+  7.0.0 event loop rework it pushed into an unsynchronized buffer, racing with
+  the main loop when called from another thread.
 
 ### Dom
 - Performance: `text` computes its requirement once and renders only the
