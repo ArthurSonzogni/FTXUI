@@ -56,27 +56,30 @@ class Text : public Node {
   }
 
   void Select(Selection& selection) override {
-    if (Box::Intersection(selection.GetBox(), box_).IsEmpty()) {
+    const Box selection_box = Box::Intersection(selection.GetBox(), box_);
+    if (selection_box.IsEmpty()) {
       return;
     }
 
-    selection_rows_.assign(lines_offsets_.size() - 1, {-1, -1});
+    // Only store the selected line range. Sizing per line would allocate one
+    // entry per line of the whole text on every frame.
+    const size_t lines_count = lines_offsets_.size() - 1;
+    const size_t first = selection_box.y_min - box_.y_min;
+    const size_t last =
+        std::min<size_t>(selection_box.y_max - box_.y_min + 1, lines_count);
+    if (first >= last) {
+      return;
+    }
+    selection_first_line_ = first;
+    selection_rows_.assign(last - first, {-1, -1});
 
-    for (size_t i = 0; i < lines_offsets_.size() - 1; ++i) {
+    for (size_t i = first; i < last; ++i) {
       const int y = box_.y_min + (int)i;
-      if (y > box_.y_max) {
-        break;
-      }
-
       const Box row_box{box_.x_min, box_.x_max, y, y};
-      if (Box::Intersection(selection.GetBox(), row_box).IsEmpty()) {
-        continue;
-      }
-
       const Selection row_sel = selection.SaturateHorizontal(row_box);
       const int sel_start = row_sel.GetBox().x_min;
       const int sel_end = row_sel.GetBox().x_max;
-      selection_rows_[i] = {sel_start, sel_end};
+      selection_rows_[i - first] = {sel_start, sel_end};
 
       std::string part;
       int x = box_.x_min;
@@ -116,8 +119,9 @@ class Text : public Node {
         auto& cell = screen.CellAt(x, y);
         cell.character = *glyph;
 
-        if (line < selection_rows_.size()) {
-          const auto& [sel_start, sel_end] = selection_rows_[line];
+        const size_t sel_index = line - selection_first_line_;
+        if (sel_index < selection_rows_.size()) {
+          const auto& [sel_start, sel_end] = selection_rows_[sel_index];
           if (sel_start != -1 && x >= sel_start && x <= sel_end) {
             screen.GetSelectionStyle()(cell);
           }
@@ -129,6 +133,9 @@ class Text : public Node {
  private:
   std::vector<std::string> glyphs_;
   std::vector<int> lines_offsets_;
+  // Selection state for the line range [selection_first_line_,
+  // selection_first_line_ + selection_rows_.size()).
+  size_t selection_first_line_ = 0;
   std::vector<std::pair<int, int>> selection_rows_;
 };
 

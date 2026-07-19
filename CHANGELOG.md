@@ -23,6 +23,9 @@ Next
 - Performance: `text` computes its requirement once and renders only the
   visible lines. This makes scrolling a large text inside a `frame`
   significantly faster. Thanks @patlefort. See #1309.
+- Performance: `text` selection now only visits and stores the selected line
+  range, instead of scanning and allocating one entry per line of the whole
+  text on every frame.
 
 7.0.1 (2026-07-14)
 ------------------
