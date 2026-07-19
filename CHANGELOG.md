@@ -4,6 +4,11 @@ Changelog
 Next
 ====
 
+### Component
+- Bugfix: Fix high CPU usage (app and terminal emulator, e.g. tmux) caused by a
+  cursor position request/reply feedback loop redrawing the screen at ~60fps in
+  the non-alternate-screen modes. See #1302.
+
 7.0.1 (2026-07-14)
 ------------------
 
