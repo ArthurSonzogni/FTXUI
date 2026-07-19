@@ -556,15 +556,7 @@ App::Internal::Internal(App* app,
       dimension_(dimension),
       use_alternative_screen_(use_alternative_screen),
       terminal_input_parser([&](Event event) {
-        // Cursor position reports are terminal replies to our own \x1b[6n
-        // requests, consumed internally. Requesting an animation frame for
-        // them creates a redraw -> request -> reply -> redraw feedback loop.
-        // See https://github.com/ArthurSonzogni/FTXUI/issues/1302.
-        const bool internal_reply = event.is_cursor_position();
         event_buffer.Push(std::move(event));
-        if (!internal_reply) {
-          public_->RequestAnimationFrame();
-        }
       }),
       cursor_position_request(this, [this] {
         TerminalSend(DeviceStatusReport(DSRMode::kCursor));
@@ -926,6 +918,13 @@ void App::Internal::HandleTask(Component component, Task& task) {
 #endif
       
       frame_valid_ = false;
+
+      // Give animated components one tick in response to the event. This must
+      // stay below the early-returns above: requesting a frame for the
+      // terminal's replies to our own requests creates a redraw -> request ->
+      // reply -> redraw feedback loop.
+      // See https://github.com/ArthurSonzogni/FTXUI/issues/1302.
+      public_->RequestAnimationFrame();
       return;
     }
 
@@ -1541,7 +1540,6 @@ void App::Post(Task task) {
 
 void App::PostEvent(Event event) {
   internal_->event_buffer.Push(std::move(event));
-  RequestAnimationFrame();
 }
 
 // static
