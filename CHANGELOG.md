@@ -8,6 +8,9 @@ Next
 - Bugfix: Fix high CPU usage (app and terminal emulator, e.g. tmux) caused by a
   cursor position request/reply feedback loop redrawing the screen at ~60fps in
   the non-alternate-screen modes. See #1302.
+- Request the animation frame when an event is handled instead of when it is
+  received. All internal terminal replies (not only cursor position reports)
+  stop triggering animation frames.
 
 ### Dom
 - Performance: `text` computes its requirement once and renders only the
