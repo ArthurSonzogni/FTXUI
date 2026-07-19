@@ -228,6 +228,7 @@ struct App::Internal {
    private:
     void Send() {
       last_sent_time_ = std::chrono::steady_clock::now();
+      last_request_time_ = last_sent_time_;
       pending_request_ = true;
       send_();
     }
@@ -556,7 +557,6 @@ App::Internal::Internal(App* app,
       use_alternative_screen_(use_alternative_screen),
       terminal_input_parser([&](Event event) {
         event_buffer.Push(std::move(event));
-        public_->RequestAnimationFrame();
       }),
       cursor_position_request(this, [this] {
         TerminalSend(DeviceStatusReport(DSRMode::kCursor));
@@ -1533,7 +1533,6 @@ void App::Post(Task task) {
 
 void App::PostEvent(Event event) {
   internal_->event_buffer.Push(std::move(event));
-  RequestAnimationFrame();
 }
 
 // static
