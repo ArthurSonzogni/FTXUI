@@ -228,6 +228,7 @@ struct App::Internal {
    private:
     void Send() {
       last_sent_time_ = std::chrono::steady_clock::now();
+      last_request_time_ = last_sent_time_;
       pending_request_ = true;
       send_();
     }
@@ -555,8 +556,15 @@ App::Internal::Internal(App* app,
       dimension_(dimension),
       use_alternative_screen_(use_alternative_screen),
       terminal_input_parser([&](Event event) {
+        // Cursor position reports are terminal replies to our own \x1b[6n
+        // requests, consumed internally. Requesting an animation frame for
+        // them creates a redraw -> request -> reply -> redraw feedback loop.
+        // See https://github.com/ArthurSonzogni/FTXUI/issues/1302.
+        const bool internal_reply = event.is_cursor_position();
         event_buffer.Push(std::move(event));
-        public_->RequestAnimationFrame();
+        if (!internal_reply) {
+          public_->RequestAnimationFrame();
+        }
       }),
       cursor_position_request(this, [this] {
         TerminalSend(DeviceStatusReport(DSRMode::kCursor));

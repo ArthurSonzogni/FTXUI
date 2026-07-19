@@ -4,6 +4,11 @@ Changelog
 Next
 ====
 
+### Component
+- Bugfix: Fix high CPU usage (app and terminal emulator, e.g. tmux) caused by a
+  cursor position request/reply feedback loop redrawing the screen at ~60fps in
+  the non-alternate-screen modes. See #1302.
+
 ### Dom
 - Performance: `text` computes its requirement once and renders only the
   visible lines. This makes scrolling a large text inside a `frame`
