@@ -152,6 +152,27 @@ TEST(SelectionTest, StyleSelection) {
   }
 }
 
+// The selection style must not persist on an element rendered again after the
+// selection was cleared. See #1309.
+TEST(SelectionTest, StyleClearedWhenSelectionCleared) {
+  auto element = text("Lorem ipsum dolor");
+
+  {
+    auto screen = App::FixedSize(20, 1);
+    Selection selection(2, 0, 9, 0);
+    Render(screen, element.get(), selection);
+    EXPECT_EQ(screen.CellAt(2, 0).inverted, true);
+  }
+
+  {
+    auto screen = App::FixedSize(20, 1);
+    Render(screen, element);
+    for (int i = 0; i < 20; i++) {
+      EXPECT_EQ(screen.CellAt(i, 0).inverted, false);
+    }
+  }
+}
+
 TEST(SelectionTest, VBoxSelection) {
   auto element = vbox({
       text("Lorem ipsum dolor"),
