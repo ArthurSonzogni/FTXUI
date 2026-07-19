@@ -173,6 +173,24 @@ TEST(SelectionTest, StyleClearedWhenSelectionCleared) {
   }
 }
 
+// A selection over a subset of the lines of a multi-line text must style and
+// extract exactly the selected rows.
+TEST(SelectionTest, MultiLineTextSelection) {
+  auto element = text("abc\ndef\nghi");
+  auto screen = App::FixedSize(3, 3);
+  Selection selection(1, 1, 2, 2);
+  Render(screen, element.get(), selection);
+
+  EXPECT_EQ(selection.GetParts(), "ef\nghi");
+  for (int y = 0; y < 3; y++) {
+    for (int x = 0; x < 3; x++) {
+      const bool selected = (y == 1 && x >= 1) || y == 2;
+      EXPECT_EQ(screen.CellAt(x, y).inverted, selected)
+          << "at (" << x << "," << y << ")";
+    }
+  }
+}
+
 TEST(SelectionTest, VBoxSelection) {
   auto element = vbox({
       text("Lorem ipsum dolor"),
