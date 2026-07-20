@@ -1,0 +1,7 @@
+<map id="Graphe hiérarchique des classes" name="Graphe hiérarchique des classes">
+<area shape="rect" id="Node000000" href="$group__screen.html#classftxui_1_1Image" title="Une grille rectangulaire de pixels." alt="" coords="5,5,68,31"/>
+<area shape="rect" id="Node000001" href="$group__screen.html#classftxui_1_1Screen" title="Une grille rectangulaire de pixels." alt="" coords="116,5,183,31"/>
+<area shape="poly" id="edge2_Node000000_Node000001" title=" " alt="" coords="81,15,116,15,116,21,81,21"/>
+<area shape="rect" id="Node000002" href="$group__component.html#classftxui_1_1ScreenInteractive" title="ScreenInteractive est un Screen qui peut gérer les événements, exécuter une boucle principale et gére..." alt="" coords="231,5,367,31"/>
+<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="196,15,230,15,230,21,196,21"/>
+</map>

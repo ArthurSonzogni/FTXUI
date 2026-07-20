@@ -1,0 +1,487 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: ftxui / screen</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Généré par Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Recherche',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('module-screen.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Chargement...</div>
+<div class="SRStatus" id="Searching">Recherche...</div>
+<div class="SRStatus" id="NoMatches">Aucune correspondance</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">ftxui / screen</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="toc"><h3>Table des matières</h3>
+<ul>
+  <li class="level1">
+    <a href="#ftxuiscreen-1">ftxui::Screen</a>
+  </li>
+  <li class="level1">
+    <a href="#ftxuidimension">ftxui::Dimension</a>
+  </li>
+  <li class="level1">
+    <a href="#ftxuipixel">ftxui::Pixel</a>
+  </li>
+  <li class="level1">
+    <a href="#ftxuicolor">ftxui::Color</a>
+  </li>
+</ul>
+</div>
+<div class="textblock"><p><img src="https://nsm09.casimages.com/img/2025/05/31//2505310207423242518595348.png" alt="title-img" class="inline"/></p>
+<p>Le module <code>ftxui::screen</code> est la fondation de bas niveau. Il peut être utilisé de manière autonome, mais il est principalement conçu pour être utilisé conjointement par les modules <a href="module-dom.html">ftxui::dom</a> et <a href="module-component.html">ftxui::component</a>.</p>
+<p>Il fournit un <a class="el" href="group__screen.html#classftxui_1_1Screen">ftxui::Screen</a>.</p>
+<hr  />
+<h1><a class="anchor" id="ftxuiscreen-1"></a>
+ftxui::Screen</h1>
+<p>La classe <a class="el" href="group__screen.html#classftxui_1_1Screen">ftxui::Screen</a> représente une grille 2D de caractères stylisés qui peut être affichée dans un terminal. Elle fournit des méthodes pour créer un écran, accéder aux pixels et afficher des éléments.</p>
+<p>Vous pouvez accéder aux cellules individuelles (<a class="el" href="group__screen.html#structftxui_1_1Pixel">ftxui::Pixel</a>) de l'écran en utilisant la méthode <a class="el" href="group__screen.html#a483f8ee1967e200cfc9e277b3ce00174">ftxui::Screen::PixelAt</a>, qui renvoie une référence au pixel aux coordonnées spécifiées.</p>
+<p><b>Example</b> </p><div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="screen_8hpp.html">ftxui/screen/screen.hpp</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="color_8hpp.html">ftxui/screen/color.hpp</a>&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">void</span> <a class="code hl_function" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>() {</div>
+<div class="line">    <span class="keyword">auto</span> <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a> = <a class="code hl_function" href="group__screen.html#ad86415567756c73e0f58fa4feb094388">ftxui::Screen::Create</a>(</div>
+<div class="line">        ftxui::Dimension::Full(),   <span class="comment">// Utiliser toute la largeur du terminal</span></div>
+<div class="line">        ftxui::Dimension::Fixed(10) <span class="comment">// Hauteur fixe de 10 lignes</span></div>
+<div class="line">    );</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Accéder à un pixel spécifique en (10, 5)</span></div>
+<div class="line">    <span class="keyword">auto</span>&amp; pixel = <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.PixelAt(10, 5);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// Définir les propriétés du pixel.</span></div>
+<div class="line">    pixel.character = U<span class="charliteral">&#39;X&#39;</span>;</div>
+<div class="line">    pixel.foreground_color = <a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fad3163c1fcda01965b692ec2c3122b743">ftxui::Color::Red</a>;</div>
+<div class="line">    pixel.background_color = <a class="code hl_function" href="group__screen.html#a1e80b338e642c9a3cdf74885bcf1604f">ftxui::Color::RGB</a>(0, 255, 0);</div>
+<div class="line">    pixel.bold = <span class="keyword">true</span>; <span class="comment">// Définir le style gras</span></div>
+<div class="line">    <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.Print(); <span class="comment">// Afficher l&#39;écran dans le terminal</span></div>
+<div class="line">}</div>
+<div class="ttc" id="acolor_8hpp_html"><div class="ttname"><a href="color_8hpp.html">color.hpp</a></div></div>
+<div class="ttc" id="acomposition_8cpp_html_af714c99ec9f8e04253d194a65f0e9ed8"><div class="ttname"><a href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a></div><div class="ttdeci">auto screen</div><div class="ttdef"><b>Definition</b> <a href="composition_8cpp_source.html#l00056">composition.cpp:56</a></div></div>
+<div class="ttc" id="aexamples_2component_2button_8cpp_html_ae66f6b31b5ad750f1fe042a706a4e3d4"><div class="ttname"><a href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a></div><div class="ttdeci">int main()</div><div class="ttdef"><b>Definition</b> <a href="examples_2component_2button_8cpp_source.html#l00033">examples/component/button.cpp:33</a></div></div>
+<div class="ttc" id="agroup__screen_html_a1e80b338e642c9a3cdf74885bcf1604f"><div class="ttname"><a href="group__screen.html#a1e80b338e642c9a3cdf74885bcf1604f">ftxui::Color::RGB</a></div><div class="ttdeci">static Color RGB(uint8_t red, uint8_t green, uint8_t blue)</div><div class="ttdoc">Construit une couleur à partir de sa représentation RGB. https://en.wikipedia.org/wiki/RGB_color_mode...</div><div class="ttdef"><b>Definition</b> <a href="screen_2color_8cpp_source.html#l00147">screen/color.cpp:147</a></div></div>
+<div class="ttc" id="agroup__screen_html_ad86415567756c73e0f58fa4feb094388"><div class="ttname"><a href="group__screen.html#ad86415567756c73e0f58fa4feb094388">ftxui::Screen::Create</a></div><div class="ttdeci">static Screen Create(Dimensions dimension)</div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fad3163c1fcda01965b692ec2c3122b743"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fad3163c1fcda01965b692ec2c3122b743">ftxui::Color::Red</a></div><div class="ttdeci">@ Red</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00054">color.hpp:54</a></div></div>
+<div class="ttc" id="ascreen_8hpp_html"><div class="ttname"><a href="screen_8hpp.html">screen.hpp</a></div></div>
+</div><!-- fragment --><dl class="section note"><dt>Note</dt><dd>Si les coordonnées sont hors limites, un pixel factice est renvoyé.</dd></dl>
+<p>L'écran peut être affiché dans le terminal en utilisant <a class="el" href="group__screen.html#ad93edbe885499a712129356f1ffd506b">ftxui::Screen::Print()</a> ou converti en une std::string avec <a class="el" href="group__screen.html#a19c380b03cea21d7ac7325136a131ff0">ftxui::Screen::ToString()</a>.</p>
+<div class="tabbed"></div><div class="tabbed"><ul>
+<li><b class="tab-title">Print()</b> <div class="fragment"><div class="line"><span class="keyword">auto</span> <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a> = ...;</div>
+<div class="line"><a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.Print();</div>
+</div><!-- fragment --></li>
+<li><b class="tab-title">ToString()</b> <div class="fragment"><div class="line"><span class="keyword">auto</span> <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a> = ...;</div>
+<div class="line">std::cout &lt;&lt; <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.ToString();</div>
+</div><!-- fragment --></li>
+</ul>
+</div><div class="tabbed"></div><p>Notez que vous pouvez réinitialiser la position du curseur en haut à gauche de l'écran après l'impression en appelant ftxui::Screen::ResetCursorPosition().</p>
+<p><b>Example</b> </p><div class="fragment"><div class="line"><span class="keyword">auto</span> <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a> = ...;</div>
+<div class="line"><span class="keywordflow">while</span>(<span class="keyword">true</span>) {</div>
+<div class="line">  <span class="comment">// Opérations de dessin :</span></div>
+<div class="line">  ...</div>
+<div class="line">  </div>
+<div class="line">  <span class="comment">// Affiche l&#39;écran dans le terminal. Puis réinitialise la position du curseur et le</span></div>
+<div class="line">  <span class="comment">// contenu de l&#39;écran.</span></div>
+<div class="line">  std::cout &lt;&lt; <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.ToString();</div>
+<div class="line">  std::cout &lt;&lt; <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.ResetCursorPosition(<span class="comment">/*clear=*/</span><span class="keyword">true</span>);</div>
+<div class="line">  std::cout &lt;&lt; std::flush;</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// Met en pause pendant une courte durée pour contrôler le taux de rafraîchissement.</span></div>
+<div class="line">  std::this_thread::sleep_for(std::chrono::milliseconds(100));</div>
+<div class="line">}</div>
+</div><!-- fragment --><hr  />
+<h1><a class="anchor" id="ftxuidimension"></a>
+ftxui::Dimension</h1>
+<p>L'utilitaire <a class="el" href="namespaceftxui_1_1Dimension.html">ftxui::Dimension</a> contrôle le dimensionnement de l'écran :</p>
+<ul>
+<li><code>Dimension::Full()</code> — utiliser toute la largeur ou hauteur du terminal</li>
+<li><code>Dimension::Fit(element)</code> — redimensionner pour s'adapter à l'élément rendu <a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">ftxui::Element</a></li>
+<li><code>Dimension::Fixed(n)</code> — utiliser exactement <code>n</code> colonnes ou lignes</li>
+</ul>
+<p>Ces valeurs doivent être passées à <code><a class="el" href="group__screen.html#ad86415567756c73e0f58fa4feb094388">ftxui::Screen::Create()</a></code>.</p>
+<p><a class="el" href="group__screen.html#ad86415567756c73e0f58fa4feb094388">ftxui::Screen::Create()</a> fournit deux surcharges :</p>
+<ul>
+<li><code>Screen::Create(Dimension)</code> définit la largeur et la hauteur avec le même type de dimension</li>
+<li><code>Screen::Create(Dimension width, Dimension height)</code> permet un contrôle distinct par axe</li>
+</ul>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a> = <a class="code hl_function" href="group__screen.html#ad86415567756c73e0f58fa4feb094388">ftxui::Screen::Create</a>(</div>
+<div class="line">  ftxui::Dimension::Full(),      <span class="comment">// largeur</span></div>
+<div class="line">  ftxui::Dimension::Fixed(10)    <span class="comment">// hauteur</span></div>
+<div class="line">);</div>
+</div><!-- fragment --><p>Une fois créé, affichez un élément et le résultat :</p>
+<div class="fragment"><div class="line"><a class="code hl_function" href="namespaceftxui.html#ad4b8aa9392f56ba41e2b421e046a7d83">ftxui::Render</a>(<a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>, element);</div>
+<div class="line"><a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.Print();</div>
+<div class="ttc" id="anamespaceftxui_html_ad4b8aa9392f56ba41e2b421e046a7d83"><div class="ttname"><a href="namespaceftxui.html#ad4b8aa9392f56ba41e2b421e046a7d83">ftxui::Render</a></div><div class="ttdeci">void Render(Screen &amp;screen, const Element &amp;element)</div></div>
+</div><!-- fragment --><hr  />
+<h1><a class="anchor" id="ftxuipixel"></a>
+ftxui::Pixel</h1>
+<p>Chaque cellule de la grille de l'écran est un <a class="el" href="group__screen.html#structftxui_1_1Pixel">ftxui::Pixel</a>, qui contient :</p>
+<ul>
+<li>Point de code Unicode.<ul>
+<li><code>character</code></li>
+</ul>
+</li>
+<li>ftxui::Color:<ul>
+<li><code>foreground_color</code></li>
+<li><code>background_color</code></li>
+</ul>
+</li>
+<li>Booléens :<ul>
+<li><code>blink</code></li>
+<li><code>bold</code></li>
+<li><code>dim</code></li>
+<li><code>italic</code></li>
+<li><code>inverted</code> (échange les couleurs de premier plan et d'arrière-plan)</li>
+<li><code>underlined</code></li>
+<li><code>underlined_double</code></li>
+<li><code>strikethrough</code></li>
+</ul>
+</li>
+</ul>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a> = <a class="code hl_function" href="group__screen.html#ad86415567756c73e0f58fa4feb094388">ftxui::Screen::Create</a>(</div>
+<div class="line">  ftxui::Dimension::Fixed(5),</div>
+<div class="line">  ftxui::Dimension::Fixed(5),</div>
+<div class="line">);</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span>&amp; pixel = <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.PixelAt(3, 3);</div>
+<div class="line">pixel.character = U<span class="charliteral">&#39;X&#39;</span>;</div>
+<div class="line">pixel.bold = <span class="keyword">true</span>;</div>
+<div class="line">pixel.foreground_color = <a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fad3163c1fcda01965b692ec2c3122b743">ftxui::Color::Red</a>;</div>
+<div class="line">pixel.background_color = <a class="code hl_function" href="group__screen.html#a1e80b338e642c9a3cdf74885bcf1604f">ftxui::Color::RGB</a>(0, 255, 0);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.Print();</div>
+</div><!-- fragment --><dl class="section note"><dt>Note</dt><dd><code>PixelAt(x, y)</code> effectue une vérification des limites et renvoie une référence au pixel aux coordonnées spécifiées. Si hors limites, une référence de pixel factice est renvoyée.</dd></dl>
+<p>Chaque cellule de l'écran est un <a class="el" href="group__screen.html#structftxui_1_1Pixel">ftxui::Pixel</a>. Vous pouvez les modifier en utilisant :</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span>&amp; pixel = <a class="code hl_variable" href="composition_8cpp.html#af714c99ec9f8e04253d194a65f0e9ed8">screen</a>.PixelAt(x, y);</div>
+<div class="line">pixel.character = U<span class="charliteral">&#39;X&#39;</span>;</div>
+<div class="line">pixel.bold = <span class="keyword">true</span>;</div>
+<div class="line">pixel.foreground_color = Color::Red;</div>
+</div><!-- fragment --><hr  />
+<h1><a class="anchor" id="ftxuicolor"></a>
+ftxui::Color</h1>
+<p>La classe <a class="el" href="group__screen.html#classftxui_1_1Color">ftxui::Color</a> est utilisée pour définir les couleurs de premier plan et d'arrière-plan pour chaque <a class="el" href="group__screen.html#structftxui_1_1Pixel">ftxui::Pixel</a>.</p>
+<p>Elle prend en charge différents espaces colorimétriques et palettes prédéfinies. FTXUI se repliera dynamiquement sur la couleur la plus proche disponible dans le terminal si la couleur demandée n'est pas prise en charge par le terminal.</p>
+<p><b>Espaces colorimétriques</b></p>
+<ul>
+<li><b>Défaut</b> : <code><a class="el" href="group__screen.html#aa4be56f94fc180d7b070df23c235b0c7a79935518a3889663d8688b6b01fff051">ftxui::Color::Default</a></code> (couleur par défaut du terminal)</li>
+<li><b>Palette de 16 couleurs</b> <a href="https://arthursonzogni.github.io/FTXUI/examples/?file=dom/color_gallery">Demo</a>:<ul>
+<li><code><a class="el" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fac1e9bce8242f443c54c7405223d616cd">ftxui::Color::Black</a></code>,</li>
+<li><code><a class="el" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fad3163c1fcda01965b692ec2c3122b743">ftxui::Color::Red</a></code>,</li>
+<li>...</li>
+</ul>
+</li>
+<li><b>Palette de 256 couleurs</b> <a href="https://arthursonzogni.github.io/FTXUI/examples/?file=dom/color_palette256">Demo</a>:<ul>
+<li><code><a class="el" href="group__screen.html#abd07c48f62cc507fafa2486a43130fcfa7d2d4cc3af6756a4eac7d12fbe4775d4">ftxui::Color::Chartreuse1</a></code>,</li>
+<li><code><a class="el" href="group__screen.html#abd07c48f62cc507fafa2486a43130fcfa0c92c7e17edeca09b7c63c8a783a562f">ftxui::Color::DarkViolet</a></code>,</li>
+<li>...</li>
+</ul>
+</li>
+<li><b>Couleur réelle</b> (24bit) [Demo](<a href="https://arthursonzogni.github.io/FTXUI/examples/?file=dom/color_truecolor_HSV:">https://arthursonzogni.github.io/FTXUI/examples/?file=dom/color_truecolor_HSV:</a><ul>
+<li><code><a class="el" href="group__screen.html#a1e80b338e642c9a3cdf74885bcf1604f" title="Construit une couleur à partir de sa représentation RGB. https://en.wikipedia.org/wiki/RGB_color_mode...">ftxui::Color::RGB(uint8_t red, uint8_t green, uint8_t blue)</a></code></li>
+<li><code><a class="el" href="group__screen.html#a1a119fd00beafc7d2aa5f94518e38fc5" title="Construit une couleur à partir de sa représentation HSV. https://en.wikipedia.org/wiki/HSL_and_HSV.">ftxui::Color::HSV(uint8_t h, uint8_t s, uint8_t v)</a></code>.</li>
+</ul>
+</li>
+</ul>
+<dl class="section note"><dt>Note</dt><dd>Vous pouvez interroger la capacité du terminal en utilisant <a class="el" href="group__screen.html#gae6e034f37aa66cfe4458a8cb6e8fc526">ftxui::Terminal::ColorSupport()</a>; <br  />
+<br  />
+ Ceci peut être défini manuellement en utilisant <a class="el" href="group__dom.html#ga65945a706131f407a47a1b9960dc1a4a">ftxui::Terminal::SetColorSupport()</a>. </dd></dl>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "fr";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

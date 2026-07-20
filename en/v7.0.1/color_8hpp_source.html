@@ -1,0 +1,693 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: color.hpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ko",
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    if (!(
+        navtree.textContent.includes("Getting Started") &&
+        navtree.textContent.includes("Installation") &&
+        navtree.textContent.includes("ftxui / screen") &&
+        navtree.textContent.includes("ftxui / dom") &&
+        navtree.textContent.includes("ftxui / component") &&
+        navtree.textContent.includes("Reference")
+      )
+    ) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;7.0.1</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('color_8hpp_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">color.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="color_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2020 Arthur Sonzogni. All rights reserved.</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Use of this source code is governed by the MIT license that can be found in</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// the LICENSE file.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#ifndef FTXUI_SCREEN_COLOR_HPP</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#define FTXUI_SCREEN_COLOR_HPP</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;cstdint&gt;</span>  <span class="comment">// for uint8_t</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;string&gt;</span>   <span class="comment">// for string</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="export_8hpp.html">ftxui/util/export.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#ifdef RGB</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// Workaround for wingdi.h (via Windows.h) defining macros that break things.</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">// https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-rgb</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#undef RGB</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a> {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"></span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">/// @brief Color is a class that represents a color in the terminal user</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">/// interface.</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">///</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">/// @ingroup screen</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"></span><span class="keyword">class </span>FTXUI_EXPORT(SCREEN) Color {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  <span class="keyword">enum</span> <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78af8fee1420fe204b3dafbacf27a545c41">Palette1</a> : uint8_t;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  <span class="keyword">enum</span> <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78ae5a76102d821ec8233fee04273c60349">Palette16</a> : uint8_t;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  <span class="keyword">enum</span> <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78a7b88ab2a5c8fe8866c96ea4acb623876">Palette256</a> : uint8_t;</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  <span class="comment">// NOLINTBEGIN</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  Color();                  <span class="comment">// Transparent.</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  Color(Palette1 index);    <span class="comment">// Transparent.</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  Color(Palette16 index);   <span class="comment">// Implicit conversion from index to Color.</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  Color(Palette256 index);  <span class="comment">// Implicit conversion from index to Color.</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  <span class="comment">// NOLINTEND</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <span class="keyword">static</span> Color RGB(uint8_t red, uint8_t green, uint8_t blue);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  <span class="keyword">static</span> Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  <span class="keyword">static</span> Color RGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keyword">static</span> Color HSVA(uint8_t hue,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                    uint8_t saturation,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                    uint8_t value,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                    uint8_t alpha);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  <span class="keyword">static</span> Color Interpolate(<span class="keywordtype">float</span> t, <span class="keyword">const</span> Color&amp; a, <span class="keyword">const</span> Color&amp; b);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  <span class="keyword">static</span> Color Blend(<span class="keyword">const</span> Color&amp; lhs, <span class="keyword">const</span> Color&amp; rhs);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="comment">//---------------------------</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  <span class="comment">// List of colors:</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  <span class="comment">//---------------------------</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <span class="comment">// clang-format off</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keyword">enum</span> <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78af8fee1420fe204b3dafbacf27a545c41">Palette1</a> : uint8_t{</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    Default, <span class="comment">// Transparent</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  };</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keyword">enum</span> <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78ae5a76102d821ec8233fee04273c60349">Palette16</a> : uint8_t {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    Black        = 0,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    Red          = 1,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    Green        = 2,</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    Yellow       = 3,</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    Blue         = 4,</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    Magenta      = 5,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    Cyan         = 6,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    GrayLight    = 7,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    GrayDark     = 8,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    RedLight     = 9,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    GreenLight   = 10,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    YellowLight  = 11,</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    BlueLight    = 12,</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    MagentaLight = 13,</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    CyanLight    = 14,</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    White        = 15,</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  };</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keyword">enum</span> <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78a7b88ab2a5c8fe8866c96ea4acb623876">Palette256</a> : uint8_t {</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    Aquamarine1        = 122,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    Aquamarine1Bis     = 86,</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    Aquamarine3        = 79,</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    Blue1              = 21,</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    Blue3              = 19,</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    Blue3Bis           = 20,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    BlueViolet         = 57,</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    CadetBlue          = 72,</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    CadetBlueBis       = 73,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    Chartreuse1        = 118,</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    Chartreuse2        = 112,</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    Chartreuse2Bis     = 82,</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    Chartreuse3        = 70,</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    Chartreuse3Bis     = 76,</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    Chartreuse4        = 64,</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    CornflowerBlue     = 69,</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    Cornsilk1          = 230,</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    Cyan1              = 51,</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    Cyan2              = 50,</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    Cyan3              = 43,</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    DarkBlue           = 18,</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    DarkCyan           = 36,</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    DarkGoldenrod      = 136,</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    DarkGreen          = 22,</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    DarkKhaki          = 143,</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    DarkMagenta        = 90,</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    DarkMagentaBis     = 91,</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    DarkOliveGreen1    = 191,</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    DarkOliveGreen1Bis = 192,</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    DarkOliveGreen2    = 155,</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    DarkOliveGreen3    = 107,</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    DarkOliveGreen3Bis = 113,</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    DarkOliveGreen3Ter = 149,</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    DarkOrange         = 208,</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    DarkOrange3        = 130,</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    DarkOrange3Bis     = 166,</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    DarkRed            = 52,</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    DarkRedBis         = 88,</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    DarkSeaGreen       = 108,</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    DarkSeaGreen1      = 158,</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    DarkSeaGreen1Bis   = 193,</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    DarkSeaGreen2      = 151,</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    DarkSeaGreen2Bis   = 157,</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    DarkSeaGreen3      = 115,</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    DarkSeaGreen3Bis   = 150,</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    DarkSeaGreen4      = 65,</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    DarkSeaGreen4Bis   = 71,</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    DarkSlateGray1     = 123,</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    DarkSlateGray2     = 87,</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    DarkSlateGray3     = 116,</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    DarkTurquoise      = 44,</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    DarkViolet         = 128,</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    DarkVioletBis      = 92,</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    DeepPink1          = 198,</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    DeepPink1Bis       = 199,</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    DeepPink2          = 197,</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    DeepPink3          = 161,</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    DeepPink3Bis       = 162,</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    DeepPink4          = 125,</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    DeepPink4Bis          = 89,</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    DeepPink4Ter       = 53,</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    DeepSkyBlue1       = 39,</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    DeepSkyBlue2       = 38,</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    DeepSkyBlue3       = 31,</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    DeepSkyBlue3Bis    = 32,</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    DeepSkyBlue4       = 23,</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    DeepSkyBlue4Bis    = 24,</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    DeepSkyBlue4Ter    = 25,</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    DodgerBlue1        = 33,</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    DodgerBlue2        = 27,</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    DodgerBlue3        = 26,</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    Gold1              = 220,</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    Gold3              = 142,</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    Gold3Bis           = 178,</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    Green1             = 46,</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    Green3             = 34,</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    Green3Bis          = 40,</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    Green4             = 28,</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    GreenYellow        = 154,</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    Grey0              = 16,</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    Grey100            = 231,</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    Grey11             = 234,</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    Grey15             = 235,</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    Grey19             = 236,</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    Grey23             = 237,</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    Grey27             = 238,</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    Grey3              = 232,</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    Grey30             = 239,</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    Grey35             = 240,</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    Grey37             = 59,</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    Grey39             = 241,</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    Grey42             = 242,</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    Grey46             = 243,</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    Grey50             = 244,</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    Grey53             = 102,</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    Grey54             = 245,</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    Grey58             = 246,</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    Grey62             = 247,</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    Grey63             = 139,</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    Grey66             = 248,</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    Grey69             = 145,</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    Grey7              = 233,</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    Grey70             = 249,</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    Grey74             = 250,</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    Grey78             = 251,</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    Grey82             = 252,</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    Grey84             = 188,</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    Grey85             = 253,</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    Grey89             = 254,</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    Grey93             = 255,</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    Honeydew2          = 194,</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    HotPink            = 205,</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    HotPink2           = 169,</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    HotPink3           = 132,</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    HotPink3Bis        = 168,</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    HotPinkBis         = 206,</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    IndianRed          = 131,</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    IndianRed1         = 203,</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    IndianRed1Bis      = 204,</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    IndianRedBis       = 167,</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    Khaki1             = 228,</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>    Khaki3             = 185,</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    LightCoral         = 210,</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    LightCyan1Bis      = 195,</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    LightCyan3         = 152,</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    LightGoldenrod1    = 227,</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    LightGoldenrod2    = 186,</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    LightGoldenrod2Bis = 221,</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    LightGoldenrod2Ter = 222,</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    LightGoldenrod3    = 179,</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    LightGreen         = 119,</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    LightGreenBis      = 120,</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    LightPink1         = 217,</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    LightPink3         = 174,</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    LightPink4         = 95,</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    LightSalmon1       = 216,</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    LightSalmon3       = 137,</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    LightSalmon3Bis       = 173,</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    LightSeaGreen      = 37,</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    LightSkyBlue1      = 153,</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>    LightSkyBlue3      = 109,</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>    LightSkyBlue3Bis      = 110,</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    LightSlateBlue     = 105,</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    LightSlateGrey     = 103,</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    LightSteelBlue     = 147,</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>    LightSteelBlue1    = 189,</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    LightSteelBlue3    = 146,</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    LightYellow3       = 187,</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    Magenta1           = 201,</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    Magenta2           = 165,</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    Magenta2Bis        = 200,</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    Magenta3           = 127,</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    Magenta3Bis        = 163,</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    Magenta3Ter        = 164,</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    MediumOrchid       = 134,</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    MediumOrchid1      = 171,</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    MediumOrchid1Bis   = 207,</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    MediumOrchid3      = 133,</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    MediumPurple       = 104,</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    MediumPurple1      = 141,</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    MediumPurple2      = 135,</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    MediumPurple2Bis   = 140,</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    MediumPurple3      = 97,</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    MediumPurple3Bis   = 98,</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    MediumPurple4      = 60,</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    MediumSpringGreen  = 49,</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    MediumTurquoise    = 80,</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    MediumVioletRed    = 126,</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    MistyRose1         = 224,</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    MistyRose3         = 181,</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    NavajoWhite1       = 223,</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    NavajoWhite3       = 144,</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    NavyBlue           = 17,</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    Orange1            = 214,</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    Orange3            = 172,</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    Orange4            = 58,</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    Orange4Bis         = 94,</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    OrangeRed1         = 202,</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    Orchid             = 170,</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>    Orchid1            = 213,</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    Orchid2            = 212,</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    PaleGreen1         = 121,</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    PaleGreen1Bis      = 156,</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    PaleGreen3         = 114,</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    PaleGreen3Bis      = 77,</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    PaleTurquoise1     = 159,</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    PaleTurquoise4     = 66,</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    PaleVioletRed1     = 211,</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    Pink1              = 218,</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>    Pink3              = 175,</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>    Plum1              = 219,</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    Plum2              = 183,</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    Plum3              = 176,</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>    Plum4              = 96,</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    Purple             = 129,</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    Purple3            = 56,</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    Purple4            = 54,</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    Purple4Bis         = 55,</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    PurpleBis          = 93,</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    Red1               = 196,</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    Red3               = 124,</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    Red3Bis            = 160,</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    RosyBrown          = 138,</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    RoyalBlue1         = 63,</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    Salmon1            = 209,</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>    SandyBrown         = 215,</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    SeaGreen1          = 84,</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    SeaGreen1Bis       = 85,</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    SeaGreen2          = 83,</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    SeaGreen3          = 78,</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    SkyBlue1           = 117,</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    SkyBlue2           = 111,</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    SkyBlue3           = 74,</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    SlateBlue1         = 99,</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    SlateBlue3         = 61,</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    SlateBlue3Bis      = 62,</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    SpringGreen1       = 48,</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    SpringGreen2       = 42,</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    SpringGreen2Bis    = 47,</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    SpringGreen3       = 35,</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    SpringGreen3Bis    = 41,</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    SpringGreen4       = 29,</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    SteelBlue          = 67,</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    SteelBlue1         = 75,</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    SteelBlue1Bis      = 81,</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    SteelBlue3         = 68,</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>    Tan                = 180,</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    Thistle1           = 225,</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    Thistle3           = 182,</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    Turquoise2         = 45,</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>    Turquoise4         = 30,</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    Violet             = 177,</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    Wheat1             = 229,</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    Wheat4             = 101,</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    Yellow1            = 226,</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    Yellow2            = 190,</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    Yellow3            = 148,</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    Yellow3Bis         = 184,</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    Yellow4            = 100,</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    Yellow4Bis         = 106,</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>  };</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>  <span class="comment">// clang-format on</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span> </div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>  <span class="comment">// --- Operators ------</span></div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>  <span class="keywordtype">bool</span> operator==(<span class="keyword">const</span> Color&amp; rhs) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>  <span class="keywordtype">bool</span> operator!=(<span class="keyword">const</span> Color&amp; rhs) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span> </div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>  std::string Print(<span class="keywordtype">bool</span> is_background_color) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>  <span class="keywordtype">void</span> PrintTo(std::string&amp; out, <span class="keywordtype">bool</span> is_background_color) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>  <span class="keywordtype">bool</span> IsOpaque()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> alpha_ == 255; }</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span> </div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>  <span class="keyword">enum class</span> ColorType : uint8_t {</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78af8fee1420fe204b3dafbacf27a545c41">Palette1</a>,</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>    <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78ae5a76102d821ec8233fee04273c60349">Palette16</a>,</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78a7b88ab2a5c8fe8866c96ea4acb623876">Palette256</a>,</div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>    <a class="code hl_enumvalue" href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78a7afd9568e82d523c91b2bfe0cc47be29">TrueColor</a>,</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>  };</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>  ColorType type_ = ColorType::Palette1;</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>  uint8_t red_ = 0;</div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>  uint8_t green_ = 0;</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>  uint8_t blue_ = 0;</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>  uint8_t alpha_ = 0;</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>};</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
+<div class="foldopen" id="foldopen00340" data-start="{" data-end="}">
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno"><a class="line" href="namespaceftxui_1_1literals.html">  340</a></span><span class="keyword">inline</span> <span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceliterals.html">literals</a> {</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><span class="comment"></span> </div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span><span class="comment">/// @brief Creates a color from a combined hex RGB representation,</span></div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span><span class="comment">/// e.g. 0x808000_rgb</span></div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno"><a class="line" href="namespaceftxui_1_1literals.html#a179c02791ea96ac548dce590af1b1488">  344</a></span><span class="comment"></span><a class="code hl_define" href="export_8hpp.html#a1289ce138560adb9f3bf451652aaeb39">FTXUI_EXPORT</a>(SCREEN) Color <span class="keyword">operator</span><span class="stringliteral">&quot;&quot;</span>_rgb(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <span class="keywordtype">long</span> <span class="keywordtype">int</span> combined);</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span> </div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>}  <span class="comment">// namespace literals</span></div>
+</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span> </div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>}  <span class="comment">// namespace ftxui</span></div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span> </div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span><span class="preprocessor">#endif  </span><span class="comment">// FTXUI_SCREEN_COLOR_HPP</span></div>
+<div class="ttc" id="aexport_8hpp_html"><div class="ttname"><a href="export_8hpp.html">export.hpp</a></div></div>
+<div class="ttc" id="aexport_8hpp_html_a1289ce138560adb9f3bf451652aaeb39"><div class="ttname"><a href="export_8hpp.html#a1289ce138560adb9f3bf451652aaeb39">FTXUI_EXPORT</a></div><div class="ttdeci">#define FTXUI_EXPORT(component)</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00024">export.hpp:24</a></div></div>
+<div class="ttc" id="agroup__screen_html_ggaa574175df6ec2a14da8226eb24c65c78a7afd9568e82d523c91b2bfe0cc47be29"><div class="ttname"><a href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78a7afd9568e82d523c91b2bfe0cc47be29">ftxui::Terminal::TrueColor</a></div><div class="ttdeci">@ TrueColor</div><div class="ttdef"><b>Definition</b> <a href="terminal_8hpp_source.html#l00035">terminal.hpp:35</a></div></div>
+<div class="ttc" id="agroup__screen_html_ggaa574175df6ec2a14da8226eb24c65c78a7b88ab2a5c8fe8866c96ea4acb623876"><div class="ttname"><a href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78a7b88ab2a5c8fe8866c96ea4acb623876">ftxui::Terminal::Palette256</a></div><div class="ttdeci">@ Palette256</div><div class="ttdef"><b>Definition</b> <a href="terminal_8hpp_source.html#l00034">terminal.hpp:34</a></div></div>
+<div class="ttc" id="agroup__screen_html_ggaa574175df6ec2a14da8226eb24c65c78ae5a76102d821ec8233fee04273c60349"><div class="ttname"><a href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78ae5a76102d821ec8233fee04273c60349">ftxui::Terminal::Palette16</a></div><div class="ttdeci">@ Palette16</div><div class="ttdef"><b>Definition</b> <a href="terminal_8hpp_source.html#l00033">terminal.hpp:33</a></div></div>
+<div class="ttc" id="agroup__screen_html_ggaa574175df6ec2a14da8226eb24c65c78af8fee1420fe204b3dafbacf27a545c41"><div class="ttname"><a href="group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78af8fee1420fe204b3dafbacf27a545c41">ftxui::Terminal::Palette1</a></div><div class="ttdeci">@ Palette1</div><div class="ttdef"><b>Definition</b> <a href="terminal_8hpp_source.html#l00032">terminal.hpp:32</a></div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">The FTXUI ftxui:: namespace.</div><div class="ttdef"><b>Definition</b> <a href="animation_8hpp_source.html#l00011">animation.hpp:11</a></div></div>
+<div class="ttc" id="anamespaceliterals_html"><div class="ttname"><a href="namespaceliterals.html">literals</a></div><div class="ttdoc">The FTXUI ftxui::literals:: namespace.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../../index.html", "es": "../../es/index.html", "fr": "../../fr/index.html", "ja": "../../ja/index.html", "zh-CH": "../../zh-CH/index.html", "zh-TW": "../../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main", "v7.0.1", "v7.0.0", "v6.1.9", "v6.1.8", "v6.1.7", "v6.1.6", "v6.1.5", "v6.1.4", "v6.1.3", "v6.1.2", "v6.1.1", "v6.1.0", "v6.0.2", "v6.0.1", "v6.0.0", "v5.0.0", "v4.1.1", "v4.1.0", "v4.0.0", "v3.0.0", "v2.0.0", "v0.9", "v0.11", "v0.10"];
+  const version_paths = {"main": "../../index.html", "v7.0.1": "index.html", "v7.0.0": "../v7.0.0/index.html", "v6.1.9": "../v6.1.9/index.html", "v6.1.8": "../v6.1.8/index.html", "v6.1.7": "../v6.1.7/index.html", "v6.1.6": "../v6.1.6/index.html", "v6.1.5": "../v6.1.5/index.html", "v6.1.4": "../v6.1.4/index.html", "v6.1.3": "../v6.1.3/index.html", "v6.1.2": "../v6.1.2/index.html", "v6.1.1": "../v6.1.1/index.html", "v6.1.0": "../v6.1.0/index.html", "v6.0.2": "../v6.0.2/index.html", "v6.0.1": "../v6.0.1/index.html", "v6.0.0": "../v6.0.0/index.html", "v5.0.0": "../v5.0.0/index.html", "v4.1.1": "../v4.1.1/index.html", "v4.1.0": "../v4.1.0/index.html", "v4.0.0": "../v4.0.0/index.html", "v3.0.0": "../v3.0.0/index.html", "v2.0.0": "../v2.0.0/index.html", "v0.9": "../v0.9/index.html", "v0.11": "../v0.11/index.html", "v0.10": "../v0.10/index.html"};
+  const currentLang = "en";
+  const currentVersion = "v7.0.1";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

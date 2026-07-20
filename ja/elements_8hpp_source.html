@@ -1,0 +1,661 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: elements.hpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('elements_8hpp_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">elements.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="elements_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2020 Arthur Sonzogni. All rights reserved.</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// このソースコードの使用は、LICENSEファイルにあるMITライセンスによって管理されています。</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#ifndef FTXUI_DOM_ELEMENTS_HPP</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#define FTXUI_DOM_ELEMENTS_HPP</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="canvas_8hpp.html">ftxui/dom/canvas.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="direction_8hpp.html">ftxui/dom/direction.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="flexbox__config_8hpp.html">ftxui/dom/flexbox_config.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="linear__gradient_8hpp.html">ftxui/dom/linear_gradient.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="node_8hpp.html">ftxui/dom/node.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="box_8hpp.html">ftxui/screen/box.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="color_8hpp.html">ftxui/screen/color.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;<a class="code" href="terminal_8hpp.html">ftxui/screen/terminal.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;<a class="code" href="ref_8hpp.html">ftxui/util/ref.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a> {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">class </span>Node;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">   21</a></span><span class="keyword">using </span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> = std::shared_ptr&lt;Node&gt;;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">   22</a></span><span class="keyword">using </span><a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> = std::vector&lt;Element&gt;;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">   23</a></span><span class="keyword">using </span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> = std::function&lt;<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>)&gt;;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno"><a class="line" href="namespaceftxui.html#ab07cb9a766f38fc867f8fe736ce2e6e3">   24</a></span><span class="keyword">using </span><a class="code hl_typedef" href="namespaceftxui.html#ab07cb9a766f38fc867f8fe736ce2e6e3">GraphFunction</a> = std::function&lt;std::vector&lt;int&gt;(<span class="keywordtype">int</span>, <span class="keywordtype">int</span>)&gt;;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"></span> </div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">/// @brief BorderStyleは、ターミナルUIの要素に適用できる様々なボーダースタイルを表す列挙型です。</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">///</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">/// BorderStyleは、ターミナルUIの要素に適用できる様々なボーダースタイルを表す列挙型です。</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">/// ウィンドウ、フレーム、セパレータなどの要素の周囲の境界線の視覚的な外観を定義するために使用されます。</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">/// @ingroup dom</span></div>
+<div class="foldopen" id="foldopen00031" data-start="{" data-end="};">
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno"><a class="line" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">   31</a></span><span class="comment"></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a> {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno"><a class="line" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9caf917d6c11c85b4ac32e30d1cc9da25eb">   32</a></span>  <a class="code hl_enumvalue" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9caf917d6c11c85b4ac32e30d1cc9da25eb">LIGHT</a>,</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca830310bdfd296d7cd00c59773579b892">   33</a></span>  <a class="code hl_enumvalue" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca830310bdfd296d7cd00c59773579b892">DASHED</a>,</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca34cd68a92c52759ed9b545969a11c2da">   34</a></span>  <a class="code hl_enumvalue" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca34cd68a92c52759ed9b545969a11c2da">HEAVY</a>,</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca33465d1d419b1074fb259ef444609e92">   35</a></span>  <a class="code hl_enumvalue" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca33465d1d419b1074fb259ef444609e92">DOUBLE</a>,</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca655074b92b285adff7d18a45748bf493">   36</a></span>  <a class="code hl_enumvalue" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca655074b92b285adff7d18a45748bf493">ROUNDED</a>,</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca2f0d18fc0d0fa4a6cd92dc328501874d">   37</a></span>  <a class="code hl_enumvalue" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca2f0d18fc0d0fa4a6cd92dc328501874d">EMPTY</a>,</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>};</div>
+</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">// 要素をデコレータにまとめてパイプします。</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">// 例えば、次の行は同等です。</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">// -&gt; text(&quot;ftxui&quot;) | bold | underlined</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment">// -&gt; underlined(bold(text(&quot;FTXUI&quot;)))</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a9c4cf8bcb7012f740b146bfe89cbd3eb">operator|</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>, <a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&amp; <a class="code hl_function" href="namespaceftxui.html#ade35e69d695327db85be01c9787c39f8">operator|=</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&amp;, <a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> <a class="code hl_function" href="namespaceftxui.html#a9c4cf8bcb7012f740b146bfe89cbd3eb">operator|</a>(<a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>, <a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#a9c4cf8bcb7012f740b146bfe89cbd3eb">operator|</a>(<a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>, <a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a>);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">// --- ウィジェット ---</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(std::string text);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga9f9f7485a45aa9d432726ca9845d1eac">vtext</a>(std::string text);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="namespaceftxui.html#ac1ef1cf6bf7cd0759ffa195071edb2a0">   52</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#ac1ef1cf6bf7cd0759ffa195071edb2a0">separator</a>();</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a37c2b93daf557f68064bc9fbf93ebde0">   53</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a37c2b93daf557f68064bc9fbf93ebde0">separatorLight</a>();</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga81f2d3256c0cfbc70f820129286f08c6">separatorDashed</a>();</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="namespaceftxui.html#af0649e89a9960f1c2703e48c1817645b">   55</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#af0649e89a9960f1c2703e48c1817645b">separatorHeavy</a>();</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gadd376830fdb51b0bf52672ef17515989">separatorDouble</a>();</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga1934703e56ab66f6f259b9f8da331f1b">separatorEmpty</a>();</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga13cb559cfc7e409b3f211f0bb35ea7fa">separatorStyled</a>(<a class="code hl_enumeration" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a>);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="namespaceftxui.html#aa0e5364767764045f44e7e3191b40cdd">   59</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#ac1ef1cf6bf7cd0759ffa195071edb2a0">separator</a>(<a class="code hl_struct" href="group__screen.html#structftxui_1_1Pixel">Pixel</a>);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a6b9a6baecc9d0176fcf6003dd8985fcc">   60</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a6b9a6baecc9d0176fcf6003dd8985fcc">separatorCharacter</a>(std::string);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a50413065cee4757447b35c3a500667d3">   61</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a50413065cee4757447b35c3a500667d3">separatorHSelector</a>(<span class="keywordtype">float</span> <a class="code hl_variable" href="screen_8cpp.html#a972107f15f3c0c099eb9fd605e7f51c6">left</a>,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                           <span class="keywordtype">float</span> <a class="code hl_variable" href="screen_8cpp.html#aa4b74e56e675912bbc06504407fc7a46">right</a>,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                           <a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a> unselected_color,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                           <a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a> selected_color);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a1a0211233bacd4eb4d31a8e3d58b5f48">   65</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a1a0211233bacd4eb4d31a8e3d58b5f48">separatorVSelector</a>(<span class="keywordtype">float</span> up,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                           <span class="keywordtype">float</span> <a class="code hl_variable" href="screen_8cpp.html#a9cdd0454d64ec151b59fdd7d22ed505a">down</a>,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                           <a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a> unselected_color,</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                           <a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a> selected_color);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gae0b8041a60629fd790716038738c93ce">gauge</a>(<span class="keywordtype">float</span> progress);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga97898b9f77b3edd330eaef22fce7cf2b">gaugeLeft</a>(<span class="keywordtype">float</span> progress);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga333d781a44885ed4b5ea8444015b86f7">gaugeRight</a>(<span class="keywordtype">float</span> progress);</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga6e9a97b66c14404a2b3f95f4dae414c2">gaugeUp</a>(<span class="keywordtype">float</span> progress);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gafe537f915cac5613261580bae3a8fe33">gaugeDown</a>(<span class="keywordtype">float</span> progress);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga1265cc8a52448e1b98d7abe84a04681e">gaugeDirection</a>(<span class="keywordtype">float</span> progress, <a class="code hl_enumeration" href="group__dom.html#ga224b9163917ac32fc95a60d8c1eec3aa">Direction</a> direction);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a76bce7ce913f693d9b42bc0cf05168b0">   75</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a76bce7ce913f693d9b42bc0cf05168b0">border</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="namespaceftxui.html#aec889eb456bfab7e10466094f17b8a01">   76</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#aec889eb456bfab7e10466094f17b8a01">borderLight</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a9fcda03e190d259a112e8cc59d6fe5f7">   77</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a9fcda03e190d259a112e8cc59d6fe5f7">borderDashed</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a6e036e08f6d7fb0fab357e507d8e93c5">   78</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a6e036e08f6d7fb0fab357e507d8e93c5">borderHeavy</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="namespaceftxui.html#aa9fef74a23ad0b0c3f60e91cf492b9cc">   79</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#aa9fef74a23ad0b0c3f60e91cf492b9cc">borderDouble</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a7d1c72debf1c34927e827c31b158270d">   80</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a7d1c72debf1c34927e827c31b158270d">borderRounded</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a4589584fd22c1d4321b88cfeac98d78a">   81</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a4589584fd22c1d4321b88cfeac98d78a">borderEmpty</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a9660a12c5ce44143bcc3b32f9759ab75">   82</a></span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#a9660a12c5ce44143bcc3b32f9759ab75">borderStyled</a>(<a class="code hl_enumeration" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a>);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a2fdd7febcdb0c79fa31108f4e125535a">   83</a></span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#a9660a12c5ce44143bcc3b32f9759ab75">borderStyled</a>(<a class="code hl_enumeration" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a>, <a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a>);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="namespaceftxui.html#aa4a82eda10ab6068778bc0e1dc5e0da4">   84</a></span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#a9660a12c5ce44143bcc3b32f9759ab75">borderStyled</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a>);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="namespaceftxui.html#ac506f4da05a5820304f37b2830ca4083">   85</a></span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#ac506f4da05a5820304f37b2830ca4083">borderWith</a>(<span class="keyword">const</span> <a class="code hl_struct" href="group__screen.html#structftxui_1_1Pixel">Pixel</a>&amp;);</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">   86</a></span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">window</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> title, <a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> content, <a class="code hl_enumeration" href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">BorderStyle</a> border = <a class="code hl_enumvalue" href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca655074b92b285adff7d18a45748bf493">ROUNDED</a>);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga3b08e0030a0831d3ec3e2a505908273b">spinner</a>(<span class="keywordtype">int</span> charset_index, <span class="keywordtype">size_t</span> image_index);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#ac54cdd05db30871ce082a8fa650545da">paragraph</a>(<span class="keyword">const</span> std::string&amp; text);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gaa334a836eccc573e1137a1ba29d07d8a">paragraphAlignLeft</a>(<span class="keyword">const</span> std::string&amp; text);</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga28a69f06a88c89fe7a507e33ab486411">paragraphAlignRight</a>(<span class="keyword">const</span> std::string&amp; text);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga6a105f6b0d07d7933379ff1ae9282fb8">paragraphAlignCenter</a>(<span class="keyword">const</span> std::string&amp; text);</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gae4de548aa67ab77cb345e4ddec6b248b">paragraphAlignJustify</a>(<span class="keyword">const</span> std::string&amp; text);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#ae78c2b2b147e65701493465f8e3f4d89">graph</a>(<a class="code hl_typedef" href="namespaceftxui.html#ab07cb9a766f38fc867f8fe736ce2e6e3">GraphFunction</a>);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga40451515a5b3049e7a1276cad8b9356c">emptyElement</a>();</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a57d7bdf155e190de514a689abb4e9a35">canvas</a>(<a class="code hl_class" href="classftxui_1_1ConstRef.html">ConstRef&lt;Canvas&gt;</a>);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a57d7bdf155e190de514a689abb4e9a35">canvas</a>(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height, std::function&lt;<span class="keywordtype">void</span>(<a class="code hl_struct" href="group__dom.html#structftxui_1_1Canvas">Canvas</a>&amp;)&gt;);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a57d7bdf155e190de514a689abb4e9a35">canvas</a>(std::function&lt;<span class="keywordtype">void</span>(<a class="code hl_struct" href="group__dom.html#structftxui_1_1Canvas">Canvas</a>&amp;)&gt;);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">// -- デコレーター ---</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga353c769068e25303eb41fa2da565c604">bold</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gac6a3b77604739516e809369810896646">dim</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga8a8d190765de7bbd9e78f9e639c2a96d">italic</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga672456b8f2091b615a30ff755418b37b">inverted</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga5ad450c97c4d084b64ffb5b5ca942664">underlined</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga16d1b74107610750276499ddb3dde8da">underlinedDouble</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gad57613de5895e774218d91dea48d074b">blink</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga8594d70f0491def903370e86132fbf01">strikethrough</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a>);</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#ga01d4c5aaf0447e862246849111782245">bgcolor</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a>);</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<span class="keyword">const</span> <a class="code hl_struct" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a>&amp;);</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#ga01d4c5aaf0447e862246849111782245">bgcolor</a>(<span class="keyword">const</span> <a class="code hl_struct" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a>&amp;);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a>, <a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga01d4c5aaf0447e862246849111782245">bgcolor</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a>, <a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<span class="keyword">const</span> <a class="code hl_struct" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a>&amp;, <a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga01d4c5aaf0447e862246849111782245">bgcolor</a>(<span class="keyword">const</span> <a class="code hl_struct" href="group__dom.html#structftxui_1_1LinearGradient">LinearGradient</a>&amp;, <a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#ga78447ba1ccb792963ad6d306f4ed1256">focusPosition</a>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#ga13befad33cb4125e2143f2af3eddcc71">focusPositionRelative</a>(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y);</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gaca42bd6c44d8d366d5c1014330402086">automerge</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child);</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#gad0eac58eac9e6cd9a04879b20f8e123b">hyperlink</a>(std::string link);</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gad0eac58eac9e6cd9a04879b20f8e123b">hyperlink</a>(std::string link, <a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#aa7e1317c76cefc5018503de4f6e09ea3">selectionStyleReset</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#a925a73b7f0eb4b5bc11af23f4ca18019">selectionColor</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a> foreground);</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#a6c965b8f6450a50a938120b5f6ddea96">selectionBackgroundColor</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a> foreground);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#a5d98498c51cfbc03f37e46d46ec8acf5">selectionForegroundColor</a>(<a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a> foreground);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#a4080865d947eea48cf695531f66a5160">selectionStyle</a>(std::function&lt;<span class="keywordtype">void</span>(<a class="code hl_struct" href="group__screen.html#structftxui_1_1Pixel">Pixel</a>&amp;)&gt; style);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">// --- レイアウト</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">// 水平、垂直、または積み重ねられた要素のセット。</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">hbox</a>(<a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>);</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gafd28058f0ccbbdf34691a85a7cc9b2e3">vbox</a>(<a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>);</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga901ab1b6b2e0e8c295552168ab206441">dbox</a>(<a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>);</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a168a235aa438b6c72df5861322154be3">flexbox</a>(<a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>, <a class="code hl_struct" href="group__dom.html#structftxui_1_1FlexboxConfig">FlexboxConfig</a> config = <a class="code hl_struct" href="group__dom.html#structftxui_1_1FlexboxConfig">FlexboxConfig</a>());</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#abcdf409d605edafd3191cd7ba47bcbd1">gridbox</a>(std::vector&lt;Elements&gt; lines);</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a345b31919048562675615d5af78e6322">hflow</a>(<a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>);  <span class="comment">// Helper: default flexbox with row direction.</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#ae0da51b614e95a0687727644b5898a23">vflow</a>(<a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a>);  <span class="comment">// Helper: default flexbox with column direction.</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment">// -- 柔軟性 ---</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment">// コンテナ内で全てのスペースが使用されない場合に、残りのスペースをどのように共有するかを定義します。</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga257acd2bd47bab7db879cca2c0e67e23">flex</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);         <span class="comment">// 可能/必要に応じて拡大/縮小します。</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga81ed6b31f512e849247f13d249f6f20e">flex_grow</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);    <span class="comment">// 可能であれば要素を拡大します。</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga4629196b5ffc280054d35f2a9977e829">flex_shrink</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);  <span class="comment">// 必要であれば要素を最小化します。</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga0dbba98e14f63f1dd5163cbdc4f42da8">xflex</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);         <span class="comment">// X軸上で可能/必要に応じて拡大/縮小します。</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga1618cb15307f29eb3d531e7b44c280d3">xflex_grow</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);    <span class="comment">// X軸上で可能であれば要素を拡大します。</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga95275a9271934cf76e970c6650cc224d">xflex_shrink</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);  <span class="comment">// X軸上で必要であれば要素を最小化します。</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga42c7a33df6d890de30fc1ebb2d1b3ca6">yflex</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);         <span class="comment">// Y軸上で可能/必要に応じて拡大/縮小します。</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga7eac3f709e905af8f583aed52093b7ce">yflex_grow</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);    <span class="comment">// Y軸上で可能であれば要素を拡大します。</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gaf7d0757f5965aa579bccc125ff909256">yflex_shrink</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);  <span class="comment">// Y軸上で必要であれば要素を最小化します。</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga845b0ea50d51024aa4e050447b46e1dd">notflex</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);  <span class="comment">// flex属性をリセットします。</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gac2a9ed2d22ec3c8811b61f4a901ed367">filler</a>();          <span class="comment">// 空白の拡張可能な要素。</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="comment">// -- サイズのオーバーライド</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a38b9241136017b93ea2755a49cf0a000">  156</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53">WidthOrHeight</a> { <a class="code hl_enumvalue" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a73c0818986b7c462c2977f57afd00522">WIDTH</a>, <a class="code hl_enumvalue" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a38b9241136017b93ea2755a49cf0a000">HEIGHT</a> };</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno"><a class="line" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926">  157</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926">Constraint</a> { <a class="code hl_enumvalue" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a41b05932cd237b2b133fff1ade85bed5">LESS_THAN</a>, <a class="code hl_enumvalue" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a59a84258a4cb9025b567ee5139455029">EQUAL</a>, <a class="code hl_enumvalue" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a5fae95457121bd697edd588d1b64cc7c">GREATER_THAN</a> };</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_variable" href="string_8cpp.html#a4d43374ddb4d3a44203a443bc6c4c44c">size</a>(<a class="code hl_enumeration" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53">WidthOrHeight</a>, <a class="code hl_enumeration" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926">Constraint</a>, <span class="keywordtype">int</span> value);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment">// --- フレーム ---</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment">// フレームはスクロール可能な領域です。内部領域は外部領域よりも大きくなる可能性があります。</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment">// フォーカスされた要素を見えるようにするために、内部領域がスクロールされます。</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#ad0d6a96f6e1fb6d67d9fa6323062a737">frame</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a2d0617c0912b732f059cf360ac951c49">xframe</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a7ea9d3ceb2a977955125c6e4a6072325">yframe</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gaa2d7d671f184f85e0f396f2610fa6c2e">focus</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="namespaceftxui.html#a9e3e2988ed61a129d82d634ad66f7eb1">select</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> e);  <span class="comment">// 非推奨 - focusのエイリアス。</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment">// --- カーソル ---</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="comment">// これらは`focus`に似ていますが、カーソルの形状も変更します。</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga509ef7e7f8913ea3de7efd45e3301ea1">focusCursorBlock</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gadda589914ba8fe863c905b6566557768">focusCursorBlockBlinking</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga4f89e72e7001064e3eb8189c8317e95b">focusCursorBar</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga085a7c997e7364c5a54e73c7b84145db">focusCursorBarBlinking</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga61e1fe02a18c2b18e31ccc9cd3943823">focusCursorUnderline</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga33637d59d1e52aa06dd2a94162adbfe9">focusCursorUnderlineBlinking</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">// --- その他 ---</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga1974176e676afdb96d203e8e0f579219">vscroll_indicator</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga7f48136f949ccbde722dd93a6de4d0de">hscroll_indicator</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="namespaceftxui.html#aaff8245861617a3d9e846e99de582a63">reflect</a>(Box&amp; box);</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">// |element|を描画する前に、下のピクセルをクリアします。これはdboxとの組み合わせで役立ちます。</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga17a89519e6b87e12b1e5811a702f7847">clear_under</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> element);</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment">// --- ユーティリティ --------------------------------------------------------------------</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gaf7d0d1e44c1a5424e42a5cddceacf7f7">hcenter</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#gad907a8a48bb9f9dfdb06402e9fc12316">vcenter</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga5b11656305fce8427b81daf1c35883f1">center</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga778e52afe28f1978f1f7ef065ed92d6d">align_right</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>);</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> <a class="code hl_function" href="group__dom.html#ga1bfd3885ac8b40dc82a1103725003c07">nothing</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> element);</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="foldopen" id="foldopen00192" data-start="{" data-end="}">
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno"><a class="line" href="namespaceftxui_1_1Dimension.html">  192</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceDimension.html">Dimension</a> {</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno"><a class="line" href="namespaceftxui_1_1Dimension.html#aee138f0b60ddc07682a785f55eb5fda6">  193</a></span><a class="code hl_struct" href="group__screen.html#structftxui_1_1Dimensions">Dimensions</a> <a class="code hl_function" href="namespaceftxui_1_1Dimension.html#aee138f0b60ddc07682a785f55eb5fda6">Fit</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>&amp;, <span class="keywordtype">bool</span> extend_beyond_screen = <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>}  <span class="comment">// namespace Dimension</span></div>
+</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>}  <span class="comment">// namespace ftxui</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">// Make container able to take any number of children as input.</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="preprocessor">#include &quot;ftxui/dom/take_any_args.hpp&quot;</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment">// Include old definitions using wstring.</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="preprocessor">#include &quot;<a class="code" href="dom_2deprecated_8hpp.html">ftxui/dom/deprecated.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="preprocessor">#endif  </span><span class="comment">// FTXUI_DOM_ELEMENTS_HPP</span></div>
+<div class="ttc" id="abox_8hpp_html"><div class="ttname"><a href="box_8hpp.html">box.hpp</a></div></div>
+<div class="ttc" id="acanvas_8hpp_html"><div class="ttname"><a href="canvas_8hpp.html">canvas.hpp</a></div></div>
+<div class="ttc" id="aclassftxui_1_1ConstRef_html"><div class="ttname"><a href="classftxui_1_1ConstRef.html">ftxui::ConstRef</a></div><div class="ttdoc">アダプター。不変オブジェクトを所有または参照します。</div><div class="ttdef"><b>Definition</b> <a href="ref_8hpp_source.html#l00016">ref.hpp:16</a></div></div>
+<div class="ttc" id="acolor_8hpp_html"><div class="ttname"><a href="color_8hpp.html">color.hpp</a></div></div>
+<div class="ttc" id="adirection_8hpp_html"><div class="ttname"><a href="direction_8hpp.html">direction.hpp</a></div></div>
+<div class="ttc" id="adom_2deprecated_8hpp_html"><div class="ttname"><a href="dom_2deprecated_8hpp.html">deprecated.hpp</a></div></div>
+<div class="ttc" id="aflexbox__config_8hpp_html"><div class="ttname"><a href="flexbox__config_8hpp.html">flexbox_config.hpp</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga01d4c5aaf0447e862246849111782245"><div class="ttname"><a href="group__dom.html#ga01d4c5aaf0447e862246849111782245">ftxui::bgcolor</a></div><div class="ttdeci">Decorator bgcolor(Color)</div><div class="ttdoc">背景色を使用して装飾します。</div><div class="ttdef"><b>Definition</b> <a href="dom_2color_8cpp_source.html#l00124">dom/color.cpp:124</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga085a7c997e7364c5a54e73c7b84145db"><div class="ttname"><a href="group__dom.html#ga085a7c997e7364c5a54e73c7b84145db">ftxui::focusCursorBarBlinking</a></div><div class="ttdeci">Element focusCursorBarBlinking(Element)</div><div class="ttdoc">focus と同じですが、カーソル形状を点滅バーに設定します。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00188">frame.cpp:188</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga0dbba98e14f63f1dd5163cbdc4f42da8"><div class="ttname"><a href="group__dom.html#ga0dbba98e14f63f1dd5163cbdc4f42da8">ftxui::xflex</a></div><div class="ttdeci">Element xflex(Element)</div><div class="ttdoc">必要に応じてX軸上で拡大・縮小します。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00126">flex.cpp:126</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga1265cc8a52448e1b98d7abe84a04681e"><div class="ttname"><a href="group__dom.html#ga1265cc8a52448e1b98d7abe84a04681e">ftxui::gaugeDirection</a></div><div class="ttdeci">Element gaugeDirection(float progress, Direction direction)</div><div class="ttdoc">指定された方向に進行する高精細プログレスバーを描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2gauge_8cpp_source.html#l00173">src/ftxui/dom/gauge.cpp:173</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga13befad33cb4125e2143f2af3eddcc71"><div class="ttname"><a href="group__dom.html#ga13befad33cb4125e2143f2af3eddcc71">ftxui::focusPositionRelative</a></div><div class="ttdeci">Decorator focusPositionRelative(float x, float y)</div><div class="ttdoc">frame内で使用され、ビューを特定の位置にスクロールさせます。位置は要求されたサイズの割合で表されます。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2focus_8cpp_source.html#l00028">src/ftxui/dom/focus.cpp:28</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga13cb559cfc7e409b3f211f0bb35ea7fa"><div class="ttname"><a href="group__dom.html#ga13cb559cfc7e409b3f211f0bb35ea7fa">ftxui::separatorStyled</a></div><div class="ttdeci">Element separatorStyled(BorderStyle)</div><div class="ttdoc">他の2つの要素の間に垂直または水平の区切り線を描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2separator_8cpp_source.html#l00152">src/ftxui/dom/separator.cpp:152</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga1618cb15307f29eb3d531e7b44c280d3"><div class="ttname"><a href="group__dom.html#ga1618cb15307f29eb3d531e7b44c280d3">ftxui::xflex_grow</a></div><div class="ttdeci">Element xflex_grow(Element)</div><div class="ttdoc">可能であればX軸上で拡大します。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00144">flex.cpp:144</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga16d1b74107610750276499ddb3dde8da"><div class="ttname"><a href="group__dom.html#ga16d1b74107610750276499ddb3dde8da">ftxui::underlinedDouble</a></div><div class="ttdeci">Element underlinedDouble(Element)</div><div class="ttdoc">テキストに二重下線を適用します。</div><div class="ttdef"><b>Definition</b> <a href="underlined__double_8cpp_source.html#l00016">underlined_double.cpp:16</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga17a89519e6b87e12b1e5811a702f7847"><div class="ttname"><a href="group__dom.html#ga17a89519e6b87e12b1e5811a702f7847">ftxui::clear_under</a></div><div class="ttdeci">Element clear_under(Element element)</div><div class="ttdoc">|child|を描画する前に、下にあるピクセルをクリアします。これは、 dboxと組み合わせて使用すると便利です。</div><div class="ttdef"><b>Definition</b> <a href="clear__under_8cpp_source.html#l00038">clear_under.cpp:38</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga1934703e56ab66f6f259b9f8da331f1b"><div class="ttname"><a href="group__dom.html#ga1934703e56ab66f6f259b9f8da331f1b">ftxui::separatorEmpty</a></div><div class="ttdeci">Element separatorEmpty()</div><div class="ttdoc">他の2つの要素の間にEMPTYスタイルで垂直または水平の区切り線を描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2separator_8cpp_source.html#l00296">src/ftxui/dom/separator.cpp:296</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga1974176e676afdb96d203e8e0f579219"><div class="ttname"><a href="group__dom.html#ga1974176e676afdb96d203e8e0f579219">ftxui::vscroll_indicator</a></div><div class="ttdeci">Element vscroll_indicator(Element)</div><div class="ttdoc">右側に垂直スクロールバーを表示します。 色はコンテンツに従います。</div><div class="ttdef"><b>Definition</b> <a href="scroll__indicator_8cpp_source.html#l00020">scroll_indicator.cpp:20</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga1bfd3885ac8b40dc82a1103725003c07"><div class="ttname"><a href="group__dom.html#ga1bfd3885ac8b40dc82a1103725003c07">ftxui::nothing</a></div><div class="ttdeci">Element nothing(Element element)</div><div class="ttdoc">何も行わないデコレーションです。</div><div class="ttdef"><b>Definition</b> <a href="dom_2util_8cpp_source.html#l00028">dom/util.cpp:28</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga224b9163917ac32fc95a60d8c1eec3aa"><div class="ttname"><a href="group__dom.html#ga224b9163917ac32fc95a60d8c1eec3aa">ftxui::Direction</a></div><div class="ttdeci">Direction</div><div class="ttdoc">Directionは、東西南北の4つの基本方向を表す列挙型です。</div><div class="ttdef"><b>Definition</b> <a href="direction_8hpp_source.html#l00011">direction.hpp:11</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga257acd2bd47bab7db879cca2c0e67e23"><div class="ttname"><a href="group__dom.html#ga257acd2bd47bab7db879cca2c0e67e23">ftxui::flex</a></div><div class="ttdeci">Element flex(Element)</div><div class="ttdoc">子要素をコンテナに残されたスペースに比例して拡大させます。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00120">flex.cpp:120</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga28a69f06a88c89fe7a507e33ab486411"><div class="ttname"><a href="group__dom.html#ga28a69f06a88c89fe7a507e33ab486411">ftxui::paragraphAlignRight</a></div><div class="ttdeci">Element paragraphAlignRight(const std::string &amp;text)</div><div class="ttdoc">段落を複数行にわたって右揃えで描画する要素を返します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2paragraph_8cpp_source.html#l00057">src/ftxui/dom/paragraph.cpp:57</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga333d781a44885ed4b5ea8444015b86f7"><div class="ttname"><a href="group__dom.html#ga333d781a44885ed4b5ea8444015b86f7">ftxui::gaugeRight</a></div><div class="ttdeci">Element gaugeRight(float progress)</div><div class="ttdoc">左から右へ進行する高精細プログレスバーを描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2gauge_8cpp_source.html#l00195">src/ftxui/dom/gauge.cpp:195</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga33637d59d1e52aa06dd2a94162adbfe9"><div class="ttname"><a href="group__dom.html#ga33637d59d1e52aa06dd2a94162adbfe9">ftxui::focusCursorUnderlineBlinking</a></div><div class="ttdeci">Element focusCursorUnderlineBlinking(Element)</div><div class="ttdoc">focus と同じですが、カーソル形状を点滅下線に設定します。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00216">frame.cpp:216</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga353c769068e25303eb41fa2da565c604"><div class="ttname"><a href="group__dom.html#ga353c769068e25303eb41fa2da565c604">ftxui::bold</a></div><div class="ttdeci">Element bold(Element)</div><div class="ttdoc">より強調したい要素に、太字フォントを使用します。</div><div class="ttdef"><b>Definition</b> <a href="bold_8cpp_source.html#l00033">bold.cpp:33</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga3b08e0030a0831d3ec3e2a505908273b"><div class="ttname"><a href="group__dom.html#ga3b08e0030a0831d3ec3e2a505908273b">ftxui::spinner</a></div><div class="ttdeci">Element spinner(int charset_index, size_t image_index)</div><div class="ttdoc">時間やイベントの効果を表現するのに便利です。これはアスキーアートの「ビデオ」を表示します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2spinner_8cpp_source.html#l00280">src/ftxui/dom/spinner.cpp:280</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga40451515a5b3049e7a1276cad8b9356c"><div class="ttname"><a href="group__dom.html#ga40451515a5b3049e7a1276cad8b9356c">ftxui::emptyElement</a></div><div class="ttdeci">Element emptyElement()</div><div class="ttdef"><b>Definition</b> <a href="dom_2util_8cpp_source.html#l00140">dom/util.cpp:140</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga42c7a33df6d890de30fc1ebb2d1b3ca6"><div class="ttname"><a href="group__dom.html#ga42c7a33df6d890de30fc1ebb2d1b3ca6">ftxui::yflex</a></div><div class="ttdeci">Element yflex(Element)</div><div class="ttdoc">必要に応じてY軸上で拡大・縮小します。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00132">flex.cpp:132</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga4629196b5ffc280054d35f2a9977e829"><div class="ttname"><a href="group__dom.html#ga4629196b5ffc280054d35f2a9977e829">ftxui::flex_shrink</a></div><div class="ttdeci">Element flex_shrink(Element)</div><div class="ttdoc">必要であれば最小化します。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00156">flex.cpp:156</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga4f89e72e7001064e3eb8189c8317e95b"><div class="ttname"><a href="group__dom.html#ga4f89e72e7001064e3eb8189c8317e95b">ftxui::focusCursorBar</a></div><div class="ttdeci">Element focusCursorBar(Element)</div><div class="ttdoc">focus と同じですが、カーソル形状を静止ブロックに設定します。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00174">frame.cpp:174</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga509ef7e7f8913ea3de7efd45e3301ea1"><div class="ttname"><a href="group__dom.html#ga509ef7e7f8913ea3de7efd45e3301ea1">ftxui::focusCursorBlock</a></div><div class="ttdeci">Element focusCursorBlock(Element)</div><div class="ttdoc">focus と同じですが、カーソル形状を静止ブロックに設定します。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00146">frame.cpp:146</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga5ad450c97c4d084b64ffb5b5ca942664"><div class="ttname"><a href="group__dom.html#ga5ad450c97c4d084b64ffb5b5ca942664">ftxui::underlined</a></div><div class="ttdeci">Element underlined(Element)</div><div class="ttdoc">指定された要素に下線を追加します。</div><div class="ttdef"><b>Definition</b> <a href="underlined_8cpp_source.html#l00032">underlined.cpp:32</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga5b11656305fce8427b81daf1c35883f1"><div class="ttname"><a href="group__dom.html#ga5b11656305fce8427b81daf1c35883f1">ftxui::center</a></div><div class="ttdeci">Element center(Element)</div><div class="ttdoc">要素を水平方向および垂直方向に中央揃えします。</div><div class="ttdef"><b>Definition</b> <a href="composite__decorator_8cpp_source.html#l00031">composite_decorator.cpp:31</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga61e1fe02a18c2b18e31ccc9cd3943823"><div class="ttname"><a href="group__dom.html#ga61e1fe02a18c2b18e31ccc9cd3943823">ftxui::focusCursorUnderline</a></div><div class="ttdeci">Element focusCursorUnderline(Element)</div><div class="ttdoc">focus と同じですが、カーソル形状を静止下線に設定します。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00202">frame.cpp:202</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga672456b8f2091b615a30ff755418b37b"><div class="ttname"><a href="group__dom.html#ga672456b8f2091b615a30ff755418b37b">ftxui::inverted</a></div><div class="ttdeci">Element inverted(Element)</div><div class="ttdoc">前景色と背景色を反転させるフィルターを追加します。</div><div class="ttdef"><b>Definition</b> <a href="inverted_8cpp_source.html#l00032">inverted.cpp:32</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga6a105f6b0d07d7933379ff1ae9282fb8"><div class="ttname"><a href="group__dom.html#ga6a105f6b0d07d7933379ff1ae9282fb8">ftxui::paragraphAlignCenter</a></div><div class="ttdeci">Element paragraphAlignCenter(const std::string &amp;text)</div><div class="ttdoc">段落を複数行にわたって中央揃えで描画する要素を返します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2paragraph_8cpp_source.html#l00068">src/ftxui/dom/paragraph.cpp:68</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga6e9a97b66c14404a2b3f95f4dae414c2"><div class="ttname"><a href="group__dom.html#ga6e9a97b66c14404a2b3f95f4dae414c2">ftxui::gaugeUp</a></div><div class="ttdeci">Element gaugeUp(float progress)</div><div class="ttdoc">下から上へ進行する高精細プログレスバーを描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2gauge_8cpp_source.html#l00246">src/ftxui/dom/gauge.cpp:246</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga75baaa2734ed76a9f478beaafa87ae57"><div class="ttname"><a href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">ftxui::text</a></div><div class="ttdeci">Element text(std::wstring text)</div><div class="ttdoc">ユニコードテキストを表示します。</div><div class="ttdef"><b>Definition</b> <a href="text_8cpp_source.html#l00160">text.cpp:160</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga778e52afe28f1978f1f7ef065ed92d6d"><div class="ttname"><a href="group__dom.html#ga778e52afe28f1978f1f7ef065ed92d6d">ftxui::align_right</a></div><div class="ttdeci">Element align_right(Element)</div><div class="ttdoc">要素を右側に揃えます。</div><div class="ttdef"><b>Definition</b> <a href="composite__decorator_8cpp_source.html#l00039">composite_decorator.cpp:39</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga78447ba1ccb792963ad6d306f4ed1256"><div class="ttname"><a href="group__dom.html#ga78447ba1ccb792963ad6d306f4ed1256">ftxui::focusPosition</a></div><div class="ttdeci">Decorator focusPosition(int x, int y)</div><div class="ttdoc">frame内で使用され、ビューを特定の位置にスクロールさせます。位置はセル数で表されます。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2focus_8cpp_source.html#l00065">src/ftxui/dom/focus.cpp:65</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga7eac3f709e905af8f583aed52093b7ce"><div class="ttname"><a href="group__dom.html#ga7eac3f709e905af8f583aed52093b7ce">ftxui::yflex_grow</a></div><div class="ttdeci">Element yflex_grow(Element)</div><div class="ttdoc">可能であればY軸上で拡大します。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00150">flex.cpp:150</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga7f48136f949ccbde722dd93a6de4d0de"><div class="ttname"><a href="group__dom.html#ga7f48136f949ccbde722dd93a6de4d0de">ftxui::hscroll_indicator</a></div><div class="ttdeci">Element hscroll_indicator(Element)</div><div class="ttdoc">下部に水平スクロールバーを表示します。 色はコンテンツに従います。</div><div class="ttdef"><b>Definition</b> <a href="scroll__indicator_8cpp_source.html#l00075">scroll_indicator.cpp:75</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga81ed6b31f512e849247f13d249f6f20e"><div class="ttname"><a href="group__dom.html#ga81ed6b31f512e849247f13d249f6f20e">ftxui::flex_grow</a></div><div class="ttdeci">Element flex_grow(Element)</div><div class="ttdoc">可能であれば拡大します。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00138">flex.cpp:138</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga81f2d3256c0cfbc70f820129286f08c6"><div class="ttname"><a href="group__dom.html#ga81f2d3256c0cfbc70f820129286f08c6">ftxui::separatorDashed</a></div><div class="ttdeci">Element separatorDashed()</div><div class="ttdoc">他の2つの要素の間にLIGHTスタイルで垂直または水平の区切り線を描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2separator_8cpp_source.html#l00206">src/ftxui/dom/separator.cpp:206</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga845b0ea50d51024aa4e050447b46e1dd"><div class="ttname"><a href="group__dom.html#ga845b0ea50d51024aa4e050447b46e1dd">ftxui::notflex</a></div><div class="ttdeci">Element notflex(Element)</div><div class="ttdoc">要素を柔軟にしないようにします。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00174">flex.cpp:174</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga8594d70f0491def903370e86132fbf01"><div class="ttname"><a href="group__dom.html#ga8594d70f0491def903370e86132fbf01">ftxui::strikethrough</a></div><div class="ttdeci">Element strikethrough(Element)</div><div class="ttdoc">テキストに打ち消し線を適用します。</div><div class="ttdef"><b>Definition</b> <a href="strikethrough_8cpp_source.html#l00016">strikethrough.cpp:16</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga8a8d190765de7bbd9e78f9e639c2a96d"><div class="ttname"><a href="group__dom.html#ga8a8d190765de7bbd9e78f9e639c2a96d">ftxui::italic</a></div><div class="ttdeci">Element italic(Element)</div><div class="ttdoc">テキストに斜体を適用します。</div><div class="ttdef"><b>Definition</b> <a href="italic_8cpp_source.html#l00016">italic.cpp:16</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga901ab1b6b2e0e8c295552168ab206441"><div class="ttname"><a href="group__dom.html#ga901ab1b6b2e0e8c295552168ab206441">ftxui::dbox</a></div><div class="ttdeci">Element dbox(Elements)</div><div class="ttdoc">複数の要素を重ねて表示します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2dbox_8cpp_source.html#l00055">src/ftxui/dom/dbox.cpp:55</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga95275a9271934cf76e970c6650cc224d"><div class="ttname"><a href="group__dom.html#ga95275a9271934cf76e970c6650cc224d">ftxui::xflex_shrink</a></div><div class="ttdeci">Element xflex_shrink(Element)</div><div class="ttdoc">必要であればX軸上で最小化します。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00162">flex.cpp:162</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga97898b9f77b3edd330eaef22fce7cf2b"><div class="ttname"><a href="group__dom.html#ga97898b9f77b3edd330eaef22fce7cf2b">ftxui::gaugeLeft</a></div><div class="ttdeci">Element gaugeLeft(float progress)</div><div class="ttdoc">右から左へ進行する高精細プログレスバーを描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2gauge_8cpp_source.html#l00217">src/ftxui/dom/gauge.cpp:217</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga9f9f7485a45aa9d432726ca9845d1eac"><div class="ttname"><a href="group__dom.html#ga9f9f7485a45aa9d432726ca9845d1eac">ftxui::vtext</a></div><div class="ttdeci">Element vtext(std::wstring text)</div><div class="ttdoc">ユニコードテキストを垂直に表示します。</div><div class="ttdef"><b>Definition</b> <a href="text_8cpp_source.html#l00220">text.cpp:220</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaa2d7d671f184f85e0f396f2610fa6c2e"><div class="ttname"><a href="group__dom.html#gaa2d7d671f184f85e0f396f2610fa6c2e">ftxui::focus</a></div><div class="ttdeci">Element focus(Element)</div><div class="ttdoc">子要素を兄弟要素の中でフォーカスされたものとして設定します。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00101">frame.cpp:101</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaa334a836eccc573e1137a1ba29d07d8a"><div class="ttname"><a href="group__dom.html#gaa334a836eccc573e1137a1ba29d07d8a">ftxui::paragraphAlignLeft</a></div><div class="ttdeci">Element paragraphAlignLeft(const std::string &amp;text)</div><div class="ttdoc">段落を複数行にわたって左揃えで描画する要素を返します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2paragraph_8cpp_source.html#l00047">src/ftxui/dom/paragraph.cpp:47</a></div></div>
+<div class="ttc" id="agroup__dom_html_gac2a9ed2d22ec3c8811b61f4a901ed367"><div class="ttname"><a href="group__dom.html#gac2a9ed2d22ec3c8811b61f4a901ed367">ftxui::filler</a></div><div class="ttdeci">Element filler()</div><div class="ttdoc">コンテナに残されたスペースに比例して拡大する要素。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00096">flex.cpp:96</a></div></div>
+<div class="ttc" id="agroup__dom_html_gac6a3b77604739516e809369810896646"><div class="ttname"><a href="group__dom.html#gac6a3b77604739516e809369810896646">ftxui::dim</a></div><div class="ttdeci">Element dim(Element)</div><div class="ttdoc">強調を抑えたい要素に、明るいフォントを使用します。</div><div class="ttdef"><b>Definition</b> <a href="dim_8cpp_source.html#l00033">dim.cpp:33</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaca42bd6c44d8d366d5c1014330402086"><div class="ttname"><a href="group__dom.html#gaca42bd6c44d8d366d5c1014330402086">ftxui::automerge</a></div><div class="ttdeci">Element automerge(Element child)</div><div class="ttdoc">文字が近くの他の文字と自動的にマージされるようにします。</div><div class="ttdef"><b>Definition</b> <a href="automerge_8cpp_source.html#l00016">automerge.cpp:16</a></div></div>
+<div class="ttc" id="agroup__dom_html_gad0eac58eac9e6cd9a04879b20f8e123b"><div class="ttname"><a href="group__dom.html#gad0eac58eac9e6cd9a04879b20f8e123b">ftxui::hyperlink</a></div><div class="ttdeci">Decorator hyperlink(std::string link)</div><div class="ttdoc">ハイパーリンクを使用して装飾します。 ユーザーがクリックするとリンクが開きます。 これは、限られたターミナルエミュレータでのみサポートされています。 リスト: https://github....</div><div class="ttdef"><b>Definition</b> <a href="hyperlink_8cpp_source.html#l00069">hyperlink.cpp:69</a></div></div>
+<div class="ttc" id="agroup__dom_html_gad57613de5895e774218d91dea48d074b"><div class="ttname"><a href="group__dom.html#gad57613de5895e774218d91dea48d074b">ftxui::blink</a></div><div class="ttdeci">Element blink(Element)</div><div class="ttdoc">描画されたテキストは、可視と非可視の間で交互に切り替わります。</div><div class="ttdef"><b>Definition</b> <a href="blink_8cpp_source.html#l00033">blink.cpp:33</a></div></div>
+<div class="ttc" id="agroup__dom_html_gad907a8a48bb9f9dfdb06402e9fc12316"><div class="ttname"><a href="group__dom.html#gad907a8a48bb9f9dfdb06402e9fc12316">ftxui::vcenter</a></div><div class="ttdeci">Element vcenter(Element)</div><div class="ttdoc">要素を垂直方向に中央揃えします。</div><div class="ttdef"><b>Definition</b> <a href="composite__decorator_8cpp_source.html#l00023">composite_decorator.cpp:23</a></div></div>
+<div class="ttc" id="agroup__dom_html_gadd376830fdb51b0bf52672ef17515989"><div class="ttname"><a href="group__dom.html#gadd376830fdb51b0bf52672ef17515989">ftxui::separatorDouble</a></div><div class="ttdeci">Element separatorDouble()</div><div class="ttdoc">他の2つの要素の間にHEAVYスタイルで垂直または水平の区切り線を描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2separator_8cpp_source.html#l00260">src/ftxui/dom/separator.cpp:260</a></div></div>
+<div class="ttc" id="agroup__dom_html_gadda589914ba8fe863c905b6566557768"><div class="ttname"><a href="group__dom.html#gadda589914ba8fe863c905b6566557768">ftxui::focusCursorBlockBlinking</a></div><div class="ttdeci">Element focusCursorBlockBlinking(Element)</div><div class="ttdoc">focus と同じですが、カーソル形状を点滅ブロックに設定します。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00160">frame.cpp:160</a></div></div>
+<div class="ttc" id="agroup__dom_html_gae0b8041a60629fd790716038738c93ce"><div class="ttname"><a href="group__dom.html#gae0b8041a60629fd790716038738c93ce">ftxui::gauge</a></div><div class="ttdeci">Element gauge(float progress)</div><div class="ttdoc">高精細プログレスバーを描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2gauge_8cpp_source.html#l00297">src/ftxui/dom/gauge.cpp:297</a></div></div>
+<div class="ttc" id="agroup__dom_html_gae4de548aa67ab77cb345e4ddec6b248b"><div class="ttname"><a href="group__dom.html#gae4de548aa67ab77cb345e4ddec6b248b">ftxui::paragraphAlignJustify</a></div><div class="ttdeci">Element paragraphAlignJustify(const std::string &amp;text)</div><div class="ttdoc">段落を複数行にわたって両端揃えで描画する要素を返します。 中央に。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2paragraph_8cpp_source.html#l00080">src/ftxui/dom/paragraph.cpp:80</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaf61b489da39ca5e24b68e6e1a2b09c0d"><div class="ttname"><a href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">ftxui::color</a></div><div class="ttdeci">Decorator color(Color)</div><div class="ttdoc">前景色を使用して装飾します。</div><div class="ttdef"><b>Definition</b> <a href="dom_2color_8cpp_source.html#l00110">dom/color.cpp:110</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaf7d0757f5965aa579bccc125ff909256"><div class="ttname"><a href="group__dom.html#gaf7d0757f5965aa579bccc125ff909256">ftxui::yflex_shrink</a></div><div class="ttdeci">Element yflex_shrink(Element)</div><div class="ttdoc">必要であればY軸上で最小化します。</div><div class="ttdef"><b>Definition</b> <a href="flex_8cpp_source.html#l00168">flex.cpp:168</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaf7d0d1e44c1a5424e42a5cddceacf7f7"><div class="ttname"><a href="group__dom.html#gaf7d0d1e44c1a5424e42a5cddceacf7f7">ftxui::hcenter</a></div><div class="ttdeci">Element hcenter(Element)</div><div class="ttdoc">要素を水平方向に中央揃えします。</div><div class="ttdef"><b>Definition</b> <a href="composite__decorator_8cpp_source.html#l00015">composite_decorator.cpp:15</a></div></div>
+<div class="ttc" id="agroup__dom_html_gafd28058f0ccbbdf34691a85a7cc9b2e3"><div class="ttname"><a href="group__dom.html#gafd28058f0ccbbdf34691a85a7cc9b2e3">ftxui::vbox</a></div><div class="ttdeci">Element vbox(Elements)</div><div class="ttdoc">要素を縦に一つずつ表示するコンテナ。</div><div class="ttdef"><b>Definition</b> <a href="vbox_8cpp_source.html#l00094">vbox.cpp:94</a></div></div>
+<div class="ttc" id="agroup__dom_html_gafe3103dd0b8240c5443892484ef5af9c"><div class="ttname"><a href="group__dom.html#gafe3103dd0b8240c5443892484ef5af9c">ftxui::BorderStyle</a></div><div class="ttdeci">BorderStyle</div><div class="ttdoc">BorderStyleは、ターミナルUIの要素に適用できる様々なボーダースタイルを表す列挙型です。</div><div class="ttdef"><b>Definition</b> <a href="#l00031">elements.hpp:31</a></div></div>
+<div class="ttc" id="agroup__dom_html_gafe537f915cac5613261580bae3a8fe33"><div class="ttname"><a href="group__dom.html#gafe537f915cac5613261580bae3a8fe33">ftxui::gaugeDown</a></div><div class="ttdeci">Element gaugeDown(float progress)</div><div class="ttdoc">上から下へ進行する高精細プログレスバーを描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2gauge_8cpp_source.html#l00275">src/ftxui/dom/gauge.cpp:275</a></div></div>
+<div class="ttc" id="agroup__dom_html_ggafe3103dd0b8240c5443892484ef5af9ca2f0d18fc0d0fa4a6cd92dc328501874d"><div class="ttname"><a href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca2f0d18fc0d0fa4a6cd92dc328501874d">ftxui::EMPTY</a></div><div class="ttdeci">@ EMPTY</div><div class="ttdef"><b>Definition</b> <a href="#l00037">elements.hpp:37</a></div></div>
+<div class="ttc" id="agroup__dom_html_ggafe3103dd0b8240c5443892484ef5af9ca33465d1d419b1074fb259ef444609e92"><div class="ttname"><a href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca33465d1d419b1074fb259ef444609e92">ftxui::DOUBLE</a></div><div class="ttdeci">@ DOUBLE</div><div class="ttdef"><b>Definition</b> <a href="#l00035">elements.hpp:35</a></div></div>
+<div class="ttc" id="agroup__dom_html_ggafe3103dd0b8240c5443892484ef5af9ca34cd68a92c52759ed9b545969a11c2da"><div class="ttname"><a href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca34cd68a92c52759ed9b545969a11c2da">ftxui::HEAVY</a></div><div class="ttdeci">@ HEAVY</div><div class="ttdef"><b>Definition</b> <a href="#l00034">elements.hpp:34</a></div></div>
+<div class="ttc" id="agroup__dom_html_ggafe3103dd0b8240c5443892484ef5af9ca655074b92b285adff7d18a45748bf493"><div class="ttname"><a href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca655074b92b285adff7d18a45748bf493">ftxui::ROUNDED</a></div><div class="ttdeci">@ ROUNDED</div><div class="ttdef"><b>Definition</b> <a href="#l00036">elements.hpp:36</a></div></div>
+<div class="ttc" id="agroup__dom_html_ggafe3103dd0b8240c5443892484ef5af9ca830310bdfd296d7cd00c59773579b892"><div class="ttname"><a href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9ca830310bdfd296d7cd00c59773579b892">ftxui::DASHED</a></div><div class="ttdeci">@ DASHED</div><div class="ttdef"><b>Definition</b> <a href="#l00033">elements.hpp:33</a></div></div>
+<div class="ttc" id="agroup__dom_html_ggafe3103dd0b8240c5443892484ef5af9caf917d6c11c85b4ac32e30d1cc9da25eb"><div class="ttname"><a href="group__dom.html#ggafe3103dd0b8240c5443892484ef5af9caf917d6c11c85b4ac32e30d1cc9da25eb">ftxui::LIGHT</a></div><div class="ttdeci">@ LIGHT</div><div class="ttdef"><b>Definition</b> <a href="#l00032">elements.hpp:32</a></div></div>
+<div class="ttc" id="agroup__dom_html_structftxui_1_1Canvas"><div class="ttname"><a href="group__dom.html#structftxui_1_1Canvas">ftxui::Canvas</a></div><div class="ttdoc">Canvasは、描画操作に関連付けられた描画可能なバッファです。</div><div class="ttdef"><b>Definition</b> <a href="canvas_8hpp_source.html#l00036">canvas.hpp:36</a></div></div>
+<div class="ttc" id="agroup__dom_html_structftxui_1_1FlexboxConfig"><div class="ttname"><a href="group__dom.html#structftxui_1_1FlexboxConfig">ftxui::FlexboxConfig</a></div><div class="ttdoc">FlexboxConfigは、flexboxコンテナのレイアウトプロパティを定義する構成構造体です。</div><div class="ttdef"><b>Definition</b> <a href="flexbox__config_8hpp_source.html#l00024">flexbox_config.hpp:24</a></div></div>
+<div class="ttc" id="agroup__dom_html_structftxui_1_1LinearGradient"><div class="ttname"><a href="group__dom.html#structftxui_1_1LinearGradient">ftxui::LinearGradient</a></div><div class="ttdoc">線形グラデーションカラー効果の設定を表すクラスです。</div><div class="ttdef"><b>Definition</b> <a href="linear__gradient_8hpp_source.html#l00031">linear_gradient.hpp:31</a></div></div>
+<div class="ttc" id="agroup__screen_html_classftxui_1_1Color"><div class="ttname"><a href="group__screen.html#classftxui_1_1Color">ftxui::Color</a></div><div class="ttdoc">Colorは、ターミナルユーザーインターフェースにおける色を表すクラスです。</div><div class="ttdef"><b>Definition</b> <a href="color_8hpp_source.html#l00025">color.hpp:25</a></div></div>
+<div class="ttc" id="agroup__screen_html_structftxui_1_1Dimensions"><div class="ttname"><a href="group__screen.html#structftxui_1_1Dimensions">ftxui::Dimensions</a></div><div class="ttdoc">Dimensionsは、ターミナルのサイズを表す構造体です。</div><div class="ttdef"><b>Definition</b> <a href="terminal_8hpp_source.html#l00010">terminal.hpp:10</a></div></div>
+<div class="ttc" id="agroup__screen_html_structftxui_1_1Pixel"><div class="ttname"><a href="group__screen.html#structftxui_1_1Pixel">ftxui::Pixel</a></div><div class="ttdoc">Unicode文字とそれに関連付けられたスタイル。</div><div class="ttdef"><b>Definition</b> <a href="pixel_8hpp_source.html#l00014">pixel.hpp:14</a></div></div>
+<div class="ttc" id="alinear__gradient_8hpp_html"><div class="ttname"><a href="linear__gradient_8hpp.html">linear_gradient.hpp</a></div></div>
+<div class="ttc" id="anamespaceDimension_html"><div class="ttname"><a href="namespaceDimension.html">Dimension</a></div><div class="ttdoc">FTXUI ftxui::Dimension::名前空間</div></div>
+<div class="ttc" id="anamespaceftxui_1_1Dimension_html_aee138f0b60ddc07682a785f55eb5fda6"><div class="ttname"><a href="namespaceftxui_1_1Dimension.html#aee138f0b60ddc07682a785f55eb5fda6">ftxui::Dimension::Fit</a></div><div class="ttdeci">Dimensions Fit(Element &amp;, bool extend_beyond_screen=false)</div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">FTXUI ftxui:: 名前空間</div><div class="ttdef"><b>Definition</b> <a href="animation_8hpp_source.html#l00009">animation.hpp:9</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a04711c04f28aabfa0e5928a35baaec53"><div class="ttname"><a href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53">ftxui::WidthOrHeight</a></div><div class="ttdeci">WidthOrHeight</div><div class="ttdef"><b>Definition</b> <a href="#l00156">elements.hpp:156</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a04711c04f28aabfa0e5928a35baaec53a38b9241136017b93ea2755a49cf0a000"><div class="ttname"><a href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a38b9241136017b93ea2755a49cf0a000">ftxui::HEIGHT</a></div><div class="ttdeci">@ HEIGHT</div><div class="ttdef"><b>Definition</b> <a href="#l00156">elements.hpp:156</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a04711c04f28aabfa0e5928a35baaec53a73c0818986b7c462c2977f57afd00522"><div class="ttname"><a href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a73c0818986b7c462c2977f57afd00522">ftxui::WIDTH</a></div><div class="ttdeci">@ WIDTH</div><div class="ttdef"><b>Definition</b> <a href="#l00156">elements.hpp:156</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a164021903e9ac6f1357e4186582891e3"><div class="ttname"><a href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">ftxui::Decorator</a></div><div class="ttdeci">std::function&lt; Element(Element)&gt; Decorator</div><div class="ttdef"><b>Definition</b> <a href="#l00023">elements.hpp:23</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a168a235aa438b6c72df5861322154be3"><div class="ttname"><a href="namespaceftxui.html#a168a235aa438b6c72df5861322154be3">ftxui::flexbox</a></div><div class="ttdeci">Element flexbox(Elements, FlexboxConfig config=FlexboxConfig())</div><div class="ttdoc">行/列に要素を表示し、一杯になると次の列/行に折り返すことができるコンテナ。</div><div class="ttdef"><b>Definition</b> <a href="flexbox_8cpp_source.html#l00250">flexbox.cpp:250</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a1a0211233bacd4eb4d31a8e3d58b5f48"><div class="ttname"><a href="namespaceftxui.html#a1a0211233bacd4eb4d31a8e3d58b5f48">ftxui::separatorVSelector</a></div><div class="ttdeci">Element separatorVSelector(float up, float down, Color unselected_color, Color selected_color)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a2bc31f2d685189e5c61d2293a1f51b4f"><div class="ttname"><a href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">ftxui::Element</a></div><div class="ttdeci">std::shared_ptr&lt; Node &gt; Element</div><div class="ttdef"><b>Definition</b> <a href="#l00021">elements.hpp:21</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a2d0617c0912b732f059cf360ac951c49"><div class="ttname"><a href="namespaceftxui.html#a2d0617c0912b732f059cf360ac951c49">ftxui::xframe</a></div><div class="ttdeci">Element xframe(Element)</div><div class="ttdoc">frame と同じですが、x軸のみに適用されます。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00125">frame.cpp:125</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a345b31919048562675615d5af78e6322"><div class="ttname"><a href="namespaceftxui.html#a345b31919048562675615d5af78e6322">ftxui::hflow</a></div><div class="ttdeci">Element hflow(Elements)</div><div class="ttdoc">要素を左から右へ行で表示するコンテナ。一杯になると、下の新しい行から開始します。</div><div class="ttdef"><b>Definition</b> <a href="flexbox_8cpp_source.html#l00267">flexbox.cpp:267</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a37c2b93daf557f68064bc9fbf93ebde0"><div class="ttname"><a href="namespaceftxui.html#a37c2b93daf557f68064bc9fbf93ebde0">ftxui::separatorLight</a></div><div class="ttdeci">Element separatorLight()</div></div>
+<div class="ttc" id="anamespaceftxui_html_a4080865d947eea48cf695531f66a5160"><div class="ttname"><a href="namespaceftxui.html#a4080865d947eea48cf695531f66a5160">ftxui::selectionStyle</a></div><div class="ttdeci">Decorator selectionStyle(std::function&lt; void(Pixel &amp;)&gt; style)</div><div class="ttdoc">要素が選択されたときのスタイルを設定します。</div><div class="ttdef"><b>Definition</b> <a href="selection__style_8cpp_source.html#l00085">selection_style.cpp:85</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a4589584fd22c1d4321b88cfeac98d78a"><div class="ttname"><a href="namespaceftxui.html#a4589584fd22c1d4321b88cfeac98d78a">ftxui::borderEmpty</a></div><div class="ttdeci">Element borderEmpty(Element)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a50413065cee4757447b35c3a500667d3"><div class="ttname"><a href="namespaceftxui.html#a50413065cee4757447b35c3a500667d3">ftxui::separatorHSelector</a></div><div class="ttdeci">Element separatorHSelector(float left, float right, Color unselected_color, Color selected_color)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a552ba6d33b3c9bec586b99fba4c243ac"><div class="ttname"><a href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">ftxui::hbox</a></div><div class="ttdeci">Element hbox(Elements)</div><div class="ttdoc">要素を水平方向に1つずつ表示するコンテナ。</div><div class="ttdef"><b>Definition</b> <a href="hbox_8cpp_source.html#l00093">hbox.cpp:93</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a57d7bdf155e190de514a689abb4e9a35"><div class="ttname"><a href="namespaceftxui.html#a57d7bdf155e190de514a689abb4e9a35">ftxui::canvas</a></div><div class="ttdeci">Element canvas(ConstRef&lt; Canvas &gt;)</div><div class="ttdoc">CanvasまたはCanvasへの参照から要素を生成します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2canvas_8cpp_source.html#l00889">src/ftxui/dom/canvas.cpp:889</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a5d4aa06ca6cc6a72e981bd5386f93f0a"><div class="ttname"><a href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">ftxui::Elements</a></div><div class="ttdeci">std::vector&lt; Element &gt; Elements</div><div class="ttdef"><b>Definition</b> <a href="#l00022">elements.hpp:22</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a5d98498c51cfbc03f37e46d46ec8acf5"><div class="ttname"><a href="namespaceftxui.html#a5d98498c51cfbc03f37e46d46ec8acf5">ftxui::selectionForegroundColor</a></div><div class="ttdeci">Decorator selectionForegroundColor(Color foreground)</div><div class="ttdoc">要素が選択されたときの描画色を設定します。 スタイルは既存のスタイルに重ねて適用されることに注意してください。</div><div class="ttdef"><b>Definition</b> <a href="selection__style_8cpp_source.html#l00068">selection_style.cpp:68</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a6b9a6baecc9d0176fcf6003dd8985fcc"><div class="ttname"><a href="namespaceftxui.html#a6b9a6baecc9d0176fcf6003dd8985fcc">ftxui::separatorCharacter</a></div><div class="ttdeci">Element separatorCharacter(std::string)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a6c965b8f6450a50a938120b5f6ddea96"><div class="ttname"><a href="namespaceftxui.html#a6c965b8f6450a50a938120b5f6ddea96">ftxui::selectionBackgroundColor</a></div><div class="ttdeci">Decorator selectionBackgroundColor(Color foreground)</div><div class="ttdoc">要素が選択されたときの背景色を設定します。 スタイルは既存のスタイルに重ねて適用されることに注意してください。</div><div class="ttdef"><b>Definition</b> <a href="selection__style_8cpp_source.html#l00060">selection_style.cpp:60</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a6e036e08f6d7fb0fab357e507d8e93c5"><div class="ttname"><a href="namespaceftxui.html#a6e036e08f6d7fb0fab357e507d8e93c5">ftxui::borderHeavy</a></div><div class="ttdeci">Element borderHeavy(Element)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a76bce7ce913f693d9b42bc0cf05168b0"><div class="ttname"><a href="namespaceftxui.html#a76bce7ce913f693d9b42bc0cf05168b0">ftxui::border</a></div><div class="ttdeci">Element border(Element)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a7d1c72debf1c34927e827c31b158270d"><div class="ttname"><a href="namespaceftxui.html#a7d1c72debf1c34927e827c31b158270d">ftxui::borderRounded</a></div><div class="ttdeci">Element borderRounded(Element)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a7ea9d3ceb2a977955125c6e4a6072325"><div class="ttname"><a href="namespaceftxui.html#a7ea9d3ceb2a977955125c6e4a6072325">ftxui::yframe</a></div><div class="ttdeci">Element yframe(Element)</div><div class="ttdoc">frame と同じですが、y軸のみに適用されます。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00133">frame.cpp:133</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a920b0e99817d412eab1f8cccdf294d21"><div class="ttname"><a href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">ftxui::window</a></div><div class="ttdeci">Element window(Element title, Element content, BorderStyle border=ROUNDED)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a925a73b7f0eb4b5bc11af23f4ca18019"><div class="ttname"><a href="namespaceftxui.html#a925a73b7f0eb4b5bc11af23f4ca18019">ftxui::selectionColor</a></div><div class="ttdeci">Decorator selectionColor(Color foreground)</div><div class="ttdoc">要素が選択されたときの色を設定します。</div><div class="ttdef"><b>Definition</b> <a href="selection__style_8cpp_source.html#l00077">selection_style.cpp:77</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a9660a12c5ce44143bcc3b32f9759ab75"><div class="ttname"><a href="namespaceftxui.html#a9660a12c5ce44143bcc3b32f9759ab75">ftxui::borderStyled</a></div><div class="ttdeci">Decorator borderStyled(BorderStyle)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a9c4cf8bcb7012f740b146bfe89cbd3eb"><div class="ttname"><a href="namespaceftxui.html#a9c4cf8bcb7012f740b146bfe89cbd3eb">ftxui::operator|</a></div><div class="ttdeci">Component operator|(Component component, ElementDecorator decorator)</div><div class="ttdef"><b>Definition</b> <a href="component_2util_8cpp_source.html#l00017">component/util.cpp:17</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a9e3e2988ed61a129d82d634ad66f7eb1"><div class="ttname"><a href="namespaceftxui.html#a9e3e2988ed61a129d82d634ad66f7eb1">ftxui::select</a></div><div class="ttdeci">Element select(Element e)</div><div class="ttdoc">子要素を兄弟要素の中でフォーカスされたものとして設定します。</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00108">frame.cpp:108</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a9fcda03e190d259a112e8cc59d6fe5f7"><div class="ttname"><a href="namespaceftxui.html#a9fcda03e190d259a112e8cc59d6fe5f7">ftxui::borderDashed</a></div><div class="ttdeci">Element borderDashed(Element)</div></div>
+<div class="ttc" id="anamespaceftxui_html_aa7e1317c76cefc5018503de4f6e09ea3"><div class="ttname"><a href="namespaceftxui.html#aa7e1317c76cefc5018503de4f6e09ea3">ftxui::selectionStyleReset</a></div><div class="ttdeci">Element selectionStyleReset(Element)</div><div class="ttdoc">要素の選択スタイルをリセットします。</div><div class="ttdef"><b>Definition</b> <a href="selection__style_8cpp_source.html#l00054">selection_style.cpp:54</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_aa9fef74a23ad0b0c3f60e91cf492b9cc"><div class="ttname"><a href="namespaceftxui.html#aa9fef74a23ad0b0c3f60e91cf492b9cc">ftxui::borderDouble</a></div><div class="ttdeci">Element borderDouble(Element)</div></div>
+<div class="ttc" id="anamespaceftxui_html_aaff8245861617a3d9e846e99de582a63"><div class="ttname"><a href="namespaceftxui.html#aaff8245861617a3d9e846e99de582a63">ftxui::reflect</a></div><div class="ttdeci">Decorator reflect(Box &amp;box)</div><div class="ttdef"><b>Definition</b> <a href="reflect_8cpp_source.html#l00042">reflect.cpp:42</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ab07cb9a766f38fc867f8fe736ce2e6e3"><div class="ttname"><a href="namespaceftxui.html#ab07cb9a766f38fc867f8fe736ce2e6e3">ftxui::GraphFunction</a></div><div class="ttdeci">std::function&lt; std::vector&lt; int &gt;(int, int)&gt; GraphFunction</div><div class="ttdef"><b>Definition</b> <a href="#l00024">elements.hpp:24</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_abcdf409d605edafd3191cd7ba47bcbd1"><div class="ttname"><a href="namespaceftxui.html#abcdf409d605edafd3191cd7ba47bcbd1">ftxui::gridbox</a></div><div class="ttdeci">Element gridbox(std::vector&lt; Elements &gt; lines)</div><div class="ttdoc">要素のグリッドを表示するコンテナ。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2gridbox_8cpp_source.html#l00172">src/ftxui/dom/gridbox.cpp:172</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ac1ef1cf6bf7cd0759ffa195071edb2a0"><div class="ttname"><a href="namespaceftxui.html#ac1ef1cf6bf7cd0759ffa195071edb2a0">ftxui::separator</a></div><div class="ttdeci">Element separator()</div></div>
+<div class="ttc" id="anamespaceftxui_html_ac506f4da05a5820304f37b2830ca4083"><div class="ttname"><a href="namespaceftxui.html#ac506f4da05a5820304f37b2830ca4083">ftxui::borderWith</a></div><div class="ttdeci">Decorator borderWith(const Pixel &amp;)</div></div>
+<div class="ttc" id="anamespaceftxui_html_ac54cdd05db30871ce082a8fa650545da"><div class="ttname"><a href="namespaceftxui.html#ac54cdd05db30871ce082a8fa650545da">ftxui::paragraph</a></div><div class="ttdeci">Elements paragraph(std::wstring text)</div></div>
+<div class="ttc" id="anamespaceftxui_html_ad0d6a96f6e1fb6d67d9fa6323062a737"><div class="ttname"><a href="namespaceftxui.html#ad0d6a96f6e1fb6d67d9fa6323062a737">ftxui::frame</a></div><div class="ttdeci">Element frame(Element)</div><div class="ttdoc">要素を「仮想」領域内に表示できるようにします。そのサイズはコンテナよりも大きくすることができます。 この場合、より小さい部分のみが表示されます。フォーカスされた要素を表示するためにビューはスクロール可能...</div><div class="ttdef"><b>Definition</b> <a href="frame_8cpp_source.html#l00117">frame.cpp:117</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ade35e69d695327db85be01c9787c39f8"><div class="ttname"><a href="namespaceftxui.html#ade35e69d695327db85be01c9787c39f8">ftxui::operator|=</a></div><div class="ttdeci">Component &amp; operator|=(Component &amp;component, ComponentDecorator decorator)</div><div class="ttdef"><b>Definition</b> <a href="component_2util_8cpp_source.html#l00022">component/util.cpp:22</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ae09f44b989d381a387329fd0a0935926"><div class="ttname"><a href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926">ftxui::Constraint</a></div><div class="ttdeci">Constraint</div><div class="ttdef"><b>Definition</b> <a href="#l00157">elements.hpp:157</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ae09f44b989d381a387329fd0a0935926a41b05932cd237b2b133fff1ade85bed5"><div class="ttname"><a href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a41b05932cd237b2b133fff1ade85bed5">ftxui::LESS_THAN</a></div><div class="ttdeci">@ LESS_THAN</div><div class="ttdef"><b>Definition</b> <a href="#l00157">elements.hpp:157</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ae09f44b989d381a387329fd0a0935926a59a84258a4cb9025b567ee5139455029"><div class="ttname"><a href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a59a84258a4cb9025b567ee5139455029">ftxui::EQUAL</a></div><div class="ttdeci">@ EQUAL</div><div class="ttdef"><b>Definition</b> <a href="#l00157">elements.hpp:157</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ae09f44b989d381a387329fd0a0935926a5fae95457121bd697edd588d1b64cc7c"><div class="ttname"><a href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a5fae95457121bd697edd588d1b64cc7c">ftxui::GREATER_THAN</a></div><div class="ttdeci">@ GREATER_THAN</div><div class="ttdef"><b>Definition</b> <a href="#l00157">elements.hpp:157</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ae0da51b614e95a0687727644b5898a23"><div class="ttname"><a href="namespaceftxui.html#ae0da51b614e95a0687727644b5898a23">ftxui::vflow</a></div><div class="ttdeci">Element vflow(Elements)</div><div class="ttdoc">要素を上から下へ行で表示するコンテナ。一杯になると、右側の新しい列から開始します。</div><div class="ttdef"><b>Definition</b> <a href="flexbox_8cpp_source.html#l00284">flexbox.cpp:284</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ae78c2b2b147e65701493465f8e3f4d89"><div class="ttname"><a href="namespaceftxui.html#ae78c2b2b147e65701493465f8e3f4d89">ftxui::graph</a></div><div class="ttdeci">Element graph(GraphFunction)</div><div class="ttdoc">GraphFunctionを使用してグラフを描画します。</div><div class="ttdef"><b>Definition</b> <a href="src_2ftxui_2dom_2graph_8cpp_source.html#l00070">src/ftxui/dom/graph.cpp:70</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_aec889eb456bfab7e10466094f17b8a01"><div class="ttname"><a href="namespaceftxui.html#aec889eb456bfab7e10466094f17b8a01">ftxui::borderLight</a></div><div class="ttdeci">Element borderLight(Element)</div></div>
+<div class="ttc" id="anamespaceftxui_html_af0649e89a9960f1c2703e48c1817645b"><div class="ttname"><a href="namespaceftxui.html#af0649e89a9960f1c2703e48c1817645b">ftxui::separatorHeavy</a></div><div class="ttdeci">Element separatorHeavy()</div></div>
+<div class="ttc" id="anode_8hpp_html"><div class="ttname"><a href="node_8hpp.html">node.hpp</a></div></div>
+<div class="ttc" id="aref_8hpp_html"><div class="ttname"><a href="ref_8hpp.html">ref.hpp</a></div></div>
+<div class="ttc" id="ascreen_8cpp_html_a972107f15f3c0c099eb9fd605e7f51c6"><div class="ttname"><a href="screen_8cpp.html#a972107f15f3c0c099eb9fd605e7f51c6">left</a></div><div class="ttdeci">std::uint8_t left</div><div class="ttdef"><b>Definition</b> <a href="screen_8cpp_source.html#l00129">screen.cpp:129</a></div></div>
+<div class="ttc" id="ascreen_8cpp_html_a9cdd0454d64ec151b59fdd7d22ed505a"><div class="ttname"><a href="screen_8cpp.html#a9cdd0454d64ec151b59fdd7d22ed505a">down</a></div><div class="ttdeci">std::uint8_t down</div><div class="ttdef"><b>Definition</b> <a href="screen_8cpp_source.html#l00132">screen.cpp:132</a></div></div>
+<div class="ttc" id="ascreen_8cpp_html_aa4b74e56e675912bbc06504407fc7a46"><div class="ttname"><a href="screen_8cpp.html#aa4b74e56e675912bbc06504407fc7a46">right</a></div><div class="ttdeci">std::uint8_t right</div><div class="ttdef"><b>Definition</b> <a href="screen_8cpp_source.html#l00131">screen.cpp:131</a></div></div>
+<div class="ttc" id="astring_8cpp_html_a4d43374ddb4d3a44203a443bc6c4c44c"><div class="ttname"><a href="string_8cpp.html#a4d43374ddb4d3a44203a443bc6c4c44c">size</a></div><div class="ttdeci">return size</div><div class="ttdef"><b>Definition</b> <a href="string_8cpp_source.html#l01516">string.cpp:1516</a></div></div>
+<div class="ttc" id="aterminal_8hpp_html"><div class="ttname"><a href="terminal_8hpp.html">terminal.hpp</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "../fr/index.html", "ja": "index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "ja";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

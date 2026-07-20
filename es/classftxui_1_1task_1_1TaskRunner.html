@@ -1,0 +1,581 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: TaskRunner Class Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ja",
+    "/ko"
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('classftxui_1_1task_1_1TaskRunner.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="classftxui_1_1task_1_1TaskRunner-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">TaskRunner Class Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="task__runner_8hpp_source.html">task_runner.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:aa2a63894916e321a8a93add257aad2c7" id="r_aa2a63894916e321a8a93add257aad2c7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2a63894916e321a8a93add257aad2c7">TaskRunner</a> ()</td></tr>
+<tr class="separator:aa2a63894916e321a8a93add257aad2c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afab0128a700661663463c90c9a33d71d" id="r_afab0128a700661663463c90c9a33d71d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afab0128a700661663463c90c9a33d71d">~TaskRunner</a> ()</td></tr>
+<tr class="separator:afab0128a700661663463c90c9a33d71d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6265a2d99ef09d491365c21a4a703c71" id="r_a6265a2d99ef09d491365c21a4a703c71"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6265a2d99ef09d491365c21a4a703c71">PostTask</a> (<a class="el" href="namespaceftxui_1_1task.html#a8cb97ed7903b5e83d45d0a985e629185">Task</a> task) -&gt; void</td></tr>
+<tr class="memdesc:a6265a2d99ef09d491365c21a4a703c71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Programa una tarea para ser ejecutada inmediatamente.  <br /></td></tr>
+<tr class="separator:a6265a2d99ef09d491365c21a4a703c71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ed72fa10b2d44bb1af7bd8af64dd28b" id="r_a9ed72fa10b2d44bb1af7bd8af64dd28b"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9ed72fa10b2d44bb1af7bd8af64dd28b">PostDelayedTask</a> (<a class="el" href="namespaceftxui_1_1task.html#a8cb97ed7903b5e83d45d0a985e629185">Task</a> task, std::chrono::steady_clock::duration duration) -&gt; void</td></tr>
+<tr class="memdesc:a9ed72fa10b2d44bb1af7bd8af64dd28b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Programa una tarea para ser ejecutada después de una cierta duración.  <br /></td></tr>
+<tr class="separator:a9ed72fa10b2d44bb1af7bd8af64dd28b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7865ea610276e71d61633de0aab71753" id="r_a7865ea610276e71d61633de0aab71753"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7865ea610276e71d61633de0aab71753">RunUntilIdle</a> () -&gt; std::optional&lt; std::chrono::steady_clock::duration &gt;</td></tr>
+<tr class="memdesc:a7865ea610276e71d61633de0aab71753"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ejecuta las tareas en la cola.  <br /></td></tr>
+<tr class="separator:a7865ea610276e71d61633de0aab71753"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58f2f0e6ed3d38c3e6a081f7c99a544f" id="r_a58f2f0e6ed3d38c3e6a081f7c99a544f"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a58f2f0e6ed3d38c3e6a081f7c99a544f">Run</a> () -&gt; void</td></tr>
+<tr class="separator:a58f2f0e6ed3d38c3e6a081f7c99a544f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a257afcb3d4b649b1a39a697cea2843ce" id="r_a257afcb3d4b649b1a39a697cea2843ce"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a257afcb3d4b649b1a39a697cea2843ce">HasImmediateTasks</a> () const</td></tr>
+<tr class="separator:a257afcb3d4b649b1a39a697cea2843ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab6716a5f504f5985e73fb6d2b0dd677" id="r_aab6716a5f504f5985e73fb6d2b0dd677"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aab6716a5f504f5985e73fb6d2b0dd677">ExecutedTasks</a> () const</td></tr>
+<tr class="separator:aab6716a5f504f5985e73fb6d2b0dd677"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a4e90ab04a37a29bb0e3432d1290a4565" id="r_a4e90ab04a37a29bb0e3432d1290a4565"><td class="memItemLeft" align="right" valign="top">static auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4e90ab04a37a29bb0e3432d1290a4565">Current</a> () -&gt; <a class="el" href="classftxui_1_1task_1_1TaskRunner.html">TaskRunner</a> *</td></tr>
+<tr class="separator:a4e90ab04a37a29bb0e3432d1290a4565"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock">
+<p class="definition">Definition at line <a class="el" href="task__runner_8hpp_source.html#l00012">12</a> of file <a class="el" href="task__runner_8hpp_source.html">task_runner.hpp</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa2a63894916e321a8a93add257aad2c7" name="aa2a63894916e321a8a93add257aad2c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2a63894916e321a8a93add257aad2c7">&#9670;&#160;</a></span>TaskRunner()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classftxui_1_1task_1_1TaskRunner.html">TaskRunner</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8cpp_source.html#l00013">13</a> of file <a class="el" href="task__runner_8cpp_source.html">task_runner.cpp</a>.</p>
+
+</div>
+</div>
+<a id="afab0128a700661663463c90c9a33d71d" name="afab0128a700661663463c90c9a33d71d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afab0128a700661663463c90c9a33d71d">&#9670;&#160;</a></span>~TaskRunner()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">~<a class="el" href="classftxui_1_1task_1_1TaskRunner.html">TaskRunner</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8cpp_source.html#l00019">19</a> of file <a class="el" href="task__runner_8cpp_source.html">task_runner.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a4e90ab04a37a29bb0e3432d1290a4565" name="a4e90ab04a37a29bb0e3432d1290a4565"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e90ab04a37a29bb0e3432d1290a4565">&#9670;&#160;</a></span>Current()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto Current </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> -&gt; <a class="el" href="classftxui_1_1task_1_1TaskRunner.html">TaskRunner</a>*</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8cpp_source.html#l00024">24</a> of file <a class="el" href="task__runner_8cpp_source.html">task_runner.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a6265a2d99ef09d491365c21a4a703c71" name="a6265a2d99ef09d491365c21a4a703c71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6265a2d99ef09d491365c21a4a703c71">&#9670;&#160;</a></span>PostTask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto PostTask </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceftxui_1_1task.html#a8cb97ed7903b5e83d45d0a985e629185">Task</a></td>          <td class="paramname"><span class="paramname"><em>task</em></span></td><td>)</td>
+          <td> -&gt; void</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Programa una tarea para ser ejecutada inmediatamente. </p>
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8cpp_source.html#l00029">29</a> of file <a class="el" href="task__runner_8cpp_source.html">task_runner.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9ed72fa10b2d44bb1af7bd8af64dd28b" name="a9ed72fa10b2d44bb1af7bd8af64dd28b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ed72fa10b2d44bb1af7bd8af64dd28b">&#9670;&#160;</a></span>PostDelayedTask()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto PostDelayedTask </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceftxui_1_1task.html#a8cb97ed7903b5e83d45d0a985e629185">Task</a></td>          <td class="paramname"><span class="paramname"><em>task</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::chrono::steady_clock::duration</td>          <td class="paramname"><span class="paramname"><em>duration</em></span>&#160;) -&gt; void</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Programa una tarea para ser ejecutada después de una cierta duración. </p>
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8cpp_source.html#l00033">33</a> of file <a class="el" href="task__runner_8cpp_source.html">task_runner.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a7865ea610276e71d61633de0aab71753" name="a7865ea610276e71d61633de0aab71753"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7865ea610276e71d61633de0aab71753">&#9670;&#160;</a></span>RunUntilIdle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto RunUntilIdle </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> -&gt; std::optional&lt;std::chrono::steady_clock::duration&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ejecuta las tareas en la cola. </p>
+<p>Ejecuta las tareas en la cola, devuelve el retraso hasta que la siguiente tarea retrasada pueda ser ejecutada. </p>
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8cpp_source.html#l00040">40</a> of file <a class="el" href="task__runner_8cpp_source.html">task_runner.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a58f2f0e6ed3d38c3e6a081f7c99a544f" name="a58f2f0e6ed3d38c3e6a081f7c99a544f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58f2f0e6ed3d38c3e6a081f7c99a544f">&#9670;&#160;</a></span>Run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto Run </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> -&gt; void</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8cpp_source.html#l00062">62</a> of file <a class="el" href="task__runner_8cpp_source.html">task_runner.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a257afcb3d4b649b1a39a697cea2843ce" name="a257afcb3d4b649b1a39a697cea2843ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a257afcb3d4b649b1a39a697cea2843ce">&#9670;&#160;</a></span>HasImmediateTasks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool HasImmediateTasks </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8hpp_source.html#l00034">34</a> of file <a class="el" href="task__runner_8hpp_source.html">task_runner.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aab6716a5f504f5985e73fb6d2b0dd677" name="aab6716a5f504f5985e73fb6d2b0dd677"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab6716a5f504f5985e73fb6d2b0dd677">&#9670;&#160;</a></span>ExecutedTasks()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t ExecutedTasks </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="task__runner_8hpp_source.html#l00036">36</a> of file <a class="el" href="task__runner_8hpp_source.html">task_runner.hpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li><a class="el" href="task__runner_8hpp_source.html">task_runner.hpp</a></li>
+<li><a class="el" href="task__runner_8cpp_source.html">task_runner.cpp</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "es";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+<map id="ConstStringRef" name="ConstStringRef">
+<area shape="rect" id="Node000001" title="一个适配器。拥有或引用一个常量字符串。为了方便，这个 类将多个不可变字符串转换为共享表示。" alt="" coords="34,79,153,104"/>
+<area shape="rect" id="Node000002" href="$classftxui_1_1ConstRef.html" title=" " alt="" coords="5,5,181,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,44,96,79,91,79,91,44"/>
+</map>

@@ -1,0 +1,406 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: menu2.cpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('menu2_8cpp_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">menu2.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="menu2_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright 2020 Arthur Sonzogni. 全著作権所有。</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// このソースコードの使用は、MITライセンスに従います。</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// LICENSEファイルで確認できます。</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;functional&gt;</span>  <span class="comment">// 関数用</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;memory&gt;</span>      <span class="comment">// アロケーター、__shared_ptr_access用</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;string&gt;</span>      <span class="comment">// string、basic_string、operator+、to_string用</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;vector&gt;</span>      <span class="comment">// vector用</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="captured__mouse_8hpp.html">ftxui/component/captured_mouse.hpp</a>&quot;</span>  <span class="comment">// ftxui用</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="component_8hpp.html">ftxui/component/component.hpp</a>&quot;</span>       <span class="comment">// Menu、Horizontal、Renderer用</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="component__base_8hpp.html">ftxui/component/component_base.hpp</a>&quot;</span>  <span class="comment">// ComponentBase用</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="component__options_8hpp.html">ftxui/component/component_options.hpp</a>&quot;</span>  <span class="comment">// MenuOption用</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="screen__interactive_8hpp.html">ftxui/component/screen_interactive.hpp</a>&quot;</span>  <span class="comment">// Component、ScreenInteractive用</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="elements_8hpp.html">ftxui/dom/elements.hpp</a>&quot;</span>  <span class="comment">// text、separator、bold、hcenter、vbox、hbox、gauge、Element、operator|、border用</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="foldopen" id="foldopen00016" data-start="{" data-end="}">
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="menu2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">   16</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="menu2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>() {</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  <span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  <span class="keyword">auto</span> screen = ScreenInteractive::TerminalOutput();</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  std::vector&lt;std::string&gt; left_menu_entries = {</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>      <span class="stringliteral">&quot;0%&quot;</span>, <span class="stringliteral">&quot;10%&quot;</span>, <span class="stringliteral">&quot;20%&quot;</span>, <span class="stringliteral">&quot;30%&quot;</span>, <span class="stringliteral">&quot;40%&quot;</span>, <span class="stringliteral">&quot;50%&quot;</span>, <span class="stringliteral">&quot;60%&quot;</span>, <span class="stringliteral">&quot;70%&quot;</span>, <span class="stringliteral">&quot;80%&quot;</span>, <span class="stringliteral">&quot;90%&quot;</span>,</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  };</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  std::vector&lt;std::string&gt; right_menu_entries = {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>      <span class="stringliteral">&quot;0%&quot;</span>, <span class="stringliteral">&quot;1%&quot;</span>, <span class="stringliteral">&quot;2%&quot;</span>, <span class="stringliteral">&quot;3%&quot;</span>, <span class="stringliteral">&quot;4%&quot;</span>, <span class="stringliteral">&quot;5%&quot;</span>, <span class="stringliteral">&quot;6%&quot;</span>, <span class="stringliteral">&quot;7%&quot;</span>, <span class="stringliteral">&quot;8%&quot;</span>, <span class="stringliteral">&quot;9%&quot;</span>, <span class="stringliteral">&quot;10%&quot;</span>,</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  };</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  <span class="keyword">auto</span> menu_option = <a class="code hl_struct" href="group__component.html#structftxui_1_1MenuOption">MenuOption</a>();</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  menu_option.on_enter = screen.ExitLoopClosure();</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  <span class="keywordtype">int</span> left_menu_selected = 0;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="keywordtype">int</span> right_menu_selected = 0;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> left_menu_ =</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>      Menu(&amp;left_menu_entries, &amp;left_menu_selected, menu_option);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> right_menu_ =</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>      Menu(&amp;right_menu_entries, &amp;right_menu_selected, menu_option);</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> container = Container::Horizontal({</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>      left_menu_,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>      right_menu_,</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  });</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <span class="keyword">auto</span> renderer = Renderer(container, [&amp;] {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">int</span> sum = left_menu_selected * 10 + right_menu_selected;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordflow">return</span> vbox({</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>               <span class="comment">// -------- 上部パネル --------------</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>               hbox({</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                   <span class="comment">// -------- 左メニュー --------------</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                   vbox({</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                       hcenter(bold(text(<span class="stringliteral">&quot;Percentage by 10%&quot;</span>))),</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                       separator(),</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                       left_menu_-&gt;Render(),</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                   }),</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                   separator(),</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                   <span class="comment">// -------- 右メニュー --------------</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>                   vbox({</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                       hcenter(bold(text(<span class="stringliteral">&quot;Percentage by 1%&quot;</span>))),</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                       separator(),</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                       right_menu_-&gt;Render(),</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                   }),</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                   separator(),</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>               }),</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>               separator(),</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>               <span class="comment">// -------- 下部パネル --------------</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>               vbox({</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>                   hbox({</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>                       text(<span class="stringliteral">&quot; gauge : &quot;</span>),</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>                       gauge(sum / 100.0),</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>                   }),</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>                   hbox({</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>                       text(<span class="stringliteral">&quot;  text : &quot;</span>),</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>                       text(std::to_string(sum) + <span class="stringliteral">&quot; %&quot;</span>),</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>                   }),</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>               }),</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>           }) |</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>           border;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  });</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  screen.Loop(renderer);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>}</div>
+</div>
+<div class="ttc" id="acaptured__mouse_8hpp_html"><div class="ttname"><a href="captured__mouse_8hpp.html">captured_mouse.hpp</a></div></div>
+<div class="ttc" id="acomponent_8hpp_html"><div class="ttname"><a href="component_8hpp.html">component.hpp</a></div></div>
+<div class="ttc" id="acomponent__base_8hpp_html"><div class="ttname"><a href="component__base_8hpp.html">component_base.hpp</a></div></div>
+<div class="ttc" id="acomponent__options_8hpp_html"><div class="ttname"><a href="component__options_8hpp.html">component_options.hpp</a></div></div>
+<div class="ttc" id="aelements_8hpp_html"><div class="ttname"><a href="elements_8hpp.html">elements.hpp</a></div></div>
+<div class="ttc" id="agroup__component_html_structftxui_1_1MenuOption"><div class="ttname"><a href="group__component.html#structftxui_1_1MenuOption">ftxui::MenuOption</a></div><div class="ttdoc">Menuコンポーネントのオプション。</div><div class="ttdef"><b>Definition</b> <a href="component__options_8hpp_source.html#l00087">component_options.hpp:87</a></div></div>
+<div class="ttc" id="amenu2_8cpp_html_ae66f6b31b5ad750f1fe042a706a4e3d4"><div class="ttname"><a href="menu2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a></div><div class="ttdeci">int main()</div><div class="ttdef"><b>Definition</b> <a href="#l00016">menu2.cpp:16</a></div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">FTXUI ftxui:: 名前空間</div><div class="ttdef"><b>Definition</b> <a href="animation_8hpp_source.html#l00009">animation.hpp:9</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_af1479ede01dbf087342534ab4ada11d3"><div class="ttname"><a href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">ftxui::Component</a></div><div class="ttdeci">std::shared_ptr&lt; ComponentBase &gt; Component</div><div class="ttdef"><b>Definition</b> <a href="component__base_8hpp_source.html#l00023">component_base.hpp:23</a></div></div>
+<div class="ttc" id="ascreen__interactive_8hpp_html"><div class="ttname"><a href="screen__interactive_8hpp.html">screen_interactive.hpp</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "../fr/index.html", "ja": "index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "ja";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

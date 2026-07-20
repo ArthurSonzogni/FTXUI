@@ -1,0 +1,610 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: export.hpp File Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ko",
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    if (!(
+        navtree.textContent.includes("Getting Started") &&
+        navtree.textContent.includes("Installation") &&
+        navtree.textContent.includes("ftxui / screen") &&
+        navtree.textContent.includes("ftxui / dom") &&
+        navtree.textContent.includes("ftxui / component") &&
+        navtree.textContent.includes("Reference")
+      )
+    ) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;7.0.1</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('export_8hpp.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#define-members">Macros</a>  </div>
+  <div class="headertitle"><div class="title">export.hpp File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><a href="export_8hpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a1289ce138560adb9f3bf451652aaeb39" id="r_a1289ce138560adb9f3bf451652aaeb39"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1289ce138560adb9f3bf451652aaeb39">FTXUI_EXPORT</a>(component)</td></tr>
+<tr class="separator:a1289ce138560adb9f3bf451652aaeb39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8798126a2a996e2c48fc737ee468cf68" id="r_a8798126a2a996e2c48fc737ee468cf68"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8798126a2a996e2c48fc737ee468cf68">INSIDE_FTXUI_COMPONENT_IMPL</a>(component)</td></tr>
+<tr class="separator:a8798126a2a996e2c48fc737ee468cf68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2375bb5f2d921b3ed9140c777154802f" id="r_a2375bb5f2d921b3ed9140c777154802f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2375bb5f2d921b3ed9140c777154802f">FTXUI_EXPORT_ANNOTATION</a></td></tr>
+<tr class="separator:a2375bb5f2d921b3ed9140c777154802f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53e8284844f82c1f3232cda6bb1a32ba" id="r_a53e8284844f82c1f3232cda6bb1a32ba"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53e8284844f82c1f3232cda6bb1a32ba">FTXUI_IMPORT_ANNOTATION</a></td></tr>
+<tr class="separator:a53e8284844f82c1f3232cda6bb1a32ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80746dd5d537ed33eca90bdfb7b91429" id="r_a80746dd5d537ed33eca90bdfb7b91429"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a80746dd5d537ed33eca90bdfb7b91429">FTXUI_MACRO_EXPAND</a>(x)</td></tr>
+<tr class="separator:a80746dd5d537ed33eca90bdfb7b91429"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a433c11adb9033eb2be85626d83c8e786" id="r_a433c11adb9033eb2be85626d83c8e786"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a433c11adb9033eb2be85626d83c8e786">FTXUI_MACRO_CONDITIONAL_</a>(condition,  consequent,  alternate)</td></tr>
+<tr class="separator:a433c11adb9033eb2be85626d83c8e786"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a272bc779de08b3d143d40de13d2edf89" id="r_a272bc779de08b3d143d40de13d2edf89"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a272bc779de08b3d143d40de13d2edf89">FTXUI_MACRO_CONDITIONAL_COMMA_</a>(...)</td></tr>
+<tr class="separator:a272bc779de08b3d143d40de13d2edf89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83646bd6a94231ed6df056a9fbe220b2" id="r_a83646bd6a94231ed6df056a9fbe220b2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a83646bd6a94231ed6df056a9fbe220b2">FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_</a>(x, ...)</td></tr>
+<tr class="separator:a83646bd6a94231ed6df056a9fbe220b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7e94b305d487172ff2210921dc6875b" id="r_ac7e94b305d487172ff2210921dc6875b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac7e94b305d487172ff2210921dc6875b">FTXUI_MACRO_CONDITIONAL_COMMA_1_</a>&#160;&#160;&#160;,</td></tr>
+<tr class="separator:ac7e94b305d487172ff2210921dc6875b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada1b9de341d106b87f56b0bb993de8c0" id="r_ada1b9de341d106b87f56b0bb993de8c0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ada1b9de341d106b87f56b0bb993de8c0">FTXUI_MACRO_SELECT_THIRD_ARGUMENT_</a>(...)</td></tr>
+<tr class="separator:ada1b9de341d106b87f56b0bb993de8c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6810907a346ccab5a45fae29c7588665" id="r_a6810907a346ccab5a45fae29c7588665"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6810907a346ccab5a45fae29c7588665">FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_</a>(a,  b,  c, ...)</td></tr>
+<tr class="separator:a6810907a346ccab5a45fae29c7588665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a1289ce138560adb9f3bf451652aaeb39" name="a1289ce138560adb9f3bf451652aaeb39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1289ce138560adb9f3bf451652aaeb39">&#9670;&#160;</a></span>FTXUI_EXPORT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_EXPORT</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>component</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">  <a class="code hl_define" href="#a433c11adb9033eb2be85626d83c8e786">FTXUI_MACRO_CONDITIONAL_</a>(IS_FTXUI_##component##_IMPL, \</div>
+<div class="line">                           <a class="code hl_define" href="#a2375bb5f2d921b3ed9140c777154802f">FTXUI_EXPORT_ANNOTATION</a>, <a class="code hl_define" href="#a53e8284844f82c1f3232cda6bb1a32ba">FTXUI_IMPORT_ANNOTATION</a>)</div>
+<div class="ttc" id="aexport_8hpp_html_a2375bb5f2d921b3ed9140c777154802f"><div class="ttname"><a href="#a2375bb5f2d921b3ed9140c777154802f">FTXUI_EXPORT_ANNOTATION</a></div><div class="ttdeci">#define FTXUI_EXPORT_ANNOTATION</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00052">export.hpp:52</a></div></div>
+<div class="ttc" id="aexport_8hpp_html_a433c11adb9033eb2be85626d83c8e786"><div class="ttname"><a href="#a433c11adb9033eb2be85626d83c8e786">FTXUI_MACRO_CONDITIONAL_</a></div><div class="ttdeci">#define FTXUI_MACRO_CONDITIONAL_(condition, consequent, alternate)</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00064">export.hpp:64</a></div></div>
+<div class="ttc" id="aexport_8hpp_html_a53e8284844f82c1f3232cda6bb1a32ba"><div class="ttname"><a href="#a53e8284844f82c1f3232cda6bb1a32ba">FTXUI_IMPORT_ANNOTATION</a></div><div class="ttdeci">#define FTXUI_IMPORT_ANNOTATION</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00053">export.hpp:53</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00024">24</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8798126a2a996e2c48fc737ee468cf68" name="a8798126a2a996e2c48fc737ee468cf68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8798126a2a996e2c48fc737ee468cf68">&#9670;&#160;</a></span>INSIDE_FTXUI_COMPONENT_IMPL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INSIDE_FTXUI_COMPONENT_IMPL</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>component</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">  <a class="code hl_define" href="#a433c11adb9033eb2be85626d83c8e786">FTXUI_MACRO_CONDITIONAL_</a>(IS_FTXUI_##component##_IMPL, 1, 0)</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00035">35</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2375bb5f2d921b3ed9140c777154802f" name="a2375bb5f2d921b3ed9140c777154802f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2375bb5f2d921b3ed9140c777154802f">&#9670;&#160;</a></span>FTXUI_EXPORT_ANNOTATION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_EXPORT_ANNOTATION</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00052">52</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a53e8284844f82c1f3232cda6bb1a32ba" name="a53e8284844f82c1f3232cda6bb1a32ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53e8284844f82c1f3232cda6bb1a32ba">&#9670;&#160;</a></span>FTXUI_IMPORT_ANNOTATION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_IMPORT_ANNOTATION</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00053">53</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a80746dd5d537ed33eca90bdfb7b91429" name="a80746dd5d537ed33eca90bdfb7b91429"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80746dd5d537ed33eca90bdfb7b91429">&#9670;&#160;</a></span>FTXUI_MACRO_EXPAND</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_MACRO_EXPAND</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">x</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00059">59</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a433c11adb9033eb2be85626d83c8e786" name="a433c11adb9033eb2be85626d83c8e786"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a433c11adb9033eb2be85626d83c8e786">&#9670;&#160;</a></span>FTXUI_MACRO_CONDITIONAL_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_MACRO_CONDITIONAL_</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>condition</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>consequent</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>alternate</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">  <a class="code hl_define" href="#a80746dd5d537ed33eca90bdfb7b91429">FTXUI_MACRO_EXPAND</a>(<a class="code hl_define" href="#ada1b9de341d106b87f56b0bb993de8c0">FTXUI_MACRO_SELECT_THIRD_ARGUMENT_</a>(           \</div>
+<div class="line">      <a class="code hl_define" href="#a272bc779de08b3d143d40de13d2edf89">FTXUI_MACRO_CONDITIONAL_COMMA_</a>(condition), consequent, alternate))</div>
+<div class="ttc" id="aexport_8hpp_html_a272bc779de08b3d143d40de13d2edf89"><div class="ttname"><a href="#a272bc779de08b3d143d40de13d2edf89">FTXUI_MACRO_CONDITIONAL_COMMA_</a></div><div class="ttdeci">#define FTXUI_MACRO_CONDITIONAL_COMMA_(...)</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00072">export.hpp:72</a></div></div>
+<div class="ttc" id="aexport_8hpp_html_a80746dd5d537ed33eca90bdfb7b91429"><div class="ttname"><a href="#a80746dd5d537ed33eca90bdfb7b91429">FTXUI_MACRO_EXPAND</a></div><div class="ttdeci">#define FTXUI_MACRO_EXPAND(x)</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00059">export.hpp:59</a></div></div>
+<div class="ttc" id="aexport_8hpp_html_ada1b9de341d106b87f56b0bb993de8c0"><div class="ttname"><a href="#ada1b9de341d106b87f56b0bb993de8c0">FTXUI_MACRO_SELECT_THIRD_ARGUMENT_</a></div><div class="ttdeci">#define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_(...)</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00081">export.hpp:81</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00064">64</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a272bc779de08b3d143d40de13d2edf89" name="a272bc779de08b3d143d40de13d2edf89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a272bc779de08b3d143d40de13d2edf89">&#9670;&#160;</a></span>FTXUI_MACRO_CONDITIONAL_COMMA_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_MACRO_CONDITIONAL_COMMA_</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">  <a class="code hl_define" href="#a80746dd5d537ed33eca90bdfb7b91429">FTXUI_MACRO_EXPAND</a>(<a class="code hl_define" href="#a83646bd6a94231ed6df056a9fbe220b2">FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_</a>(__VA_ARGS__, dummy))</div>
+<div class="ttc" id="aexport_8hpp_html_a83646bd6a94231ed6df056a9fbe220b2"><div class="ttname"><a href="#a83646bd6a94231ed6df056a9fbe220b2">FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_</a></div><div class="ttdeci">#define FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_(x,...)</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00074">export.hpp:74</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00072">72</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a83646bd6a94231ed6df056a9fbe220b2" name="a83646bd6a94231ed6df056a9fbe220b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83646bd6a94231ed6df056a9fbe220b2">&#9670;&#160;</a></span>FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_MACRO_CONDITIONAL_COMMA_IMPL_</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">  <a class="code hl_define" href="#a272bc779de08b3d143d40de13d2edf89">FTXUI_MACRO_CONDITIONAL_COMMA_</a>##x##_</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00074">74</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ac7e94b305d487172ff2210921dc6875b" name="ac7e94b305d487172ff2210921dc6875b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7e94b305d487172ff2210921dc6875b">&#9670;&#160;</a></span>FTXUI_MACRO_CONDITIONAL_COMMA_1_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_MACRO_CONDITIONAL_COMMA_1_&#160;&#160;&#160;,</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00076">76</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ada1b9de341d106b87f56b0bb993de8c0" name="ada1b9de341d106b87f56b0bb993de8c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada1b9de341d106b87f56b0bb993de8c0">&#9670;&#160;</a></span>FTXUI_MACRO_SELECT_THIRD_ARGUMENT_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">  <a class="code hl_define" href="#a80746dd5d537ed33eca90bdfb7b91429">FTXUI_MACRO_EXPAND</a>(                           \</div>
+<div class="line">      <a class="code hl_define" href="#a6810907a346ccab5a45fae29c7588665">FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_</a>(__VA_ARGS__, dummy))</div>
+<div class="ttc" id="aexport_8hpp_html_a6810907a346ccab5a45fae29c7588665"><div class="ttname"><a href="#a6810907a346ccab5a45fae29c7588665">FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_</a></div><div class="ttdeci">#define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_(a, b, c,...)</div><div class="ttdef"><b>Definition</b> <a href="export_8hpp_source.html#l00084">export.hpp:84</a></div></div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00081">81</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6810907a346ccab5a45fae29c7588665" name="a6810907a346ccab5a45fae29c7588665"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6810907a346ccab5a45fae29c7588665">&#9670;&#160;</a></span>FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FTXUI_MACRO_SELECT_THIRD_ARGUMENT_IMPL_</td>
+          <td>(</td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>a</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>b</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em>c</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"></td>          <td class="paramname"><span class="paramname"><em></em></span>...&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">c</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="export_8hpp_source.html#l00084">84</a> of file <a class="el" href="export_8hpp_source.html">export.hpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "index.html", "es": "es/index.html", "fr": "fr/index.html", "ja": "ja/index.html", "zh-CH": "zh-CH/index.html", "zh-TW": "zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main", "v7.0.1", "v7.0.0", "v6.1.9", "v6.1.8", "v6.1.7", "v6.1.6", "v6.1.5", "v6.1.4", "v6.1.3", "v6.1.2", "v6.1.1", "v6.1.0", "v6.0.2", "v6.0.1", "v6.0.0", "v5.0.0", "v4.1.1", "v4.1.0", "v4.0.0", "v3.0.0", "v2.0.0", "v0.9", "v0.11", "v0.10"];
+  const version_paths = {"main": "index.html", "v7.0.1": "en/v7.0.1/index.html", "v7.0.0": "en/v7.0.0/index.html", "v6.1.9": "en/v6.1.9/index.html", "v6.1.8": "en/v6.1.8/index.html", "v6.1.7": "en/v6.1.7/index.html", "v6.1.6": "en/v6.1.6/index.html", "v6.1.5": "en/v6.1.5/index.html", "v6.1.4": "en/v6.1.4/index.html", "v6.1.3": "en/v6.1.3/index.html", "v6.1.2": "en/v6.1.2/index.html", "v6.1.1": "en/v6.1.1/index.html", "v6.1.0": "en/v6.1.0/index.html", "v6.0.2": "en/v6.0.2/index.html", "v6.0.1": "en/v6.0.1/index.html", "v6.0.0": "en/v6.0.0/index.html", "v5.0.0": "en/v5.0.0/index.html", "v4.1.1": "en/v4.1.1/index.html", "v4.1.0": "en/v4.1.0/index.html", "v4.0.0": "en/v4.0.0/index.html", "v3.0.0": "en/v3.0.0/index.html", "v2.0.0": "en/v2.0.0/index.html", "v0.9": "en/v0.9/index.html", "v0.11": "en/v0.11/index.html", "v0.10": "en/v0.10/index.html"};
+  const currentLang = "en";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>
