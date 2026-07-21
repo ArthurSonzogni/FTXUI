@@ -13,6 +13,7 @@ out/
 !.gitignore
 !CHANGELOG.md
 !CMakeLists.txt
+!conanfile.py
 !LICENSE
 !README.md
 !GEMINI.md
@@ -83,6 +84,11 @@ out/
 # subprojects directory (meson wraps only, not downloaded sources):
 /subprojects/*
 !subprojects/*.wrap
+
+# test_package directory (Conan recipe self-test):
+!test_package/**/*.py
+!test_package/**/*.txt
+!test_package/**/*.cpp
 
 # tools directory:
 !tools/**/*.sh

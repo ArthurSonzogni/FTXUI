@@ -1,0 +1,43 @@
+name: Conan
+
+on:
+  # On new commits to main:
+  push:
+    branches:
+      - main
+
+  # On pull requests:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test_conan:
+    name: "Conan, ${{ matrix.os }}, shared=${{ matrix.shared }}"
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        shared: ["False", "True"]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: "Install Conan"
+        run: pip install conan
+
+      - name: "Detect Conan profile"
+        run: conan profile detect
+
+      - name: "conan create ."
+        run: >
+          conan create .
+          --build=missing
+          -o "&:shared=${{ matrix.shared }}"

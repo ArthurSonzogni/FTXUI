@@ -26,6 +26,12 @@ After ensuring your environment is set up correctly, create a Conan configuratio
 > team but by the community. The package maintainer appears to actively update it
 > to the latest releases. Many thanks to the maintainer for their work!
 
+FTXUI also ships its own `conanfile.py` at the root of the repository, tested
+by CI on every commit. It isn't published to Conan Center itself, but it can
+be used to consume FTXUI directly from a local checkout via
+`conan create .`, and could serve as the basis for an official Conan Center
+recipe.
+
 @todo If you are familiar with the process, please consider adding an "official" build script to Conan Center.
 This could be a GitHub Action that automatically updates Conan Center upon new releases.
 
