@@ -41,7 +41,7 @@ using ftxui::Component;
 int main() {
   App app = App::TerminalOutput();
   Component button = Button("Click me", app.ExitLoopClosure());
-  screen.Loop(button);
+  app.Loop(button);
   return 0;
 }
 ```
