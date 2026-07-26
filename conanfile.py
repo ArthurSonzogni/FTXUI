@@ -59,6 +59,11 @@ class FtxuiConan(ConanFile):
 
     def generate(self):
         tc = CMakeToolchain(self)
+        if self.settings.os == "Windows":
+            # Avoid the multi-config "Visual Studio" generator, which installs
+            # libraries into lib/<CONFIG>/ instead of lib/, where Conan expects
+            # them.
+            tc.generator = "Ninja"
         tc.variables["BUILD_SHARED_LIBS"] = bool(self.options.shared)
         tc.variables["FTXUI_BUILD_DOCS"] = False
         tc.variables["FTXUI_BUILD_EXAMPLES"] = False
