@@ -84,7 +84,7 @@ class FTXUI_EXPORT(DOM) Node {
   virtual void Reserved7();
   virtual void Reserved8();
 
-  friend void Render(Screen& screen, Node* node, Selection& selection);
+  friend FTXUI_EXPORT(DOM) void Render(Screen& screen, Node* node, Selection& selection);
 
  protected:
   Elements children_;

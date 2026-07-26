@@ -31,7 +31,7 @@ jobs:
           python-version: '3.x'
 
       - name: "Install Conan"
-        run: pip install conan
+        run: pip install conan ninja
 
       - name: "Detect Conan profile"
         run: conan profile detect
