@@ -6,4 +6,5 @@ screen_sources = files(
   'screen.cpp',
   'string.cpp',
   'terminal.cpp',
+  '../util/ref.cpp',
 )

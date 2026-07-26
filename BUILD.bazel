@@ -45,6 +45,7 @@ ftxui_cc_library(
         "src/ftxui/screen/string_internal.hpp",
         "src/ftxui/screen/terminal.cpp",
         "src/ftxui/screen/util.hpp",
+        "src/ftxui/util/ref.cpp",
     ],
     hdrs = [
         "include/ftxui/screen/box.hpp",
