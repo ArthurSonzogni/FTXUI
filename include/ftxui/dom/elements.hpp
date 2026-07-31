@@ -9,6 +9,7 @@
 #include <memory>
 
 #include <string_view>
+#include <format>
 #include "ftxui/dom/canvas.hpp"
 #include "ftxui/dom/direction.hpp"
 #include "ftxui/dom/flexbox_config.hpp"
@@ -56,6 +57,21 @@ FTXUI_EXPORT(DOM) Decorator operator|(Decorator, Decorator);
 // --- Widget ---
 FTXUI_EXPORT(DOM) Element text(std::string_view text);
 FTXUI_EXPORT(DOM) Element vtext(std::string_view text);
+
+
+/// @brief Variation of text element that accepts formatting
+template <typename... Args>
+inline Element ftext(std::format_string<Args...> fmt, Args&&... args) {
+  return text(std::format(fmt, std::forward<Args>(args)...));
+}
+
+/// @brief Variation of vtext element that accepts formatting
+template <typename... Args>
+inline Element fvtext(std::format_string<Args...> fmt, Args&&... args) {
+  return vtext(std::format(fmt, std::forward<Args>(args)...));
+}
+
+
 FTXUI_EXPORT(DOM) Element separator();
 FTXUI_EXPORT(DOM) Element separatorLight();
 FTXUI_EXPORT(DOM) Element separatorDashed();
@@ -81,6 +97,47 @@ FTXUI_EXPORT(DOM) Element gaugeRight(float progress);
 FTXUI_EXPORT(DOM) Element gaugeUp(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDown(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDirection(float progress, Direction direction);
+
+FTXUI_EXPORT(DOM)
+Element gaugeDirection(float progress,
+                       Direction direction,
+                       std::vector<std::string> charset);
+FTXUI_EXPORT(DOM)
+Element gauge(float progress, std::vector<std::string> charset);
+FTXUI_EXPORT(DOM)
+Element gaugeLeft(float progress, std::vector<std::string> charset);
+FTXUI_EXPORT(DOM)
+Element gaugeRight(float progress, std::vector<std::string> charset);
+FTXUI_EXPORT(DOM)
+Element gaugeUp(float progress, std::vector<std::string> charset);
+FTXUI_EXPORT(DOM)
+Element gaugeDown(float progress, std::vector<std::string> charset);
+
+FTXUI_EXPORT(DOM)
+Element gaugeDirection(float progress,
+                       Direction direction,
+                       std::string_view empty_char,
+                       std::string_view filled_char);
+FTXUI_EXPORT(DOM)
+Element gauge(float progress,
+              std::string_view empty_char,
+              std::string_view filled_char);
+FTXUI_EXPORT(DOM)
+Element gaugeLeft(float progress,
+                 std::string_view empty_char,
+                 std::string_view filled_char);
+FTXUI_EXPORT(DOM)
+Element gaugeRight(float progress,
+                  std::string_view empty_char,
+                  std::string_view filled_char);
+FTXUI_EXPORT(DOM)
+Element gaugeUp(float progress,
+                std::string_view empty_char,
+                std::string_view filled_char);
+FTXUI_EXPORT(DOM)
+Element gaugeDown(float progress,
+                  std::string_view empty_char,
+                  std::string_view filled_char);
 FTXUI_EXPORT(DOM) Element border(Element);
 FTXUI_EXPORT(DOM) Element borderLight(Element);
 FTXUI_EXPORT(DOM) Element borderDashed(Element);

@@ -7,6 +7,9 @@
 # (otherwise causes terribly slow indexing)
 out/
 
+# Ignore CLion's project configs and preferances
+.idea/
+
 # Allowed top-level files:
 !.clang-format
 !.clang-tidy

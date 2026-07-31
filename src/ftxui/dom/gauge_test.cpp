@@ -99,5 +99,21 @@ TEST(GaugeTest, OneVertical) {
       screen.ToString());
 }
 
+TEST(GaugeTest, CustomTwoCharHorizontal) {
+  auto root = gauge(0.5, " ", "#");
+  Screen screen(10, 1);
+  Render(screen, root);
+
+  EXPECT_EQ("#####     ", screen.ToString());
+}
+
+TEST(GaugeTest, CustomVectorHorizontal) {
+  auto root = gauge(0.5, std::vector<std::string>{" ", "░", "▒", "▓", "█"});
+  Screen screen(10, 1);
+  Render(screen, root);
+
+  EXPECT_EQ("█████     ", screen.ToString());
+}
+
 }  // namespace ftxui
 // NOLINTEND

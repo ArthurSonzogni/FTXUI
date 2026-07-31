@@ -48,8 +48,10 @@ static const std::string charset_vertical[10] = {
 
 class Gauge : public Node {
  public:
-  Gauge(float progress, Direction direction)
-      : progress_(progress), direction_(direction) {
+  Gauge(float progress, Direction direction, std::vector<std::string> charset = {})
+      : progress_(progress),
+        direction_(direction),
+        charset_(std::move(charset)) {
     // This handle NAN correctly:
     if (!(progress_ > 0.F)) {
       progress_ = 0.F;
@@ -102,11 +104,37 @@ class Gauge : public Node {
       return;
     }
 
-    const auto* charset = Terminal::GetQuirks().BlockCharacters()  // NOLINT
-                              ? charset_horizontal
-                              : charset_horizontal_microsoft;
+    if (charset_.empty()) {
+      const auto* charset = Terminal::GetQuirks().BlockCharacters()  // NOLINT
+                                ? charset_horizontal
+                                : charset_horizontal_microsoft;
 
-    // Draw the progress bar horizontally across the full allocated height:
+      // Draw the progress bar horizontally across the full allocated height:
+      const float progress = invert ? 1.F - progress_ : progress_;
+      const auto limit =
+          float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
+      const int limit_int = static_cast<int>(limit);
+
+      for (int y = box_.y_min; y <= box_.y_max; y++) {
+        int x = box_.x_min;
+        while (x < limit_int) {
+          screen.at(x++, y) = charset[9];  // NOLINT
+        }
+        // NOLINTNEXTLINE
+        screen.at(x++, y) = charset[int(9 * (limit - limit_int))];
+        while (x <= box_.x_max) {
+          screen.at(x++, y) = charset[0];  // NOLINT
+        }
+      }
+
+      if (invert) {
+        Invert(screen);
+      }
+      return;
+    }
+
+    // Custom charset rendering:
+    const size_t max_index = charset_.size() - 1;
     const float progress = invert ? 1.F - progress_ : progress_;
     const auto limit =
         float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
@@ -115,17 +143,15 @@ class Gauge : public Node {
     for (int y = box_.y_min; y <= box_.y_max; y++) {
       int x = box_.x_min;
       while (x < limit_int) {
-        screen.at(x++, y) = charset[9];  // NOLINT
+        screen.at(x++, y) = charset_[max_index];
       }
-      // NOLINTNEXTLINE
-      screen.at(x++, y) = charset[int(9 * (limit - limit_int))];
+      if (x <= box_.x_max) {
+        const int partial_idx = static_cast<int>(max_index * (limit - limit_int));
+        screen.at(x++, y) = charset_[partial_idx];
+      }
       while (x <= box_.x_max) {
-        screen.at(x++, y) = charset[0];  // NOLINT
+        screen.at(x++, y) = charset_[0];
       }
-    }
-
-    if (invert) {
-      Invert(screen);
     }
   }
 
@@ -134,7 +160,32 @@ class Gauge : public Node {
       return;
     }
 
-    // Draw the progress bar vertically across the full allocated width:
+    if (charset_.empty()) {
+      // Draw the progress bar vertically across the full allocated width:
+      const float progress = invert ? progress_ : 1.F - progress_;
+      const float limit =
+          float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
+      const int limit_int = static_cast<int>(limit);
+
+      for (int x = box_.x_min; x <= box_.x_max; x++) {
+        int y = box_.y_min;
+        while (y < limit_int) {
+          screen.at(x, y++) = charset_vertical[8];  // NOLINT
+        }
+        // NOLINTNEXTLINE
+        screen.at(x, y++) = charset_vertical[int(8 * (limit - limit_int))];
+        while (y <= box_.y_max) {
+          screen.at(x, y++) = charset_vertical[0];  // NOLINT
+        }
+      }
+      if (invert) {
+        Invert(screen);
+      }
+      return;
+    }
+
+    // Custom charset rendering:
+    const size_t max_index = charset_.size() - 1;
     const float progress = invert ? progress_ : 1.F - progress_;
     const float limit =
         float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
@@ -143,16 +194,15 @@ class Gauge : public Node {
     for (int x = box_.x_min; x <= box_.x_max; x++) {
       int y = box_.y_min;
       while (y < limit_int) {
-        screen.at(x, y++) = charset_vertical[8];  // NOLINT
+        screen.at(x, y++) = charset_[max_index];
       }
-      // NOLINTNEXTLINE
-      screen.at(x, y++) = charset_vertical[int(8 * (limit - limit_int))];
+      if (y <= box_.y_max) {
+        const int partial_idx = static_cast<int>(max_index * (limit - limit_int));
+        screen.at(x, y++) = charset_[partial_idx];
+      }
       while (y <= box_.y_max) {
-        screen.at(x, y++) = charset_vertical[0];  // NOLINT
+        screen.at(x, y++) = charset_[0];
       }
-    }
-    if (invert) {
-      Invert(screen);
     }
   }
 
@@ -167,6 +217,7 @@ class Gauge : public Node {
  private:
   float progress_;
   Direction direction_;
+  std::vector<std::string> charset_;
 };
 
 }  // namespace
@@ -178,6 +229,13 @@ class Gauge : public Node {
 /// @ingroup dom
 Element gaugeDirection(float progress, Direction direction) {
   return std::make_shared<Gauge>(progress, direction);
+}
+
+/// @brief overload of gaugeDirection that supports a custom charset
+Element gaugeDirection(float progress,
+                       Direction direction,
+                       std::vector<std::string> charset) {
+  return std::make_shared<Gauge>(progress, direction, std::move(charset));
 }
 
 /// @brief Draw a high definition progress bar progressing from left to right.
@@ -202,6 +260,11 @@ Element gaugeRight(float progress) {
   return gaugeDirection(progress, Direction::Right);
 }
 
+/// @brief overload of gaugeRight that supports a custom charset
+Element gaugeRight(float progress, std::vector<std::string> charset) {
+  return gaugeDirection(progress, Direction::Right, std::move(charset));
+}
+
 /// @brief Draw a high definition progress bar progressing from right to left.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
@@ -222,6 +285,11 @@ Element gaugeRight(float progress) {
 /// ~~~
 Element gaugeLeft(float progress) {
   return gaugeDirection(progress, Direction::Left);
+}
+
+/// @brief overload of gaugeLeft that supports a custom charset
+Element gaugeLeft(float progress, std::vector<std::string> charset) {
+  return gaugeDirection(progress, Direction::Left, std::move(charset));
 }
 
 /// @brief Draw a high definition progress bar progressing from bottom to top.
@@ -253,6 +321,11 @@ Element gaugeUp(float progress) {
   return gaugeDirection(progress, Direction::Up);
 }
 
+/// @brief overload of gaugeUp that supports a custom charset
+Element gaugeUp(float progress, std::vector<std::string> charset) {
+  return gaugeDirection(progress, Direction::Up, std::move(charset));
+}
+
 /// @brief Draw a high definition progress bar progressing from top to bottom.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
@@ -282,6 +355,11 @@ Element gaugeDown(float progress) {
   return gaugeDirection(progress, Direction::Down);
 }
 
+/// @brief overload of gaugeDown that supports a custom charset
+Element gaugeDown(float progress, std::vector<std::string> charset) {
+  return gaugeDirection(progress, Direction::Down, std::move(charset));
+}
+
 /// @brief Draw a high definition progress bar.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
@@ -302,6 +380,53 @@ Element gaugeDown(float progress) {
 /// ~~~
 Element gauge(float progress) {
   return gaugeRight(progress);
+}
+
+/// @brief overload of gauge that supports a custom charset
+Element gauge(float progress, std::vector<std::string> charset) {
+  return gaugeRight(progress, std::move(charset));
+}
+
+
+/// @brief The following functions are also overloads
+/// for two sets of characters (character for empty and a character for filled)
+Element gaugeDirection(float progress,
+                       Direction direction,
+                       std::string_view empty_char,
+                       std::string_view filled_char) {
+  return gaugeDirection(progress, direction,
+                         std::vector<std::string>{std::string(empty_char),
+                                                  std::string(filled_char)});
+}
+
+Element gauge(float progress,
+              std::string_view empty_char,
+              std::string_view filled_char) {
+  return gaugeRight(progress, empty_char, filled_char);
+}
+
+Element gaugeRight(float progress,
+                  std::string_view empty_char,
+                  std::string_view filled_char) {
+  return gaugeDirection(progress, Direction::Right, empty_char, filled_char);
+}
+
+Element gaugeLeft(float progress,
+                 std::string_view empty_char,
+                 std::string_view filled_char) {
+  return gaugeDirection(progress, Direction::Left, empty_char, filled_char);
+}
+
+Element gaugeUp(float progress,
+                std::string_view empty_char,
+                std::string_view filled_char) {
+  return gaugeDirection(progress, Direction::Up, empty_char, filled_char);
+}
+
+Element gaugeDown(float progress,
+                  std::string_view empty_char,
+                  std::string_view filled_char) {
+  return gaugeDirection(progress, Direction::Down, empty_char, filled_char);
 }
 
 }  // namespace ftxui

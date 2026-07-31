@@ -158,5 +158,44 @@ TEST(TextTest, NewlineMultiple) {
   EXPECT_EQ("a\r\nb\r\nc", screen.ToString());
 }
 
+TEST(TextTest, Formatted) {
+  auto element = ftext("{} {} {:.2f}",
+    "Hello",
+    1492,
+    2413.13131424234243
+  );
+  Screen screen(18, 1);
+  Render(screen, element);
+  EXPECT_EQ("Hello 1492 2413.13", screen.ToString());
+}
+
+TEST(TextTest, FormattedWide) {
+  auto element = ftext("{}{}{}", "█", "❤️", "猫");
+  Screen screen(3, 1);
+  Render(screen, element);
+  EXPECT_EQ("█❤️猫", screen.ToString());
+}
+
+TEST(TextTest, FormattedVertical) {
+  auto element = fvtext("{}{}{:.2f}",
+    "Hello",
+    1492,
+    2413.13131424234243
+  );
+  Screen screen(1, 16);
+  Render(screen, element);
+  EXPECT_EQ("H\r\ne\r\nl\r\nl\r\no\r\n1\r\n4\r\n9"
+            "\r\n2\r\n2\r\n4\r\n1\r\n3\r\n.\r\n1\r\n3",
+    screen.ToString());
+}
+
+TEST(TextTest, WideFormattedVertical) {
+  auto element = fvtext("{}{}{}", "█", "❤️", "猫");
+  Screen screen(1, 3);
+  Render(screen, element);
+  EXPECT_EQ("█\r\n❤️\r\n猫", screen.ToString());
+}
+
+
 }  // namespace ftxui
 // NOLINTEND
