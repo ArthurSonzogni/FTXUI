@@ -10,15 +10,20 @@ on:
 
 jobs:
   build-shared:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Configure CMake
-        env:
-          CC: clang
-          CXX: clang++
+        shell: bash
         run: |
           cmake -B build \
             -DBUILD_SHARED_LIBS=ON \
