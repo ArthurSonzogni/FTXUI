@@ -364,9 +364,30 @@ Element gauge(float progress) {
 // under the hood. Collapsed to a single function: pass any-length charset
 // (2 entries for a plain bar, more for shaded boundary cells), direction
 // defaults to Right like the rest of the gauge*() family.
-/// @brief Draw a high definition progress bar using a custom charset. The
-/// first entry is the "empty" glyph, the last is the "full" glyph, and any
-/// entries in between are used to render the partially-filled boundary cell.
+/// @brief Draw a high definition progress bar using a custom charset.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @param charset The glyphs to render the bar with, from the "empty" glyph
+/// (index 0) to the "full" glyph (last index). Entries in between are used
+/// for the partially-filled boundary cell; a 2-entry charset gives a plain,
+/// unshaded two-glyph bar.
+/// @param direction Direction of progress bars progression.
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge rendered with a custom charset instead of the default block
+/// characters.
+/// ~~~cpp
+/// border(gaugeCharset(0.5, {".", "#"}))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+/// ┌──────────────────────────────────────────────────────────────────────────┐
+/// │#####################################.....................................│
+/// └──────────────────────────────────────────────────────────────────────────┘
+/// ~~~
 Element gaugeCharset(float progress,
                       std::vector<std::string> charset,
                       Direction direction) {
