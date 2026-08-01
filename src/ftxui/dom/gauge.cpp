@@ -104,37 +104,21 @@ class Gauge : public Node {
       return;
     }
 
+    // `full` is the index of the "full" glyph in `charset`; the boundary
+    // cell picks glyph index int(full * fractional_fill).
+    const std::string* charset;
+    int full;
     if (charset_.empty()) {
-      const auto* charset = Terminal::GetQuirks().BlockCharacters()  // NOLINT
-                                ? charset_horizontal
-                                : charset_horizontal_microsoft;
-
-      // Draw the progress bar horizontally across the full allocated height:
-      const float progress = invert ? 1.F - progress_ : progress_;
-      const auto limit =
-          float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
-      const int limit_int = static_cast<int>(limit);
-
-      for (int y = box_.y_min; y <= box_.y_max; y++) {
-        int x = box_.x_min;
-        while (x < limit_int) {
-          screen.at(x++, y) = charset[9];  // NOLINT
-        }
-        // NOLINTNEXTLINE
-        screen.at(x++, y) = charset[int(9 * (limit - limit_int))];
-        while (x <= box_.x_max) {
-          screen.at(x++, y) = charset[0];  // NOLINT
-        }
-      }
-
-      if (invert) {
-        Invert(screen);
-      }
-      return;
+      charset = Terminal::GetQuirks().BlockCharacters()  // NOLINT
+                    ? charset_horizontal
+                    : charset_horizontal_microsoft;
+      full = 9;
+    } else {
+      charset = charset_.data();
+      full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Custom charset rendering:
-    const size_t max_index = charset_.size() - 1;
+    // Draw the progress bar horizontally across the full allocated height:
     const float progress = invert ? 1.F - progress_ : progress_;
     const auto limit =
         float(box_.x_min) + progress * float(box_.x_max - box_.x_min + 1);
@@ -143,15 +127,18 @@ class Gauge : public Node {
     for (int y = box_.y_min; y <= box_.y_max; y++) {
       int x = box_.x_min;
       while (x < limit_int) {
-        screen.at(x++, y) = charset_[max_index];
+        screen.at(x++, y) = charset[full];
       }
       if (x <= box_.x_max) {
-        const int partial_idx = static_cast<int>(max_index * (limit - limit_int));
-        screen.at(x++, y) = charset_[partial_idx];
+        screen.at(x++, y) = charset[int(full * (limit - limit_int))];
       }
       while (x <= box_.x_max) {
-        screen.at(x++, y) = charset_[0];
+        screen.at(x++, y) = charset[0];
       }
+    }
+
+    if (invert) {
+      Invert(screen);
     }
   }
 
@@ -160,32 +147,17 @@ class Gauge : public Node {
       return;
     }
 
+    const std::string* charset;
+    int full;
     if (charset_.empty()) {
-      // Draw the progress bar vertically across the full allocated width:
-      const float progress = invert ? progress_ : 1.F - progress_;
-      const float limit =
-          float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
-      const int limit_int = static_cast<int>(limit);
-
-      for (int x = box_.x_min; x <= box_.x_max; x++) {
-        int y = box_.y_min;
-        while (y < limit_int) {
-          screen.at(x, y++) = charset_vertical[8];  // NOLINT
-        }
-        // NOLINTNEXTLINE
-        screen.at(x, y++) = charset_vertical[int(8 * (limit - limit_int))];
-        while (y <= box_.y_max) {
-          screen.at(x, y++) = charset_vertical[0];  // NOLINT
-        }
-      }
-      if (invert) {
-        Invert(screen);
-      }
-      return;
+      charset = charset_vertical;
+      full = 8;
+    } else {
+      charset = charset_.data();
+      full = static_cast<int>(charset_.size()) - 1;
     }
 
-    // Custom charset rendering:
-    const size_t max_index = charset_.size() - 1;
+    // Draw the progress bar vertically across the full allocated width:
     const float progress = invert ? progress_ : 1.F - progress_;
     const float limit =
         float(box_.y_min) + progress * float(box_.y_max - box_.y_min + 1);
@@ -194,15 +166,17 @@ class Gauge : public Node {
     for (int x = box_.x_min; x <= box_.x_max; x++) {
       int y = box_.y_min;
       while (y < limit_int) {
-        screen.at(x, y++) = charset_[max_index];
+        screen.at(x, y++) = charset[full];
       }
       if (y <= box_.y_max) {
-        const int partial_idx = static_cast<int>(max_index * (limit - limit_int));
-        screen.at(x, y++) = charset_[partial_idx];
+        screen.at(x, y++) = charset[int(full * (limit - limit_int))];
       }
       while (y <= box_.y_max) {
-        screen.at(x, y++) = charset_[0];
+        screen.at(x, y++) = charset[0];
       }
+    }
+    if (invert) {
+      Invert(screen);
     }
   }
 
