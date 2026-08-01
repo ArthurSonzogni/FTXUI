@@ -231,13 +231,6 @@ Element gaugeDirection(float progress, Direction direction) {
   return std::make_shared<Gauge>(progress, direction);
 }
 
-/// @brief overload of gaugeDirection that supports a custom charset
-Element gaugeDirection(float progress,
-                       Direction direction,
-                       std::vector<std::string> charset) {
-  return std::make_shared<Gauge>(progress, direction, std::move(charset));
-}
-
 /// @brief Draw a high definition progress bar progressing from left to right.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
@@ -260,11 +253,6 @@ Element gaugeRight(float progress) {
   return gaugeDirection(progress, Direction::Right);
 }
 
-/// @brief overload of gaugeRight that supports a custom charset
-Element gaugeRight(float progress, std::vector<std::string> charset) {
-  return gaugeDirection(progress, Direction::Right, std::move(charset));
-}
-
 /// @brief Draw a high definition progress bar progressing from right to left.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
@@ -285,11 +273,6 @@ Element gaugeRight(float progress, std::vector<std::string> charset) {
 /// ~~~
 Element gaugeLeft(float progress) {
   return gaugeDirection(progress, Direction::Left);
-}
-
-/// @brief overload of gaugeLeft that supports a custom charset
-Element gaugeLeft(float progress, std::vector<std::string> charset) {
-  return gaugeDirection(progress, Direction::Left, std::move(charset));
 }
 
 /// @brief Draw a high definition progress bar progressing from bottom to top.
@@ -321,11 +304,6 @@ Element gaugeUp(float progress) {
   return gaugeDirection(progress, Direction::Up);
 }
 
-/// @brief overload of gaugeUp that supports a custom charset
-Element gaugeUp(float progress, std::vector<std::string> charset) {
-  return gaugeDirection(progress, Direction::Up, std::move(charset));
-}
-
 /// @brief Draw a high definition progress bar progressing from top to bottom.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
@@ -355,11 +333,6 @@ Element gaugeDown(float progress) {
   return gaugeDirection(progress, Direction::Down);
 }
 
-/// @brief overload of gaugeDown that supports a custom charset
-Element gaugeDown(float progress, std::vector<std::string> charset) {
-  return gaugeDirection(progress, Direction::Down, std::move(charset));
-}
-
 /// @brief Draw a high definition progress bar.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @ingroup dom
@@ -382,51 +355,22 @@ Element gauge(float progress) {
   return gaugeRight(progress);
 }
 
-/// @brief overload of gauge that supports a custom charset
-Element gauge(float progress, std::vector<std::string> charset) {
-  return gaugeRight(progress, std::move(charset));
-}
-
-
-/// @brief The following functions are also overloads
-/// for two sets of characters (character for empty and a character for filled)
-Element gaugeDirection(float progress,
-                       Direction direction,
-                       std::string_view empty_char,
-                       std::string_view filled_char) {
-  return gaugeDirection(progress, direction,
-                         std::vector<std::string>{std::string(empty_char),
-                                                  std::string(filled_char)});
-}
-
-Element gauge(float progress,
-              std::string_view empty_char,
-              std::string_view filled_char) {
-  return gaugeRight(progress, empty_char, filled_char);
-}
-
-Element gaugeRight(float progress,
-                  std::string_view empty_char,
-                  std::string_view filled_char) {
-  return gaugeDirection(progress, Direction::Right, empty_char, filled_char);
-}
-
-Element gaugeLeft(float progress,
-                 std::string_view empty_char,
-                 std::string_view filled_char) {
-  return gaugeDirection(progress, Direction::Left, empty_char, filled_char);
-}
-
-Element gaugeUp(float progress,
-                std::string_view empty_char,
-                std::string_view filled_char) {
-  return gaugeDirection(progress, Direction::Up, empty_char, filled_char);
-}
-
-Element gaugeDown(float progress,
-                  std::string_view empty_char,
-                  std::string_view filled_char) {
-  return gaugeDirection(progress, Direction::Down, empty_char, filled_char);
+// The original patch added 12 overloads (a Direction-taking and a
+// Direction-less variant, times a vector<string> and a 2-char convenience
+// form, times gauge()/gaugeLeft()/gaugeRight()/gaugeUp()/gaugeDown()). That
+// broke from how the rest of this file exposes variants of an element
+// (separatorStyled(), borderStyled(): one dedicated name, not overloads of
+// the base function), and the 2-char form only ever built a 2-entry vector
+// under the hood. Collapsed to a single function: pass any-length charset
+// (2 entries for a plain bar, more for shaded boundary cells), direction
+// defaults to Right like the rest of the gauge*() family.
+/// @brief Draw a high definition progress bar using a custom charset. The
+/// first entry is the "empty" glyph, the last is the "full" glyph, and any
+/// entries in between are used to render the partially-filled boundary cell.
+Element gaugeCharset(float progress,
+                      std::vector<std::string> charset,
+                      Direction direction) {
+  return std::make_shared<Gauge>(progress, direction, std::move(charset));
 }
 
 }  // namespace ftxui

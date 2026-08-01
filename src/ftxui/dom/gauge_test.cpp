@@ -100,7 +100,7 @@ TEST(GaugeTest, OneVertical) {
 }
 
 TEST(GaugeTest, CustomTwoCharHorizontal) {
-  auto root = gauge(0.5, " ", "#");
+  auto root = gaugeCharset(0.5, {" ", "#"});
   Screen screen(10, 1);
   Render(screen, root);
 
@@ -108,7 +108,7 @@ TEST(GaugeTest, CustomTwoCharHorizontal) {
 }
 
 TEST(GaugeTest, CustomVectorHorizontal) {
-  auto root = gauge(0.5, std::vector<std::string>{" ", "░", "▒", "▓", "█"});
+  auto root = gaugeCharset(0.5, {" ", "░", "▒", "▓", "█"});
   Screen screen(10, 1);
   Render(screen, root);
 
