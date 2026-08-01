@@ -82,12 +82,8 @@ FTXUI_EXPORT(DOM) Element gaugeUp(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDown(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDirection(float progress, Direction direction);
 
-// gaugeCharset() lets the caller pick the glyphs used to render a gauge,
-// instead of the built-in block characters. `charset` goes from the "empty"
-// glyph (index 0) to the "full" glyph (last index); a 2-entry vector gives a
-// plain two-glyph bar, a longer one adds intermediate shading levels for the
-// partially-filled boundary cell. `direction` defaults to Right, matching
-// gauge()'s relationship to gaugeDirection().
+// charset[0] is the "empty" glyph, charset.back() is "full"; entries in
+// between shade the boundary cell.
 FTXUI_EXPORT(DOM)
 Element gaugeCharset(float progress,
                       std::vector<std::string> charset,

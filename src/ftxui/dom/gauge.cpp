@@ -355,21 +355,13 @@ Element gauge(float progress) {
   return gaugeRight(progress);
 }
 
-// The original patch added 12 overloads (a Direction-taking and a
-// Direction-less variant, times a vector<string> and a 2-char convenience
-// form, times gauge()/gaugeLeft()/gaugeRight()/gaugeUp()/gaugeDown()). That
-// broke from how the rest of this file exposes variants of an element
-// (separatorStyled(), borderStyled(): one dedicated name, not overloads of
-// the base function), and the 2-char form only ever built a 2-entry vector
-// under the hood. Collapsed to a single function: pass any-length charset
-// (2 entries for a plain bar, more for shaded boundary cells), direction
-// defaults to Right like the rest of the gauge*() family.
+// One function instead of 12 overloads (gauge()/gaugeLeft()/.../ x
+// vector/2-char x with/without Direction): matches separatorStyled() /
+// borderStyled(), and the 2-char form was just sugar for a 2-entry vector.
 /// @brief Draw a high definition progress bar using a custom charset.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
-/// @param charset The glyphs to render the bar with, from the "empty" glyph
-/// (index 0) to the "full" glyph (last index). Entries in between are used
-/// for the partially-filled boundary cell; a 2-entry charset gives a plain,
-/// unshaded two-glyph bar.
+/// @param charset Glyphs from "empty" (index 0) to "full" (last index); a
+/// 2-entry charset gives a plain unshaded bar.
 /// @param direction Direction of progress bars progression.
 /// @ingroup dom
 ///
