@@ -329,9 +329,9 @@ Element gauge(float progress) {
   return gaugeRight(progress);
 }
 
-// One function instead of 12 overloads (gauge()/gaugeLeft()/.../ x
-// vector/2-char x with/without Direction): matches separatorStyled() /
-// borderStyled(), and the 2-char form was just sugar for a 2-entry vector.
+// A dedicated name for this variant, like separatorStyled()/borderStyled(),
+// rather than an overload of gauge(). direction defaults to Right, matching
+// gauge()'s relationship to gaugeDirection().
 /// @brief Draw a high definition progress bar using a custom charset.
 /// @param progress The proportion of the area to be filled. Belong to [0,1].
 /// @param charset Glyphs from "empty" (index 0) to "full" (last index); a
