@@ -4,6 +4,14 @@ Changelog
 Next
 ====
 
+### Component
+- Bugfix: Fix mouse selection producing a garbled/wrong selection box when
+  the cursor position reply arrived in the middle of a drag. The frame
+  offset (`cursor_x_`/`cursor_y_`) could change between the mouse-press and
+  mouse-release of a single selection gesture, so the start and end
+  coordinates ended up computed against different offsets. Regressed by the
+  cursor position throttle fix in #1310.
+
 7.0.2 (2026-08-01)
 ------------------
 
