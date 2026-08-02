@@ -240,6 +240,122 @@ TEST(SelectionTest, HBoxSelection) {
             "Lo\x1B[7mrem ipsum dolorUt e\x1B[27mnim ad minim       ");
 }
 
+// The next two tests drive a selection through `App`/`Loop` (press, move,
+// release, each in its own frame), then re-render the same document with a
+// plain `Selection` built from `screen.GetSelection()`'s row/column extent
+// to check exactly what got highlighted. `screen.CellAt()` can't be used
+// directly after `loop.RunOnce()`: `App::Internal::Draw()` clears its cell
+// buffer at the end of every frame (to build the next diff), so by the time
+// a test can inspect it, it's already back to defaults.
+
+// A selection built up over several separate frames (press, then one or
+// more moves, then release each processed in their own `loop.RunOnce()`)
+// must render the same thing as if it had been submitted all at once: the
+// first row from the start column to the end of the line, the last row from
+// the start of the line to the end column, and every row in between fully
+// selected (this is regular flow/text selection, not a rectangular block
+// selection -- see the pre-existing VBoxSelection/HBoxSelection tests).
+TEST(SelectionTest, SelectionAcrossMultipleFrames) {
+  // Each row is "0123456": column `x` holds the digit `x`.
+  const std::string content =
+      "0123456\n0123456\n0123456\n0123456\n0123456\n0123456\n0123456";
+  auto component = Renderer([&] { return text(content); });
+  auto screen = App::FixedSize(7, 7);
+  Loop loop(&screen, component);
+  loop.RunOnce();
+
+  screen.PostEvent(MousePressed(2, 2));  // local (1, 1)
+  loop.RunOnce();
+  screen.PostEvent(MouseMove(4, 4));  // local (3, 3)
+  loop.RunOnce();
+  screen.PostEvent(MouseMove(6, 6));  // local (5, 5)
+  loop.RunOnce();
+  screen.PostEvent(MouseReleased(6, 6));
+  loop.RunOnce();
+
+  EXPECT_EQ(screen.GetSelection(),
+            "123456\n0123456\n0123456\n0123456\n012345");
+
+  // Cross-check what actually gets rendered for that selection: row 1 from
+  // column 1 to the end, rows 2-4 fully selected, row 5 from the start to
+  // column 5.
+  auto element = text(content);
+  auto render_screen = App::FixedSize(7, 7);
+  Selection selection(1, 1, 5, 5);
+  Render(render_screen, element.get(), selection);
+  EXPECT_EQ(render_screen.ToString(),
+            "0123456\r\n"
+            "0\x1B[7m123456\x1B[27m\r\n"
+            "\x1B[7m0123456\x1B[27m\r\n"
+            "\x1B[7m0123456\x1B[27m\r\n"
+            "\x1B[7m0123456\x1B[27m\r\n"
+            "\x1B[7m012345\x1B[27m6\r\n"
+            "0123456");
+}
+
+// Regression test: the frame offset (used to translate absolute terminal
+// mouse coordinates into document-relative ones) must not change in the
+// middle of a selection gesture. If a `CursorPosition` reply lands between
+// the mouse-press and the mouse-release, start_{x,y} and end_{x,y} would
+// otherwise be computed against different offsets, producing a selection
+// that doesn't correspond to any real mouse path. See the fix following the
+// #1310 cursor-position throttle change.
+TEST(SelectionTest, SelectionKeepsConsistentOffsetWhenCursorPositionReplyArrivesMidDrag) {
+  // Each row is "0123456": column `x` holds the digit `x`.
+  const std::string content =
+      "0123456\n0123456\n0123456\n0123456\n0123456\n0123456\n0123456";
+  auto component = Renderer([&] { return text(content); });
+  auto screen = App::FixedSize(7, 7);
+  Loop loop(&screen, component);
+  loop.RunOnce();
+
+  // Press while the frame offset is still the default (1, 1): local (1, 1).
+  screen.PostEvent(MousePressed(2, 2));
+  loop.RunOnce();
+
+  // The cursor-position reply lands mid-drag, revealing a different offset.
+  screen.PostEvent(Event::CursorPosition("", 1, 5));
+  loop.RunOnce();
+
+  // Continue the drag and release with an absolute position a real terminal
+  // would report consistently with the *new* offset.
+  screen.PostEvent(MouseMove(2, 8));
+  loop.RunOnce();
+  screen.PostEvent(MouseReleased(2, 8));
+  loop.RunOnce();
+
+  // The offset must stay frozen at (1, 1) -- the value in effect when the
+  // drag started -- for the whole gesture: (2, 8) maps to local (1, 7),
+  // which falls off the bottom of the 7x7 grid (rows 0-6). Since the end
+  // point never lands on a visible row, every row from the start row down
+  // to the last visible row (1 through 6) is swept as a "row in between",
+  // matching a real, single mouse path under a constant offset.
+  //
+  // Without the fix, the reply would apply immediately: the release would
+  // be interpreted with the *new* offset (1, 5), landing at local (1, 3),
+  // while the press had already been recorded at local (1, 1) using the
+  // *old* offset -- two different offsets for one gesture, selecting only
+  // rows 1-3 instead, which doesn't correspond to any single mouse path.
+  EXPECT_EQ(screen.GetSelection(),
+            "123456\n0123456\n0123456\n0123456\n0123456\n0123456");
+
+  // Cross-check what actually gets rendered: row 1 from column 1 to the
+  // end, rows 2-6 fully selected (the end point, row 7, is off-grid, so it
+  // never becomes a "last, partial" row).
+  auto element = text(content);
+  auto render_screen = App::FixedSize(7, 7);
+  Selection selection(1, 1, 1, 7);
+  Render(render_screen, element.get(), selection);
+  EXPECT_EQ(render_screen.ToString(),
+            "0123456\r\n"
+            "0\x1B[7m123456\x1B[27m\r\n"
+            "\x1B[7m0123456\x1B[27m\r\n"
+            "\x1B[7m0123456\x1B[27m\r\n"
+            "\x1B[7m0123456\x1B[27m\r\n"
+            "\x1B[7m0123456\x1B[27m\r\n"
+            "\x1B[7m0123456\x1B[27m");
+}
+
 TEST(SelectionTest, HBoxSaturatedSelection) {
   auto element = hbox({
       text("Lorem ipsum dolor"),
