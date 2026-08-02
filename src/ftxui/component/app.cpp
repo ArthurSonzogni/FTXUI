@@ -867,8 +867,13 @@ void App::Internal::HandleTask(Component component, Task& task) {
     if constexpr (std::is_same_v<T, Event>) {
 
       if (arg.is_cursor_position()) {
-        cursor_x_ = arg.cursor_x();
-        cursor_y_ = arg.cursor_y();
+        // Don't let the frame offset change in the middle of a mouse
+        // selection: start_{x,y} and end_{x,y} must be computed against the
+        // same offset, or the selection box ends up inconsistent.
+        if (!selection_pending_) {
+          cursor_x_ = arg.cursor_x();
+          cursor_y_ = arg.cursor_y();
+        }
         cursor_position_request.OnReply();
         return;
       }
