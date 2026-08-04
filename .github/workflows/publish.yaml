@@ -17,7 +17,7 @@ env:
 
 jobs:
   publish:
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v0.0.4
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.4.2
     with:
       tag_name: ${{ github.event.inputs.tag_name }}
       registry_fork: ArthurSonzogni/bazel-central-registry

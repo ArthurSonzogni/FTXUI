@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0   # Need full history.
           fetch-tags: true # Need tags.
@@ -24,10 +24,10 @@ jobs:
         uses: lukka/get-cmake@latest
 
       - name: "Install emsdk"
-        uses: mymindstorm/setup-emsdk@v7
+        uses: mymindstorm/setup-emsdk@v16
 
       - name: "Install Doxygen"
-        uses: ssciwr/doxygen-install@v1
+        uses: ssciwr/doxygen-install@v2
         with:
           version: '1.12.0'
 
@@ -66,7 +66,7 @@ jobs:
           ../multiversion_docs/
 
       - name: "Deploy"
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: multiversion_docs
