@@ -41,8 +41,4 @@ if(FTXUI_ENABLE_INSTALL)
     INCLUDES
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
     )
-  install(EXPORT ftxui-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
-    CXX_MODULES_DIRECTORY ${CMAKE_INSTALL_LIBDIR}/cmake/ftxui
-    )
 endif()
