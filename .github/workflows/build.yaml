@@ -45,7 +45,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: "Build with Bazel"
         env:
@@ -93,11 +93,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Get number of CPU cores
-        uses: SimenB/github-actions-cpu-cores@v1
+        uses: SimenB/github-actions-cpu-cores@v3
         id: cpu-cores
 
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: "Setup Cpp"
         uses: aminya/setup-cpp@v1
@@ -170,7 +170,7 @@ jobs:
           ctest -C Debug --rerun-failed --output-on-failure;
 
       - name: Publish to codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           flags: ${{ runner.os }}
           name: ${{ runner.os }}-coverage
@@ -187,7 +187,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: "Setup Cpp"
         uses: aminya/setup-cpp@v1
@@ -230,7 +230,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: "Setup Cpp"
         uses: aminya/setup-cpp@v1
@@ -280,7 +280,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout repository"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: "Setup Cpp"
         uses: aminya/setup-cpp@v1
@@ -291,7 +291,7 @@ jobs:
           ninja: true
 
       - name: "Setup Python"
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.x'
 
