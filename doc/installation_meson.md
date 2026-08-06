@@ -88,7 +88,7 @@ To use FTXUI in your own Meson project, create a wrap file at `subprojects/ftxui
 ```ini
 [wrap-git]
 url = https://github.com/ArthurSonzogni/FTXUI.git
-revision = v7.0.2
+revision = v7.0.3
 
 [provide]
 ftxui-screen = ftxui_screen_dep

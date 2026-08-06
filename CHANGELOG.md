@@ -4,6 +4,9 @@ Changelog
 Next
 ====
 
+7.0.3 (2026-08-06)
+------------------
+
 ### Component
 - Bugfix: Fix incorrect mouse position in non-alternate-screen modes. The
   cursor position request (used to convert mouse coordinates from screen
