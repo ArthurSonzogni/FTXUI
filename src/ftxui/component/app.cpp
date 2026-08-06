@@ -196,33 +196,26 @@ struct App::Internal {
       }
 
       const auto now = std::chrono::steady_clock::now();
-      const auto delta = now - last_request_time_;
-      const auto delay = std::chrono::milliseconds(500) - delta;
-
-      if (delay <= std::chrono::milliseconds(0)) {
-        Send();
+      if (now - last_request_time_ < std::chrono::milliseconds(500)) {
+        // Too soon since the last request. Skip it: the request must be sent
+        // synchronously from Draw(), right after the cursor is moved to the
+        // frame's origin, so that the terminal's reply reflects that
+        // position. Draw() calls Request() again on the next frame, so the
+        // request isn't lost, only delayed.
         return;
       }
 
-      request_queued_ = true;
-      internal_->task_runner.PostDelayedTask(
-          [this] {
-            request_queued_ = false;
-            Request();
-          },
-          delay);
+      Send();
     }
 
     void OnReply() { pending_request_ = false; }
 
     bool HasPending() const {
-      if (pending_request_) {
-        const auto now = std::chrono::steady_clock::now();
-        if (now - last_sent_time_ < std::chrono::seconds(5)) {
-          return true;
-        }
+      if (!pending_request_) {
+        return false;
       }
-      return request_queued_;
+      const auto now = std::chrono::steady_clock::now();
+      return now - last_sent_time_ < std::chrono::seconds(5);
     }
 
    private:
@@ -240,7 +233,6 @@ struct App::Internal {
         std::chrono::steady_clock::now() - std::chrono::hours(1);
     std::chrono::steady_clock::time_point last_sent_time_ =
         std::chrono::steady_clock::now() - std::chrono::hours(1);
-    bool request_queued_ = false;
   };
 
   ThrottledRequest cursor_position_request;

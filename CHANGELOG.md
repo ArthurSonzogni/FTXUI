@@ -5,6 +5,13 @@ Next
 ====
 
 ### Component
+- Bugfix: Fix incorrect mouse position in non-alternate-screen modes. The
+  cursor position request (used to convert mouse coordinates from screen
+  space to frame space) could be sent asynchronously, after the cursor had
+  already moved away from the frame's origin, causing the terminal's reply to
+  be misread as the wrong offset. Regressed by the 7.0.2 throttle fix, which
+  made the request's 500ms throttle actually engage for the first time. See
+  #1310.
 - Bugfix: Fix mouse selection producing a garbled/wrong selection box when
   the cursor position reply arrived in the middle of a drag. The frame
   offset (`cursor_x_`/`cursor_y_`) could change between the mouse-press and
