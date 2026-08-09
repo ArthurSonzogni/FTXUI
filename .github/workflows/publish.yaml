@@ -89,8 +89,25 @@ jobs:
           ./bootstrap-vcpkg.sh
 
           # Update portfile.cmake and vcpkg.json
-          python3 -c "import re; p=open('ports/ftxui/portfile.cmake').read(); open('ports/ftxui/portfile.cmake','w').write(re.sub(r'SHA512 [0-9a-fA-F]+', f'SHA512 ${SHA512}', p))"
-          python3 -c "import re; j=open('ports/ftxui/vcpkg.json').read(); open('ports/ftxui/vcpkg.json','w').write(re.sub(r'\"(version|version-semver|version-date|version-string)\": \"[^\"]+\"', f'\"\\1\": \"${VERSION}\"', j))"
+          python3 -c '
+          import re, sys
+          path = "ports/ftxui/portfile.cmake"
+          with open(path, "r") as f:
+              content = f.read()
+          content = re.sub(r"SHA512 [0-9a-fA-F]+", f"SHA512 {sys.argv[1]}", content)
+          with open(path, "w") as f:
+              f.write(content)
+          ' "${SHA512}"
+
+          python3 -c '
+          import re, sys
+          path = "ports/ftxui/vcpkg.json"
+          with open(path, "r") as f:
+              content = f.read()
+          content = re.sub(r"\"(version|version-semver|version-date|version-string)\": \"[^\"]+\"", f"\"\\1\": \"{sys.argv[1]}\"", content)
+          with open(path, "w") as f:
+              f.write(content)
+          ' "${VERSION}"
 
           # Commit port changes (required before running x-add-version)
           git add ports/ftxui/
@@ -113,4 +130,3 @@ jobs:
             --base master \
             --title "[ftxui] update to ${VERSION}" \
             --body "Automated update of ftxui to version ${VERSION}."
-
