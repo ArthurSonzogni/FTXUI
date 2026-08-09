@@ -1,4 +1,4 @@
-name: "Publish to Bazel Central Registry"
+name: "Publish"
 
 on:
   # Manual kick-off (you type the tag)
@@ -8,20 +8,109 @@ on:
         description: "Tag to publish"
         required: true
         type: string
+      publish_bcr:
+        description: "Publish to Bazel Central Registry (BCR)"
+        required: true
+        type: boolean
+        default: true
+      publish_vcpkg:
+        description: "Publish to vcpkg"
+        required: true
+        type: boolean
+        default: true
 
 permissions:
-  contents:     write
+  contents: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  publish:
+  bcr:
+    name: "Publish to Bazel Central Registry"
+    if: ${{ inputs.publish_bcr }}
     uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.4.2
     with:
-      tag_name: ${{ github.event.inputs.tag_name }}
+      tag_name: ${{ inputs.tag_name }}
       registry_fork: ArthurSonzogni/bazel-central-registry
       attest: false
 
     secrets:
       publish_token: ${{ secrets.PUBLISH_TOKEN }}
+
+  vcpkg:
+    name: "Publish to vcpkg"
+    if: ${{ inputs.publish_vcpkg }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout FTXUI"
+        uses: actions/checkout@v4
+
+      - name: "Push to vcpkg"
+        env:
+          GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+          TAG_NAME: ${{ inputs.tag_name }}
+        run: |
+          # Normalize tag and version
+          TAG="${TAG_NAME}"
+          VERSION="${TAG#v}"
+          TAG="v${VERSION}"
+          echo "Publishing FTXUI version ${VERSION} (tag: ${TAG}) to vcpkg"
+
+          # Calculate SHA512 of GitHub release archive
+          ARCHIVE_URL="https://github.com/ArthurSonzogni/FTXUI/archive/refs/tags/${TAG}.tar.gz"
+          echo "Fetching archive from ${ARCHIVE_URL}..."
+          SHA512=$(curl -sL "${ARCHIVE_URL}" | sha512sum | awk '{print $1}')
+          if [ -z "${SHA512}" ] || [ "${#SHA512}" -ne 128 ]; then
+            echo "Failed to calculate valid SHA512 hash"
+            exit 1
+          fi
+          echo "Archive SHA512: ${SHA512}"
+
+          # Ensure fork exists
+          echo "Forking microsoft/vcpkg if needed..."
+          gh repo fork microsoft/vcpkg --clone=false || true
+
+          # Clone the fork
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/ArthurSonzogni/vcpkg.git" vcpkg
+          cd vcpkg
+          git remote add upstream https://github.com/microsoft/vcpkg.git
+          git fetch upstream master
+
+          # Create new branch from upstream master
+          BRANCH_NAME="ftxui-${VERSION}"
+          git checkout -b "${BRANCH_NAME}" upstream/master
+
+          # Configure git author
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Bootstrap vcpkg CLI for x-add-version
+          ./bootstrap-vcpkg.sh
+
+          # Update portfile.cmake and vcpkg.json
+          python3 -c "import re; p=open('ports/ftxui/portfile.cmake').read(); open('ports/ftxui/portfile.cmake','w').write(re.sub(r'SHA512 [0-9a-fA-F]+', f'SHA512 ${SHA512}', p))"
+          python3 -c "import re; j=open('ports/ftxui/vcpkg.json').read(); open('ports/ftxui/vcpkg.json','w').write(re.sub(r'\"(version|version-semver|version-date|version-string)\": \"[^\"]+\"', f'\"\\1\": \"${VERSION}\"', j))"
+
+          # Commit port changes (required before running x-add-version)
+          git add ports/ftxui/
+          git commit -m "[ftxui] update to ${VERSION}"
+
+          # Run x-add-version to update version database
+          ./vcpkg x-add-version ftxui --overwrite-version
+
+          # Commit version database changes
+          git add versions/
+          git commit -m "Update version database for ftxui ${VERSION}"
+
+          # Push branch to fork
+          git push origin "${BRANCH_NAME}" --force
+
+          # Create PR against microsoft/vcpkg
+          gh pr create \
+            --repo microsoft/vcpkg \
+            --head "ArthurSonzogni:${BRANCH_NAME}" \
+            --base master \
+            --title "[ftxui] update to ${VERSION}" \
+            --body "Automated update of ftxui to version ${VERSION}."
+
