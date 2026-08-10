@@ -23,6 +23,11 @@ on:
         required: true
         type: boolean
         default: true
+      publish_homebrew:
+        description: "Publish to Homebrew"
+        required: true
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -246,4 +251,73 @@ jobs:
             --head "ArthurSonzogni:${BRANCH_NAME}" \
             --base master \
             --title "ftxui: add ${VERSION}" \
+            --body "Automated update of ftxui to version ${VERSION}."
+
+  homebrew:
+    name: "Publish to Homebrew"
+    needs: prepare
+    if: ${{ inputs.publish_homebrew }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout FTXUI"
+        uses: actions/checkout@v4
+
+      - name: "Push to Homebrew"
+        env:
+          GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SHA256: ${{ needs.prepare.outputs.sha256 }}
+        run: |
+          echo "Publishing FTXUI version ${VERSION} (tag: ${TAG}) to Homebrew"
+          echo "Archive SHA256: ${SHA256}"
+
+          # Ensure fork exists
+          echo "Forking Homebrew/homebrew-core if needed..."
+          gh repo fork Homebrew/homebrew-core --clone=false || true
+
+          # Clone the fork
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/ArthurSonzogni/homebrew-core.git" homebrew-core
+          cd homebrew-core
+          git remote add upstream https://github.com/Homebrew/homebrew-core.git
+          git fetch upstream main
+
+          # Create new branch from upstream main
+          BRANCH_NAME="ftxui-${VERSION}"
+          git checkout -b "${BRANCH_NAME}" upstream/main
+
+          # Configure git author
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Update Formula/f/ftxui.rb
+          python3 -c '
+          import re, sys
+          version, sha256 = sys.argv[1], sys.argv[2]
+          tag = f"v{version}"
+
+          rb_path = "Formula/f/ftxui.rb"
+          with open(rb_path, "r") as f:
+              content = f.read()
+          new_url = f"url \"https://github.com/ArthurSonzogni/FTXUI/archive/refs/tags/{tag}.tar.gz\""
+          new_sha = f"sha256 \"{sha256}\""
+          content = re.sub(r"url \"https://github.com/ArthurSonzogni/FTXUI/archive/refs/tags/[^\"]+\"", new_url, content)
+          content = re.sub(r"sha256 \"[0-9a-fA-F]{64}\"", new_sha, content, count=1)
+          with open(rb_path, "w") as f:
+              f.write(content)
+          ' "${VERSION}" "${SHA256}"
+
+          # Commit changes
+          git add Formula/f/ftxui.rb
+          git commit -m "ftxui ${VERSION}"
+
+          # Push branch to fork
+          git push origin "${BRANCH_NAME}" --force
+
+          # Create PR against Homebrew/homebrew-core
+          gh pr create \
+            --repo Homebrew/homebrew-core \
+            --head "ArthurSonzogni:${BRANCH_NAME}" \
+            --base main \
+            --title "ftxui ${VERSION}" \
             --body "Automated update of ftxui to version ${VERSION}."
