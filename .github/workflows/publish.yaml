@@ -18,8 +18,8 @@ on:
         required: true
         type: boolean
         default: true
-      publish_conan:
-        description: "Publish to Conan Center Index"
+      publish_xmake:
+        description: "Publish to xmake-repo"
         required: true
         type: boolean
         default: true
@@ -172,33 +172,33 @@ jobs:
             --title "[ftxui] update to ${VERSION}" \
             --body "Automated update of ftxui to version ${VERSION}."
 
-  conan:
-    name: "Publish to Conan Center Index"
+  xmake:
+    name: "Publish to xmake-repo"
     needs: prepare
-    if: ${{ inputs.publish_conan }}
+    if: ${{ inputs.publish_xmake }}
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout FTXUI"
         uses: actions/checkout@v4
 
-      - name: "Push to Conan Center Index"
+      - name: "Push to xmake-repo"
         env:
           GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
           TAG: ${{ needs.prepare.outputs.tag }}
           VERSION: ${{ needs.prepare.outputs.version }}
           SHA256: ${{ needs.prepare.outputs.sha256 }}
         run: |
-          echo "Publishing FTXUI version ${VERSION} (tag: ${TAG}) to Conan Center Index"
+          echo "Publishing FTXUI version ${VERSION} (tag: ${TAG}) to xmake-repo"
           echo "Archive SHA256: ${SHA256}"
 
           # Ensure fork exists
-          echo "Forking conan-io/conan-center-index if needed..."
-          gh repo fork conan-io/conan-center-index --clone=false || true
+          echo "Forking xmake-io/xmake-repo if needed..."
+          gh repo fork xmake-io/xmake-repo --clone=false || true
 
           # Clone the fork
-          git clone "https://x-access-token:${GH_TOKEN}@github.com/ArthurSonzogni/conan-center-index.git" conan-center-index
-          cd conan-center-index
-          git remote add upstream https://github.com/conan-io/conan-center-index.git
+          git clone "https://x-access-token:${GH_TOKEN}@github.com/ArthurSonzogni/xmake-repo.git" xmake-repo
+          cd xmake-repo
+          git remote add upstream https://github.com/xmake-io/xmake-repo.git
           git fetch upstream master
 
           # Create new branch from upstream master
@@ -209,41 +209,32 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Update recipes/ftxui/config.yml and recipes/ftxui/all/conandata.yml
+          # Update packages/f/ftxui/xmake.lua
           python3 -c '
           import re, sys
           version, sha256 = sys.argv[1], sys.argv[2]
           tag = f"v{version}"
 
-          # Update config.yml
-          cfg_path = "recipes/ftxui/config.yml"
-          with open(cfg_path, "r") as f:
-              cfg = f.read()
-          cfg = re.sub(r"^versions:\n", f"versions:\n  \"{version}\":\n    folder: all\n", cfg, flags=re.MULTILINE)
-          with open(cfg_path, "w") as f:
-              f.write(cfg)
-
-          # Update conandata.yml
-          data_path = "recipes/ftxui/all/conandata.yml"
-          with open(data_path, "r") as f:
-              data = f.read()
-          entry = f"sources:\n  \"{version}\":\n    url: \"https://github.com/ArthurSonzogni/FTXUI/archive/refs/tags/{tag}.tar.gz\"\n    sha256: \"{sha256}\"\n"
-          data = re.sub(r"^sources:\n", entry, data, flags=re.MULTILINE)
-          with open(data_path, "w") as f:
-              f.write(data)
+          lua_path = "packages/f/ftxui/xmake.lua"
+          with open(lua_path, "r") as f:
+              content = f.read()
+          new_entry = f"    add_versions(\"{tag}\", \"{sha256}\")\n"
+          content = re.sub(r"^(    add_versions\()", f"{new_entry}\\1", content, count=1, flags=re.MULTILINE)
+          with open(lua_path, "w") as f:
+              f.write(content)
           ' "${VERSION}" "${SHA256}"
 
           # Commit changes
-          git add recipes/ftxui/
-          git commit -m "ftxui: add ${VERSION}"
+          git add packages/f/ftxui/xmake.lua
+          git commit -m "update ftxui ${TAG}"
 
           # Push branch to fork
           git push origin "${BRANCH_NAME}" --force
 
-          # Create PR against conan-io/conan-center-index
+          # Create PR against xmake-io/xmake-repo
           gh pr create \
-            --repo conan-io/conan-center-index \
+            --repo xmake-io/xmake-repo \
             --head "ArthurSonzogni:${BRANCH_NAME}" \
             --base master \
-            --title "ftxui: add ${VERSION}" \
+            --title "update ftxui ${TAG}" \
             --body "Automated update of ftxui to version ${VERSION}."
