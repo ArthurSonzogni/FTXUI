@@ -31,12 +31,58 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  prepare:
+    name: "Prepare release metadata"
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
+      version: ${{ steps.meta.outputs.version }}
+      sha256: ${{ steps.meta.outputs.sha256 }}
+      sha512: ${{ steps.meta.outputs.sha512 }}
+    steps:
+      - name: "Fetch archive and compute checksums"
+        id: meta
+        env:
+          TAG_NAME: ${{ inputs.tag_name }}
+        run: |
+          TAG="${TAG_NAME}"
+          VERSION="${TAG#v}"
+          TAG="v${VERSION}"
+          echo "Preparing metadata for FTXUI version ${VERSION} (tag: ${TAG})"
+
+          ARCHIVE_URL="https://github.com/ArthurSonzogni/FTXUI/archive/refs/tags/${TAG}.tar.gz"
+          echo "Fetching release archive from ${ARCHIVE_URL}..."
+          TMP_FILE=$(mktemp)
+          curl -sL "${ARCHIVE_URL}" -o "${TMP_FILE}"
+
+          SHA256=$(sha256sum "${TMP_FILE}" | awk '{print $1}')
+          SHA512=$(sha512sum "${TMP_FILE}" | awk '{print $1}')
+          rm "${TMP_FILE}"
+
+          if [ -z "${SHA256}" ] || [ "${#SHA256}" -ne 64 ]; then
+            echo "Failed to calculate valid SHA256 hash"
+            exit 1
+          fi
+          if [ -z "${SHA512}" ] || [ "${#SHA512}" -ne 128 ]; then
+            echo "Failed to calculate valid SHA512 hash"
+            exit 1
+          fi
+
+          echo "Archive SHA256: ${SHA256}"
+          echo "Archive SHA512: ${SHA512}"
+
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "sha256=${SHA256}" >> $GITHUB_OUTPUT
+          echo "sha512=${SHA512}" >> $GITHUB_OUTPUT
+
   bcr:
     name: "Publish to Bazel Central Registry"
+    needs: prepare
     if: ${{ inputs.publish_bcr }}
     uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.4.2
     with:
-      tag_name: ${{ inputs.tag_name }}
+      tag_name: ${{ needs.prepare.outputs.tag }}
       registry_fork: ArthurSonzogni/bazel-central-registry
       attest: false
 
@@ -45,6 +91,7 @@ jobs:
 
   vcpkg:
     name: "Publish to vcpkg"
+    needs: prepare
     if: ${{ inputs.publish_vcpkg }}
     runs-on: ubuntu-latest
     steps:
@@ -54,22 +101,11 @@ jobs:
       - name: "Push to vcpkg"
         env:
           GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-          TAG_NAME: ${{ inputs.tag_name }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SHA512: ${{ needs.prepare.outputs.sha512 }}
         run: |
-          # Normalize tag and version
-          TAG="${TAG_NAME}"
-          VERSION="${TAG#v}"
-          TAG="v${VERSION}"
           echo "Publishing FTXUI version ${VERSION} (tag: ${TAG}) to vcpkg"
-
-          # Calculate SHA512 of GitHub release archive
-          ARCHIVE_URL="https://github.com/ArthurSonzogni/FTXUI/archive/refs/tags/${TAG}.tar.gz"
-          echo "Fetching archive from ${ARCHIVE_URL}..."
-          SHA512=$(curl -sL "${ARCHIVE_URL}" | sha512sum | awk '{print $1}')
-          if [ -z "${SHA512}" ] || [ "${#SHA512}" -ne 128 ]; then
-            echo "Failed to calculate valid SHA512 hash"
-            exit 1
-          fi
           echo "Archive SHA512: ${SHA512}"
 
           # Ensure fork exists
@@ -138,6 +174,7 @@ jobs:
 
   conan:
     name: "Publish to Conan Center Index"
+    needs: prepare
     if: ${{ inputs.publish_conan }}
     runs-on: ubuntu-latest
     steps:
@@ -147,22 +184,11 @@ jobs:
       - name: "Push to Conan Center Index"
         env:
           GH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-          TAG_NAME: ${{ inputs.tag_name }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          SHA256: ${{ needs.prepare.outputs.sha256 }}
         run: |
-          # Normalize tag and version
-          TAG="${TAG_NAME}"
-          VERSION="${TAG#v}"
-          TAG="v${VERSION}"
           echo "Publishing FTXUI version ${VERSION} (tag: ${TAG}) to Conan Center Index"
-
-          # Calculate SHA256 of GitHub release archive
-          ARCHIVE_URL="https://github.com/ArthurSonzogni/FTXUI/archive/refs/tags/${TAG}.tar.gz"
-          echo "Fetching archive from ${ARCHIVE_URL}..."
-          SHA256=$(curl -sL "${ARCHIVE_URL}" | sha256sum | awk '{print $1}')
-          if [ -z "${SHA256}" ] || [ "${#SHA256}" -ne 64 ]; then
-            echo "Failed to calculate valid SHA256 hash"
-            exit 1
-          fi
           echo "Archive SHA256: ${SHA256}"
 
           # Ensure fork exists
