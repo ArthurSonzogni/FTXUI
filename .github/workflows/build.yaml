@@ -103,7 +103,10 @@ jobs:
           clangtidy: false
           cppcheck: false
           gcovr: "5.0"
-          opencppcoverage: true
+          # Only installed when the coverage step below actually runs. It is a
+          # slow chocolatey install of a third party download, so pull requests
+          # must not depend on it being reachable.
+          opencppcoverage: ${{ contains(matrix.os, 'windows') && github.event_name != 'pull_request' }}
 
       # make sure coverage is only enabled for Debug builds, since it sets -O0
       # to make sure coverage has meaningful results
