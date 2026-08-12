@@ -11,14 +11,38 @@ on:
     branches:
       - main
 
+  # Weekly, with the full matrix:
+  schedule:
+    - cron: '0 3 * * 1'
+
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
 jobs:
+  # Which platforms run for this event is defined in tools/ci_matrix.json.
+  select_matrix:
+    name: "Select matrix"
+    runs-on: ubuntu-latest
+    outputs:
+      conan: ${{ steps.select.outputs.conan }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v7
+
+      - name: "Select the matrices for ${{ github.event_name }}"
+        id: select
+        run: ./tools/select_ci_matrix.sh >> "$GITHUB_OUTPUT"
+
   test_conan:
     name: "Conan, ${{ matrix.os }}, shared=${{ matrix.shared }}"
+    needs: select_matrix
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        shared: ["False", "True"]
+        include: ${{ fromJSON(needs.select_matrix.outputs.conan) }}
 
     runs-on: ${{ matrix.os }}
     steps:

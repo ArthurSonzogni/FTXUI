@@ -11,36 +11,46 @@ on:
     branches:
       - main
 
+  # Weekly, with the full matrix:
+  schedule:
+    - cron: '0 3 * * 1'
+
+  workflow_dispatch:
+
+# Only keep the latest run per branch: pushing a new commit cancels the
+# in-flight checks for the previous one.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
 
+  # Which platforms run for this event is defined in tools/ci_matrix.json.
+  select_matrix:
+    name: "Select matrix"
+    runs-on: ubuntu-latest
+    outputs:
+      bazel: ${{ steps.select.outputs.bazel }}
+      cmake: ${{ steps.select.outputs.cmake }}
+      meson: ${{ steps.select.outputs.meson }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v7
+
+      - name: "Select the matrices for ${{ github.event_name }}"
+        id: select
+        run: ./tools/select_ci_matrix.sh >> "$GITHUB_OUTPUT"
+
   test_bazel:
     name: "Bazel, ${{ matrix.cxx }}, ${{ matrix.os }}"
+    needs: select_matrix
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: ubuntu-latest
-            cxx: g++
-            cc: gcc
-
-          - os: ubuntu-latest
-            cxx: clang++
-            cc: clang
-
-          - os: macos-latest
-            cxx: g++
-            cc: gcc
-
-          - os: macos-latest
-            cxx: clang++
-            cc: clang
-
-          - os: windows-latest
-            cxx: cl
-            cc: cl
+        include: ${{ fromJSON(needs.select_matrix.outputs.bazel) }}
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -68,27 +78,11 @@ jobs:
 
   test_cmake:
     name: "CMake, ${{ matrix.compiler }}, ${{ matrix.os }}"
+    needs: select_matrix
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: Linux GCC
-            os: ubuntu-latest
-            compiler: gcc
-
-          - name: Linux Clang
-            os: ubuntu-latest
-            compiler: llvm
-            gcov_executable: "llvm-cov gcov"
-
-          - name: MacOS clang
-            os: macos-latest
-            compiler: llvm
-            gcov_executable: "llvm-cov gcov"
-
-          - name: Windows MSVC
-            os: windows-latest
-            compiler: cl
+        include: ${{ fromJSON(needs.select_matrix.outputs.cmake) }}
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -109,7 +103,10 @@ jobs:
           clangtidy: false
           cppcheck: false
           gcovr: "5.0"
-          opencppcoverage: true
+          # Only installed when the coverage step below actually runs. It is a
+          # slow chocolatey install of a third party download, so pull requests
+          # must not depend on it being reachable.
+          opencppcoverage: ${{ contains(matrix.os, 'windows') && github.event_name != 'pull_request' }}
 
       # make sure coverage is only enabled for Debug builds, since it sets -O0
       # to make sure coverage has meaningful results
@@ -159,8 +156,18 @@ jobs:
           .
           --gcov-executable '${{ matrix.gcov_executable }}';
 
+      # OpenCppCoverage instruments every ctest child process and takes ~33
+      # minutes, against ~1 minute for the tests alone. Pull requests run the
+      # tests bare; the Windows coverage report comes from the weekly full
+      # matrix, which is the only other event scheduling a Windows job.
+      - name: Windows - Test
+        if: runner.os == 'Windows' && github.event_name == 'pull_request'
+        working-directory: ./build
+        run: >
+          ctest -C Debug --rerun-failed --output-on-failure;
+
       - name: Windows - Test and coverage
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && github.event_name != 'pull_request'
         working-directory: ./build
         run: >
           OpenCppCoverage.exe
@@ -170,6 +177,7 @@ jobs:
           ctest -C Debug --rerun-failed --output-on-failure;
 
       - name: Publish to codecov
+        if: runner.os != 'Windows' || github.event_name != 'pull_request'
         uses: codecov/codecov-action@v7
         with:
           flags: ${{ runner.os }}
@@ -261,21 +269,11 @@ jobs:
 
   test_meson:
     name: "Meson, ${{ matrix.compiler }}, ${{ matrix.os }}"
+    needs: select_matrix
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: ubuntu-latest
-            compiler: gcc
-
-          - os: ubuntu-latest
-            compiler: llvm
-
-          - os: macos-latest
-            compiler: llvm
-
-          - os: windows-latest
-            compiler: cl
+        include: ${{ fromJSON(needs.select_matrix.outputs.meson) }}
 
     runs-on: ${{ matrix.os }}
     steps:
