@@ -1,0 +1,60 @@
+{
+  "_doc": [
+    "Job matrices for the CI workflows. Every platform is listed exactly once.",
+    "",
+    "'tier' is the cheapest event an entry runs on:",
+    "  push : runs on push to main, on pull requests, and in the weekly run",
+    "  pr   : runs on pull requests and in the weekly run",
+    "  full : runs in the weekly run and on workflow_dispatch only",
+    "",
+    "A macOS minute costs 10x a Linux one and a Windows minute 2x, so most",
+    "macOS entries sit in 'full'. The exception is cmake, which compiles and",
+    "runs the whole test suite and is worth paying for on every pull request.",
+    "",
+    "Selected by tools/select_ci_matrix.sh, which drops 'tier' before use.",
+    "Keys starting with '_' are documentation and are not emitted."
+  ],
+
+  "bazel": [
+    {"tier": "push", "os": "ubuntu-latest",  "cxx": "clang++", "cc": "clang"},
+    {"tier": "pr",   "os": "ubuntu-latest",  "cxx": "g++",     "cc": "gcc"},
+    {"tier": "pr",   "os": "windows-latest", "cxx": "cl",      "cc": "cl"},
+    {"tier": "full", "os": "macos-latest",   "cxx": "clang++", "cc": "clang"}
+  ],
+
+  "cmake": [
+    {"tier": "push", "os": "ubuntu-latest",  "compiler": "llvm", "gcov_executable": "llvm-cov gcov"},
+    {"tier": "pr",   "os": "ubuntu-latest",  "compiler": "gcc"},
+    {"tier": "pr",   "os": "macos-latest",   "compiler": "llvm", "gcov_executable": "llvm-cov gcov"},
+    {"tier": "pr",   "os": "windows-latest", "compiler": "cl"}
+  ],
+
+  "meson": [
+    {"tier": "push", "os": "ubuntu-latest",  "compiler": "llvm"},
+    {"tier": "pr",   "os": "ubuntu-latest",  "compiler": "gcc"},
+    {"tier": "pr",   "os": "windows-latest", "compiler": "cl"},
+    {"tier": "full", "os": "macos-latest",   "compiler": "llvm"}
+  ],
+
+  "amalgamate": [
+    {"tier": "push", "name": "Linux GCC",    "os": "ubuntu-latest",  "compiler": "gcc",  "cxx": "g++"},
+    {"tier": "pr",   "name": "Linux Clang",  "os": "ubuntu-latest",  "compiler": "llvm", "cxx": "clang++"},
+    {"tier": "pr",   "name": "Windows MSVC", "os": "windows-latest", "compiler": "cl",   "cxx": "cl"},
+    {"tier": "full", "name": "MacOS clang",  "os": "macos-latest",   "compiler": "llvm", "cxx": "clang++"}
+  ],
+
+  "conan": [
+    {"tier": "push", "os": "ubuntu-latest",  "shared": "False"},
+    {"tier": "pr",   "os": "ubuntu-latest",  "shared": "True"},
+    {"tier": "pr",   "os": "windows-latest", "shared": "False"},
+    {"tier": "full", "os": "windows-latest", "shared": "True"},
+    {"tier": "full", "os": "macos-latest",   "shared": "False"},
+    {"tier": "full", "os": "macos-latest",   "shared": "True"}
+  ],
+
+  "shared_lib": [
+    {"tier": "push", "os": "ubuntu-latest"},
+    {"tier": "pr",   "os": "windows-latest"},
+    {"tier": "full", "os": "macos-latest"}
+  ]
+}

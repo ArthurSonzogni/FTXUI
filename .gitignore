@@ -97,6 +97,7 @@ out/
 !tools/**/*.ps1
 !tools/abi_fingerprint.txt
 !tools/abidiff_suppressions.ini
+!tools/ci_matrix.json
 # Windows VM disk images and ssh keys, created by tools/windows-vm.sh:
 tools/windows-vm/data/
 build/

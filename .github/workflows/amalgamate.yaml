@@ -5,34 +5,36 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: '0 3 * * 1'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
 jobs:
+  # Which platforms run for this event is defined in tools/ci_matrix.json.
+  select_matrix:
+    name: "Select matrix"
+    runs-on: ubuntu-latest
+    outputs:
+      amalgamate: ${{ steps.select.outputs.amalgamate }}
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v7
+
+      - name: "Select the matrices for ${{ github.event_name }}"
+        id: select
+        run: ./tools/select_ci_matrix.sh >> "$GITHUB_OUTPUT"
+
   build:
     name: "Amalgamate, ${{ matrix.compiler }}, ${{ matrix.os }}"
+    needs: select_matrix
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: Linux GCC
-            os: ubuntu-latest
-            compiler: gcc
-            cxx: g++
-
-          - name: Linux Clang
-            os: ubuntu-latest
-            compiler: llvm
-            cxx: clang++
-
-          - name: MacOS clang
-            os: macos-latest
-            compiler: llvm
-            cxx: clang++
-
-          - name: Windows MSVC
-            os: windows-latest
-            compiler: cl
-            cxx: cl
+        include: ${{ fromJSON(needs.select_matrix.outputs.amalgamate) }}
 
     runs-on: ${{ matrix.os }}
     steps:
