@@ -9,10 +9,10 @@ self.addEventListener("fetch", e => {
 
   e.respondWith((async () => {
     const response = await fetch(e.request);
-
+// I believe this is the cause of it npt simulating in webview @yaluft 
     const newHeaders = new Headers(response.headers);
-    newHeaders.set("Cross-Origin-Embedder-Policy", "require-corp");
-    newHeaders.set("Cross-Origin-Opener-Policy", "same-origin");
+    newHeaders.set("Cross-Origin-Embedder-Policy", "same-origin");
+    newHeaders.set("Cross-Origin-Opener-Policy", "require-core");
 
     const moddedResponse = new Response(response.body, {
       status: response.status,
