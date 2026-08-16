@@ -3,17 +3,13 @@
 
     python3 tools/gen_unicode_tables.py
 
-Writes src/ftxui/screen/string_unicode_tables.ipp from the Unicode Character
-Database. To adopt a newer Unicode release, bump UNICODE_VERSION and re-run.
+Reads the latest released Unicode Character Database and writes
+src/ftxui/screen/string_unicode_tables.ipp. The release the tables were built
+from is recorded in the generated file's header.
 
-The version is pinned rather than "latest": "latest" serves a different release
-every September, so a regenerated table would quietly mean something different
-each time, and nothing would record which version a table represents. That is
-how a table documented as Unicode 13.0.0 came to be four releases behind.
-
-Re-running without bumping the version rewrites the same bytes, so
-`git diff --exit-code` after a run says whether the committed table really is
-the version it claims to be.
+The script takes no options and is idempotent: until Unicode publishes a new
+release, re-running it rewrites the same bytes, so `git diff --exit-code` after
+a run tells whether the committed tables are up to date.
 """
 
 import re
@@ -21,15 +17,13 @@ import sys
 import urllib.request
 from pathlib import Path
 
-UNICODE_VERSION = "17.0.0"
-
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "src/ftxui/screen/string_unicode_tables.ipp"
 ENUM = ROOT / "src/ftxui/screen/string_internal.hpp"
 
-UCD = f"https://www.unicode.org/Public/{UNICODE_VERSION}/ucd/"
-EAST_ASIAN_WIDTH = UCD + "EastAsianWidth.txt"
-WORD_BREAK_PROPERTY = UCD + "auxiliary/WordBreakProperty.txt"
+UCD = "https://www.unicode.org/Public/UCD/latest/ucd/"
+EAST_ASIAN_WIDTH = "EastAsianWidth.txt"
+WORD_BREAK_PROPERTY = "auxiliary/WordBreakProperty.txt"
 
 PROLOGUE = """\
 // Copyright 2026 Arthur Sonzogni. All rights reserved.
@@ -37,10 +31,10 @@ PROLOGUE = """\
 // the LICENSE file.
 //
 // Generated from Unicode {version} by tools/gen_unicode_tables.py.
-// Do not edit: bump UNICODE_VERSION in that script and re-run it.
+// Do not edit: re-run that script instead.
 //
-// {width_url}
-// {word_break_url}
+// https://www.unicode.org/Public/{version}/ucd/{width}
+// https://www.unicode.org/Public/{version}/ucd/{word_break}
 //
 // Included by string.cpp from inside its anonymous namespace: Interval,
 // WordBreakPropertyInterval and WBP are expected to be declared already.
@@ -48,15 +42,14 @@ PROLOGUE = """\
 // clang-format off"""
 
 
-def fetch(url):
-    with urllib.request.urlopen(url, timeout=60) as response:
-        # An unreleased version redirects to the draft data, which is still
-        # changing: the table would carry a version whose content it does not
-        # have.
-        if "/draft/" in response.url:
-            sys.exit(f"Unicode {UNICODE_VERSION} is not released yet:\n"
-                     f"  {url}\n  -> {response.url}")
+def fetch(path):
+    with urllib.request.urlopen(UCD + path, timeout=60) as response:
         return response.read().decode("utf-8")
+
+
+def version(text):
+    """The release a UCD file belongs to, from its `# Name-15.1.0.txt` header."""
+    return re.match(r"#\s*\S+?-([\d.]+)\.txt", text).group(1)
 
 
 def parse(text):
@@ -83,19 +76,19 @@ def merge(rows):
     return merged
 
 
-def full_width_intervals():
+def full_width_intervals(text):
     """Wide and Fullwidth both take two cells, so they are merged together.
 
     EastAsianWidth.txt documents that unassigned code points in the CJK blocks
     and in planes 2 and 3 default to Wide. Reading only the explicit lines is
     still enough, because the file also spells those reserved ranges out.
     """
-    rows = parse(fetch(EAST_ASIAN_WIDTH))
+    rows = parse(text)
     return merge([(a, b, "W") for a, b, width in rows if width in ("W", "F")])
 
 
-def word_break_intervals():
-    rows = parse(fetch(WORD_BREAK_PROPERTY))
+def word_break_intervals(text):
+    rows = parse(text)
     # The enum is the source of truth for the names, so the two cannot drift.
     # A value Unicode adds later must be handled rather than quietly dropped.
     body = re.search(r"enum class WordBreakProperty[^{]*\{(.*?)\}",
@@ -103,8 +96,8 @@ def word_break_intervals():
     known = set(re.findall(r"\w+", body.group(1)))
     unknown = sorted({value for _, _, value in rows} - known)
     if unknown:
-        sys.exit(f"Unicode {UNICODE_VERSION} has Word_Break values missing from "
-                 f"{ENUM.name}: {', '.join(unknown)}")
+        sys.exit(f"Word_Break values missing from {ENUM.name}: "
+                 f"{', '.join(unknown)}")
     return merge(rows)
 
 
@@ -126,19 +119,20 @@ def emit_word_break(rows):
 
 
 def main():
-    width = full_width_intervals()
-    word_break = word_break_intervals()
+    width_text = fetch(EAST_ASIAN_WIDTH)
+    width = full_width_intervals(width_text)
+    word_break = word_break_intervals(fetch(WORD_BREAK_PROPERTY))
 
-    lines = [PROLOGUE.format(version=UNICODE_VERSION,
-                             width_url=EAST_ASIAN_WIDTH,
-                             word_break_url=WORD_BREAK_PROPERTY), ""]
+    lines = [PROLOGUE.format(version=version(width_text),
+                             width=EAST_ASIAN_WIDTH,
+                             word_break=WORD_BREAK_PROPERTY), ""]
     lines += emit_full_width(width)
     lines += [""]
     lines += emit_word_break(word_break)
     lines += ["", "// clang-format on"]
     OUTPUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-    print(f"{OUTPUT.relative_to(ROOT)}: Unicode {UNICODE_VERSION}, "
+    print(f"{OUTPUT.relative_to(ROOT)}: Unicode {version(width_text)}, "
           f"{len(width)} full-width and {len(word_break)} word-break intervals")
 
 

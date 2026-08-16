@@ -3,7 +3,7 @@
 // the LICENSE file.
 //
 // Generated from Unicode 17.0.0 by tools/gen_unicode_tables.py.
-// Do not edit: bump UNICODE_VERSION in that script and re-run it.
+// Do not edit: re-run that script instead.
 //
 // https://www.unicode.org/Public/17.0.0/ucd/EastAsianWidth.txt
 // https://www.unicode.org/Public/17.0.0/ucd/auxiliary/WordBreakProperty.txt
