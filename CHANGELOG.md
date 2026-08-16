@@ -4,6 +4,15 @@ Changelog
 Next
 ====
 
+### Screen
+- The Unicode tables are updated from 13.0.0 to 17.0.0. Code points assigned by
+  the last four Unicode releases now get their real width and word break
+  property, instead of falling back to one cell and `ALetter`. Note that a
+  handful of code points already assigned in Unicode 13 became two cells wide
+  in the meantime, most visibly the Yijing hexagrams (U+4DC0..U+4DFF), the Tai
+  Xuan Jing symbols and the counting rod numerals; terminals still using an
+  older table will disagree about those. Thanks @jagerman. See #1332.
+
 7.0.3 (2026-08-06)
 ------------------
 
