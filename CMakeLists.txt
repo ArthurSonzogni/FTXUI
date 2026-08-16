@@ -57,6 +57,7 @@ add_library(screen
   src/ftxui/screen/surface.cpp
   src/ftxui/screen/screen.cpp
   src/ftxui/screen/string.cpp
+  src/ftxui/screen/string_unicode_tables.ipp
   src/ftxui/screen/terminal.cpp
   src/ftxui/screen/util.hpp
 )

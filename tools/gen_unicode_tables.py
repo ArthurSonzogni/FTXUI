@@ -1,202 +1,146 @@
 #!/usr/bin/env python3
-"""Generate ftxui's Unicode tables for a given Unicode version.
+"""Regenerate the Unicode tables used by src/ftxui/screen/string.cpp.
 
-./gen_unicode_tables.py 17.0.0                # emit both tables
-./gen_unicode_tables.py 13.0.0 --check FILE   # compare against the tables already in FILE
+    python3 tools/gen_unicode_tables.py
 
+Writes src/ftxui/screen/string_unicode_tables.ipp from the Unicode Character
+Database. To adopt a newer Unicode release, bump UNICODE_VERSION and re-run.
+
+The version is pinned rather than "latest": "latest" serves a different release
+every September, so a regenerated table would quietly mean something different
+each time, and nothing would record which version a table represents. That is
+how a table documented as Unicode 13.0.0 came to be four releases behind.
+
+Re-running without bumping the version rewrites the same bytes, so
+`git diff --exit-code` after a run says whether the committed table really is
+the version it claims to be.
 """
 
-import argparse, sys, os, urllib.error, urllib.request, re
+import re
+import sys
+import urllib.request
+from pathlib import Path
 
-BASE = "https://www.unicode.org/Public/{v}/ucd/"
-WBP_NAMES = {
-    "ALetter",
-    "CR",
-    "Double_Quote",
-    "Extend",
-    "ExtendNumLet",
-    "Format",
-    "Hebrew_Letter",
-    "Katakana",
-    "LF",
-    "MidLetter",
-    "MidNum",
-    "MidNumLet",
-    "Newline",
-    "Numeric",
-    "Regional_Indicator",
-    "Single_Quote",
-    "WSegSpace",
-    "ZWJ",
-}
+UNICODE_VERSION = "17.0.0"
 
+ROOT = Path(__file__).resolve().parent.parent
+OUTPUT = ROOT / "src/ftxui/screen/string_unicode_tables.ipp"
+ENUM = ROOT / "src/ftxui/screen/string_internal.hpp"
 
-def fetch(version, path):
-    cache = f"cache-{version}-{os.path.basename(path)}"
-    if not os.path.exists(cache):
-        url = BASE.format(v=version) + path
-        try:
-            with urllib.request.urlopen(url) as resp:
-                # An unreleased version redirects to the draft data, which is still changing: the
-                # result would be a table labelled with a version whose contents it does not have.
-                if "/draft/" in resp.url:
-                    print(
-                        f"WARNING: Unicode {version} is not released yet.\n"
-                        f"         {url}\n"
-                        f"      -> {resp.url}\n"
-                        f"         These are DRAFT tables and will change before release.",
-                        file=sys.stderr,
-                    )
-                data = resp.read()
-        except urllib.error.HTTPError as e:
-            # Almost always a version that does not exist.
-            sys.exit(f"{url}\n  {e}\n(is {version} a real Unicode version?)")
-        except urllib.error.URLError as e:
-            sys.exit(f"could not fetch {url}: {e.reason}")
-        # Written whole, so an interrupted fetch cannot leave a truncated cache behind.
-        with open(cache, "wb") as f:
-            f.write(data)
-    return open(cache, encoding="utf-8")
+UCD = f"https://www.unicode.org/Public/{UNICODE_VERSION}/ucd/"
+EAST_ASIAN_WIDTH = UCD + "EastAsianWidth.txt"
+WORD_BREAK_PROPERTY = UCD + "auxiliary/WordBreakProperty.txt"
+
+PROLOGUE = """\
+// Copyright 2026 Arthur Sonzogni. All rights reserved.
+// Use of this source code is governed by the MIT license that can be found in
+// the LICENSE file.
+//
+// Generated from Unicode {version} by tools/gen_unicode_tables.py.
+// Do not edit: bump UNICODE_VERSION in that script and re-run it.
+//
+// {width_url}
+// {word_break_url}
+//
+// Included by string.cpp from inside its anonymous namespace: Interval,
+// WordBreakPropertyInterval and WBP are expected to be declared already.
+
+// clang-format off"""
 
 
-def parse(fh, keep):
-    """(first, last, property) for lines whose property is wanted."""
-    out = []
-    for line in fh:
+def fetch(url):
+    with urllib.request.urlopen(url, timeout=60) as response:
+        # An unreleased version redirects to the draft data, which is still
+        # changing: the table would carry a version whose content it does not
+        # have.
+        if "/draft/" in response.url:
+            sys.exit(f"Unicode {UNICODE_VERSION} is not released yet:\n"
+                     f"  {url}\n  -> {response.url}")
+        return response.read().decode("utf-8")
+
+
+def parse(text):
+    """(first, last, value) for every code point range a UCD file assigns."""
+    rows = []
+    for line in text.splitlines():
         line = line.split("#", 1)[0].strip()
-        if not line or ";" not in line:
+        if ";" not in line:
             continue
-        field, prop = (p.strip() for p in line.split(";")[:2])
-        if prop not in keep:
-            continue
-        a, _, b = field.partition("..")
-        out.append((int(a, 16), int(b or a, 16), prop))
-    return sorted(out)
+        field, value = (part.strip() for part in line.split(";")[:2])
+        first, _, last = field.partition("..")
+        rows.append((int(first, 16), int(last or first, 16), value))
+    return sorted(rows)
 
 
-def merge(rows, by_property):
-    """Coalesce touching ranges; only ranges of the same property merge when it matters."""
-    out = []
-    for a, b, p in rows:
-        if out and a <= out[-1][1] + 1 and (not by_property or p == out[-1][2]):
-            out[-1][1] = max(out[-1][1], b)
+def merge(rows):
+    """Coalesce ranges that share a value and touch or overlap."""
+    merged = []
+    for first, last, value in rows:
+        if merged and value == merged[-1][2] and first <= merged[-1][1] + 1:
+            merged[-1][1] = max(merged[-1][1], last)
         else:
-            out.append([a, b, p])
-    return out
+            merged.append([first, last, value])
+    return merged
 
 
-def widths(version):
-    return merge(
-        parse(fetch(version, "EastAsianWidth.txt"), {"W", "F"}), by_property=False
-    )
+def full_width_intervals():
+    """Wide and Fullwidth both take two cells, so they are merged together.
+
+    EastAsianWidth.txt documents that unassigned code points in the CJK blocks
+    and in planes 2 and 3 default to Wide. Reading only the explicit lines is
+    still enough, because the file also spells those reserved ranges out.
+    """
+    rows = parse(fetch(EAST_ASIAN_WIDTH))
+    return merge([(a, b, "W") for a, b, width in rows if width in ("W", "F")])
 
 
-def wordbreaks(version):
-    return merge(
-        parse(fetch(version, "auxiliary/WordBreakProperty.txt"), WBP_NAMES),
-        by_property=True,
-    )
+def word_break_intervals():
+    rows = parse(fetch(WORD_BREAK_PROPERTY))
+    # The enum is the source of truth for the names, so the two cannot drift.
+    # A value Unicode adds later must be handled rather than quietly dropped.
+    body = re.search(r"enum class WordBreakProperty[^{]*\{(.*?)\}",
+                     ENUM.read_text(encoding="utf-8"), re.DOTALL)
+    known = set(re.findall(r"\w+", body.group(1)))
+    unknown = sorted({value for _, _, value in rows} - known)
+    if unknown:
+        sys.exit(f"Unicode {UNICODE_VERSION} has Word_Break values missing from "
+                 f"{ENUM.name}: {', '.join(unknown)}")
+    return merge(rows)
 
 
-def emit_widths(rows):
-    # Five digits zero padded, matching the hand-written table this replaced, so the columns align.
-    yield "constexpr std::array<Interval, %d> g_full_width_characters = {{" % len(rows)
+def emit_full_width(rows):
+    yield f"constexpr std::array<Interval, {len(rows)}> g_full_width_characters = {{{{"
     for i in range(0, len(rows), 3):
-        yield "    " + " ".join(f"{{0x{a:05x}, 0x{b:05x}}}," for a, b, _ in rows[i : i + 3])
+        yield "    " + " ".join(f"{{0x{a:05x}, 0x{b:05x}}}," for a, b, _ in rows[i:i + 3])
     yield "}};"
 
 
-def emit_wbp(rows):
-    yield "constexpr std::array<WordBreakPropertyInterval, %d> g_word_break_intervals = {{" % len(
-        rows
-    )
-    for a, b, p in rows:
-        yield f"    {{0x{a:05X}, 0x{b:05X}, WBP::{p}}},"
+def emit_word_break(rows):
+    # Wrapped so the declaration stays inside 80 columns however wide the count
+    # grows.
+    yield f"constexpr std::array<WordBreakPropertyInterval, {len(rows)}>"
+    yield "    g_word_break_intervals = {{"
+    for first, last, property in rows:
+        yield f"        {{0x{first:05X}, 0x{last:05X}, WBP::{property}}},"
     yield "}};"
-
-
-def existing(path):
-    src = open(path, encoding="utf-8").read()
-    w = [
-        (int(a, 16), int(b, 16), None)
-        for a, b in re.findall(
-            r"\{0x([0-9a-fA-F]+), 0x([0-9a-fA-F]+)\},",
-            src[
-                src.index("g_full_width_characters") : src.index(
-                    "struct WordBreakPropertyInterval"
-                )
-            ],
-        )
-    ]
-    seg = src[src.index("g_word_break_intervals") :]
-    seg = seg[: seg.index("}};")]
-    wb = [
-        (int(a, 16), int(b, 16), p)
-        for a, b, p in re.findall(
-            r"\{0x([0-9a-fA-F]+), 0x([0-9a-fA-F]+), WBP::(\w+)\}", seg
-        )
-    ]
-    return sorted(w), sorted(wb)
 
 
 def main():
-    ap = argparse.ArgumentParser(
-        description=__doc__.splitlines()[0],
-        epilog="The version is explicit rather than 'latest' because 'latest' serves a different "
-        "release every September: a regenerated table would quietly mean something different each "
-        "time, and nothing would record which version a given table represents.",
-    )
-    ap.add_argument("version", help="Unicode version to generate from, e.g. 17.0.0")
-    ap.add_argument(
-        "--check",
-        metavar="FILE",
-        help="compare against the tables already in FILE instead of emitting them; "
-        "exits non-zero if they differ",
-    )
-    args = ap.parse_args()
+    width = full_width_intervals()
+    word_break = word_break_intervals()
 
-    # The UCD is published under a three-part version; "13" and "15.1" are how people say them.
-    version = args.version
-    if not re.fullmatch(r"\d+(\.\d+){0,2}", version):
-        ap.error(f"'{version}' is not a Unicode version (expected something like 17.0.0)")
-    version += ".0" * (2 - version.count("."))
+    lines = [PROLOGUE.format(version=UNICODE_VERSION,
+                             width_url=EAST_ASIAN_WIDTH,
+                             word_break_url=WORD_BREAK_PROPERTY), ""]
+    lines += emit_full_width(width)
+    lines += [""]
+    lines += emit_word_break(word_break)
+    lines += ["", "// clang-format on"]
+    OUTPUT.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-    w = [tuple(x) for x in widths(version)]
-    wb = [tuple(x) for x in wordbreaks(version)]
-
-    if args.check:
-        path = args.check
-
-        curr_w, curr_wb = existing(path)
-        mine_w = sorted((a, b, None) for a, b, _ in w)
-        ok_w = mine_w == curr_w
-        ok_wb = sorted(wb) == curr_wb
-        print(f"Unicode {version} vs {os.path.basename(path)}")
-        print(
-            f"  full-width : generated {len(mine_w):>5}, in source {len(curr_w):>5}  {'MATCH' if ok_w else 'DIFFER'}"
-        )
-        print(
-            f"  word-break : generated {len(wb):>5}, in source {len(curr_wb):>5}  {'MATCH' if ok_wb else 'DIFFER'}"
-        )
-        for label, mine, theirs in (
-            ("full-width", mine_w, curr_w),
-            ("word-break", sorted(wb), curr_wb),
-        ):
-            if mine != theirs:
-                mine_set, theirs_set = set(mine), set(theirs)
-                only_mine = [r for r in mine if r not in theirs_set][:6]
-                only_theirs = [r for r in theirs if r not in mine_set][:6]
-                if only_mine:
-                    print(f"    {label}: only generated  {only_mine}")
-                if only_theirs:
-                    print(f"    {label}: only in source  {only_theirs}")
-        return 0 if (ok_w and ok_wb) else 1
-    for line in emit_widths([tuple(r) for r in w]):
-        print(line)
-    print()
-    for line in emit_wbp(wb):
-        print(line)
-    return 0
+    print(f"{OUTPUT.relative_to(ROOT)}: Unicode {UNICODE_VERSION}, "
+          f"{len(width)} full-width and {len(word_break)} word-break intervals")
 
 
-sys.exit(main())
+if __name__ == "__main__":
+    main()
