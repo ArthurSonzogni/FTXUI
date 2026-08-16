@@ -48,8 +48,10 @@ static const std::string charset_vertical[10] = {
 
 class Gauge : public Node {
  public:
-  Gauge(float progress, Direction direction)
-      : progress_(progress), direction_(direction) {
+  Gauge(float progress, Direction direction, std::vector<std::string> charset = {})
+      : progress_(progress),
+        direction_(direction),
+        charset_(std::move(charset)) {
     // This handle NAN correctly:
     if (!(progress_ > 0.F)) {
       progress_ = 0.F;
@@ -102,9 +104,19 @@ class Gauge : public Node {
       return;
     }
 
-    const auto* charset = Terminal::GetQuirks().BlockCharacters()  // NOLINT
-                              ? charset_horizontal
-                              : charset_horizontal_microsoft;
+    // `full` is the index of the "full" glyph in `charset`; the boundary
+    // cell picks glyph index int(full * fractional_fill).
+    const std::string* charset;
+    int full;
+    if (charset_.empty()) {
+      charset = Terminal::GetQuirks().BlockCharacters()  // NOLINT
+                    ? charset_horizontal
+                    : charset_horizontal_microsoft;
+      full = 9;
+    } else {
+      charset = charset_.data();
+      full = static_cast<int>(charset_.size()) - 1;
+    }
 
     // Draw the progress bar horizontally across the full allocated height:
     const float progress = invert ? 1.F - progress_ : progress_;
@@ -115,12 +127,13 @@ class Gauge : public Node {
     for (int y = box_.y_min; y <= box_.y_max; y++) {
       int x = box_.x_min;
       while (x < limit_int) {
-        screen.at(x++, y) = charset[9];  // NOLINT
+        screen.at(x++, y) = charset[full];
       }
-      // NOLINTNEXTLINE
-      screen.at(x++, y) = charset[int(9 * (limit - limit_int))];
+      if (x <= box_.x_max) {
+        screen.at(x++, y) = charset[int(full * (limit - limit_int))];
+      }
       while (x <= box_.x_max) {
-        screen.at(x++, y) = charset[0];  // NOLINT
+        screen.at(x++, y) = charset[0];
       }
     }
 
@@ -134,6 +147,16 @@ class Gauge : public Node {
       return;
     }
 
+    const std::string* charset;
+    int full;
+    if (charset_.empty()) {
+      charset = charset_vertical;
+      full = 8;
+    } else {
+      charset = charset_.data();
+      full = static_cast<int>(charset_.size()) - 1;
+    }
+
     // Draw the progress bar vertically across the full allocated width:
     const float progress = invert ? progress_ : 1.F - progress_;
     const float limit =
@@ -143,12 +166,13 @@ class Gauge : public Node {
     for (int x = box_.x_min; x <= box_.x_max; x++) {
       int y = box_.y_min;
       while (y < limit_int) {
-        screen.at(x, y++) = charset_vertical[8];  // NOLINT
+        screen.at(x, y++) = charset[full];
       }
-      // NOLINTNEXTLINE
-      screen.at(x, y++) = charset_vertical[int(8 * (limit - limit_int))];
+      if (y <= box_.y_max) {
+        screen.at(x, y++) = charset[int(full * (limit - limit_int))];
+      }
       while (y <= box_.y_max) {
-        screen.at(x, y++) = charset_vertical[0];  // NOLINT
+        screen.at(x, y++) = charset[0];
       }
     }
     if (invert) {
@@ -167,6 +191,7 @@ class Gauge : public Node {
  private:
   float progress_;
   Direction direction_;
+  std::vector<std::string> charset_;
 };
 
 }  // namespace
@@ -302,6 +327,35 @@ Element gaugeDown(float progress) {
 /// ~~~
 Element gauge(float progress) {
   return gaugeRight(progress);
+}
+
+/// @brief Draw a high definition progress bar using a custom charset.
+/// @param progress The proportion of the area to be filled. Belong to [0,1].
+/// @param charset Glyphs from "empty" (index 0) to "full" (last index); a
+/// 2-entry charset gives a plain unshaded bar.
+/// @param direction Direction of progress bars progression. Defaults to
+/// Right.
+/// @ingroup dom
+///
+/// ### Example
+///
+/// A gauge rendered with a custom charset instead of the default block
+/// characters.
+/// ~~~cpp
+/// border(gaugeCharset(0.5, {".", "#"}))
+/// ~~~
+///
+/// #### Output
+///
+/// ~~~bash
+/// ┌──────────────────────────────────────────────────────────────────────────┐
+/// │#####################################.....................................│
+/// └──────────────────────────────────────────────────────────────────────────┘
+/// ~~~
+Element gaugeCharset(float progress,
+                      std::vector<std::string> charset,
+                      Direction direction) {
+  return std::make_shared<Gauge>(progress, direction, std::move(charset));
 }
 
 }  // namespace ftxui

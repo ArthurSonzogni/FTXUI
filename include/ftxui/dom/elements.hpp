@@ -81,6 +81,13 @@ FTXUI_EXPORT(DOM) Element gaugeRight(float progress);
 FTXUI_EXPORT(DOM) Element gaugeUp(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDown(float progress);
 FTXUI_EXPORT(DOM) Element gaugeDirection(float progress, Direction direction);
+
+// charset[0] is the "empty" glyph, charset.back() is "full"; entries in
+// between shade the boundary cell.
+FTXUI_EXPORT(DOM)
+Element gaugeCharset(float progress,
+                      std::vector<std::string> charset,
+                      Direction direction = Direction::Right);
 FTXUI_EXPORT(DOM) Element border(Element);
 FTXUI_EXPORT(DOM) Element borderLight(Element);
 FTXUI_EXPORT(DOM) Element borderDashed(Element);

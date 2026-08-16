@@ -50,6 +50,9 @@ Next
 - Performance: `text` selection now only visits and stores the selected line
   range, instead of scanning and allocating one entry per line of the whole
   text on every frame.
+- Feature: `gaugeCharset(progress, charset, direction = Direction::Right)`
+  lets a gauge be rendered with a custom set of glyphs instead of the
+  built-in block characters. Thanks @H3X-FF. See #1319.
 
 7.0.1 (2026-07-14)
 ------------------
