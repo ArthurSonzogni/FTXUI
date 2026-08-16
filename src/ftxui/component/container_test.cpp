@@ -170,6 +170,17 @@ TEST(ContainerTest, VerticalEvent) {
   container->OnEvent(Event::TabReverse);
 }
 
+TEST(ContainerTest, InitializeWithFocusableChild) {
+  auto button = Focusable();
+  auto inner = Container::Vertical({NonFocusable(), button});
+  auto outer = Container::Vertical({Focusable(), inner});
+
+  outer->OnEvent(Event::ArrowDown);
+
+  EXPECT_EQ(inner->ActiveChild(), button);
+  EXPECT_TRUE(button->Focused());
+}
+
 TEST(ContainerTest, SetActiveChild) {
   auto container = Container::Horizontal({});
   auto c0 = Focusable();
