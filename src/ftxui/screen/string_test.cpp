@@ -28,6 +28,15 @@ TEST(StringTest, StringWidth) {
   // Control characters:
   EXPECT_EQ(0, string_width("\1"));
   EXPECT_EQ(2, string_width("a\1a"));
+
+  // Fullwidth after Unicode 13:
+  EXPECT_EQ(2, string_width("🫃"));  // U+1FAC3 PREGNANT MAN, 14.0
+  EXPECT_EQ(2, string_width("🥹"));  // U+1F979 FACE HOLDING BACK TEARS, 14.0
+  EXPECT_EQ(2, string_width("🩵"));  // U+1FA75 LIGHT BLUE HEART, 15.0
+  EXPECT_EQ(2, string_width("🫎"));  // U+1FACE MOOSE, 15.0
+  EXPECT_EQ(2, string_width("🫜"));  // U+1FADC ROOT VEGETABLE, 16.0
+  EXPECT_EQ(2, string_width("🫯"));  // U+1FAEF FIGHT CLOUD, 17.0
+  EXPECT_EQ(2, string_width("☰"));  // U+2630 TRIGRAM FOR HEAVEN, reclassified in 16.0
 }
 
 TEST(StringTest, Utf8ToGlyphs) {

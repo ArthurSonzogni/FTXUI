@@ -78,6 +78,7 @@ out/
 # src directory:
 !src/ftxui/*.cppm
 !src/ftxui/**/*.hpp
+!src/ftxui/**/*.ipp
 !src/ftxui/**/*.cpp
 !src/ftxui/**/*.cppm
 
