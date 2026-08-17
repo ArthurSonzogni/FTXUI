@@ -226,5 +226,22 @@ TEST(SliderTest, Focus) {
   EXPECT_FALSE(container->OnEvent(Event::ArrowDown));
 }
 
+TEST(SliderTest, LabeledSliderIsOneLineHigh) {
+  int value = 50;
+  auto button_left = Button("button 1", [] {});
+  auto slider = Slider("slider", &value, 0, 100, 1);
+  auto button_right = Button("button 2", [] {});
+  auto container =
+      Container::Horizontal({button_left, slider, button_right});
+
+  Screen screen(40, 3);
+  Render(screen, container->Render());
+
+  EXPECT_EQ(screen.at(16, 0), "");
+  EXPECT_EQ(screen.at(16, 1), "[");
+  EXPECT_EQ(screen.at(29, 1), "]");
+  EXPECT_EQ(screen.at(16, 2), "");
+}
+
 }  // namespace ftxui
 // NOLINTEND
