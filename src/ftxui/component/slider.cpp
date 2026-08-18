@@ -217,7 +217,8 @@ class SliderWithLabel : public ComponentBase {
                            text("["),
                            ComponentBase::Render() | underlined,
                            text("]"),
-                       }) | xflex,
+                       }) | vcenter |
+                           xflex,
                    }) |
                    gauge_color | xflex | reflect(box_);
 

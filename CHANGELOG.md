@@ -4,6 +4,10 @@ Changelog
 Next
 ====
 
+### Component
+- Bugfix: Prevent labeled sliders from stretching vertically when placed in a
+  container next to taller components. Thanks @Machillka. See #1340.
+
 ### Screen
 - The Unicode tables are updated from 13.0.0 to 17.0.0. Code points assigned by
   the last four Unicode releases now get their real width and word break
