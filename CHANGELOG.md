@@ -13,6 +13,15 @@ Next
   Xuan Jing symbols and the counting rod numerals; terminals still using an
   older table will disagree about those. Thanks @jagerman. See #1332.
 
+### Doc
+- Bugfix: Repair the WebAssembly examples published on GitHub Pages. They are
+  cross-origin isolated by a ServiceWorker injecting the COOP/COEP headers,
+  which only covered navigations and the `*.worker.js` file Emscripten used to
+  emit for pthreads. Recent Emscripten spawns pthread workers from the main
+  `*.js` file instead, so that file was served without COEP and `new Worker()`
+  failed, leaving every example blank. The ServiceWorker now adds the headers
+  to all same-origin responses.
+
 7.0.3 (2026-08-06)
 ------------------
 

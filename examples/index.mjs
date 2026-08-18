@@ -170,4 +170,4 @@ if (!selectEl) {
 
     tocList.appendChild(dirContainer);
   }
-}''
+}
