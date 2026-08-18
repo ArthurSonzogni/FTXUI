@@ -17,6 +17,10 @@ class CatchEventBase : public ComponentBase {
       : on_event_(std::move(on_event)) {}
 
   // Component implementation.
+  Component ActiveChild() override {
+    return Active() ? ComponentBase::ActiveChild() : nullptr;
+  }
+
   bool OnEvent(Event event) override {
     if (on_event_(event)) {
       return true;
