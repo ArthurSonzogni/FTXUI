@@ -7,6 +7,9 @@ Next
 ### Component
 - Bugfix: Prevent labeled sliders from stretching vertically when placed in a
   container next to taller components. Thanks @Machillka. See #1340.
+- Bugfix: Ensure horizontal and vertical containers initially select a focusable
+  child, preventing lost focus when entering nested containers whose first
+  child is non-focusable. Thanks @Machillka. See #1337.
 
 ### Screen
 - The Unicode tables are updated from 13.0.0 to 17.0.0. Code points assigned by

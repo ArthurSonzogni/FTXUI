@@ -69,6 +69,12 @@ class ContainerBase : public ComponentBase {
   int selected_ = 0;
   int* selector_ = nullptr;
 
+  void EnsureFocusableSelection() {
+    if (!children().empty() && !ActiveChild()->Focusable()) {
+      MoveSelectorWrap(+1);
+    }
+  }
+
   void MoveSelector(int dir) {
     for (int i = *selector_ + dir; i >= 0 && i < int(children().size());
          i += dir) {
@@ -96,7 +102,10 @@ class ContainerBase : public ComponentBase {
 
 class VerticalContainer : public ContainerBase {
  public:
-  using ContainerBase::ContainerBase;
+  VerticalContainer(Components children, int* selector)
+      : ContainerBase(std::move(children), selector) {
+    EnsureFocusableSelection();
+  }
 
   Element OnRender() override {
     Elements elements;
@@ -180,7 +189,10 @@ class VerticalContainer : public ContainerBase {
 
 class HorizontalContainer : public ContainerBase {
  public:
-  using ContainerBase::ContainerBase;
+  HorizontalContainer(Components children, int* selector)
+      : ContainerBase(std::move(children), selector) {
+    EnsureFocusableSelection();
+  }
 
   Element OnRender() override {
     Elements elements;
