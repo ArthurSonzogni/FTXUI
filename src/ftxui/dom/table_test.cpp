@@ -460,6 +460,27 @@ TEST(TableTest, SelectRows) {
       screen.ToString());
 }
 
+TEST(TableTest, SelectRowsOutOfRangeIsEmpty) {
+  auto table = Table({
+      {"header 1"},
+      {"header 2"},
+  });
+  auto selection = table.SelectRows(2, -1);
+  selection.DecorateAlternateRow(bgcolor(Color::Red));
+  selection.Border(LIGHT);
+
+  Screen screen(10, 4);
+  Render(screen, table.Render());
+  EXPECT_EQ(
+      "header 1  \r\n"
+      "header 2  \r\n"
+      "          \r\n"
+      "          ",
+      screen.ToString());
+  EXPECT_EQ(screen.CellAt(0, 0).background_color, Color::Default);
+  EXPECT_EQ(screen.CellAt(0, 1).background_color, Color::Default);
+}
+
 TEST(TableTest, SelectRectangle) {
   auto table = Table({
       {"a", "b", "c", "d"},
