@@ -83,6 +83,25 @@ TEST(Event, EscapeFast) {
   EXPECT_EQ(received_events[1], Event::AltB);
 }
 
+TEST(Event, EscapeKeyImmediatelyFollowedByMouse) {
+  std::vector<Event> received_events;
+  auto parser = TerminalInputParser(
+      [&](Event event) { received_events.push_back(std::move(event)); });
+
+  for (const char c :
+       {'\x1B', '\x1B', '[', '<', '3', '5', ';', '1', '2', ';', '4', 'M'}) {
+    parser.Add(c);
+  }
+
+  ASSERT_EQ(2u, received_events.size());
+  EXPECT_EQ(Event::Escape, received_events[0]);
+  EXPECT_TRUE(received_events[1].is_mouse());
+  EXPECT_EQ(Mouse::None, received_events[1].mouse().button);
+  EXPECT_EQ(Mouse::Moved, received_events[1].mouse().motion);
+  EXPECT_EQ(12, received_events[1].mouse().x);
+  EXPECT_EQ(4, received_events[1].mouse().y);
+}
+
 TEST(Event, MouseLeftClickPressed) {
   std::vector<Event> received_events;
   auto parser = TerminalInputParser(

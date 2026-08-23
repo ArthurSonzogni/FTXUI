@@ -110,6 +110,9 @@ void TerminalInputParser::Timeout(int time) {
 }
 
 void TerminalInputParser::Add(char c) {
+  if (pending_ == "\x1B" && c == '\x1B') {
+    Send(SPECIAL);
+  }
   pending_ += c;
   timeout_ = 0;
   position_ = -1;
