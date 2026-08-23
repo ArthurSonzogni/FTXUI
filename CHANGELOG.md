@@ -16,6 +16,11 @@ Next
   child, preventing lost focus when entering nested containers whose first
   child is non-focusable. Thanks @Machillka. See #1337.
 
+### Dom
+- Bugfix: Fill horizontal gaps with spaces during text selection so copying text
+  from elements with spacing (such as `paragraph()`) preserves inter-word
+  spaces. Thanks @aleroot. See #1318.
+
 ### Screen
 - The Unicode tables are updated from 13.0.0 to 17.0.0. Code points assigned by
   the last four Unicode releases now get their real width and word break
