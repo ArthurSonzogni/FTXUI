@@ -27,6 +27,7 @@ class TerminalInputParser {
   enum Type {
     UNCOMPLETED,
     DROP,
+    RESYNC,
     CHARACTER,
     MOUSE,
     CURSOR_POSITION,
