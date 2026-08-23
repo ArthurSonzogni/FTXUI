@@ -180,6 +180,16 @@ TableSelection Table::SelectRectangle(int column_min,
                                       int column_max,
                                       int row_min,
                                       int row_max) {
+  TableSelection output;  // NOLINT
+  output.table_ = this;
+  if (input_dim_x_ == 0 || input_dim_y_ == 0) {
+    output.x_min_ = 0;
+    output.x_max_ = -1;
+    output.y_min_ = 0;
+    output.y_max_ = -1;
+    return output;
+  }
+
   column_min = Wrap(column_min, input_dim_x_);
   column_max = Wrap(column_max, input_dim_x_);
   Order(column_min, column_max);
@@ -187,8 +197,6 @@ TableSelection Table::SelectRectangle(int column_min,
   row_max = Wrap(row_max, input_dim_y_);
   Order(row_min, row_max);
 
-  TableSelection output;  // NOLINT
-  output.table_ = this;
   output.x_min_ = 2 * column_min;
   output.x_max_ = 2 * column_max + 2;
   output.y_min_ = 2 * row_min;
@@ -434,6 +442,10 @@ void TableSelection::DecorateSeparatorHorizontal(const Decorator& decorator) {
 /// @brief Apply a `border` around the selection.
 /// @param border The border style to apply.
 void TableSelection::Border(BorderStyle border) {
+  if (x_min_ > x_max_ || y_min_ > y_max_) {
+    return;
+  }
+
   BorderLeft(border);
   BorderRight(border);
   BorderTop(border);

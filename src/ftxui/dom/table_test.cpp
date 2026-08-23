@@ -24,6 +24,26 @@ TEST(TableTest, Empty) {
       screen.ToString());
 }
 
+TEST(TableTest, EmptySelection) {
+  auto table = Table();
+  table.SelectRow(0).Border(LIGHT);
+  table.SelectColumn(0).Border(LIGHT);
+  table.SelectRows(0, 1).Decorate(bold);
+  table.SelectColumns(0, 1).Decorate(bold);
+  table.SelectCell(0, 0).Decorate(bold);
+  table.SelectRectangle(0, 0, 0, 0).Border(LIGHT);
+
+  Screen screen(5, 5);
+  Render(screen, table.Render());
+  EXPECT_EQ(
+      "     \r\n"
+      "     \r\n"
+      "     \r\n"
+      "     \r\n"
+      "     ",
+      screen.ToString());
+}
+
 TEST(TableTest, Basic) {
   auto table = Table(std::initializer_list<std::vector<std::string>>({
       {"a", "b", "c", "d"},
@@ -459,6 +479,7 @@ TEST(TableTest, SelectRows) {
       "          ",
       screen.ToString());
 }
+
 
 TEST(TableTest, SelectRectangle) {
   auto table = Table({
