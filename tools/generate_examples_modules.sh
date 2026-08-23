@@ -23,7 +23,7 @@ for file in ./examples_modules/**/*.cpp; do
   fi
 done
 
-  sed -i 's/${DIRECTORY_LIB}/ftxui-modules/g' ./examples_modules/CMakeLists.txt
+  sed -i 's/${DIRECTORY_LIB}/ftxui::modules/g' ./examples_modules/CMakeLists.txt
 sed -i 's/ftxui_example_/ftxui_modules_example_/g' ./examples_modules/CMakeLists.txt
 
 
