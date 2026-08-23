@@ -15,6 +15,9 @@ Next
 - Bugfix: Ensure horizontal and vertical containers initially select a focusable
   child, preventing lost focus when entering nested containers whose first
   child is non-focusable. Thanks @Machillka. See #1337.
+- Bugfix: Propagate the container's active state through `CatchEvent`, preventing
+  inactive wrapped components from incorrectly reporting `Active() == true`.
+  Thanks @Machillka. See #1342.
 
 ### Dom
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on
