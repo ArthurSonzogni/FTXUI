@@ -10,6 +10,9 @@ Next
 - Bugfix: Ensure horizontal and vertical containers initially select a focusable
   child, preventing lost focus when entering nested containers whose first
   child is non-focusable. Thanks @Machillka. See #1337.
+- Bugfix: Propagate the container's active state through `CatchEvent`, preventing
+  inactive wrapped components from incorrectly reporting `Active() == true`.
+  Thanks @Machillka. See #1342.
 
 ### Screen
 - The Unicode tables are updated from 13.0.0 to 17.0.0. Code points assigned by
