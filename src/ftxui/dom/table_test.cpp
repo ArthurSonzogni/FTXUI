@@ -24,6 +24,26 @@ TEST(TableTest, Empty) {
       screen.ToString());
 }
 
+TEST(TableTest, EmptySelection) {
+  auto table = Table();
+  table.SelectRow(0).Border(LIGHT);
+  table.SelectColumn(0).Border(LIGHT);
+  table.SelectRows(0, 1).Decorate(bold);
+  table.SelectColumns(0, 1).Decorate(bold);
+  table.SelectCell(0, 0).Decorate(bold);
+  table.SelectRectangle(0, 0, 0, 0).Border(LIGHT);
+
+  Screen screen(5, 5);
+  Render(screen, table.Render());
+  EXPECT_EQ(
+      "     \r\n"
+      "     \r\n"
+      "     \r\n"
+      "     \r\n"
+      "     ",
+      screen.ToString());
+}
+
 TEST(TableTest, Basic) {
   auto table = Table(std::initializer_list<std::vector<std::string>>({
       {"a", "b", "c", "d"},
@@ -460,26 +480,6 @@ TEST(TableTest, SelectRows) {
       screen.ToString());
 }
 
-TEST(TableTest, SelectRowsOutOfRangeIsEmpty) {
-  auto table = Table({
-      {"header 1"},
-      {"header 2"},
-  });
-  auto selection = table.SelectRows(2, -1);
-  selection.DecorateAlternateRow(bgcolor(Color::Red));
-  selection.Border(LIGHT);
-
-  Screen screen(10, 4);
-  Render(screen, table.Render());
-  EXPECT_EQ(
-      "header 1  \r\n"
-      "header 2  \r\n"
-      "          \r\n"
-      "          ",
-      screen.ToString());
-  EXPECT_EQ(screen.CellAt(0, 0).background_color, Color::Default);
-  EXPECT_EQ(screen.CellAt(0, 1).background_color, Color::Default);
-}
 
 TEST(TableTest, SelectRectangle) {
   auto table = Table({

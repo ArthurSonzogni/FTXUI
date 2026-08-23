@@ -182,8 +182,7 @@ TableSelection Table::SelectRectangle(int column_min,
                                       int row_max) {
   TableSelection output;  // NOLINT
   output.table_ = this;
-  if (input_dim_x_ == 0 || input_dim_y_ == 0 ||
-      column_min >= input_dim_x_ || row_min >= input_dim_y_) {
+  if (input_dim_x_ == 0 || input_dim_y_ == 0) {
     output.x_min_ = 0;
     output.x_max_ = -1;
     output.y_min_ = 0;
