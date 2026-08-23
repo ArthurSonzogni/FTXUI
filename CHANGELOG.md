@@ -5,6 +5,11 @@ Next
 ====
 
 ### Component
+- Bugfix: Stop escape sequences from eating the ESC byte starting the next one.
+  Pressing the ESC key while moving the mouse, or any sequence truncated by the
+  terminal, used to be merged with the sequence following it, emitting its
+  remaining bytes as text. An ESC is now always treated as the start of a new
+  sequence. Thanks @Machillka. See #1345.
 - Bugfix: Prevent labeled sliders from stretching vertically when placed in a
   container next to taller components. Thanks @Machillka. See #1340.
 - Bugfix: Ensure horizontal and vertical containers initially select a focusable

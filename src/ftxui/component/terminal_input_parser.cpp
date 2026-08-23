@@ -110,9 +110,6 @@ void TerminalInputParser::Timeout(int time) {
 }
 
 void TerminalInputParser::Add(char c) {
-  if (pending_ == "\x1B" && c == '\x1B') {
-    Send(SPECIAL);
-  }
   pending_ += c;
   timeout_ = 0;
   position_ = -1;
@@ -136,6 +133,19 @@ void TerminalInputParser::Send(TerminalInputParser::Output output) {
     case DROP:
       pending_.clear();
       return;
+
+    case RESYNC: {
+      // The bytes accumulated so far can't be continued by the one at
+      // |position_|, which starts a new sequence. Emit the truncated prefix and
+      // parse the remaining bytes again.
+      std::string next = pending_.substr(position_);
+      pending_.resize(position_);
+      Send(SPECIAL);
+      pending_ = std::move(next);
+      position_ = -1;
+      Send(Parse());
+      return;
+    }
 
     case CHARACTER:
       out_(Event::Character(std::move(pending_)));
@@ -303,6 +313,10 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
     case ']':
       return ParseOSC();
 
+    // An ESC is not allowed inside a sequence. This one starts a new one.
+    case '\x1B':
+      return RESYNC;
+
     // Expecting 2 characters.
     case ' ':
     case '#':
@@ -315,6 +329,9 @@ TerminalInputParser::Output TerminalInputParser::ParseESC() {
     case 'N': {
       if (!Eat()) {
         return UNCOMPLETED;
+      }
+      if (Current() == '\x1B') {
+        return RESYNC;
       }
       return SPECIAL;
     }
@@ -446,9 +463,9 @@ TerminalInputParser::Output TerminalInputParser::ParseCSI() {
       }
     }
 
-    // Invalid ESC in CSI.
+    // Invalid ESC in CSI. It starts a new sequence.
     if (Current() == '\x1B') {
-      return SPECIAL;
+      return RESYNC;
     }
   }
 }
