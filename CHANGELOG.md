@@ -23,6 +23,10 @@ Next
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on
   an empty table. Thanks @Machillka. See #1344.
 
+### Build
+- Bugfix: Fix missing CMake targets namespace in exported package when C++20
+  modules are enabled. Thanks @patlefort. See #1322.
+
 ### Screen
 - The Unicode tables are updated from 13.0.0 to 17.0.0. Code points assigned by
   the last four Unicode releases now get their real width and word break

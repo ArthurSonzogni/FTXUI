@@ -51,10 +51,16 @@ install(
 # ------------------------------------------------------------------------------
 # Install the exported cmake targets for use in other CMake projects.
 # ------------------------------------------------------------------------------
+set(FTXUI_INSTALL_ARGS "")
+if(FTXUI_BUILD_MODULES)
+  set(FTXUI_INSTALL_ARGS CXX_MODULES_DIRECTORY "${CMAKE_INSTALL_LIBDIR}/cmake/ftxui")
+endif()
+
 install(
   EXPORT ftxui-targets
   NAMESPACE ftxui::
   DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/ftxui"
+  ${FTXUI_INSTALL_ARGS}
   )
 
 # ------------------------------------------------------------------------------
