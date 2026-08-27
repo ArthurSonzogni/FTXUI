@@ -181,6 +181,42 @@ TEST(ContainerTest, InitializeWithFocusableChild) {
   EXPECT_TRUE(button->Focused());
 }
 
+TEST(ContainerTest, HorizontalUpdatesDynamicallyFocusableSelection) {
+  bool show_first = true;
+  auto first = Focusable();
+  auto maybe_first = Maybe(first, &show_first);
+  auto second = Focusable();
+  auto container = Container::Horizontal({maybe_first, second});
+
+  EXPECT_EQ(container->ActiveChild(), maybe_first);
+  EXPECT_TRUE(first->Focused());
+
+  show_first = false;
+  container->Render();
+
+  EXPECT_EQ(container->ActiveChild(), second);
+  EXPECT_FALSE(first->Focused());
+  EXPECT_TRUE(second->Focused());
+}
+
+TEST(ContainerTest, VerticalUpdatesDynamicallyFocusableSelection) {
+  bool show_first = true;
+  auto first = Focusable();
+  auto maybe_first = Maybe(first, &show_first);
+  auto second = Focusable();
+  auto container = Container::Vertical({maybe_first, second});
+
+  EXPECT_EQ(container->ActiveChild(), maybe_first);
+  EXPECT_TRUE(first->Focused());
+
+  show_first = false;
+  container->Render();
+
+  EXPECT_EQ(container->ActiveChild(), second);
+  EXPECT_FALSE(first->Focused());
+  EXPECT_TRUE(second->Focused());
+}
+
 TEST(ContainerTest, SetActiveChild) {
   auto container = Container::Horizontal({});
   auto c0 = Focusable();
