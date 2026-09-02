@@ -108,6 +108,7 @@ class VerticalContainer : public ContainerBase {
   }
 
   Element OnRender() override {
+    EnsureFocusableSelection();
     Elements elements;
     elements.reserve(children().size());
     for (auto& it : children()) {
@@ -195,6 +196,7 @@ class HorizontalContainer : public ContainerBase {
   }
 
   Element OnRender() override {
+    EnsureFocusableSelection();
     Elements elements;
     elements.reserve(children().size());
     for (auto& it : children()) {
