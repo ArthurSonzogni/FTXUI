@@ -310,5 +310,17 @@ TEST(SelectionTest, HBoxSaturatedSelection) {
             "         ");
 }
 
+TEST(SelectionTest, ParagraphGapFillsSpaces) {
+  // paragraph() splits its text on spaces and lays the words out with a
+  // 1-column flexbox gap (FlexboxConfig::SetGap(1, 0)). Those gap cells are
+  // blank and owned by no text node, so selecting across words must still
+  // reproduce the inter-word spaces in the copied text.
+  auto element = paragraph("Lorem ipsum dolor");
+  auto screen = App::FixedSize(20, 1);
+  Selection selection(0, 0, 16, 0);
+  Render(screen, element.get(), selection);
+  EXPECT_EQ(selection.GetParts(), "Lorem ipsum dolor");
+}
+
 }  // namespace ftxui
 // NOLINTEND

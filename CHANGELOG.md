@@ -27,6 +27,11 @@ Next
 - Bugfix: Fix missing CMake targets namespace in exported package when C++20
   modules are enabled. Thanks @patlefort. See #1322.
 
+### Dom
+- Bugfix: Fill horizontal gaps with spaces during text selection so copying text
+  from elements with spacing (such as `paragraph()`) preserves inter-word
+  spaces. Thanks @aleroot. See #1318.
+
 ### Screen
 - The Unicode tables are updated from 13.0.0 to 17.0.0. Code points assigned by
   the last four Unicode releases now get their real width and word break
