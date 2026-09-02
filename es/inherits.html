@@ -1,0 +1,661 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: Class Hierarchy</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ja",
+    "/ko"
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('hierarchy.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Class Hierarchy</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock">
+<p><a href="hierarchy.html">Go to the textual class hierarchy</a></p>
+</div><table border="0" cellspacing="10" cellpadding="0">
+<tr><td><img src="inherit_graph_0.png" border="0" usemap="#aAnimatedColorOption" alt=""/>
+<map name="aAnimatedColorOption" id="aAnimatedColorOption">
+<area shape="rect" href="group__component.html#structftxui_1_1AnimatedColorOption" title="Opción sobre un color potencialmente animado." alt="" coords="5,5,168,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_1.png" border="0" usemap="#aAnimatedColorsOption" alt=""/>
+<map name="aAnimatedColorsOption" id="aAnimatedColorsOption">
+<area shape="rect" href="structftxui_1_1AnimatedColorsOption.html" title=" " alt="" coords="5,5,175,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_2.png" border="0" usemap="#aAnimationTask" alt=""/>
+<map name="aAnimationTask" id="aAnimationTask">
+<area shape="rect" href="classftxui_1_1AnimationTask.html" title=" " alt="" coords="5,5,124,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_3.png" border="0" usemap="#aAnimator" alt=""/>
+<map name="aAnimator" id="aAnimator">
+<area shape="rect" href="classftxui_1_1animation_1_1Animator.html" title=" " alt="" coords="5,5,88,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_4.png" border="0" usemap="#aAutoReset_3_01T_01_4" alt=""/>
+<map name="aAutoReset_3_01T_01_4" id="aAutoReset_3_01T_01_4">
+<area shape="rect" href="classftxui_1_1AutoReset.html" title="Asigna un valor a una variable, restaurando su valor antiguo al salir del ámbito." alt="" coords="5,5,132,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_5.png" border="0" usemap="#aBlock" alt=""/>
+<map name="aBlock" id="aBlock">
+<area shape="rect" href="structftxui_1_1flexbox__helper_1_1Block.html" title=" " alt="" coords="5,5,64,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_6.png" border="0" usemap="#aBox" alt=""/>
+<map name="aBox" id="aBox">
+<area shape="rect" href="group__screen.html#structftxui_1_1Box" title="Box es una estructura que representa un área rectangular en un espacio 2D." alt="" coords="5,5,52,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_7.png" border="0" usemap="#aButtonOption" alt=""/>
+<map name="aButtonOption" id="aButtonOption">
+<area shape="rect" href="group__component.html#structftxui_1_1ButtonOption" title="Opción para el componente AnimatedButton." alt="" coords="5,5,113,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_8.png" border="0" usemap="#aCanvas" alt=""/>
+<map name="aCanvas" id="aCanvas">
+<area shape="rect" href="group__dom.html#structftxui_1_1Canvas" title="Canvas es un búfer dibujable asociado con operaciones de dibujo." alt="" coords="5,5,76,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_9.png" border="0" usemap="#aCapturedMouseInterface" alt=""/>
+<map name="aCapturedMouseInterface" id="aCapturedMouseInterface">
+<area shape="rect" href="classftxui_1_1CapturedMouseInterface.html" title=" " alt="" coords="5,5,188,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_10.png" border="0" usemap="#aCheckboxOption" alt=""/>
+<map name="aCheckboxOption" id="aCheckboxOption">
+<area shape="rect" href="group__component.html#structftxui_1_1CheckboxOption" title="Opción para el componente Checkbox." alt="" coords="5,5,135,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_11.png" border="0" usemap="#aColor" alt=""/>
+<map name="aColor" id="aColor">
+<area shape="rect" href="group__screen.html#classftxui_1_1Color" title="Color es una clase que representa un color en la interfaz de usuario de la terminal." alt="" coords="5,5,61,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_12.png" border="0" usemap="#aColorInfo" alt=""/>
+<map name="aColorInfo" id="aColorInfo">
+<area shape="rect" href="group__screen.html#structftxui_1_1ColorInfo" title="ColorInfo es una estructura que contiene información sobre la paleta de colores del terminal." alt="" coords="5,5,87,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_13.png" border="0" usemap="#aComponentBase" alt=""/>
+<map name="aComponentBase" id="aComponentBase">
+<area shape="rect" href="group__component.html#classftxui_1_1ComponentBase" title="Implementa el renderizado de sí mismo como ftxui::Element. Implementa la navegación por teclado respo..." alt="" coords="5,5,135,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_14.png" border="0" usemap="#aConstRef_3_01std_1_1string_01_4" alt=""/>
+<map name="aConstRef_3_01std_1_1string_01_4" id="aConstRef_3_01std_1_1string_01_4">
+<area shape="rect" href="classftxui_1_1ConstRef.html" title=" " alt="" coords="5,5,181,31"/>
+<area shape="rect" href="classftxui_1_1ConstStringRef.html" title="Un adaptador. Posee o referencia una cadena constante. Para mayor comodidad, esta clase convierte múl..." alt="" coords="229,5,348,31"/>
+<area shape="poly" title=" " alt="" coords="195,15,229,15,229,21,195,21"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_15.png" border="0" usemap="#aConstRef_3_01T_01_4" alt=""/>
+<map name="aConstRef_3_01T_01_4" id="aConstRef_3_01T_01_4">
+<area shape="rect" href="classftxui_1_1ConstRef.html" title="Un adaptador. Posee o referencia un objeto inmutable." alt="" coords="5,5,124,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_16.png" border="0" usemap="#aConstStringListRef" alt=""/>
+<map name="aConstStringListRef" id="aConstStringListRef">
+<area shape="rect" href="classftxui_1_1ConstStringListRef.html" title="Un adaptador. Referencia una lista de cadenas." alt="" coords="5,5,148,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_17.png" border="0" usemap="#aConstStringListRef_1_1Adapter" alt=""/>
+<map name="aConstStringListRef_1_1Adapter" id="aConstStringListRef_1_1Adapter">
+<area shape="rect" href="classftxui_1_1ConstStringListRef_1_1Adapter.html" title=" " alt="" coords="5,5,148,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_18.png" border="0" usemap="#aDimensions" alt=""/>
+<map name="aDimensions" id="aDimensions">
+<area shape="rect" href="group__screen.html#structftxui_1_1Dimensions" title="Dimensions es una estructura que representa el tamaño de la terminal." alt="" coords="5,5,104,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_19.png" border="0" usemap="#aDropdownOption" alt=""/>
+<map name="aDropdownOption" id="aDropdownOption">
+<area shape="rect" href="group__component.html#structftxui_1_1DropdownOption" title="Opción para el componente Dropdown.Un menú desplegable es un checkbox que abre/cierra un radiobox." alt="" coords="5,5,136,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_20.png" border="0" usemap="#aElement" alt=""/>
+<map name="aElement" id="aElement">
+<area shape="rect" href="structftxui_1_1box__helper_1_1Element.html" title=" " alt="" coords="5,5,81,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_21.png" border="0" usemap="#aEntryState" alt=""/>
+<map name="aEntryState" id="aEntryState">
+<area shape="rect" href="structftxui_1_1EntryState.html" title="Argumentos para la transformación de |ButtonOption|, |CheckboxOption|, |RadioboxOption|,..." alt="" coords="5,5,96,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_22.png" border="0" usemap="#aEvent" alt=""/>
+<map name="aEvent" id="aEvent">
+<area shape="rect" href="group__component.html#structftxui_1_1Event" title="Representa un evento. Puede ser un evento de pulsación de tecla, un redimensionamiento de terminal,..." alt="" coords="5,5,64,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_23.png" border="0" usemap="#aFlexboxConfig" alt=""/>
+<map name="aFlexboxConfig" id="aFlexboxConfig">
+<area shape="rect" href="group__dom.html#structftxui_1_1FlexboxConfig" title="FlexboxConfig es una estructura de configuración que define las propiedades de diseño para un contene..." alt="" coords="5,5,120,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_24.png" border="0" usemap="#aGlobal" alt=""/>
+<map name="aGlobal" id="aGlobal">
+<area shape="rect" href="structftxui_1_1flexbox__helper_1_1Global.html" title=" " alt="" coords="5,5,69,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_25.png" border="0" usemap="#aImage" alt=""/>
+<map name="aImage" id="aImage">
+<area shape="rect" href="group__screen.html#classftxui_1_1Image" title="Una cuadrícula rectangular de píxeles." alt="" coords="5,5,68,31"/>
+<area shape="rect" href="group__screen.html#classftxui_1_1Screen" title="Una cuadrícula rectangular de píxeles." alt="" coords="116,5,183,31"/>
+<area shape="poly" title=" " alt="" coords="81,15,116,15,116,21,81,21"/>
+<area shape="rect" href="group__component.html#classftxui_1_1ScreenInteractive" title="ScreenInteractive es una Screen que puede manejar eventos, ejecutar un bucle principal y administrar ..." alt="" coords="231,5,367,31"/>
+<area shape="poly" title=" " alt="" coords="196,15,230,15,230,21,196,21"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_26.png" border="0" usemap="#aInputOption" alt=""/>
+<map name="aInputOption" id="aInputOption">
+<area shape="rect" href="group__component.html#structftxui_1_1InputOption" title="Opción para el componente Input." alt="" coords="5,5,104,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_27.png" border="0" usemap="#aInputState" alt=""/>
+<map name="aInputState" id="aInputState">
+<area shape="rect" href="structftxui_1_1InputState.html" title="Usado para definir el estilo del componente Input." alt="" coords="5,5,95,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_28.png" border="0" usemap="#aLine" alt=""/>
+<map name="aLine" id="aLine">
+<area shape="rect" href="structftxui_1_1flexbox__helper_1_1Line.html" title=" " alt="" coords="5,5,55,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_29.png" border="0" usemap="#aLinearGradient" alt=""/>
+<map name="aLinearGradient" id="aLinearGradient">
+<area shape="rect" href="group__dom.html#structftxui_1_1LinearGradient" title="Una clase que representa la configuración para el efecto de color de gradiente lineal." alt="" coords="5,5,124,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_30.png" border="0" usemap="#aLinearGradient_1_1Stop" alt=""/>
+<map name="aLinearGradient_1_1Stop" id="aLinearGradient_1_1Stop">
+<area shape="rect" href="structftxui_1_1LinearGradient_1_1Stop.html" title=" " alt="" coords="5,5,160,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_31.png" border="0" usemap="#aLoop" alt=""/>
+<map name="aLoop" id="aLoop">
+<area shape="rect" href="group__component.html#classftxui_1_1Loop" title="Loop es una clase que gestiona el bucle de eventos de un componente." alt="" coords="5,5,59,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_32.png" border="0" usemap="#aMenuEntryOption" alt=""/>
+<map name="aMenuEntryOption" id="aMenuEntryOption">
+<area shape="rect" href="group__component.html#structftxui_1_1MenuEntryOption" title="Opción para el componente MenuEntry." alt="" coords="5,5,140,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_33.png" border="0" usemap="#aMenuOption" alt=""/>
+<map name="aMenuOption" id="aMenuOption">
+<area shape="rect" href="group__component.html#structftxui_1_1MenuOption" title="Opción para el componente Menu." alt="" coords="5,5,107,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_34.png" border="0" usemap="#aMouse" alt=""/>
+<map name="aMouse" id="aMouse">
+<area shape="rect" href="group__component.html#structftxui_1_1Mouse" title="Un evento del ratón. Contiene las coordenadas del ratón, el botón presionado y el modificador (shift,..." alt="" coords="5,5,71,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_35.png" border="0" usemap="#aNode" alt=""/>
+<map name="aNode" id="aNode">
+<area shape="rect" href="group__dom.html#classftxui_1_1Node" title="Node es la clase base para todos los elementos en el árbol DOM." alt="" coords="5,5,61,31"/>
+<area shape="rect" href="classftxui_1_1NodeDecorator.html" title=" " alt="" coords="109,5,229,31"/>
+<area shape="poly" title=" " alt="" coords="75,15,109,15,109,21,75,21"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_36.png" border="0" usemap="#aNode_1_1Status" alt=""/>
+<map name="aNode_1_1Status" id="aNode_1_1Status">
+<area shape="rect" href="structftxui_1_1Node_1_1Status.html" title=" " alt="" coords="5,5,111,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_37.png" border="0" usemap="#aParams" alt=""/>
+<map name="aParams" id="aParams">
+<area shape="rect" href="classftxui_1_1animation_1_1Params.html" title=" " alt="" coords="5,5,76,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_38.png" border="0" usemap="#aPendingTask" alt=""/>
+<map name="aPendingTask" id="aPendingTask">
+<area shape="rect" href="structftxui_1_1task_1_1PendingTask.html" title=" " alt="" coords="5,5,108,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_39.png" border="0" usemap="#aPixel" alt=""/>
+<map name="aPixel" id="aPixel">
+<area shape="rect" href="group__screen.html#structftxui_1_1Pixel" title="Un carácter Unicode y su estilo asociado." alt="" coords="5,5,59,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_40.png" border="0" usemap="#aRadioboxOption" alt=""/>
+<map name="aRadioboxOption" id="aRadioboxOption">
+<area shape="rect" href="group__component.html#structftxui_1_1RadioboxOption" title="Opción para el componente Radiobox." alt="" coords="5,5,132,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_41.png" border="0" usemap="#aReceiverImpl_3_01T_01_4" alt=""/>
+<map name="aReceiverImpl_3_01T_01_4" id="aReceiverImpl_3_01T_01_4">
+<area shape="rect" href="classftxui_1_1ReceiverImpl.html" title=" " alt="" coords="5,5,152,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_42.png" border="0" usemap="#aRef_3_01bool_01_4" alt=""/>
+<map name="aRef_3_01bool_01_4" id="aRef_3_01bool_01_4">
+<area shape="rect" href="classftxui_1_1Ref.html" title=" " alt="" coords="5,5,108,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_43.png" border="0" usemap="#aRef_3_01Direction_01_4" alt=""/>
+<map name="aRef_3_01Direction_01_4" id="aRef_3_01Direction_01_4">
+<area shape="rect" href="classftxui_1_1Ref.html" title=" " alt="" coords="5,5,139,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_44.png" border="0" usemap="#aRef_3_01int_01_4" alt=""/>
+<map name="aRef_3_01int_01_4" id="aRef_3_01int_01_4">
+<area shape="rect" href="classftxui_1_1Ref.html" title=" " alt="" coords="5,5,96,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_45.png" border="0" usemap="#aRef_3_01std_1_1string_01_4" alt=""/>
+<map name="aRef_3_01std_1_1string_01_4" id="aRef_3_01std_1_1string_01_4">
+<area shape="rect" href="classftxui_1_1Ref.html" title=" " alt="" coords="5,5,144,31"/>
+<area shape="rect" href="classftxui_1_1StringRef.html" title="Un adaptador. Posee o referencia una cadena constante. Para mayor comodidad, esta clase convierte múl..." alt="" coords="192,5,275,31"/>
+<area shape="poly" title=" " alt="" coords="158,15,192,15,192,21,158,21"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_46.png" border="0" usemap="#aRef_3_01T_01_4" alt=""/>
+<map name="aRef_3_01T_01_4" id="aRef_3_01T_01_4">
+<area shape="rect" href="classftxui_1_1Ref.html" title="Un adaptador. Posee o referencia un objeto mutable." alt="" coords="5,5,88,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_47.png" border="0" usemap="#aRequirement" alt=""/>
+<map name="aRequirement" id="aRequirement">
+<area shape="rect" href="group__dom.html#structftxui_1_1Requirement" title="Requirement es una estructura que define los requisitos de diseño para un Nodo en la interfaz de usua..." alt="" coords="5,5,112,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_48.png" border="0" usemap="#aRequirement_1_1Focused" alt=""/>
+<map name="aRequirement_1_1Focused" id="aRequirement_1_1Focused">
+<area shape="rect" href="structftxui_1_1Requirement_1_1Focused.html" title=" " alt="" coords="5,5,172,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_49.png" border="0" usemap="#aResizableSplitOption" alt=""/>
+<map name="aResizableSplitOption" id="aResizableSplitOption">
+<area shape="rect" href="structftxui_1_1ResizableSplitOption.html" title=" " alt="" coords="5,5,163,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_50.png" border="0" usemap="#aScreen_1_1Cursor" alt=""/>
+<map name="aScreen_1_1Cursor" id="aScreen_1_1Cursor">
+<area shape="rect" href="structftxui_1_1Screen_1_1Cursor.html" title=" " alt="" coords="5,5,121,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_51.png" border="0" usemap="#aScreenInteractive_1_1Private" alt=""/>
+<map name="aScreenInteractive_1_1Private" id="aScreenInteractive_1_1Private">
+<area shape="rect" href="classftxui_1_1ScreenInteractive_1_1Private.html" title=" " alt="" coords="5,5,149,45"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_52.png" border="0" usemap="#aSelection" alt=""/>
+<map name="aSelection" id="aSelection">
+<area shape="rect" href="group__dom.html#classftxui_1_1Selection" title="Representa una selección en una interfaz de usuario de terminal." alt="" coords="5,5,88,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_53.png" border="0" usemap="#aSenderImpl_3_01T_01_4" alt=""/>
+<map name="aSenderImpl_3_01T_01_4" id="aSenderImpl_3_01T_01_4">
+<area shape="rect" href="classftxui_1_1SenderImpl.html" title=" " alt="" coords="5,5,140,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_54.png" border="0" usemap="#aSliderOption_3_01T_01_4" alt=""/>
+<map name="aSliderOption_3_01T_01_4" id="aSliderOption_3_01T_01_4">
+<area shape="rect" href="structftxui_1_1SliderOption.html" title=" " alt="" coords="5,5,145,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_55.png" border="0" usemap="#aTable" alt=""/>
+<map name="aTable" id="aTable">
+<area shape="rect" href="group__dom.html#classftxui_1_1Table" title="Table es una utilidad para dibujar tablas." alt="" coords="5,5,61,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_56.png" border="0" usemap="#aTableSelection" alt=""/>
+<map name="aTableSelection" id="aTableSelection">
+<area shape="rect" href="classftxui_1_1TableSelection.html" title=" " alt="" coords="5,5,121,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_57.png" border="0" usemap="#aTaskQueue" alt=""/>
+<map name="aTaskQueue" id="aTaskQueue">
+<area shape="rect" href="structftxui_1_1task_1_1TaskQueue.html" title=" " alt="" coords="5,5,99,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_58.png" border="0" usemap="#aTaskRunner" alt=""/>
+<map name="aTaskRunner" id="aTaskRunner">
+<area shape="rect" href="classftxui_1_1task_1_1TaskRunner.html" title=" " alt="" coords="5,5,103,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_59.png" border="0" usemap="#aTerminalInputParser" alt=""/>
+<map name="aTerminalInputParser" id="aTerminalInputParser">
+<area shape="rect" href="classftxui_1_1TerminalInputParser.html" title=" " alt="" coords="5,5,156,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_60.png" border="0" usemap="#aUnderlineOption" alt=""/>
+<map name="aUnderlineOption" id="aUnderlineOption">
+<area shape="rect" href="group__component.html#structftxui_1_1UnderlineOption" title="Opción para el efecto de subrayado." alt="" coords="5,5,133,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_61.png" border="0" usemap="#aWindowOptions" alt=""/>
+<map name="aWindowOptions" id="aWindowOptions">
+<area shape="rect" href="structftxui_1_1WindowOptions.html" title=" " alt="" coords="5,5,129,31"/>
+</map>
+</td></tr>
+<tr><td><img src="inherit_graph_62.png" border="0" usemap="#aWindowRenderState" alt=""/>
+<map name="aWindowRenderState" id="aWindowRenderState">
+<area shape="rect" href="group__component.html#structftxui_1_1WindowRenderState" title="Estado pasado a la función de renderizado del componente Window." alt="" coords="5,5,160,31"/>
+</map>
+</td></tr>
+</table>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "es";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

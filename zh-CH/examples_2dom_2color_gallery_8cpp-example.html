@@ -1,0 +1,470 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: examples/dom/color_gallery.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('examples_2dom_2color_gallery_8cpp-example.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">examples/dom/color_gallery.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><span class="comment">// 版权所有 2020 Arthur Sonzogni。保留所有权利。</span></div>
+<div class="line"><span class="comment">// 本源代码受 MIT 许可协议的约束，详情请参阅 LICENSE 文件。</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="color__info_8hpp.html">ftxui/screen/color_info.hpp</a>&gt;</span>  <span class="comment">// for ColorInfo</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="screen_8hpp.html">ftxui/screen/screen.hpp</a>&gt;</span>      <span class="comment">// for Full, Screen</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="terminal_8hpp.html">ftxui/screen/terminal.hpp</a>&gt;</span>  <span class="comment">// for ColorSupport, Color, Palette16, Palette256, TrueColor</span></div>
+<div class="line"><span class="preprocessor">#include &lt;memory&gt;</span>                     <span class="comment">// for allocator, shared_ptr</span></div>
+<div class="line"><span class="preprocessor">#include &lt;utility&gt;</span>                    <span class="comment">// for move</span></div>
+<div class="line"><span class="preprocessor">#include &lt;vector&gt;</span>                     <span class="comment">// for vector</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="elements_8hpp.html">ftxui/dom/elements.hpp</a>&quot;</span>  <span class="comment">// for text, bgcolor, color, vbox, hbox, separator, operator|, Elements, Element, Fit, border</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="node_8hpp.html">ftxui/dom/node.hpp</a>&quot;</span>      <span class="comment">// for Render</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="color_8hpp.html">ftxui/screen/color.hpp</a>&quot;</span>  <span class="comment">// for Color, Color::Black, Color::Blue, Color::BlueLight, Color::Cyan, Color::CyanLight, Color::Default, Color::GrayDark, Color::GrayLight, Color::Green, Color::GreenLight, Color::Magenta, Color::MagentaLight, Color::Red, Color::RedLight, Color::White, Color::Yellow, Color::YellowLight, Color::Palette256, ftxui</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a>;</div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="color__info__sorted__2d_8ipp.html">./color_info_sorted_2d.ipp</a>&quot;</span>  <span class="comment">// for ColorInfoSorted2D</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keywordtype">int</span> <a id="a0" name="a0"></a><a class="code hl_function" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>() {</div>
+<div class="line">  <span class="comment">// clang-format off</span></div>
+<div class="line">  <span class="keyword">auto</span> basic_color_display =</div>
+<div class="line">    vbox(</div>
+<div class="line">      text(<span class="stringliteral">&quot;16 color palette:&quot;</span>),</div>
+<div class="line">      separator(),</div>
+<div class="line">      hbox(</div>
+<div class="line">        vbox(</div>
+<div class="line">          <a id="a1" name="a1"></a><a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::Default, text(<span class="stringliteral">&quot;Default&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::Black, text(<span class="stringliteral">&quot;Black&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::GrayDark, text(<span class="stringliteral">&quot;GrayDark&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::GrayLight, text(<span class="stringliteral">&quot;GrayLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::White, text(<span class="stringliteral">&quot;White&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::Blue, text(<span class="stringliteral">&quot;Blue&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::BlueLight, text(<span class="stringliteral">&quot;BlueLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::Cyan, text(<span class="stringliteral">&quot;Cyan&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::CyanLight, text(<span class="stringliteral">&quot;CyanLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::Green, text(<span class="stringliteral">&quot;Green&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::GreenLight, text(<span class="stringliteral">&quot;GreenLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::Magenta, text(<span class="stringliteral">&quot;Magenta&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::MagentaLight, text(<span class="stringliteral">&quot;MagentaLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::Red, text(<span class="stringliteral">&quot;Red&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::RedLight, text(<span class="stringliteral">&quot;RedLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::Yellow, text(<span class="stringliteral">&quot;Yellow&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::YellowLight, text(<span class="stringliteral">&quot;YellowLight&quot;</span>))</div>
+<div class="line">        ),</div>
+<div class="line">        vbox(</div>
+<div class="line">          <a id="a2" name="a2"></a><a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::Default, text(<span class="stringliteral">&quot;Default&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::Black, text(<span class="stringliteral">&quot;Black&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::GrayDark, text(<span class="stringliteral">&quot;GrayDark&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::GrayLight, text(<span class="stringliteral">&quot;GrayLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::White, text(<span class="stringliteral">&quot;White&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::Blue, text(<span class="stringliteral">&quot;Blue&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::BlueLight, text(<span class="stringliteral">&quot;BlueLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::Cyan, text(<span class="stringliteral">&quot;Cyan&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::CyanLight, text(<span class="stringliteral">&quot;CyanLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::Green, text(<span class="stringliteral">&quot;Green&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::GreenLight, text(<span class="stringliteral">&quot;GreenLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::Magenta, text(<span class="stringliteral">&quot;Magenta&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::MagentaLight, text(<span class="stringliteral">&quot;MagentaLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::Red, text(<span class="stringliteral">&quot;Red&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::RedLight, text(<span class="stringliteral">&quot;RedLight&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::Yellow, text(<span class="stringliteral">&quot;Yellow&quot;</span>)),</div>
+<div class="line">          <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::YellowLight, text(<span class="stringliteral">&quot;YellowLight&quot;</span>))</div>
+<div class="line">        )</div>
+<div class="line">      )</div>
+<div class="line">    );</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// clang-format on</span></div>
+<div class="line">  <span class="keyword">auto</span> palette_256_color_display = text(<span class="stringliteral">&quot;256 colors palette:&quot;</span>);</div>
+<div class="line">  {</div>
+<div class="line">    std::vector&lt;std::vector&lt;ColorInfo&gt;&gt; info_columns = <a id="a3" name="a3"></a><a class="code hl_function" href="color__info__sorted__2d_8ipp.html#a0f08918d6064cd2a0e56cb9ec74033ca">ColorInfoSorted2D</a>();</div>
+<div class="line">    <a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> columns;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; column : info_columns) {</div>
+<div class="line">      <a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> column_elements;</div>
+<div class="line">      <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; it : column) {</div>
+<div class="line">        column_elements.push_back(</div>
+<div class="line">            text(<span class="stringliteral">&quot;   &quot;</span>) | <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(<a id="_a4" name="_a4"></a><a class="code hl_class" href="group__screen.html#classftxui_1_1Color">Color</a>(<a class="code hl_enumeration" href="group__screen.html#abd07c48f62cc507fafa2486a43130fcf">Color::Palette256</a>(it.index_256))));</div>
+<div class="line">      }</div>
+<div class="line">      columns.push_back(hbox(std::move(column_elements)));</div>
+<div class="line">    }</div>
+<div class="line">    palette_256_color_display = vbox({</div>
+<div class="line">        palette_256_color_display,</div>
+<div class="line">        separator(),</div>
+<div class="line">        vbox(columns),</div>
+<div class="line">    });</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="comment">// 真彩色显示。</span></div>
+<div class="line">  <span class="keyword">auto</span> true_color_display = text(<span class="stringliteral">&quot;TrueColors: 24bits:&quot;</span>);</div>
+<div class="line">  {</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">int</span> max_value = 255;</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">int</span> value_increment = 8;</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">int</span> hue_increment = 6;</div>
+<div class="line">    <span class="keywordtype">int</span> saturation = max_value;</div>
+<div class="line">    <a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> array;</div>
+<div class="line">    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> value = 0; value &lt; max_value; value += 2 * value_increment) {</div>
+<div class="line">      <a class="code hl_typedef" href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">Elements</a> line;</div>
+<div class="line">      <span class="keywordflow">for</span> (<span class="keywordtype">int</span> hue = 0; hue &lt; max_value; hue += hue_increment) {</div>
+<div class="line">        line.push_back(</div>
+<div class="line">            text(<span class="stringliteral">&quot;▀&quot;</span>)                                    <span class="comment">//</span></div>
+<div class="line">            | <a class="code hl_function" href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a>(Color::HSV(hue, saturation, value))  <span class="comment">//</span></div>
+<div class="line">            | <a class="code hl_function" href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a>(Color::HSV(hue, saturation, value + value_increment)));</div>
+<div class="line">      }</div>
+<div class="line">      array.push_back(hbox(std::move(line)));</div>
+<div class="line">    }</div>
+<div class="line">    true_color_display = vbox({</div>
+<div class="line">        true_color_display,</div>
+<div class="line">        separator(),</div>
+<div class="line">        vbox(std::move(array)),</div>
+<div class="line">    });</div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">auto</span> terminal_info =</div>
+<div class="line">      vbox({</div>
+<div class="line">          Terminal::ColorSupport() &gt;= Terminal::Color::Palette16</div>
+<div class="line">              ? text(<span class="stringliteral">&quot; 16 color palette support : Yes&quot;</span>)</div>
+<div class="line">              : text(<span class="stringliteral">&quot; 16 color palette support : No&quot;</span>),</div>
+<div class="line">          Terminal::ColorSupport() &gt;= Terminal::Color::Palette256</div>
+<div class="line">              ? text(<span class="stringliteral">&quot;256 color palette support : Yes&quot;</span>)</div>
+<div class="line">              : text(<span class="stringliteral">&quot;256 color palette support : No&quot;</span>),</div>
+<div class="line">          Terminal::ColorSupport() &gt;= Terminal::Color::TrueColor</div>
+<div class="line">              ? text(<span class="stringliteral">&quot;       True color support : Yes&quot;</span>)</div>
+<div class="line">              : text(<span class="stringliteral">&quot;       True color support : No&quot;</span>),</div>
+<div class="line">      }) |</div>
+<div class="line">      border;</div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">auto</span> document = vbox({hbox({</div>
+<div class="line">                            basic_color_display,</div>
+<div class="line">                            text(<span class="stringliteral">&quot; &quot;</span>),</div>
+<div class="line">                            palette_256_color_display,</div>
+<div class="line">                            text(<span class="stringliteral">&quot; &quot;</span>),</div>
+<div class="line">                            true_color_display,</div>
+<div class="line">                        }),</div>
+<div class="line">                        terminal_info});</div>
+<div class="line">  <span class="comment">// clang-format on</span></div>
+<div class="line"> </div>
+<div class="line">  <span class="keyword">auto</span> screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));</div>
+<div class="line">  Render(screen, document);</div>
+<div class="line"> </div>
+<div class="line">  screen.Print();</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="ttc" id="acolor_8hpp_html"><div class="ttname"><a href="color_8hpp.html">color.hpp</a></div></div>
+<div class="ttc" id="acolor__info_8hpp_html"><div class="ttname"><a href="color__info_8hpp.html">color_info.hpp</a></div></div>
+<div class="ttc" id="acolor__info__sorted__2d_8ipp_html"><div class="ttname"><a href="color__info__sorted__2d_8ipp.html">color_info_sorted_2d.ipp</a></div></div>
+<div class="ttc" id="acolor__info__sorted__2d_8ipp_html_a0f08918d6064cd2a0e56cb9ec74033ca"><div class="ttname"><a href="color__info__sorted__2d_8ipp.html#a0f08918d6064cd2a0e56cb9ec74033ca">ColorInfoSorted2D</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; ftxui::ColorInfo &gt; &gt; ColorInfoSorted2D()</div><div class="ttdef"><b>定义</b> <a href="color__info__sorted__2d_8ipp_source.html#l00005">color_info_sorted_2d.ipp:5</a></div></div>
+<div class="ttc" id="aelements_8hpp_html"><div class="ttname"><a href="elements_8hpp.html">elements.hpp</a></div></div>
+<div class="ttc" id="aexamples_2component_2button_8cpp_html_ae66f6b31b5ad750f1fe042a706a4e3d4"><div class="ttname"><a href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a></div><div class="ttdeci">int main()</div><div class="ttdef"><b>定义</b> <a href="examples_2component_2button_8cpp_source.html#l00033">examples/component/button.cpp:33</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga050df9c8ed04eec13309d6c0542c636d"><div class="ttname"><a href="group__dom.html#ga050df9c8ed04eec13309d6c0542c636d">color</a></div><div class="ttdeci">Element color(const LinearGradient &amp;gradient, Element child)</div><div class="ttdoc">使用线性渐变效果设置元素的前景色。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2dom_2linear__gradient_8cpp_source.html#l00239">src/ftxui/dom/linear_gradient.cpp:239</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaaac1622d43662a6a02113d9230a4fdd4"><div class="ttname"><a href="group__dom.html#gaaac1622d43662a6a02113d9230a4fdd4">bgcolor</a></div><div class="ttdeci">Element bgcolor(const LinearGradient &amp;gradient, Element child)</div><div class="ttdoc">使用线性渐变效果设置元素的背景色。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2dom_2linear__gradient_8cpp_source.html#l00255">src/ftxui/dom/linear_gradient.cpp:255</a></div></div>
+<div class="ttc" id="agroup__screen_html_abd07c48f62cc507fafa2486a43130fcf"><div class="ttname"><a href="group__screen.html#abd07c48f62cc507fafa2486a43130fcf">ftxui::Color::Palette256</a></div><div class="ttdeci">Palette256</div><div class="ttdef"><b>定义</b> <a href="color_8hpp_source.html#l00070">color.hpp:70</a></div></div>
+<div class="ttc" id="agroup__screen_html_classftxui_1_1Color"><div class="ttname"><a href="group__screen.html#classftxui_1_1Color">ftxui::Color</a></div><div class="ttdoc">Color 是一个表示终端用户界面中颜色的类。</div><div class="ttdef"><b>定义</b> <a href="color_8hpp_source.html#l00020">color.hpp:20</a></div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">#include &quot;ftxui/component/component_base.hpp&quot; // 用于 ComponentBase</div><div class="ttdef"><b>定义</b> <a href="animation_8hpp_source.html#l00009">animation.hpp:9</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a5d4aa06ca6cc6a72e981bd5386f93f0a"><div class="ttname"><a href="namespaceftxui.html#a5d4aa06ca6cc6a72e981bd5386f93f0a">ftxui::Elements</a></div><div class="ttdeci">std::vector&lt; Element &gt; Elements</div><div class="ttdef"><b>定义</b> <a href="elements_8hpp_source.html#l00023">elements.hpp:23</a></div></div>
+<div class="ttc" id="anode_8hpp_html"><div class="ttname"><a href="node_8hpp.html">node.hpp</a></div></div>
+<div class="ttc" id="ascreen_8hpp_html"><div class="ttname"><a href="screen_8hpp.html">screen.hpp</a></div></div>
+<div class="ttc" id="aterminal_8hpp_html"><div class="ttname"><a href="terminal_8hpp.html">terminal.hpp</a></div></div>
+</div><!-- fragment --> </div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "zh-CH";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

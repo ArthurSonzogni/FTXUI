@@ -1,0 +1,563 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: flexbox_gallery.cpp 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('flexbox__gallery_8cpp_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">flexbox_gallery.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="flexbox__gallery_8cpp.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// 版权所有 2020 Arthur Sonzogni。保留所有权利。</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// 此源代码的使用受 MIT 许可证的约束，该许可证可在</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// LICENSE 文件中找到。</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;stddef.h&gt;</span>  <span class="comment">// for size_t</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;memory&gt;</span>    <span class="comment">// for shared_ptr, __shared_ptr_access, allocator</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;string&gt;</span>  <span class="comment">// for string, basic_string, to_string, operator+, char_traits</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;vector&gt;</span>  <span class="comment">// for vector</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="captured__mouse_8hpp.html">ftxui/component/captured_mouse.hpp</a>&quot;</span>  <span class="comment">// for ftxui</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="component_8hpp.html">ftxui/component/component.hpp</a>&quot;</span>  <span class="comment">// for Radiobox, Vertical, Checkbox, Horizontal, Renderer, ResizableSplitBottom, ResizableSplitRight</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="component__base_8hpp.html">ftxui/component/component_base.hpp</a>&quot;</span>      <span class="comment">// for ComponentBase</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="screen__interactive_8hpp.html">ftxui/component/screen_interactive.hpp</a>&quot;</span>  <span class="comment">// for ScreenInteractive</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="elements_8hpp.html">ftxui/dom/elements.hpp</a>&quot;</span>  <span class="comment">// for text, window, operator|, vbox, hbox, Element, flexbox, bgcolor, filler, flex, size, border, hcenter, color, EQUAL, bold, dim, notflex, xflex_grow, yflex_grow, HEIGHT, WIDTH</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="flexbox__config_8hpp.html">ftxui/dom/flexbox_config.hpp</a>&quot;</span>  <span class="comment">// for FlexboxConfig, FlexboxConfig::AlignContent, FlexboxConfig::JustifyContent, FlexboxConfig::AlignContent::Center, FlexboxConfig::AlignItems, FlexboxConfig::Direction, FlexboxConfig::JustifyContent::Center, FlexboxConfig::Wrap</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="color_8hpp.html">ftxui/screen/color.hpp</a>&quot;</span>        <span class="comment">// for Color, Color::Black</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">using namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="foldopen" id="foldopen00019" data-start="{" data-end="}">
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="flexbox__gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">   19</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="flexbox__gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>() {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  <span class="keyword">auto</span> screen = <a class="code hl_function" href="group__component.html#a53dc5c3030151713857cf1a898d0f897">ScreenInteractive::Fullscreen</a>();</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  <span class="keywordtype">int</span> direction_index = 0;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  <span class="keywordtype">int</span> wrap_index = 0;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  <span class="keywordtype">int</span> justify_content_index = 0;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  <span class="keywordtype">int</span> align_items_index = 0;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  <span class="keywordtype">int</span> align_content_index = 0;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  std::vector&lt;std::string&gt; directions = {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>      <span class="stringliteral">&quot;Row&quot;</span>,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>      <span class="stringliteral">&quot;RowInversed&quot;</span>,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>      <span class="stringliteral">&quot;Column&quot;</span>,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>      <span class="stringliteral">&quot;ColumnInversed&quot;</span>,</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  };</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  std::vector&lt;std::string&gt; wraps = {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>      <span class="stringliteral">&quot;NoWrap&quot;</span>,</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>      <span class="stringliteral">&quot;Wrap&quot;</span>,</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>      <span class="stringliteral">&quot;WrapInversed&quot;</span>,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  };</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  std::vector&lt;std::string&gt; justify_content = {</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>      <span class="stringliteral">&quot;FlexStart&quot;</span>,    <span class="stringliteral">&quot;FlexEnd&quot;</span>,     <span class="stringliteral">&quot;Center&quot;</span>,      <span class="stringliteral">&quot;Stretch&quot;</span>,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>      <span class="stringliteral">&quot;SpaceBetween&quot;</span>, <span class="stringliteral">&quot;SpaceAround&quot;</span>, <span class="stringliteral">&quot;SpaceEvenly&quot;</span>,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  };</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  std::vector&lt;std::string&gt; align_items = {</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>      <span class="stringliteral">&quot;FlexStart&quot;</span>,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>      <span class="stringliteral">&quot;FlexEnd&quot;</span>,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>      <span class="stringliteral">&quot;Center&quot;</span>,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>      <span class="stringliteral">&quot;Stretch&quot;</span>,</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  };</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  std::vector&lt;std::string&gt; align_content = {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>      <span class="stringliteral">&quot;FlexStart&quot;</span>,    <span class="stringliteral">&quot;FlexEnd&quot;</span>,     <span class="stringliteral">&quot;Center&quot;</span>,      <span class="stringliteral">&quot;Stretch&quot;</span>,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>      <span class="stringliteral">&quot;SpaceBetween&quot;</span>, <span class="stringliteral">&quot;SpaceAround&quot;</span>, <span class="stringliteral">&quot;SpaceEvenly&quot;</span>,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  };</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  <span class="keyword">auto</span> radiobox_direction = <a class="code hl_function" href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">Radiobox</a>(&amp;directions, &amp;direction_index);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>  <span class="keyword">auto</span> radiobox_wrap = <a class="code hl_function" href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">Radiobox</a>(&amp;wraps, &amp;wrap_index);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="keyword">auto</span> radiobox_justify_content =</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>      <a class="code hl_function" href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">Radiobox</a>(&amp;justify_content, &amp;justify_content_index);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  <span class="keyword">auto</span> radiobox_align_items = <a class="code hl_function" href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">Radiobox</a>(&amp;align_items, &amp;align_items_index);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <span class="keyword">auto</span> radiobox_align_content = <a class="code hl_function" href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">Radiobox</a>(&amp;align_content, &amp;align_content_index);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keywordtype">bool</span> element_xflex_grow = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="keywordtype">bool</span> element_yflex_grow = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keywordtype">bool</span> group_xflex_grow = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keywordtype">bool</span> group_yflex_grow = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="keyword">auto</span> checkbox_element_xflex_grow =</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>      <a class="code hl_function" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">Checkbox</a>(<span class="stringliteral">&quot;element |= xflex_grow&quot;</span>, &amp;element_xflex_grow);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keyword">auto</span> checkbox_element_yflex_grow =</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>      <a class="code hl_function" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">Checkbox</a>(<span class="stringliteral">&quot;element |= yflex_grow&quot;</span>, &amp;element_yflex_grow);</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <span class="keyword">auto</span> checkbox_group_xflex_grow =</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>      <a class="code hl_function" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">Checkbox</a>(<span class="stringliteral">&quot;group |= xflex_grow&quot;</span>, &amp;group_xflex_grow);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  <span class="keyword">auto</span> checkbox_group_yflex_grow =</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      <a class="code hl_function" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">Checkbox</a>(<span class="stringliteral">&quot;group |= yflex_grow&quot;</span>, &amp;group_yflex_grow);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="keyword">auto</span> <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a> = [&amp;](<span class="keywordtype">size_t</span> dimx, <span class="keywordtype">size_t</span> dimy, <span class="keywordtype">size_t</span> index) {</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    std::string title = std::to_string(dimx) + <span class="stringliteral">&quot;x&quot;</span> + std::to_string(dimy);</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keyword">auto</span> element = <a class="code hl_function" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">window</a>(<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(title) | hcenter | bold,</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>                          <a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(std::to_string(index)) | hcenter | dim) |</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                   <a class="code hl_function" href="group__dom.html#ga201220986fbdc539e42efe067985cbdb">size</a>(<a class="code hl_enumvalue" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a73c0818986b7c462c2977f57afd00522">WIDTH</a>, <a class="code hl_enumvalue" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a59a84258a4cb9025b567ee5139455029">EQUAL</a>, dimx) | <a class="code hl_function" href="group__dom.html#ga201220986fbdc539e42efe067985cbdb">size</a>(<a class="code hl_enumvalue" href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a38b9241136017b93ea2755a49cf0a000">HEIGHT</a>, <a class="code hl_enumvalue" href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a59a84258a4cb9025b567ee5139455029">EQUAL</a>, dimy) |</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>                   <a class="code hl_function" href="group__dom.html#ga01d4c5aaf0447e862246849111782245">bgcolor</a>(<a class="code hl_function" href="group__screen.html#a1a119fd00beafc7d2aa5f94518e38fc5">Color::HSV</a>(index * 25, 255, 255)) |</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                   <a class="code hl_function" href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">color</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fac1e9bce8242f443c54c7405223d616cd">Color::Black</a>);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keywordflow">if</span> (element_xflex_grow) {</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>      element = element | <a class="code hl_function" href="group__dom.html#ga1618cb15307f29eb3d531e7b44c280d3">xflex_grow</a>;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    }</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keywordflow">if</span> (element_yflex_grow) {</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>      element = element | <a class="code hl_function" href="group__dom.html#ga7eac3f709e905af8f583aed52093b7ce">yflex_grow</a>;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    }</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordflow">return</span> element;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  };</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <span class="keyword">auto</span> content_renderer = <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>([&amp;] {</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <a class="code hl_struct" href="group__dom.html#structftxui_1_1FlexboxConfig">FlexboxConfig</a> config;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    config.<a class="code hl_variable" href="group__dom.html#a53421c695d00016ab925777d423b4eb6">direction</a> = <span class="keyword">static_cast&lt;</span><a class="code hl_enumeration" href="group__dom.html#a224b9163917ac32fc95a60d8c1eec3aa">FlexboxConfig::Direction</a><span class="keyword">&gt;</span>(direction_index);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    config.<a class="code hl_variable" href="group__dom.html#a68b5470ece4f0a492cc1d2057c9bd5e0">wrap</a> = <span class="keyword">static_cast&lt;</span><a class="code hl_enumeration" href="group__dom.html#a6c844a611650cf7e956dbe269a0e72ab">FlexboxConfig::Wrap</a><span class="keyword">&gt;</span>(wrap_index);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    config.<a class="code hl_variable" href="group__dom.html#ab3173252829e796ee1c100b447243748">justify_content</a> =</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keyword">static_cast&lt;</span><a class="code hl_enumeration" href="group__dom.html#ac6e5ab18dcac465ee2ac9a0d8b4a82d2">FlexboxConfig::JustifyContent</a><span class="keyword">&gt;</span>(justify_content_index);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    config.<a class="code hl_variable" href="group__dom.html#a1514fd3d64965c521555fdc2cf2002ce">align_items</a> =</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <span class="keyword">static_cast&lt;</span><a class="code hl_enumeration" href="group__dom.html#a821af961ece5fe13540ad48b54c7a9e7">FlexboxConfig::AlignItems</a><span class="keyword">&gt;</span>(align_items_index);</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    config.<a class="code hl_variable" href="group__dom.html#a103275cb09167852e469450cf8471256">align_content</a> =</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        <span class="keyword">static_cast&lt;</span><a class="code hl_enumeration" href="group__dom.html#a1f99410fd0fc632a5bc2497b6a447420">FlexboxConfig::AlignContent</a><span class="keyword">&gt;</span>(align_content_index);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="keyword">auto</span> group = <a class="code hl_function" href="namespaceftxui.html#a168a235aa438b6c72df5861322154be3">flexbox</a>(</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>        {</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(8, 4, 0),</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(9, 6, 1),</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(11, 6, 2),</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(10, 4, 3),</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(13, 7, 4),</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(12, 4, 5),</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(12, 5, 6),</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(10, 4, 7),</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(12, 4, 8),</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>            <a class="code hl_function" href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a>(10, 5, 9),</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>        },</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>        config);</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    group = group | <a class="code hl_function" href="group__dom.html#ga01d4c5aaf0447e862246849111782245">bgcolor</a>(<a class="code hl_enumvalue" href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fac1e9bce8242f443c54c7405223d616cd">Color::Black</a>);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    group = group | <a class="code hl_function" href="group__dom.html#ga845b0ea50d51024aa4e050447b46e1dd">notflex</a>;</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keywordflow">if</span> (!group_xflex_grow) {</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>      group = <a class="code hl_function" href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">hbox</a>(group, <a class="code hl_function" href="group__dom.html#gac2a9ed2d22ec3c8811b61f4a901ed367">filler</a>());</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    }</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keywordflow">if</span> (!group_yflex_grow) {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>      group = <a class="code hl_function" href="group__dom.html#gafd28058f0ccbbdf34691a85a7cc9b2e3">vbox</a>(group, <a class="code hl_function" href="group__dom.html#gac2a9ed2d22ec3c8811b61f4a901ed367">filler</a>());</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    group = group | <a class="code hl_function" href="group__dom.html#ga257acd2bd47bab7db879cca2c0e67e23">flex</a>;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keywordflow">return</span> group;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  });</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>  <span class="keyword">auto</span> center = <a class="code hl_struct" href="group__dom.html#structftxui_1_1FlexboxConfig">FlexboxConfig</a>()</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                    .<a class="code hl_function" href="group__dom.html#ae47b5b0d793d0c2312e4805a1f40012a">Set</a>(<a class="code hl_enumvalue" href="group__dom.html#ac6e5ab18dcac465ee2ac9a0d8b4a82d2a4f1f6016fc9f3f2353c0cc7c67b292bd">FlexboxConfig::JustifyContent::Center</a>)</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>                    .<a class="code hl_function" href="group__dom.html#ae47b5b0d793d0c2312e4805a1f40012a">Set</a>(<a class="code hl_enumvalue" href="group__dom.html#a1f99410fd0fc632a5bc2497b6a447420a4f1f6016fc9f3f2353c0cc7c67b292bd">FlexboxConfig::AlignContent::Center</a>);</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <span class="keywordtype">int</span> space_right = 10;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>  <span class="keywordtype">int</span> space_bottom = 1;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  content_renderer = <a class="code hl_function" href="group__component.html#ga9030d0beb64f653603cab382b02750a8">ResizableSplitRight</a>(</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>      <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>([&amp;] { <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceftxui.html#a168a235aa438b6c72df5861322154be3">flexbox</a>({<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;resizable&quot;</span>)}, <a class="code hl_function" href="group__dom.html#ga5b11656305fce8427b81daf1c35883f1">center</a>); }),</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>      content_renderer, &amp;space_right);</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>  content_renderer = <a class="code hl_function" href="group__component.html#gacb75e6e61a021829893f7b57aeb7e3a2">ResizableSplitBottom</a>(</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>      <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>([&amp;] { <span class="keywordflow">return</span> <a class="code hl_function" href="namespaceftxui.html#a168a235aa438b6c72df5861322154be3">flexbox</a>({<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;resizable&quot;</span>)}, <a class="code hl_function" href="group__dom.html#ga5b11656305fce8427b81daf1c35883f1">center</a>); }),</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>      content_renderer, &amp;space_bottom);</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  <span class="keyword">auto</span> main_container = Container::Vertical({</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>      Container::Horizontal({</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>          radiobox_direction,</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>          radiobox_wrap,</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>          Container::Vertical({</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>              checkbox_element_xflex_grow,</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>              checkbox_element_yflex_grow,</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>              checkbox_group_xflex_grow,</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>              checkbox_group_yflex_grow,</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>          }),</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>      }),</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>      Container::Horizontal({</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>          radiobox_justify_content,</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>          radiobox_align_items,</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>          radiobox_align_content,</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>      }),</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>      content_renderer,</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  });</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>  <span class="keyword">auto</span> main_renderer = <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>(main_container, [&amp;] {</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="group__dom.html#gafd28058f0ccbbdf34691a85a7cc9b2e3">vbox</a>({</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        <a class="code hl_function" href="group__dom.html#gafd28058f0ccbbdf34691a85a7cc9b2e3">vbox</a>({<a class="code hl_function" href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">hbox</a>({</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                  <a class="code hl_function" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">window</a>(<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;FlexboxConfig::Direction&quot;</span>),</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                         radiobox_direction-&gt;<a class="code hl_function" href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">Render</a>()),</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>                  <a class="code hl_function" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">window</a>(<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;FlexboxConfig::Wrap&quot;</span>), radiobox_wrap-&gt;<a class="code hl_function" href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">Render</a>()),</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>                  <a class="code hl_function" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">window</a>(<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;Misc:&quot;</span>),</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>                         <a class="code hl_function" href="group__dom.html#gafd28058f0ccbbdf34691a85a7cc9b2e3">vbox</a>({</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>                             checkbox_element_xflex_grow-&gt;Render(),</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>                             checkbox_element_yflex_grow-&gt;Render(),</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>                             checkbox_group_xflex_grow-&gt;Render(),</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                             checkbox_group_yflex_grow-&gt;Render(),</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>                         })),</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>              }),</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>              <a class="code hl_function" href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">hbox</a>({</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                  <a class="code hl_function" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">window</a>(<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;FlexboxConfig::JustifyContent&quot;</span>),</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>                         radiobox_justify_content-&gt;<a class="code hl_function" href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">Render</a>()),</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                  <a class="code hl_function" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">window</a>(<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;FlexboxConfig::AlignItems&quot;</span>),</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>                         radiobox_align_items-&gt;<a class="code hl_function" href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">Render</a>()),</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>                  <a class="code hl_function" href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">window</a>(<a class="code hl_function" href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">text</a>(<span class="stringliteral">&quot;FlexboxConfig::AlignContent&quot;</span>),</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>                         radiobox_align_content-&gt;<a class="code hl_function" href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">Render</a>()),</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>              })}),</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        content_renderer-&gt;Render() | flex | <a class="code hl_function" href="namespaceftxui.html#a76bce7ce913f693d9b42bc0cf05168b0">border</a>,</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    });</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>  });</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>  screen.Loop(main_renderer);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>}</div>
+</div>
+<div class="ttc" id="acaptured__mouse_8hpp_html"><div class="ttname"><a href="captured__mouse_8hpp.html">captured_mouse.hpp</a></div></div>
+<div class="ttc" id="acolor_8hpp_html"><div class="ttname"><a href="color_8hpp.html">color.hpp</a></div></div>
+<div class="ttc" id="acomponent_8hpp_html"><div class="ttname"><a href="component_8hpp.html">component.hpp</a></div></div>
+<div class="ttc" id="acomponent__base_8hpp_html"><div class="ttname"><a href="component__base_8hpp.html">component_base.hpp</a></div></div>
+<div class="ttc" id="aelements_8hpp_html"><div class="ttname"><a href="elements_8hpp.html">elements.hpp</a></div></div>
+<div class="ttc" id="aexamples_2component_2focus_8cpp_html_a9ffb8a33ec5d0133f63f791d526df1c7"><div class="ttname"><a href="examples_2component_2focus_8cpp.html#a9ffb8a33ec5d0133f63f791d526df1c7">make_box</a></div><div class="ttdeci">Element make_box(int x, int y)</div><div class="ttdef"><b>定义</b> <a href="examples_2component_2focus_8cpp_source.html#l00017">examples/component/focus.cpp:17</a></div></div>
+<div class="ttc" id="aflexbox__config_8hpp_html"><div class="ttname"><a href="flexbox__config_8hpp.html">flexbox_config.hpp</a></div></div>
+<div class="ttc" id="aflexbox__gallery_8cpp_html_ae66f6b31b5ad750f1fe042a706a4e3d4"><div class="ttname"><a href="flexbox__gallery_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a></div><div class="ttdeci">int main()</div><div class="ttdef"><b>定义</b> <a href="#l00019">flexbox_gallery.cpp:19</a></div></div>
+<div class="ttc" id="agroup__component_html_a53dc5c3030151713857cf1a898d0f897"><div class="ttname"><a href="group__component.html#a53dc5c3030151713857cf1a898d0f897">ftxui::ScreenInteractive::Fullscreen</a></div><div class="ttdeci">static ScreenInteractive Fullscreen()</div><div class="ttdef"><b>定义</b> <a href="screen__interactive_8cpp_source.html#l00297">screen_interactive.cpp:297</a></div></div>
+<div class="ttc" id="agroup__component_html_ga3e7a44f321fa910f07aef5879e67af95"><div class="ttname"><a href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">ftxui::Radiobox</a></div><div class="ttdeci">Component Radiobox(RadioboxOption options)</div><div class="ttdoc">元素列表，其中只能选择一个。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2radiobox_8cpp_source.html#l00203">src/ftxui/component/radiobox.cpp:203</a></div></div>
+<div class="ttc" id="agroup__component_html_ga533e883e2aeea28de2b60564fcaf0361"><div class="ttname"><a href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">ftxui::Renderer</a></div><div class="ttdeci">Component Renderer(Component child, std::function&lt; Element()&gt;)</div><div class="ttdoc">返回一个新组件，类似于 |child|，但使用 |render| 作为 Component::Render() 事件。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2renderer_8cpp_source.html#l00061">src/ftxui/component/renderer.cpp:61</a></div></div>
+<div class="ttc" id="agroup__component_html_ga9030d0beb64f653603cab382b02750a8"><div class="ttname"><a href="group__component.html#ga9030d0beb64f653603cab382b02750a8">ftxui::ResizableSplitRight</a></div><div class="ttdeci">Component ResizableSplitRight(Component main, Component back, int *main_size)</div><div class="ttdoc">两个组件之间的水平分割，可通过鼠标配置。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2resizable__split_8cpp_source.html#l00230">src/ftxui/component/resizable_split.cpp:230</a></div></div>
+<div class="ttc" id="agroup__component_html_gacb75e6e61a021829893f7b57aeb7e3a2"><div class="ttname"><a href="group__component.html#gacb75e6e61a021829893f7b57aeb7e3a2">ftxui::ResizableSplitBottom</a></div><div class="ttdeci">Component ResizableSplitBottom(Component main, Component back, int *main_size)</div><div class="ttdoc">两个组件之间的垂直分割，可通过鼠标配置。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2resizable__split_8cpp_source.html#l00296">src/ftxui/component/resizable_split.cpp:296</a></div></div>
+<div class="ttc" id="agroup__component_html_gae0d441d2c83740f187f62db566bbefcd"><div class="ttname"><a href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">ftxui::Checkbox</a></div><div class="ttdeci">Component Checkbox(CheckboxOption options)</div><div class="ttdoc">绘制可勾选元素。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2checkbox_8cpp_source.html#l00108">src/ftxui/component/checkbox.cpp:108</a></div></div>
+<div class="ttc" id="agroup__dom_html_a103275cb09167852e469450cf8471256"><div class="ttname"><a href="group__dom.html#a103275cb09167852e469450cf8471256">ftxui::FlexboxConfig::align_content</a></div><div class="ttdeci">AlignContent align_content</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00095">flexbox_config.hpp:95</a></div></div>
+<div class="ttc" id="agroup__dom_html_a1514fd3d64965c521555fdc2cf2002ce"><div class="ttname"><a href="group__dom.html#a1514fd3d64965c521555fdc2cf2002ce">ftxui::FlexboxConfig::align_items</a></div><div class="ttdeci">AlignItems align_items</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00080">flexbox_config.hpp:80</a></div></div>
+<div class="ttc" id="agroup__dom_html_a1f99410fd0fc632a5bc2497b6a447420"><div class="ttname"><a href="group__dom.html#a1f99410fd0fc632a5bc2497b6a447420">ftxui::FlexboxConfig::AlignContent</a></div><div class="ttdeci">AlignContent</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00084">flexbox_config.hpp:84</a></div></div>
+<div class="ttc" id="agroup__dom_html_a1f99410fd0fc632a5bc2497b6a447420a4f1f6016fc9f3f2353c0cc7c67b292bd"><div class="ttname"><a href="group__dom.html#a1f99410fd0fc632a5bc2497b6a447420a4f1f6016fc9f3f2353c0cc7c67b292bd">ftxui::FlexboxConfig::AlignContent::Center</a></div><div class="ttdeci">@ Center</div><div class="ttdoc">项目沿交叉轴居中。</div></div>
+<div class="ttc" id="agroup__dom_html_a224b9163917ac32fc95a60d8c1eec3aa"><div class="ttname"><a href="group__dom.html#a224b9163917ac32fc95a60d8c1eec3aa">ftxui::FlexboxConfig::Direction</a></div><div class="ttdeci">Direction</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00029">flexbox_config.hpp:29</a></div></div>
+<div class="ttc" id="agroup__dom_html_a53421c695d00016ab925777d423b4eb6"><div class="ttname"><a href="group__dom.html#a53421c695d00016ab925777d423b4eb6">ftxui::FlexboxConfig::direction</a></div><div class="ttdeci">Direction direction</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00036">flexbox_config.hpp:36</a></div></div>
+<div class="ttc" id="agroup__dom_html_a68b5470ece4f0a492cc1d2057c9bd5e0"><div class="ttname"><a href="group__dom.html#a68b5470ece4f0a492cc1d2057c9bd5e0">ftxui::FlexboxConfig::wrap</a></div><div class="ttdeci">Wrap wrap</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00045">flexbox_config.hpp:45</a></div></div>
+<div class="ttc" id="agroup__dom_html_a6c844a611650cf7e956dbe269a0e72ab"><div class="ttname"><a href="group__dom.html#a6c844a611650cf7e956dbe269a0e72ab">ftxui::FlexboxConfig::Wrap</a></div><div class="ttdeci">Wrap</div><div class="ttdoc">默认情况下，弹性项目将全部尝试适应一行。您可以通过此属性更改它，并允许项目根据需要换行。</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00039">flexbox_config.hpp:39</a></div></div>
+<div class="ttc" id="agroup__dom_html_a7e286fe14880614686ceeec84a9a9702"><div class="ttname"><a href="group__dom.html#a7e286fe14880614686ceeec84a9a9702">ftxui::Node::Render</a></div><div class="ttdeci">virtual void Render(Screen &amp;screen)</div><div class="ttdoc">在 ftxui::Screen 上显示元素。</div><div class="ttdef"><b>定义</b> <a href="node_8cpp_source.html#l00059">node.cpp:59</a></div></div>
+<div class="ttc" id="agroup__dom_html_a821af961ece5fe13540ad48b54c7a9e7"><div class="ttname"><a href="group__dom.html#a821af961ece5fe13540ad48b54c7a9e7">ftxui::FlexboxConfig::AlignItems</a></div><div class="ttdeci">AlignItems</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00074">flexbox_config.hpp:74</a></div></div>
+<div class="ttc" id="agroup__dom_html_ab3173252829e796ee1c100b447243748"><div class="ttname"><a href="group__dom.html#ab3173252829e796ee1c100b447243748">ftxui::FlexboxConfig::justify_content</a></div><div class="ttdeci">JustifyContent justify_content</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00070">flexbox_config.hpp:70</a></div></div>
+<div class="ttc" id="agroup__dom_html_ac6e5ab18dcac465ee2ac9a0d8b4a82d2"><div class="ttname"><a href="group__dom.html#ac6e5ab18dcac465ee2ac9a0d8b4a82d2">ftxui::FlexboxConfig::JustifyContent</a></div><div class="ttdeci">JustifyContent</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00050">flexbox_config.hpp:50</a></div></div>
+<div class="ttc" id="agroup__dom_html_ac6e5ab18dcac465ee2ac9a0d8b4a82d2a4f1f6016fc9f3f2353c0cc7c67b292bd"><div class="ttname"><a href="group__dom.html#ac6e5ab18dcac465ee2ac9a0d8b4a82d2a4f1f6016fc9f3f2353c0cc7c67b292bd">ftxui::FlexboxConfig::JustifyContent::Center</a></div><div class="ttdeci">@ Center</div><div class="ttdoc">项目沿线居中。</div></div>
+<div class="ttc" id="agroup__dom_html_ae47b5b0d793d0c2312e4805a1f40012a"><div class="ttname"><a href="group__dom.html#ae47b5b0d793d0c2312e4805a1f40012a">ftxui::FlexboxConfig::Set</a></div><div class="ttdeci">FlexboxConfig &amp; Set(FlexboxConfig::Direction)</div><div class="ttdoc">设置 flexbox 方向。</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8cpp_source.html#l00009">flexbox_config.cpp:9</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga01d4c5aaf0447e862246849111782245"><div class="ttname"><a href="group__dom.html#ga01d4c5aaf0447e862246849111782245">ftxui::bgcolor</a></div><div class="ttdeci">Decorator bgcolor(Color)</div><div class="ttdoc">使用背景色进行装饰。</div><div class="ttdef"><b>定义</b> <a href="dom_2color_8cpp_source.html#l00124">dom/color.cpp:124</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga1618cb15307f29eb3d531e7b44c280d3"><div class="ttname"><a href="group__dom.html#ga1618cb15307f29eb3d531e7b44c280d3">ftxui::xflex_grow</a></div><div class="ttdeci">Element xflex_grow(Element)</div><div class="ttdoc">如果可能，在 X 轴上进行扩展。</div><div class="ttdef"><b>定义</b> <a href="flex_8cpp_source.html#l00144">flex.cpp:144</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga201220986fbdc539e42efe067985cbdb"><div class="ttname"><a href="group__dom.html#ga201220986fbdc539e42efe067985cbdb">ftxui::size</a></div><div class="ttdeci">Decorator size(WidthOrHeight, Constraint, int value)</div><div class="ttdoc">对元素大小应用约束。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2dom_2size_8cpp_source.html#l00089">src/ftxui/dom/size.cpp:89</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga257acd2bd47bab7db879cca2c0e67e23"><div class="ttname"><a href="group__dom.html#ga257acd2bd47bab7db879cca2c0e67e23">ftxui::flex</a></div><div class="ttdeci">Element flex(Element)</div><div class="ttdoc">使子元素按比例扩展以填充容器中剩余的空间。</div><div class="ttdef"><b>定义</b> <a href="flex_8cpp_source.html#l00120">flex.cpp:120</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga5b11656305fce8427b81daf1c35883f1"><div class="ttname"><a href="group__dom.html#ga5b11656305fce8427b81daf1c35883f1">ftxui::center</a></div><div class="ttdeci">Element center(Element)</div><div class="ttdoc">水平并垂直居中一个元素。</div><div class="ttdef"><b>定义</b> <a href="composite__decorator_8cpp_source.html#l00030">composite_decorator.cpp:30</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga75baaa2734ed76a9f478beaafa87ae57"><div class="ttname"><a href="group__dom.html#ga75baaa2734ed76a9f478beaafa87ae57">ftxui::text</a></div><div class="ttdeci">Element text(std::wstring text)</div><div class="ttdoc">显示一段Unicode文本。</div><div class="ttdef"><b>定义</b> <a href="text_8cpp_source.html#l00160">text.cpp:160</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga7eac3f709e905af8f583aed52093b7ce"><div class="ttname"><a href="group__dom.html#ga7eac3f709e905af8f583aed52093b7ce">ftxui::yflex_grow</a></div><div class="ttdeci">Element yflex_grow(Element)</div><div class="ttdoc">如果可能，在 Y 轴上进行扩展。</div><div class="ttdef"><b>定义</b> <a href="flex_8cpp_source.html#l00150">flex.cpp:150</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga845b0ea50d51024aa4e050447b46e1dd"><div class="ttname"><a href="group__dom.html#ga845b0ea50d51024aa4e050447b46e1dd">ftxui::notflex</a></div><div class="ttdeci">Element notflex(Element)</div><div class="ttdoc">使元素不可伸缩。</div><div class="ttdef"><b>定义</b> <a href="flex_8cpp_source.html#l00174">flex.cpp:174</a></div></div>
+<div class="ttc" id="agroup__dom_html_gac2a9ed2d22ec3c8811b61f4a901ed367"><div class="ttname"><a href="group__dom.html#gac2a9ed2d22ec3c8811b61f4a901ed367">ftxui::filler</a></div><div class="ttdeci">Element filler()</div><div class="ttdoc">一个元素，它将按比例扩展以填充容器中剩余的空间。</div><div class="ttdef"><b>定义</b> <a href="flex_8cpp_source.html#l00096">flex.cpp:96</a></div></div>
+<div class="ttc" id="agroup__dom_html_gaf61b489da39ca5e24b68e6e1a2b09c0d"><div class="ttname"><a href="group__dom.html#gaf61b489da39ca5e24b68e6e1a2b09c0d">ftxui::color</a></div><div class="ttdeci">Decorator color(Color)</div><div class="ttdoc">使用前景色进行装饰。</div><div class="ttdef"><b>定义</b> <a href="dom_2color_8cpp_source.html#l00110">dom/color.cpp:110</a></div></div>
+<div class="ttc" id="agroup__dom_html_gafd28058f0ccbbdf34691a85a7cc9b2e3"><div class="ttname"><a href="group__dom.html#gafd28058f0ccbbdf34691a85a7cc9b2e3">ftxui::vbox</a></div><div class="ttdeci">Element vbox(Elements)</div><div class="ttdoc">垂直一个接一个显示元素的容器。</div><div class="ttdef"><b>定义</b> <a href="vbox_8cpp_source.html#l00096">vbox.cpp:96</a></div></div>
+<div class="ttc" id="agroup__dom_html_structftxui_1_1FlexboxConfig"><div class="ttname"><a href="group__dom.html#structftxui_1_1FlexboxConfig">ftxui::FlexboxConfig</a></div><div class="ttdoc">FlexboxConfig 是一个配置结构体，定义了弹性盒子容器的布局属性。</div><div class="ttdef"><b>定义</b> <a href="flexbox__config_8hpp_source.html#l00026">flexbox_config.hpp:26</a></div></div>
+<div class="ttc" id="agroup__screen_html_a1a119fd00beafc7d2aa5f94518e38fc5"><div class="ttname"><a href="group__screen.html#a1a119fd00beafc7d2aa5f94518e38fc5">ftxui::Color::HSV</a></div><div class="ttdeci">static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value)</div><div class="ttdoc">从其 HSV 表示构建一个颜色。 https://en.wikipedia.org/wiki/HSL_and_HSV</div><div class="ttdef"><b>定义</b> <a href="screen_2color_8cpp_source.html#l00197">screen/color.cpp:197</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae2b6d9670960e89c66d7b76167a0802fac1e9bce8242f443c54c7405223d616cd"><div class="ttname"><a href="group__screen.html#ae2b6d9670960e89c66d7b76167a0802fac1e9bce8242f443c54c7405223d616cd">ftxui::Color::Black</a></div><div class="ttdeci">@ Black</div><div class="ttdef"><b>定义</b> <a href="color_8hpp_source.html#l00052">color.hpp:52</a></div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">#include &quot;ftxui/component/component_base.hpp&quot; // 用于 ComponentBase</div><div class="ttdef"><b>定义</b> <a href="animation_8hpp_source.html#l00009">animation.hpp:9</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a04711c04f28aabfa0e5928a35baaec53a38b9241136017b93ea2755a49cf0a000"><div class="ttname"><a href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a38b9241136017b93ea2755a49cf0a000">ftxui::HEIGHT</a></div><div class="ttdeci">@ HEIGHT</div><div class="ttdef"><b>定义</b> <a href="elements_8hpp_source.html#l00157">elements.hpp:157</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a04711c04f28aabfa0e5928a35baaec53a73c0818986b7c462c2977f57afd00522"><div class="ttname"><a href="namespaceftxui.html#a04711c04f28aabfa0e5928a35baaec53a73c0818986b7c462c2977f57afd00522">ftxui::WIDTH</a></div><div class="ttdeci">@ WIDTH</div><div class="ttdef"><b>定义</b> <a href="elements_8hpp_source.html#l00157">elements.hpp:157</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a168a235aa438b6c72df5861322154be3"><div class="ttname"><a href="namespaceftxui.html#a168a235aa438b6c72df5861322154be3">ftxui::flexbox</a></div><div class="ttdeci">Element flexbox(Elements, FlexboxConfig config=FlexboxConfig())</div><div class="ttdoc">一个容器，用于在行/列中显示元素，并且在填满时能够换行到下一列/行。</div><div class="ttdef"><b>定义</b> <a href="flexbox_8cpp_source.html#l00249">flexbox.cpp:249</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a552ba6d33b3c9bec586b99fba4c243ac"><div class="ttname"><a href="namespaceftxui.html#a552ba6d33b3c9bec586b99fba4c243ac">ftxui::hbox</a></div><div class="ttdeci">Element hbox(Elements)</div><div class="ttdoc">一个按水平顺序逐一显示元素的容器。</div><div class="ttdef"><b>定义</b> <a href="hbox_8cpp_source.html#l00094">hbox.cpp:94</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a76bce7ce913f693d9b42bc0cf05168b0"><div class="ttname"><a href="namespaceftxui.html#a76bce7ce913f693d9b42bc0cf05168b0">ftxui::border</a></div><div class="ttdeci">Element border(Element)</div></div>
+<div class="ttc" id="anamespaceftxui_html_a920b0e99817d412eab1f8cccdf294d21"><div class="ttname"><a href="namespaceftxui.html#a920b0e99817d412eab1f8cccdf294d21">ftxui::window</a></div><div class="ttdeci">Element window(Element title, Element content, BorderStyle border=ROUNDED)</div></div>
+<div class="ttc" id="anamespaceftxui_html_ae09f44b989d381a387329fd0a0935926a59a84258a4cb9025b567ee5139455029"><div class="ttname"><a href="namespaceftxui.html#ae09f44b989d381a387329fd0a0935926a59a84258a4cb9025b567ee5139455029">ftxui::EQUAL</a></div><div class="ttdeci">@ EQUAL</div><div class="ttdef"><b>定义</b> <a href="elements_8hpp_source.html#l00158">elements.hpp:158</a></div></div>
+<div class="ttc" id="ascreen__interactive_8hpp_html"><div class="ttname"><a href="screen__interactive_8hpp.html">screen_interactive.hpp</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "zh-CH";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

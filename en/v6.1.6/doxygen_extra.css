@@ -1,0 +1,323 @@
+/*
+ *  GitHub Markdown style CSS for doxygen 1.8.14
+ *  Source:  https://github.com/sindresorhus/github-markdown-css
+ *  License: MIT � Sindre Sorhus
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+body, table, div, p, dl {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.5;
+  color: #24292e;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  word-wrap: break-word;
+}
+
+b {
+  font-weight: 600;
+}
+
+/* @group Heading Levels */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-size: 2em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid #eaecef;
+}
+
+h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #eaecef;
+}
+
+h3 {
+  font-size: 1.25em;
+}
+
+h4 {
+  font-size: 1em;
+}
+
+h5 {
+  font-size: 0.875em;
+}
+
+h6 {
+  font-size: 0.85em;
+  color: #6a737d;
+}
+
+a {
+  background-color: transparent;
+  color: #0366d6;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.contents a:visited {
+  color: #0366d6;
+}
+
+a:active, a:hover {
+  outline-width: 0;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+a.el {
+  font-weight: normal;
+}
+
+.image {
+  text-align: left;
+}
+
+.tip {
+  background-image: url(tip.png);
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: 30px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  min-height: 31px;
+  display: block;
+  font-style:italic;
+}
+
+.warn {
+  background-image: url(warn.png);
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: 48px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  min-height: 31px;
+  display: block;
+  font-style:italic;
+}
+
+#projectname {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+#projectbrief {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.8em;
+}
+
+#projectnumber {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 1em;
+}
+
+div.contents {
+  width: 980px;
+  padding: 40px;
+  margin-top: -1px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  border: 1px solid #d1d5da;
+  border-radius: 2px;
+}
+
+div.toc {
+  border: 0 none;
+  border-radius: 7px;
+}
+
+div.header {
+  width: 980px;
+  padding: 10px;
+  margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: none;
+  background-repeat: none;
+  background-color: #f6f8fa;
+  border: 1px solid #d1d5da;
+}
+
+div.headertitle {
+  padding: 0;
+}
+
+.title ol {
+  margin: 0;
+}
+
+.title ol li {
+  list-style-type: none;
+}
+
+.ui-resizable-e {
+  background: none;
+  background-color: #E6E6E6;
+}
+
+div.fragment {
+  background-color: #f3f3f3;
+  border-radius:5px;
+  border: 0 solid;
+  border: none;
+  padding:16px;
+  transition: all 0.5s ease-in-out;
+}
+
+div.fragment:hover {
+  background-color: #e9e9e9;
+  box-shadow: 0 5px 10px -5px rgb(0,0,0,0.5) inset;
+}
+
+div.line {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 90%;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-kerning: none;
+  -webkit-transition-duration: 0;
+  -moz-transition-duration: 0;
+  -ms-transition-duration: 0;
+  -o-transition-duration: 0;
+  transition-duration: 0;
+}
+
+div.line.glow {
+  background-color: auto;
+  box-shadow: none;
+}
+
+/* @group Code Colorization */
+span.keyword {
+  color: #808000
+}
+
+span.keywordtype {
+  color: #808000
+}
+
+span.keywordflow {
+  color: #808000
+}
+
+span.comment {
+  color: #008000
+}
+
+span.preprocessor {
+  color: #800000
+}
+
+span.stringliteral {
+  color: #000080
+}
+
+span.charliteral {
+  color: #000080
+}
+
+blockquote {
+  background-color: #EEEEEE;
+  border-left: 2px solid #606060;
+  margin: 0 24px 0 4px;
+  padding: 0 12px 0 16px;
+}
+
+/* @end */
+
+.arrow {
+  box-sizing: content-box;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+#nav-tree {
+  background-image: none;
+  background-color: white;
+}
+
+#nav-tree .label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+#side-nav {
+  width: 25%;
+  max-width: 50%;
+}
+
+.memtitle {
+  background-image: none;
+}
+
+.memproto {
+  text-shadow: none;
+  /* opera specific markup */
+  box-shadow: none;
+  /* firefox specific markup */
+  -moz-box-shadow: none;
+  -moz-border-radius-topright: 4px;
+  /* webkit specific markup */
+  -webkit-box-shadow: none;
+  -webkit-border-top-right-radius: 4px;
+}
+
+.memdoc {
+  background-image:none;
+  background-repeat:repeat-x;
+  background-color: #FFFFFF;
+  /* opera specific markup */
+  box-shadow: none;
+  /* firefox specific markup */
+  -moz-box-shadow: none;
+  /* webkit specific markup */
+  -webkit-box-shadow: none;
+}
+
+#main-menu {
+  background: none;
+  border-bottom: 1px solid black;
+}
+
+#main-menu li {
+  border: none !important;
+  transition: all 0.1s ease-in-out;
+}
+
+#main-menu li:hover {
+  color:black;
+  background-color:black;
+}
+
+.sm-dox a, .sm-dox a:focus, .sm-dox a:active, .sm-dox a:hover, .sm-dox a.highlighted {
+  background-image:none;
+}
+
+#titlearea {
+  margin: 8px;
+  border: none;
+}

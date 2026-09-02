@@ -1,0 +1,821 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: ftxui / component</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','搜索',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('module-component.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">载入中...</div>
+<div class="SRStatus" id="Searching">搜索中...</div>
+<div class="SRStatus" id="NoMatches">未找到</div>
+</div>
+</div>
+</div>
+</div>
+
+<div><div class="header">
+  <div class="headertitle"><div class="title">ftxui / component</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="toc"><h3>目录</h3>
+<ul>
+  <li class="level1">
+    <a href="#component-input">Input</a>
+    <ul>
+      <li class="level2">
+        <a href="#filtered-input">Filtered input</a>
+      </li>
+    </ul>
+  </li>
+  <li class="level1">
+    <a href="#component-menu">Menu</a>
+  </li>
+  <li class="level1">
+    <a href="#component-toggle">Toggle</a>
+  </li>
+  <li class="level1">
+    <a href="#component-checkbox">CheckBox</a>
+  </li>
+  <li class="level1">
+    <a href="#component-radiobox">RadioBox</a>
+  </li>
+  <li class="level1">
+    <a href="#component-dropdown">Dropdown</a>
+  </li>
+  <li class="level1">
+    <a href="#component-slider">Slider</a>
+  </li>
+  <li class="level1">
+    <a href="#component-renderer">Renderer</a>
+  </li>
+  <li class="level1">
+    <a href="#component-catchevent">CatchEvent</a>
+  </li>
+  <li class="level1">
+    <a href="#component-collapsible">Collapsible</a>
+  </li>
+  <li class="level1">
+    <a href="#component-maybe">Maybe</a>
+  </li>
+  <li class="level1">
+    <a href="#component-container">Container</a>
+    <ul>
+      <li class="level2">
+        <a href="#component-horizontal">Horizontal</a>
+      </li>
+      <li class="level2">
+        <a href="#component-vertical">Vertical</a>
+      </li>
+      <li class="level2">
+        <a href="#component-tab">Tab</a>
+      </li>
+    </ul>
+  </li>
+  <li class="level1">
+    <a href="#component-resizable-split">ResizableSplit</a>
+  </li>
+  <li class="level1">
+    <a href="#component-force-redraw">Force a frame redraw.</a>
+  </li>
+</ul>
+</div>
+<div class="textblock"><p><img src="https://nsm09.casimages.com/img/2025/05/31//2505310207423242518595349.png" alt="title-img" class="inline"/></p>
+<p><code>ftxui::component</code> 模块定义了生成响应用户事件（键盘、鼠标等）的交互式组件的逻辑。</p>
+<p><a class="el" href="module-component-examples.html">Example</a> 部分提供了一系列示例。</p>
+<p><code><a class="el" href="group__component.html#classftxui_1_1ScreenInteractive" title="ScreenInteractive 是一个可以处理事件、运行主循环和管理组件的 Screen。">ftxui::ScreenInteractive</a></code> 定义了一个渲染组件的主循环。</p>
+<p><code><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">ftxui::Component</a></code> 是 <code><a class="el" href="group__component.html#classftxui_1_1ComponentBase" title="它将自身实现为 ftxui::Element。它通过响应 ftxui::Event 来实现键盘导航。">ftxui::ComponentBase</a></code> 的共享指针。后者定义了：</p><ul>
+<li><code><a class="el" href="group__component.html#a28d41d6113c5b29c8dd45846582b3299" title="绘制组件。 构建一个 ftxui::Element，用于在表示此 ftxui::ComponentBase 的 ftxui::Screen 上绘制。 请覆盖 OnRender() 以修改渲染。">ftxui::ComponentBase::Render()</a></code>：如何渲染界面。</li>
+<li><code><a class="el" href="group__component.html#ab84629a8fecad2e1cdd426b7ddc72277" title="响应事件时调用。">ftxui::ComponentBase::OnEvent()</a></code>：如何响应事件。</li>
+<li><code><a class="el" href="group__component.html#a21f040bec9104e164bfa6c3ad45be3a1" title="添加一个子项。 @param child 要附加的子项。">ftxui::ComponentBase::Add()</a></code>：在两个组件之间构建父子关系。组件树用于定义如何使用键盘进行导航。</li>
+</ul>
+<p><code><a class="el" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">ftxui::Element</a></code> 用于渲染单个帧。</p>
+<p><code><a class="el" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">ftxui::Component</a></code> 用于渲染动态用户界面，生成多个帧，并在事件发生时更新其状态。</p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2gallery_8cpp-example.html">组件库</a> (多种组件的集合)。(<a href="https://arthursonzogni.github.io/FTXUI/examples/?file=component/gallery">演示</a>)</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147247330-b60beb9f-e665-48b4-81c0-4b01ee95bc66.png" alt="image" class="inline"/></p>
+<p>所有预定义组件都可以在 <a href="./component_8hpp.html">"ftxui/dom/component.hpp"</a> 中找到</p>
+<div class="fragment"><div class="line"><span class="comment">// 版权所有 2021 Arthur Sonzogni。保留所有权利。</span></div>
+<div class="line"><span class="comment">// 此源代码的使用受 MIT 许可的约束，MIT 许可可在</span></div>
+<div class="line"><span class="comment">// LICENSE 文件中找到。</span></div>
+<div class="line"><span class="preprocessor">#ifndef FTXUI_COMPONENT_HPP</span></div>
+<div class="line"><span class="preprocessor">#define FTXUI_COMPONENT_HPP</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;functional&gt;</span>  <span class="comment">// for function</span></div>
+<div class="line"><span class="preprocessor">#include &lt;memory&gt;</span>      <span class="comment">// for make_shared, shared_ptr</span></div>
+<div class="line"><span class="preprocessor">#include &lt;utility&gt;</span>     <span class="comment">// for forward</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="warn__windows__macro_8hpp.html">ftxui/util/warn_windows_macro.hpp</a>&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="component__base_8hpp.html">ftxui/component/component_base.hpp</a>&quot;</span>  <span class="comment">// for Component, Components</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="component__options_8hpp.html">ftxui/component/component_options.hpp</a>&quot;</span>  <span class="comment">// for ButtonOption, CheckboxOption, MenuOption</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="elements_8hpp.html">ftxui/dom/elements.hpp</a>&quot;</span>  <span class="comment">// for Element</span></div>
+<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="ref_8hpp.html">ftxui/util/ref.hpp</a>&quot;</span>  <span class="comment">// for ConstRef, Ref, ConstStringRef, ConstStringListRef, StringRef</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a> {</div>
+<div class="line"><span class="keyword">struct </span>ButtonOption;</div>
+<div class="line"><span class="keyword">struct </span>CheckboxOption;</div>
+<div class="line"><span class="keyword">struct </span>Event;</div>
+<div class="line"><span class="keyword">struct </span>InputOption;</div>
+<div class="line"><span class="keyword">struct </span>MenuOption;</div>
+<div class="line"><span class="keyword">struct </span>RadioboxOption;</div>
+<div class="line"><span class="keyword">struct </span>MenuEntryOption;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">class </span>T, <span class="keyword">class</span>... Args&gt;</div>
+<div class="line">std::shared_ptr&lt;T&gt; <a class="code hl_function" href="namespaceftxui.html#a2b8973dc71334f1d98e2e6f55de8b5ae">Make</a>(Args&amp;&amp;... args) {</div>
+<div class="line">  <span class="keywordflow">return</span> std::make_shared&lt;T&gt;(std::forward&lt;Args&gt;(args)...);</div>
+<div class="line">}</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 用于装饰组件的管道运算符。</span></div>
+<div class="line"><span class="keyword">using </span><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> = std::function&lt;<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>)&gt;;</div>
+<div class="line"><span class="keyword">using </span><a class="code hl_typedef" href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ElementDecorator</a> = std::function&lt;<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>)&gt;;</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#a65a2e15f64ae3bc205c485abc3a5aeb9">operator|</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component, <a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> decorator);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#a65a2e15f64ae3bc205c485abc3a5aeb9">operator|</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component, <a class="code hl_typedef" href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ElementDecorator</a> decorator);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&amp; <a class="code hl_function" href="namespaceftxui.html#ade35e69d695327db85be01c9787c39f8">operator|=</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&amp; component, <a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> decorator);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&amp; <a class="code hl_function" href="namespaceftxui.html#ade35e69d695327db85be01c9787c39f8">operator|=</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>&amp; component, <a class="code hl_typedef" href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ElementDecorator</a> decorator);</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceContainer.html">Container</a> {</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga6471e39f5664d059144746c5801d37e6">Vertical</a>(<a class="code hl_typedef" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga6471e39f5664d059144746c5801d37e6">Vertical</a>(<a class="code hl_typedef" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children, <span class="keywordtype">int</span>* selector);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga01563bae9454fe64c0b29b0eb3755e68">Horizontal</a>(<a class="code hl_typedef" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga01563bae9454fe64c0b29b0eb3755e68">Horizontal</a>(<a class="code hl_typedef" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children, <span class="keywordtype">int</span>* selector);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#gaea9fe244eeeb420276bcc5760b46953d">Tab</a>(<a class="code hl_typedef" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children, <span class="keywordtype">int</span>* selector);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#gaafd394665b0c231380a143b810339d8e">Stacked</a>(<a class="code hl_typedef" href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">Components</a> children);</div>
+<div class="line">}  <span class="comment">// namespace Container</span></div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga4e8295ec77dd31b0acc5063b134473e7">Button</a>(ButtonOption options);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga4e8295ec77dd31b0acc5063b134473e7">Button</a>(ConstStringRef label,</div>
+<div class="line">                 std::function&lt;<span class="keywordtype">void</span>()&gt; on_click,</div>
+<div class="line">                 ButtonOption options = <a class="code hl_function" href="group__component.html#a553fe18f102e8e62aec516d4d3213eac">ButtonOption::Simple</a>());</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">Checkbox</a>(CheckboxOption options);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">Checkbox</a>(ConstStringRef label,</div>
+<div class="line">                   <span class="keywordtype">bool</span>* checked,</div>
+<div class="line">                   CheckboxOption options = <a class="code hl_function" href="group__component.html#a41b17a916980353033366c01b15d3cb1">CheckboxOption::Simple</a>());</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga7f285fcbc4dd0a0767b89a255fd062dc">Input</a>(InputOption options = {});</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga7f285fcbc4dd0a0767b89a255fd062dc">Input</a>(StringRef content, InputOption options = {});</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga7f285fcbc4dd0a0767b89a255fd062dc">Input</a>(StringRef content,</div>
+<div class="line">                StringRef placeholder,</div>
+<div class="line">                InputOption options = {});</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga27828fc39da10a18478ba84b1b162039">Menu</a>(MenuOption options);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga27828fc39da10a18478ba84b1b162039">Menu</a>(ConstStringListRef entries,</div>
+<div class="line">               <span class="keywordtype">int</span>* selected_,</div>
+<div class="line">               MenuOption options = <a class="code hl_function" href="group__component.html#a617c59fdb94db99100d0e7a569c31d75">MenuOption::Vertical</a>());</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga2c0a27959e6a5d90109f6d4506e00f69">MenuEntry</a>(MenuEntryOption options);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga2c0a27959e6a5d90109f6d4506e00f69">MenuEntry</a>(ConstStringRef label, MenuEntryOption options = {});</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">Radiobox</a>(RadioboxOption options);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">Radiobox</a>(ConstStringListRef entries,</div>
+<div class="line">                   <span class="keywordtype">int</span>* selected_,</div>
+<div class="line">                   RadioboxOption options = {});</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#gaa22bddff4aeed66e20f30d0715596999">Dropdown</a>(ConstStringListRef entries, <span class="keywordtype">int</span>* selected);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#gaa22bddff4aeed66e20f30d0715596999">Dropdown</a>(DropdownOption options);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga3537fccac66b07cd792874c9a6086811">Toggle</a>(ConstStringListRef entries, <span class="keywordtype">int</span>* selected);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 通用滑块构造函数：</span></div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#aa3558d992a72679e5e9c9c7b67abd727">Slider</a>(SliderOption&lt;T&gt; options);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 不带“SliderOption”构造函数的简写：</span></div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#aa3558d992a72679e5e9c9c7b67abd727">Slider</a>(ConstStringRef label,</div>
+<div class="line">                 Ref&lt;int&gt; value,</div>
+<div class="line">                 ConstRef&lt;int&gt; min = 0,</div>
+<div class="line">                 ConstRef&lt;int&gt; max = 100,</div>
+<div class="line">                 ConstRef&lt;int&gt; increment = 5);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#aa3558d992a72679e5e9c9c7b67abd727">Slider</a>(ConstStringRef label,</div>
+<div class="line">                 Ref&lt;float&gt; value,</div>
+<div class="line">                 ConstRef&lt;float&gt; min = 0.f,</div>
+<div class="line">                 ConstRef&lt;float&gt; max = 100.f,</div>
+<div class="line">                 ConstRef&lt;float&gt; increment = 5.f);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#aa3558d992a72679e5e9c9c7b67abd727">Slider</a>(ConstStringRef label,</div>
+<div class="line">                 Ref&lt;long&gt; value,</div>
+<div class="line">                 ConstRef&lt;long&gt; min = 0L,</div>
+<div class="line">                 ConstRef&lt;long&gt; max = 100L,</div>
+<div class="line">                 ConstRef&lt;long&gt; increment = 5L);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#a5ce41caeafc35dedc5c7da5347386e80">ResizableSplit</a>(ResizableSplitOption options);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#gae2205fc172615b43e1e3307bb614be4c">ResizableSplitLeft</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> back, <span class="keywordtype">int</span>* main_size);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga9030d0beb64f653603cab382b02750a8">ResizableSplitRight</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> back, <span class="keywordtype">int</span>* main_size);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga238b4b650aca14716b82b2198695e008">ResizableSplitTop</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> back, <span class="keywordtype">int</span>* main_size);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#gacb75e6e61a021829893f7b57aeb7e3a2">ResizableSplitBottom</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> back, <span class="keywordtype">int</span>* main_size);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> child, std::function&lt;<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>()&gt;);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>(std::function&lt;<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>()&gt;);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>(std::function&lt;<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a>(<span class="keywordtype">bool</span> <span class="comment">/* focused */</span>)&gt;);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> <a class="code hl_function" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">Renderer</a>(<a class="code hl_typedef" href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ElementDecorator</a>);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#afa5872ba3f9889c7487e57e745e56857">CatchEvent</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> child, std::function&lt;<span class="keywordtype">bool</span>(Event)&gt;);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> <a class="code hl_function" href="namespaceftxui.html#afa5872ba3f9889c7487e57e745e56857">CatchEvent</a>(std::function&lt;<span class="keywordtype">bool</span>(Event)&gt; on_event);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga20b66a70c1cd4ff3f0ff571a4507d2b4">Maybe</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>, <span class="keyword">const</span> <span class="keywordtype">bool</span>* show);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga20b66a70c1cd4ff3f0ff571a4507d2b4">Maybe</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a>, std::function&lt;<span class="keywordtype">bool</span>()&gt;);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> <a class="code hl_function" href="group__component.html#ga20b66a70c1cd4ff3f0ff571a4507d2b4">Maybe</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span>* show);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> <a class="code hl_function" href="group__component.html#ga20b66a70c1cd4ff3f0ff571a4507d2b4">Maybe</a>(std::function&lt;<span class="keywordtype">bool</span>()&gt;);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga5185342fbba215496cb8a6805f36089c">Modal</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a>, <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> modal, <span class="keyword">const</span> <span class="keywordtype">bool</span>* show_modal);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> <a class="code hl_function" href="group__component.html#ga5185342fbba215496cb8a6805f36089c">Modal</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> modal, <span class="keyword">const</span> <span class="keywordtype">bool</span>* show_modal);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="namespaceftxui.html#af75c40d83714ba0748a68d11ff5e25dd">Collapsible</a>(ConstStringRef label,</div>
+<div class="line">                      <a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> child,</div>
+<div class="line">                      Ref&lt;bool&gt; show = <span class="keyword">false</span>);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga562d984d3830d63285643565cd55d16f">Hoverable</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component, <span class="keywordtype">bool</span>* hover);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga562d984d3830d63285643565cd55d16f">Hoverable</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component,</div>
+<div class="line">                    std::function&lt;<span class="keywordtype">void</span>()&gt; on_enter,</div>
+<div class="line">                    std::function&lt;<span class="keywordtype">void</span>()&gt; on_leave);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga562d984d3830d63285643565cd55d16f">Hoverable</a>(<a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> component,  <span class="comment">//</span></div>
+<div class="line">                    std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">bool</span>)&gt; on_change);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> <a class="code hl_function" href="group__component.html#ga562d984d3830d63285643565cd55d16f">Hoverable</a>(<span class="keywordtype">bool</span>* hover);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> <a class="code hl_function" href="group__component.html#ga562d984d3830d63285643565cd55d16f">Hoverable</a>(std::function&lt;<span class="keywordtype">void</span>()&gt; on_enter,</div>
+<div class="line">                             std::function&lt;<span class="keywordtype">void</span>()&gt; on_leave);</div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ComponentDecorator</a> <a class="code hl_function" href="group__component.html#ga562d984d3830d63285643565cd55d16f">Hoverable</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keywordtype">bool</span>)&gt; on_change);</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_typedef" href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">Component</a> <a class="code hl_function" href="group__component.html#ga638693abef9289912f5fa39606390b20">Window</a>(WindowOptions option);</div>
+<div class="line"> </div>
+<div class="line">}  <span class="comment">// namespace ftxui</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#endif </span><span class="comment">/* end of include guard: FTXUI_COMPONENT_HPP */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="acomponent__base_8hpp_html"><div class="ttname"><a href="component__base_8hpp.html">component_base.hpp</a></div></div>
+<div class="ttc" id="acomponent__options_8hpp_html"><div class="ttname"><a href="component__options_8hpp.html">component_options.hpp</a></div></div>
+<div class="ttc" id="aelements_8hpp_html"><div class="ttname"><a href="elements_8hpp.html">elements.hpp</a></div></div>
+<div class="ttc" id="aexamples_2component_2button_8cpp_html_ae66f6b31b5ad750f1fe042a706a4e3d4"><div class="ttname"><a href="examples_2component_2button_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a></div><div class="ttdeci">int main()</div><div class="ttdef"><b>定义</b> <a href="examples_2component_2button_8cpp_source.html#l00033">examples/component/button.cpp:33</a></div></div>
+<div class="ttc" id="agroup__component_html_a41b17a916980353033366c01b15d3cb1"><div class="ttname"><a href="group__component.html#a41b17a916980353033366c01b15d3cb1">ftxui::CheckboxOption::Simple</a></div><div class="ttdeci">static CheckboxOption Simple()</div><div class="ttdoc">标准Checkbox的选项。</div><div class="ttdef"><b>定义</b> <a href="component__options_8cpp_source.html#l00241">component_options.cpp:241</a></div></div>
+<div class="ttc" id="agroup__component_html_a553fe18f102e8e62aec516d4d3213eac"><div class="ttname"><a href="group__component.html#a553fe18f102e8e62aec516d4d3213eac">ftxui::ButtonOption::Simple</a></div><div class="ttdeci">static ButtonOption Simple()</div><div class="ttdoc">创建一个ButtonOption，聚焦时反转显示。</div><div class="ttdef"><b>定义</b> <a href="component__options_8cpp_source.html#l00163">component_options.cpp:163</a></div></div>
+<div class="ttc" id="agroup__component_html_a617c59fdb94db99100d0e7a569c31d75"><div class="ttname"><a href="group__component.html#a617c59fdb94db99100d0e7a569c31d75">ftxui::MenuOption::Vertical</a></div><div class="ttdeci">static MenuOption Vertical()</div><div class="ttdoc">垂直菜单的标准选项。 这对于实现可选择项目列表非常有用。</div><div class="ttdef"><b>定义</b> <a href="component__options_8cpp_source.html#l00100">component_options.cpp:100</a></div></div>
+<div class="ttc" id="agroup__component_html_ga01563bae9454fe64c0b29b0eb3755e68"><div class="ttname"><a href="group__component.html#ga01563bae9454fe64c0b29b0eb3755e68">ftxui::Container::Horizontal</a></div><div class="ttdeci">Component Horizontal(Components children)</div><div class="ttdoc">一个组件列表，水平逐个绘制，并使用左/右箭头键或“h”/“l”键水平导航。</div><div class="ttdef"><b>定义</b> <a href="container_8cpp_source.html#l00357">container.cpp:357</a></div></div>
+<div class="ttc" id="agroup__component_html_ga20b66a70c1cd4ff3f0ff571a4507d2b4"><div class="ttname"><a href="group__component.html#ga20b66a70c1cd4ff3f0ff571a4507d2b4">ftxui::Maybe</a></div><div class="ttdeci">Component Maybe(Component, const bool *show)</div><div class="ttdoc">装饰一个组件 |child|。它仅在 |show| 为 true 时显示。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2maybe_8cpp_source.html#l00074">src/ftxui/component/maybe.cpp:74</a></div></div>
+<div class="ttc" id="agroup__component_html_ga238b4b650aca14716b82b2198695e008"><div class="ttname"><a href="group__component.html#ga238b4b650aca14716b82b2198695e008">ftxui::ResizableSplitTop</a></div><div class="ttdeci">Component ResizableSplitTop(Component main, Component back, int *main_size)</div><div class="ttdoc">两个组件之间的垂直分割，可通过鼠标配置。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2resizable__split_8cpp_source.html#l00263">src/ftxui/component/resizable_split.cpp:263</a></div></div>
+<div class="ttc" id="agroup__component_html_ga27828fc39da10a18478ba84b1b162039"><div class="ttname"><a href="group__component.html#ga27828fc39da10a18478ba84b1b162039">ftxui::Menu</a></div><div class="ttdeci">Component Menu(MenuOption options)</div><div class="ttdoc">文本列表。選定的元素是焦點。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2menu_8cpp_source.html#l00512">src/ftxui/component/menu.cpp:512</a></div></div>
+<div class="ttc" id="agroup__component_html_ga2c0a27959e6a5d90109f6d4506e00f69"><div class="ttname"><a href="group__component.html#ga2c0a27959e6a5d90109f6d4506e00f69">ftxui::MenuEntry</a></div><div class="ttdeci">Component MenuEntry(MenuEntryOption options)</div><div class="ttdoc">一個特定的菜單條目。它們可以放入 Container::Vertical 中形成一個菜單。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2menu_8cpp_source.html#l00612">src/ftxui/component/menu.cpp:612</a></div></div>
+<div class="ttc" id="agroup__component_html_ga3537fccac66b07cd792874c9a6086811"><div class="ttname"><a href="group__component.html#ga3537fccac66b07cd792874c9a6086811">ftxui::Toggle</a></div><div class="ttdeci">Component Toggle(ConstStringListRef entries, int *selected)</div><div class="ttdoc">元素的水平列表。用戶可以瀏覽它們。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2menu_8cpp_source.html#l00554">src/ftxui/component/menu.cpp:554</a></div></div>
+<div class="ttc" id="agroup__component_html_ga3e7a44f321fa910f07aef5879e67af95"><div class="ttname"><a href="group__component.html#ga3e7a44f321fa910f07aef5879e67af95">ftxui::Radiobox</a></div><div class="ttdeci">Component Radiobox(RadioboxOption options)</div><div class="ttdoc">元素列表，其中只能选择一个。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2radiobox_8cpp_source.html#l00203">src/ftxui/component/radiobox.cpp:203</a></div></div>
+<div class="ttc" id="agroup__component_html_ga4e8295ec77dd31b0acc5063b134473e7"><div class="ttname"><a href="group__component.html#ga4e8295ec77dd31b0acc5063b134473e7">ftxui::Button</a></div><div class="ttdeci">Component Button(ButtonOption options)</div><div class="ttdoc">绘制一个按钮。点击时执行一个函数。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2button_8cpp_source.html#l00175">src/ftxui/component/button.cpp:175</a></div></div>
+<div class="ttc" id="agroup__component_html_ga5185342fbba215496cb8a6805f36089c"><div class="ttname"><a href="group__component.html#ga5185342fbba215496cb8a6805f36089c">ftxui::Modal</a></div><div class="ttdeci">Component Modal(Component main, Component modal, const bool *show_modal)</div><div class="ttdef"><b>定义</b> <a href="modal_8cpp_source.html#l00018">modal.cpp:18</a></div></div>
+<div class="ttc" id="agroup__component_html_ga533e883e2aeea28de2b60564fcaf0361"><div class="ttname"><a href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361">ftxui::Renderer</a></div><div class="ttdeci">Component Renderer(Component child, std::function&lt; Element()&gt;)</div><div class="ttdoc">返回一个新组件，类似于 |child|，但使用 |render| 作为 Component::Render() 事件。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2renderer_8cpp_source.html#l00061">src/ftxui/component/renderer.cpp:61</a></div></div>
+<div class="ttc" id="agroup__component_html_ga562d984d3830d63285643565cd55d16f"><div class="ttname"><a href="group__component.html#ga562d984d3830d63285643565cd55d16f">ftxui::Hoverable</a></div><div class="ttdeci">Component Hoverable(Component component, bool *hover)</div><div class="ttdef"><b>定义</b> <a href="hoverable_8cpp_source.html#l00039">hoverable.cpp:39</a></div></div>
+<div class="ttc" id="agroup__component_html_ga638693abef9289912f5fa39606390b20"><div class="ttname"><a href="group__component.html#ga638693abef9289912f5fa39606390b20">ftxui::Window</a></div><div class="ttdeci">Component Window(WindowOptions option)</div><div class="ttdoc">一个可拖动/可调整大小的窗口。要使用多个窗口，它们必须 使用 Container::Stacked({...}) 组件进行堆叠；</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2window_8cpp_source.html#l00312">src/ftxui/component/window.cpp:312</a></div></div>
+<div class="ttc" id="agroup__component_html_ga6471e39f5664d059144746c5801d37e6"><div class="ttname"><a href="group__component.html#ga6471e39f5664d059144746c5801d37e6">ftxui::Container::Vertical</a></div><div class="ttdeci">Component Vertical(Components children)</div><div class="ttdoc">一个组件列表，垂直逐个绘制，并使用上/下箭头键或“j”/“k”键垂直导航。</div><div class="ttdef"><b>定义</b> <a href="container_8cpp_source.html#l00316">container.cpp:316</a></div></div>
+<div class="ttc" id="agroup__component_html_ga7f285fcbc4dd0a0767b89a255fd062dc"><div class="ttname"><a href="group__component.html#ga7f285fcbc4dd0a0767b89a255fd062dc">ftxui::Input</a></div><div class="ttdeci">Component Input(InputOption options={})</div><div class="ttdoc">用于编辑文本的输入框。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2input_8cpp_source.html#l00571">src/ftxui/component/input.cpp:571</a></div></div>
+<div class="ttc" id="agroup__component_html_ga9030d0beb64f653603cab382b02750a8"><div class="ttname"><a href="group__component.html#ga9030d0beb64f653603cab382b02750a8">ftxui::ResizableSplitRight</a></div><div class="ttdeci">Component ResizableSplitRight(Component main, Component back, int *main_size)</div><div class="ttdoc">两个组件之间的水平分割，可通过鼠标配置。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2resizable__split_8cpp_source.html#l00230">src/ftxui/component/resizable_split.cpp:230</a></div></div>
+<div class="ttc" id="agroup__component_html_gaa22bddff4aeed66e20f30d0715596999"><div class="ttname"><a href="group__component.html#gaa22bddff4aeed66e20f30d0715596999">ftxui::Dropdown</a></div><div class="ttdeci">Component Dropdown(ConstStringListRef entries, int *selected)</div><div class="ttdoc">一个下拉菜单。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2dropdown_8cpp_source.html#l00021">src/ftxui/component/dropdown.cpp:21</a></div></div>
+<div class="ttc" id="agroup__component_html_gaafd394665b0c231380a143b810339d8e"><div class="ttname"><a href="group__component.html#gaafd394665b0c231380a143b810339d8e">ftxui::Container::Stacked</a></div><div class="ttdeci">Component Stacked(Components children)</div><div class="ttdoc">一个组件列表，它们相互堆叠。 事件传播到第一个组件，如果未处理，则传播到第二个，依此类推。 组件以给定顺序的相反顺序绘制。 当一个组件获得焦点时，它会被置于最前面，而不改变其他元素的相对顺序。</div><div class="ttdef"><b>定义</b> <a href="container_8cpp_source.html#l00424">container.cpp:424</a></div></div>
+<div class="ttc" id="agroup__component_html_gacb75e6e61a021829893f7b57aeb7e3a2"><div class="ttname"><a href="group__component.html#gacb75e6e61a021829893f7b57aeb7e3a2">ftxui::ResizableSplitBottom</a></div><div class="ttdeci">Component ResizableSplitBottom(Component main, Component back, int *main_size)</div><div class="ttdoc">两个组件之间的垂直分割，可通过鼠标配置。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2resizable__split_8cpp_source.html#l00296">src/ftxui/component/resizable_split.cpp:296</a></div></div>
+<div class="ttc" id="agroup__component_html_gae0d441d2c83740f187f62db566bbefcd"><div class="ttname"><a href="group__component.html#gae0d441d2c83740f187f62db566bbefcd">ftxui::Checkbox</a></div><div class="ttdeci">Component Checkbox(CheckboxOption options)</div><div class="ttdoc">绘制可勾选元素。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2checkbox_8cpp_source.html#l00108">src/ftxui/component/checkbox.cpp:108</a></div></div>
+<div class="ttc" id="agroup__component_html_gae2205fc172615b43e1e3307bb614be4c"><div class="ttname"><a href="group__component.html#gae2205fc172615b43e1e3307bb614be4c">ftxui::ResizableSplitLeft</a></div><div class="ttdeci">Component ResizableSplitLeft(Component main, Component back, int *main_size)</div><div class="ttdoc">两个组件之间的水平分割，可通过鼠标配置。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2resizable__split_8cpp_source.html#l00197">src/ftxui/component/resizable_split.cpp:197</a></div></div>
+<div class="ttc" id="agroup__component_html_gaea9fe244eeeb420276bcc5760b46953d"><div class="ttname"><a href="group__component.html#gaea9fe244eeeb420276bcc5760b46953d">ftxui::Container::Tab</a></div><div class="ttdeci">Component Tab(Components children, int *selector)</div><div class="ttdoc">一个组件列表，一次只绘制并与其交互一个。|selector| 提供所选组件的索引。这对于实现选项卡很有用。</div><div class="ttdef"><b>定义</b> <a href="container_8cpp_source.html#l00399">container.cpp:399</a></div></div>
+<div class="ttc" id="anamespaceContainer_html"><div class="ttname"><a href="namespaceContainer.html">Container</a></div><div class="ttdoc">FTXUI ftxui::Container:: 命名空间</div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">#include &quot;ftxui/component/component_base.hpp&quot; // 用于 ComponentBase</div><div class="ttdef"><b>定义</b> <a href="animation_8hpp_source.html#l00009">animation.hpp:9</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a2b8973dc71334f1d98e2e6f55de8b5ae"><div class="ttname"><a href="namespaceftxui.html#a2b8973dc71334f1d98e2e6f55de8b5ae">ftxui::Make</a></div><div class="ttdeci">std::shared_ptr&lt; T &gt; Make(Args &amp;&amp;... args)</div><div class="ttdef"><b>定义</b> <a href="component_8hpp_source.html#l00027">component.hpp:27</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a2bc31f2d685189e5c61d2293a1f51b4f"><div class="ttname"><a href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">ftxui::Element</a></div><div class="ttdeci">std::shared_ptr&lt; Node &gt; Element</div><div class="ttdef"><b>定义</b> <a href="elements_8hpp_source.html#l00022">elements.hpp:22</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a2d5012891073dbf196bfada5f702f382"><div class="ttname"><a href="namespaceftxui.html#a2d5012891073dbf196bfada5f702f382">ftxui::ElementDecorator</a></div><div class="ttdeci">std::function&lt; Element(Element)&gt; ElementDecorator</div><div class="ttdef"><b>定义</b> <a href="component_8hpp_source.html#l00033">component.hpp:33</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a3d4ccad0c8a07d5b0cb4b2e690ffc90c"><div class="ttname"><a href="namespaceftxui.html#a3d4ccad0c8a07d5b0cb4b2e690ffc90c">ftxui::Components</a></div><div class="ttdeci">std::vector&lt; Component &gt; Components</div><div class="ttdef"><b>定义</b> <a href="component__base_8hpp_source.html#l00024">component_base.hpp:24</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a5ce41caeafc35dedc5c7da5347386e80"><div class="ttname"><a href="namespaceftxui.html#a5ce41caeafc35dedc5c7da5347386e80">ftxui::ResizableSplit</a></div><div class="ttdeci">Component ResizableSplit(ResizableSplitOption options)</div><div class="ttdoc">两个组件之间的分割。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2resizable__split_8cpp_source.html#l00169">src/ftxui/component/resizable_split.cpp:169</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a65a2e15f64ae3bc205c485abc3a5aeb9"><div class="ttname"><a href="namespaceftxui.html#a65a2e15f64ae3bc205c485abc3a5aeb9">ftxui::operator|</a></div><div class="ttdeci">Component operator|(Component component, ComponentDecorator decorator)</div><div class="ttdef"><b>定义</b> <a href="component_2util_8cpp_source.html#l00011">component/util.cpp:11</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_aa3558d992a72679e5e9c9c7b67abd727"><div class="ttname"><a href="namespaceftxui.html#aa3558d992a72679e5e9c9c7b67abd727">ftxui::Slider</a></div><div class="ttdeci">Component Slider(SliderOption&lt; T &gt; options)</div><div class="ttdoc">任意方向的滑块。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2component_2slider_8cpp_source.html#l00316">src/ftxui/component/slider.cpp:316</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_ade35e69d695327db85be01c9787c39f8"><div class="ttname"><a href="namespaceftxui.html#ade35e69d695327db85be01c9787c39f8">ftxui::operator|=</a></div><div class="ttdeci">Component &amp; operator|=(Component &amp;component, ComponentDecorator decorator)</div><div class="ttdef"><b>定义</b> <a href="component_2util_8cpp_source.html#l00021">component/util.cpp:21</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_af07b496fe512e3a4863ee546f19e9a6c"><div class="ttname"><a href="namespaceftxui.html#af07b496fe512e3a4863ee546f19e9a6c">ftxui::ComponentDecorator</a></div><div class="ttdeci">std::function&lt; Component(Component)&gt; ComponentDecorator</div><div class="ttdef"><b>定义</b> <a href="component_8hpp_source.html#l00032">component.hpp:32</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_af1479ede01dbf087342534ab4ada11d3"><div class="ttname"><a href="namespaceftxui.html#af1479ede01dbf087342534ab4ada11d3">ftxui::Component</a></div><div class="ttdeci">std::shared_ptr&lt; ComponentBase &gt; Component</div><div class="ttdef"><b>定义</b> <a href="component__base_8hpp_source.html#l00023">component_base.hpp:23</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_af75c40d83714ba0748a68d11ff5e25dd"><div class="ttname"><a href="namespaceftxui.html#af75c40d83714ba0748a68d11ff5e25dd">ftxui::Collapsible</a></div><div class="ttdeci">Component Collapsible(ConstStringRef label, Component child, Ref&lt; bool &gt; show=false)</div></div>
+<div class="ttc" id="anamespaceftxui_html_afa5872ba3f9889c7487e57e745e56857"><div class="ttname"><a href="namespaceftxui.html#afa5872ba3f9889c7487e57e745e56857">ftxui::CatchEvent</a></div><div class="ttdeci">Component CatchEvent(Component child, std::function&lt; bool(Event)&gt;)</div></div>
+<div class="ttc" id="aref_8hpp_html"><div class="ttname"><a href="ref_8hpp.html">ref.hpp</a></div></div>
+<div class="ttc" id="awarn__windows__macro_8hpp_html"><div class="ttname"><a href="warn__windows__macro_8hpp.html">warn_windows_macro.hpp</a></div></div>
+</div><!-- fragment --><h1><a class="anchor" id="component-input"></a>
+Input</h1>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2input_8cpp-example.html">示例</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147247671-f1d6f606-1845-4e94-a4a0-d4273e9ae6bd.png" alt="image" class="inline"/></p>
+<p>由以下生成: <code><a class="el" href="group__component.html#ga7f285fcbc4dd0a0767b89a255fd062dc" title="用于编辑文本的输入框。">ftxui::Input()</a></code> 来自 "ftxui/component/component.hpp"</p>
+<p> 
+<script id="asciicast-223719" src="https://asciinema.org/a/223719.js" async></script>
+</p>
+<h2><a class="anchor" id="filtered-input"></a>
+Filtered input</h2>
+<p>可以使用 <code>ftxui::CatchEvent</code> 过滤输入组件接收到的字符。</p>
+<div class="fragment"><div class="line">std::string phone_number;</div>
+<div class="line">Component input = Input(&amp;phone_number, <span class="stringliteral">&quot;phone number&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Filter out non-digit characters.</span></div>
+<div class="line">input |= CatchEvent([&amp;](Event event) {</div>
+<div class="line">  <span class="keywordflow">return</span> <span class="keyword">event</span>.is_character() &amp;&amp; !std::isdigit(event.character()[0]);</div>
+<div class="line">});</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Filter out characters past the 10th one.</span></div>
+<div class="line">input |= CatchEvent([&amp;](Event event) {</div>
+<div class="line">  <span class="keywordflow">return</span> <span class="keyword">event</span>.is_character() &amp;&amp; phone_number.size() &gt;= 10;</div>
+<div class="line">});</div>
+</div><!-- fragment --><h1><a class="anchor" id="component-menu"></a>
+Menu</h1>
+<p>定义一个菜单对象。它包含一个条目列表，其中一个被选中。</p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2menu_8cpp-example.html">示例</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147247822-0035fd6f-bb13-4b3a-b057-77eb9291582f.png" alt="image" class="inline"/></p>
+<p>由以下生成: <code><a class="el" href="group__component.html#ga27828fc39da10a18478ba84b1b162039" title="文本列表。選定的元素是焦點。">ftxui::Menu()</a></code> 来自 "ftxui/component/component.hpp"</p>
+<p> 
+<script id="asciicast-223720" src="https://asciinema.org/a/223720.js" async></script>
+</p>
+<h1><a class="anchor" id="component-toggle"></a>
+Toggle</h1>
+<p>一种特殊的菜单。条目水平显示。</p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2toggle_8cpp-example.html">示例</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147249383-e2201cf1-b7b8-4a5a-916f-d761e3e7ae40.png" alt="image" class="inline"/></p>
+<p>由以下生成: <code><a class="el" href="group__component.html#ga3537fccac66b07cd792874c9a6086811" title="元素的水平列表。用戶可以瀏覽它們。">ftxui::Toggle()</a></code> 来自 "ftxui/component/component.hpp"</p>
+<p> 
+<script id="asciicast-223722" src="https://asciinema.org/a/223722.js" async></script>
+</p>
+<h1><a class="anchor" id="component-checkbox"></a>
+CheckBox</h1>
+<p>该组件定义了一个复选框。它是一个可以打开/关闭的单个条目。</p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2checkbox_8cpp-example.html">示例</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147246646-b86926a9-1ef9-4efb-af98-48a9b62acd81.png" alt="image" class="inline"/></p>
+<p>由以下生成: <code><a class="el" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd" title="绘制可勾选元素。">ftxui::Checkbox()</a></code> 来自 "ftxui/component/component.hpp"</p>
+<p> 
+<script id="asciicast-223724" src="https://asciinema.org/a/223724.js" async></script>
+</p>
+<h1><a class="anchor" id="component-radiobox"></a>
+RadioBox</h1>
+<p>一个单选按钮组件。这是一个条目列表，其中一个可以被选中。</p>
+<h1><a class="anchor" id="component-dropdown"></a>
+Dropdown</h1>
+<p>下拉菜单是一种组件，当打开时，它会显示一个元素列表供用户选择。</p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2dropdown_8cpp-example.html">示例</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147246982-1e821751-531c-4e1f-bc37-2fa290e143cd.gif" alt="youtube-video-gif (3)" class="inline"/></p>
+<p>由以下生成: <code><a class="el" href="group__component.html#gaa22bddff4aeed66e20f30d0715596999" title="一个下拉菜单。">ftxui::Dropdown()</a></code> 来自 "ftxui/component/component.hpp"</p>
+<h1><a class="anchor" id="component-slider"></a>
+Slider</h1>
+<p>表示一个滑块对象，它由一个带有分箱中间间隔的范围组成。它可以通过 <code><a class="el" href="namespaceftxui.html#aa3558d992a72679e5e9c9c7b67abd727" title="任意方向的滑块。">ftxui::Slider()</a></code> 创建。</p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2slider_8cpp-example.html">Example</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147249265-7e2cad75-082c-436e-affe-44a550c480ab.png" alt="image" class="inline"/></p>
+<p>Produced by: <code><a class="el" href="namespaceftxui.html#aa3558d992a72679e5e9c9c7b67abd727" title="任意方向的滑块。">ftxui::Slider()</a></code> from "ftxui/component/component.hpp"</p>
+<h1><a class="anchor" id="component-renderer"></a>
+Renderer</h1>
+<p>由以下生成: <code><a class="el" href="group__component.html#ga533e883e2aeea28de2b60564fcaf0361" title="返回一个新组件，类似于 |child|，但使用 |render| 作为 Component::Render() 事件。">ftxui::Renderer()</a></code> 来自 ftxui/component/component.hpp。该组件通过使用不同的函数渲染界面来装饰另一个组件。</p>
+<p>示例:</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> inner = [...]</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> <a class="code hl_variable" href="with__restored__io_8cpp.html#a63598717de7973f11f57a488d6424e4a">renderer</a> = Renderer(inner, [&amp;] {</div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">return</span> inner-&gt;Render() | border</div>
+<div class="line"> </div>
+<div class="line">});</div>
+<div class="ttc" id="awith__restored__io_8cpp_html_a63598717de7973f11f57a488d6424e4a"><div class="ttname"><a href="with__restored__io_8cpp.html#a63598717de7973f11f57a488d6424e4a">renderer</a></div><div class="ttdeci">auto renderer</div><div class="ttdef"><b>定义</b> <a href="with__restored__io_8cpp_source.html#l00037">with_restored_io.cpp:37</a></div></div>
+</div><!-- fragment --><p><code>ftxui::Renderer</code> 也支持组件装饰器模式:</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> component = [...]</div>
+<div class="line"> </div>
+<div class="line">component = component</div>
+<div class="line"> </div>
+<div class="line">  | Renderer([](Element e) { <span class="keywordflow">return</span> e | <a class="code hl_function" href="group__dom.html#gae8537acd423d47cf07e61bd774fb1098">border</a>))</div>
+<div class="line"> </div>
+<div class="line">  | Renderer(bold)</div>
+<div class="ttc" id="agroup__dom_html_gae8537acd423d47cf07e61bd774fb1098"><div class="ttname"><a href="group__dom.html#gae8537acd423d47cf07e61bd774fb1098">border</a></div><div class="ttdeci">Element border(Element child)</div><div class="ttdoc">在元素周围绘制边框。</div><div class="ttdef"><b>定义</b> <a href="src_2ftxui_2dom_2border_8cpp_source.html#l00225">src/ftxui/dom/border.cpp:225</a></div></div>
+</div><!-- fragment --><p>作为简写，你也可以将一个组件与一个元素装饰器组合:</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> component = [...]</div>
+<div class="line"> </div>
+<div class="line">component = component | border | bold;</div>
+</div><!-- fragment --><h1><a class="anchor" id="component-catchevent"></a>
+CatchEvent</h1>
+<p>由以下生成: <code><a class="el" href="namespaceftxui.html#afa5872ba3f9889c7487e57e745e56857">ftxui::CatchEvent()</a></code> 来自 ftxui/component/component.hpp。</p>
+<p>该组件装饰其他组件，在底层组件之前捕获事件。</p>
+<p>示例:</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> screen = ScreenInteractive::TerminalOutput();</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> <a class="code hl_variable" href="with__restored__io_8cpp.html#a63598717de7973f11f57a488d6424e4a">renderer</a> = Renderer([] {</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">return</span> text(<span class="stringliteral">&quot;My interface&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">});</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> component = CatchEvent(<a class="code hl_variable" href="with__restored__io_8cpp.html#a63598717de7973f11f57a488d6424e4a">renderer</a>, [&amp;](Event event) {</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">if</span> (event == Event::Character(<span class="charliteral">&#39;q&#39;</span>)) {</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    screen.ExitLoopClosure()();</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  }</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">});</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">screen.Loop(component);</div>
+</div><!-- fragment --><p><code>ftxui::CatchEvent</code> 也可以用作装饰器:</p>
+<div class="fragment"><div class="line">component = component</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  | CatchEvent(handler_1)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  | CatchEvent(handler_2)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  | CatchEvent(handler_3)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  ;</div>
+</div><!-- fragment --><h1><a class="anchor" id="component-collapsible"></a>
+Collapsible</h1>
+<p>对于其可见性可以通过用户切换打开或关闭的视觉元素很有用。本质上，这是 <code><a class="el" href="group__component.html#gae0d441d2c83740f187f62db566bbefcd" title="绘制可勾选元素。">ftxui::Checkbox()</a></code> 和 <code><a class="el" href="group__component.html#ga20b66a70c1cd4ff3f0ff571a4507d2b4" title="装饰一个组件 |child|。它仅在 |show| 为 true 时显示。">ftxui::Maybe()</a></code> 组件的组合。</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> collapsible = Collapsible(<span class="stringliteral">&quot;Show more&quot;</span>, inner_element);</div>
+</div><!-- fragment --><h1><a class="anchor" id="component-maybe"></a>
+Maybe</h1>
+<p>由以下生成: <code><a class="el" href="group__component.html#ga20b66a70c1cd4ff3f0ff571a4507d2b4" title="装饰一个组件 |child|。它仅在 |show| 为 true 时显示。">ftxui::Maybe()</a></code> 来自 ftxui/component/component.hpp。</p>
+<p>该组件可以通过布尔值或谓词显示/隐藏任何其他组件。</p>
+<p>布尔值示例:</p>
+<div class="fragment"><div class="line"><span class="keywordtype">bool</span> show = <span class="keyword">true</span>;</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> component = Renderer([]{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;Hello World!&quot;</span>; });</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> maybe_component = Maybe(component, &amp;show)</div>
+</div><!-- fragment --><p>谓词示例:</p>
+<div class="fragment"><div class="line"><span class="keyword">auto</span> component = Renderer([]{ <span class="keywordflow">return</span> <span class="stringliteral">&quot;Hello World!&quot;</span>; });</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> maybe_component = Maybe(component, [&amp;] { <span class="keywordflow">return</span> time &gt; 10; })</div>
+</div><!-- fragment --><p>像往常一样，<code>ftxui::Maybe</code> 也可以用作装饰器:</p>
+<div class="fragment"><div class="line">component = component</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  | Maybe(&amp;a_boolean)</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  | Maybe([&amp;] { <span class="keywordflow">return</span> time &gt; 10; })</div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">  ;</div>
+</div><!-- fragment --><h1><a class="anchor" id="component-container"></a>
+Container</h1>
+<h2><a class="anchor" id="component-horizontal"></a>
+Horizontal</h2>
+<p>由以下生成: <code><a class="el" href="group__component.html#ga01563bae9454fe64c0b29b0eb3755e68" title="一个组件列表，水平逐个绘制，并使用左/右箭头键或“h”/“l”键水平导航。">ftxui::Container::Horizontal()</a></code> 来自 "ftxui/component/component.hpp"。它水平显示组件列表并处理键盘/鼠标导航。</p>
+<h2><a class="anchor" id="component-vertical"></a>
+Vertical</h2>
+<p>由以下生成: <code><a class="el" href="group__component.html#ga6471e39f5664d059144746c5801d37e6" title="一个组件列表，垂直逐个绘制，并使用上/下箭头键或“j”/“k”键垂直导航。">ftxui::Container::Vertical()</a></code> 来自 "ftxui/component/component.hpp"。它垂直显示组件列表并处理键盘/鼠标导航。</p>
+<h2><a class="anchor" id="component-tab"></a>
+Tab</h2>
+<p>由以下生成: <code><a class="el" href="group__component.html#gaea9fe244eeeb420276bcc5760b46953d" title="一个组件列表，一次只绘制并与其交互一个。|selector| 提供所选组件的索引。这对于实现选项卡很有用。">ftxui::Container::Tab()</a></code> 来自 "ftxui/component/component.hpp"。它接受一个组件列表并只显示其中一个。这对于实现选项卡栏很有用。</p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_vertical_8cpp-example.html">Vertical</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147250144-22ff044a-4773-4ff7-a49c-12ba4034acb4.gif" alt="ezgif com-gif-maker (1)" class="inline"/></p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2tab_horizontal_8cpp-example.html">Horizontal</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif" alt="ezgif com-gif-maker (2)" class="inline"/></p>
+<h1><a class="anchor" id="component-resizable-split"></a>
+ResizableSplit</h1>
+<p>它定义了两个子组件之间的水平或垂直分隔。分隔的位置是可变的，可以通过鼠标控制。</p>
+<p>有四种可能的分隔:</p>
+<ul>
+<li><code><a class="el" href="group__component.html#gae2205fc172615b43e1e3307bb614be4c" title="两个组件之间的水平分割，可通过鼠标配置。">ftxui::ResizableSplitLeft()</a></code></li>
+<li><code><a class="el" href="group__component.html#ga9030d0beb64f653603cab382b02750a8" title="两个组件之间的水平分割，可通过鼠标配置。">ftxui::ResizableSplitRight()</a></code></li>
+<li><code><a class="el" href="group__component.html#ga238b4b650aca14716b82b2198695e008" title="两个组件之间的垂直分割，可通过鼠标配置。">ftxui::ResizableSplitTop()</a></code></li>
+<li><code><a class="el" href="group__component.html#gacb75e6e61a021829893f7b57aeb7e3a2" title="两个组件之间的垂直分割，可通过鼠标配置。">ftxui::ResizableSplitBottom()</a></code></li>
+</ul>
+<p>来自 "ftxui/component/component.hpp"</p>
+<p><a href="https://arthursonzogni.github.io/FTXUI/examples_2component_2resizable_split_8cpp-example.html">示例</a>:</p>
+<p><img src="https://user-images.githubusercontent.com/4759106/147248372-c55512fe-9b96-4b08-a1df-d05cf2cae431.gif" alt="ezgif com-gif-maker" class="inline"/> <br  />
+</p>
+<p> 
+
+
+<script id="asciicast-tprMH2EdkUoMb7D2YxgMGgpzx" src="https://asciinema.org/a/tprMH2EdkUoMb7D2YxgMGgpzx.js" async></script>
+
+
+</p>
+<h1><a class="anchor" id="component-force-redraw"></a>
+Force a frame redraw.</h1>
+<p>通常，<code><a class="el" href="group__component.html#a6f7095d721dd1dbd490d97c028eb676f">ftxui::ScreenInteractive::Loop()</a></code> 负责在处理完一组新事件（例如键盘、鼠标、窗口大小调整等）时绘制新帧。但是，你可能希望对 FTXUI 未知的任意事件作出反应。为了实现这一点，你必须通过线程使用 <code><a class="el" href="group__component.html#a29e75bdaa1d5465518787ec014b2c3bf" title="向主循环添加一个事件。 它将在所有其他计划事件之后执行。">ftxui::ScreenInteractive::PostEvent</a></code>（**这是线程安全的**）发布事件。你必须发布事件 <code><a class="el" href="group__component.html#a699872f2a6d8607d714be174e9435290">ftxui::Event::Custom</a></code>。</p>
+<p>示例:</p>
+<div class="fragment"><div class="line">screen-&gt;PostEvent(Event::Custom);</div>
+</div><!-- fragment --><p>如果你不需要处理新事件，可以使用:</p>
+<div class="fragment"><div class="line">screen-&gt;RequestAnimationFrame();</div>
+</div><!-- fragment --><p>代替。 </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "../es/index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "zh-CH";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>

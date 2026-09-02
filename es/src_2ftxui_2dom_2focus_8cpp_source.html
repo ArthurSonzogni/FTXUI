@@ -1,0 +1,446 @@
+<!-- HTML header for doxygen 1.9.8-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FTXUI: focus.cpp Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="module">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+    await new Promise(r => window.addEventListener('DOMContentLoaded', r));
+    // Remove title when a img[alt='title-img'] is present.
+    // Find an image with the alt "img-title".
+    const img = document.querySelector("img[alt='title-img']");
+    const header = document.querySelector(".headertitle");
+    if (img && header) {
+      // Hide the header title progressively.
+      header.style.display = "none";
+      // Show progressively the image.
+      img.style.maxHeight = "40vh";
+      img.style.maxWidth = "100%";
+      img.style.objectFit = "contain";
+    }
+    // In the "examples.html" page. Turn every link with text
+    // "examples/<...>
+    //
+    // Add a "demo" link toward.
+    // https://arthursonzogni.github.io/FTXUI/examples/?file=<...>
+    const examples = document.querySelectorAll("a")
+    examples.forEach((example) => {
+      if (!example.textContent.startsWith("examples/")) {
+        return;
+      }
+      // Remove the ".cpp" extension from the example name.
+      const exampleName = example.textContent.replace("examples/", "").replace(".cpp", "");
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + exampleName;
+      a.style.marginRight= "1em";
+      a.style.fontWeight = "bold";
+      example.parentElement.insertBefore(a, example)
+    });
+    // If the current URL ends with -example.html, we can add a link to the demo
+    // as well using the div.title textContent.
+    const url = new URL(window.location.href);
+    if (url.pathname.endsWith("-example.html")) {
+      // Get the title text.
+      const title = document.querySelector("div.title").textContent;
+      const example = title.replace("examples/", "").replace(".cpp", "");
+      // Create a link to the demo.
+      const a = document.createElement("a");
+      a.textContent = "[demo]";
+      a.href = "https://arthursonzogni.github.io/FTXUI/examples/?file=" + example;
+      a.style.marginLeft = "1em";
+      a.style.fontWeight = "bold";
+      a.style.display = "inline-block";
+      // Insert the link after the title.
+      const titleDiv = document.querySelector("div.title");
+      if (titleDiv) {
+        titleDiv.insertBefore(a, titleDiv.nextSibling);
+      }
+    }
+</script>
+<script type="module">
+  // Ignore non english pages and/or the main page.
+  const excluded_lang = [
+    "/de",
+    "/es",
+    "/fr",
+    "/it",
+    "/ja",
+    "/ja",
+    "/ko"
+    "/ru",
+    "/zh-CH",
+    "/zh-TW",
+  ]
+  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+      window.location.pathname.endsWith("index.html")) {
+    return;
+  }
+  // Click on the navtree, except for the main page where this is already done
+  // automatically.
+  let delay = 0;
+  while(true) {
+    const navtree = document.querySelector("div.item.selected");
+    if (!navtree) {
+      delay *= 2;
+      delay += 1;
+      await new Promise(resolve => setTimeout(resolve, delay));
+      continue;
+    }
+    // Include only selected navtree items.
+    console.log("navtree.textContent", navtree.textContent);
+    if (!navtree.textContent.includes("Getting Started") &&
+        !navtree.textContent.includes("Installation") &&
+        !navtree.textContent.includes("ftxui / screen") &&
+        !navtree.textContent.includes("ftxui / dom") &&
+        !navtree.textContent.includes("ftxui / component") &&
+        !navtree.textContent.includes("Reference")) {
+      break;
+    }
+    // Find the first link inside the navtree.
+    const link = navtree.querySelector("a");
+    if (link) {
+      // Simulate a click on the link.
+      link.click();
+      break;
+    }
+  }
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="stylesheet.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FTXUI<span id="projectnumber">&#160;6.1.9</span>
+   </div>
+   <div id="projectbrief">C++ functional terminal UI.</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('src_2ftxui_2dom_2focus_8cpp_source.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">src/ftxui/dom/focus.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="src_2ftxui_2dom_2focus_8cpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Derechos de autor 2020 Arthur Sonzogni. Todos los derechos reservados.</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// El uso de este código fuente se rige por la licencia MIT que se puede encontrar en</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">// el archivo LICENSE.</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;memory&gt;</span>   <span class="comment">// for make_shared</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;utility&gt;</span>  <span class="comment">// for move</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="elements_8hpp.html">ftxui/dom/elements.hpp</a>&quot;</span>  <span class="comment">// for Decorator, Element, focusPosition, focusPositionRelative</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="node__decorator_8hpp.html">ftxui/dom/node_decorator.hpp</a>&quot;</span>  <span class="comment">// for NodeDecorator</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="requirement_8hpp.html">ftxui/dom/requirement.hpp</a>&quot;</span>  <span class="comment">// for Requirement, Requirement::NORMAL, Requirement::Selection</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="box_8hpp.html">ftxui/screen/box.hpp</a>&quot;</span>  <span class="comment">// for Box</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespaceftxui.html">ftxui</a> {</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"></span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">/// @brief Utilizado dentro de un `frame`, esto fuerza que la vista se desplace hacia</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">/// una posición determinada. La posición se expresa en proporción del tamaño solicitado.</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">///</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">/// Por ejemplo:</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">/// - (0, 0) significa que la vista se desplaza hacia la parte superior izquierda.</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">/// - (1, 0) significa que la vista se desplaza hacia la parte superior derecha.</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">/// - (0, 1) significa que la vista se desplaza hacia la parte inferior izquierda.</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">/// @ingroup dom</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">///</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">/// ### Ejemplo</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">///</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">/// ```cpp</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">/// Element document = huge_document()</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">///   | focusPositionRelative(0.f, 1.f)</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">///   | frame;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">/// ```</span></div>
+<div class="foldopen" id="foldopen00030" data-start="{" data-end="}">
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="group__dom.html#ga13befad33cb4125e2143f2af3eddcc71">   30</a></span><span class="comment"></span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#ga13befad33cb4125e2143f2af3eddcc71">focusPositionRelative</a>(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y) {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="keyword">class </span>Impl : <span class="keyword">public</span> <a class="code hl_class" href="classftxui_1_1NodeDecorator.html">NodeDecorator</a> {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>   <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    Impl(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child, <span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y)</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        : <a class="code hl_class" href="classftxui_1_1NodeDecorator.html">NodeDecorator</a>(std::move(child)), x_(x), y_(y) {}</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">void</span> ComputeRequirement()<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>      NodeDecorator::ComputeRequirement();</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>      requirement_.focused.enabled = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>      requirement_.focused.node = <span class="keyword">this</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>      requirement_.focused.box.x_min = int(<span class="keywordtype">float</span>(requirement_.min_x) * x_);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>      requirement_.focused.box.y_min = int(<span class="keywordtype">float</span>(requirement_.min_y) * y_);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>      requirement_.focused.box.x_max = int(<span class="keywordtype">float</span>(requirement_.min_x) * x_);</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>      requirement_.focused.box.y_max = int(<span class="keywordtype">float</span>(requirement_.min_y) * y_);</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    }</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>   <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keyword">const</span> <span class="keywordtype">float</span> x_;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">const</span> <span class="keywordtype">float</span> y_;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  };</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keywordflow">return</span> [x, y](<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child) {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordflow">return</span> std::make_shared&lt;Impl&gt;(std::move(child), x, y);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  };</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>}</div>
+</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"></span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment">/// @brief Utilizado dentro de un `frame`, esto fuerza que la vista se desplace hacia</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment">/// una posición determinada. La posición se expresa en el número de celdas.</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment">///</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">/// @ingroup dom</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">///</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment">/// ### Ejemplo</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">///</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment">/// ```cpp</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">/// Element document = huge_document()</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment">///   | focusPosition(10, 10)</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">///   | frame;</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment">/// ```</span></div>
+<div class="foldopen" id="foldopen00068" data-start="{" data-end="}">
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="group__dom.html#ga78447ba1ccb792963ad6d306f4ed1256">   68</a></span><span class="comment"></span><a class="code hl_typedef" href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">Decorator</a> <a class="code hl_function" href="group__dom.html#ga78447ba1ccb792963ad6d306f4ed1256">focusPosition</a>(<span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y) {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="keyword">class </span>Impl : <span class="keyword">public</span> <a class="code hl_class" href="classftxui_1_1NodeDecorator.html">NodeDecorator</a> {</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>   <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    Impl(<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child, <span class="keywordtype">int</span> x, <span class="keywordtype">int</span> y)</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>        : <a class="code hl_class" href="classftxui_1_1NodeDecorator.html">NodeDecorator</a>(std::move(child)), x_(x), y_(y) {}</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">void</span> ComputeRequirement()<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>      NodeDecorator::ComputeRequirement();</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>      requirement_.focused.enabled = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>      <a class="code hl_struct" href="group__screen.html#structftxui_1_1Box">Box</a>&amp; box = requirement_.focused.box;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>      box.<a class="code hl_variable" href="group__screen.html#ae0951dcafafdc96ac1d8361c672d47e2">x_min</a> = x_;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>      box.<a class="code hl_variable" href="group__screen.html#a7941ddc7e35fffb8864af1e922814401">y_min</a> = y_;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>      box.<a class="code hl_variable" href="group__screen.html#a5f0bb6d8a3e66525c3e6264cb8288e43">x_max</a> = x_;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>      box.<a class="code hl_variable" href="group__screen.html#ad033aea530fbbcf5bcd6cd98d882e3a5">y_max</a> = y_;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    }</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>   <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> x_;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keyword">const</span> <span class="keywordtype">int</span> y_;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  };</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  <span class="keywordflow">return</span> [x, y](<a class="code hl_typedef" href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">Element</a> child) {</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordflow">return</span> std::make_shared&lt;Impl&gt;(std::move(child), x, y);</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  };</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>}</div>
+</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>}  <span class="comment">// namespace ftxui</span></div>
+<div class="ttc" id="abox_8hpp_html"><div class="ttname"><a href="box_8hpp.html">box.hpp</a></div></div>
+<div class="ttc" id="aclassftxui_1_1NodeDecorator_html"><div class="ttname"><a href="classftxui_1_1NodeDecorator.html">ftxui::NodeDecorator</a></div><div class="ttdef"><b>Definition</b> <a href="node__decorator_8hpp_source.html#l00016">node_decorator.hpp:16</a></div></div>
+<div class="ttc" id="aelements_8hpp_html"><div class="ttname"><a href="elements_8hpp.html">elements.hpp</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga13befad33cb4125e2143f2af3eddcc71"><div class="ttname"><a href="group__dom.html#ga13befad33cb4125e2143f2af3eddcc71">ftxui::focusPositionRelative</a></div><div class="ttdeci">Decorator focusPositionRelative(float x, float y)</div><div class="ttdoc">Utilizado dentro de un frame, esto fuerza que la vista se desplace hacia una posición determinada....</div><div class="ttdef"><b>Definition</b> <a href="#l00030">src/ftxui/dom/focus.cpp:30</a></div></div>
+<div class="ttc" id="agroup__dom_html_ga78447ba1ccb792963ad6d306f4ed1256"><div class="ttname"><a href="group__dom.html#ga78447ba1ccb792963ad6d306f4ed1256">ftxui::focusPosition</a></div><div class="ttdeci">Decorator focusPosition(int x, int y)</div><div class="ttdoc">Utilizado dentro de un frame, esto fuerza que la vista se desplace hacia una posición determinada....</div><div class="ttdef"><b>Definition</b> <a href="#l00068">src/ftxui/dom/focus.cpp:68</a></div></div>
+<div class="ttc" id="agroup__screen_html_a5f0bb6d8a3e66525c3e6264cb8288e43"><div class="ttname"><a href="group__screen.html#a5f0bb6d8a3e66525c3e6264cb8288e43">ftxui::Box::x_max</a></div><div class="ttdeci">int x_max</div><div class="ttdef"><b>Definition</b> <a href="box_8hpp_source.html#l00018">box.hpp:18</a></div></div>
+<div class="ttc" id="agroup__screen_html_a7941ddc7e35fffb8864af1e922814401"><div class="ttname"><a href="group__screen.html#a7941ddc7e35fffb8864af1e922814401">ftxui::Box::y_min</a></div><div class="ttdeci">int y_min</div><div class="ttdef"><b>Definition</b> <a href="box_8hpp_source.html#l00019">box.hpp:19</a></div></div>
+<div class="ttc" id="agroup__screen_html_ad033aea530fbbcf5bcd6cd98d882e3a5"><div class="ttname"><a href="group__screen.html#ad033aea530fbbcf5bcd6cd98d882e3a5">ftxui::Box::y_max</a></div><div class="ttdeci">int y_max</div><div class="ttdef"><b>Definition</b> <a href="box_8hpp_source.html#l00020">box.hpp:20</a></div></div>
+<div class="ttc" id="agroup__screen_html_ae0951dcafafdc96ac1d8361c672d47e2"><div class="ttname"><a href="group__screen.html#ae0951dcafafdc96ac1d8361c672d47e2">ftxui::Box::x_min</a></div><div class="ttdeci">int x_min</div><div class="ttdef"><b>Definition</b> <a href="box_8hpp_source.html#l00017">box.hpp:17</a></div></div>
+<div class="ttc" id="agroup__screen_html_structftxui_1_1Box"><div class="ttname"><a href="group__screen.html#structftxui_1_1Box">ftxui::Box</a></div><div class="ttdoc">Box es una estructura que representa un área rectangular en un espacio 2D.</div><div class="ttdef"><b>Definition</b> <a href="box_8hpp_source.html#l00016">box.hpp:16</a></div></div>
+<div class="ttc" id="anamespaceftxui_html"><div class="ttname"><a href="namespaceftxui.html">ftxui</a></div><div class="ttdoc">El espacio de nombres ftxui:: de FTXUI.</div><div class="ttdef"><b>Definition</b> <a href="animation_8hpp_source.html#l00010">animation.hpp:10</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a164021903e9ac6f1357e4186582891e3"><div class="ttname"><a href="namespaceftxui.html#a164021903e9ac6f1357e4186582891e3">ftxui::Decorator</a></div><div class="ttdeci">std::function&lt; Element(Element)&gt; Decorator</div><div class="ttdef"><b>Definition</b> <a href="elements_8hpp_source.html#l00024">elements.hpp:24</a></div></div>
+<div class="ttc" id="anamespaceftxui_html_a2bc31f2d685189e5c61d2293a1f51b4f"><div class="ttname"><a href="namespaceftxui.html#a2bc31f2d685189e5c61d2293a1f51b4f">ftxui::Element</a></div><div class="ttdeci">std::shared_ptr&lt; Node &gt; Element</div><div class="ttdef"><b>Definition</b> <a href="elements_8hpp_source.html#l00022">elements.hpp:22</a></div></div>
+<div class="ttc" id="anode__decorator_8hpp_html"><div class="ttname"><a href="node__decorator_8hpp.html">node_decorator.hpp</a></div></div>
+<div class="ttc" id="arequirement_8hpp_html"><div class="ttname"><a href="requirement_8hpp.html">requirement.hpp</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.8-->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const projectNumber = document.getElementById('projectname');
+
+  if (!projectNumber) {
+    console.warn('Doxygen element with ID "projectnumber" not found. Cannot add version switcher.');
+    return;
+  }
+
+  const langs = ["en", "es", "fr", "ja", "zh-CH", "zh-TW"];
+  const lang_paths = {"en": "../index.html", "es": "index.html", "fr": "../fr/index.html", "ja": "../ja/index.html", "zh-CH": "../zh-CH/index.html", "zh-TW": "../zh-TW/index.html"};
+  const lang_display = {"en": "English", "es": "Espa\u00f1ol", "fr": "Fran\u00e7ais", "ja": "\u65e5\u672c\u8a9e", "zh-CH": "\u4e2d\u6587 (\u7b80\u4f53)", "zh-TW": "\u4e2d\u6587 (\u7e41\u9ad4)"};
+  const versions = ["main"];
+  const version_paths = {"main": "index.html"};
+  const currentLang = "es";
+  const currentVersion = "main";
+
+  // Helper function to create a styled select element
+  const createSelect = (options, current, paths, label, displayMap = null) => {
+    const select = document.createElement('select');
+    select.title = label;
+    select.onchange = function() {
+      const selectedValue = this.value;
+      if (selectedValue in paths) {
+        window.location.href = paths[selectedValue];
+      }
+    };
+
+    // Sort versions: 'main' first, then others numerically descending.
+    options.sort((a, b) => {
+      if (a === 'main') return -1;
+      if (b === 'main') return 1;
+      return b.localeCompare(a, undefined, { numeric: true, sensitivity: 'base' });
+    });
+
+    options.forEach(v => {
+      const option = document.createElement('option');
+      option.value = v;
+      // Use the displayMap if provided, otherwise default to the value (v)
+      option.textContent = displayMap ? displayMap[v] : v; 
+      if (v === current) {
+        option.selected = true;
+      }
+      select.appendChild(option);
+    });
+
+    // Apply some styling to make it look good.
+    Object.assign(select.style, {
+      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+      color: 'white',
+      border: '1px solid rgba(255, 255, 255, 0.2)',
+      padding: '5px',
+      borderRadius: '5px',
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      margin: '0 5px 0 0',
+      cursor: 'pointer'
+    });
+    return select;
+  };
+
+  // 1. Create Language Switcher, passing the language display names map
+  const langSelect = createSelect(langs, currentLang, lang_paths, 'Select Language', lang_display);
+  
+  // 2. Create Version Switcher
+  const versionSelect = createSelect(versions, currentVersion, version_paths, 'Select Version');
+
+  // 3. Create FTXUI title.
+  const ftxuiTitle = document.createElement('span');
+  ftxuiTitle.textContent = 'FTXUI: ';
+  Object.assign(ftxuiTitle.style, {
+    color: 'white',
+    fontSize: '20px',
+    fontWeight: 'bold',
+    marginRight: '10px'
+  });
+
+  // 3. Create a container to hold both selectors
+  const container = document.createElement('div');
+  container.id = 'version-lang-switchers';
+  Object.assign(container.style, {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: 'auto'
+  });
+  container.appendChild(ftxuiTitle);
+  container.appendChild(langSelect);
+  container.appendChild(versionSelect);
+
+  Object.assign(container.style, {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5px 10px',
+    borderRadius: '8px'
+  });
+
+
+  // Replace the Doxygen project number element with our container.
+  projectNumber.replaceWith(container);
+
+  // Clean up the original Doxygen project number text if it still exists nearby
+  const parent = container.parentElement;
+  if (parent) {
+    const textNode = Array.from(parent.childNodes).find(n => n.nodeType === 3 && n.textContent.trim() !== '');
+    if (textNode) {
+      textNode.remove();
+    }
+  }
+});
+</script>
+</body>
+</html>
