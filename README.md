@@ -408,6 +408,8 @@ Feel free to add your projects here:
 - [vantage](https://github.com/gokulmaxi/vantage)
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
 - [C++ Process Manager](https://github.com/ondrejhonus/cpp_proc)
+- [Baobab TUI Remake](https://github.com/orrnithogalum/bonsai)
+- [Youtube Music Client](https://github.com/orrnithogalum/moroder)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
