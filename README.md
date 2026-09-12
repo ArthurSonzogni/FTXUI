@@ -345,6 +345,7 @@ Prebuilt components are declared in [`<ftxui/component/component.hpp>`](https://
 - [ftxui-grid-container](https://github.com/mingsheng13/grid-container-ftxui)
 - [ftxui-ip-input](https://github.com/mingsheng13/ip-input-ftxui)
 - [ftxui-image-view](https://github.com/ljrrjl/ftxui-image-view.git): For Image Display.
+- [ftxui-image-view-async](https://github.com/orrnithogalum/ftxui-image-view-async.git): Fork of the original, without image reloads and conversions on every frame redraw.
 - [ftxui-navigation-tree](https://github.com/Appisolato/navigation-tree-ftxui)
 - [MarkdownFTXUI](https://github.com/zvasilev/MarkdownFTXUI): Markdown Editor/Viewer for the terminal.
 
@@ -407,6 +408,8 @@ Feel free to add your projects here:
 - [vantage](https://github.com/gokulmaxi/vantage)
 - [x86-64 CPU Architecture Simulation](https://github.com/AnisBdz/CPU)
 - [C++ Process Manager](https://github.com/ondrejhonus/cpp_proc)
+- [Baobab TUI Remake](https://github.com/orrnithogalum/bonsai)
+- [Youtube Music Client](https://github.com/orrnithogalum/moroder)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
