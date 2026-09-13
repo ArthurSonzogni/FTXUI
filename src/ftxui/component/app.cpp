@@ -1221,14 +1221,9 @@ void App::Internal::InstallTerminalInfo() {
   // Set quirks and color support based on terminal identification.
   Terminal::Quirks quirks = Terminal::GetQuirks();
 
-  auto safe_getenv = [](const char* name) -> std::string_view {
-    const char* value = std::getenv(name);
-    return value ? value : "";
-  };
-
   auto color_support = Terminal::ComputeColorSupport(
-      safe_getenv("TERM"), safe_getenv("COLORTERM"),
-      safe_getenv("TERM_PROGRAM"), terminal_name_, terminal_emulator_name_,
+      util::GetEnv("TERM"), util::GetEnv("COLORTERM"),
+      util::GetEnv("TERM_PROGRAM"), terminal_name_, terminal_emulator_name_,
       terminal_capabilities_);
 
   quirks.SetColorSupport(color_support);

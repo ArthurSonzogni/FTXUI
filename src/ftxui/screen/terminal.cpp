@@ -3,12 +3,12 @@
 // the LICENSE file.
 #include <algorithm>  // for std::search
 #include <cctype>     // for std::tolower
-#include <cstdlib>    // for getenv
 #include <initializer_list>
 #include <string>
 #include <string_view>  // for string_view
 
 #include "ftxui/screen/terminal.hpp"
+#include "ftxui/screen/util.hpp"  // for util::GetEnv
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
@@ -71,10 +71,6 @@ Dimensions& FallbackSize() {
   return g_fallback_size;
 }
 
-const char* Safe(const char* c) {
-  return (c != nullptr) ? c : "";
-}
-
 bool Contains(std::string_view s, std::string_view key) {
   if (key.empty()) {
     return true;
@@ -100,10 +96,8 @@ bool ContainsAny(std::string_view s,
 Terminal::Color ComputeColorSupportInternal() {
   static const std::vector<int> empty_capabilities;
   return Terminal::ComputeColorSupport(
-      Safe(std::getenv("TERM")),          // NOLINT
-      Safe(std::getenv("COLORTERM")),     // NOLINT
-      Safe(std::getenv("TERM_PROGRAM")),  // NOLINT
-      "unknown", "unknown", empty_capabilities);
+      util::GetEnv("TERM"), util::GetEnv("COLORTERM"),
+      util::GetEnv("TERM_PROGRAM"), "unknown", "unknown", empty_capabilities);
 }
 
 }  // namespace
@@ -223,8 +217,7 @@ Color TerminalInfo::ComputeColorSupport() const {
   // Terminal::ComputeColorSupport() signature, i.e. an API-breaking change.
 
   // 0. User preference. See https://no-color.org.
-  const char* no_color = std::getenv("NO_COLOR");  // NOLINT
-  if (no_color != nullptr && no_color[0] != '\0') {
+  if (util::GetEnv("NO_COLOR")[0] != '\0') {
     return Terminal::Color::Palette1;
   }
 
@@ -249,8 +242,7 @@ Color TerminalInfo::ComputeColorSupport() const {
 #endif
 
   // Check WT_SESSION for Windows Terminal (e.g. when running under WSL).
-  const char* wt_session = std::getenv("WT_SESSION");  // NOLINT
-  if (wt_session != nullptr && wt_session[0] != '\0') {
+  if (util::GetEnv("WT_SESSION")[0] != '\0') {
     return Terminal::Color::TrueColor;
   }
 
