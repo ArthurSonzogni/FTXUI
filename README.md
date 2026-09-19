@@ -410,6 +410,7 @@ Feel free to add your projects here:
 - [C++ Process Manager](https://github.com/ondrejhonus/cpp_proc)
 - [Baobab TUI Remake](https://github.com/orrnithogalum/bonsai)
 - [Youtube Music Client](https://github.com/orrnithogalum/moroder)
+- [TUI_DB](https://github.com/klementii229/TUI_DB)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
