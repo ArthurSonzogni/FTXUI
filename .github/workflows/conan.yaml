@@ -5,11 +5,32 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'conanfile.py'
+      - 'test_package/**'
+      - 'include/**'
+      - 'src/**'
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'tools/ci_matrix.json'
+      - 'tools/select_ci_matrix.sh'
+      - '.github/workflows/conan.yaml'
 
   # On pull requests:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - main
+    paths:
+      - 'conanfile.py'
+      - 'test_package/**'
+      - 'include/**'
+      - 'src/**'
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'tools/ci_matrix.json'
+      - 'tools/select_ci_matrix.sh'
+      - '.github/workflows/conan.yaml'
 
   # Weekly, with the full matrix:
   schedule:
@@ -21,10 +42,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   # Which platforms run for this event is defined in tools/ci_matrix.json.
   select_matrix:
     name: "Select matrix"
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     outputs:
       conan: ${{ steps.select.outputs.conan }}

@@ -4,9 +4,28 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'include/**'
+      - 'src/**'
+      - 'examples/**'
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'tools/ci_matrix.json'
+      - 'tools/select_ci_matrix.sh'
+      - '.github/workflows/shared_lib_build.yaml'
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - main
+    paths:
+      - 'include/**'
+      - 'src/**'
+      - 'examples/**'
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'tools/ci_matrix.json'
+      - 'tools/select_ci_matrix.sh'
+      - '.github/workflows/shared_lib_build.yaml'
   schedule:
     - cron: '0 3 * * 1'
   workflow_dispatch:
@@ -15,10 +34,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   # Which platforms run for this event is defined in tools/ci_matrix.json.
   select_matrix:
     name: "Select matrix"
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     outputs:
       shared_lib: ${{ steps.select.outputs.shared_lib }}
@@ -40,6 +63,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+
+      - name: Setup Ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: shared-lib-${{ matrix.os }}
 
       - name: Configure CMake
         shell: bash

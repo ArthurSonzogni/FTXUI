@@ -2,24 +2,39 @@ name: ABI Compatibility Check
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - main
+    paths:
+      - 'include/**'
+      - 'src/**'
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - 'tools/*abi*'
+      - '.github/workflows/abi_check.yaml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 permissions:
+  contents: read
   pull-requests: write
 
 jobs:
   check-abi:
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      - name: Setup Ccache
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: abi-check-${{ runner.os }}
 
       - name: Install dependencies
         run: |
@@ -45,11 +60,11 @@ jobs:
           if [ "$BASE_FINGERPRINT" == "$CURRENT_FINGERPRINT" ]; then
             echo "### ✅ ABI Compatibility Report" > abi_comment.md
             echo "ABI fingerprints match (\`$CURRENT_FINGERPRINT\`). No changes detected." >> abi_comment.md
-            echo "ABI_STATUS=unchanged" >> $GITHUB_ENV
+            echo "ABI_STATUS=unchanged" >> "$GITHUB_ENV"
           else
             echo "ABI fingerprints differ. Performing deep analysis..."
             # Run the script and capture output
-            ./tools/check_abi_change.sh origin/${{ github.base_ref }} HEAD > abi_report.txt 2>&1 || echo "ABI_FAILED=true" >> $GITHUB_ENV
+            ./tools/check_abi_change.sh origin/${{ github.base_ref }} HEAD > abi_report.txt 2>&1 || echo "ABI_FAILED=true" >> "$GITHUB_ENV"
             
             # Format the output for a PR comment
             {
@@ -66,7 +81,7 @@ jobs:
               echo "\`\`\`"
               echo "</details>"
             } > abi_comment.md
-            echo "ABI_STATUS=changed" >> $GITHUB_ENV
+            echo "ABI_STATUS=changed" >> "$GITHUB_ENV"
           fi
 
       - name: Post comment

@@ -3,8 +3,23 @@ name: Amalgamate
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'include/**'
+      - 'src/**'
+      - 'tools/amalgamate.py'
+      - 'tools/ci_matrix.json'
+      - 'tools/select_ci_matrix.sh'
+      - '.github/workflows/amalgamate.yaml'
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches: [ main ]
+    paths:
+      - 'include/**'
+      - 'src/**'
+      - 'tools/amalgamate.py'
+      - 'tools/ci_matrix.json'
+      - 'tools/select_ci_matrix.sh'
+      - '.github/workflows/amalgamate.yaml'
   schedule:
     - cron: '0 3 * * 1'
   workflow_dispatch:
@@ -13,10 +28,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   # Which platforms run for this event is defined in tools/ci_matrix.json.
   select_matrix:
     name: "Select matrix"
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     outputs:
       amalgamate: ${{ steps.select.outputs.amalgamate }}

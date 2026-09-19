@@ -5,11 +5,50 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '**.md'
+      - 'doc/**'
+      - 'LICENSE'
+      - '.clang-format'
+      - '.clang-tidy'
+      - '.gitignore'
+      - 'codecov.yml'
+      - '.github/workflows/documentation.yaml'
+      - '.github/workflows/publish.yaml'
+      - '.github/workflows/release.yaml'
+      - '.github/workflows/unicode.yaml'
+      - 'tools/build_multiversion_doc.py'
+      - 'tools/build_translations.py'
+      - 'tools/gen_unicode_tables.py'
+      - 'tools/check_workflows.sh'
+      - 'tools/*abi*'
+      - 'conanfile.py'
+      - 'test_package/**'
 
   # On pull requests:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - main
+    paths-ignore:
+      - '**.md'
+      - 'doc/**'
+      - 'LICENSE'
+      - '.clang-format'
+      - '.clang-tidy'
+      - '.gitignore'
+      - 'codecov.yml'
+      - '.github/workflows/documentation.yaml'
+      - '.github/workflows/publish.yaml'
+      - '.github/workflows/release.yaml'
+      - '.github/workflows/unicode.yaml'
+      - 'tools/build_multiversion_doc.py'
+      - 'tools/build_translations.py'
+      - 'tools/gen_unicode_tables.py'
+      - 'tools/check_workflows.sh'
+      - 'tools/*abi*'
+      - 'conanfile.py'
+      - 'test_package/**'
 
   # Weekly, with the full matrix:
   schedule:
@@ -23,6 +62,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -31,6 +73,7 @@ jobs:
   # Which platforms run for this event is defined in tools/ci_matrix.json.
   select_matrix:
     name: "Select matrix"
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
     outputs:
       bazel: ${{ steps.select.outputs.bazel }}
@@ -56,6 +99,13 @@ jobs:
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v7
+
+      - name: "Setup Bazel"
+        uses: bazel-contrib/setup-bazel@0.19.0
+        with:
+          bazelisk-cache: true
+          disk-cache: bazel-${{ matrix.os }}-${{ matrix.cxx }}
+          repository-cache: true
 
       - name: "Build with Bazel"
         env:
@@ -107,6 +157,11 @@ jobs:
           # slow chocolatey install of a third party download, so pull requests
           # must not depend on it being reachable.
           opencppcoverage: ${{ contains(matrix.os, 'windows') && github.event_name != 'pull_request' }}
+
+      - name: "Setup Ccache"
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: cmake-${{ matrix.os }}-${{ matrix.compiler }}
 
       # make sure coverage is only enabled for Debug builds, since it sets -O0
       # to make sure coverage has meaningful results
@@ -186,6 +241,7 @@ jobs:
 
   test_modules:
     name: "Test modules"
+    needs: select_matrix
     strategy:
       matrix:
         include:
@@ -230,6 +286,7 @@ jobs:
 
   test_umbrella_header:
     name: "Test umbrella header"
+    needs: select_matrix
     strategy:
       matrix:
         include:
@@ -247,6 +304,11 @@ jobs:
           vcvarsall: ${{ contains(matrix.os, 'windows' )}}
           cmake: true
           ninja: true
+
+      - name: "Setup Ccache"
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: umbrella-${{ matrix.os }}-${{ matrix.compiler }}
 
       - name: "Generate ./examples_ftxui_hpp"
         run: >
@@ -287,6 +349,11 @@ jobs:
           vcvarsall: ${{ contains(matrix.os, 'windows' )}}
           cmake: false
           ninja: true
+
+      - name: "Setup Ccache"
+        uses: hendrikmuhs/ccache-action@v1.2
+        with:
+          key: meson-${{ matrix.os }}-${{ matrix.compiler }}
 
       - name: "Setup Python"
         uses: actions/setup-python@v7
