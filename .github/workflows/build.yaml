@@ -351,11 +351,6 @@ jobs:
           cmake: false
           ninja: true
 
-      - name: "Setup Ccache"
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: meson-${{ matrix.os }}-${{ matrix.compiler }}
-
       - name: "Setup Python"
         uses: actions/setup-python@v7
         with:
@@ -365,7 +360,7 @@ jobs:
         run: pip install meson
 
       - name: "Configure Meson"
-        run: meson setup build_meson -Dtests=true -Dexamples=true -Db_ccache=true
+        run: meson setup build_meson -Dtests=true -Dexamples=true
 
       - name: "Build with Meson"
         run: ninja -C build_meson
