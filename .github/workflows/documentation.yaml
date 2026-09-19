@@ -15,15 +15,15 @@ on:
       - 'cmake/**'
       - '.github/workflows/documentation.yaml'
 
+  # Manually, to refresh the translated pages:
+  workflow_dispatch:
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 permissions:
   contents: write
-
-  # Manually, to refresh the translated pages:
-  workflow_dispatch:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
