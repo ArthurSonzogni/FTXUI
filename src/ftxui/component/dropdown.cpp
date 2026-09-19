@@ -38,10 +38,11 @@ Component Dropdown(DropdownOption option) {
       checkbox_ = Checkbox(checkbox);
       radiobox_ = Radiobox(radiobox);
 
-      Add(Container::Vertical({
+      container_ = Container::Vertical({
           checkbox_,
           Maybe(radiobox_, checkbox.checked),
-      }));
+      });
+      Add(container_);
     }
 
     Element OnRender() override {
@@ -51,6 +52,15 @@ Component Dropdown(DropdownOption option) {
 
       if (selected_() >= 0 && selected_() < int(radiobox.entries.size())) {
         title_ = radiobox.entries[selected_()];
+      }
+
+      // Close the dropdown when another component takes the focus. This can
+      // happen without this dropdown receiving any event, e.g. when the user
+      // clicks on a sibling dropdown. Move the inner focus back to the
+      // checkbox without stealing the focus from the other component.
+      if (open_() && !Focused()) {
+        container_->SetActiveChild(checkbox_);
+        *open_ = false;
       }
 
       return transform(*open_, checkbox_->Render(), radiobox_->Render());
@@ -130,6 +140,7 @@ Component Dropdown(DropdownOption option) {
    private:
     Ref<bool> open_;
     Ref<int> selected_;
+    Component container_;
     Component checkbox_;
     Component radiobox_;
     std::string title_;
