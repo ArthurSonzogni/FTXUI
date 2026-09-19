@@ -79,6 +79,18 @@ TEST(DropdownTest, ClosesWhenAnotherDropdownTakesFocus) {
   render();
   EXPECT_TRUE(top_open);
   EXPECT_FALSE(bottom_open);
+
+  // Close the top dropdown, move to the bottom one, and reopen it with the
+  // keyboard. Focus must be back on its checkbox.
+  layout->OnEvent(Event::Escape);
+  render();
+  EXPECT_FALSE(top_open);
+  layout->OnEvent(Event::ArrowDown);
+  render();
+  layout->OnEvent(Event::Return);
+  render();
+  EXPECT_FALSE(top_open);
+  EXPECT_TRUE(bottom_open);
 }
 
 }  // namespace ftxui
