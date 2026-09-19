@@ -318,6 +318,12 @@ def build_doc_from_git(doc_info: DocInfo, build_root: Path, repo_url: str, branc
     run_command(["tar", "-xf", str(archive_path)], cwd=version_src_dir)
     archive_path.unlink()
 
+    # Translations only carry the text. Use the header from the current
+    # checkout, so its scripts stay in sync with the English docs.
+    if not doc_info.is_primary_lang:
+        shutil.copy(Path.cwd() / "doc" / "header.html",
+                    version_src_dir / "doc" / "header.html")
+
     # 2. Configure and build the docs using CMake.
     version_build_dir = build_root / f"build_{doc_info.key}"
     version_build_dir.mkdir()

@@ -104,7 +104,9 @@
     "/zh-CH",
     "/zh-TW",
   ]
-  if (excluded_lang.some(lang => window.location.pathname.startsWith(lang)) ||
+  // The docs are served under a prefix (e.g. /FTXUI/zh-CH/...), so match the
+  // language as a path segment anywhere in the path.
+  if (excluded_lang.some(lang => window.location.pathname.includes(lang + "/")) ||
       window.location.pathname.endsWith("index.html")) {
     return;
   }
@@ -134,13 +136,14 @@
       break;
     }
 
-    // Find the first link inside the navtree.
+    // Find the first link inside the navtree. Clicking a link to the current
+    // page would reload it, and run this script again forever.
     const link = navtree.querySelector("a");
-    if (link) {
+    if (link && new URL(link.href).pathname !== window.location.pathname) {
       // Simulate a click on the link.
       link.click();
-      break;
     }
+    break;
   }
 </script>
 
