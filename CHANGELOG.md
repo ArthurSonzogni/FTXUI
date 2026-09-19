@@ -60,6 +60,10 @@ Next
   `*.js` file instead, so that file was served without COEP and `new Worker()`
   failed, leaving every example blank. The ServiceWorker now adds the headers
   to all same-origin responses.
+- Bugfix: Stop the translated documentation pages from reloading in a loop.
+  Translations are now built with the same header as the English docs, and the
+  navigation script no longer clicks a link to the current page. Thanks
+  @dfhx5694 and @beklauter. See #1230.
 
 7.0.3 (2026-08-06)
 ------------------
