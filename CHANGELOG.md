@@ -20,6 +20,9 @@ Next
   Thanks @Machillka. See #1342.
 - Bugfix: Update selection in horizontal and vertical containers when the
   selected child dynamically becomes unfocusable. Thanks @Machillka. See #1346.
+- Bugfix: Drain all available terminal input each frame on POSIX, instead of at
+  most 128 bytes. Fast trackpad scrolling no longer queues wheel events that
+  delay subsequent input. Thanks @mati5kova. See #1348.
 
 ### Dom
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on
