@@ -1361,7 +1361,7 @@ size_t App::Internal::FetchTerminalEvents() {
 #elif defined(__EMSCRIPTEN__)
   // Read chars from the terminal.
   // We configured it to be non blocking.
-  std::array<char, 128> out{};
+  std::array<char, 4096> out{};
   const ssize_t l = read(STDIN_FILENO, out.data(), out.size());
   if (l <= 0) {
     const auto timeout = std::chrono::steady_clock::now() - last_char_time;
@@ -1389,18 +1389,30 @@ size_t App::Internal::FetchTerminalEvents() {
   }
   last_char_time = std::chrono::steady_clock::now();
 
-  // Read chars from the terminal.
-  std::array<char, 128> out{};
-  const ssize_t l = read(tty_fd_, out.data(), out.size());
-  if (l <= 0) {
-    return 0;
-  }
+  // Drain the available input, so that bursts (e.g. fast mouse wheel
+  // scrolling) do not accumulate across frames. The total is bounded to keep
+  // the frame responsive under a continuous input flood. See #1348.
+  constexpr size_t kMaxBytesPerFetch = 64 * 1024;
+  std::array<char, 4096> out{};
+  size_t total = 0;
+  while (total < kMaxBytesPerFetch) {
+    const ssize_t l = read(tty_fd_, out.data(), out.size());
+    if (l <= 0) {
+      break;
+    }
 
-  // Convert the chars to events.
-  for (ssize_t i = 0; i < l; ++i) {
-    terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
+    // Convert the chars to events.
+    for (ssize_t i = 0; i < l; ++i) {
+      terminal_input_parser.Add(out.at(static_cast<size_t>(i)));
+    }
+    total += static_cast<size_t>(l);
+
+    pfd.revents = 0;
+    if (poll(&pfd, 1, 0) <= 0) {
+      break;
+    }
   }
-  return (size_t)l;
+  return total;
 #endif
 }
 
