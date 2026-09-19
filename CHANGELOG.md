@@ -23,6 +23,9 @@ Next
 - Bugfix: Drain all available terminal input each frame on POSIX, instead of at
   most 128 bytes. Fast trackpad scrolling no longer queues wheel events that
   delay subsequent input. Thanks @mati5kova. See #1348.
+- Bugfix: Close an open `Dropdown` when another component takes the focus.
+  Opening a dropdown placed above an open one used to leave both open and
+  overlapping. Thanks @bleakglory. See #1278.
 
 ### Dom
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on
