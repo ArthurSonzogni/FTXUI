@@ -92,10 +92,12 @@ jobs:
           echo "Archive SHA256: ${SHA256}"
           echo "Archive SHA512: ${SHA512}"
 
-          echo "tag=${TAG}" >> $GITHUB_OUTPUT
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "sha256=${SHA256}" >> $GITHUB_OUTPUT
-          echo "sha512=${SHA512}" >> $GITHUB_OUTPUT
+          {
+            echo "tag=${TAG}"
+            echo "version=${VERSION}"
+            echo "sha256=${SHA256}"
+            echo "sha512=${SHA512}"
+          } >> "$GITHUB_OUTPUT"
 
   bcr:
     name: "Publish to Bazel Central Registry"
@@ -103,7 +105,7 @@ jobs:
     if: ${{ inputs.publish_bcr }}
     permissions:
       contents: write
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.4.2
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.5.0
     with:
       tag_name: ${{ needs.prepare.outputs.tag }}
       registry_fork: ArthurSonzogni/bazel-central-registry

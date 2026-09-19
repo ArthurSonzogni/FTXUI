@@ -5,6 +5,22 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'doc/**'
+      - 'include/**'
+      - 'src/**'
+      - 'examples/**'
+      - 'tools/build_multiversion_doc.py'
+      - 'CMakeLists.txt'
+      - 'cmake/**'
+      - '.github/workflows/documentation.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
