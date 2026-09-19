@@ -30,6 +30,9 @@ Next
 ### Dom
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on
   an empty table. Thanks @Machillka. See #1344.
+- Bugfix: `Table` selections no longer wrap around when an index is out of
+  range. For instance `SelectRows(2, -1)` on a 2-row table now selects nothing
+  instead of the whole table. Thanks @lukester1975. See #806.
 
 ### Build
 - Bugfix: Fix missing CMake targets namespace in exported package when C++20
