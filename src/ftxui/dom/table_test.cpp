@@ -480,7 +480,6 @@ TEST(TableTest, SelectRows) {
       screen.ToString());
 }
 
-
 TEST(TableTest, SelectRectangle) {
   auto table = Table({
       {"a", "b", "c", "d"},
@@ -777,6 +776,26 @@ TEST(TableTest, DecorateBorder) {
   table.SelectAll().DecorateSeparator(color(Color::Red));
   table.SelectAll().Border(LIGHT, color(Color::Red));
   table.SelectAll().Separator(LIGHT, color(Color::Red));
+}
+
+// See https://github.com/ArthurSonzogni/FTXUI/issues/806
+TEST(TableTest, SelectOutOfRange) {
+  auto table = Table({
+      {"a"},
+      {"b"},
+  });
+  table.SelectRows(2, -1).Decorate(inverted);
+  table.SelectColumns(1, 1).Border(LIGHT);
+  table.SelectRows(-3, 0).Border(LIGHT);
+  Screen screen(3, 3);
+  Render(screen, table.Render());
+  EXPECT_EQ(
+      "a  \r\n"
+      "b  \r\n"
+      "   ",
+      screen.ToString());
+  EXPECT_FALSE(screen.PixelAt(0, 0).inverted);
+  EXPECT_FALSE(screen.PixelAt(0, 1).inverted);
 }
 
 }  // namespace ftxui

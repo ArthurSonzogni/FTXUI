@@ -28,11 +28,13 @@ static std::string table_charset[6][6] = {
     {" ", " ", " ", " ", " ", " "},  // EMPTY
 };
 
+// Resolve negative indices as counting from the end.
 int Wrap(int input, int modulo) {
-  input %= modulo;
-  input += modulo;
-  input %= modulo;
-  return input;
+  return input < 0 ? input + modulo : input;
+}
+
+bool InRange(int input, int modulo) {
+  return input >= 0 && input < modulo;
 }
 
 void Order(int& a, int& b) {
@@ -182,7 +184,16 @@ TableSelection Table::SelectRectangle(int column_min,
                                       int row_max) {
   TableSelection output;  // NOLINT
   output.table_ = this;
-  if (input_dim_x_ == 0 || input_dim_y_ == 0) {
+
+  column_min = Wrap(column_min, input_dim_x_);
+  column_max = Wrap(column_max, input_dim_x_);
+  row_min = Wrap(row_min, input_dim_y_);
+  row_max = Wrap(row_max, input_dim_y_);
+
+  // Out of range indices select nothing.
+  if (!InRange(column_min, input_dim_x_) ||
+      !InRange(column_max, input_dim_x_) || !InRange(row_min, input_dim_y_) ||
+      !InRange(row_max, input_dim_y_)) {
     output.x_min_ = 0;
     output.x_max_ = -1;
     output.y_min_ = 0;
@@ -190,11 +201,7 @@ TableSelection Table::SelectRectangle(int column_min,
     return output;
   }
 
-  column_min = Wrap(column_min, input_dim_x_);
-  column_max = Wrap(column_max, input_dim_x_);
   Order(column_min, column_max);
-  row_min = Wrap(row_min, input_dim_y_);
-  row_max = Wrap(row_max, input_dim_y_);
   Order(row_min, row_max);
 
   output.x_min_ = 2 * column_min;
