@@ -64,7 +64,7 @@ int main() {
                vbox({
                    hbox({
                        text(" gauge : "),
-                       gauge(sum / 100.0),
+                       gauge(sum / 100.f),
                    }),
                    hbox({
                        text("  text : "),

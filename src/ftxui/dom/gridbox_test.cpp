@@ -205,7 +205,7 @@ TEST(GridboxTest, Vertical_NoFlex_NoFlex_NoFlex) {
       "012abcABC ",   //
       "012abcABC  ",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(1, i);
     Render(screen, root);
     EXPECT_EQ(expectations[i], rotate(screen.ToString()));
@@ -263,7 +263,7 @@ TEST(GridboxTest, Vertical_FlexGrow_NoFlex_NoFlex) {
       "012 abcABC",   //
       "012  abcABC",  //
   };
-  for (size_t i = 0; i < expectations.size(); ++i) {
+  for (int i = 0; i < (int)expectations.size(); ++i) {
     Screen screen(1, i);
     Render(screen, root);
     EXPECT_EQ(expectations[i], rotate(screen.ToString()));

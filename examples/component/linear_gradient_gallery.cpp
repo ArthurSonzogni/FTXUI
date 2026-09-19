@@ -41,7 +41,7 @@ int main() {
 
     auto background = text("Gradient") | center |
                       bgcolor(LinearGradient()
-                                  .Angle(angle)
+                                  .Angle(float(angle))
                                   .Stop(Color::Blue, start)
                                   .Stop(Color::Red, end));
     return vbox({
