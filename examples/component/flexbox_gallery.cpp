@@ -75,12 +75,12 @@ int main() {
   auto checkbox_group_yflex_grow =
       Checkbox("group |= yflex_grow", &group_yflex_grow);
 
-  auto make_box = [&](size_t dimx, size_t dimy, size_t index) {
+  auto make_box = [&](int dimx, int dimy, int index) {
     std::string title = std::to_string(dimx) + "x" + std::to_string(dimy);
     auto element = window(text(title) | hcenter | bold,
                           text(std::to_string(index)) | hcenter | dim) |
                    size(WIDTH, EQUAL, dimx) | size(HEIGHT, EQUAL, dimy) |
-                   bgcolor(Color::HSV(index * 25, 255, 255)) |
+                   bgcolor(Color::HSV(uint8_t(index * 25), 255, 255)) |
                    color(Color::Black);
     if (element_xflex_grow) {
       element = element | xflex_grow;

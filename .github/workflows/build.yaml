@@ -171,6 +171,8 @@ jobs:
           -B ./build
           -DCMAKE_BUILD_TYPE:STRING=Debug
           -DCMAKE_BUILD_PARALLEL_LEVEL=${{ steps.cpu-cores.outputs.count }}
+          -DCMAKE_MSVC_DEBUG_INFORMATION_FORMAT=Embedded
+          -DCMAKE_POLICY_DEFAULT_CMP0141=NEW
           -DFTXUI_ENABLE_COVERAGE:BOOL=ON
           -DFTXUI_BUILD_DOCS:BOOL=OFF
           -DFTXUI_BUILD_EXAMPLES:BOOL=ON
@@ -349,11 +351,6 @@ jobs:
           vcvarsall: ${{ contains(matrix.os, 'windows' )}}
           cmake: false
           ninja: true
-
-      - name: "Setup Ccache"
-        uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: meson-${{ matrix.os }}-${{ matrix.compiler }}
 
       - name: "Setup Python"
         uses: actions/setup-python@v7

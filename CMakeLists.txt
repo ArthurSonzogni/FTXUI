@@ -34,6 +34,15 @@ project(ftxui
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
+if (MSVC AND CMAKE_CXX_COMPILER_LAUNCHER)
+  if (POLICY CMP0141)
+    cmake_policy(SET CMP0141 NEW)
+    set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "Embedded")
+  endif()
+  string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+  string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(cmake/ftxui_message.cmake)
