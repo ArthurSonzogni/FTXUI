@@ -1,58 +1,60 @@
 #!/usr/bin/env python3
 """
-FTXUI → translations translator, v2.9 (Full Rich Console Output).
-- Diff-aware and cost-optimized.
-- AGGRESSIVE Throttling for Free Tier (max ~5-6 RPM).
-- Parses JSON streams (Robust) for accurate token usage tracking.
-- DEBUG: Prints the full raw output stream as formatted, syntax-highlighted YAML using 'rich'.
-- CONSOLE: All logging and output now uses rich markup and styling.
+Translate the FTXUI documentation into the ftxui-translations repository.
+
+Uses the `claude` CLI with the logged-in subscription (no API key), so it is
+free but bounded by the subscription quota. To use as little of it as
+possible:
+- Only comment blocks (C++) and paragraphs (Markdown) are sent. Code is never
+  sent nor returned; the files are rebuilt locally.
+- Each language branch keeps a translation memory (English block -> translated
+  block). Only blocks missing from it are translated, so an upstream change
+  costs only the blocks it touches.
+- Each batch is a single turn, without tools, system prompt, or MCP servers.
+
+It is resumable: the memory is committed after each batch. When the quota is
+exhausted, the run pushes what it has and exits. The next run continues.
+
+Usage:
+  tools/build_translations.py --langs fr ja zh-CN
+
+Nightly background run (crontab -e):
+  0 2 * * * cd ~/FTXUI && flock -n /tmp/ftxui-tx.lock \
+      tools/build_translations.py --langs fr it zh-CN zh-TW zh-HK ja es pt de ru ko \
+      >> ~/ftxui-translations.log 2>&1
 """
 
 from __future__ import annotations
 
 import argparse
+import difflib
+import filecmp
+import fnmatch
 import json
+import os
+import re
 import shutil
 import subprocess
-import time
 import sys
-from collections import deque
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-# If 'rich' or 'pyyaml' is not installed, install them via: pip install rich pyyaml
-from rich.console import Console
-from rich.syntax import Syntax
-import yaml
+from typing import Dict, List, Tuple
 
-# Initialize rich console once for colored printing
-# Using style="dark_sea_green4" for a pleasant terminal default color
-console = Console()
-
-# ---------------------------------------------------------------------------
-# Config & Constants
-# ---------------------------------------------------------------------------
 FTXUI_REPO_URL = "git@github.com:ArthurSonzogni/FTXUI.git"
 TRANSLATIONS_REPO_URL = "git@github.com:ArthurSonzogni/ftxui-translations.git"
-MODEL = "gemini-2.5-flash"
 
-# --- FREE TIER LIMITS (Conservative) ---
-LIMIT_RPM = 1_000           # Max requests per minute
-LIMIT_TPM = 1_000_000   # Tokens per minute
-POST_REQUEST_DELAY = 2 # Seconds to SLEEP after every request.
+# Files whose documentation is translated. Everything else is copied as-is.
+TRANSLATE_PATTERNS = ["README.md", "doc/*.md", "include/*.hpp", "src/*.cpp",
+                      "src/*.hpp", "src/*.cppm", "src/*.ipp", "examples/*.cpp"]
+SKIP_PATTERNS = ["*_test.cpp", "*_fuzzer.cpp"]
 
-CPP_EXT = {".cppm", ".cpp", ".hpp", ".h", ".ipp"}
-MD_EXT = {".md"}
-TRANSLATABLE_EXT = CPP_EXT | MD_EXT
+# Blocks kept as-is: license headers, include-what-you-use annotations, linter
+# directives, markers like `// namespace ftxui`, and lone HTML tags.
+KEEP_BLOCK = re.compile(
+    r"\s*(//\s*(Copyright|for\b|namespace\b|NOLINT|IWYU|clang-format|static$)"
+    r"|</?[a-z][^>]*>\s*$)")
 
-ALLOWED_TOOLS = ",".join([
-    "list_directory",
-    "read_file",
-    "write_file",
-    "glob",
-    "search_file_content",
-    "replace",
-    "read_many_files",
-])
+# Characters of English text per claude call.
+BATCH_MAX_CHARS = 20_000
 
 LANG_NAMES = {
     "fr": "French",
@@ -70,172 +72,157 @@ LANG_NAMES = {
 
 CACHE_FILE = "translation_cache.json"
 
-# ---------------------------------------------------------------------------
-# Rich Console Helpers
-# ---------------------------------------------------------------------------
+SYSTEM_PROMPT = """\
+You translate the documentation of the FTXUI C++ library (a terminal UI
+library) from English into {lang_name} ("{lang_code}").
 
-def print_step(msg: str):
-    # Big, bold step indicator
-    console.print(f"\n[bold deep_sky_blue1]==> {msg}[/]", highlight=False)
+The input is a JSON array of {{"id", "file", "text"}}. Each text is either a
+block of C++ comments, or a Markdown paragraph. Reply with only a JSON object
+mapping each id to its translated text.
 
-def print_info(msg: str):
-    # Standard informational message
-    console.print(f"[cyan]  -> {msg}[/cyan]", highlight=False)
-
-def print_success(msg: str):
-    # Successful outcome
-    console.print(f"[green]  ✓ {msg}[/green]", highlight=False)
-
-def print_warn(msg: str):
-    # Warning message
-    console.print(f"[yellow]  ! {msg}[/yellow]", highlight=False)
-
-def print_err(msg: str):
-    # Critical error message with reverse styling
-    console.print(f"[bold white on red]  X {msg}[/]", highlight=False)
-
-# ---------------------------------------------------------------------------
-# Rate Limiter
-# ---------------------------------------------------------------------------
-class RateLimiter:
-    def __init__(self, rpm_limit: int, tpm_limit: int):
-        self.rpm_limit = rpm_limit
-        self.tpm_limit = tpm_limit
-        self.requests: deque[float] = deque()
-        self.tokens: deque[tuple[float, int]] = deque()
-        self.session_requests = 0
-
-    def _cleanup(self, now: float):
-        """Remove entries older than 60 seconds."""
-        window_start = now - 60.0
-        while self.requests and self.requests[0] < window_start:
-            self.requests.popleft()
-        while self.tokens and self.tokens[0][0] < window_start:
-            self.tokens.popleft()
-
-    def wait_for_capacity(self, estimated_tokens: int = 1000):
-        while True:
-            now = time.time()
-            self._cleanup(now)
-            
-            if len(self.requests) >= self.rpm_limit:
-                wait_time = 60.0 - (now - self.requests[0]) + 1.0
-                print_warn(f"RPM limit reached ({self.rpm_limit}). Cooling down for {wait_time:.1f}s...")
-                time.sleep(wait_time)
-                continue
-
-            current_tpm = sum(count for _, count in self.tokens)
-            if current_tpm + estimated_tokens > self.tpm_limit:
-                if self.tokens:
-                    wait_time = 60.0 - (now - self.tokens[0][0]) + 1.0
-                    print_warn(f"TPM limit saturation ({current_tpm}/{self.tpm_limit}). Cooling down for {wait_time:.1f}s...")
-                    time.sleep(wait_time)
-                    continue
-            
-            break
-
-    def record_usage(self, input_tok: int, output_tok: int):
-        now = time.time()
-        total = input_tok + output_tok
-        self.requests.append(now)
-        self.tokens.append((now, total))
-        print_info(f"Usage recorded: {total} tokens (In: {input_tok}, Out: {output_tok})")
-    
-    def increment_session_counter(self):
-        self.session_requests += 1
-
-limiter = RateLimiter(LIMIT_RPM, LIMIT_TPM)
-
-# ---------------------------------------------------------------------------
-# Prompts
-# ---------------------------------------------------------------------------
-AGENT_NEW_FILE_PROMPT = """\
-You are an autonomous documentation translator. You are translating the FTXUI
-C++ library from English into {lang_name} ("{lang_code}").
-
-GOAL
-- Translate a single, NEW file to {lang_name} ("{lang_code}").
-- The file at {tx_root}/{rel_path} is currently a copy of the English source.
-- Translate IN-PLACE.
-
-WORKFLOW
-1. Read {tx_root}/{rel_path}
-2. Translate ONLY documentation:
-   * C++ comments (//, /* ... */)
-   * Doxygen comments (///, /** ... */).
-   * Prose in Markdown.
-3. DO NOT translate/modify:
-   * C/C++ code, identifiers, includes, macros.
-   * Doxygen commands/params.
-   * Markdown code fences/URLs.
-4. Overwrite {tx_root}/{rel_path} with the translation.
-
-TOOLS: {allowed_tools}.
+RULES
+- Keep the comment markers (//, ///, /*, */, *) and the line structure of each
+  comment. Every line of a comment must stay a comment.
+- Keep code, identifiers, Doxygen commands (@param name, @brief, \\ref, ...),
+  inline `code`, URLs, anchors ({{#...}}), HTML tags, and Markdown syntax.
+- Keep leading indentation.
+- If a text has nothing to translate, return it unchanged.
 """
 
-AGENT_DIFF_FILE_PROMPT = """\
-You are an autonomous documentation translator. You are translating the FTXUI
-C++ library from English into {lang_name} ("{lang_code}").
+Pieces = List[Tuple[bool, str]]  # (is_block, text)
 
-GOAL
-- Update existing translation: {tx_root}/{rel_path}
-- Target: "{lang_name}" ("{lang_code}").
 
-CONTEXT: SOURCE DIFF
-The English source has changed. `git diff`:
-```diff
-{diff}
-```
+class QuotaExhausted(Exception):
+    pass
 
-WORKFLOW
-1. Read {tx_root}/{rel_path}
-2. Analyze the `diff`.
-3. For each changed English section:
-   a. Find corresponding old translation.
-   b. Generate new translation for the new English text.
-   c. Update the file using `replace`.
-4. ONLY update text where the source changed.
-5. DO NOT translate code.
 
-RULES:
-1. Translate ONLY documentation:
-   * C++ comments (//, /* ... */)
-   * Doxygen comments (///, /** ... */).
-   * Prose in Markdown.
-2. DO NOT translate/modify:
-   * C/C++ code, identifiers, includes, macros.
-   * Doxygen commands/params.
-   * Markdown code fences/URLs.
+def log(msg: str) -> None:
+    print(msg, flush=True)
 
-TOOLS: {allowed_tools}.
-"""
-
-# ---------------------------------------------------------------------------
-# Helpers
-# ---------------------------------------------------------------------------
 
 def run(cmd: List[str], cwd: Path | None = None, check: bool = True) -> str:
     proc = subprocess.run(cmd, cwd=cwd, text=True, capture_output=True)
     if check and proc.returncode != 0:
-        raise RuntimeError(f"Command failed: {' '.join(cmd)}\nStderr: {proc.stderr}")
+        raise RuntimeError(f"Command failed: {' '.join(cmd)}\n{proc.stderr}")
     return proc.stdout.strip()
 
+
+# ---------------------------------------------------------------------------
+# Splitting files into code and translatable blocks.
+# ---------------------------------------------------------------------------
+
+def split_cpp_comments(text: str) -> Pieces:
+    """Splits C++ source into (is_comment, text) segments."""
+    out: Pieces = []
+    n = len(text)
+    start = i = 0
+    while i < n:
+        c = text[i]
+        if text.startswith("//", i) or text.startswith("/*", i):
+            if text[i + 1] == "/":
+                end = text.find("\n", i)
+                end = n if end < 0 else end
+            else:
+                end = text.find("*/", i + 2)
+                end = n if end < 0 else end + 2
+            out.append((False, text[start:i]))
+            out.append((True, text[i:end]))
+            start = i = end
+        elif c == "R" and text.startswith('"', i + 1) and \
+                not (text[i - 1:i].isalnum() or text[i - 1:i] == "_"):
+            m = re.match(r'R"([^()\\\s]{0,16})\(', text[i:])
+            if not m:
+                i += 1
+                continue
+            end = text.find(")" + m.group(1) + '"', i + m.end())
+            i = n if end < 0 else end + len(m.group(1)) + 2
+        elif c == '"' or (c == "'" and not text[i - 1:i].isdigit()):
+            i += 1
+            while i < n and text[i] != c and text[i] != "\n":
+                i += 2 if text[i] == "\\" else 1
+            i += 1
+        else:
+            i += 1
+    out.append((False, text[start:]))
+    return [p for p in out if p[1]]
+
+
+def split_cpp(text: str) -> Pieces:
+    """Groups comments on consecutive lines into blocks."""
+    pieces: Pieces = []
+    for is_comment, seg in split_cpp_comments(text):
+        if is_comment and len(pieces) >= 2 and pieces[-1][1].isspace() and \
+                pieces[-1][1].count("\n") == 1 and pieces[-2][0]:
+            sep = pieces.pop()[1]
+            pieces[-1] = (True, pieces[-1][1] + sep + seg)
+        else:
+            pieces.append((is_comment, seg))
+    return pieces
+
+
+def split_md(text: str) -> Pieces:
+    """Splits Markdown into paragraphs, keeping fenced code blocks as code."""
+    pieces: Pieces = []
+    for i, part in enumerate(re.split(r"(^```.*?^```[^\n]*$)", text,
+                                      flags=re.M | re.S)):
+        if i % 2:
+            pieces.append((False, part))
+            continue
+        for j, para in enumerate(re.split(r"(\n\s*\n)", part)):
+            pieces.append((j % 2 == 0 and not para.isspace(), para))
+    return [p for p in pieces if p[1]]
+
+
+def split(rel: str, text: str) -> Pieces:
+    pieces = split_md(text) if rel.endswith(".md") else split_cpp(text)
+    # Blocks without prose are kept as-is.
+    return [(b and len(re.findall(r"[A-Za-z]", t)) >= 3 and
+             not KEEP_BLOCK.match(t), t) for b, t in pieces]
+
+
+URL = re.compile(r"https?://[^\s)\]}>\"']+")
+DOXYGEN = re.compile(r"[@\\]\w+")
+
+
+def is_valid(english: str, translated: str) -> bool:
+    """Rejects a translation that lost, gained, or mangled content."""
+    urls = lambda x: [u.rstrip(".,;:\u3002\u3001\uff0c\uff1b\uff1a") for u in URL.findall(x)]
+    if urls(english) != urls(translated):
+        return False
+    if DOXYGEN.findall(english) != DOXYGEN.findall(translated):
+        return False
+    # A translation is never that much longer or shorter than its source.
+    if not 0.3 * len(english) - 40 < len(translated) < 2.2 * len(english) + 40:
+        return False
+    if not english.lstrip().startswith(("//", "/*")):  # Markdown
+        return translated.count("```") == english.count("```")
+    # Must be comments only, and closed: the sentinel must remain code.
+    segs = split_cpp_comments(translated + "\n@")
+    return segs[-1] == (False, "\n@") and \
+        all(c or s.isspace() for c, s in segs[:-1])
+
+
+def render(pieces: Pieces, memory: Dict[str, str]) -> str:
+    return "".join(memory.get(t, t) if b else t for b, t in pieces)
+
+
+# ---------------------------------------------------------------------------
+# Git and repository helpers.
+# ---------------------------------------------------------------------------
+
 def ensure_repo(path: Path, url: str) -> None:
-    if path.exists() and (path / ".git").is_dir():
+    if (path / ".git").is_dir():
         run(["git", "fetch", "--all", "--prune"], cwd=path)
         return
     if path.exists():
         shutil.rmtree(path)
     run(["git", "clone", url, str(path)])
 
+
 def update_to_head(path: Path) -> None:
-    try:
-        ref = run(["git", "symbolic-ref", "--short", "refs/remotes/origin/HEAD"], cwd=path)
-        default_branch = ref.split("/")[-1]
-    except Exception:
-        default_branch = "main"
-    run(["git", "checkout", default_branch], cwd=path)
+    run(["git", "checkout", "main"], cwd=path)
     run(["git", "pull", "--ff-only"], cwd=path)
+
 
 def checkout_or_create_branch(repo: Path, branch: str) -> None:
     if run(["git", "branch", "--list", branch], cwd=repo):
@@ -243,292 +230,248 @@ def checkout_or_create_branch(repo: Path, branch: str) -> None:
         run(["git", "pull", "--ff-only"], cwd=repo, check=False)
     elif run(["git", "ls-remote", "--heads", "origin", branch], cwd=repo):
         run(["git", "checkout", "-t", f"origin/{branch}"], cwd=repo)
-        run(["git", "pull", "--ff-only"], cwd=repo)
     else:
         run(["git", "checkout", "-b", branch], cwd=repo)
 
-def ensure_gemini() -> None:
-    if not shutil.which("gemini"):
-        print_err("gemini CLI not found. Install it and set GEMINI_API_KEY.")
-        sys.exit(1)
 
-def parse_and_accumulate_usage(line_str: str) -> bool:
-    """
-    Parses a JSON line from the gemini CLI stream.
-    Updates the global limiter if usage data is found, checking for both
-    'usageMetadata' (standard) and 'stats' (error summary) formats.
-    """
-    try:
-        data = json.loads(line_str)
-    except json.JSONDecodeError:
+def commit(tx_dir: Path, message: str) -> None:
+    if run(["git", "status", "--porcelain"], cwd=tx_dir):
+        run(["git", "add", "-A"], cwd=tx_dir)
+        run(["git", "commit", "-m", message], cwd=tx_dir)
+
+
+def is_translatable(rel: str) -> bool:
+    name = Path(rel).name
+    if any(fnmatch.fnmatch(name, p) for p in SKIP_PATTERNS):
         return False
+    return any(fnmatch.fnmatch(rel, p) for p in TRANSLATE_PATTERNS)
 
-    # 1. Look for standard usage keys (camelCase or snake_case)
-    usage = data.get("usageMetadata") or data.get("usage_metadata")
 
-    # 2. Look for nested usage (e.g. inside 'result' or 'candidates')
-    if not usage and "result" in data and isinstance(data["result"], dict):
-        usage = data["result"].get("usageMetadata") or data["result"].get("usage_metadata")
-    
-    # 3. CRITICAL: Check for 'stats' key in error/result chunks (CLI-specific format)
-    if not usage:
-        usage = data.get("stats")
+def list_blobs(repo: Path, ref: str) -> Dict[str, str]:
+    """Maps each tracked file path to its blob hash at `ref`."""
+    out = run(["git", "ls-tree", "-r", ref], cwd=repo)
+    blobs = {}
+    for line in out.splitlines():
+        meta, path = line.split("\t", 1)
+        blobs[path] = meta.split()[2]
+    return blobs
 
-    # If found, record it
-    if usage:
-        # Prioritize standard keys, fall back to 'stats' snake_case keys if needed.
-        prompt_tok = usage.get("promptTokenCount") or usage.get("prompt_token_count") or usage.get("input_tokens") or 0
-        cand_tok = usage.get("candidatesTokenCount") or usage.get("candidates_token_count") or usage.get("output_tokens") or 0
-        total_tok = usage.get("totalTokenCount") or usage.get("total_token_count") or usage.get("total_tokens") or 0
-        
-        if total_tok > 0:
-            console.print() # Newline before recording usage for clean output
-            limiter.record_usage(prompt_tok, cand_tok)
-    
-    if "error" in data:
-        console.print()
-        print_err(f"API Error: {data['error']}")
-    
-    return True
 
-def run_gemini_agent(workdir: Path, prompt: str) -> None:
-    limiter.wait_for_capacity(estimated_tokens=500)
-    limiter.increment_session_counter()
+# ---------------------------------------------------------------------------
+# Translation memory.
+# ---------------------------------------------------------------------------
 
-    cmd = [
-        "gemini",
-        "--model", MODEL,
-        f"--allowed-tools={ALLOWED_TOOLS}",
-        "--output-format", "stream-json",
-        "--approval-mode", "auto_edit",
-        prompt,
-    ]
-    
-    print_info(f"Invoking Agent ({MODEL})...")
-    
-    process = subprocess.Popen(
-        cmd, 
-        cwd=workdir, 
-        stdout=subprocess.PIPE, 
-        stderr=subprocess.PIPE, 
-        text=True, 
-        bufsize=1
-    )
+def load_memory(tx_dir: Path, ftxui_dir: Path) -> Dict[str, str]:
+    path = tx_dir / CACHE_FILE
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text())
+    if "memory" in data:
+        # Drop entries that no longer pass the checks below.
+        return {e: t for e, t in data["memory"].items() if is_valid(e, t)}
 
-    if process.stdout:
-        for line in process.stdout:
-            line = line.strip()
-            if not line:
+    # Older formats recorded which English source each file was translated
+    # from. Pair its blocks with the translated file's to seed the memory.
+    if "sources" in data:
+        sources = data["sources"]
+    elif "last_processed_ftxui_commit" in data:
+        sources = list_blobs(ftxui_dir, data["last_processed_ftxui_commit"])
+    else:
+        return {}
+    memory: Dict[str, str] = {}
+    for rel, blob in sources.items():
+        dst = tx_dir / rel
+        if not is_translatable(rel) or not dst.exists():
+            continue
+        english = split(rel, run(["git", "cat-file", "blob", blob],
+                                 cwd=ftxui_dir))
+        translated = split(rel, dst.read_text())
+        # Align on the code, ignoring whitespace and comments. Blocks between
+        # identical code are translations of each other.
+        keys = [[None if b else re.sub(r"\s", "", "".join(
+                    s for c, s in split_cpp_comments(t) if not c))
+                 for b, t in pieces] for pieces in (english, translated)]
+        matcher = difflib.SequenceMatcher(None, *keys, autojunk=False)
+        for tag, i1, i2, j1, _ in matcher.get_opcodes():
+            if tag != "equal":
                 continue
-            
-            try:
-                # Load the JSON data
-                data = json.loads(line)
-                
-                # Convert Python object (from JSON) to YAML string for readability
-                # Use safe_dump for security and sort_keys=False to maintain streaming order
-                yaml_output = yaml.safe_dump(data, indent=2, sort_keys=False)
-                
-                console.print("--- Agent Stream Chunk (YAML) ---", style="bold magenta")
-                # Use rich.syntax.Syntax for colored YAML output with monokai theme
-                syntax = Syntax(yaml_output, "yaml", theme="monokai", word_wrap=True)
-                console.print(syntax, justify="left")
-                
-                # Still run the usage tracking logic on the raw line string
-                parse_and_accumulate_usage(line)
+            for (b, e), (_, t) in zip(english[i1:i2], translated[j1:]):
+                if b and e != t and is_valid(e, t):
+                    memory[e] = t
+    log(f"  imported {len(memory)} blocks from the previous translation")
+    return memory
 
-            except json.JSONDecodeError:
-                # Handle non-JSON output (e.g., occasional non-stream lines from the CLI)
-                print(f"  [Agent Non-JSON Output] {line}")
-            
-    _, stderr_str = process.communicate()
-    
-    # No final print() needed, as usage recording handles the newlines.
 
-    if process.returncode != 0:
-        print_err("Gemini Agent failed.")
-        console.print(stderr_str)
-        raise RuntimeError("Agent execution failed")
-    
-    print_success("Agent finished task.")
+def save_memory(tx_dir: Path, memory: Dict[str, str]) -> None:
+    data = {"memory": dict(sorted(memory.items()))}
+    (tx_dir / CACHE_FILE).write_text(
+        json.dumps(data, indent=1, ensure_ascii=False) + "\n")
 
-    if POST_REQUEST_DELAY > 0:
-        print_info(f"Cooling down for {POST_REQUEST_DELAY}s ...")
-        time.sleep(POST_REQUEST_DELAY)
 
 # ---------------------------------------------------------------------------
-# Filesystem
+# Claude.
 # ---------------------------------------------------------------------------
 
-def is_hidden(rel: Path) -> bool:
-    return any(p.startswith(".") for p in rel.parts)
+def run_claude(workdir: Path, lang_code: str, model: str,
+               items: List[dict]) -> Dict[str, str]:
+    # Unset ANTHROPIC_API_KEY so the subscription is used, never the API.
+    env = {k: v for k, v in os.environ.items() if k != "ANTHROPIC_API_KEY"}
+    system = SYSTEM_PROMPT.format(lang_name=LANG_NAMES[lang_code],
+                                  lang_code=lang_code)
+    cmd = [
+        "claude", "-p",
+        "--model", model,
+        "--effort", "low",
+        "--output-format", "json",
+        "--system-prompt", system,
+        "--tools=",
+        "--strict-mcp-config",
+        "--setting-sources=",
+        "--no-session-persistence",
+    ]
+    proc = subprocess.run(cmd, cwd=workdir, env=env, text=True,
+                          capture_output=True,
+                          input=json.dumps(items, ensure_ascii=False))
+    try:
+        result = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        result = {"is_error": True, "result": proc.stdout + proc.stderr}
 
-def list_repo_files(root: Path) -> List[Path]:
-    out: List[Path] = []
-    for p in root.rglob("*"):
-        if p.is_dir(): continue
-        rel = p.relative_to(root)
-        if is_hidden(rel): continue
-        out.append(rel)
-    return out
+    if result.get("is_error") or proc.returncode != 0:
+        # Most failures here are the usage limit. Either way, stop and let the
+        # next run retry this batch.
+        raise QuotaExhausted(str(result.get("result", ""))[:500])
 
-def load_cache(path: Path) -> Dict[str, Any]:
-    if path.exists():
-        try:
-            with open(path, "r") as f: return json.load(f)
-        except: pass
-    return {}
+    usage = result.get("usage", {})
+    log(f"    {result.get('duration_ms', 0) // 1000}s, "
+        f"{usage.get('output_tokens', 0)} output tokens")
+    text = result.get("result", "")
+    try:
+        return json.loads(text[text.index("{"):text.rindex("}") + 1])
+    except ValueError:
+        log("    ! could not parse the reply, skipping the batch")
+        return {}
 
-def save_cache(path: Path, data: Dict[str, Any]) -> None:
-    with open(path, "w") as f: json.dump(data, f, indent=2)
+
+def make_batches(items: List[dict]) -> List[List[dict]]:
+    batches: List[List[dict]] = [[]]
+    size = 0
+    for item in items:
+        if batches[-1] and size + len(item["text"]) > BATCH_MAX_CHARS:
+            batches.append([])
+            size = 0
+        batches[-1].append(item)
+        size += len(item["text"])
+    return [b for b in batches if b]
+
 
 # ---------------------------------------------------------------------------
-# Main
+# Main.
 # ---------------------------------------------------------------------------
+
+def process_language(lang_code: str, ftxui_dir: Path, tx_dir: Path,
+                     model: str) -> None:
+    lang_name = LANG_NAMES[lang_code]
+    log(f"\n==> {lang_name} ({lang_code})")
+    checkout_or_create_branch(tx_dir, lang_code)
+
+    ftxui_head = run(["git", "rev-parse", "--short", "HEAD"], cwd=ftxui_dir)
+    blobs = list_blobs(ftxui_dir, "HEAD")
+    memory = load_memory(tx_dir, ftxui_dir)
+
+    # Remove files that no longer exist upstream.
+    for p in list(tx_dir.rglob("*")):
+        rel = str(p.relative_to(tx_dir))
+        if p.is_dir() or rel.startswith(".") or "/." in rel or rel == CACHE_FILE:
+            continue
+        if rel not in blobs:
+            p.unlink()
+
+    files: Dict[str, Pieces] = {}
+    for rel in sorted(blobs):
+        src = ftxui_dir / rel
+        dst = tx_dir / rel
+        if is_translatable(rel):
+            files[rel] = split(rel, src.read_text())
+        elif not dst.exists() or not filecmp.cmp(src, dst, shallow=False):
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dst)
+
+    # Drop entries no longer used, then list what is missing.
+    used = {t for pieces in files.values() for b, t in pieces if b}
+    memory = {e: t for e, t in memory.items() if e in used}
+    missing: List[dict] = []
+    seen = set(memory)
+    for rel, pieces in files.items():
+        for b, t in pieces:
+            if b and t not in seen:
+                seen.add(t)
+                missing.append({"id": str(len(missing)), "file": rel,
+                                "text": t})
+
+    def write_files() -> None:
+        for rel, pieces in files.items():
+            dst = tx_dir / rel
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            dst.write_text(render(pieces, memory))
+        save_memory(tx_dir, memory)
+
+    write_files()
+    commit(tx_dir, f"{lang_name}: sync to {ftxui_head}")
+
+    batches = make_batches(missing)
+    log(f"  {len(memory)} blocks translated, {len(missing)} missing, "
+        f"{len(batches)} batches")
+    try:
+        for i, batch in enumerate(batches, 1):
+            log(f"  [{i}/{len(batches)}] {len(batch)} blocks")
+            reply = run_claude(tx_dir, lang_code, model, batch)
+            rejected = 0
+            for item in batch:
+                t = reply.get(item["id"])
+                if isinstance(t, str) and is_valid(item["text"], t):
+                    memory[item["text"]] = t
+                else:
+                    rejected += 1
+            if rejected:
+                log(f"    ! {rejected} blocks rejected, retried next run")
+            write_files()
+            commit(tx_dir, f"{lang_name}: translate {len(batch)} blocks "
+                           f"({ftxui_head})")
+    finally:
+        run(["git", "checkout", "--", "."], cwd=tx_dir, check=False)
+        run(["git", "clean", "-fd"], cwd=tx_dir, check=False)
+        run(["git", "push", "--set-upstream", "origin", lang_code], cwd=tx_dir)
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--langs", nargs="+", required=True, help="Language codes")
+    parser.add_argument("--langs", nargs="+", required=True,
+                        choices=list(LANG_NAMES), help="Language codes")
+    parser.add_argument("--model", default="sonnet")
     args = parser.parse_args()
 
-    ensure_gemini()
-    
-    root_dir = Path.cwd()
-    build_dir = root_dir / "build_translation"
+    if not shutil.which("claude"):
+        sys.exit("claude CLI not found.")
+
+    build_dir = Path.cwd() / "build_translation"
     build_dir.mkdir(parents=True, exist_ok=True)
-    
     ftxui_dir = build_dir / "ftxui"
     tx_dir = build_dir / "translations"
 
-    print_step("Ensuring source repo (FTXUI)...")
     ensure_repo(ftxui_dir, FTXUI_REPO_URL)
     update_to_head(ftxui_dir)
-    ftxui_head = run(["git", "rev-parse", "HEAD"], cwd=ftxui_dir)
-    print_info(f"FTXUI HEAD: {ftxui_head[:8]}")
-
-    print_step("Ensuring translations repo...")
     ensure_repo(tx_dir, TRANSLATIONS_REPO_URL)
     update_to_head(tx_dir)
 
-    print_step("Scanning files...")
-    all_files = list_repo_files(ftxui_dir)
-    source_set = {str(p) for p in all_files}
-    all_files.sort()
+    try:
+        for lang_code in args.langs:
+            process_language(lang_code, ftxui_dir, tx_dir, args.model)
+    except QuotaExhausted as e:
+        log(f"\nStopping, claude failed (likely usage limit): {e}")
+        return
+    log("\nAll done.")
 
-    for lang_code in args.langs:
-        lang_name = LANG_NAMES.get(lang_code, "")
-        print_step(f"Processing Language: {lang_name} ({lang_code})")
-
-        if not lang_name:
-            exit_msg = f"Unknown language code: {lang_code}. Please update LANG_NAMES dictionary."
-            print_err(exit_msg)
-            sys.exit(1)
-
-        
-        checkout_or_create_branch(tx_dir, lang_code)
-        
-        cache_path = tx_dir / CACHE_FILE
-        cache = load_cache(cache_path)
-        last_hash = cache.get("last_processed_ftxui_commit")
-
-        if last_hash == ftxui_head:
-            print_success("Up to date. Skipping.")
-            continue
-
-        changed_set = set()
-        if last_hash:
-            diff_files = run(["git", "diff", "--name-only", last_hash, ftxui_head], cwd=ftxui_dir, check=False)
-            changed_set = set(diff_files.splitlines())
-            print_info(f"Changes detected: {len(changed_set)} files changed since {last_hash[:8]}")
-        else:
-            print_info("No history found. Full scan.")
-
-        for p in tx_dir.rglob("*"):
-            if p.is_dir(): continue
-            rel = p.relative_to(tx_dir)
-            if is_hidden(rel) or str(rel) == CACHE_FILE: continue
-            if str(rel) not in source_set:
-                print_warn(f"Removing orphan: {rel}")
-                p.unlink()
-
-        processed_count = 0
-        total_files = len(all_files)
-
-        for idx, rel in enumerate(all_files, 1):
-            src = ftxui_dir / rel
-            dst = tx_dir / rel
-            rel_s = str(rel)
-            dst.parent.mkdir(parents=True, exist_ok=True)
-            
-            is_translatable = rel.suffix.lower() in TRANSLATABLE_EXT
-            is_changed = rel_s in changed_set
-            dst_exists = dst.exists()
-
-            prefix = f"[{idx}/{total_files}] {rel_s}"
-
-            if not is_translatable:
-                if is_changed or not dst_exists:
-                    print_info(f"{prefix} -> Copying (Asset)")
-                    shutil.copy2(src, dst)
-                    processed_count += 1
-                continue
-
-            if dst_exists and last_hash and not is_changed:
-                continue
-
-            console.print("-" * 60, style="dim")
-            
-            if not dst_exists or not last_hash:
-                print_info(f"{prefix} -> New Translation")
-                shutil.copy2(src, dst)
-                prompt = AGENT_NEW_FILE_PROMPT.format(
-                    tx_root="translations", rel_path=rel_s,
-                    lang_code=lang_code, lang_name=lang_name,
-                    allowed_tools=ALLOWED_TOOLS
-                )
-                run_gemini_agent(build_dir, prompt)
-                processed_count += 1
-
-            elif is_changed:
-                print_info(f"{prefix} -> Updating (Diff-based)")
-                diff_out = run(["git", "diff", last_hash, ftxui_head, "--", rel_s], cwd=ftxui_dir)
-                
-                if len(diff_out) > 20_000:
-                    print_warn(f"Diff too large ({len(diff_out)} chars). Copying source for full re-translation.")
-                    shutil.copy2(src, dst)
-                    prompt = AGENT_NEW_FILE_PROMPT.format(
-                        tx_root="translations", rel_path=rel_s,
-                        lang_code=lang_code, lang_name=lang_name,
-                        allowed_tools=ALLOWED_TOOLS
-                    )
-                else:
-                    prompt = AGENT_DIFF_FILE_PROMPT.format(
-                        tx_root="translations", rel_path=rel_s,
-                        lang_code=lang_code, lang_name=lang_name,
-                        allowed_tools=ALLOWED_TOOLS,
-                        diff=diff_out
-                    )
-                
-                run_gemini_agent(build_dir, prompt)
-                processed_count += 1
-
-        if processed_count > 0:
-            cache["last_processed_ftxui_commit"] = ftxui_head
-            save_cache(cache_path, cache)
-            
-            status = run(["git", "status", "--porcelain"], cwd=tx_dir, check=False)
-            if status.strip():
-                print_step("Committing changes...")
-                run(["git", "add", "-A"], cwd=tx_dir)
-                run(["git", "commit", "-m", f"{lang_name}: update translations to {ftxui_head[:8]}"], cwd=tx_dir, check=False)
-                run(["git", "push", "--set-upstream", "origin", lang_code], cwd=tx_dir)
-                print_success("Pushed.")
-            else:
-                print_success("No file changes detected after processing.")
-        else:
-            print_success("Nothing to process.")
-
-    print_step("All Done.")
 
 if __name__ == "__main__":
     main()
