@@ -63,6 +63,7 @@ export namespace ftxui {
     using ftxui::gaugeUp;
     using ftxui::gaugeDown;
     using ftxui::gaugeDirection;
+    using ftxui::gaugeCharset;
     using ftxui::border;
     using ftxui::borderLight;
     using ftxui::borderDashed;
