@@ -63,6 +63,7 @@ export namespace ftxui {
     using ftxui::gaugeUp;
     using ftxui::gaugeDown;
     using ftxui::gaugeDirection;
+    using ftxui::gaugeCharset;
     using ftxui::border;
     using ftxui::borderLight;
     using ftxui::borderDashed;
@@ -114,12 +115,21 @@ export namespace ftxui {
     using ftxui::flex;
     using ftxui::flex_grow;
     using ftxui::flex_shrink;
+    using ftxui::flex_factor;
+    using ftxui::flex_grow_factor;
+    using ftxui::flex_shrink_factor;
     using ftxui::xflex;
     using ftxui::xflex_grow;
     using ftxui::xflex_shrink;
+    using ftxui::xflex_factor;
+    using ftxui::xflex_grow_factor;
+    using ftxui::xflex_shrink_factor;
     using ftxui::yflex;
     using ftxui::yflex_grow;
     using ftxui::yflex_shrink;
+    using ftxui::yflex_factor;
+    using ftxui::yflex_grow_factor;
+    using ftxui::yflex_shrink_factor;
     using ftxui::notflex;
     using ftxui::filler;
 

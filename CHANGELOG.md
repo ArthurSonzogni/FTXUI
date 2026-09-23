@@ -35,6 +35,12 @@ Next
   instead of the whole table. Thanks @lukester1975. See #806.
 
 ### Build
+- Bugfix: Export `gaugeCharset()` from the `ftxui.dom` module. It was added to
+  the headers, but never re-exported, so it was unreachable from
+  `import ftxui;`. The nine `flex_factor()` decorators (`flex_factor`,
+  `flex_grow_factor`, `flex_shrink_factor` and their `x`/`y` variants) and
+  `Terminal::TerminalInfo` / `Terminal::ComputeColorSupport` were missing the
+  same way and are now exported too. Thanks @woquchonglang. See #1360.
 - Bugfix: Fix missing CMake targets namespace in exported package when C++20
   modules are enabled. Thanks @patlefort. See #1322.
 

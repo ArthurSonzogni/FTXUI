@@ -64,6 +64,8 @@ export namespace ftxui {
         using ftxui::Terminal::Quirks;
         using ftxui::Terminal::GetQuirks;
         using ftxui::Terminal::SetQuirks;
+        using ftxui::Terminal::TerminalInfo;
+        using ftxui::Terminal::ComputeColorSupport;
     }
 
     /**
