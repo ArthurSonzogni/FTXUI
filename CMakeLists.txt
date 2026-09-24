@@ -30,7 +30,7 @@ else()
 endif()
 project(ftxui
   LANGUAGES CXX
-  VERSION 7.0.3
+  VERSION 7.1.0
   DESCRIPTION "C++ Functional Terminal User Interface."
 )
 
