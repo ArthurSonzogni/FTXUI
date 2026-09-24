@@ -323,6 +323,13 @@ class FTXUI_EXPORT(SCREEN) Color {
   void PrintTo(std::string& out, bool is_background_color) const;
   bool IsOpaque() const { return alpha_ == 255; }
 
+  // --- Accessors ------
+  // Palette colors are resolved to their RGB approximation.
+  uint8_t GetRed() const;
+  uint8_t GetGreen() const;
+  uint8_t GetBlue() const;
+  uint8_t GetAlpha() const;
+
  private:
   enum class ColorType : uint8_t {
     Palette1,
