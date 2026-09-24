@@ -206,4 +206,32 @@ TEST(ColorTest, FallbackToPalette1) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
 }
 
+TEST(ColorTest, GetRGBA) {
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+
+  const Color rgba = Color::RGBA(1, 2, 3, 4);
+  EXPECT_EQ(rgba.GetRed(), 1);
+  EXPECT_EQ(rgba.GetGreen(), 2);
+  EXPECT_EQ(rgba.GetBlue(), 3);
+  EXPECT_EQ(rgba.GetAlpha(), 4);
+
+  const Color palette16 = Color::RedLight;  // #FF0000
+  EXPECT_EQ(palette16.GetRed(), 255);
+  EXPECT_EQ(palette16.GetGreen(), 0);
+  EXPECT_EQ(palette16.GetBlue(), 0);
+  EXPECT_EQ(palette16.GetAlpha(), 255);
+
+  const Color palette256 = Color::Orange1;  // #FFAF00
+  EXPECT_EQ(palette256.GetRed(), 255);
+  EXPECT_EQ(palette256.GetGreen(), 175);
+  EXPECT_EQ(palette256.GetBlue(), 0);
+  EXPECT_EQ(palette256.GetAlpha(), 255);
+
+  const Color transparent = Color::Default;
+  EXPECT_EQ(transparent.GetRed(), 0);
+  EXPECT_EQ(transparent.GetGreen(), 0);
+  EXPECT_EQ(transparent.GetBlue(), 0);
+  EXPECT_EQ(transparent.GetAlpha(), 0);
+}
+
 }  // namespace ftxui

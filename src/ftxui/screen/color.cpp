@@ -8,7 +8,6 @@
 #include <cstdint>
 #include <cstdio>  // for snprintf
 #include <string>
-#include <tuple>
 
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
 #include "ftxui/screen/terminal.hpp"  // for ColorSupport, Color, Palette256, TrueColor
@@ -242,30 +241,6 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
     }
   }
 
-  auto to_rgb =
-      [](const Color& color) -> std::tuple<uint8_t, uint8_t, uint8_t> {
-    switch (color.type_) {
-      case ColorType::Palette1: {
-        return {0, 0, 0};
-      }
-      case ColorType::Palette16: {
-        const ColorInfo info = GetColorInfo(Color::Palette16(color.red_));
-        return {info.red, info.green, info.blue};
-      }
-      case ColorType::Palette256: {
-        const ColorInfo info = GetColorInfo(Color::Palette256(color.red_));
-        return {info.red, info.green, info.blue};
-      }
-      case ColorType::TrueColor:
-      default: {
-        return {color.red_, color.green_, color.blue_};
-      }
-    }
-  };
-
-  const auto [a_r, a_g, a_b] = to_rgb(a);
-  const auto [b_r, b_g, b_b] = to_rgb(b);
-
   // Gamma correction:
   // https://en.wikipedia.org/wiki/Gamma_correction
   auto interp = [t](uint8_t a_u, uint8_t b_u) {
@@ -276,9 +251,62 @@ Color Color::Interpolate(float t, const Color& a, const Color& b) {
                       b_f * t;
     return static_cast<uint8_t>(std::pow(c_f, 1.F / gamma));
   };
-  return Color::RGB(interp(a_r, b_r),   //
-                    interp(a_g, b_g),   //
-                    interp(a_b, b_b));  //
+  return Color::RGB(interp(a.GetRed(), b.GetRed()),      //
+                    interp(a.GetGreen(), b.GetGreen()),  //
+                    interp(a.GetBlue(), b.GetBlue()));   //
+}
+
+/// @brief The red component of the color [0,255].
+/// Palette colors are resolved to their RGB approximation. Returns 0 for the
+/// default (transparent) color.
+uint8_t Color::GetRed() const {
+  switch (type_) {
+    case ColorType::Palette1:
+      return 0;
+    case ColorType::Palette16:
+    case ColorType::Palette256:
+      return GetColorInfo(Palette256(red_)).red;
+    case ColorType::TrueColor:
+      return red_;
+  }
+  return 0;
+}
+
+/// @brief The green component of the color [0,255].
+/// Palette colors are resolved to their RGB approximation. Returns 0 for the
+/// default (transparent) color.
+uint8_t Color::GetGreen() const {
+  switch (type_) {
+    case ColorType::Palette1:
+      return 0;
+    case ColorType::Palette16:
+    case ColorType::Palette256:
+      return GetColorInfo(Palette256(red_)).green;
+    case ColorType::TrueColor:
+      return green_;
+  }
+  return 0;
+}
+
+/// @brief The blue component of the color [0,255].
+/// Palette colors are resolved to their RGB approximation. Returns 0 for the
+/// default (transparent) color.
+uint8_t Color::GetBlue() const {
+  switch (type_) {
+    case ColorType::Palette1:
+      return 0;
+    case ColorType::Palette16:
+    case ColorType::Palette256:
+      return GetColorInfo(Palette256(red_)).blue;
+    case ColorType::TrueColor:
+      return blue_;
+  }
+  return 0;
+}
+
+/// @brief The alpha component of the color [0,255]. 0 is fully transparent.
+uint8_t Color::GetAlpha() const {
+  return alpha_;
 }
 
 /// @brief Blend two colors together using the alpha channel.

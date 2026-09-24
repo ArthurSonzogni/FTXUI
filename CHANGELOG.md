@@ -34,6 +34,10 @@ Next
   range. For instance `SelectRows(2, -1)` on a 2-row table now selects nothing
   instead of the whole table. Thanks @lukester1975. See #806.
 
+### Screen
+- Feature: Add `Color::GetRed()`, `GetGreen()`, `GetBlue()` and `GetAlpha()`.
+  Palette colors are resolved to their RGB values. See #486.
+
 ### Build
 - Bugfix: Export `gaugeCharset()` from the `ftxui.dom` module. It was added to
   the headers, but never re-exported, so it was unreachable from
