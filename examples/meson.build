@@ -84,6 +84,7 @@ component_examples = [
   'modal_dialog',
   'modal_dialog_custom',
   'nested_screen',
+  'print_above',
   'print_key_press',
   'radiobox',
   'radiobox_in_frame',

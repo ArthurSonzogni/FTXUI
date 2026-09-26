@@ -306,3 +306,23 @@ If you don't need to process a new Event, you can use:
 screen->RequestAnimationFrame();
 ```
 instead.
+
+# Print above the app. {#component-print-above}
+
+When using `ftxui::App::TerminalOutput()`, the app is redrawn in place, below
+the terminal's previous content. To permanently output content, like messages
+in a chat, or logs, use `ftxui::App::PrintAbove`
+(**this is thread safe**).
+
+The element is printed once, above the app, and becomes part of the terminal
+scrollback. The app keeps being drawn below it.
+
+Example:
+```cpp
+auto app = App::TerminalOutput();
+app.PrintAbove(paragraph("Hello!") | border);
+```
+
+This is meant for apps not using the alternate screen. See the
+[print_above](https://arthursonzogni.github.io/FTXUI/examples_2component_2print_above_8cpp-example.html)
+example.
