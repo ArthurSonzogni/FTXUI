@@ -1,0 +1,10 @@
+<map id="src/ftxui/component" name="src/ftxui/component">
+<area shape="rect" id="node1" href="dir_aeeb1cdc755ff90d4eddbe949b1de91d.html" title="screen" alt="" coords="42,125,107,151"/>
+<area shape="rect" id="node2" href="dir_cf844d540e1e0d2dc53d5b63b9a99b1e.html" title="component" alt="" coords="27,52,122,77"/>
+<area shape="poly" id="edge2" href="dir_000001_000010.html" alt="" coords="77,78,77,112,72,112,72,78"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000001_000010.html" title="4" alt="" coords="78,100,88,114"/>
+<area shape="rect" id="node3" href="dir_43374de67d56ea76982461ad71763d54.html" title="include" alt="" coords="144,125,213,151"/>
+<area shape="poly" id="edge1" href="dir_000001_000008.html" alt="" coords="93,75,152,115,149,119,90,80"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000001_000008.html" title="154" alt="" coords="139,101,164,115"/>
+<area shape="rect" id="clust1" href="dir_5141bbd992dbdacad2c3da76172a5e5b.html" title="ftxui" alt="" coords="16,16,133,161"/>
+</map>

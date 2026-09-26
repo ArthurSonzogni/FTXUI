@@ -1,0 +1,16 @@
+var searchData=
+[
+  ['y_0',['y',['../structftxui_1_1flexbox__helper_1_1Block.html#a0a2f84ed7838f07779ae24c5a9086d33',1,'ftxui::flexbox_helper::Block::y'],['../structftxui_1_1flexbox__helper_1_1Line.html#a0a2f84ed7838f07779ae24c5a9086d33',1,'ftxui::flexbox_helper::Line::y'],['../namespaceftxui.html#aa4f0d3eebc3c443f9be81bf48561a217',1,'ftxui::y']]],
+  ['y_20construir_1',['y Construir',['../installation_conan.html#instalar-dependencias-y-construir',1,'Instalar Dependencias y Construir'],['../todo.html#_todo000002',1,'Instalar Dependencias y Construir']]],
+  ['y_20dependencia_2',['Instalación y Dependencia',['../getting-started.html#instalación-y-dependencia',1,'']]],
+  ['y_20estilo_3',['Selección y estilo',['../module-dom.html#selección-y-estilo',1,'']]],
+  ['y_20ubuntu_20no_20oficiales_4',['Paquetes Debian y Ubuntu (No Oficiales)',['../installation_debian.html#paquetes-debian-y-ubuntu-no-oficiales',1,'']]],
+  ['y_5fsize_5',['y_size',['../src_2ftxui_2dom_2gridbox_8cpp.html#a99e442a053babaa64367447a56138823',1,'gridbox.cpp']]],
+  ['yflex_6',['yflex',['../group__dom.html#ga42c7a33df6d890de30fc1ebb2d1b3ca6',1,'ftxui']]],
+  ['yflex_5ffactor_7',['yflex_factor',['../namespaceftxui.html#a5f83b72517a4c408d5ec9685fd2756ef',1,'ftxui']]],
+  ['yflex_5fgrow_8',['yflex_grow',['../group__dom.html#ga7eac3f709e905af8f583aed52093b7ce',1,'ftxui']]],
+  ['yflex_5fgrow_5ffactor_9',['yflex_grow_factor',['../namespaceftxui.html#a400f963a0ffdf640175066242659c039',1,'ftxui']]],
+  ['yflex_5fshrink_10',['yflex_shrink',['../group__dom.html#gaf7d0757f5965aa579bccc125ff909256',1,'ftxui']]],
+  ['yflex_5fshrink_5ffactor_11',['yflex_shrink_factor',['../namespaceftxui.html#a2514b70055e6bfdfaadfa74ab6f00b39',1,'ftxui']]],
+  ['yframe_12',['yframe',['../namespaceftxui.html#a7ea9d3ceb2a977955125c6e4a6072325',1,'ftxui']]]
+];

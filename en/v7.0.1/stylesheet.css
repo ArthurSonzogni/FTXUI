@@ -1,0 +1,119 @@
+html {
+  --primary-color: #9ed072;         /* green (identifier, strings) */
+  --primary-dark-color: #f39660;    /* orange (functions, tags) */
+  --primary-light-color: #7fbbb3;   /* teal (types, decorators) */
+
+  --page-background-color: #2c2e34; /* main background */
+  --page-foreground-color: #e2e2e3; /* main text */
+  --page-secondary-foreground-color: #9aa5ce; /* dim text */
+  --separator-color: #3b3e48;
+  --side-nav-background: #1a1b26;
+
+  --code-background: #2a2e38;
+  --code-foreground: #e2e2e3;
+
+  --tablehead-background: #1f1f28;
+
+  --blockquote-background: #3a3e44;
+  --blockquote-foreground: #d4bfff;
+
+  --warning-color: #e0af68;
+  --warning-color-dark: #ff9e64;
+  --warning-color-darker: #f7768e;
+  --bug-color: #f7768e;
+
+  --fragment-background: #222222;
+  --fragment-foreground: #e2e2e3;
+  --fragment-keyword: #f7768e;       /* pink */
+  --fragment-keywordtype: #7fbbb3;   /* teal */
+  --fragment-keywordflow: #e0af68;   /* orange-yellow */
+  --fragment-token: #9ed072;         /* green */
+  --fragment-comment: #5c6370;
+  --fragment-link: #7aa2f7;          /* blue link */
+  --fragment-preprocessor: #f39660;  /* orange */
+  --fragment-linenumber-color: #414868;
+  --fragment-linenumber-background: #2c2e34;
+  --fragment-linenumber-border: #1a1b26;
+  --fragment-lineheight: 1.125em;
+}
+
+/* Base style for all sections */
+.section.note,
+.section.warning,
+.section.remark,
+.section.attention,
+.section.important {
+  border-left: 4px solid var(--primary-dark-color);
+  border-radius: 6px;
+  padding: 0.9em 1.2em;
+  margin: 1.5em 0;
+  background-color: #2e303e;
+  color: var(--page-foreground-color);
+  font-size: 0.95em;
+}
+
+/* Section title */
+.section.note dt,
+.section.warning dt,
+.section.remark dt,
+.section.attention dt,
+.section.important dt {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.35em;
+}
+
+/* Section body */
+.section.note dd,
+.section.warning dd,
+.section.remark dd,
+.section.attention dd,
+.section.important dd {
+  margin: 0;
+}
+
+/* Note - soft cyan */
+.section.note {
+  border-left-color: #7fbbb3;
+  background-color: #263640;
+}
+.section.note dt {
+  color: #7fbbb3;
+}
+
+/* Warning - amber */
+.section.warning {
+  border-left-color: #e0af68;
+  background-color: #3d2f1f;
+}
+.section.warning dt {
+  color: #e0af68;
+}
+
+/* Tip (Remark) - green */
+.section.remark {
+  border-left-color: #9ed072;
+  background-color: #2d3a2d;
+}
+.section.remark dt {
+  color: #9ed072;
+}
+
+/* Caution (Attention) - bold red-orange */
+.section.attention {
+  border-left-color: #f7768e;
+  background-color: #3d2a2e;
+}
+.section.attention dt {
+  color: #f7768e;
+}
+
+/* Important - purple */
+.section.important {
+  border-left-color: #ab9df2;
+  background-color: #2f2a3a;
+}
+.section.important dt {
+  color: #ab9df2;
+}
+

@@ -1,0 +1,29 @@
+<map id="src/ftxui/dom/node_decorator.hpp" name="src/ftxui/dom/node_decorator.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1188,5,1331,45"/>
+<area shape="rect" id="Node000002" href="$automerge_8cpp.html" title=" " alt="" coords="5,101,215,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1174,32,766,52,498,70,228,96,175,103,174,98,227,91,498,65,765,47,1174,27"/>
+<area shape="rect" id="Node000003" href="$blink_8cpp.html" title=" " alt="" coords="239,101,410,126"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1174,33,844,53,634,72,422,96,379,103,378,98,422,91,633,66,844,48,1174,28"/>
+<area shape="rect" id="Node000004" href="$bold_8cpp.html" title=" " alt="" coords="435,101,601,126"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1175,36,922,58,768,75,613,96,572,103,571,98,612,91,767,70,922,53,1174,30"/>
+<area shape="rect" id="Node000005" href="$clear__under_8cpp.html" title=" " alt="" coords="625,93,768,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1174,39,993,62,780,96,769,98,768,93,779,91,992,57,1174,34"/>
+<area shape="rect" id="Node000006" href="$dom_2color_8cpp.html" title=" " alt="" coords="792,101,961,126"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1175,48,928,103,927,98,1174,43"/>
+<area shape="rect" id="Node000007" href="$dim_8cpp.html" title=" " alt="" coords="986,101,1149,126"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1206,53,1094,103,1092,98,1204,49"/>
+<area shape="rect" id="Node000008" href="$focus_8cpp.html" title=" " alt="" coords="1173,101,1346,126"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1262,59,1262,100,1257,100,1257,59"/>
+<area shape="rect" id="Node000009" href="$inverted_8cpp.html" title=" " alt="" coords="1370,101,1562,126"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1318,48,1440,98,1437,103,1316,53"/>
+<area shape="rect" id="Node000010" href="$node__decorator_8cpp.html" title=" " alt="" coords="1587,93,1729,133"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1345,42,1575,91,1587,93,1586,99,1573,96,1344,47"/>
+<area shape="rect" id="Node000011" href="$scroll__indicator_8cpp.html" title=" " alt="" coords="1754,93,1901,133"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1345,34,1528,57,1742,91,1754,93,1753,98,1742,96,1527,63,1344,39"/>
+<area shape="rect" id="Node000012" href="$strikethrough_8cpp.html" title=" " alt="" coords="1925,101,2149,126"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1345,31,1599,56,1913,91,1966,98,1965,103,1912,96,1599,61,1344,37"/>
+<area shape="rect" id="Node000013" href="$underlined_8cpp.html" title=" " alt="" coords="2173,101,2380,126"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1344,28,1701,49,1930,67,2161,91,2213,98,2212,103,2160,96,1929,72,1700,54,1344,33"/>
+<area shape="rect" id="Node000014" href="$underlined__double_8cpp.html" title=" " alt="" coords="2404,93,2584,133"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1345,25,1534,31,1794,42,2092,61,2393,91,2404,92,2403,97,2392,96,2091,66,1794,47,1534,36,1345,31"/>
+</map>
