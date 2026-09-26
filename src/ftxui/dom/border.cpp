@@ -8,6 +8,7 @@
 #include <optional>  // for optional, nullopt
 #include <string>    // for basic_string, string
 #include <utility>   // for move
+#include <vector>    // for vector
 
 #include "ftxui/dom/elements.hpp"  // for unpack, Element, Decorator, BorderStyle, ROUNDED, borderStyled, Elements, DASHED, DOUBLE, EMPTY, HEAVY, LIGHT, border, borderDashed, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, borderWith, window
 #include "ftxui/dom/node.hpp"      // for Node, Elements
@@ -65,8 +66,7 @@ class Border : public Node {
     if (children_.size() == 2) {
       Box title_box;
       title_box.x_min = box.x_min + 1;
-      title_box.x_max = std::min(box.x_max - 1,
-                                 box.x_min + children_[1]->requirement().min_x);
+      title_box.x_max = box.x_max - 1;
       title_box.y_min = box.y_min;
       title_box.y_max = box.y_min;
       children_[1]->SetBox(title_box);
@@ -111,7 +111,7 @@ class Border : public Node {
 
     // Draw title.
     if (children_.size() == 2) {
-      children_[1]->Render(screen);
+      RenderTitle(screen);
     }
 
     // Draw the border color.
@@ -123,6 +123,24 @@ class Border : public Node {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         screen.CellAt(box_.x_min, y).foreground_color = *foreground_color_;
         screen.CellAt(box_.x_max, y).foreground_color = *foreground_color_;
+      }
+    }
+  }
+
+  // The title spans the whole top border, so that it can be aligned. Restore
+  // the border cells it didn't draw on, so that its decorators (e.g. color)
+  // only apply to its content.
+  void RenderTitle(Screen& screen) {
+    std::vector<Cell> top_border;
+    for (int x = box_.x_min + 1; x < box_.x_max; ++x) {
+      top_border.push_back(screen.CellAt(x, box_.y_min));
+    }
+    children_[1]->Render(screen);
+    for (int x = box_.x_min + 1; x < box_.x_max; ++x) {
+      Cell& cell = screen.CellAt(x, box_.y_min);
+      const Cell& saved = top_border[x - box_.x_min - 1];
+      if (cell.character == saved.character) {
+        cell = saved;
       }
     }
   }

@@ -6,6 +6,7 @@
 
 #include "ftxui/dom/elements.hpp"  // for text, operator|, Element, borderStyled, borderWith, window, border, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, DOUBLE
 #include "ftxui/dom/node.hpp"      // for Render
+#include "ftxui/screen/color.hpp"   // for Color
 #include "ftxui/screen/screen.hpp"  // for Screen, Cell
 
 // NOLINTBEGIN
@@ -101,6 +102,30 @@ TEST(BorderTest, Window) {
             "╭title───╮\r\n"
             "│content │\r\n"
             "╰────────╯");
+}
+
+// https://github.com/ArthurSonzogni/FTXUI/issues/1016
+TEST(BorderTest, WindowTitleCentered) {
+  auto element = window(text("title") | hcenter, text("content"));
+  Screen screen(11, 3);
+  Render(screen, element);
+  EXPECT_EQ(screen.ToString(),
+            "╭──title──╮\r\n"
+            "│content  │\r\n"
+            "╰─────────╯");
+}
+
+// https://github.com/ArthurSonzogni/FTXUI/issues/940
+TEST(BorderTest, WindowTitleColorOnlyAppliesToTitle) {
+  auto element =
+      window(text("title") | hcenter | color(Color::Red), text("content"));
+  Screen screen(11, 3);
+  Render(screen, element);
+  for (int x = 0; x < 11; ++x) {
+    const bool is_title = x >= 3 && x < 8;
+    EXPECT_EQ(screen.CellAt(x, 0).foreground_color,
+              is_title ? Color(Color::Red) : Color(Color::Default));
+  }
 }
 
 }  // namespace ftxui
