@@ -37,6 +37,13 @@ Next
 ### Screen
 - Feature: Add `Color::GetRed()`, `GetGreen()`, `GetBlue()` and `GetAlpha()`.
   Palette colors are resolved to their RGB values. See #486.
+- Bugfix: Colors are degraded to the terminal color support when printed,
+  instead of when built. Colors built before the color support is known are no
+  longer stuck with the wrong one, and `Color::RGB()` keeps its RGB values.
+  Building an RGB color is also ~70x faster on non-truecolor terminals.
+  See #1364.
+- Feature: Add `Color::PrintTo(out, is_background_color, color_support)`, to
+  print a color degraded to a given terminal color support.
 
 ### Build
 - Bugfix: Export `gaugeCharset()` from the `ftxui.dom` module. It was added to

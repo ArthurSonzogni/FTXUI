@@ -82,6 +82,37 @@ TEST(ColorTest, FallbackTo16) {
   EXPECT_EQ(Color::RGB(1, 2, 3).Print(false), "30");
 }
 
+TEST(ColorTest, FallbackTo256Closest) {
+  Terminal::SetColorSupport(Terminal::Color::Palette256);
+  EXPECT_EQ(Color::RGB(215, 153, 33).Print(false), "38;5;172");   // Cube.
+  EXPECT_EQ(Color::RGB(40, 40, 40).Print(false), "38;5;235");     // Grayscale.
+  EXPECT_EQ(Color::RGB(115, 115, 115).Print(false), "38;5;243");  // Tie.
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+}
+
+TEST(ColorTest, Palette256FallbackTo16) {
+  Terminal::SetColorSupport(Terminal::Color::Palette16);
+  EXPECT_EQ(Color(Color::DarkRed).Print(false), "31");
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+}
+
+// Colors are degraded when printed, not when built. This matters for colors
+// built before the terminal color support is known.
+TEST(ColorTest, FallbackAtPrint) {
+  Terminal::SetColorSupport(Terminal::Color::Palette16);
+  const Color rgb = Color::RGB(215, 153, 33);
+  const Color palette256 = Color::DarkRed;
+  EXPECT_EQ(rgb.Print(false), "93");
+  EXPECT_EQ(palette256.Print(false), "31");
+  EXPECT_EQ(rgb.GetRed(), 215);
+  EXPECT_EQ(rgb.GetGreen(), 153);
+  EXPECT_EQ(rgb.GetBlue(), 33);
+
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+  EXPECT_EQ(rgb.Print(false), "38;2;215;153;33");
+  EXPECT_EQ(palette256.Print(false), "38;5;52");
+}
+
 TEST(ColorTest, Literals) {
   Terminal::SetColorSupport(Terminal::Color::TrueColor);
   using namespace ftxui::literals;

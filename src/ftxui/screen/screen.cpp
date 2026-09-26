@@ -74,9 +74,22 @@ void WindowsEmulateVT100Terminal() {
 }
 #endif
 
+// Position of a color sequence inside the output string. It refers to the
+// output instead of copying it, so tracking it costs no allocation.
+struct ColorSequence {
+  size_t begin = 0;
+  size_t size = 0;
+};
+
+// Append to `ss` the escape sequences switching the style from `prev` to
+// `next`.
+// - `color_support`: the terminal color support, read once per frame.
+// - `last_colors`: the last color sequence written to `ss`.
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void UpdateCellStyle(const Screen* screen,
                      std::string& ss,
+                     Terminal::Color color_support,
+                     ColorSequence& last_colors,
                      const Cell& prev,
                      const Cell& next) {
   // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
@@ -134,12 +147,29 @@ void UpdateCellStyle(const Screen* screen,
 
   if (FTXUI_UNLIKELY(next.foreground_color != prev.foreground_color ||
                      next.background_color != prev.background_color)) {
+    const size_t begin = ss.size();
     ss += "\x1B[";
-    next.foreground_color.PrintTo(ss, false);
+    next.foreground_color.PrintTo(ss, false, color_support);
     ss += 'm';
     ss += "\x1B[";
-    next.background_color.PrintTo(ss, true);
+    next.background_color.PrintTo(ss, true, color_support);
     ss += 'm';
+
+    // Colors are degraded to the terminal color support when printed, so
+    // distinct colors can print the same sequence. e.g. RGB(1,2,3) and
+    // RGB(2,3,4) both print "38;5;16" on a 256-color terminal. Drop the new
+    // sequence when it repeats the last one. This can't happen with
+    // TrueColor, so skip the comparison there.
+    if (color_support != Terminal::Color::TrueColor) {
+      const size_t size = ss.size() - begin;
+      if (size == last_colors.size &&
+          ss.compare(begin, size, ss, last_colors.begin, size) == 0) {
+        ss.resize(begin);
+      } else {
+        last_colors.begin = begin;
+        last_colors.size = size;
+      }
+    }
   }
 }
 
@@ -444,11 +474,14 @@ std::string Screen::ToString() const {
 void Screen::ToString(std::string& ss) const {
   const Cell default_cell;
   const Cell* previous_cell_ref = &default_cell;
+  const Terminal::Color color_support = Terminal::ColorSupport();
+  ColorSequence last_colors;
 
   for (int y = 0; y < dimy_; ++y) {
     // New line in between two lines.
     if (y != 0) {
-      UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
+      UpdateCellStyle(this, ss, color_support, last_colors, *previous_cell_ref,
+                      default_cell);
       previous_cell_ref = &default_cell;
       ss += "\r\n";
     }
@@ -461,7 +494,8 @@ void Screen::ToString(std::string& ss) const {
       for (const Cell* it = line_start; it != line_end; ++it) {
         const auto& cell = *it;
         if (!previous_fullwidth) {
-          UpdateCellStyle(this, ss, *previous_cell_ref, cell);
+          UpdateCellStyle(this, ss, color_support, last_colors,
+                          *previous_cell_ref, cell);
           previous_cell_ref = &cell;
           if (cell.character.empty()) {
             ss += ' ';
@@ -479,7 +513,8 @@ void Screen::ToString(std::string& ss) const {
   }
 
   // Reset the style to default:
-  UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
+  UpdateCellStyle(this, ss, color_support, last_colors, *previous_cell_ref,
+                  default_cell);
 }
 
 // Print the Screen to the terminal.
