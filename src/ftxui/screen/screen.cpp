@@ -74,9 +74,20 @@ void WindowsEmulateVT100Terminal() {
 }
 #endif
 
+// The last color sequence emitted in the output string. Distinct colors can
+// print identically once degraded to the terminal color support. This is used
+// to drop redundant sequences.
+struct ColorSequence {
+  Terminal::Color support = Terminal::ColorSupport();
+  bool degraded = support != Terminal::Color::TrueColor;
+  size_t begin = 0;
+  size_t size = 0;
+};
+
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void UpdateCellStyle(const Screen* screen,
                      std::string& ss,
+                     ColorSequence& last_colors,
                      const Cell& prev,
                      const Cell& next) {
   // See https://gist.github.com/egmontkob/eb114294efbcd5adb1944c9f3cb5feda
@@ -134,12 +145,24 @@ void UpdateCellStyle(const Screen* screen,
 
   if (FTXUI_UNLIKELY(next.foreground_color != prev.foreground_color ||
                      next.background_color != prev.background_color)) {
+    const size_t begin = ss.size();
     ss += "\x1B[";
-    next.foreground_color.PrintTo(ss, false);
+    next.foreground_color.PrintTo(ss, false, last_colors.support);
     ss += 'm';
     ss += "\x1B[";
-    next.background_color.PrintTo(ss, true);
+    next.background_color.PrintTo(ss, true, last_colors.support);
     ss += 'm';
+
+    if (last_colors.degraded) {
+      const size_t size = ss.size() - begin;
+      if (size == last_colors.size &&
+          ss.compare(begin, size, ss, last_colors.begin, size) == 0) {
+        ss.resize(begin);
+      } else {
+        last_colors.begin = begin;
+        last_colors.size = size;
+      }
+    }
   }
 }
 
@@ -444,11 +467,12 @@ std::string Screen::ToString() const {
 void Screen::ToString(std::string& ss) const {
   const Cell default_cell;
   const Cell* previous_cell_ref = &default_cell;
+  ColorSequence last_colors;
 
   for (int y = 0; y < dimy_; ++y) {
     // New line in between two lines.
     if (y != 0) {
-      UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
+      UpdateCellStyle(this, ss, last_colors, *previous_cell_ref, default_cell);
       previous_cell_ref = &default_cell;
       ss += "\r\n";
     }
@@ -461,7 +485,7 @@ void Screen::ToString(std::string& ss) const {
       for (const Cell* it = line_start; it != line_end; ++it) {
         const auto& cell = *it;
         if (!previous_fullwidth) {
-          UpdateCellStyle(this, ss, *previous_cell_ref, cell);
+          UpdateCellStyle(this, ss, last_colors, *previous_cell_ref, cell);
           previous_cell_ref = &cell;
           if (cell.character.empty()) {
             ss += ' ';
@@ -479,7 +503,7 @@ void Screen::ToString(std::string& ss) const {
   }
 
   // Reset the style to default:
-  UpdateCellStyle(this, ss, *previous_cell_ref, default_cell);
+  UpdateCellStyle(this, ss, last_colors, *previous_cell_ref, default_cell);
 }
 
 // Print the Screen to the terminal.

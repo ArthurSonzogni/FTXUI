@@ -3,7 +3,9 @@
 // the LICENSE file.
 #include <string>
 
+#include "ftxui/screen/color.hpp"
 #include "ftxui/screen/screen.hpp"
+#include "ftxui/screen/terminal.hpp"
 #include "gtest/gtest.h"
 
 namespace ftxui {
@@ -119,6 +121,25 @@ TEST(ScreenTest, NegativeAndZeroDimensions) {
     EXPECT_EQ(screen.dimx(), 0);
     EXPECT_EQ(screen.dimy(), 0);
   });
+}
+
+// Distinct colors printing identically once degraded to the terminal color
+// support don't emit redundant escape sequences.
+TEST(ScreenTest, DegradedColorsAreNotRepeated) {
+  Screen screen(3, 1);
+  screen.PixelAt(0, 0).foreground_color = Color::RGB(1, 2, 3);
+  screen.PixelAt(1, 0).foreground_color = Color::RGB(2, 3, 4);
+  screen.PixelAt(2, 0).foreground_color = Color::RGB(3, 3, 3);
+
+  Terminal::SetColorSupport(Terminal::Color::Palette256);
+  EXPECT_EQ(screen.ToString(), "\x1B[38;5;16m\x1B[49m   \x1B[39m\x1B[49m");
+
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+  EXPECT_EQ(screen.ToString(),
+            "\x1B[38;2;1;2;3m\x1B[49m "
+            "\x1B[38;2;2;3;4m\x1B[49m "
+            "\x1B[38;2;3;3;3m\x1B[49m "
+            "\x1B[39m\x1B[49m");
 }
 
 }  // namespace ftxui

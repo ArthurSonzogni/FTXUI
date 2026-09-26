@@ -3,7 +3,8 @@
 // the LICENSE file.
 #include "ftxui/screen/color.hpp"
 
-#include <array>  // for array
+#include <algorithm>  // for clamp
+#include <array>      // for array
 #include <cmath>
 #include <cstdint>
 #include <cstdio>  // for snprintf
@@ -11,6 +12,12 @@
 
 #include "ftxui/screen/color_info.hpp"  // for GetColorInfo, ColorInfo
 #include "ftxui/screen/terminal.hpp"  // for ColorSupport, Color, Palette256, TrueColor
+
+#if defined(_MSC_VER)
+#define FTXUI_NOINLINE __declspec(noinline)
+#else
+#define FTXUI_NOINLINE __attribute__((noinline))
+#endif
 
 namespace ftxui {
 namespace {
@@ -49,6 +56,59 @@ void AppendNumber(std::string& out, uint8_t n) {
   }
 }
 
+// Index of the Palette256 color closest to (r, g, b), matching an exhaustive
+// search over [16, 255]: ties resolve to the lowest index.
+uint8_t ClosestPalette256(int r, int g, int b) {
+  // Colors [16, 231] form a 6x6x6 cube of levels {0, 95, 135, 175, 215, 255}.
+  auto cube_index = [](int v) {
+    return v < 48 ? 0 : v < 116 ? 1 : (v - 36) / 40;
+  };
+  auto cube_level = [](int i) { return i == 0 ? 0 : 55 + 40 * i; };
+  const int ri = cube_index(r);
+  const int gi = cube_index(g);
+  const int bi = cube_index(b);
+  const int cr = cube_level(ri) - r;
+  const int cg = cube_level(gi) - g;
+  const int cb = cube_level(bi) - b;
+  const int cube_distance = cr * cr + cg * cg + cb * cb;
+
+  // Colors [232, 255] are the grays {8, 18, ..., 238}. The closest one is the
+  // closest to the mean (r + g + b) / 3.
+  const int gray_index = std::clamp((r + g + b - 10) / 30, 0, 23);
+  const int gray_level = 8 + 10 * gray_index;
+  const int dr = gray_level - r;
+  const int dg = gray_level - g;
+  const int db = gray_level - b;
+  const int gray_distance = dr * dr + dg * dg + db * db;
+
+  return gray_distance < cube_distance ? 232 + gray_index
+                                       : 16 + 36 * ri + 6 * gi + bi;
+}
+
+// Print the color the terminal supports closest to either the RGB color
+// (r, g, b), or the Palette256 color r. Kept out of line, so that printing
+// supported colors stays fast.
+FTXUI_NOINLINE void PrintDegraded(std::string& out,
+                                  bool is_background_color,
+                                  bool is_rgb,
+                                  uint8_t r,
+                                  uint8_t g,
+                                  uint8_t b,
+                                  Terminal::Color support) {
+  if (support == Terminal::Color::Palette1) {
+    out.append(is_background_color ? "49" : "39", 2);
+    return;
+  }
+  const uint8_t index = is_rgb ? ClosestPalette256(r, g, b) : r;
+  if (support == Terminal::Color::Palette256) {
+    out.append(is_background_color ? "48;5;" : "38;5;", 5);
+    AppendNumber(out, index);
+    return;
+  }
+  const uint8_t index_16 = GetColorInfo(Color::Palette256(index)).index_16;
+  out.append(palette16code[2 * index_16 + (is_background_color ? 1 : 0)]);
+}
+
 }  // namespace
 
 bool Color::operator==(const Color& rhs) const {
@@ -70,6 +130,25 @@ std::string Color::Print(bool is_background_color) const {
 /// @param out The string to append to.
 /// @param is_background_color Whether this is a background color code.
 void Color::PrintTo(std::string& out, bool is_background_color) const {
+  PrintTo(out, is_background_color, Terminal::ColorSupport());
+}
+
+/// @brief Append the ANSI color code to a string, degraded to the given
+/// terminal color support.
+/// @param out The string to append to.
+/// @param is_background_color Whether this is a background color code.
+/// @param support The terminal color support.
+void Color::PrintTo(std::string& out,
+                    bool is_background_color,
+                    Terminal::Color support) const {
+  // Degrade the color to what the terminal supports. Both enums are ordered
+  // the same way.
+  if (static_cast<uint8_t>(type_) > static_cast<uint8_t>(support)) {
+    PrintDegraded(out, is_background_color, type_ == ColorType::TrueColor, red_,
+                  green_, blue_, support);
+    return;
+  }
+
   switch (type_) {
     case ColorType::Palette1:
       out.append(is_background_color ? "49" : "39", 2);
@@ -100,25 +179,11 @@ Color::Color(Palette1 /*value*/) : Color() {}
 
 /// @brief Build a color using the Palette16 colors.
 Color::Color(Palette16 index)
-    : type_(ColorType::Palette16), red_(index), alpha_(255) {
-  if (Terminal::ColorSupport() == Terminal::Color::Palette1) {
-    type_ = ColorType::Palette1;
-  }
-}
+    : type_(ColorType::Palette16), red_(index), alpha_(255) {}
 
 /// @brief Build a color using Palette256 colors.
 Color::Color(Palette256 index)
-    : type_(ColorType::Palette256), red_(index), alpha_(255) {
-  if (Terminal::ColorSupport() >= Terminal::Color::Palette256) {
-    return;
-  }
-  if (Terminal::ColorSupport() == Terminal::Color::Palette1) {
-    type_ = ColorType::Palette1;
-    return;
-  }
-  type_ = ColorType::Palette16;
-  red_ = GetColorInfo(Color::Palette256(red_)).index_16;
-}
+    : type_(ColorType::Palette256), red_(index), alpha_(255) {}
 
 /// @brief Build a Color from its RGB representation.
 /// https://en.wikipedia.org/wiki/RGB_color_model
@@ -132,41 +197,7 @@ Color::Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha)
       red_(red),
       green_(green),
       blue_(blue),
-      alpha_(alpha) {
-  if (Terminal::ColorSupport() == Terminal::Color::TrueColor) {
-    return;
-  }
-  if (Terminal::ColorSupport() == Terminal::Color::Palette1) {
-    type_ = ColorType::Palette1;
-    return;
-  }
-
-  // Find the closest Color from the database:
-  const int max_distance = 256 * 256 * 3;
-  int closest = max_distance;
-  int best = 0;
-  const int database_begin = 16;
-  const int database_end = 256;
-  for (int i = database_begin; i < database_end; ++i) {
-    const ColorInfo color_info = GetColorInfo(Color::Palette256(i));
-    const int dr = color_info.red - red;
-    const int dg = color_info.green - green;
-    const int db = color_info.blue - blue;
-    const int dist = dr * dr + dg * dg + db * db;
-    if (closest > dist) {
-      closest = dist;
-      best = i;
-    }
-  }
-
-  if (Terminal::ColorSupport() == Terminal::Color::Palette256) {
-    type_ = ColorType::Palette256;
-    red_ = best;
-  } else {
-    type_ = ColorType::Palette16;
-    red_ = GetColorInfo(Color::Palette256(best)).index_16;
-  }
-}
+      alpha_(alpha) {}
 
 /// @brief Build a Color from its RGB representation.
 /// https://en.wikipedia.org/wiki/RGB_color_model

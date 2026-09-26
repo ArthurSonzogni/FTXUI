@@ -17,6 +17,10 @@
 
 namespace ftxui {
 
+namespace Terminal {
+enum Color : uint8_t;
+}  // namespace Terminal
+
 /// @brief Color is a class that represents a color in the terminal user
 /// interface.
 ///
@@ -321,6 +325,9 @@ class FTXUI_EXPORT(SCREEN) Color {
 
   std::string Print(bool is_background_color) const;
   void PrintTo(std::string& out, bool is_background_color) const;
+  void PrintTo(std::string& out,
+               bool is_background_color,
+               Terminal::Color color_support) const;
   bool IsOpaque() const { return alpha_ == 255; }
 
   // --- Accessors ------
