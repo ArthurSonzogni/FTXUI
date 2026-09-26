@@ -247,17 +247,14 @@ Color TerminalInfo::ComputeColorSupport() const {
     return Terminal::Color::TrueColor;
   }
 
-  // 2. term / colorterm environment variables.
+  // 2. term / colorterm environment variables explicitly advertising 24bit
+  // colors.
   if (ContainsAny(impl_->colorterm, {"24bit", "truecolor"})) {
     return Terminal::Color::TrueColor;
   }
   if (ContainsAny(impl_->term,
                   {"direct", "truecolor", "kitty", "alacritty", "foot"})) {
     return Terminal::Color::TrueColor;
-  }
-  if (ContainsAny(impl_->colorterm, {"256"}) ||
-      ContainsAny(impl_->term, {"256", "xterm", "screen", "tmux"})) {
-    return Terminal::Color::Palette256;
   }
 
   // 3. term_program
@@ -286,6 +283,16 @@ Color TerminalInfo::ComputeColorSupport() const {
   if (impl_->terminal_name == "xterm") {
     return Terminal::Color::TrueColor;
   }
+
+  // 5. Generic term / colorterm environment variables. They are checked after
+  // the terminal identification, because they are weak evidence: most
+  // terminals set TERM=xterm-256color, whatever their capabilities.
+  if (ContainsAny(impl_->colorterm, {"256"}) ||
+      ContainsAny(impl_->term, {"256", "xterm", "screen", "tmux"})) {
+    return Terminal::Color::Palette256;
+  }
+
+  // 6. Terminal capabilities.
   for (const int x : impl_->capabilities) {
     // The value 22 is the SGR capability for 256 colors. If the terminal
     // supports it, it is a strong indication that the terminal supports 256

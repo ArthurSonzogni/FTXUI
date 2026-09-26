@@ -179,6 +179,24 @@ TEST(ColorTest, ComputeColorSupport) {
   EXPECT_EQ(Terminal::ComputeColorSupport("", "", "iTerm.app", "unknown",
                                           "unknown", {}),
             Terminal::Color::TrueColor);
+
+  // Terminal identification takes precedence over the generic TERM.
+  // See https://github.com/ArthurSonzogni/FTXUI/issues/1364
+  EXPECT_EQ(Terminal::ComputeColorSupport("xterm-256color", "", "", "unknown",
+                                          "kitty", {}),
+            Terminal::Color::TrueColor);
+  EXPECT_EQ(Terminal::ComputeColorSupport("xterm-256color", "", "", "xterm",
+                                          "unknown", {}),
+            Terminal::Color::TrueColor);
+  EXPECT_EQ(Terminal::ComputeColorSupport("xterm-256color", "", "vscode",
+                                          "unknown", "unknown", {}),
+            Terminal::Color::TrueColor);
+  EXPECT_EQ(Terminal::ComputeColorSupport("screen-256color", "", "", "unknown",
+                                          "unknown", {}),
+            Terminal::Color::Palette256);
+  EXPECT_EQ(Terminal::ComputeColorSupport("xterm", "rxvt-xpm", "", "urxvt",
+                                          "unknown", {}),
+            Terminal::Color::Palette256);
 #endif
   EXPECT_EQ(Terminal::ComputeColorSupport("xterm", "truecolor", "", "", "", {}),
             Terminal::Color::TrueColor);
