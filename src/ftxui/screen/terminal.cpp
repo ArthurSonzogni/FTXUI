@@ -211,7 +211,7 @@ Color ComputeColorSupport(std::string_view term,
 }
 
 Color TerminalInfo::ComputeColorSupport() const {
-  // TODO(v8): Read NO_COLOR and WT_SESSION from ComputeColorSupportInternal()
+  // TODO(v8.0.0): Read NO_COLOR and WT_SESSION from ComputeColorSupportInternal()
   // and pass them in as parameters, so that this function remains a pure
   // function of its inputs. This requires extending the public
   // Terminal::ComputeColorSupport() signature, i.e. an API-breaking change.
