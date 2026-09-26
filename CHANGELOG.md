@@ -33,6 +33,9 @@ Next
 - Bugfix: Don't query the cursor shape on Apple's Terminal.app and GNU Screen.
   They don't support DECRQSS, and printed "$q q" on screen. Thanks @md81544.
   See #1217.
+- Bugfix: Restore the terminal's default cursor shape on exit when it doesn't
+  report its current one, instead of forcing a blinking block. Thanks
+  @aaron-michaux. See #904.
 
 ### Dom
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on

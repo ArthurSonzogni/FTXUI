@@ -125,7 +125,8 @@ struct App::Internal {
   bool force_handle_ctrl_c_ = true;
   bool force_handle_ctrl_z_ = true;
 
-  int cursor_reset_shape_ = 1;
+  // 0: the terminal's default shape, used when it doesn't report its own.
+  int cursor_reset_shape_ = 0;
 
   // Piped input handling state (POSIX only)
   bool handle_piped_input_ = true;
