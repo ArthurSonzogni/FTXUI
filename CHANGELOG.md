@@ -51,6 +51,9 @@ Next
   See #1364.
 - Feature: Add `Color::PrintTo(out, is_background_color, color_support)`, to
   print a color degraded to a given terminal color support.
+- Bugfix: Terminal identification now takes precedence over the generic
+  `TERM` values, like `xterm-256color`. Terminals identified as supporting 24bit
+  colors are no longer limited to 256 colors. See #1364.
 
 ### Build
 - Bugfix: Export `gaugeCharset()` from the `ftxui.dom` module. It was added to
