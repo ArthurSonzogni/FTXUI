@@ -109,22 +109,9 @@ class Border : public Node {
       p4.automerge = true;
     }
 
-    // Draw title. It spans the whole top border, so that it can be aligned.
-    // Restore the border cells it didn't draw on, so that its decorators
-    // (e.g. color) only apply to its content.
+    // Draw title.
     if (children_.size() == 2) {
-      std::vector<Cell> top_border;
-      for (int x = box_.x_min + 1; x < box_.x_max; ++x) {
-        top_border.push_back(screen.CellAt(x, box_.y_min));
-      }
-      children_[1]->Render(screen);
-      for (int x = box_.x_min + 1; x < box_.x_max; ++x) {
-        Cell& cell = screen.CellAt(x, box_.y_min);
-        const Cell& saved = top_border[x - box_.x_min - 1];
-        if (cell.character == saved.character) {
-          cell = saved;
-        }
-      }
+      RenderTitle(screen);
     }
 
     // Draw the border color.
@@ -136,6 +123,24 @@ class Border : public Node {
       for (int y = box_.y_min; y <= box_.y_max; ++y) {
         screen.CellAt(box_.x_min, y).foreground_color = *foreground_color_;
         screen.CellAt(box_.x_max, y).foreground_color = *foreground_color_;
+      }
+    }
+  }
+
+  // The title spans the whole top border, so that it can be aligned. Restore
+  // the border cells it didn't draw on, so that its decorators (e.g. color)
+  // only apply to its content.
+  void RenderTitle(Screen& screen) {
+    std::vector<Cell> top_border;
+    for (int x = box_.x_min + 1; x < box_.x_max; ++x) {
+      top_border.push_back(screen.CellAt(x, box_.y_min));
+    }
+    children_[1]->Render(screen);
+    for (int x = box_.x_min + 1; x < box_.x_max; ++x) {
+      Cell& cell = screen.CellAt(x, box_.y_min);
+      const Cell& saved = top_border[x - box_.x_min - 1];
+      if (cell.character == saved.character) {
+        cell = saved;
       }
     }
   }
