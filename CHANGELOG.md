@@ -45,6 +45,9 @@ Next
   content, not the border. Thanks @alex-pat. See #1016.
 
 ### Screen
+- Bugfix: Emoji with the presentation selector U+FE0F (e.g. ❤️) now take two
+  cells, as drawn by modern terminals. They used to shift the rest of the line.
+  Thanks @Darleanow. See #929.
 - Feature: Add `Color::GetRed()`, `GetGreen()`, `GetBlue()` and `GetAlpha()`.
   Palette colors are resolved to their RGB values. See #486.
 - Bugfix: Colors are degraded to the terminal color support when printed,
