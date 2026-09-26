@@ -31,6 +31,9 @@ class FTXUI_EXPORT(SCREEN) Color {
   enum Palette16 : uint8_t;
   enum Palette256 : uint8_t;
 
+  // TODO(v8.0.0): Make the constructors and RGB()/RGBA() constexpr. They no
+  // longer depend on the terminal color support, but moving them inline
+  // removes their exported symbols, which breaks the ABI.
   // NOLINTBEGIN
   Color();                  // Transparent.
   Color(Palette1 index);    // Transparent.
