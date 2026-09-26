@@ -1061,9 +1061,9 @@ void App::Internal::Draw(Component component) {
   // Print the pending elements above the frame. They are never drawn again,
   // and scroll into the terminal scrollback.
   for (auto& element : print_above_) {
-    const int dimy =
+    const int height =
         Dimension::Fit(element, /*extend_beyond_screen=*/true).dimy;
-    Screen screen(terminal.dimx, dimy);
+    Screen screen(terminal.dimx, height);
     Render(screen, element.get());
     screen.ToString(output_buffer);
     TerminalSend("\r\n");
