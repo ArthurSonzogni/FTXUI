@@ -30,6 +30,9 @@ Next
   used to be ignored in favor of `DropdownOption::checkbox.checked`. Both are
   now supported: the one bound to a variable wins, `open` first. Thanks
   @Ridho36. See #1363.
+- Bugfix: Don't query the cursor shape on Apple's Terminal.app and GNU Screen.
+  They don't support DECRQSS, and printed "$q q" on screen. Thanks @md81544.
+  See #1217.
 
 ### Dom
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on

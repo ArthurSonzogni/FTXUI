@@ -290,6 +290,20 @@ const std::string ST = "\x1b\\";  // NOLINT
 // DECSCUSR: Set Cursor Style
 const std::string DECRQSS_DECSCUSR = DCS + "$q q" + ST;  // NOLINT
 
+// Some terminals don't parse DCS sequences, and print their payload ("$q q")
+// instead. See https://github.com/ArthurSonzogni/FTXUI/issues/1217
+bool SupportsDECRQSS() {
+  // Apple's Terminal.app.
+  if (std::string_view(util::GetEnv("TERM_PROGRAM")) == "Apple_Terminal") {
+    return false;
+  }
+  // GNU Screen.
+  if (util::GetEnv("STY")[0] != '\0') {
+    return false;
+  }
+  return true;
+}
+
 // DEC: Digital Equipment Corporation
 enum class DECMode : std::uint16_t {
   kLineWrap = 7,
@@ -1163,7 +1177,9 @@ void App::Internal::InstallTerminalInfo() {
   // Request the terminal to report the current cursor shape. We will restore it
   // on exit.
   if (is_stdout_a_tty_) {
-    TerminalSend(DECRQSS_DECSCUSR);
+    if (SupportsDECRQSS()) {
+      TerminalSend(DECRQSS_DECSCUSR);
+    }
     TerminalSend("\033[>q");  // XTVERSION
     TerminalSend("\033[>c");  // DA2
     TerminalSend("\033[c");   // DA1
