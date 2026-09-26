@@ -40,6 +40,9 @@ Next
 - Bugfix: `Table` selections no longer wrap around when an index is out of
   range. For instance `SelectRows(2, -1)` on a 2-row table now selects nothing
   instead of the whole table. Thanks @lukester1975. See #806.
+- Bugfix: `window` titles can be aligned again, e.g. `text(title) | hcenter`.
+  Decorators on the title, like `color`, still only apply to the title's
+  content, not the border. Thanks @alex-pat. See #1016.
 
 ### Screen
 - Feature: Add `Color::GetRed()`, `GetGreen()`, `GetBlue()` and `GetAlpha()`.
