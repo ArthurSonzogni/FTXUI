@@ -19,6 +19,12 @@ Event MousePressed(int x, int y) {
   mouse.y = y;
   return Event::Mouse("", mouse);
 }
+
+bool IsOpen(Component dropdown) {
+  auto screen = Screen(8, 6);
+  Render(screen, dropdown->Render());
+  return screen.ToString().find("↓") != std::string::npos;
+}
 }  // namespace
 
 TEST(DropdownTest, Empty) {
@@ -91,6 +97,72 @@ TEST(DropdownTest, ClosesWhenAnotherDropdownTakesFocus) {
   render();
   EXPECT_FALSE(top_open);
   EXPECT_TRUE(bottom_open);
+}
+
+// https://github.com/ArthurSonzogni/FTXUI/issues/1363
+TEST(DropdownTest, OpenOption) {
+  std::vector<std::string> entries = {"a", "b"};
+  int selected = 0;
+  bool open = true;
+
+  DropdownOption option;
+  option.open = &open;
+  option.radiobox.entries = &entries;
+  option.radiobox.selected = &selected;
+  auto dropdown = Dropdown(option);
+
+  EXPECT_TRUE(IsOpen(dropdown));
+  open = false;
+  EXPECT_FALSE(IsOpen(dropdown));
+
+  // Toggling the dropdown writes back to `open`.
+  dropdown->OnEvent(Event::Return);
+  EXPECT_TRUE(open);
+}
+
+// https://github.com/ArthurSonzogni/FTXUI/issues/1363
+TEST(DropdownTest, OpenOptionPriority) {
+  std::vector<std::string> entries = {"a", "b"};
+  DropdownOption base;
+  base.radiobox.entries = &entries;
+
+  // Neither is bound: the non-default value wins.
+  {
+    DropdownOption option = base;
+    option.checkbox.checked = true;
+    EXPECT_TRUE(IsOpen(Dropdown(option)));
+  }
+  {
+    DropdownOption option = base;
+    option.open = true;
+    EXPECT_TRUE(IsOpen(Dropdown(option)));
+  }
+
+  // Only `checkbox.checked` is bound: it wins over a non-default `open`.
+  {
+    bool checked = false;
+    DropdownOption option = base;
+    option.open = true;
+    option.checkbox.checked = &checked;
+    auto dropdown = Dropdown(option);
+    EXPECT_FALSE(IsOpen(dropdown));
+    dropdown->OnEvent(Event::Return);
+    EXPECT_TRUE(checked);
+  }
+
+  // Both are bound: `open` wins.
+  {
+    bool open = false;
+    bool checked = true;
+    DropdownOption option = base;
+    option.open = &open;
+    option.checkbox.checked = &checked;
+    auto dropdown = Dropdown(option);
+    EXPECT_FALSE(IsOpen(dropdown));
+    dropdown->OnEvent(Event::Return);
+    EXPECT_TRUE(open);
+    EXPECT_TRUE(checked);
+  }
 }
 
 }  // namespace ftxui

@@ -277,7 +277,8 @@ struct FTXUI_EXPORT(COMPONENT) WindowOptions {
 /// @ingroup component
 /// A dropdown menu is a checkbox opening/closing a radiobox.
 struct FTXUI_EXPORT(COMPONENT) DropdownOption {
-  /// Whether the dropdown is open or closed:
+  /// Whether the dropdown is open or closed. Takes precedence over
+  /// `checkbox.checked`, unless only the latter is bound to a variable.
   Ref<bool> open = false;
   // The options for the checkbox:
   CheckboxOption checkbox;

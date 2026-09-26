@@ -2,7 +2,7 @@
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
 #include <ftxui/component/event.hpp>
-#include <functional>  // for function
+#include <functional>  // for function, less
 #include <string>      // for string
 
 #include <utility>
@@ -14,6 +14,16 @@
 #include "ftxui/util/ref.hpp"      // for ConstStringListRef
 
 namespace ftxui {
+
+namespace {
+// Whether `ref` points to a variable owned by the caller, as opposed to a value
+// stored inside `ref` itself.
+bool IsExternal(const Ref<bool>& ref) {
+  const std::less<const void*> less;
+  const void* address = &*ref;
+  return less(address, &ref) || !less(address, &ref + 1);
+}
+}  // namespace
 
 /// @brief A dropdown menu.
 /// @ingroup component
@@ -58,28 +68,28 @@ Component Dropdown(DropdownOption option) {
       // happen without this dropdown receiving any event, e.g. when the user
       // clicks on a sibling dropdown. Move the inner focus back to the
       // checkbox without stealing the focus from the other component.
-      if (open_() && !Focused()) {
+      if (open() && !Focused()) {
         container_->SetActiveChild(checkbox_);
-        *open_ = false;
+        *open = false;
       }
 
-      return transform(*open_, checkbox_->Render(), radiobox_->Render());
+      return transform(*open, checkbox_->Render(), radiobox_->Render());
     }
 
     // Switch focus in between the checkbox and the radiobox when selecting it.
     bool OnEvent(ftxui::Event event) override {
-      const bool open_old = open_();
+      const bool open_old = open();
       const int selected_old = selected_();
       bool handled = ComponentBase::OnEvent(event);
 
       // Transfer focus to the radiobox when the dropdown is opened.
-      if (!open_old && open_()) {
+      if (!open_old && open()) {
         radiobox_->TakeFocus();
       }
 
       // Auto-close the dropdown when the user selects an item, even if the item
       // it the same as the previous one.
-      if (open_old && open_()) {
+      if (open_old && open()) {
         const bool should_close =
             (selected_() != selected_old) ||     //
             (event == Event::Return) ||          //
@@ -90,7 +100,7 @@ Component Dropdown(DropdownOption option) {
 
         if (should_close) {
           checkbox_->TakeFocus();
-          *open_ = false;
+          *open = false;
           handled = true;
         }
       }
@@ -99,9 +109,14 @@ Component Dropdown(DropdownOption option) {
     }
 
     void FillDefault() {
-      open_ = checkbox.checked;
+      // Both `open` and `checkbox.checked` can hold the open state. Prefer the
+      // one bound to an external variable, then the one set to non-default.
+      if (!IsExternal(open) &&
+          (IsExternal(checkbox.checked) || checkbox.checked())) {
+        open = checkbox.checked;
+      }
       selected_ = radiobox.selected;
-      checkbox.checked = &*open_;
+      checkbox.checked = &*open;
       radiobox.selected = &*selected_;
       checkbox.label = &title_;
 
@@ -138,7 +153,6 @@ Component Dropdown(DropdownOption option) {
     }
 
    private:
-    Ref<bool> open_;
     Ref<int> selected_;
     Component container_;
     Component checkbox_;

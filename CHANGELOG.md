@@ -26,6 +26,10 @@ Next
 - Bugfix: Close an open `Dropdown` when another component takes the focus.
   Opening a dropdown placed above an open one used to leave both open and
   overlapping. Thanks @bleakglory. See #1278.
+- Bugfix: `DropdownOption::open` now controls whether the dropdown is open. It
+  used to be ignored in favor of `DropdownOption::checkbox.checked`. Both are
+  now supported: the one bound to a variable wins, `open` first. Thanks
+  @Ridho36. See #1363.
 
 ### Dom
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on
