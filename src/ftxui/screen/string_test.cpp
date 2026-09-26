@@ -37,6 +37,14 @@ TEST(StringTest, StringWidth) {
   EXPECT_EQ(2, string_width("🫜"));  // U+1FADC ROOT VEGETABLE, 16.0
   EXPECT_EQ(2, string_width("🫯"));  // U+1FAEF FIGHT CLOUD, 17.0
   EXPECT_EQ(2, string_width("☰"));  // U+2630 TRIGRAM FOR HEAVEN, reclassified in 16.0
+
+  // Emoji presentation selector (VS16) widens narrow glyphs:
+  EXPECT_EQ(1, string_width("❤"));
+  EXPECT_EQ(2, string_width("❤️"));
+  EXPECT_EQ(3, string_width("❤️a"));
+  EXPECT_EQ(2, string_width("#️⃣"));
+  EXPECT_EQ(2, string_width("✊️"));  // Already fullwidth.
+  EXPECT_EQ(2, string_width("❤️️"));  // Repeated selector.
 }
 
 TEST(StringTest, Utf8ToGlyphs) {
@@ -55,6 +63,10 @@ TEST(StringTest, Utf8ToGlyphs) {
   // Control characters:
   EXPECT_EQ(Utf8ToGlyphs("\1"), T({}));
   EXPECT_EQ(Utf8ToGlyphs("a\1a"), T({"a", "a"}));
+  // Emoji presentation selector (VS16):
+  EXPECT_EQ(Utf8ToGlyphs("❤️a"), T({"❤️", "", "a"}));
+  EXPECT_EQ(Utf8ToGlyphs("#️⃣"), T({"#️⃣", ""}));
+  EXPECT_EQ(Utf8ToGlyphs("✊️"), T({"✊️", ""}));
 }
 
 TEST(StringTest, GlyphCount) {
@@ -133,6 +145,13 @@ TEST(StringTest, CellToGlyphIndex) {
   EXPECT_EQ(combining[0], 0);
   EXPECT_EQ(combining[1], 1);
   EXPECT_EQ(combining[2], 2);
+
+  // Emoji presentation selector (VS16):
+  auto emoji = CellToGlyphIndex("❤️a");
+  ASSERT_EQ(emoji.size(), 3u);
+  EXPECT_EQ(emoji[0], 0);
+  EXPECT_EQ(emoji[1], 0);
+  EXPECT_EQ(emoji[2], 1);
 }
 
 TEST(StringTest, Utf8ToWordBreakProperty) {

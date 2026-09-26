@@ -111,6 +111,10 @@ bool Bisearch(uint32_t ucs, const std::array<C, N>& table, C* out) {
   return false;
 }
 
+// VARIATION SELECTOR-16 requests the emoji presentation of the preceding
+// character. Terminals draw it two cells wide.
+constexpr uint32_t kEmojiPresentationSelector = 0xFE0F;
+
 int codepoint_width(uint32_t ucs) {
   if (ftxui::IsControl(ucs)) {
     return -1;
@@ -322,6 +326,7 @@ int string_width(std::string_view input) {
   }
 
   int width = 0;
+  bool previous_narrow = false;
   size_t start = 0;
   while (start < input.size()) {
     uint32_t codepoint = 0;
@@ -334,14 +339,20 @@ int string_width(std::string_view input) {
     }
 
     if (IsCombining(codepoint)) {
+      if (codepoint == kEmojiPresentationSelector && previous_narrow) {
+        previous_narrow = false;
+        width += 1;
+      }
       continue;
     }
 
     if (IsFullWidth(codepoint)) {
+      previous_narrow = false;
       width += 2;
       continue;
     }
 
+    previous_narrow = true;
     width += 1;
   }
   return width;
@@ -350,6 +361,8 @@ int string_width(std::string_view input) {
 std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
   std::vector<std::string> out;
   out.reserve(input.size());
+  size_t last_glyph = 0;
+  bool last_glyph_narrow = false;
   size_t start = 0;
   size_t end = 0;
   while (start < input.size()) {
@@ -370,20 +383,29 @@ std::vector<std::string> Utf8ToGlyphs(std::string_view input) {
     // Combining characters are put with the previous glyph they are modifying.
     if (IsCombining(codepoint)) {
       if (!out.empty()) {
-        out.back() += append;
+        out[last_glyph] += append;
+      }
+      // The emoji presentation makes a narrow glyph take two cells.
+      if (codepoint == kEmojiPresentationSelector && last_glyph_narrow) {
+        last_glyph_narrow = false;
+        out.emplace_back("");
       }
       continue;
     }
 
+    last_glyph = out.size();
+
     // Fullwidth characters take two cells. The second is made of the empty
     // string to reserve the space the first is taking.
     if (IsFullWidth(codepoint)) {
+      last_glyph_narrow = false;
       out.emplace_back(append);
       out.emplace_back("");
       continue;
     }
 
     // Normal characters:
+    last_glyph_narrow = true;
     out.emplace_back(append);
   }
   return out;
@@ -456,6 +478,7 @@ size_t GlyphIterate(std::string_view input, int glyph_offset, size_t start) {
 
 std::vector<int> CellToGlyphIndex(std::string_view input) {
   int x = -1;
+  bool last_glyph_narrow = false;
   std::vector<int> out;
   out.reserve(input.size());
   size_t start = 0;
@@ -476,12 +499,18 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
         ++x;
         out.push_back(x);
       }
+      // The emoji presentation makes a narrow glyph take two cells.
+      if (codepoint == kEmojiPresentationSelector && last_glyph_narrow) {
+        last_glyph_narrow = false;
+        out.push_back(x);
+      }
       continue;
     }
 
     // Fullwidth characters take two cells. The second is made of the empty
     // string to reserve the space the first is taking.
     if (IsFullWidth(codepoint)) {
+      last_glyph_narrow = false;
       ++x;
       out.push_back(x);
       out.push_back(x);
@@ -489,6 +518,7 @@ std::vector<int> CellToGlyphIndex(std::string_view input) {
     }
 
     // Normal characters:
+    last_glyph_narrow = true;
     ++x;
     out.push_back(x);
   }
