@@ -283,6 +283,31 @@ TEST(App, FixedSizeInitialFrame) {
 #endif
 }
 
+TEST(App, PrintAbove) {
+#if defined(__unix__)
+  std::string output;
+  {
+    auto capture = StdCapture(&output);
+
+    auto screen = App::FixedSize(2, 1);
+    auto component = Renderer([&] { return text("AB"); });
+
+    Loop loop(&screen, component);
+    loop.RunOnce();
+    screen.PrintAbove(text("XY"));
+    loop.RunOnce();
+    screen.PostEvent(Event::Custom);
+    loop.RunOnce();
+  }
+
+  // "XY" is printed once, and followed by the frames drawn below it.
+  const size_t xy = output.find("XY");
+  ASSERT_NE(xy, std::string::npos);
+  EXPECT_EQ(output.find("XY", xy + 1), std::string::npos);
+  EXPECT_NE(output.find("AB", xy), std::string::npos);
+#endif
+}
+
 TEST(App, MoveConstructor) {
   auto screen = App::FixedSize(10, 10);
   App screen2 = std::move(screen);

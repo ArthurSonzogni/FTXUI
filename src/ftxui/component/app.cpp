@@ -34,6 +34,7 @@
 #include "ftxui/component/multi_receiver_buffer.hpp"
 #include "ftxui/component/task_runner.hpp"
 #include "ftxui/component/terminal_input_parser.hpp"  // for TerminalInputParser
+#include "ftxui/dom/elements.hpp"                     // for Dimension::Fit
 #include "ftxui/dom/node.hpp"                         // for Node, Render
 #include "ftxui/screen/cell.hpp"                      // for Cell
 #include "ftxui/screen/terminal.hpp"                  // for Dimensions, Size
@@ -117,6 +118,9 @@ struct App::Internal {
   bool previous_frame_resized_ = false;
 
   bool frame_valid_ = false;
+
+  // Elements to print above the app on the next frame.
+  std::vector<Element> print_above_;
 
   bool force_handle_ctrl_c_ = true;
   bool force_handle_ctrl_z_ = true;
@@ -1042,7 +1046,9 @@ void App::Internal::Draw(Component component) {
   if (frame_count_ != 0) {
     // Reset the cursor position to the lower left corner to start drawing the
     // new frame.
-    public_->ResetPosition(output_buffer, resized);
+    // Clear the previous frame when printing above it, because the new frame
+    // is drawn lower and would not overwrite it fully.
+    public_->ResetPosition(output_buffer, resized || !print_above_.empty());
 
     // If the terminal width decrease, the terminal emulator will start wrapping
     // lines and make the display dirty. We should clear it completely.
@@ -1051,6 +1057,18 @@ void App::Internal::Draw(Component component) {
       TerminalSend("\033[H");  // move cursor to home position
     }
   }
+
+  // Print the pending elements above the frame. They are never drawn again,
+  // and scroll into the terminal scrollback.
+  for (auto& element : print_above_) {
+    const int dimy =
+        Dimension::Fit(element, /*extend_beyond_screen=*/true).dimy;
+    Screen screen(terminal.dimx, dimy);
+    Render(screen, element.get());
+    screen.ToString(output_buffer);
+    TerminalSend("\r\n");
+  }
+  print_above_.clear();
 
   // Resize the screen if needed.
   if (resized) {
@@ -1532,6 +1550,13 @@ void App::Exit() {
 
 Closure App::ExitLoopClosure() {
   return [this] { Exit(); };
+}
+
+void App::PrintAbove(Element element) {
+  Post([this, element = std::move(element)] {
+    internal_->print_above_.push_back(element);
+    internal_->frame_valid_ = false;
+  });
 }
 
 void App::Post(Task task) {

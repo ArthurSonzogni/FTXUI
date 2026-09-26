@@ -21,6 +21,8 @@
 namespace ftxui {
 class ComponentBase;
 using Component = std::shared_ptr<ComponentBase>;
+class Node;
+using Element = std::shared_ptr<Node>;
 struct Event;
 class Selection;
 class TaskRunner;
@@ -139,6 +141,13 @@ class FTXUI_EXPORT(COMPONENT) App : public Screen {
   /// @brief Add a task to draw the screen one more time, until all the
   /// animations are done.
   void RequestAnimationFrame();
+
+  /// @brief Print an element above the app. It is printed once, and becomes
+  /// part of the terminal scrollback. The app keeps being drawn below.
+  /// @param element The element to print. Its width is the terminal width.
+  /// @note This is meant for apps not using the alternate screen, such as
+  /// `App::TerminalOutput()`.
+  void PrintAbove(Element element);
 
   // Selection API:
 
