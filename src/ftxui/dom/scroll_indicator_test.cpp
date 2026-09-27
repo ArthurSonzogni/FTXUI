@@ -365,6 +365,30 @@ TEST(ScrollIndicator, HorizontalFlexbox) {
             "╰────╯");
 }
 
+// The content scrolled below the scrollbars sets their background, but not
+// their foreground. See #1133.
+TEST(ScrollIndicator, ContentColorsOnlyBackground) {
+  Elements rows;
+  for (int i = 0; i < 10; ++i) {
+    rows.push_back(text("0123456789") | color(Color::Green) |
+                   bgcolor(Color::Red));
+  }
+  auto element = vbox(std::move(rows)) | focusPositionRelative(1.f, 0.f) |
+                 vscroll_indicator | hscroll_indicator | frame |
+                 color(Color::Blue);
+  Screen screen(4, 4);
+  Render(screen, element);
+
+  // Vertical scrollbar:
+  EXPECT_EQ(screen.CellAt(3, 0).character, "┃");
+  EXPECT_EQ(screen.CellAt(3, 0).foreground_color, Color::Blue);
+  EXPECT_EQ(screen.CellAt(3, 0).background_color, Color::Red);
+  // Horizontal scrollbar:
+  EXPECT_EQ(screen.CellAt(2, 3).character, "╶");
+  EXPECT_EQ(screen.CellAt(2, 3).foreground_color, Color::Blue);
+  EXPECT_EQ(screen.CellAt(2, 3).background_color, Color::Red);
+}
+
 }  // namespace
 
 }  // namespace ftxui

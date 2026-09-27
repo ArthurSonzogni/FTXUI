@@ -38,6 +38,10 @@ Next
   @aaron-michaux. See #904.
 
 ### Dom
+- Bugfix: `vscroll_indicator` and `hscroll_indicator` no longer take the
+  foreground color and style of the content scrolled below them. They keep
+  the style of their parents, and only the background of the content.
+  Thanks @its-pablo. See #1133.
 - Bugfix: Avoid division by zero when selecting rows, columns, or rectangles on
   an empty table. Thanks @Machillka. See #1344.
 - Bugfix: `Table` selections no longer wrap around when an index is out of
