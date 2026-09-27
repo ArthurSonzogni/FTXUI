@@ -5,6 +5,7 @@
 #include <memory>     // for make_shared, __shared_ptr_access
 #include <string>     // for string
 #include <utility>    // for move
+#include <vector>     // for vector
 
 #include "ftxui/dom/elements.hpp"  // for Element, vscroll_indicator, hscroll_indicator
 #include "ftxui/dom/node.hpp"            // for Node, Elements
@@ -16,7 +17,7 @@
 namespace ftxui {
 
 /// @brief Display a vertical scrollbar on the right.
-/// Colors follow the content.
+/// The background follows the content, the rest follows the parent.
 /// @ingroup dom
 Element vscroll_indicator(Element child) {
   class Impl : public NodeDecorator {
@@ -35,9 +36,14 @@ Element vscroll_indicator(Element child) {
     }
 
     void Render(Screen& screen) final {
-      NodeDecorator::Render(screen);
+      // Save the style from the parents, before the content draws over it.
+      const Box stencil = screen.stencil;
+      std::vector<Cell> saved;
+      for (int y = stencil.y_min; y <= stencil.y_max; ++y) {
+        saved.push_back(screen.CellAt(stencil.x_max, y));
+      }
 
-      const Box& stencil = screen.stencil;
+      NodeDecorator::Render(screen);
 
       const int size_inner = box_.y_max - box_.y_min;
       if (size_inner <= 0) {
@@ -63,7 +69,11 @@ Element vscroll_indicator(Element child) {
         const bool down = (start_y <= y_down) && (y_down <= start_y + size);
 
         const char* c = up ? (down ? "┃" : "╹") : (down ? "╻" : " ");  // NOLINT
-        screen.CellAt(x, y).character = c;
+        Cell& cell = screen.CellAt(x, y);
+        const Color background = cell.background_color;
+        cell = saved[y - stencil.y_min];
+        cell.background_color = background;
+        cell.character = c;
       }
     }
   };
@@ -71,7 +81,7 @@ Element vscroll_indicator(Element child) {
 }
 
 /// @brief Display a horizontal scrollbar at the bottom.
-/// Colors follow the content.
+/// The background follows the content, the rest follows the parent.
 /// @ingroup dom
 Element hscroll_indicator(Element child) {
   class Impl : public NodeDecorator {
@@ -90,9 +100,14 @@ Element hscroll_indicator(Element child) {
     }
 
     void Render(Screen& screen) final {
-      NodeDecorator::Render(screen);
+      // Save the style from the parents, before the content draws over it.
+      const Box stencil = screen.stencil;
+      std::vector<Cell> saved;
+      for (int x = stencil.x_min; x <= stencil.x_max; ++x) {
+        saved.push_back(screen.CellAt(x, stencil.y_max));
+      }
 
-      const Box& stencil = screen.stencil;
+      NodeDecorator::Render(screen);
 
       const int size_inner = box_.x_max - box_.x_min;
       if (size_inner <= 0) {
@@ -119,7 +134,11 @@ Element hscroll_indicator(Element child) {
 
         const char* c =
             left ? (right ? "─" : "╴") : (right ? "╶" : " ");  // NOLINT
-        screen.CellAt(x, y).character = c;
+        Cell& cell = screen.CellAt(x, y);
+        const Color background = cell.background_color;
+        cell = saved[x - stencil.x_min];
+        cell.background_color = background;
+        cell.character = c;
       }
     }
   };
