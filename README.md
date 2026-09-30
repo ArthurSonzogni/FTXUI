@@ -40,6 +40,13 @@
 
 A simple cross-platform C++ library for terminal based user interfaces!
 
+> [!TIP]
+> Check out [RTXUI](https://github.com/ArthurSonzogni/RTXUI), my other
+> project. It is a different, experimental TUI library based on reactive
+> HTML/CSS/C++: structure with semantic HTML, style with real CSS (flexbox,
+> grid, transitions), and bind plain C++ state.
+> [Live demo](https://arthursonzogni.github.io/RTXUI/#interactive-playground).
+
 ## Feature
  * Functional style. Inspired by
    [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
