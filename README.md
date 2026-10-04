@@ -418,6 +418,7 @@ Feel free to add your projects here:
 - [Baobab TUI Remake](https://github.com/orrnithogalum/bonsai)
 - [Youtube Music Client](https://github.com/orrnithogalum/moroder)
 - [TUI_DB](https://github.com/klementii229/TUI_DB)
+- [Tpedia - Terminal Wikipedia](https://github.com/Float314/tpedia)
 
 ### [cpp-best-practices/game_jam](https://github.com/cpp-best-practices/game_jam)
 
