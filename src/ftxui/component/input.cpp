@@ -209,6 +209,42 @@ class InputBase : public ComponentBase, public InputOption {
     return true;
   }
 
+  bool HandleBackspaceWord() {
+    if (cursor_position() == 0) {
+      return false;
+    }
+
+    size_t start = cursor_position();
+    const size_t previous = GlyphPrevious(content(), start);
+    if (content()[previous] == '\n') {
+      start = previous;
+    } else {
+      // Phase 1: Skip non-word characters going backward (stopping at '\n').
+      while (start > 0) {
+        const size_t prev = GlyphPrevious(content(), start);
+        if (content()[prev] == '\n' || IsWordCharacter(content(), prev)) {
+          break;
+        }
+        start = prev;
+      }
+
+      // Phase 2: Skip word characters going backward (stopping at '\n').
+      while (start > 0) {
+        const size_t prev = GlyphPrevious(content(), start);
+        if (content()[prev] == '\n' || !IsWordCharacter(content(), prev)) {
+          break;
+        }
+        start = prev;
+      }
+    }
+
+    const size_t end = cursor_position();
+    content->erase(start, end - start);
+    cursor_position() = static_cast<int>(start);
+    App::PostEventOrExecute(on_change);
+    return true;
+  }
+
   bool DeleteImpl() {
     if (cursor_position() == (int)content->size()) {
       return false;
@@ -389,6 +425,9 @@ class InputBase : public ComponentBase, public InputOption {
     if (event == Event::Backspace) {
       return HandleBackspace();
     }
+    if (event == Event::BackspaceAlt || event == Event::AltBackspace) {
+      return HandleBackspaceWord();
+    }
     if (event == Event::Delete) {
       return HandleDelete();
     }
@@ -410,11 +449,17 @@ class InputBase : public ComponentBase, public InputOption {
     if (event == Event::End) {
       return HandleEnd();
     }
-    if (event == Event::ArrowLeftCtrl) {
+    if (event == Event::ArrowLeftCtrl || event == Event::ArrowLeftAlt) {
       return HandleLeftCtrl();
     }
-    if (event == Event::ArrowRightCtrl) {
+    if (event == Event::ArrowRightCtrl || event == Event::ArrowRightAlt) {
       return HandleRightCtrl();
+    }
+    if (event == Event::ArrowUpAlt) {
+      return HandleArrowUp();
+    }
+    if (event == Event::ArrowDownAlt) {
+      return HandleArrowDown();
     }
     if (event == Event::Insert) {
       return HandleInsert();

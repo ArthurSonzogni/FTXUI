@@ -565,6 +565,165 @@ TEST(InputTest, CtrlArrowRight2) {
   EXPECT_EQ(cursor_position, 38);
 }
 
+TEST(InputTest, AltArrow) {
+  std::string content =
+      "word word 测ord wo测d word\n"
+      "coucou    coucou coucou\n"
+      "coucou coucou coucou\n";
+  int cursor_position = 1000;
+  auto input = Input(&content, {
+                                   .cursor_position = &cursor_position,
+                               });
+
+  // Use Alt+Left several times
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftAlt));
+  EXPECT_EQ(cursor_position, 67);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftAlt));
+  EXPECT_EQ(cursor_position, 60);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowLeftAlt));
+  EXPECT_EQ(cursor_position, 53);
+
+  // Jump all the way to beginning
+  while (input->OnEvent(Event::ArrowLeftAlt)) {
+  }
+  EXPECT_EQ(cursor_position, 0);
+  EXPECT_FALSE(input->OnEvent(Event::ArrowLeftAlt));
+
+  // Use Alt+Right several times
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightAlt));
+  EXPECT_EQ(cursor_position, 4);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightAlt));
+  EXPECT_EQ(cursor_position, 9);
+}
+
+TEST(InputTest, AltArrowUpDown) {
+  std::string content =
+      "line1\n"
+      "line2\n"
+      "line3\n";
+  int cursor_position = 0;
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowDownAlt));
+  EXPECT_EQ(cursor_position, 6);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowDownAlt));
+  EXPECT_EQ(cursor_position, 12);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowUpAlt));
+  EXPECT_EQ(cursor_position, 6);
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowUpAlt));
+  EXPECT_EQ(cursor_position, 0);
+}
+
+TEST(InputTest, AltBackspace) {
+  std::string content = "word1 word2 word3";
+  int cursor_position = 17;
+  int on_change_called = 0;
+  auto input = Input(&content, {
+                                   .on_change = [&] { on_change_called++; },
+                                   .cursor_position = &cursor_position,
+                               });
+
+  // Deleting word3
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "word1 word2 ");
+  EXPECT_EQ(cursor_position, 12);
+  EXPECT_EQ(on_change_called, 1);
+
+  // Deleting trailing space and word2 using AltBackspace alias
+  EXPECT_TRUE(input->OnEvent(Event::AltBackspace));
+  EXPECT_EQ(content, "word1 ");
+  EXPECT_EQ(cursor_position, 6);
+  EXPECT_EQ(on_change_called, 2);
+
+  // Deleting trailing space and word1
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "");
+  EXPECT_EQ(cursor_position, 0);
+  EXPECT_EQ(on_change_called, 3);
+
+  // Deleting when empty
+  EXPECT_FALSE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "");
+  EXPECT_EQ(cursor_position, 0);
+  EXPECT_EQ(on_change_called, 3);
+}
+
+TEST(InputTest, AltBackspaceWhitespaceAndPunctuation) {
+  std::string content = "   hello, world!   ";
+  int cursor_position = (int)content.size();
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  // Deletes trailing spaces, '!' and "world"
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "   hello, ");
+  EXPECT_EQ(cursor_position, 10);
+
+  // Deletes ", " and "hello"
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "   ");
+  EXPECT_EQ(cursor_position, 3);
+
+  // Deletes remaining spaces
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "");
+  EXPECT_EQ(cursor_position, 0);
+
+  EXPECT_FALSE(input->OnEvent(Event::BackspaceAlt));
+}
+
+TEST(InputTest, AltBackspaceMiddleOfWord) {
+  std::string content = "abcdef";
+  int cursor_position = 3;  // between 'c' and 'd'
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "def");
+  EXPECT_EQ(cursor_position, 0);
+}
+
+TEST(InputTest, AltBackspaceMultiline) {
+  std::string content = "line1\nline2";
+  int cursor_position = (int)content.size();  // after 'line2'
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  // Deletes word "line2" on second line without eating newline
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "line1\n");
+  EXPECT_EQ(cursor_position, 6);
+
+  // Cursor right after '\n': deletes the newline
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "line1");
+  EXPECT_EQ(cursor_position, 5);
+
+  // Deletes "line1"
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "");
+  EXPECT_EQ(cursor_position, 0);
+
+  EXPECT_FALSE(input->OnEvent(Event::BackspaceAlt));
+}
+
+TEST(InputTest, AltBackspaceCJK) {
+  std::string content = "hello 测word";
+  int cursor_position = (int)content.size();
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "hello ");
+  EXPECT_EQ(cursor_position, 6);
+
+  EXPECT_TRUE(input->OnEvent(Event::BackspaceAlt));
+  EXPECT_EQ(content, "");
+  EXPECT_EQ(cursor_position, 0);
+}
+
 TEST(InputTest, TypePassword) {
   std::string content;
   std::string placeholder;

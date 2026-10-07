@@ -275,8 +275,15 @@ std::string Event::DebugString() const {
       {Event::ArrowUpCtrl, "Event::ArrowUpCtrl"},
       {Event::ArrowDownCtrl, "Event::ArrowDownCtrl"},
 
+      // --- ArrowAlt ---
+      {Event::ArrowLeftAlt, "Event::ArrowLeftAlt"},
+      {Event::ArrowRightAlt, "Event::ArrowRightAlt"},
+      {Event::ArrowUpAlt, "Event::ArrowUpAlt"},
+      {Event::ArrowDownAlt, "Event::ArrowDownAlt"},
+
       // --- Other ---
       {Event::Backspace, "Event::Backspace"},
+      {Event::BackspaceAlt, "Event::BackspaceAlt"},
       {Event::Delete, "Event::Delete"},
       {Event::Escape, "Event::Escape"},
       {Event::Return, "Event::Return"},
@@ -482,7 +489,13 @@ const Event Event::ArrowLeftCtrl  = Event::Special("\x1B[1;5D");
 const Event Event::ArrowRightCtrl = Event::Special("\x1B[1;5C");
 const Event Event::ArrowUpCtrl    = Event::Special("\x1B[1;5A");
 const Event Event::ArrowDownCtrl  = Event::Special("\x1B[1;5B");
+const Event Event::ArrowLeftAlt   = Event::Special("\x1B[1;3D");
+const Event Event::ArrowRightAlt  = Event::Special("\x1B[1;3C");
+const Event Event::ArrowUpAlt     = Event::Special("\x1B[1;3A");
+const Event Event::ArrowDownAlt   = Event::Special("\x1B[1;3B");
 const Event Event::Backspace      = Event::Special({127});
+const Event Event::BackspaceAlt   = Event::Special({27, 127});
+const Event Event::AltBackspace   = Event::Special({27, 127});
 const Event Event::Delete         = Event::Special("\x1B[3~");
 const Event Event::Escape         = Event::Special("\x1B");
 const Event Event::Return         = Event::Special({10});

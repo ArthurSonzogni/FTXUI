@@ -5,6 +5,8 @@ Next
 ====
 
 ### Component
+- Feature: Support Alt+Arrow keys (word navigation for Left/Right) and
+  Alt+Backspace (delete word backward) in the `Input` component.
 - Bugfix: Stop escape sequences from eating the ESC byte starting the next one.
   Pressing the ESC key while moving the mouse, or any sequence truncated by the
   terminal, used to be merged with the sequence following it, emitting its

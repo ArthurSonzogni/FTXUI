@@ -441,10 +441,18 @@ TEST(Event, Special) {
       {str("\x1B[1~"), Event::Home},
       {str("\x1B[4~"), Event::End},
 
+      // Arrow (Alt modifier)
+      {str("\x1B[1;3A"), Event::ArrowUpAlt},
+      {str("\x1B[1;3B"), Event::ArrowDownAlt},
+      {str("\x1B[1;3C"), Event::ArrowRightAlt},
+      {str("\x1B[1;3D"), Event::ArrowLeftAlt},
+
       // Backspace & Quirk for:
       // https://github.com/ArthurSonzogni/FTXUI/issues/508
       {{127}, Event::Backspace},
       {{8}, Event::Backspace},
+      {{27, 127}, Event::BackspaceAlt},
+      {{27, 8}, Event::BackspaceAlt},
 
       // Delete
       {str("\x1B[3~"), Event::Delete},
