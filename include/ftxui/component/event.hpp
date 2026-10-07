@@ -62,8 +62,15 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event ArrowUpCtrl;
   static const Event ArrowDownCtrl;
 
+  static const Event ArrowLeftAlt;
+  static const Event ArrowRightAlt;
+  static const Event ArrowUpAlt;
+  static const Event ArrowDownAlt;
+
   // --- Other ---
   static const Event Backspace;
+  static const Event BackspaceAlt;
+  static const Event AltBackspace;
   static const Event Delete;
   static const Event Return;
   static const Event Escape;

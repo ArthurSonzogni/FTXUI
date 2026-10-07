@@ -25,6 +25,7 @@ const std::map<std::string, std::string> g_uniformize = {
 
     // See: https://github.com/ArthurSonzogni/FTXUI/issues/508
     {std::string({8}), std::string({127})},
+    {std::string({27, 8}), std::string({27, 127})},
 
     // See: https://github.com/ArthurSonzogni/FTXUI/issues/626
     //
