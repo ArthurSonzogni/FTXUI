@@ -40,6 +40,9 @@ Next
   @aaron-michaux. See #904.
 
 ### Dom
+- Bugfix: `LinearGradient` stops without an explicit position are now spread
+  in order. With two or more of them in the middle, their colors used to be
+  reversed. Thanks @davidscottpope-gif. See #1379.
 - Bugfix: `vscroll_indicator` and `hscroll_indicator` no longer take the
   foreground color and style of the content scrolled below them. They keep
   the style of their parents, and only the background of the content.
