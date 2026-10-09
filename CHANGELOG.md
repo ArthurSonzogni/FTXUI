@@ -38,6 +38,12 @@ Next
 - Bugfix: Restore the terminal's default cursor shape on exit when it doesn't
   report its current one, instead of forcing a blinking block. Thanks
   @aaron-michaux. See #904.
+- Bugfix: Support a `Renderer` rendering descendants of its child directly,
+  bypassing the components in between. They used to lose their active state,
+  and their mouse handling. For instance, a `Container::Vertical` ignored the
+  mouse wheel. Thanks @739C1AE2. See #1377.
+- Feature: `ComponentBase::RenderedBox()` returns the area drawn by the
+  component during its last frame.
 
 ### Dom
 - Bugfix: `LinearGradient` stops without an explicit position are now spread

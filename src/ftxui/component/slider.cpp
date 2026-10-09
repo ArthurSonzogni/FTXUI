@@ -195,7 +195,7 @@ class SliderWithLabel : public ComponentBase {
       return false;
     }
 
-    mouse_hover_ = box_.Contain(event.mouse().x, event.mouse().y);
+    mouse_hover_ = RenderedBox().Contain(event.mouse().x, event.mouse().y);
 
     if (!mouse_hover_) {
       return false;
@@ -220,14 +220,13 @@ class SliderWithLabel : public ComponentBase {
                        }) | vcenter |
                            xflex,
                    }) |
-                   gauge_color | xflex | reflect(box_);
+                   gauge_color | xflex;
 
     element |= focus;
     return element;
   }
 
   ConstStringRef label_;
-  Box box_;
   bool mouse_hover_ = false;
 };
 

@@ -110,10 +110,9 @@ class InputBase : public ComponentBase, public InputOption {
       auto element = text(placeholder()) | focused | xflex | frame;
 
       return transform_func({
-                 std::move(element), hovered_, is_focused,
-                 true  // placeholder
-             }) |
-             reflect(box_);
+          std::move(element), hovered_, is_focused,
+          true  // placeholder
+      });
     }
 
     Elements elements;
@@ -180,7 +179,7 @@ class InputBase : public ComponentBase, public InputOption {
                std::move(element), hovered_, is_focused,
                false  // placeholder
            }) |
-           xflex | reflect(box_);
+           xflex;
   }
 
   Element Text(const std::string& input) {
@@ -517,8 +516,8 @@ class InputBase : public ComponentBase, public InputOption {
   }
 
   bool HandleMouse(Event event) {
-    hovered_ = box_.Contain(event.mouse().x,  //
-                            event.mouse().y) &&
+    hovered_ = RenderedBox().Contain(event.mouse().x,  //
+                                     event.mouse().y) &&
                CaptureMouse(event);
     if (!hovered_) {
       return false;
@@ -602,8 +601,6 @@ class InputBase : public ComponentBase, public InputOption {
   bool Focusable() const final { return true; }
 
   bool hovered_ = false;
-
-  Box box_;
   Box cursor_box_;
 };
 

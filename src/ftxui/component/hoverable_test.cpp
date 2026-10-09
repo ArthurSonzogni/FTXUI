@@ -188,6 +188,30 @@ TEST(HoverableTest, Coverage) {
   EXPECT_EQ(on_leave, 1);
 }
 
+// The Hoverable is bypassed: its child is rendered directly. See #1377.
+TEST(HoverableTest, Bypassed) {
+  bool hover_1 = false;
+  bool hover_2 = false;
+  auto child_1 = BasicComponent();
+  auto child_2 = BasicComponent();
+  auto layout = Container::Horizontal({
+      Hoverable(child_1, &hover_1),
+      Hoverable(child_2, &hover_2),
+  });
+  auto renderer = Renderer(
+      layout, [&] { return hbox({child_1->Render(), child_2->Render()}); });
+  auto screen = Screen(8, 2);
+  Render(screen, renderer->Render());
+
+  EXPECT_FALSE(renderer->OnEvent(HoverEvent(1, 0)));
+  EXPECT_TRUE(hover_1);
+  EXPECT_FALSE(hover_2);
+
+  EXPECT_FALSE(renderer->OnEvent(HoverEvent(4, 0)));
+  EXPECT_FALSE(hover_1);
+  EXPECT_TRUE(hover_2);
+}
+
 }  // namespace
 }  // namespace ftxui
 // NOLINTEND

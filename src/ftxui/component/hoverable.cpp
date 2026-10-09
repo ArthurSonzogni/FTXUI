@@ -9,7 +9,7 @@
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"           // for Mouse
-#include "ftxui/dom/elements.hpp"  // for operator|, reflect, Element
+#include "ftxui/dom/elements.hpp"  // for operator|, Element
 #include "ftxui/screen/box.hpp"    // for Box
 
 namespace ftxui {
@@ -39,13 +39,9 @@ Component Hoverable(Component component, bool* hover) {
     }
 
    private:
-    Element OnRender() override {
-      return ComponentBase::OnRender() | reflect(box_);
-    }
-
     bool OnEvent(Event event) override {
       if (event.is_mouse()) {
-        *hover_ = box_.Contain(event.mouse().x, event.mouse().y) &&
+        *hover_ = RenderedBox().Contain(event.mouse().x, event.mouse().y) &&
                   CaptureMouse(event);
       }
 
@@ -54,7 +50,6 @@ Component Hoverable(Component component, bool* hover) {
 
     Component component_;
     bool* hover_;
-    Box box_;
   };
 
   return Make<Impl>(component, hover);
@@ -88,14 +83,11 @@ Component Hoverable(Component component,
     }
 
    private:
-    Element OnRender() override {
-      return ComponentBase::OnRender() | reflect(box_);
-    }
-
     bool OnEvent(Event event) override {
       if (event.is_mouse()) {
-        const bool hover = box_.Contain(event.mouse().x, event.mouse().y) &&
-                           CaptureMouse(event);
+        const bool hover =
+            RenderedBox().Contain(event.mouse().x, event.mouse().y) &&
+            CaptureMouse(event);
         if (hover != hover_) {
           App::PostEventOrExecute(hover ? on_enter_ : on_leave_);
         }
@@ -106,7 +98,6 @@ Component Hoverable(Component component,
     }
 
     Component component_;
-    Box box_;
     bool hover_ = false;
     std::function<void()> on_enter_;
     std::function<void()> on_leave_;

@@ -64,18 +64,19 @@ class ResizableSplitBase : public ComponentBase, public ResizableSplitOption {
       return ComponentBase::OnEvent(event);
     }
 
+    const Box box = RenderedBox();
     switch (direction()) {
       case Direction::Left:
-        main_size() = std::max(0, event.mouse().x - box_.x_min);
+        main_size() = std::max(0, event.mouse().x - box.x_min);
         break;
       case Direction::Right:
-        main_size() = std::max(0, box_.x_max - event.mouse().x);
+        main_size() = std::max(0, box.x_max - event.mouse().x);
         break;
       case Direction::Up:
-        main_size() = std::max(0, event.mouse().y - box_.y_min);
+        main_size() = std::max(0, event.mouse().y - box.y_min);
         break;
       case Direction::Down:
-        main_size() = std::max(0, box_.y_max - event.mouse().y);
+        main_size() = std::max(0, box.y_max - event.mouse().y);
         break;
     }
 
@@ -100,44 +101,39 @@ class ResizableSplitBase : public ComponentBase, public ResizableSplitOption {
 
   Element RenderLeft() {
     return hbox({
-               main->Render() | size(WIDTH, EQUAL, main_size()),
-               separator_func() | reflect(separator_box_),
-               back->Render() | xflex,
-           }) |
-           reflect(box_);
+        main->Render() | size(WIDTH, EQUAL, main_size()),
+        separator_func() | reflect(separator_box_),
+        back->Render() | xflex,
+    });
   }
 
   Element RenderRight() {
     return hbox({
-               back->Render() | xflex,
-               separator_func() | reflect(separator_box_),
-               main->Render() | size(WIDTH, EQUAL, main_size()),
-           }) |
-           reflect(box_);
+        back->Render() | xflex,
+        separator_func() | reflect(separator_box_),
+        main->Render() | size(WIDTH, EQUAL, main_size()),
+    });
   }
 
   Element RenderTop() {
     return vbox({
-               main->Render() | size(HEIGHT, EQUAL, main_size()),
-               separator_func() | reflect(separator_box_),
-               back->Render() | yflex,
-           }) |
-           reflect(box_);
+        main->Render() | size(HEIGHT, EQUAL, main_size()),
+        separator_func() | reflect(separator_box_),
+        back->Render() | yflex,
+    });
   }
 
   Element RenderBottom() {
     return vbox({
-               back->Render() | yflex,
-               separator_func() | reflect(separator_box_),
-               main->Render() | size(HEIGHT, EQUAL, main_size()),
-           }) |
-           reflect(box_);
+        back->Render() | yflex,
+        separator_func() | reflect(separator_box_),
+        main->Render() | size(HEIGHT, EQUAL, main_size()),
+    });
   }
 
  private:
   CapturedMouse captured_mouse_;
   Box separator_box_;
-  Box box_;
 };
 
 }  // namespace

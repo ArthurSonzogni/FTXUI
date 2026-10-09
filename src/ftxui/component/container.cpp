@@ -10,7 +10,7 @@
 #include "ftxui/component/component_base.hpp"  // for Components, Component, ComponentBase
 #include "ftxui/component/event.hpp"  // for Event, Event::Tab, Event::TabReverse, Event::ArrowDown, Event::ArrowLeft, Event::ArrowRight, Event::ArrowUp, Event::End, Event::Home, Event::PageDown, Event::PageUp
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::WheelDown, Mouse::WheelUp
-#include "ftxui/dom/elements.hpp"  // for text, Elements, operator|, reflect, Element, hbox, vbox
+#include "ftxui/dom/elements.hpp"  // for text, Elements, operator|, Element, hbox, vbox
 #include "ftxui/screen/box.hpp"  // for Box
 
 namespace ftxui {
@@ -115,9 +115,9 @@ class VerticalContainer : public ContainerBase {
       elements.push_back(it->Render());
     }
     if (elements.empty()) {
-      return text("Empty container") | reflect(box_);
+      return text("Empty container");
     }
-    return vbox(std::move(elements)) | reflect(box_);
+    return vbox(std::move(elements));
   }
 
   bool EventHandler(Event event) override {
@@ -128,13 +128,14 @@ class VerticalContainer : public ContainerBase {
     if (event == Event::ArrowDown || event == Event::Character('j')) {
       MoveSelector(+1);
     }
+    const Box box = RenderedBox();
     if (event == Event::PageUp) {
-      for (int i = 0; i < box_.y_max - box_.y_min; ++i) {
+      for (int i = 0; i < box.y_max - box.y_min; ++i) {
         MoveSelector(-1);
       }
     }
     if (event == Event::PageDown) {
-      for (int i = 0; i < box_.y_max - box_.y_min; ++i) {
+      for (int i = 0; i < box.y_max - box.y_min; ++i) {
         MoveSelector(1);
       }
     }
@@ -169,7 +170,7 @@ class VerticalContainer : public ContainerBase {
       return false;
     }
 
-    if (!box_.Contain(event.mouse().x, event.mouse().y)) {
+    if (!RenderedBox().Contain(event.mouse().x, event.mouse().y)) {
       return false;
     }
 
@@ -184,8 +185,6 @@ class VerticalContainer : public ContainerBase {
 
     return old_selected != *selector_;
   }
-
-  Box box_;
 };
 
 class HorizontalContainer : public ContainerBase {

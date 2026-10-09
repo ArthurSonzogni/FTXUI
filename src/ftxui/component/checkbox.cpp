@@ -11,7 +11,7 @@
 #include "ftxui/component/component_options.hpp"  // for CheckboxOption, EntryState
 #include "ftxui/component/event.hpp"              // for Event, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/dom/elements.hpp"  // for operator|, Element, reflect, focus, nothing, select
+#include "ftxui/dom/elements.hpp"  // for operator|, Element, focus, nothing, select
 #include "ftxui/screen/box.hpp"  // for Box
 #include "ftxui/util/ref.hpp"    // for Ref, ConstStringRef
 
@@ -34,7 +34,6 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
     auto element = (transform ? transform : CheckboxOption::Simple().transform)(
         entry_state);
     element |= focus;
-    element |= reflect(box_);
     return element;
   }
 
@@ -58,7 +57,7 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
   }
 
   bool OnMouseEvent(Event event) {
-    hovered_ = box_.Contain(event.mouse().x, event.mouse().y);
+    hovered_ = RenderedBox().Contain(event.mouse().x, event.mouse().y);
 
     if (!CaptureMouse(event)) {
       return false;
@@ -82,7 +81,6 @@ class CheckboxBase : public ComponentBase, public CheckboxOption {
   bool Focusable() const final { return true; }
 
   bool hovered_ = false;
-  Box box_;
 };
 }  // namespace
 

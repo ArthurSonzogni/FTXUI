@@ -142,25 +142,21 @@ class MenuBase : public ComponentBase, public MenuOption {
         IsHorizontal() ? hbox(std::move(elements)) : vbox(std::move(elements));
 
     if (!underline.enabled) {
-      return bar | reflect(box_);
+      return bar;
     }
 
     if (IsHorizontal()) {
       return vbox({
-                 bar | xflex,
-                 separatorHSelector(first_, second_,  //
-                                    underline.color_active,
-                                    underline.color_inactive),
-             }) |
-             reflect(box_);
+          bar | xflex,
+          separatorHSelector(first_, second_,  //
+                             underline.color_active, underline.color_inactive),
+      });
     } else {
       return hbox({
-                 separatorVSelector(first_, second_,  //
-                                    underline.color_active,
-                                    underline.color_inactive),
-                 bar | yflex,
-             }) |
-             reflect(box_);
+          separatorVSelector(first_, second_,  //
+                             underline.color_active, underline.color_inactive),
+          bar | yflex,
+      });
     }
   }
 
@@ -251,10 +247,10 @@ class MenuBase : public ComponentBase, public MenuOption {
         OnRight();
       }
       if (event == Event::PageUp) {
-        selected() -= box_.y_max - box_.y_min;
+        selected() -= RenderedBox().y_max - RenderedBox().y_min;
       }
       if (event == Event::PageDown) {
-        selected() += box_.y_max - box_.y_min;
+        selected() += RenderedBox().y_max - RenderedBox().y_min;
       }
       if (event == Event::Home) {
         selected() = 0;
@@ -322,7 +318,7 @@ class MenuBase : public ComponentBase, public MenuOption {
   }
 
   bool OnMouseWheel(Event event) {
-    if (!box_.Contain(event.mouse().x, event.mouse().y)) {
+    if (!RenderedBox().Contain(event.mouse().x, event.mouse().y)) {
       return false;
     }
     const int old_selected = selected();
@@ -441,16 +437,18 @@ class MenuBase : public ComponentBase, public MenuOption {
     if (boxes_.empty()) {
       return 0.F;
     }
-    const int value = IsHorizontal() ? boxes_[selected()].x_min - box_.x_min
-                                     : boxes_[selected()].y_min - box_.y_min;
+    const int value = IsHorizontal()
+                          ? boxes_[selected()].x_min - RenderedBox().x_min
+                          : boxes_[selected()].y_min - RenderedBox().y_min;
     return float(value);
   }
   float SecondTarget() {
     if (boxes_.empty()) {
       return 0.F;
     }
-    const int value = IsHorizontal() ? boxes_[selected()].x_max - box_.x_min
-                                     : boxes_[selected()].y_max - box_.y_min;
+    const int value = IsHorizontal()
+                          ? boxes_[selected()].x_max - RenderedBox().x_min
+                          : boxes_[selected()].y_max - RenderedBox().y_min;
     return float(value);
   }
 
@@ -460,7 +458,6 @@ class MenuBase : public ComponentBase, public MenuOption {
 
   // Mouse click support:
   std::vector<Box> boxes_;
-  Box box_;
 
   // Animation support:
   float first_ = 0.F;
@@ -626,7 +623,7 @@ Component MenuEntry(MenuEntryOption option) {
         element |= focus;
       }
 
-      return element | AnimatedColorStyle() | reflect(box_);
+      return element | AnimatedColorStyle();
     }
 
     void UpdateAnimationTarget() {
@@ -667,7 +664,7 @@ Component MenuEntry(MenuEntryOption option) {
         return false;
       }
 
-      hovered_ = box_.Contain(event.mouse().x, event.mouse().y);
+      hovered_ = RenderedBox().Contain(event.mouse().x, event.mouse().y);
 
       if (!hovered_) {
         return false;
@@ -686,8 +683,6 @@ Component MenuEntry(MenuEntryOption option) {
       animator_background_.OnAnimation(params);
       animator_foreground_.OnAnimation(params);
     }
-
-    Box box_;
     bool hovered_ = false;
 
     float animation_background_ = 0.F;

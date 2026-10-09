@@ -8,7 +8,7 @@
 #include "ftxui/component/component_base.hpp"  // for Component, ComponentBase
 #include "ftxui/component/event.hpp"           // for Event
 #include "ftxui/component/mouse.hpp"           // for Mouse
-#include "ftxui/dom/elements.hpp"  // for Element, operator|, reflect
+#include "ftxui/dom/elements.hpp"  // for Element, operator|
 #include "ftxui/screen/box.hpp"    // for Box
 
 namespace ftxui {
@@ -88,10 +88,11 @@ Component Renderer(std::function<Element(bool)> render) {
         : render_(std::move(render)) {}
 
    private:
-    Element OnRender() override { return render_(Focused()) | reflect(box_); }
+    Element OnRender() override { return render_(Focused()); }
     bool Focusable() const override { return true; }
     bool OnEvent(Event event) override {
-      if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
+      if (event.is_mouse() &&
+          RenderedBox().Contain(event.mouse().x, event.mouse().y)) {
         if (!CaptureMouse(event)) {
           return false;
         }
@@ -101,7 +102,6 @@ Component Renderer(std::function<Element(bool)> render) {
 
       return false;
     }
-    Box box_;
 
     std::function<Element(bool)> render_;
   };

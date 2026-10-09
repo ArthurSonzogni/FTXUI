@@ -47,7 +47,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
       }
       elements.push_back(element | reflect(boxes_[i]));
     }
-    return vbox(std::move(elements)) | reflect(box_);
+    return vbox(std::move(elements));
   }
 
   // NOLINTNEXTLINE(readability-function-cognitive-complexity)
@@ -70,10 +70,10 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
         (hovered_)++;
       }
       if (event == Event::PageUp) {
-        (hovered_) -= box_.y_max - box_.y_min;
+        (hovered_) -= RenderedBox().y_max - RenderedBox().y_min;
       }
       if (event == Event::PageDown) {
-        (hovered_) += box_.y_max - box_.y_min;
+        (hovered_) += RenderedBox().y_max - RenderedBox().y_min;
       }
       if (event == Event::Home) {
         (hovered_) = 0;
@@ -133,7 +133,7 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
   }
 
   bool OnMouseWheel(Event event) {
-    if (!box_.Contain(event.mouse().x, event.mouse().y)) {
+    if (!RenderedBox().Contain(event.mouse().x, event.mouse().y)) {
       return false;
     }
 
@@ -167,7 +167,6 @@ class RadioboxBase : public ComponentBase, public RadioboxOption {
 
   int hovered_ = selected();
   std::vector<Box> boxes_;
-  Box box_;
 };
 
 }  // namespace

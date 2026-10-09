@@ -17,6 +17,8 @@
 #include "ftxui/dom/elements.hpp"              // for text, Element
 #include "ftxui/dom/node.hpp"                  // for Node, Elements
 #include "ftxui/screen/box.hpp"                // for Box
+#include "ftxui/screen/screen.hpp"             // for Screen
+#include "ftxui/util/autoreset.hpp"            // for AutoReset
 
 namespace ftxui::animation {
 class Params;
@@ -26,12 +28,29 @@ namespace ftxui {
 
 namespace {
 class CaptureMouseImpl : public CapturedMouseInterface {};
+
+// A frame starts when a component is rendered while no other one is.
+int render_depth = 0;     // NOLINT
+size_t render_frame = 0;  // NOLINT
 }  // namespace
 
 struct ComponentBase::Impl {
   Components children;
   ComponentBase* parent = nullptr;
   bool in_render = false;
+
+  // The area drawn during the last frame |box_frame|.
+  Box box{0, -1, 0, -1};
+  size_t box_frame = 0;
+
+  void Reflect(Box drawn, size_t frame) {
+    if (box_frame != frame) {
+      box_frame = frame;
+      box = drawn;
+    } else {
+      box = Box::Union(box, drawn);
+    }
+  }
 };
 
 ComponentBase::ComponentBase() : impl_(std::make_unique<Impl>()) {}
@@ -128,17 +147,47 @@ Element ComponentBase::Render() {
     return ComponentBase::OnRender();
   }
 
-  impl_->in_render = true;
-  Element element = OnRender();
-  impl_->in_render = false;
+  if (render_depth == 0) {
+    render_frame++;
+  }
+  Element element;
+  {
+    const AutoReset<int> depth(&render_depth, render_depth + 1);
+    const AutoReset<bool> in_render(&impl_->in_render, true);
+    element = OnRender();
+  }
+
+  // The ancestors not currently rendering have been bypassed by a parent
+  // rendering this component directly. Act on their behalf: take their active
+  // state into account, and report the drawn area to them. See #1377.
+  bool active = Active();
+  std::vector<Impl*> bypassed;
+  for (ComponentBase* it = impl_->parent; it && !it->impl_->in_render;
+       it = it->impl_->parent) {
+    active = active && it->Active();
+    bypassed.push_back(it->impl_.get());
+  }
 
   class Wrapper : public Node {
    public:
     bool active_ = false;
     bool focused_ = false;
+    Impl* self_;
+    std::vector<Impl*> bypassed_;
+    size_t frame_;
 
-    Wrapper(Element child, bool active, bool focused)
-        : Node({std::move(child)}), active_(active), focused_(focused) {}
+    Wrapper(Element child,
+            bool active,
+            bool focused,
+            Impl* self,
+            std::vector<Impl*> bypassed,
+            size_t frame)
+        : Node({std::move(child)}),
+          active_(active),
+          focused_(focused),
+          self_(self),
+          bypassed_(std::move(bypassed)),
+          frame_(frame) {}
 
     void SetBox(Box box) override {
       Node::SetBox(box);
@@ -150,9 +199,22 @@ Element ComponentBase::Render() {
       requirement_.focused.component_active = active_;
       requirement_.focused.component_focused = focused_;
     }
+
+    void Render(Screen& screen) override {
+      const Box drawn = Box::Intersection(box_, screen.stencil);
+      if (!drawn.IsEmpty()) {
+        self_->Reflect(drawn, frame_);
+        for (Impl* impl : bypassed_) {
+          impl->Reflect(drawn, frame_);
+        }
+      }
+      Node::Render(screen);
+    }
   };
 
-  return std::make_shared<Wrapper>(std::move(element), Active(), Focused());
+  return std::make_shared<Wrapper>(std::move(element), active, Focused(),
+                                   impl_.get(), std::move(bypassed),
+                                   render_frame);
 }
 
 /// @brief Draw the component.
@@ -187,6 +249,13 @@ void ComponentBase::OnAnimation(animation::Params& params) {
   for (const Component& child : impl_->children) {
     child->OnAnimation(params);
   }
+}
+
+/// @brief The area drawn by this component during its last frame.
+/// When it was bypassed, by a parent rendering its descendants directly, this
+/// is the union of their areas. Empty until drawn.
+Box ComponentBase::RenderedBox() const {
+  return impl_->box;
 }
 
 /// @brief Return the currently Active child.

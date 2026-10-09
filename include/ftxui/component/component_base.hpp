@@ -9,6 +9,7 @@
 
 #include "ftxui/component/captured_mouse.hpp"  // for CaptureMouse
 #include "ftxui/dom/elements.hpp"              // for Element
+#include "ftxui/screen/box.hpp"                // for Box
 #include "ftxui/util/export.hpp"
 
 namespace ftxui {
@@ -102,6 +103,11 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
 
  protected:
   CapturedMouse CaptureMouse(const Event& event);
+
+  // The area drawn by this component during its last frame. When it was
+  // bypassed, by a parent rendering its descendants directly, this is the
+  // union of their areas. Empty until drawn.
+  Box RenderedBox() const;
 
   Components& children();
   const Components& children() const;

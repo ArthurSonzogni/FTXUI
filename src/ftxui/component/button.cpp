@@ -13,7 +13,7 @@
 #include "ftxui/component/component_options.hpp"  // for ButtonOption, AnimatedColorOption, AnimatedColorsOption, EntryState
 #include "ftxui/component/event.hpp"  // for Event, Event::Return
 #include "ftxui/component/mouse.hpp"  // for Mouse, Mouse::Left, Mouse::Pressed
-#include "ftxui/dom/elements.hpp"  // for operator|, Decorator, Element, operator|=, bgcolor, color, reflect, text, bold, border, inverted, nothing
+#include "ftxui/dom/elements.hpp"  // for operator|, Decorator, Element, operator|=, bgcolor, color, text, bold, border, inverted, nothing
 #include "ftxui/screen/box.hpp"    // for Box
 #include "ftxui/screen/color.hpp"  // for Color
 #include "ftxui/util/ref.hpp"      // for Ref, ConstStringRef
@@ -56,7 +56,6 @@ class ButtonBase : public ComponentBase, public ButtonOption {
         (state);
     element |= AnimatedColorStyle();
     element |= focus;
-    element |= reflect(box_);
     return element;
   }
 
@@ -116,8 +115,8 @@ class ButtonBase : public ComponentBase, public ButtonOption {
   }
 
   bool OnMouseEvent(Event event) {
-    mouse_hover_ =
-        box_.Contain(event.mouse().x, event.mouse().y) && CaptureMouse(event);
+    mouse_hover_ = RenderedBox().Contain(event.mouse().x, event.mouse().y) &&
+                   CaptureMouse(event);
 
     if (!mouse_hover_) {
       return false;
@@ -137,7 +136,6 @@ class ButtonBase : public ComponentBase, public ButtonOption {
 
  private:
   bool mouse_hover_ = false;
-  Box box_;
   float animation_background_ = 0;
   float animation_foreground_ = 0;
   animation::Animator animator_background_ =
