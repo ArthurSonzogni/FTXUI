@@ -52,9 +52,9 @@ LinearGradientNormalized Normalize(LinearGradient gradient) {
     }
 
     if (i - last_checkpoint >= 2) {
-      const float min = gradient.stops[i].position.value();  // NOLINT
-      const float max =
+      const float min =
           gradient.stops[last_checkpoint].position.value();  // NOLINT
+      const float max = gradient.stops[i].position.value();  // NOLINT
       for (size_t j = last_checkpoint + 1; j < i; ++j) {
         gradient.stops[j].position = min + (max - min) *
                                                float(j - last_checkpoint) /

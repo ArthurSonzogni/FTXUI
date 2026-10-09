@@ -86,5 +86,29 @@ TEST(ColorTest, GradientBackground) {
   EXPECT_EQ(screen.CellAt(4, 0).background_color, gradient_end);
 }
 
+// https://github.com/ArthurSonzogni/FTXUI/issues/1379
+TEST(ColorTest, GradientImplicitPositions) {
+  auto implicit = LinearGradient()
+                      .Stop(Color::Red)
+                      .Stop(Color::Green)
+                      .Stop(Color::Blue)
+                      .Stop(Color::White);
+  auto explicit_ = LinearGradient()
+                       .Stop(Color::Red, 0.F)
+                       .Stop(Color::Green, 1.F / 3.F)
+                       .Stop(Color::Blue, 2.F / 3.F)
+                       .Stop(Color::White, 1.F);
+
+  Screen screen_implicit(7, 1);
+  Screen screen_explicit(7, 1);
+  Render(screen_implicit, text("       ") | bgcolor(implicit));
+  Render(screen_explicit, text("       ") | bgcolor(explicit_));
+
+  for (int x = 0; x < 7; ++x) {
+    EXPECT_EQ(screen_implicit.CellAt(x, 0).background_color,
+              screen_explicit.CellAt(x, 0).background_color);
+  }
+}
+
 }  // namespace ftxui
 // NOLINTEND
