@@ -40,6 +40,9 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
 
   std::string ToString() const;
   void ToString(std::string& ss) const;
+  // Update the terminal from |previous| to this screen, printing only the cells
+  // that changed. The cursor must be at the top-left corner of |previous|.
+  void ToString(std::string& ss, const Screen& previous) const;
 
   // Print the Screen on to the terminal.
   void Print() const;

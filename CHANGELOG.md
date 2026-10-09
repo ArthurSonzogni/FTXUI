@@ -57,6 +57,12 @@ Next
   content, not the border. Thanks @alex-pat. See #1016.
 
 ### Screen
+- Feature: Only print the cells that changed since the previous frame. This
+  reduces the output a lot, which matters over high-latency connections.
+  `Screen::ToString(std::string&, const Screen& previous)` is added for this.
+  Thanks @mbacarella. See #1304.
+- Bugfix: A fullwidth character drawn over the second half of another one, e.g.
+  using `dbox`, no longer shifts the rest of the line to the left.
 - Bugfix: Emoji with the presentation selector U+FE0F (e.g. ❤️) now take two
   cells, as drawn by modern terminals. They used to shift the rest of the line.
   Thanks @Darleanow. See #929.
