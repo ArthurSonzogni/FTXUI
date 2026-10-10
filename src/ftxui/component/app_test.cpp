@@ -18,7 +18,10 @@
 #include <unistd.h>
 #include <array>
 #include <cstdio>
+#include <functional>  // for function
+#include <iostream>    // for cout, flush
 #include <string>
+#include <vector>  // for vector
 #endif
 
 namespace ftxui {
@@ -305,6 +308,131 @@ TEST(App, PrintAbove) {
   ASSERT_NE(xy, std::string::npos);
   EXPECT_EQ(output.find("XY", xy + 1), std::string::npos);
   EXPECT_NE(output.find("AB", xy), std::string::npos);
+#endif
+}
+
+#if defined(__unix__)
+namespace {
+// Draw a frame for each step, and return the output of each.
+std::vector<std::string> DrawFrames(App& screen,
+                                    Component component,
+                                    std::vector<std::function<void()>> steps) {
+  const std::string separator = "<FRAME>";
+  std::string output;
+  {
+    auto capture = StdCapture(&output);
+    Loop loop(&screen, component);
+    for (auto& step : steps) {
+      std::cout << separator << std::flush;
+      step();
+      screen.PostEvent(Event::Custom);
+      loop.RunOnce();
+    }
+    std::cout << separator << std::flush;
+  }
+
+  std::vector<std::string> frames;
+  size_t begin = output.find(separator) + separator.size();
+  size_t end = 0;
+  while ((end = output.find(separator, begin)) != std::string::npos) {
+    frames.push_back(output.substr(begin, end - begin));
+    begin = end + separator.size();
+  }
+  return frames;
+}
+
+Component Lines(int* counter) {
+  return Renderer([counter] {
+    return vbox({
+        text("Header"),
+        text("Counter " + std::to_string(*counter)),
+        text("Footer"),
+    });
+  });
+}
+}  // namespace
+#endif
+
+// Only the cells that changed are printed. See #1304.
+TEST(App, UpdateInPlace) {
+#if defined(__unix__)
+  int counter = 0;
+  auto screen = App::FixedSize(12, 3);
+  auto frames = DrawFrames(screen, Lines(&counter),
+                           {
+                               [] {},
+                               [&] { counter = 1; },
+                               [] {},
+                           });
+  ASSERT_EQ(frames.size(), 3u);
+  EXPECT_NE(frames[0].find("Header"), std::string::npos);
+  EXPECT_NE(frames[0].find("Footer"), std::string::npos);
+
+  // Only the counter changed.
+  EXPECT_EQ(frames[1].find("Header"), std::string::npos);
+  EXPECT_EQ(frames[1].find("Footer"), std::string::npos);
+  EXPECT_EQ(frames[1].find("Counter"), std::string::npos);
+  EXPECT_NE(frames[1].find('1'), std::string::npos);
+
+  // Nothing changed.
+  EXPECT_EQ(frames[2].find("Header"), std::string::npos);
+  EXPECT_EQ(frames[2].find("Footer"), std::string::npos);
+  EXPECT_EQ(frames[2].find("Counter"), std::string::npos);
+#endif
+}
+
+// A resize redraws everything.
+TEST(App, UpdateInPlaceResize) {
+#if defined(__unix__)
+  int counter = 0;
+  auto screen = App::FitComponent();
+  auto frames = DrawFrames(screen, Lines(&counter),
+                           {
+                               [] {},
+                               [&] { counter = 10; },
+                               [&] { counter = 11; },
+                           });
+  ASSERT_EQ(frames.size(), 3u);
+  EXPECT_NE(frames[1].find("Header"), std::string::npos);
+  EXPECT_NE(frames[1].find("Footer"), std::string::npos);
+
+  // The next frame, with the same size, is updated in place.
+  EXPECT_EQ(frames[2].find("Header"), std::string::npos);
+  EXPECT_EQ(frames[2].find("Footer"), std::string::npos);
+  EXPECT_NE(frames[2].find('1'), std::string::npos);
+#endif
+}
+
+// Printing above the frame redraws everything.
+TEST(App, UpdateInPlacePrintAbove) {
+#if defined(__unix__)
+  int counter = 0;
+  auto screen = App::FixedSize(12, 3);
+  auto frames = DrawFrames(screen, Lines(&counter),
+                           {
+                               [] {},
+                               [&] { screen.PrintAbove(text("Above")); },
+                           });
+  ASSERT_EQ(frames.size(), 2u);
+  EXPECT_NE(frames[1].find("Above"), std::string::npos);
+  EXPECT_NE(frames[1].find("Header"), std::string::npos);
+  EXPECT_NE(frames[1].find("Footer"), std::string::npos);
+#endif
+}
+
+// Restoring the terminal for a while redraws everything.
+TEST(App, UpdateInPlaceWithRestoredIO) {
+#if defined(__unix__)
+  int counter = 0;
+  auto screen = App::FixedSize(12, 3);
+  auto frames = DrawFrames(screen, Lines(&counter),
+                           {
+                               [] {},
+                               [&] { screen.WithRestoredIO([] {})(); },
+                           });
+  ASSERT_EQ(frames.size(), 2u);
+  EXPECT_NE(frames[1].find("Header"), std::string::npos);
+  EXPECT_NE(frames[1].find("Footer"), std::string::npos);
 #endif
 }
 

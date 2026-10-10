@@ -93,6 +93,25 @@ void ftxui_on_resize(int columns, int rows) {
 }
 #endif
 
+namespace {
+// The frame currently displayed by the terminal. Its cells are swapped with the
+// App's ones, instead of being copied.
+class PreviousFrame : public Screen {
+ public:
+  PreviousFrame() : Screen(0, 0) {}
+
+  void Swap(std::vector<Cell>& cells,
+            std::vector<std::string>& hyperlinks,
+            int dimx,
+            int dimy) {
+    std::swap(cells_, cells);
+    std::swap(hyperlinks_, hyperlinks);
+    dimx_ = dimx;
+    dimy_ = dimy;
+  }
+};
+}  // namespace
+
 struct App::Internal {
   App* public_;
 
@@ -118,6 +137,10 @@ struct App::Internal {
   bool previous_frame_resized_ = false;
 
   bool frame_valid_ = false;
+
+  // The frame currently displayed by the terminal. Only the cells that changed
+  // since are printed. Empty when the terminal must be fully redrawn.
+  PreviousFrame previous_frame_;
 
   // Elements to print above the app on the next frame.
   std::vector<Element> print_above_;
@@ -580,6 +603,7 @@ void App::Internal::ExitNow() {
 
 void App::Internal::Install() {
   frame_valid_ = false;
+  previous_frame_ = PreviousFrame();
 
   // Flush the buffer for stdout to ensure whatever the user has printed before
   // is fully applied before we start modifying the terminal configuration. This
@@ -1042,6 +1066,8 @@ void App::Internal::Draw(Component component) {
 
   const bool resized =
       frame_count_ == 0 || (dimx != public_->dimx_) || (dimy != public_->dimy_);
+  // Whether the frame can be updated in place, from the previous one.
+  const bool update_in_place = !resized && print_above_.empty();
   TerminalSend(ResetCursorPosition());
 
   if (frame_count_ != 0) {
@@ -1124,10 +1150,18 @@ void App::Internal::Draw(Component component) {
     }
   }
 
-  public_->ToString(output_buffer);
+  if (update_in_place) {
+    public_->ToString(output_buffer, previous_frame_);
+  } else {
+    public_->ToString(output_buffer);
+  }
   TerminalSend(set_cursor_position_);
   TerminalFlush();
 
+  previous_frame_.Swap(public_->cells_, public_->hyperlinks_, public_->dimx_,
+                       public_->dimy_);
+  public_->cells_.resize(static_cast<size_t>(public_->dimx_) *
+                         static_cast<size_t>(public_->dimy_));
   public_->Clear();
   frame_valid_ = true;
   frame_count_++;

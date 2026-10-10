@@ -9,6 +9,7 @@
 #include <string>  // for string
 #include <string_view>  // for string_view
 #include <utility>      // for pair
+#include <vector>       // for vector
 
 #include "ftxui/screen/cell.hpp"  // for Cell
 #include "ftxui/screen/screen.hpp"
@@ -415,6 +416,38 @@ bool ShouldAttemptAutoMerge(Cell& cell) {
   return cell.automerge && cell.character.size() == 3;
 }
 
+// Whether the two cells are printed identically.
+bool SameCell(const Screen& screen_a,
+              const Cell& a,
+              const Screen& screen_b,
+              const Cell& b) {
+  return a.character == b.character &&                //
+         a.foreground_color == b.foreground_color &&  //
+         a.background_color == b.background_color &&  //
+         a.blink == b.blink &&                        //
+         a.bold == b.bold &&                          //
+         a.dim == b.dim &&                            //
+         a.italic == b.italic &&                      //
+         a.inverted == b.inverted &&                  //
+         a.underlined == b.underlined &&              //
+         a.underlined_double == b.underlined_double &&
+         a.strikethrough == b.strikethrough &&
+         screen_a.Hyperlink(a.hyperlink) == screen_b.Hyperlink(b.hyperlink);
+}
+
+// Mark the cells hidden behind the fullwidth character preceding them. They
+// aren't printed. This matches Screen::ToString().
+void HiddenCells(const Cell* row, int dimx, std::vector<bool>& hidden) {
+  hidden.assign(static_cast<size_t>(dimx), false);
+  bool previous_fullwidth = false;
+  for (int x = 0; x < dimx; ++x) {
+    hidden[x] = previous_fullwidth;
+    const std::string& character = row[x].character;
+    previous_fullwidth =
+        !hidden[x] && character.size() > 1 && string_width(character) == 2;
+  }
+}
+
 }  // namespace
 
 /// A fixed dimension.
@@ -503,11 +536,9 @@ void Screen::ToString(std::string& ss) const {
             ss += cell.character;
           }
         }
-        if (cell.character.size() <= 1) {
-          previous_fullwidth = false;
-        } else {
-          previous_fullwidth = (string_width(cell.character) == 2);
-        }
+        // A hidden cell can't hide the next one.
+        previous_fullwidth = !previous_fullwidth && cell.character.size() > 1 &&
+                             string_width(cell.character) == 2;
       }
     }
   }
@@ -515,6 +546,91 @@ void Screen::ToString(std::string& ss) const {
   // Reset the style to default:
   UpdateCellStyle(this, ss, color_support, last_colors, *previous_cell_ref,
                   default_cell);
+}
+
+/// Produce a std::string updating the terminal from |previous| to this Screen.
+/// Only the cells that changed are printed.
+/// @param ss The string to append to.
+/// @param previous The Screen currently displayed. The cursor must be at its
+///                 top-left corner. It ends where ToString() would leave it.
+void Screen::ToString(std::string& ss, const Screen& previous) const {
+  if (previous.dimx_ != dimx_ || previous.dimy_ != dimy_ || dimx_ == 0 ||
+      dimy_ == 0) {
+    ToString(ss);
+    return;
+  }
+
+  const Cell default_cell;
+  const Terminal::Color color_support = Terminal::ColorSupport();
+  ColorSequence last_colors;
+  std::vector<bool> hidden;
+  std::vector<bool> previous_hidden;
+  int cursor_y = 0;
+
+  for (int y = 0; y < dimy_; ++y) {
+    const Cell* row = &FastCellAt(0, y);
+    const Cell* previous_row = &previous.FastCellAt(0, y);
+    auto same = [&](int x) {
+      return SameCell(*this, row[x], previous, previous_row[x]);
+    };
+
+    int first = 0;
+    while (first < dimx_ && same(first)) {
+      ++first;
+    }
+    int last = dimx_ - 1;
+    if (y != dimy_ - 1) {
+      if (first == dimx_) {
+        continue;
+      }
+      while (same(last)) {
+        --last;
+      }
+    } else if (first == dimx_) {
+      // Always print the last cell, so the cursor ends like ToString().
+      first = dimx_ - 1;
+    }
+
+    // Don't split fullwidth characters, from either frame. Overwriting half of
+    // one erases the other half, which must be printed again.
+    HiddenCells(row, dimx_, hidden);
+    HiddenCells(previous_row, dimx_, previous_hidden);
+    while (first > 0 && (hidden[first] || previous_hidden[first])) {
+      --first;
+    }
+    while (last + 1 < dimx_ &&
+           (hidden[last + 1] || previous_hidden[last + 1])) {
+      ++last;
+    }
+
+    // Move the cursor to (first, y).
+    if (y != cursor_y) {
+      ss += "\x1B[" + std::to_string(y - cursor_y) + "B";  // MOVE_DOWN
+      cursor_y = y;
+    }
+    ss += '\r';  // MOVE_LEFT
+    if (first != 0) {
+      ss += "\x1B[" + std::to_string(first) + "C";  // MOVE_RIGHT
+    }
+
+    const Cell* previous_cell_ref = &default_cell;
+    for (int x = first; x <= last; ++x) {
+      if (hidden[x]) {
+        continue;
+      }
+      const Cell& cell = row[x];
+      UpdateCellStyle(this, ss, color_support, last_colors, *previous_cell_ref,
+                      cell);
+      previous_cell_ref = &cell;
+      if (cell.character.empty()) {
+        ss += ' ';
+      } else {
+        ss += cell.character;
+      }
+    }
+    UpdateCellStyle(this, ss, color_support, last_colors, *previous_cell_ref,
+                    default_cell);
+  }
 }
 
 // Print the Screen to the terminal.
