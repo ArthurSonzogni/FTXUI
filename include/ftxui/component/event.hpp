@@ -72,6 +72,8 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   static const Event BackspaceAlt;
   static const Event AltBackspace;
   static const Event Delete;
+  static const Event DeleteAlt;
+  static const Event DeleteCtrl;
   static const Event Return;
   static const Event Escape;
   static const Event Tab;

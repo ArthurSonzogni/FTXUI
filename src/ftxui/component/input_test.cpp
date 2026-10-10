@@ -724,6 +724,135 @@ TEST(InputTest, AltBackspaceCJK) {
   EXPECT_EQ(cursor_position, 0);
 }
 
+TEST(InputTest, CtrlW) {
+  std::string content = "word1 word2";
+  int cursor_position = (int)content.size();
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  EXPECT_TRUE(input->OnEvent(Event::CtrlW));
+  EXPECT_EQ(content, "word1 ");
+  EXPECT_EQ(cursor_position, 6);
+}
+
+TEST(InputTest, DeleteWord) {
+  std::string content = "word1, word2 word3";
+  int cursor_position = 0;
+  int on_change_called = 0;
+  auto input = Input(&content, {
+                                   .on_change = [&] { on_change_called++; },
+                                   .cursor_position = &cursor_position,
+                               });
+
+  // Deletes "word1".
+  EXPECT_TRUE(input->OnEvent(Event::DeleteAlt));
+  EXPECT_EQ(content, ", word2 word3");
+  EXPECT_EQ(cursor_position, 0);
+  EXPECT_EQ(on_change_called, 1);
+
+  // Deletes ", " and "word2".
+  EXPECT_TRUE(input->OnEvent(Event::DeleteCtrl));
+  EXPECT_EQ(content, " word3");
+  EXPECT_EQ(on_change_called, 2);
+
+  // Deletes " word3".
+  EXPECT_TRUE(input->OnEvent(Event::AltD));
+  EXPECT_EQ(content, "");
+  EXPECT_EQ(on_change_called, 3);
+
+  EXPECT_FALSE(input->OnEvent(Event::DeleteAlt));
+  EXPECT_EQ(on_change_called, 3);
+}
+
+TEST(InputTest, DeleteWordMiddleOfWord) {
+  std::string content = "abc测def ghi";
+  int cursor_position = 1;  // between 'a' and 'b'
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  EXPECT_TRUE(input->OnEvent(Event::DeleteAlt));
+  EXPECT_EQ(content, "a ghi");
+  EXPECT_EQ(cursor_position, 1);
+}
+
+TEST(InputTest, DeleteWordMultiline) {
+  std::string content = "line1\nline2";
+  int cursor_position = 0;
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  // Deletes "line1" without eating the newline.
+  EXPECT_TRUE(input->OnEvent(Event::DeleteAlt));
+  EXPECT_EQ(content, "\nline2");
+
+  // Cursor right before '\n': deletes the newline.
+  EXPECT_TRUE(input->OnEvent(Event::DeleteAlt));
+  EXPECT_EQ(content, "line2");
+}
+
+TEST(InputTest, CtrlU) {
+  std::string content = "line1\nline2 word";
+  int cursor_position = 11;  // after "line2"
+  int on_change_called = 0;
+  auto input = Input(&content, {
+                                   .on_change = [&] { on_change_called++; },
+                                   .cursor_position = &cursor_position,
+                               });
+
+  // Deletes the beginning of the line.
+  EXPECT_TRUE(input->OnEvent(Event::CtrlU));
+  EXPECT_EQ(content, "line1\n word");
+  EXPECT_EQ(cursor_position, 6);
+  EXPECT_EQ(on_change_called, 1);
+
+  // At the beginning of the line: deletes the newline.
+  EXPECT_TRUE(input->OnEvent(Event::CtrlU));
+  EXPECT_EQ(content, "line1 word");
+  EXPECT_EQ(cursor_position, 5);
+
+  EXPECT_TRUE(input->OnEvent(Event::CtrlU));
+  EXPECT_EQ(content, " word");
+  EXPECT_EQ(cursor_position, 0);
+  EXPECT_EQ(on_change_called, 3);
+
+  EXPECT_FALSE(input->OnEvent(Event::CtrlU));
+  EXPECT_EQ(on_change_called, 3);
+}
+
+TEST(InputTest, CtrlAE) {
+  std::string content = "line1\nli测e2\nline3";
+  int cursor_position = 8;  // after "li"
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  EXPECT_TRUE(input->OnEvent(Event::CtrlE));
+  EXPECT_EQ(cursor_position, 13);  // before the second '\n'
+  EXPECT_TRUE(input->OnEvent(Event::CtrlE));
+  EXPECT_EQ(cursor_position, 13);
+
+  EXPECT_TRUE(input->OnEvent(Event::CtrlA));
+  EXPECT_EQ(cursor_position, 6);  // after the first '\n'
+  EXPECT_TRUE(input->OnEvent(Event::CtrlA));
+  EXPECT_EQ(cursor_position, 6);
+
+  cursor_position = 2;
+  EXPECT_TRUE(input->OnEvent(Event::CtrlA));
+  EXPECT_EQ(cursor_position, 0);
+
+  cursor_position = 16;
+  EXPECT_TRUE(input->OnEvent(Event::CtrlE));
+  EXPECT_EQ(cursor_position, (int)content.size());
+}
+
+TEST(InputTest, AltBF) {
+  std::string content = "word1 word2";
+  int cursor_position = (int)content.size();
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  EXPECT_TRUE(input->OnEvent(Event::AltB));
+  EXPECT_EQ(cursor_position, 6);
+  EXPECT_TRUE(input->OnEvent(Event::AltB));
+  EXPECT_EQ(cursor_position, 0);
+  EXPECT_TRUE(input->OnEvent(Event::AltF));
+  EXPECT_EQ(cursor_position, 5);
+}
+
 TEST(InputTest, TypePassword) {
   std::string content;
   std::string placeholder;

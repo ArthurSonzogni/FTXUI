@@ -456,6 +456,8 @@ TEST(Event, Special) {
 
       // Delete
       {str("\x1B[3~"), Event::Delete},
+      {str("\x1B[3;3~"), Event::DeleteAlt},
+      {str("\x1B[3;5~"), Event::DeleteCtrl},
 
       // Return
       {{13}, Event::Return},
