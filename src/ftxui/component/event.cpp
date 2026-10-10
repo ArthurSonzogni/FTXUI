@@ -285,6 +285,8 @@ std::string Event::DebugString() const {
       {Event::Backspace, "Event::Backspace"},
       {Event::BackspaceAlt, "Event::BackspaceAlt"},
       {Event::Delete, "Event::Delete"},
+      {Event::DeleteAlt, "Event::DeleteAlt"},
+      {Event::DeleteCtrl, "Event::DeleteCtrl"},
       {Event::Escape, "Event::Escape"},
       {Event::Return, "Event::Return"},
       {Event::Tab, "Event::Tab"},
@@ -497,6 +499,8 @@ const Event Event::Backspace      = Event::Special({127});
 const Event Event::BackspaceAlt   = Event::Special({27, 127});
 const Event Event::AltBackspace   = Event::Special({27, 127});
 const Event Event::Delete         = Event::Special("\x1B[3~");
+const Event Event::DeleteAlt      = Event::Special("\x1B[3;3~");
+const Event Event::DeleteCtrl     = Event::Special("\x1B[3;5~");
 const Event Event::Escape         = Event::Special("\x1B");
 const Event Event::Return         = Event::Special({10});
 const Event Event::Tab            = Event::Special({9});

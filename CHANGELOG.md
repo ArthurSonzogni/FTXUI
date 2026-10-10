@@ -7,6 +7,14 @@ Next
 ### Component
 - Feature: Support Alt+Arrow keys (word navigation for Left/Right) and
   Alt+Backspace (delete word backward) in the `Input` component.
+- Feature: Support more editing shortcuts in the `Input` component, matching
+  what macOS terminals send for Cmd and Option keys:
+  - Ctrl+A / Ctrl+E: move to the beginning / end of the line.
+  - Alt+B / Alt+F: move one word left / right.
+  - Ctrl+W: delete the previous word.
+  - Ctrl+U: delete up to the beginning of the line.
+  - Alt+Delete, Ctrl+Delete, Alt+D: delete the next word.
+  Add `Event::DeleteAlt` and `Event::DeleteCtrl`. Thanks @jsphweid. See #1089.
 - Bugfix: Stop escape sequences from eating the ESC byte starting the next one.
   Pressing the ESC key while moving the mouse, or any sequence truncated by the
   terminal, used to be merged with the sequence following it, emitting its
