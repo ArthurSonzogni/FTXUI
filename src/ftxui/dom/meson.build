@@ -7,7 +7,7 @@ dom_sources = files(
   'box_helper.cpp',
   'canvas.cpp',
   'clear_under.cpp',
-  'color.cpp',
+  'color_decorator.cpp',
   'composite_decorator.cpp',
   'dbox.cpp',
   'dim.cpp',

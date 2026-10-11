@@ -94,6 +94,12 @@ Next
   `flex_grow_factor`, `flex_shrink_factor` and their `x`/`y` variants) and
   `Terminal::TerminalInfo` / `Terminal::ComputeColorSupport` were missing the
   same way and are now exported too. Thanks @woquchonglang. See #1360.
+- Bugfix: Give every source file a unique name. Visual Studio's own build
+  system puts all the object files in one directory, so `dom/color.cpp` and
+  `screen/color.cpp` overwrote each other, causing unresolved `color` and
+  `bgcolor` symbols. Thanks @HDuft. See #896.
+- Add `tools/check.py`, running repository checks in CI: unique source file
+  names, the same sources built by CMake, Meson and Bazel, and license headers.
 - Bugfix: Fix missing CMake targets namespace in exported package when C++20
   modules are enabled. Thanks @patlefort. See #1322.
 

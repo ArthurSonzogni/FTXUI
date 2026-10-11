@@ -6,6 +6,7 @@ component_sources = files(
   'collapsible.cpp',
   'component.cpp',
   'component_options.cpp',
+  'component_util.cpp',
   'container.cpp',
   'dropdown.cpp',
   'event.cpp',
@@ -23,6 +24,5 @@ component_sources = files(
   'task_queue.cpp',
   'task_runner.cpp',
   'terminal_input_parser.cpp',
-  'util.cpp',
   'window.cpp',
 )

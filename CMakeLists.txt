@@ -90,7 +90,7 @@ add_library(dom
   src/ftxui/dom/box_helper.hpp
   src/ftxui/dom/canvas.cpp
   src/ftxui/dom/clear_under.cpp
-  src/ftxui/dom/color.cpp
+  src/ftxui/dom/color_decorator.cpp
   src/ftxui/dom/composite_decorator.cpp
   src/ftxui/dom/dbox.cpp
   src/ftxui/dom/dim.cpp
@@ -149,6 +149,7 @@ add_library(component
   src/ftxui/component/collapsible.cpp
   src/ftxui/component/component.cpp
   src/ftxui/component/component_options.cpp
+  src/ftxui/component/component_util.cpp
   src/ftxui/component/container.cpp
   src/ftxui/component/dropdown.cpp
   src/ftxui/component/event.cpp
@@ -170,7 +171,6 @@ add_library(component
   src/ftxui/component/task_runner.hpp
   src/ftxui/component/terminal_input_parser.cpp
   src/ftxui/component/terminal_input_parser.hpp
-  src/ftxui/component/util.cpp
   src/ftxui/component/window.cpp
 )
 

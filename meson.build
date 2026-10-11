@@ -110,7 +110,7 @@ if ftxui_build_tests
     'src/ftxui/dom/bold_test.cpp',
     'src/ftxui/dom/border_test.cpp',
     'src/ftxui/dom/canvas_test.cpp',
-    'src/ftxui/dom/color_test.cpp',
+    'src/ftxui/dom/color_decorator_test.cpp',
     'src/ftxui/dom/dbox_test.cpp',
     'src/ftxui/dom/dim_test.cpp',
     'src/ftxui/dom/flexbox_helper_test.cpp',
