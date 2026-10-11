@@ -1,0 +1,3 @@
+<map id="类继承关系图" name="类继承关系图">
+<area shape="rect" id="Node000000" href="$group__component.html#classftxui_1_1ComponentBase" title="它将自身实现为 ftxui::Element。它通过响应 ftxui::Event 来实现键盘导航。" alt="" coords="5,5,135,31"/>
+</map>
