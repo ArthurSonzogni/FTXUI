@@ -278,7 +278,7 @@ class Amalgamator:
         cpp_files = []
         for root, _, files in os.walk(SRC_DIR):
             for file in files:
-                if file.endswith(".cpp") and not any(x in file for x in ["_test.cpp", "_fuzzer.cpp", "loop.cpp"]):
+                if file.endswith(".cpp") and not any(x in file for x in ["_test.cpp", "_fuzzer.cpp"]):
                     cpp_files.append(Path(root) / file)
         
         source_blocks = []

@@ -1,11 +1,11 @@
-#include <string_view>
 // Copyright 2020 Arthur Sonzogni. All rights reserved.
 // Use of this source code is governed by the MIT license that can be found in
 // the LICENSE file.
-#include <array>    // for array, array<>::value_type
-#include <memory>   // for make_shared, allocator
-#include <string>   // for basic_string, string
-#include <utility>  // for move
+#include <array>        // for array, array<>::value_type
+#include <memory>       // for make_shared, allocator
+#include <string>       // for basic_string, string
+#include <string_view>  // for string_view
+#include <utility>      // for move
 
 #include "ftxui/dom/elements.hpp"  // for Element, BorderStyle, LIGHT, separator, DOUBLE, EMPTY, HEAVY, separatorCharacter, separatorDouble, separatorEmpty, separatorHSelector, separatorHeavy, separatorLight, separatorStyled, separatorVSelector
 #include "ftxui/dom/node.hpp"      // for Node
