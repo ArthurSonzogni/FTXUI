@@ -436,6 +436,82 @@ TEST(App, UpdateInPlaceWithRestoredIO) {
 #endif
 }
 
+// A second Loop draws below the last frame of the first one. See #809.
+TEST(App, LoopTwice) {
+#if defined(__unix__)
+  auto screen = App::FixedSize(2, 2);
+  auto component = Renderer([] { return text("AB"); });
+  std::string output;
+  {
+    auto capture = StdCapture(&output);
+    {
+      Loop loop(&screen, component);
+      loop.RunOnce();
+    }
+    std::cout << "<SECOND>" << std::flush;
+    {
+      Loop loop(&screen, component);
+      loop.RunOnce();
+    }
+  }
+  const std::string second = output.substr(output.find("<SECOND>"));
+  EXPECT_NE(second.find("AB"), std::string::npos);
+  // The cursor doesn't move up, over the first frame.
+  EXPECT_EQ(second.find("\x1B[1A"), std::string::npos);
+#endif
+}
+
+// An app suspended before drawing anything has nothing to clear. See #809.
+TEST(App, NestedBeforeFirstFrame) {
+#if defined(__unix__)
+  auto outer = App::FixedSize(2, 2);
+  auto inner = App::FixedSize(2, 2);
+  auto component = Renderer([] { return text("AB"); });
+  std::string output;
+  {
+    auto capture = StdCapture(&output);
+    Loop outer_loop(&outer, component);
+    {
+      Loop inner_loop(&inner, component);
+      inner_loop.RunOnce();
+    }
+    outer_loop.RunOnce();
+  }
+  // Nothing is cleared above the inner frame.
+  const size_t inner_frame = output.find("AB");
+  ASSERT_NE(inner_frame, std::string::npos);
+  EXPECT_EQ(output.substr(0, inner_frame).find("\x1B[1A"), std::string::npos);
+  // The outer frame is drawn after the inner one, with its size.
+  EXPECT_NE(output.find("AB", inner_frame + 1), std::string::npos);
+#endif
+}
+
+// A nested app exiting before drawing anything has nothing to clear.
+TEST(App, NestedExitBeforeFirstFrame) {
+#if defined(__unix__)
+  auto outer = App::FixedSize(2, 2);
+  auto inner = App::FixedSize(2, 2);
+  auto component = Renderer([] { return text("AB"); });
+  std::string output;
+  {
+    auto capture = StdCapture(&output);
+    Loop outer_loop(&outer, component);
+    outer_loop.RunOnce();
+    {
+      Loop inner_loop(&inner, component);
+    }
+    outer_loop.RunOnce();
+  }
+  // Only the outer frame is cleared, moving up one line.
+  size_t move_up = 0;
+  for (size_t i = output.find("\x1B[1A"); i != std::string::npos;
+       i = output.find("\x1B[1A", i + 1)) {
+    move_up++;
+  }
+  EXPECT_EQ(move_up, 1u);
+#endif
+}
+
 TEST(App, MoveConstructor) {
   auto screen = App::FixedSize(10, 10);
   App screen2 = std::move(screen);
