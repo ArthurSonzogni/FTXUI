@@ -105,7 +105,7 @@ jobs:
     if: ${{ inputs.publish_bcr }}
     permissions:
       contents: write
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.5.0
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.5.1
     with:
       tag_name: ${{ needs.prepare.outputs.tag }}
       registry_fork: ArthurSonzogni/bazel-central-registry
