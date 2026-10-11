@@ -93,26 +93,24 @@ void ftxui_on_resize(int columns, int rows) {
 }
 #endif
 
-namespace {
-// The frame currently displayed by the terminal. Its cells are swapped with the
-// App's ones, instead of being copied.
-class PreviousFrame : public Screen {
- public:
-  PreviousFrame() : Screen(0, 0) {}
-
-  void Swap(std::vector<Cell>& cells,
-            std::vector<std::string>& hyperlinks,
-            int dimx,
-            int dimy) {
-    std::swap(cells_, cells);
-    std::swap(hyperlinks_, hyperlinks);
-    dimx_ = dimx;
-    dimy_ = dimy;
-  }
-};
-}  // namespace
-
 struct App::Internal {
+  // The frame currently displayed by the terminal. Its cells are swapped with
+  // the App's ones, instead of being copied.
+  class PreviousFrame : public Screen {
+   public:
+    PreviousFrame() : Screen(0, 0) {}
+
+    void Swap(std::vector<Cell>& cells,
+              std::vector<std::string>& hyperlinks,
+              int dimx,
+              int dimy) {
+      std::swap(cells_, cells);
+      std::swap(hyperlinks_, hyperlinks);
+      dimx_ = dimx;
+      dimy_ = dimy;
+    }
+  };
+
   App* public_;
 
   App* suspended_screen_ = nullptr;
