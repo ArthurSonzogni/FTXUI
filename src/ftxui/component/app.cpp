@@ -783,17 +783,24 @@ void App::Internal::PreMain() {
   if (g_active_screen) {
     std::swap(suspended_screen_, g_active_screen);
     // Reset cursor position to the top of the screen and clear the screen.
-    suspended_screen_->internal_->TerminalSend(
-        suspended_screen_->internal_->ResetCursorPosition());
-    suspended_screen_->ResetPosition(
-        suspended_screen_->internal_->output_buffer,
-        /*clear=*/true);
-    suspended_screen_->dimx_ = 0;
-    suspended_screen_->dimy_ = 0;
+    // Nothing to clear when nothing was drawn yet.
+    if (suspended_screen_->internal_->frame_count_ != 0) {
+      suspended_screen_->internal_->TerminalSend(
+          suspended_screen_->internal_->ResetCursorPosition());
+      suspended_screen_->ResetPosition(
+          suspended_screen_->internal_->output_buffer,
+          /*clear=*/true);
+      suspended_screen_->dimx_ = 0;
+      suspended_screen_->dimy_ = 0;
+    }
 
     // Reset dimensions to force drawing the screen again next time:
     suspended_screen_->internal_->Uninstall();
   }
+
+  // The first frame is drawn at the cursor position, below what was printed
+  // before, including the last frame of a previous Loop. See #809.
+  frame_count_ = 0;
 
   // This screen is now active:
   g_active_screen = public_;
@@ -811,9 +818,11 @@ void App::Internal::PostMain() {
   // Restore suspended screen.
   if (suspended_screen_) {
     // Clear screen, and put the cursor at the beginning of the drawing.
-    public_->ResetPosition(output_buffer, /*clear=*/true);
-    public_->dimx_ = 0;
-    public_->dimy_ = 0;
+    if (frame_count_ != 0) {
+      public_->ResetPosition(output_buffer, /*clear=*/true);
+      public_->dimx_ = 0;
+      public_->dimy_ = 0;
+    }
     Uninstall();
     std::swap(g_active_screen, suspended_screen_);
     g_active_screen->internal_->Install();
