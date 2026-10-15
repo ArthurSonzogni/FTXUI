@@ -347,6 +347,7 @@ enum class DECMode : std::uint16_t {
   kMouseUrxvtMode = 1015,
   kMouseSgrPixelsMode = 1016,
   kAlternateScreen = 1049,
+  kSynchronizedOutput = 2026,
 };
 
 // Device Status Report (DSR) {
@@ -1068,6 +1069,10 @@ void App::Internal::Draw(Component component) {
       break;
   }
 
+  // Ask the terminal to present the frame atomically, instead of showing it
+  // while it is being drawn. Terminals not supporting it ignore this.
+  TerminalSend(Set({DECMode::kSynchronizedOutput}));
+
   // Hide cursor to prevent flickering during reset.
   TerminalSend("\033[?25l");
 
@@ -1163,6 +1168,7 @@ void App::Internal::Draw(Component component) {
     public_->ToString(output_buffer);
   }
   TerminalSend(set_cursor_position_);
+  TerminalSend(Reset({DECMode::kSynchronizedOutput}));
   TerminalFlush();
 
   previous_frame_.Swap(public_->cells_, public_->hyperlinks_, public_->dimx_,

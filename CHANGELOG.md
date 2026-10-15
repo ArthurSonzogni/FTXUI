@@ -9,6 +9,10 @@ Next
   over the previous one, leaving parts of it on screen. The new frame is now
   drawn below. A nested app that exits, or is suspended, before drawing
   anything no longer erases the lines above it. See #809.
+- Feature: Each frame is wrapped in a synchronized update (DEC mode 2026), so
+  that the terminal presents it at once instead of while it is being drawn.
+  This avoids tearing, notably over high-latency connections. Terminals not
+  supporting it ignore it. See #1304.
 - Feature: Support Alt+Arrow keys (word navigation for Left/Right) and
   Alt+Backspace (delete word backward) in the `Input` component.
 - Feature: Support more editing shortcuts in the `Input` component, matching
