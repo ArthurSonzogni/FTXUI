@@ -373,6 +373,7 @@ Feel free to add your projects here:
 - [FTB - tertminal file browser](https://github.com/Cyxuan0311/FTB)
 - [FTowerX](https://github.com/MhmRhm/FTowerX)
 - [Fallout terminal hacking](https://github.com/gshigin/yet-another-fallout-terminal-hacking-game)
+- [Imza - Coding Agent](https://github.com/umutsevdi/imza)
 - [Lazylist](https://github.com/zhuyongqi9/lazylist)
 - [Memory game](https://github.com/mikolajlubiak/memory)
 - [nfolens](https://github.com/a4x7/nfolens)
