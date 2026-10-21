@@ -257,6 +257,9 @@ TEST(App, FixedSizeInitialFrame) {
   expected += "\x1B[?1006h"s;  // Enable SGR mouse tracking.
   expected += "\0"s;           // Flush stdout.
 
+  // Begin the synchronized update.
+  expected += "\x1B[?2026h"s;
+
   // Reset the screen.
   expected += "\x1B[?25l"s;  // Hide cursor.
 
@@ -266,6 +269,9 @@ TEST(App, FixedSizeInitialFrame) {
 
   // Set cursor position.
   expected += "\x1B[1D"s;  // Move cursor left one character.
+
+  // End the synchronized update.
+  expected += "\x1B[?2026l"s;
 
   // Flush
   expected += "\0"s;  // Flush stdout.
@@ -509,6 +515,38 @@ TEST(App, NestedExitBeforeFirstFrame) {
     move_up++;
   }
   EXPECT_EQ(move_up, 1u);
+#endif
+}
+
+// Every frame is wrapped in a synchronized update, so that the terminal
+// presents it atomically.
+TEST(App, SynchronizedOutput) {
+#if defined(__unix__)
+  int counter = 0;
+  auto screen = App::FixedSize(12, 3);
+  auto frames = DrawFrames(screen, Lines(&counter),
+                           {
+                               [] {},
+                               [&] { counter = 1; },
+                               [&] { screen.PrintAbove(text("Above")); },
+                           });
+  ASSERT_EQ(frames.size(), 3u);
+  const std::string begin = "\x1B[?2026h";
+  const std::string end = "\x1B[?2026l";
+  const std::string contents[] = {"Header", "1", "Above"};
+  for (size_t i = 0; i < frames.size(); ++i) {
+    const auto& frame = frames[i];
+    const size_t begin_pos = frame.find(begin);
+    const size_t end_pos = frame.find(end);
+    const size_t content_pos = frame.find(contents[i]);
+    ASSERT_NE(begin_pos, std::string::npos) << "frame " << i;
+    ASSERT_NE(end_pos, std::string::npos) << "frame " << i;
+    ASSERT_NE(content_pos, std::string::npos) << "frame " << i;
+    EXPECT_LT(begin_pos, content_pos) << "frame " << i;
+    EXPECT_LT(content_pos, end_pos) << "frame " << i;
+    EXPECT_EQ(frame.find(begin, begin_pos + 1), std::string::npos);
+    EXPECT_EQ(frame.find(end, end_pos + 1), std::string::npos);
+  }
 #endif
 }
 
