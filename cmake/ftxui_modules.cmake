@@ -2,9 +2,11 @@ if (NOT FTXUI_BUILD_MODULES)
   return()
 endif()
 
-add_library(modules)
+add_library(ftxui_modules)
 
-target_sources(modules
+set_target_properties(ftxui_modules PROPERTIES EXPORT_NAME modules)
+
+target_sources(ftxui_modules
   PUBLIC FILE_SET CXX_MODULES FILES
   src/ftxui/ftxui.cppm
   src/ftxui/component.cppm
@@ -13,26 +15,26 @@ target_sources(modules
   src/ftxui/util.cppm
   )
 
-target_link_libraries(modules
+target_link_libraries(ftxui_modules
   PUBLIC
   ftxui::screen
   ftxui::dom
   ftxui::component
   )
 
-target_compile_features(modules PUBLIC cxx_std_20)
+target_compile_features(ftxui_modules PUBLIC cxx_std_20)
 # TODO: Explain why this is needed.
 if (CMAKE_COMPILER_IS_GNUCXX)
-  target_compile_options(modules PUBLIC -fmodules-ts)
+  target_compile_options(ftxui_modules PUBLIC -fmodules-ts)
 endif ()
 
-add_library(ftxui::modules ALIAS modules)
+add_library(ftxui::modules ALIAS ftxui_modules)
 
 if(FTXUI_ENABLE_INSTALL)
 
   include(GNUInstallDirs)
 
-  install(TARGETS modules
+  install(TARGETS ftxui_modules
     EXPORT ftxui-targets
     FILE_SET CXX_MODULES
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/ftxui
