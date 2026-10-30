@@ -53,12 +53,42 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
       : SliderOption<T>(std::move(options)) {}
 
   Element OnRender() override {
-    auto gauge_color =
-        Focused() ? color(this->color_active) : color(this->color_inactive);
+    auto gauge_color = (Focused() || hovered_)
+                           ? color(this->color_active)
+                           : color(this->color_inactive);
     const float percent =
         float(this->value() - this->min()) / float(this->max() - this->min());
-    return gaugeDirection(percent, this->direction) |
-           flexDirection(this->direction) | reflect(gauge_box_) | gauge_color;
+    auto gauge = gaugeDirection(percent, this->direction) |
+                 flexDirection(this->direction) | reflect(gauge_box_) |
+                 gauge_color;
+
+    if (this->label().empty()) {
+      return gauge | reflect(box_);
+    }
+
+    if (this->direction == Direction::Right ||
+        this->direction == Direction::Left) {
+      auto element = hbox({
+                         text(this->label()) | dim | vcenter,
+                         hbox({
+                             text("["),
+                             gauge | underlined,
+                             text("]"),
+                         }) | vcenter |
+                             xflex,
+                     }) |
+                     gauge_color | xflex | reflect(box_);
+      element |= focus;
+      return element;
+    }
+
+    auto element = vbox({
+                       text(this->label()) | dim | hcenter,
+                       gauge,
+                   }) |
+                   gauge_color | yflex | reflect(box_);
+    element |= focus;
+    return element;
   }
 
   void OnDirection(Direction pressed) {
@@ -149,6 +179,8 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
       return OnCapturedMouseEvent(event);
     }
 
+    hovered_ = box_.Contain(event.mouse().x, event.mouse().y);
+
     if (event.mouse().button != Mouse::Left) {
       return false;
     }
@@ -156,15 +188,17 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
       return false;
     }
 
-    if (!gauge_box_.Contain(event.mouse().x, event.mouse().y)) {
-      return false;
+    if (gauge_box_.Contain(event.mouse().x, event.mouse().y)) {
+      captured_mouse_ = CaptureMouse(event);
+      if (captured_mouse_) {
+        TakeFocus();
+        return OnCapturedMouseEvent(event);
+      }
     }
 
-    captured_mouse_ = CaptureMouse(event);
-
-    if (captured_mouse_) {
+    if (box_.Contain(event.mouse().x, event.mouse().y)) {
       TakeFocus();
-      return OnCapturedMouseEvent(event);
+      return true;
     }
 
     return false;
@@ -174,61 +208,9 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
 
  private:
   Box gauge_box_;
-  CapturedMouse captured_mouse_;
-};
-
-class SliderWithLabel : public ComponentBase {
- public:
-  SliderWithLabel(ConstStringRef label, Component inner)
-      : label_(std::move(label)) {
-    Add(std::move(inner));
-    SetActiveChild(ChildAt(0));
-  }
-
- private:
-  bool OnEvent(Event event) final {
-    if (ComponentBase::OnEvent(event)) {
-      return true;
-    }
-
-    if (!event.is_mouse()) {
-      return false;
-    }
-
-    mouse_hover_ = box_.Contain(event.mouse().x, event.mouse().y);
-
-    if (!mouse_hover_) {
-      return false;
-    }
-
-    if (!CaptureMouse(event)) {
-      return false;
-    }
-
-    return true;
-  }
-
-  Element OnRender() override {
-    auto gauge_color = (Focused() || mouse_hover_) ? color(Color::White)
-                                                   : color(Color::GrayDark);
-    auto element = hbox({
-                       text(label_()) | dim | vcenter,
-                       hbox({
-                           text("["),
-                           ComponentBase::Render() | underlined,
-                           text("]"),
-                       }) | vcenter |
-                           xflex,
-                   }) |
-                   gauge_color | xflex | reflect(box_);
-
-    element |= focus;
-    return element;
-  }
-
-  ConstStringRef label_;
   Box box_;
-  bool mouse_hover_ = false;
+  bool hovered_ = false;
+  CapturedMouse captured_mouse_;
 };
 
 }  // namespace
@@ -261,12 +243,12 @@ Component Slider(ConstStringRef label,
                  ConstRef<int> max,
                  ConstRef<int> increment) {
   SliderOption<int> option;
+  option.label = std::move(label);
   option.value = value;
   option.min = min;
   option.max = max;
   option.increment = increment;
-  auto slider = Make<SliderBase<int>>(option);
-  return Make<SliderWithLabel>(std::move(label), slider);
+  return Make<SliderBase<int>>(std::move(option));
 }
 
 Component Slider(ConstStringRef label,
@@ -275,12 +257,12 @@ Component Slider(ConstStringRef label,
                  ConstRef<float> max,
                  ConstRef<float> increment) {
   SliderOption<float> option;
+  option.label = std::move(label);
   option.value = value;
   option.min = min;
   option.max = max;
   option.increment = increment;
-  auto slider = Make<SliderBase<float>>(option);
-  return Make<SliderWithLabel>(std::move(label), slider);
+  return Make<SliderBase<float>>(std::move(option));
 }
 Component Slider(ConstStringRef label,
                  Ref<long> value,
@@ -288,12 +270,12 @@ Component Slider(ConstStringRef label,
                  ConstRef<long> max,
                  ConstRef<long> increment) {
   SliderOption<long> option;
+  option.label = std::move(label);
   option.value = value;
   option.min = min;
   option.max = max;
   option.increment = increment;
-  auto slider = Make<SliderBase<long>>(option);
-  return Make<SliderWithLabel>(std::move(label), slider);
+  return Make<SliderBase<long>>(std::move(option));
 }
 
 /// @brief A slider in any direction.

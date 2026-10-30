@@ -243,5 +243,171 @@ TEST(SliderTest, LabeledSliderIsOneLineHigh) {
   EXPECT_EQ(screen.at(16, 2), "");
 }
 
+// SliderOption::label: the label must be rendered.
+// Layout for Screen(15, 1): "ab" (x 0-1), "[" (x 2), gauge (x 3-13), "]" (x 14)
+TEST(SliderTest, LabeledOptionsRendersLabel) {
+  int value = 50;
+  auto slider = Slider<int>({
+      .label = "ab",
+      .value = &value,
+      .min = 0,
+      .max = 100,
+      .increment = 10,
+      .direction = Direction::Right,
+  });
+  Screen screen(15, 1);
+  Render(screen, slider->Render());
+  EXPECT_EQ(screen.at(0, 0), "a");
+  EXPECT_EQ(screen.at(1, 0), "b");
+  EXPECT_EQ(screen.at(2, 0), "[");
+  EXPECT_EQ(screen.at(14, 0), "]");
+}
+
+// Mouse events must reach the slider when using label.
+TEST(SliderTest, LabeledOptionsMouse) {
+  int updated = 0;
+  int value = 50;
+  auto slider = Slider<int>({
+      .label = "ab",
+      .value = &value,
+      .min = 0,
+      .max = 100,
+      .increment = 10,
+      .direction = Direction::Right,
+      .on_change = [&]() { updated++; },
+  });
+  Screen screen(15, 1);
+  Render(screen, slider->Render());
+  EXPECT_EQ(value, 50);
+  EXPECT_EQ(updated, 0);
+
+  // The gauge spans x = 3..13, so x = 6 -> 30 and x = 11 -> 80.
+  EXPECT_TRUE(slider->OnEvent(MousePressed(6, 0)));
+  EXPECT_EQ(value, 30);
+  EXPECT_EQ(updated, 1);
+  EXPECT_TRUE(slider->OnEvent(MousePressed(11, 0)));
+  EXPECT_EQ(value, 80);
+  EXPECT_EQ(updated, 2);
+  EXPECT_TRUE(slider->OnEvent(MouseReleased(11, 0)));
+}
+
+// Keyboard events must work when using label.
+TEST(SliderTest, LabeledOptionsKeyboard) {
+  int updated = 0;
+  int value = 50;
+  auto slider = Slider<int>({
+      .label = "label",
+      .value = &value,
+      .min = 0,
+      .max = 100,
+      .increment = 10,
+      .direction = Direction::Right,
+      .on_change = [&]() { updated++; },
+  });
+  EXPECT_TRUE(slider->OnEvent(Event::ArrowRight));
+  EXPECT_EQ(value, 60);
+  EXPECT_EQ(updated, 1);
+  EXPECT_TRUE(slider->OnEvent(Event::ArrowLeft));
+  EXPECT_TRUE(slider->OnEvent(Event::ArrowLeft));
+  EXPECT_EQ(value, 40);
+  EXPECT_EQ(updated, 3);
+
+  // Clamped at the bounds: no change, so the event is not consumed.
+  value = 100;
+  EXPECT_FALSE(slider->OnEvent(Event::ArrowRight));
+  EXPECT_EQ(value, 100);
+  EXPECT_EQ(updated, 3);
+}
+
+// Float and double types must work with label.
+TEST(SliderTest, LabeledOptionsFloatAndDouble) {
+  float f = 0.5f;
+  auto slider_f = Slider<float>({
+      .label = "f",
+      .value = &f,
+      .min = 0.f,
+      .max = 1.f,
+      .increment = 0.25f,
+      .direction = Direction::Right,
+  });
+  EXPECT_TRUE(slider_f->OnEvent(Event::ArrowRight));
+  EXPECT_FLOAT_EQ(f, 0.75f);
+
+  double d = 0.5;
+  auto slider_d = Slider<double>({
+      .label = "d",
+      .value = &d,
+      .min = 0.0,
+      .max = 1.0,
+      .increment = 0.25,
+      .direction = Direction::Right,
+  });
+  EXPECT_TRUE(slider_d->OnEvent(Event::ArrowLeft));
+  EXPECT_DOUBLE_EQ(d, 0.25);
+}
+
+// Guards against dropping `vcenter`.
+TEST(SliderTest, LabeledOptionsSliderIsOneLineHigh) {
+  int value = 50;
+  auto button_left = Button("button 1", [] {});
+  auto slider = Slider<int>({
+      .label = "slider",
+      .value = &value,
+      .min = 0,
+      .max = 100,
+      .increment = 1,
+      .direction = Direction::Right,
+  });
+  auto button_right = Button("button 2", [] {});
+  auto container = Container::Horizontal({button_left, slider, button_right});
+
+  Screen screen(40, 3);
+  Render(screen, container->Render());
+
+  EXPECT_EQ(screen.at(16, 0), "");
+  EXPECT_EQ(screen.at(16, 1), "[");
+  EXPECT_EQ(screen.at(29, 1), "]");
+  EXPECT_EQ(screen.at(16, 2), "");
+}
+
+// Labeled vertical slider renders without brackets/horizontal distortion.
+TEST(SliderTest, LabeledOptionsVertical) {
+  int value = 50;
+  auto slider = Slider<int>({
+      .label = "v",
+      .value = &value,
+      .min = 0,
+      .max = 100,
+      .increment = 10,
+      .direction = Direction::Down,
+  });
+  Screen screen(1, 12);
+  Render(screen, slider->Render());
+  EXPECT_EQ(screen.at(0, 0), "v");
+}
+
+// Custom colors are applied to active and inactive states.
+TEST(SliderTest, LabeledOptionsColors) {
+  int value1 = 50;
+  int value2 = 50;
+  auto slider1 = Slider<int>({
+      .label = "lbl1",
+      .value = &value1,
+      .color_active = Color::Red,
+      .color_inactive = Color::Blue,
+  });
+  auto slider2 = Slider<int>({
+      .label = "lbl2",
+      .value = &value2,
+      .color_active = Color::Red,
+      .color_inactive = Color::Blue,
+  });
+  auto container = Container::Vertical({slider1, slider2});
+  Screen screen(15, 2);
+  Render(screen, container->Render());
+  EXPECT_EQ(screen.PixelAt(0, 0).foreground_color, Color(Color::Red));
+  EXPECT_EQ(screen.PixelAt(0, 1).foreground_color, Color(Color::Blue));
+}
+
 }  // namespace ftxui
 // NOLINTEND
