@@ -397,6 +397,7 @@ Feel free to add your projects here:
 - [i3-termdialogs](https://github.com/mibli/i3-termdialogs)
 - [inLimbo](https://github.com/nots1dd/inLimbo)
 - [keywords](https://github.com/Oakamoore/keywords) ([Play web version :heart:](https://oakamoore.itch.io/keywords))
+- [LookForward Calendar](https://github.com/sin390/look-forward-calendar)
 - [ltuiny](https://github.com/adrianoviana87/ltuiny)
 - [openJuice](https://github.com/mikomikotaishi/openJuice)
 - [ostree-tui](https://github.com/AP-Sensing/ostree-tui)
