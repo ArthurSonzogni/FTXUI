@@ -7,7 +7,7 @@
 
 #include "ftxui/component/app.hpp"             // for App
 #include "ftxui/component/captured_mouse.hpp"  // for ftxui
-#include "ftxui/component/component.hpp"       // for Radiobox, Renderer
+#include "ftxui/component/component.hpp"       // for Menu, Renderer
 #include "ftxui/component/component_base.hpp"  // for ComponentBase
 #include "ftxui/dom/elements.hpp"  // for operator|, Element, size, border, frame, HEIGHT, LESS_THAN
 
@@ -20,9 +20,9 @@ int main() {
   for (int i = 0; i < 100; ++i) {
     entries.push_back(std::to_string(i));
   }
-  auto radiobox = Menu(&entries, &selected, MenuOption::Horizontal());
+  auto menu = Menu(&entries, &selected, MenuOption::Horizontal());
   auto renderer = Renderer(
-      radiobox, [&] { return radiobox->Render() | hscroll_indicator | frame; });
+      menu, [&] { return menu->Render() | hscroll_indicator | frame; });
 
   auto screen = App::FitComponent();
   screen.Loop(renderer);
