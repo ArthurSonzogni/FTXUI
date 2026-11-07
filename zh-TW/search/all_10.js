@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['package_5fmanager_0',['package_manager',['../module-dom-examples.html#package_manager',1,'']]],
+  ['package_5fmanager_2ecpp_1',['package_manager.cpp',['../package__manager_8cpp.html',1,'']]],
+  ['palette1_2',['Palette1',['../group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78af8fee1420fe204b3dafbacf27a545c41',1,'ftxui::Terminal']]],
+  ['palette16_3',['Palette16',['../group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78ae5a76102d821ec8233fee04273c60349',1,'ftxui::Terminal']]],
+  ['palette256_4',['Palette256',['../group__screen.html#ggaa574175df6ec2a14da8226eb24c65c78a7b88ab2a5c8fe8866c96ea4acb623876',1,'ftxui::Terminal']]],
+  ['palette256_5',['palette256',['../namespaceftxui.html#acc77ce2876ca75e8d5fe8925a45592d1',1,'ftxui']]],
+  ['paragraph_6',['paragraph',['../group__dom.html#gaa444d00c88ed2ef6d17dc517ca1c7eec',1,'ftxui::paragraph()'],['../module-dom.html#dom-paragraph',1,'paragraph'],['../module-dom-examples.html#paragraph',1,'paragraph']]],
+  ['paragraphaligncenter_7',['paragraphAlignCenter',['../group__dom.html#ga9cf60bc052edefa42ea3ddd6d58a8794',1,'ftxui']]],
+  ['paragraphalignjustify_8',['paragraphAlignJustify',['../group__dom.html#ga5cc5c74323be824e5c23d6cffcd97e14',1,'ftxui']]],
+  ['paragraphalignleft_9',['paragraphAlignLeft',['../group__dom.html#ga1c1c4631ab9f0d8008032b1095b16802',1,'ftxui']]],
+  ['paragraphalignright_10',['paragraphAlignRight',['../group__dom.html#gabe45694e62612abe0adc80112186f57d',1,'ftxui']]],
+  ['pendingtask_11',['PendingTask',['../structftxui_1_1task_1_1PendingTask.html',1,'PendingTask'],['../structftxui_1_1task_1_1PendingTask.html#afc8e67df1a9259a50e7afa49765cb7c8',1,'ftxui::task::PendingTask::PendingTask(Task t)'],['../structftxui_1_1task_1_1PendingTask.html#a5e36044e86c7936eee25d0ff222b7235',1,'ftxui::task::PendingTask::PendingTask(Task t, std::chrono::steady_clock::duration duration)']]],
+  ['pixel_12',['Pixel',['../namespaceftxui.html#ac5412f09af801a197fd7aa0b591c33e9',1,'ftxui']]],
+  ['pixel_2ehpp_13',['pixel.hpp',['../pixel_8hpp.html',1,'']]],
+  ['pop_14',['Pop',['../classftxui_1_1MultiReceiverBuffer_1_1Receiver.html#a50269203f686ecb28298ff8f98708e40',1,'ftxui::MultiReceiverBuffer::Receiver']]],
+  ['positions_15',['positions',['../src_2ftxui_2dom_2linear__gradient_8cpp.html#af3fd42b7427cb742f96e7ec3244fb7cf',1,'linear_gradient.cpp']]],
+  ['posix_20管道輸入_16',['FTXUI 中的 POSIX 管道輸入',['../md_doc_2posix__pipe.html',1,'']]],
+  ['posix_20管道？_17',['什麼是 POSIX 管道？',['../md_doc_2posix__pipe.html#什麼是-posix-管道',1,'']]],
+  ['posix_5fpipe_2emd_18',['posix_pipe.md',['../posix__pipe_8md.html',1,'']]],
+  ['postdelayedtask_19',['PostDelayedTask',['../classftxui_1_1task_1_1TaskRunner.html#a9ed72fa10b2d44bb1af7bd8af64dd28b',1,'ftxui::task::TaskRunner']]],
+  ['posttask_20',['PostTask',['../structftxui_1_1task_1_1TaskQueue.html#ada41a34871c48f856bf3659e0b0c4f81',1,'ftxui::task::TaskQueue::PostTask()'],['../classftxui_1_1task_1_1TaskRunner.html#a6265a2d99ef09d491365c21a4a703c71',1,'ftxui::task::TaskRunner::PostTask()']]],
+  ['print_5fkey_5fpress_21',['print_key_press',['../module-component-examples.html#print_key_press',1,'']]],
+  ['print_5fkey_5fpress_2ecpp_22',['print_key_press.cpp',['../print__key__press_8cpp.html',1,'']]],
+  ['push_23',['Push',['../classftxui_1_1MultiReceiverBuffer.html#a86274c70b3cbf11377a33b523c6a6fff',1,'ftxui::MultiReceiverBuffer']]]
+];
