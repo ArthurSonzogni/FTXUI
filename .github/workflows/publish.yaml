@@ -28,6 +28,11 @@ on:
         required: true
         type: boolean
         default: true
+      publish_aur:
+        description: "Publish to the AUR (ftxui)"
+        required: true
+        type: boolean
+        default: true
 
 permissions: {}
 
@@ -105,7 +110,7 @@ jobs:
     if: ${{ inputs.publish_bcr }}
     permissions:
       contents: write
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.5.1
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@v1.6.0
     with:
       tag_name: ${{ needs.prepare.outputs.tag }}
       registry_fork: ArthurSonzogni/bazel-central-registry
@@ -407,3 +412,60 @@ jobs:
               --title "update ftxui ${TAG}" \
               --body "Automated update of ftxui to version ${VERSION}."
           fi
+
+  # The AUR's ftxui package is maintained by vitaliikuzhdin, with
+  # ArthurSonzogni as co-maintainer. This job only bumps the version: pkgver,
+  # pkgrel and the checksums. The rest of the PKGBUILD (patches, split
+  # packages, options) stays as its maintainer wrote it. The package is built
+  # before anything is pushed: if a patch no longer applies to the new
+  # version, the job fails and the AUR is left alone.
+  #
+  # AUR_SSH_PRIVATE_KEY: the private key of an SSH key registered on
+  # ArthurSonzogni's AUR account.
+  aur:
+    name: "Publish to the AUR"
+    needs: prepare
+    if: ${{ inputs.publish_aur }}
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    steps:
+      - name: "Bump and push ftxui"
+        env:
+          AUR_KEY: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          [ -n "${AUR_KEY}" ] || { echo "::error::The AUR_SSH_PRIVATE_KEY secret is missing"; exit 1; }
+          pacman -Syu --noconfirm git openssh pacman-contrib
+
+          # makepkg refuses to run as root; -s installs the makedepends.
+          useradd -m builder
+          echo 'builder ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/builder
+          install -d -m 700 -o builder ~builder/.ssh
+          printf '%s\n' "${AUR_KEY}" > ~builder/.ssh/aur
+          ssh-keyscan aur.archlinux.org > ~builder/.ssh/known_hosts
+          printf 'Host aur.archlinux.org\n  IdentityFile ~/.ssh/aur\n  User aur\n' > ~builder/.ssh/config
+          chown -R builder ~builder/.ssh
+          chmod 600 ~builder/.ssh/*
+
+          cat > /tmp/bump.sh <<'SCRIPT'
+          set -euo pipefail
+          cd ~
+          git clone ssh://aur@aur.archlinux.org/ftxui.git
+          cd ftxui
+          git config user.name "ArthurSonzogni"
+          git config user.email "sonzogniarthur@gmail.com"
+          if grep -qx "pkgver=${VERSION}" PKGBUILD; then
+            echo "The AUR already has ftxui ${VERSION}."
+            exit 0
+          fi
+          sed -i -e "s/^pkgver=.*/pkgver=${VERSION}/" -e "s/^pkgrel=.*/pkgrel=1/" PKGBUILD
+          updpkgsums
+          makepkg --printsrcinfo > .SRCINFO
+          git diff
+          makepkg --syncdeps --noconfirm --cleanbuild
+          git add PKGBUILD .SRCINFO
+          git commit -m "Update to ${VERSION}"
+          git push origin HEAD:master
+          SCRIPT
+          chmod +r /tmp/bump.sh
+          su builder -c "VERSION=${VERSION} bash /tmp/bump.sh"
