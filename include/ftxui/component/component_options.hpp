@@ -229,6 +229,7 @@ struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
 // @ingroup component
 template <typename T>
 struct SliderOption {
+  ConstStringRef label = "";
   Ref<T> value;
   ConstRef<T> min = T(0);
   ConstRef<T> max = T(100);
