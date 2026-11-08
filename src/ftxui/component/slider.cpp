@@ -53,9 +53,9 @@ class SliderBase : public SliderOption<T>, public ComponentBase {
       : SliderOption<T>(std::move(options)) {}
 
   Element OnRender() override {
-    auto gauge_color = (Focused() || hovered_)
-                           ? color(this->color_active)
-                           : color(this->color_inactive);
+    const bool is_active = Focused() || (!this->label().empty() && hovered_);
+    auto gauge_color =
+        is_active ? color(this->color_active) : color(this->color_inactive);
     const float percent =
         float(this->value() - this->min()) / float(this->max() - this->min());
     auto gauge = gaugeDirection(percent, this->direction) |

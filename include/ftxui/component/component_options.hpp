@@ -229,7 +229,6 @@ struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
 // @ingroup component
 template <typename T>
 struct SliderOption {
-  ConstStringRef label = "";
   Ref<T> value;
   ConstRef<T> min = T(0);
   ConstRef<T> max = T(100);
@@ -238,6 +237,7 @@ struct SliderOption {
   Color color_active = Color::White;
   Color color_inactive = Color::GrayDark;
   std::function<void()> on_change;  ///> Called when `value` is updated.
+  ConstStringRef label = "";
 };
 
 /// @brief State passed to the `Window` component's render function.
