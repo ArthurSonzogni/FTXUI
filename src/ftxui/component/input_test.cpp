@@ -537,6 +537,40 @@ TEST(InputTest, CtrlArrowRight) {
   EXPECT_EQ(cursor_position, 49);
 }
 
+TEST(InputTest, CtrlArrowRightFromLastLetterOfWord) {
+  std::string content = "abc def";
+  int cursor_position = 0;
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  // From the start of a word, or from inside it: stop at the end of the word.
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(cursor_position, 3);
+
+  cursor_position = 1;
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(cursor_position, 3);
+
+  // From the last letter of a word: stop at the end of that same word.
+  cursor_position = 2;
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(cursor_position, 3);
+
+  // From the end of a word: jump to the end of the next one.
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(cursor_position, 7);
+}
+
+TEST(InputTest, CtrlArrowRightSingleLetterWords) {
+  std::string content = "a b";
+  int cursor_position = 0;
+  auto input = Input(&content, {.cursor_position = &cursor_position});
+
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(cursor_position, 1);
+  EXPECT_TRUE(input->OnEvent(Event::ArrowRightCtrl));
+  EXPECT_EQ(cursor_position, 3);
+}
+
 TEST(InputTest, CtrlArrowRight2) {
   std::string content = "   word  word  测ord  wo测d  word   ";
   int cursor_position = 0;

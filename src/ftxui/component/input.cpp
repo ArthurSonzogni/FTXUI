@@ -587,13 +587,13 @@ class InputBase : public ComponentBase, public InputOption {
       return false;
     }
 
-    // Move right, until entering a word.
+    // Move right, as long as the cursor is not on a word character.
     while (cursor_position() < (int)content().size()) {
-      cursor_position() =
-          static_cast<int>(GlyphNext(content(), cursor_position()));
       if (IsWordCharacter(content(), cursor_position())) {
         break;
       }
+      cursor_position() =
+          static_cast<int>(GlyphNext(content(), cursor_position()));
     }
     // Move right, as long as right is a word character:
     while (cursor_position() < (int)content().size()) {
