@@ -450,19 +450,21 @@ void HiddenCells(const Cell* row, int dimx, std::vector<bool>& hidden) {
 
 }  // namespace
 
+namespace Dimension {
 /// A fixed dimension.
 /// @see Fit
 /// @see Full
-Dimensions Dimension::Fixed(int v) {
+Dimensions Fixed(int v) {
   return {v, v};
 }
 
 /// Use the terminal dimensions.
 /// @see Fixed
 /// @see Fit
-Dimensions Dimension::Full() {
+Dimensions Full() {
   return Terminal::Size();
 }
+}  // namespace Dimension
 
 // static
 /// Create a screen with the given dimension along the x-axis and y-axis.
