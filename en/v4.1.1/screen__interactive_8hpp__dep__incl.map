@@ -1,0 +1,21 @@
+<map id="include/ftxui/component/screen_interactive.hpp" name="include/ftxui/component/screen_interactive.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="690,5,868,50"/>
+<area shape="rect" id="Node000002" href="$button_8cpp.html" title=" " alt="" coords="5,98,156,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="672,37,442,62,305,79,169,101,157,103,156,98,168,95,304,74,442,57,677,36"/>
+<area shape="rect" id="Node000003" href="$component_8cpp.html" title=" " alt="" coords="180,98,330,143"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="677,43,518,70,344,101,331,103,330,98,343,95,517,64,672,44"/>
+<area shape="rect" id="Node000004" href="$hoverable_8cpp.html" title=" " alt="" coords="355,98,505,143"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="684,54,506,102,505,97,678,55"/>
+<area shape="rect" id="Node000005" href="$input_8cpp.html" title=" " alt="" coords="529,98,680,143"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="726,57,647,100,645,95,721,58"/>
+<area shape="rect" id="Node000006" href="$loop_8cpp.html" title=" " alt="" coords="704,98,854,143"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="781,64,781,100,777,96,777,67"/>
+<area shape="rect" id="Node000007" href="$menu_8cpp.html" title=" " alt="" coords="879,98,1029,143"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="835,55,915,98,910,97,834,60"/>
+<area shape="rect" id="Node000008" href="$radiobox_8cpp.html" title=" " alt="" coords="1053,98,1204,143"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="878,52,1056,100,1051,100,877,57"/>
+<area shape="rect" id="Node000009" href="$screen__interactive_8cpp.html" title=" " alt="" coords="1228,98,1400,143"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="884,41,1216,95,1230,101,1225,100,1215,101,883,47"/>
+<area shape="rect" id="Node000010" href="$slider_8cpp.html" title=" " alt="" coords="1424,98,1574,143"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="884,34,1127,56,1270,73,1413,95,1426,100,1421,100,1412,101,1269,79,1126,61,884,39"/>
+</map>

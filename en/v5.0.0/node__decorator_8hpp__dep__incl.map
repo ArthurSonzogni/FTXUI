@@ -1,0 +1,35 @@
+<map id="src/ftxui/dom/node_decorator.hpp" name="src/ftxui/dom/node_decorator.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="1461,5,1604,50"/>
+<area shape="rect" id="Node000002" href="$window_8cpp.html" title=" " alt="" coords="5,98,156,143"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1443,32,803,57,436,76,284,88,169,101,157,103,156,97,168,95,284,83,436,71,802,51,1448,31"/>
+<area shape="rect" id="Node000003" href="$automerge_8cpp.html" title=" " alt="" coords="180,106,389,134"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1443,31,1257,39,998,51,701,71,401,101,350,109,349,103,400,95,701,66,997,46,1257,34,1449,31"/>
+<area shape="rect" id="Node000004" href="$blink_8cpp.html" title=" " alt="" coords="413,106,582,134"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="1443,32,1287,40,1075,53,836,72,596,101,553,109,552,103,595,95,836,67,1075,47,1287,35,1449,31"/>
+<area shape="rect" id="Node000005" href="$bold_8cpp.html" title=" " alt="" coords="607,106,772,134"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="1443,34,1152,57,969,76,785,101,744,109,743,103,784,95,968,71,1152,52,1449,33"/>
+<area shape="rect" id="Node000006" href="$clear__under_8cpp.html" title=" " alt="" coords="796,98,938,143"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1448,36,1221,61,1086,79,952,101,939,103,939,98,951,95,1086,74,1221,56,1443,36"/>
+<area shape="rect" id="Node000007" href="$dom_2color_8cpp.html" title=" " alt="" coords="963,106,1131,134"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="1449,43,1144,101,1106,109,1105,103,1143,95,1444,44"/>
+<area shape="rect" id="Node000008" href="$dim_8cpp.html" title=" " alt="" coords="1155,106,1318,134"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="1450,55,1280,108,1279,103,1444,55"/>
+<area shape="rect" id="Node000009" href="$focus_8cpp.html" title=" " alt="" coords="1342,106,1515,134"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="1499,59,1445,108,1443,103,1494,61"/>
+<area shape="rect" id="Node000010" href="$hyperlink_8cpp.html" title=" " alt="" coords="1539,106,1737,134"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="1570,58,1625,107,1620,105,1568,63"/>
+<area shape="rect" id="Node000011" href="$inverted_8cpp.html" title=" " alt="" coords="1761,106,1952,134"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="1619,50,1812,106,1807,106,1618,56"/>
+<area shape="rect" id="Node000012" href="$linear__gradient_8cpp.html" title=" " alt="" coords="1976,98,2124,143"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="1620,38,1781,62,1965,95,1979,101,1973,100,1964,101,1780,68,1619,43"/>
+<area shape="rect" id="Node000013" href="$node__decorator_8cpp.html" title=" " alt="" coords="2148,98,2290,143"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="1619,33,1853,55,1995,73,2136,95,2150,101,2145,100,2135,101,1994,78,1853,60,1619,38"/>
+<area shape="rect" id="Node000014" href="$scroll__indicator_8cpp.html" title=" " alt="" coords="2314,98,2460,143"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="1619,30,1922,50,2112,69,2302,95,2317,100,2312,100,2301,101,2111,74,1922,55,1619,35"/>
+<area shape="rect" id="Node000015" href="$strikethrough_8cpp.html" title=" " alt="" coords="2484,106,2707,134"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="1619,30,1991,51,2231,70,2473,95,2528,106,2523,106,2472,101,2230,75,1990,56,1619,35"/>
+<area shape="rect" id="Node000016" href="$underlined_8cpp.html" title=" " alt="" coords="2731,106,2937,134"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="1619,28,1817,33,2089,45,2402,65,2719,95,2773,106,2768,106,2719,101,2402,70,2089,50,1816,38,1619,33"/>
+<area shape="rect" id="Node000017" href="$underlined__double_8cpp.html" title=" " alt="" coords="2962,98,3141,143"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="1620,26,1851,28,2180,37,2561,58,2757,74,2949,95,2964,100,2958,100,2948,101,2757,80,2561,63,2180,42,1851,33,1620,31"/>
+</map>
