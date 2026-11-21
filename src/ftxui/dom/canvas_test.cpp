@@ -123,5 +123,51 @@ TEST(CanvasTest, NegativeAndZeroDimensions) {
   });
 }
 
+TEST(CanvasTest, TransparentBackgroundInDbox) {
+  Canvas c(10, 8);
+  c.DrawText(2, 0, "X");
+
+  auto element = dbox({
+      vbox({
+          text("abcde"),
+          text("12345"),
+      }),
+      canvas(c),
+  });
+  Screen screen(5, 2);
+  Render(screen, element);
+  EXPECT_EQ(screen.ToString(), "aXcde\r\n12345");
+}
+
+TEST(CanvasTest, ClearUnderRestoresOpaqueBackground) {
+  Canvas c(10, 8);
+  c.DrawText(2, 0, "X");
+
+  auto element = dbox({
+      vbox({
+          text("abcde"),
+          text("12345"),
+      }),
+      canvas(c) | clear_under,
+  });
+  Screen screen(5, 2);
+  Render(screen, element);
+  EXPECT_EQ(screen.ToString(), " X   \r\n     ");
+}
+
+TEST(CanvasTest, TransparentBackgroundClipped) {
+  Canvas c(10, 8);
+  c.DrawText(0, 0, "A");
+  c.DrawText(6, 4, "B");  // Outside 2x1 screen box.
+
+  auto element = dbox({
+      text("xy"),
+      canvas(c),
+  });
+  Screen screen(2, 1);
+  Render(screen, element);
+  EXPECT_EQ(screen.ToString(), "Ay");
+}
+
 }  // namespace ftxui
 // NOLINTEND
