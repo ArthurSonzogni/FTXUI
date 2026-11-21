@@ -237,6 +237,7 @@ struct SliderOption {
   Color color_active = Color::White;
   Color color_inactive = Color::GrayDark;
   std::function<void()> on_change;  ///> Called when `value` is updated.
+  ConstStringRef label = "";
 };
 
 /// @brief State passed to the `Window` component's render function.
