@@ -59,6 +59,9 @@ Next
   @pcbeingused333. See #1401.
 
 ### Dom
+- Bugfix: `canvas` now only renders cells that were actually drawn, preserving
+  underlying content when layered with `dbox`. Use `canvas(...) | clear_under`
+  to clear the background. See #811.
 - Bugfix: `LinearGradient` stops without an explicit position are now spread
   in order. With two or more of them in the middle, their colors used to be
   reversed. Thanks @davidscottpope-gif. See #1379.

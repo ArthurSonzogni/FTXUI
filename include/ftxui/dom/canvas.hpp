@@ -130,6 +130,8 @@ struct FTXUI_EXPORT(DOM) Canvas {
   void Style(int x, int y, const Stylizer& style);
 
  private:
+  friend class CanvasNodeBase;
+
   bool IsIn(int x, int y) const {
     return x >= 0 && x < width_ && y >= 0 && y < height_;
   }

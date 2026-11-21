@@ -873,8 +873,6 @@ void Canvas::Style(int x, int y, const Stylizer& style) {
   }
 }
 
-namespace {
-
 class CanvasNodeBase : public Node {
  public:
   CanvasNodeBase() = default;
@@ -883,17 +881,15 @@ class CanvasNodeBase : public Node {
     const Canvas& c = canvas();
     const int y_max = std::min(c.height() / 4, box_.y_max - box_.y_min + 1);
     const int x_max = std::min(c.width() / 2, box_.x_max - box_.x_min + 1);
-    for (int y = 0; y < y_max; ++y) {
-      for (int x = 0; x < x_max; ++x) {
-        screen.CellAt(box_.x_min + x, box_.y_min + y) = c.GetCell(x, y);
+    for (const auto& [xy, cell] : c.storage_) {
+      if (xy.x >= 0 && xy.x < x_max && xy.y >= 0 && xy.y < y_max) {
+        screen.CellAt(box_.x_min + xy.x, box_.y_min + xy.y) = cell.content;
       }
     }
   }
 
   virtual const Canvas& canvas() = 0;
 };
-
-}  // namespace
 
 /// @brief Produce an element from a Canvas, or a reference to a Canvas.
 // NOLINTNEXTLINE
