@@ -54,6 +54,9 @@ Next
 - Bugfix: Restore the terminal's default cursor shape on exit when it doesn't
   report its current one, instead of forcing a blinking block. Thanks
   @aaron-michaux. See #904.
+- Bugfix: Ctrl+Right in `Input` now stops at the end of the current word when
+  the cursor is on its last letter, instead of skipping an extra word. Thanks
+  @pcbeingused333. See #1401.
 
 ### Dom
 - Bugfix: `LinearGradient` stops without an explicit position are now spread
