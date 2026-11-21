@@ -9,8 +9,11 @@
 #include "ftxui/component/event.hpp"
 
 namespace ftxui {
+/// Marker task requesting an animation step.
 class AnimationTask {};
+/// Zero-argument callback executed on the App main loop.
 using Closure = std::function<void()>;
+/// Unit of work queued on the App event loop.
 using Task = std::variant<Event, Closure, AnimationTask>;
 }  // namespace ftxui
 

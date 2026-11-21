@@ -22,6 +22,7 @@ class FTXUI_EXPORT(SCREEN) Surface {
  public:
   // Constructors:
   Surface() = delete;
+  /// Create a surface of dimensions `dimx` x `dimy`.
   Surface(int dimx, int dimy);
 
   // Destructor:
@@ -31,23 +32,27 @@ class FTXUI_EXPORT(SCREEN) Surface {
   Surface(const Surface&) = default;
   Surface& operator=(const Surface&) = default;
 
-  // Access a character in the grid at a given position.
+  /// Access the character string at (x, y) (bounds-checked against stencil).
   std::string& at(int x, int y);
+  /// Read the character string at (x, y) (bounds-checked against stencil).
   const std::string& at(int x, int y) const;
 
-  // Access a cell (Cell) in the grid at a given position.
+  /// Access the Cell at (x, y) (bounds-checked against stencil).
   Cell& CellAt(int x, int y);
+  /// Read the Cell at (x, y) (bounds-checked against stencil).
   const Cell& CellAt(int x, int y) const;
 
-  // [Deprecated] alias for CellAt.
+  /// Deprecated alias for CellAt().
   Cell& PixelAt(int x, int y) { return CellAt(x, y); }
+  /// Deprecated alias for CellAt().
   const Cell& PixelAt(int x, int y) const { return CellAt(x, y); }
 
-  // Get screen dimensions.
+  /// Width of the surface in terminal columns.
   int dimx() const { return dimx_; }
+  /// Height of the surface in terminal rows.
   int dimy() const { return dimy_; }
 
-  // Fill the surface with space and default style
+  /// Fill the surface with spaces and reset all cell styles.
   void Clear();
 
   // ABI Reserve:

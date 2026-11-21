@@ -36,20 +36,32 @@ class TableSelection;
 /// @ingroup dom
 class FTXUI_EXPORT(DOM) Table {
  public:
+  /// Create an empty table.
   Table();
+  /// Create a table from a 2D vector of strings.
   explicit Table(const std::vector<std::vector<std::string>>&);
+  /// Create a table from a 2D vector of Elements.
   explicit Table(std::vector<std::vector<Element>>);
+  /// Create a table from an initializer list of string rows.
   Table(std::initializer_list<std::vector<std::string>> init);
+  /// Select all cells in the table.
   TableSelection SelectAll();
+  /// Select a single cell at (column, row). Negative indices count from end.
   TableSelection SelectCell(int column, int row);
+  /// Select a single row. Negative indices count from the end.
   TableSelection SelectRow(int row_index);
+  /// Select an inclusive range of rows [row_min, row_max].
   TableSelection SelectRows(int row_min, int row_max);
+  /// Select a single column. Negative indices count from the end.
   TableSelection SelectColumn(int column_index);
+  /// Select an inclusive range of columns [column_min, column_max].
   TableSelection SelectColumns(int column_min, int column_max);
+  /// Select a rectangular region of cells.
   TableSelection SelectRectangle(int column_min,
                                  int column_max,
                                  int row_min,
                                  int row_max);
+  /// Build and return the rendered table Element.
   Element Render();
 
  private:
@@ -62,53 +74,91 @@ class FTXUI_EXPORT(DOM) Table {
   int dim_y_ = 0;
 };
 
+/// @brief A rectangular selection of cells in a Table used to apply styling.
+/// @ingroup dom
 class FTXUI_EXPORT(DOM) TableSelection {
  public:
   // Decorate the whole selection with a decorator.
+
+  /// Apply a decorator to all cells, borders, and separators in the selection.
   void Decorate(const Decorator&);
+  /// Apply a decorator to rows where `(row - shift) % modulo == 0`.
   void DecorateAlternateRow(const Decorator&, int modulo = 2, int shift = 0);
+  /// Apply a decorator to columns where `(col - shift) % modulo == 0`.
   void DecorateAlternateColumn(const Decorator&, int modulo = 2, int shift = 0);
 
   // Decorate only the cells of the selection with a decorator.
+
+  /// Apply a decorator to all content cells in the selection.
   void DecorateCells(const Decorator&);
+  /// Apply a decorator to content cells on alternating columns.
   void DecorateCellsAlternateColumn(const Decorator&,
                                     int modulo = 2,
                                     int shift = 0);
+  /// Apply a decorator to content cells on alternating rows.
   void DecorateCellsAlternateRow(const Decorator&,
                                  int modulo = 2,
                                  int shift = 0);
 
   // Decorate only the border of the selection with a decorator.
+
+  /// Apply a decorator to all four borders of the selection.
   void DecorateBorder(const Decorator&);
+  /// Apply a decorator to the left border of the selection.
   void DecorateBorderLeft(const Decorator&);
+  /// Apply a decorator to the right border of the selection.
   void DecorateBorderRight(const Decorator&);
+  /// Apply a decorator to the top border of the selection.
   void DecorateBorderTop(const Decorator&);
+  /// Apply a decorator to the bottom border of the selection.
   void DecorateBorderBottom(const Decorator&);
 
   // Decorate only the separator of the selection with a decorator.
+
+  /// Apply a decorator to all internal separators in the selection.
   void DecorateSeparator(const Decorator&);
+  /// Apply a decorator to vertical internal separators in the selection.
   void DecorateSeparatorVertical(const Decorator&);
+  /// Apply a decorator to horizontal internal separators in the selection.
   void DecorateSeparatorHorizontal(const Decorator&);
 
   // Decorate the border of the selection with a border style and a decorator.
+
+  /// Draw a border around the selection.
   void Border(BorderStyle border = LIGHT);
+  /// Draw a decorated border around the selection.
   void Border(BorderStyle, const Decorator&);
+  /// Draw a border on the left side of the selection.
   void BorderLeft(BorderStyle border = LIGHT);
+  /// Draw a decorated border on the left side of the selection.
   void BorderLeft(BorderStyle, const Decorator&);
+  /// Draw a border on the right side of the selection.
   void BorderRight(BorderStyle border = LIGHT);
+  /// Draw a decorated border on the right side of the selection.
   void BorderRight(BorderStyle, const Decorator&);
+  /// Draw a border on the top side of the selection.
   void BorderTop(BorderStyle border = LIGHT);
+  /// Draw a decorated border on the top side of the selection.
   void BorderTop(BorderStyle, const Decorator&);
+  /// Draw a border on the bottom side of the selection.
   void BorderBottom(BorderStyle border = LIGHT);
+  /// Draw a decorated border on the bottom side of the selection.
   void BorderBottom(BorderStyle, const Decorator&);
 
   // Decorate the separator of the selection with a border style and a
   // decorator.
+
+  /// Draw internal horizontal and vertical separator lines.
   void Separator(BorderStyle border = LIGHT);
+  /// Draw decorated internal horizontal and vertical separator lines.
   void Separator(BorderStyle, const Decorator&);
+  /// Draw internal vertical separator lines.
   void SeparatorVertical(BorderStyle border = LIGHT);
+  /// Draw decorated internal vertical separator lines.
   void SeparatorVertical(BorderStyle, const Decorator&);
+  /// Draw internal horizontal separator lines.
   void SeparatorHorizontal(BorderStyle border = LIGHT);
+  /// Draw decorated internal horizontal separator lines.
   void SeparatorHorizontal(BorderStyle, const Decorator&);
 
  private:

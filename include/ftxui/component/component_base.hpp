@@ -41,53 +41,53 @@ class FTXUI_EXPORT(COMPONENT) ComponentBase {
   ComponentBase& operator=(ComponentBase&&) = delete;
 
   // Component hierarchy:
+
+  /// Return the parent component, or nullptr if this is the root.
   ComponentBase* Parent() const;
+  /// Return the child component at index `i`.
   Component& ChildAt(size_t i);
+  /// Return the number of direct children.
   size_t ChildCount() const;
+  /// Return this component's index within its parent, or -1 if detached.
   int Index() const;
+  /// Add `children` as a child of this component.
   void Add(Component children);
+  /// Remove this component from its parent.
   void Detach();
+  /// Remove all child components.
   void DetachAllChildren();
 
-  // Renders the component.
+  /// Render the component into a DOM Element.
   Element Render();
 
-  // Override this function modify how `Render` works.
+  /// Override to customize how this component renders itself.
   virtual Element OnRender();
 
-  // Handles an event.
-  // By default, reduce on children with a lazy OR.
-  //
-  // Returns whether the event was handled or not.
+  /// Handle an input event; return true if the event was consumed.
   virtual bool OnEvent(Event);
 
-  // Handle an animation step.
+  /// Handle an animation step.
   virtual void OnAnimation(animation::Params& params);
 
   // Focus management ----------------------------------------------------------
-  //
-  // If this component contains children, this indicates which one is active,
-  // nullptr if none is active.
-  //
-  // We say an element has the focus if the chain of ActiveChild() from the
-  // root component contains this object.
+
+  /// Return the currently active child component, or nullptr if none.
   virtual Component ActiveChild();
 
-  // Return true when the component contains focusable elements.
-  // The non focusable Component will be skipped when navigating using the
-  // keyboard.
+  /// Return true if this component (or a descendant) can receive focus.
   virtual bool Focusable() const;
 
-  // Whether this is the active child of its parent.
+  /// Return true if this component is the active child of its parent.
   bool Active() const;
-  // Whether all the ancestors are active.
+  /// Return true if this component and all of its ancestors are active.
   bool Focused() const;
 
-  // Make the |child| to be the "active" one.
+  /// Mark `child` as the active child of this component.
   virtual void SetActiveChild(ComponentBase* child);
+  /// Mark `child` as the active child of this component.
   void SetActiveChild(Component child);
 
-  // Configure all the ancestors to give focus to this component.
+  /// Configure all ancestors so that this component receives focus.
   void TakeFocus();
 
   // ABI Reserve:

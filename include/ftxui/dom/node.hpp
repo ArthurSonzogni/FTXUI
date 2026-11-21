@@ -46,32 +46,29 @@ class FTXUI_EXPORT(DOM) Node {
 
   virtual ~Node();
 
-  // Step 1: Compute layout requirement. Tell parent what dimensions this
-  //         element wants to be.
-  //         Propagated from Children to Parents.
+  /// Step 1: Compute layout requirement (propagated from children to parents).
   virtual void ComputeRequirement();
+  /// Return the computed layout requirement of this node.
   Requirement requirement() { return requirement_; }
 
-  // Step 2: Assign this element its final dimensions.
-  //         Propagated from Parents to Children.
+  /// Step 2: Assign this element its final box (from parents to children).
   virtual void SetBox(Box box);
 
-  // Step 3: (optional) Selection
-  //         Propagated from Parents to Children.
+  /// Step 3 (optional): Propagate text selection from parents to children.
   virtual void Select(Selection& selection);
 
-  // Step 4: Draw this element.
+  /// Step 4: Draw this element onto `screen`.
   virtual void Render(Screen& screen);
 
+  /// Return the text selected within this node.
   virtual std::string GetSelectedContent(Selection& selection);
 
-  // Layout may not resolve within a single iteration for some elements. This
-  // allows them to request additional iterations. This signal must be
-  // forwarded to children at least once.
+  /// Layout iteration status used when multiple layout passes are needed.
   struct Status {
     int iteration = 0;
     bool need_iteration = false;
   };
+  /// Request additional layout iterations if layout has not converged yet.
   virtual void Check(Status* status);
 
   // ABI Reserve:
@@ -92,10 +89,14 @@ class FTXUI_EXPORT(DOM) Node {
   Box box_;
 };
 
+/// Layout and render `element` into `screen`.
 FTXUI_EXPORT(DOM) void Render(Screen& screen, const Element& element);
+/// Layout and render `node` into `screen`.
 FTXUI_EXPORT(DOM) void Render(Screen& screen, Node* node);
+/// Layout, select, and render `node` into `screen` with `selection`.
 FTXUI_EXPORT(DOM)
 void Render(Screen& screen, Node* node, Selection& selection);
+/// Layout `node` and extract the selected text without rendering.
 FTXUI_EXPORT(DOM)
 std::string GetNodeSelectedContent(Screen& screen,
                                    Node* node,
