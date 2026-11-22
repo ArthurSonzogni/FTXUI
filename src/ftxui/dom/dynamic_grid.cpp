@@ -7,9 +7,9 @@
 namespace ftxui {
 
 // This is more of a helper function, but it has a couple problems, such as
-// 1. It does not add spacing in between elements [ ]
-// 2. It has no documentation yet                 [ ]
-// 3. Its a bit small, for a new version          [ ]
+// 1. It does not add spacing in between elements [ ] We leave that up to the user
+// 2. It has no documentation yet                 [X]
+// 3. Its a bit small, for a new version          [X]
 // ([ ] means not fixed, [X] means fixed) 
 Element dynamic_grid(Elements children) {
   int max_width = 0;
