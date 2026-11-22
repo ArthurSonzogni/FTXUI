@@ -126,7 +126,7 @@ Each cell in the screen grid is a @ref ftxui::Cell, which holds:
 
 - Unicode codepoint.
     - `character`
-- @ref ftxui::Color:
+- @ref ftxui::Color "ftxui::Color":
     - `foreground_color`
     - `background_color`
 - Booleans:

@@ -3,9 +3,9 @@
 
 <img src="https://github.com/ArthurSonzogni/FTXUI/assets/4759106/6925b6da-0a7e-49d9-883c-c890e1f36007" alt="Demo image"></img>
 
-**FTXUI** is simple cross-platform C++ library for terminal based user interfaces!
+**FTXUI** is a simple cross-platform C++ library for terminal-based user interfaces!
 
-# Feature
+# Features
  * Functional style. Inspired by
    [1](https://hackernoon.com/building-reactive-terminal-interfaces-in-c-d392ce34e649?gi=d9fb9ce35901)
    and [React](https://reactjs.org/)
@@ -17,7 +17,7 @@
  * Support for animations. [Demo 1](https://arthursonzogni.github.io/FTXUI/examples/?file=component/menu_underline_animated_gallery), [Demo 2](https://arthursonzogni.github.io/FTXUI/examples/?file=component/button_style)
  * Support for drawing. [Demo](https://arthursonzogni.github.io/FTXUI/examples/?file=component/canvas_animated)
  * Learn by [installation](installation.html), and [getting started](getting-started.html) guide.
- * Multiple build system and packages: 
+ * Multiple build systems and package managers (CMake, Bazel, Meson, vcpkg, Conan, Nix, Debian, Arch, OpenSUSE, xmake).
  * Good practices: documentation, tests, fuzzers, performance tests, automated CI, automated packaging, etc...
 
 # Example

@@ -87,10 +87,11 @@ Element& operator|=(Element& e, Decorator d) {
   return e;
 }
 
+namespace Dimension {
 /// The minimal dimension that will fit the given element.
 /// @see Fixed
 /// @see Full
-Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
+Dimensions Fit(Element& e, bool extend_beyond_screen) {
   const Dimensions fullsize = Dimension::Full();
   Box box;
   box.x_min = 0;
@@ -134,6 +135,7 @@ Dimensions Dimension::Fit(Element& e, bool extend_beyond_screen) {
       box.y_max,
   };
 }
+}  // namespace Dimension
 
 /// An element of size 0x0 drawing nothing.
 /// @ingroup dom

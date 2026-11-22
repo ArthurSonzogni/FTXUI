@@ -268,6 +268,58 @@ only one of them. This is useful for implementing a tab bar.
   ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/4759106/147250217-fe447e0f-7a99-4e08-948a-995087d9b40e.gif)
 
 
+## Stacked {#component-stacked}
+
+Produced by: `ftxui::Container::Stacked()` from
+"ftxui/component/component.hpp". It stacks children on top of each other (like
+`ftxui::dbox`), routing keyboard focus to the topmost child and promoting a
+child when clicked. This is useful for floating windows or layered overlays.
+
+# Modal {#component-modal}
+
+Produced by: `ftxui::Modal()` from "ftxui/component/component.hpp". It overlays
+a `modal` component on top of a `main` component whenever `*show_modal` is true,
+capturing events while the modal is open.
+
+Example:
+```cpp
+bool modal_shown = false;
+auto main_component = Button("Open modal", [&] { modal_shown = true; });
+auto modal_component = Button("Close", [&] { modal_shown = false; }) | border;
+
+auto component = main_component | Modal(modal_component, &modal_shown);
+```
+
+# Window {#component-window}
+
+Produced by: `ftxui::Window()` from "ftxui/component/component.hpp". It wraps a
+child component in a floating window that can be dragged and resized with the
+mouse. Multiple windows are typically placed inside `ftxui::Container::Stacked`.
+
+Example:
+```cpp
+auto window = Window({
+    .inner = content_component,
+    .title = "My Window",
+    .left = 5,
+    .top = 2,
+    .width = 40,
+    .height = 12,
+});
+```
+
+# Hoverable {#component-hoverable}
+
+Produced by: `ftxui::Hoverable()` from "ftxui/component/component.hpp". It
+tracks whether the mouse pointer is currently over a component, either via a
+`bool*` or callbacks (`on_enter` / `on_leave` / `on_change`).
+
+Example:
+```cpp
+bool hovered = false;
+auto component = Button("Hover me", [] {}) | Hoverable(&hovered);
+```
+
 # ResizableSplit  {#component-resizable-split}
 
 It defines a horizontal or vertical separation between two children components.
@@ -326,3 +378,67 @@ app.PrintAbove(paragraph("Hello!") | border);
 This is meant for apps not using the alternate screen. See the
 [print_above](https://arthursonzogni.github.io/FTXUI/examples_2component_2print_above_8cpp-example.html)
 example.
+
+# Composing Layout, Events, and Focus {#component-composition}
+
+In FTXUI, **event/focus routing** and **visual layout** are intentionally
+decoupled:
+
+- **Containers** (`Container::Vertical`, `Container::Horizontal`,
+  `Container::Tab`, `Container::Stacked`) define the component tree used for
+  focus navigation and event propagation.
+- **`Renderer(container, [&] { ... })`** attaches a custom visual layout to a
+  container while forwarding all events to it. You do not need to call
+  `container->Render()` — you can call each child's `->Render()` directly inside
+  any `vbox`, `hbox`, `window`, etc.
+
+A common pitfall is omitting the container argument:
+```cpp
+// Wrong: events will NOT reach `input` or `button`!
+auto ui = Renderer([&] {
+  return vbox({input->Render(), button->Render()});
+});
+
+// Right: `container` routes events & focus, `Renderer` controls layout.
+auto container = Container::Vertical({input, button});
+auto ui = Renderer(container, [&] {
+  return vbox({
+      text("Form") | bold,
+      separator(),
+      input->Render(),
+      button->Render(),
+  }) | border;
+});
+```
+
+For focus control on a `ftxui::ComponentBase`:
+- `Active()` is true when this component is its parent's active child.
+- `Focused()` is true when this component and all of its ancestors are active.
+- `TakeFocus()` configures all ancestors so that this component becomes focused.
+
+# Custom Event Loop (Loop) {#component-loop}
+
+If you need to integrate FTXUI with another event loop (e.g. a game engine,
+network loop, or custom timer), use `ftxui::Loop` from
+"ftxui/component/loop.hpp" instead of `App::Loop()`:
+
+```cpp
+auto app = App::Fullscreen();
+Loop loop(&app, component);
+while (!loop.HasQuitted()) {
+  loop.RunOnce();
+  // Run your own work here.
+}
+```
+
+# Restoring Terminal I/O (WithRestoredIO) {#component-restored-io}
+
+To temporarily suspend FTXUI's raw terminal mode — for example, to launch an
+external interactive command like `$EDITOR` or `less` — wrap the callback with
+`ftxui::App::WithRestoredIO()`:
+
+```cpp
+auto button = Button("Open editor", app.WithRestoredIO([&] {
+  std::system("vim file.txt");
+}));
+```

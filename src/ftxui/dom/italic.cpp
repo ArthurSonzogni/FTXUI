@@ -12,7 +12,7 @@
 
 namespace ftxui {
 
-/// @brief Apply a underlinedDouble to text.
+/// @brief Render text in italics.
 /// @ingroup dom
 Element italic(Element child) {
   class Impl : public NodeDecorator {
