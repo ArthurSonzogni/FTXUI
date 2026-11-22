@@ -16,6 +16,10 @@
 #include "ftxui/dom/node.hpp"  // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::BlueLight, Color::RedLight, Color::YellowLight, ftxui
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 class Graph {
  public:
   std::vector<int> operator()(int width, int height) const {
@@ -78,8 +82,12 @@ int main() {
     screen.Print();
     reset_position = screen.ResetPosition();
 
+#if defined(__EMSCRIPTEN__)
+    emscripten_sleep(30);
+#else
     const auto sleep_time = 0.03s;
     std::this_thread::sleep_for(sleep_time);
+#endif
     my_graph.shift++;
   }
 

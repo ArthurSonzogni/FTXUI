@@ -26,6 +26,10 @@
 #include "ftxui/screen/color_info.hpp"  // for ColorInfo
 #include "ftxui/screen/terminal.hpp"    // for Size, Dimensions
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 using namespace ftxui;
 
 int main() {
@@ -525,7 +529,11 @@ int main() {
     loop.RunOnce();
 
     // Sleep for a short duration to control the frame rate (60 FPS).
+#if defined(__EMSCRIPTEN__)
+    emscripten_sleep(1000 / 60);
+#else
     std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 60));
+#endif
   }
 
   return 0;

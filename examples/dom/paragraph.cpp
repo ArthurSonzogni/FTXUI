@@ -12,6 +12,10 @@
 #include "ftxui/dom/node.hpp"      // for Render
 #include "ftxui/screen/box.hpp"    // for ftxui
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 using namespace std::chrono_literals;
 int main() {
   using namespace ftxui;
@@ -46,7 +50,11 @@ int main() {
     screen.Print();
     reset_position = screen.ResetPosition();
 
+#if defined(__EMSCRIPTEN__)
+    emscripten_sleep(10);
+#else
     std::this_thread::sleep_for(0.01s);
+#endif
   }
 
   return 0;

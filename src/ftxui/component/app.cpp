@@ -772,7 +772,11 @@ void App::Internal::Uninstall() {
           std::chrono::milliseconds(400)) {
         break;
       }
+#if defined(__EMSCRIPTEN__)
+      emscripten_sleep(10);
+#else
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
+#endif
     }
   }
 
@@ -895,7 +899,15 @@ void App::Internal::RunOnceBlocking(Component component) {
 
     if (delta < time_per_frame) {
       const auto sleep_duration = time_per_frame - delta;
+#if defined(__EMSCRIPTEN__)
+      const auto sleep_ms =
+          std::chrono::duration_cast<std::chrono::milliseconds>(sleep_duration)
+              .count();
+      emscripten_sleep(
+          static_cast<unsigned int>(std::max<int64_t>(1, sleep_ms)));
+#else
       std::this_thread::sleep_for(sleep_duration);
+#endif
     }
   }
 }
@@ -1296,7 +1308,11 @@ void App::Internal::InstallTerminalInfo() {
           std::chrono::milliseconds(500)) {
         break;
       }
+#if defined(__EMSCRIPTEN__)
+      emscripten_sleep(10);
+#else
       std::this_thread::sleep_for(std::chrono::milliseconds(10));
+#endif
     }
   }
 

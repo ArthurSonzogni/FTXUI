@@ -14,6 +14,10 @@
 #include "ftxui/component/component.hpp"  // for CatchEvent, Renderer, operator|=
 #include "ftxui/component/loop.hpp"       // for Loop
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 int main() {
   using namespace ftxui;
   auto screen = App::FitComponent();
@@ -47,7 +51,11 @@ int main() {
   while (!loop.HasQuitted()) {
     custom_loop_count++;
     loop.RunOnce();
+#if defined(__EMSCRIPTEN__)
+    emscripten_sleep(10);
+#else
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
+#endif
   }
 
   return EXIT_SUCCESS;

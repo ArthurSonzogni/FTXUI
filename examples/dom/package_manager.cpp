@@ -15,6 +15,10 @@
 #include "ftxui/dom/node.hpp"  // for Render
 #include "ftxui/screen/color.hpp"  // for Color, Color::Green, Color::Red, Color::RedLight, ftxui
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 int main() {
   using namespace ftxui;
 
@@ -135,8 +139,12 @@ int main() {
     reset_position = screen.ResetPosition();
 
     // Simulate time.
+#if defined(__EMSCRIPTEN__)
+    emscripten_sleep(10);
+#else
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(0.01s);
+#endif
 
     // Exit
     if (nb_active + nb_queued == 0) {
