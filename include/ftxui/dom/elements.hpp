@@ -150,6 +150,22 @@ FTXUI_EXPORT(DOM) Element dbox(Elements);
 FTXUI_EXPORT(DOM)
 Element flexbox(Elements, FlexboxConfig config = FlexboxConfig());
 FTXUI_EXPORT(DOM) Element gridbox(std::vector<Elements> lines);
+/// @brief Arrange elements in a responsive, equal-width grid.
+///
+/// Children are arranged horizontally and automatically wrap onto
+/// additional rows when the available width is insufficient.
+///
+/// Each child is assigned the same width, determined by the largest
+/// minimum width requirement among the children.
+///
+/// @param children The elements to arrange.
+/// @return An element containing the dynamic grid.
+///
+/// @ingroup dom
+/// @see flexbox
+/// @see gridbox
+FTXUI_EXPORT(DOM) Element dynamic_grid(Elements children);
+FTXUI_EXPORT(DOM) Element dynamic_grid(Elements);
 
 FTXUI_EXPORT(DOM)
 Element hflow(Elements);  // Helper: default flexbox with row direction.

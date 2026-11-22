@@ -386,6 +386,7 @@ Enables elements to be arranged in the following ways:
   - **Vertically** with `ftxui::vbox`
   - **Inside a grid** with `ftxui::gridbox`
   - **Wrapped along one direction** using the `ftxui::flexbox`.
+  - **Automatically wrapped into equal-width cells** with `ftxui::dynamic_grid`
   
 [Example](https://arthursonzogni.github.io/FTXUI/examples_2dom_2vbox_hbox_8cpp-example.html) using `ftxui::hbox`, `ftxui::vbox` and `ftxui::filler`.
 
@@ -438,6 +439,28 @@ Terminal output:
 ┌────┐┌───────────────────────────────┐┌───────────────────────────────┐
 │left││middle                         ││right                          │
 └────┘└───────────────────────────────┘└───────────────────────────────┘
+```
+
+## Dynamic Grid {#dom-dynamic-grid}
+
+`ftxui::dynamic_grid` arranges elements horizontally into
+equal-width cells, automatically wrapping them onto new rows
+when the available width is insufficient.
+
+The width of each cell is determined by the largest minimum
+width requirement among its children.
+
+Unlike `ftxui::gridbox`, the number of columns is not fixed.
+
+**Example:**
+
+```cpp
+auto document = dynamic_grid({
+    text("One") | border,
+    text("Two") | border,
+    text("Longer item") | border,
+    text("Four") | border,
+});
 ```
 
 # Table {#dom-table}

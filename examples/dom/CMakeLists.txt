@@ -37,3 +37,7 @@ example(table)
 example(text)
 example(vbox_hbox)
 example(vflow)
+example(dynamic_grid)
+target_link_libraries(ftxui_example_dynamic_grid
+  PRIVATE ftxui::component
+)

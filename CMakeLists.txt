@@ -125,6 +125,7 @@ add_library(dom
   src/ftxui/dom/underlined_double.cpp
   src/ftxui/dom/util.cpp
   src/ftxui/dom/vbox.cpp
+  src/ftxui/dom/dynamic_grid.cpp
 )
 
 add_library(component
