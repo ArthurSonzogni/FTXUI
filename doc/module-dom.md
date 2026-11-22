@@ -531,3 +531,17 @@ Simple [example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/do
 Complex [example](https://github.com/ArthurSonzogni/FTXUI/blob/master/examples/component/canvas_animated.cpp):
   
 ![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/4759106/147250538-783a8246-98e0-4a25-b032-3bd3710549d1.gif)
+
+# Hyperlinks, Reflection, and Layering {#dom-misc}
+
+- `ftxui::hyperlink(link, child)` (or `element | hyperlink(link)`): turns an
+  element into a clickable OSC-8 terminal hyperlink.
+- `ftxui::reflect(box)`: records the final rendered `ftxui::Box` of an element
+  during layout, useful for hit-testing or computing element-relative mouse
+  coordinates.
+- `ftxui::clear_under(element)`: clears the cells underneath an element before
+  rendering it, useful when overlaying popups or floating content inside a
+  `ftxui::dbox`.
+- `ftxui::selectionColor`, `ftxui::selectionBackgroundColor`,
+  `ftxui::selectionForegroundColor`, and `ftxui::selectionStyle`: customize how
+  user-selected text is highlighted.
