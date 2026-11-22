@@ -12,6 +12,10 @@
 #include "ftxui/screen/box.hpp"    // for ftxui
 #include "ftxui/screen/color.hpp"  // for Color, Color::Red
 
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 int main() {
   using namespace ftxui;
   using namespace std::chrono_literals;
@@ -52,7 +56,11 @@ int main() {
     screen.Print();
     reset_position = screen.ResetPosition();
 
+#if defined(__EMSCRIPTEN__)
+    emscripten_sleep(10);
+#else
     std::this_thread::sleep_for(0.01s);
+#endif
   }
 
   return 0;

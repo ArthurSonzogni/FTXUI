@@ -21,7 +21,6 @@ if (EMSCRIPTEN)
       "index.html"
       "index.mjs"
       "run_webassembly.py"
-      "sw.js"
   )
     configure_file(${file} ${file})
   endforeach(file)

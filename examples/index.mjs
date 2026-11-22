@@ -2,13 +2,6 @@ import xterm             from 'https://cdn.jsdelivr.net/npm/xterm@4.18.0/+esm'
 import xterm_addon_webgl from 'https://cdn.jsdelivr.net/npm/xterm-addon-webgl@0.11.4/+esm'
 import xterm_addon_fit   from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.0/+esm'
 
-// Add COOP/COEP via a ServiceWorker to use SharedArrayBuffer
-if ("serviceWorker" in navigator && !window.crossOriginIsolated) {
-  const url_sw = new URL("./sw.js", location.href);
-  const registration = await navigator.serviceWorker.register(url_sw);
-  window.location.reload(); // Reload to ensure the COOP/COEP headers are set.
-}
-
 const webgl_support = () => {
   try {
     var canvas = document.createElement('canvas'); 

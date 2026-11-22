@@ -122,6 +122,6 @@ function(ftxui_set_options library)
 endfunction()
 
 if (EMSCRIPTEN)
-  string(APPEND CMAKE_CXX_FLAGS " -s USE_PTHREADS")
-  string(APPEND CMAKE_EXE_LINKER_FLAGS " -s PROXY_TO_PTHREAD -s ALLOW_MEMORY_GROWTH=1")
+  string(APPEND CMAKE_EXE_LINKER_FLAGS
+    " -s ASYNCIFY -s ASYNCIFY_STACK_SIZE=65536 -s ALLOW_MEMORY_GROWTH=1")
 endif()
