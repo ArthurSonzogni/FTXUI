@@ -24,7 +24,7 @@ function ftxuiCodeLinkTransformer() {
 
       const text: string = child.value
 
-      // Skip comments (usually italicized or starting with // or /*)
+      // Skip comments
       if (text.trimStart().startsWith('//') || text.trimStart().startsWith('/*')) return
 
       // 1. Check for <ftxui/...hpp> or "ftxui/...hpp" header includes
@@ -75,40 +75,8 @@ function ftxuiCodeLinkTransformer() {
   }
 }
 
-const guideSidebar = [
-  {
-    text: 'Guide',
-    items: [
-      { text: 'Getting Started', link: '/guide/getting-started' },
-      { text: 'Mental Model', link: '/guide/mental-model' },
-      { text: 'Cookbook', link: '/guide/cookbook' },
-      { text: 'Cheat Sheet', link: '/guide/cheatsheet' },
-      { text: 'Events, Focus & Mouse', link: '/guide/events-and-focus' },
-      { text: 'Custom Widgets', link: '/guide/custom-widgets' },
-      { text: 'Troubleshooting & FAQ', link: '/guide/troubleshooting' },
-      { text: 'Screen Module', link: '/guide/screen' },
-      { text: 'DOM Module', link: '/guide/dom' },
-      { text: 'Component Module', link: '/guide/component' },
-      { text: 'C++20 Modules', link: '/guide/cpp20-modules' },
-      { text: 'POSIX Pipe Support', link: '/guide/posix-pipe' },
-    ],
-  },
-  {
-    text: 'Installation',
-    collapsed: false,
-    items: [
-      { text: 'Overview', link: '/install/' },
-      { text: 'Build Systems', link: '/install/build-systems' },
-      { text: 'Package Managers', link: '/install/package-managers' },
-      { text: 'Linux Distros & Single Header', link: '/install/distros-and-header' },
-    ],
-  },
-]
-
 function ftxuiWasmExamplesPlugin() {
   const attachMiddleware = (middlewares: any) => {
-    // Serve locally built ASYNCIFY WASM examples from build-wasm/examples/ first,
-    // falling back to GitHub Pages for examples not built locally.
     const localWasmDir = path.resolve(process.cwd(), '../build-wasm/examples')
     middlewares.use('/wasm-examples', async (req: any, res: any, next: any) => {
       try {
@@ -145,105 +113,357 @@ function ftxuiWasmExamplesPlugin() {
   }
 }
 
-const LANG_LABELS: Record<string, string> = {
-  af: 'Afrikaans',
-  ar: 'العربية',
-  bg: 'Български',
-  ca: 'Català',
-  cs: 'Čeština',
-  da: 'Dansk',
-  de: 'Deutsch',
-  el: 'Ελληνικά',
-  eo: 'Esperanto',
-  es: 'Español',
-  fi: 'Suomi',
-  fr: 'Français',
-  hi: 'हिन्दी',
-  hr: 'Hrvatski',
-  hu: 'Magyar',
-  hy: 'Հայերեն',
-  id: 'Bahasa Indonesia',
-  it: 'Italiano',
-  ja: '日本語',
-  ko: '한국어',
-  lt: 'Lietuvių',
-  lv: 'Latviešu',
-  mk: 'Македонски',
-  nl: 'Nederlands',
-  no: 'Norsk',
-  pl: 'Polski',
-  pt: 'Português',
-  ro: 'Română',
-  ru: 'Русский',
-  sk: 'Slovenčina',
-  sl: 'Slovenščina',
-  sr: 'Српски',
-  sv: 'Svenska',
-  tr: 'Türkçe',
-  uk: 'Українська',
-  vi: 'Tiếng Việt',
-  'zh-CH': '中文 (简体)',
-  'zh-TW': '中文 (繁體)',
+const currentVersion = process.env.VITEPRESS_VERSION || 'main'
+const singleLocale = process.env.VITEPRESS_SINGLE_LOCALE === '1'
+const ignoreDeadLinks = process.env.VITEPRESS_IGNORE_DEAD_LINKS === '1'
+
+const versionItems: Array<{ text: string; link: string; target?: string }> = process.env.VITEPRESS_VERSIONS
+  ? JSON.parse(process.env.VITEPRESS_VERSIONS)
+  : [
+      { text: 'main (latest)', link: '/' },
+      { text: 'v7.0.3', link: 'https://arthursonzogni.github.io/FTXUI/en/v7.0.3/', target: '_self' },
+      { text: 'v6.1.9', link: 'https://arthursonzogni.github.io/FTXUI/en/v6.1.9/', target: '_self' },
+    ]
+
+const versionNavItem = {
+  text: currentVersion === 'main' ? 'main (latest)' : currentVersion,
+  items: versionItems,
 }
 
-// Auto-detect any translated VitePress locale folders placed alongside English.
-const detectedLocales: Record<string, any> = {}
-for (const [code, label] of Object.entries(LANG_LABELS)) {
-  const dir = path.resolve(process.cwd(), code)
-  if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
-    detectedLocales[code] = {
-      label,
-      lang: code,
-      dir: code === 'ar' ? 'rtl' : 'ltr',
+interface LocaleStrings {
+  label: string
+  lang: string
+  description: string
+  nav: { guide: string; install: string; api: string; examples: string }
+  sidebar: {
+    guide: string
+    gettingStarted: string
+    mentalModel: string
+    cookbook: string
+    cheatsheet: string
+    eventsFocus: string
+    customWidgets: string
+    troubleshooting: string
+    screen: string
+    dom: string
+    component: string
+    cpp20Modules: string
+    posixPipe: string
+    install: string
+    overview: string
+    buildSystems: string
+    packageManagers: string
+    distrosHeader: string
+  }
+  outline: string
+  editText: string
+  prev: string
+  next: string
+  returnToTop: string
+  sidebarMenu: string
+  darkMode: string
+}
+
+function makeGuideSidebar(prefix: string, s: LocaleStrings['sidebar']) {
+  const p = prefix ? `/${prefix}` : ''
+  return [
+    {
+      text: s.guide,
+      items: [
+        { text: s.gettingStarted, link: `${p}/guide/getting-started` },
+        { text: s.mentalModel, link: `${p}/guide/mental-model` },
+        { text: s.cookbook, link: `${p}/guide/cookbook` },
+        { text: s.cheatsheet, link: `${p}/guide/cheatsheet` },
+        { text: s.eventsFocus, link: `${p}/guide/events-and-focus` },
+        { text: s.customWidgets, link: `${p}/guide/custom-widgets` },
+        { text: s.troubleshooting, link: `${p}/guide/troubleshooting` },
+        { text: s.screen, link: `${p}/guide/screen` },
+        { text: s.dom, link: `${p}/guide/dom` },
+        { text: s.component, link: `${p}/guide/component` },
+        { text: s.cpp20Modules, link: `${p}/guide/cpp20-modules` },
+        { text: s.posixPipe, link: `${p}/guide/posix-pipe` },
+      ],
+    },
+    {
+      text: s.install,
+      collapsed: false,
+      items: [
+        { text: s.overview, link: `${p}/install/` },
+        { text: s.buildSystems, link: `${p}/install/build-systems` },
+        { text: s.packageManagers, link: `${p}/install/package-managers` },
+        { text: s.distrosHeader, link: `${p}/install/distros-and-header` },
+      ],
+    },
+  ]
+}
+
+function makeLocaleEntry(prefix: string, s: LocaleStrings) {
+  const p = prefix ? `/${prefix}` : ''
+  const guide = makeGuideSidebar(prefix, s.sidebar)
+  return {
+    label: s.label,
+    lang: s.lang,
+    description: s.description,
+    themeConfig: {
+      nav: [
+        { text: s.nav.guide, link: `${p}/guide/getting-started` },
+        { text: s.nav.install, link: `${p}/install/` },
+        { text: s.nav.api, link: '/api/' },
+        { text: s.nav.examples, link: '/examples/' },
+        versionNavItem,
+      ],
+      sidebar: {
+        [`${p}/guide/`]: guide,
+        [`${p}/install/`]: guide,
+        '/api/': apiSidebar,
+        '/examples/': examplesSidebar,
+      },
+      outline: {
+        level: [2, 3] as [number, number],
+        label: s.outline,
+      },
+      docFooter: {
+        prev: s.prev,
+        next: s.next,
+      },
+      returnToTopLabel: s.returnToTop,
+      sidebarMenuLabel: s.sidebarMenu,
+      darkModeSwitchLabel: s.darkMode,
+      editLink: {
+        pattern: 'https://github.com/ArthurSonzogni/FTXUI/edit/main/docs_vitepress/:path',
+        text: s.editText,
+      },
+    },
+  }
+}
+
+const EN_STRINGS: LocaleStrings = {
+  label: 'English',
+  lang: 'en',
+  description: 'C++ Functional Terminal User Interface',
+  nav: { guide: 'Guide', install: 'Installation', api: 'API Reference', examples: 'Examples' },
+  sidebar: {
+    guide: 'Guide',
+    gettingStarted: 'Getting Started',
+    mentalModel: 'Mental Model',
+    cookbook: 'Cookbook',
+    cheatsheet: 'Cheat Sheet',
+    eventsFocus: 'Events, Focus & Mouse',
+    customWidgets: 'Custom Widgets',
+    troubleshooting: 'Troubleshooting & FAQ',
+    screen: 'Screen Module',
+    dom: 'DOM Module',
+    component: 'Component Module',
+    cpp20Modules: 'C++20 Modules',
+    posixPipe: 'POSIX Pipe Support',
+    install: 'Installation',
+    overview: 'Overview',
+    buildSystems: 'Build Systems',
+    packageManagers: 'Package Managers',
+    distrosHeader: 'Linux Distros & Single Header',
+  },
+  outline: 'On this page',
+  editText: 'Edit this page on GitHub',
+  prev: 'Previous page',
+  next: 'Next page',
+  returnToTop: 'Return to top',
+  sidebarMenu: 'Menu',
+  darkMode: 'Appearance',
+}
+
+const TRANSLATED_LOCALES: Record<string, LocaleStrings> = {
+  fr: {
+    label: 'Français',
+    lang: 'fr',
+    description: 'Interface utilisateur terminal fonctionnelle en C++',
+    nav: { guide: 'Guide', install: 'Installation', api: 'Référence API', examples: 'Exemples' },
+    sidebar: {
+      guide: 'Guide',
+      gettingStarted: 'Démarrage rapide',
+      mentalModel: 'Modèle mental',
+      cookbook: 'Recettes',
+      cheatsheet: 'Aide-mémoire',
+      eventsFocus: 'Événements, focus et souris',
+      customWidgets: 'Widgets personnalisés',
+      troubleshooting: 'Dépannage et FAQ',
+      screen: 'Module Screen',
+      dom: 'Module DOM',
+      component: 'Module Component',
+      cpp20Modules: 'Modules C++20',
+      posixPipe: 'Support des tubes POSIX',
+      install: 'Installation',
+      overview: 'Vue d\'ensemble',
+      buildSystems: 'Systèmes de compilation',
+      packageManagers: 'Gestionnaires de paquets',
+      distrosHeader: 'Distributions Linux et en-tête unique',
+    },
+    outline: 'Sur cette page',
+    editText: 'Modifier cette page sur GitHub',
+    prev: 'Page précédente',
+    next: 'Page suivante',
+    returnToTop: 'Retour en haut',
+    sidebarMenu: 'Menu',
+    darkMode: 'Apparence',
+  },
+  es: {
+    label: 'Español',
+    lang: 'es',
+    description: 'Interfaz de usuario funcional para terminal en C++',
+    nav: { guide: 'Guía', install: 'Instalación', api: 'Referencia API', examples: 'Ejemplos' },
+    sidebar: {
+      guide: 'Guía',
+      gettingStarted: 'Primeros pasos',
+      mentalModel: 'Modelo mental',
+      cookbook: 'Recetario',
+      cheatsheet: 'Hoja de referencia',
+      eventsFocus: 'Eventos, foco y ratón',
+      customWidgets: 'Widgets personalizados',
+      troubleshooting: 'Solución de problemas y FAQ',
+      screen: 'Módulo Screen',
+      dom: 'Módulo DOM',
+      component: 'Módulo Component',
+      cpp20Modules: 'Módulos C++20',
+      posixPipe: 'Soporte de tuberías POSIX',
+      install: 'Instalación',
+      overview: 'Resumen',
+      buildSystems: 'Sistemas de compilación',
+      packageManagers: 'Gestores de paquetes',
+      distrosHeader: 'Distribuciones Linux y cabecera única',
+    },
+    outline: 'En esta página',
+    editText: 'Editar esta página en GitHub',
+    prev: 'Página anterior',
+    next: 'Página siguiente',
+    returnToTop: 'Volver arriba',
+    sidebarMenu: 'Menú',
+    darkMode: 'Apariencia',
+  },
+  ja: {
+    label: '日本語',
+    lang: 'ja',
+    description: 'C++ 関数型ターミナルユーザーインターフェースライブラリ',
+    nav: { guide: 'ガイド', install: 'インストール', api: 'API リファレンス', examples: 'サンプル' },
+    sidebar: {
+      guide: 'ガイド',
+      gettingStarted: 'はじめに',
+      mentalModel: '基本コンセプト',
+      cookbook: 'クックブック',
+      cheatsheet: 'チートシート',
+      eventsFocus: 'イベント・フォーカス・マウス',
+      customWidgets: 'カスタムウィジェット',
+      troubleshooting: 'トラブルシューティングと FAQ',
+      screen: 'Screen モジュール',
+      dom: 'DOM モジュール',
+      component: 'Component モジュール',
+      cpp20Modules: 'C++20 モジュール',
+      posixPipe: 'POSIX パイプ対応',
+      install: 'インストール',
+      overview: '概要',
+      buildSystems: 'ビルドシステム',
+      packageManagers: 'パッケージマネージャー',
+      distrosHeader: 'Linux ディストリビューションと単一ヘッダー',
+    },
+    outline: 'このページの内容',
+    editText: 'GitHub でこのページを編集',
+    prev: '前のページ',
+    next: '次のページ',
+    returnToTop: 'トップへ戻る',
+    sidebarMenu: 'メニュー',
+    darkMode: '外観',
+  },
+  'zh-CN': {
+    label: '中文 (简体)',
+    lang: 'zh-CN',
+    description: 'C++ 函数式终端用户界面库',
+    nav: { guide: '指南', install: '安装', api: 'API 参考', examples: '示例' },
+    sidebar: {
+      guide: '指南',
+      gettingStarted: '快速开始',
+      mentalModel: '核心概念',
+      cookbook: '实用示例',
+      cheatsheet: '速查表',
+      eventsFocus: '事件、焦点与鼠标',
+      customWidgets: '自定义组件',
+      troubleshooting: '常见问题与排错',
+      screen: 'Screen 模块',
+      dom: 'DOM 模块',
+      component: 'Component 模块',
+      cpp20Modules: 'C++20 模块',
+      posixPipe: 'POSIX 管道支持',
+      install: '安装',
+      overview: '概览',
+      buildSystems: '构建系统',
+      packageManagers: '包管理器',
+      distrosHeader: 'Linux 发行版与单头文件',
+    },
+    outline: '本页目录',
+    editText: '在 GitHub 上编辑此页',
+    prev: '上一页',
+    next: '下一页',
+    returnToTop: '返回顶部',
+    sidebarMenu: '菜单',
+    darkMode: '外观',
+  },
+  'zh-TW': {
+    label: '中文 (繁體)',
+    lang: 'zh-TW',
+    description: 'C++ 函數式終端機使用者介面函式庫',
+    nav: { guide: '指南', install: '安裝', api: 'API 參考', examples: '範例' },
+    sidebar: {
+      guide: '指南',
+      gettingStarted: '快速開始',
+      mentalModel: '核心概念',
+      cookbook: '實用範例',
+      cheatsheet: '速查表',
+      eventsFocus: '事件、焦點與滑鼠',
+      customWidgets: '自訂元件',
+      troubleshooting: '常見問題與排錯',
+      screen: 'Screen 模組',
+      dom: 'DOM 模組',
+      component: 'Component 模組',
+      cpp20Modules: 'C++20 模組',
+      posixPipe: 'POSIX 管線支援',
+      install: '安裝',
+      overview: '概覽',
+      buildSystems: '建置系統',
+      packageManagers: '套件管理器',
+      distrosHeader: 'Linux 發行版與單一標頭檔',
+    },
+    outline: '本頁目錄',
+    editText: '在 GitHub 上編輯此頁',
+    prev: '上一頁',
+    next: '下一頁',
+    returnToTop: '返回頂部',
+    sidebarMenu: '選單',
+    darkMode: '外觀',
+  },
+}
+
+const activeLocales: Record<string, any> = {}
+if (!singleLocale) {
+  for (const [code, strings] of Object.entries(TRANSLATED_LOCALES)) {
+    const dir = path.resolve(process.cwd(), code)
+    if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
+      activeLocales[code] = makeLocaleEntry(code, strings)
     }
   }
 }
 
-const localesConfig =
-  Object.keys(detectedLocales).length > 0
-    ? {
-        root: { label: 'English', lang: 'en' },
-        ...detectedLocales,
-      }
-    : undefined
+const hasMultipleLocales = Object.keys(activeLocales).length > 0
+const rootLocale = makeLocaleEntry('', EN_STRINGS)
 
-const currentVersion = process.env.VITEPRESS_VERSION || 'main'
-const versionItems: Array<{ text: string; link: string }> = process.env.VITEPRESS_VERSIONS
-  ? JSON.parse(process.env.VITEPRESS_VERSIONS)
-  : [
-      { text: 'main (latest)', link: '/' },
-      { text: 'v7.0.3 (Doxygen archive)', link: 'https://arthursonzogni.github.io/FTXUI/en/v7.0.3/' },
-      { text: 'v6.1.9 (Doxygen archive)', link: 'https://arthursonzogni.github.io/FTXUI/en/v6.1.9/' },
-    ]
-
-const externalLangItems: Array<{ text: string; link: string }> = process.env.VITEPRESS_LANGS
-  ? JSON.parse(process.env.VITEPRESS_LANGS)
+const srcExclude = singleLocale
+  ? Object.keys(TRANSLATED_LOCALES).map((code) => `${code}/**`)
   : []
-
-const navItems: any[] = [
-  { text: 'Guide', link: '/guide/getting-started' },
-  { text: 'Installation', link: '/install/' },
-  { text: 'API Reference', link: '/api/' },
-  { text: 'Examples', link: '/examples/' },
-  {
-    text: currentVersion === 'main' ? 'main (latest)' : currentVersion,
-    items: versionItems,
-  },
-]
-
-if (!localesConfig && externalLangItems.length > 0) {
-  navItems.push({
-    text: 'Languages',
-    items: externalLangItems,
-  })
-}
 
 export default defineConfig({
   base: siteBase,
   title: 'FTXUI',
-  description: 'C++ Functional Terminal User Interface',
+  description: EN_STRINGS.description,
   cleanUrls: true,
   lastUpdated: true,
+  ignoreDeadLinks,
+  srcExclude,
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: withSiteBase('/favicon.svg') }],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -253,9 +473,20 @@ export default defineConfig({
     ['meta', { property: 'og:url', content: 'https://arthursonzogni.github.io/FTXUI/' }],
     ['meta', { name: 'twitter:card', content: 'summary' }],
   ],
-  ...(localesConfig ? { locales: localesConfig } : {}),
+
+  ...(hasMultipleLocales
+    ? {
+        locales: {
+          root: rootLocale,
+          ...activeLocales,
+        },
+      }
+    : {}),
 
   vite: {
+    define: {
+      __FTXUI_VERSION__: JSON.stringify(currentVersion),
+    },
     plugins: [ftxuiWasmExamplesPlugin()],
   },
 
@@ -285,7 +516,6 @@ export default defineConfig({
           const match = highlighted.match(/<span class="line">([\s\S]*?)<\/span><\/code>/)
           if (match) {
             let inner = match[1]
-            // Avoid nested <a> tags when inline code is already inside a Markdown link.
             const insideLink = idx > 0 && tokens[idx - 1].type === 'link_open'
             if (insideLink) {
               inner = inner.replace(/<a\b[^>]*>/g, '').replace(/<\/a>/g, '')
@@ -299,29 +529,10 @@ export default defineConfig({
   },
 
   themeConfig: {
-    outline: {
-      level: [2, 3],
-      label: 'On this page',
-    },
-
     search: {
       provider: 'local',
     },
-
-    nav: navItems,
-
-    sidebar: {
-      '/guide/': guideSidebar,
-      '/install/': guideSidebar,
-      '/api/': apiSidebar,
-      '/examples/': examplesSidebar,
-    },
-
-    editLink: {
-      pattern: 'https://github.com/ArthurSonzogni/FTXUI/edit/main/docs_vitepress/:path',
-      text: 'Edit this page on GitHub',
-    },
-
+    ...(hasMultipleLocales ? {} : rootLocale.themeConfig),
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ArthurSonzogni/FTXUI' },
     ],

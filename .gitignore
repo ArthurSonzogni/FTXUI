@@ -64,6 +64,11 @@ out/
 !docs_vitepress/index.md
 !docs_vitepress/guide/**/*.md
 !docs_vitepress/install/**/*.md
+!docs_vitepress/fr/**/*.md
+!docs_vitepress/es/**/*.md
+!docs_vitepress/ja/**/*.md
+!docs_vitepress/zh-CN/**/*.md
+!docs_vitepress/zh-TW/**/*.md
 !docs_vitepress/public/favicon.svg
 !docs_vitepress/public/demo/**/*.html
 !docs_vitepress/.vitepress/config.mts

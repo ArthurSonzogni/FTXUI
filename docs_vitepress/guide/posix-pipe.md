@@ -1,8 +1,8 @@
 # POSIX Piped Input in FTXUI
 
-> [!WARNING]
-> This feature works only on Linux and macOS. It is not supported on
-> Windows and WebAssembly.
+::: warning Platform Support
+This feature works only on Linux and macOS. It is not supported on Windows or WebAssembly.
+:::
 
 ## What is a POSIX Pipe?
 
