@@ -1,10 +1,12 @@
 import DefaultTheme from 'vitepress/theme'
 import { withBase } from 'vitepress'
+import Layout from './Layout.vue'
 import FtxuiDemo from './FtxuiDemo.vue'
 import './custom.css'
 
 export default {
   extends: DefaultTheme,
+  Layout,
   enhanceApp({ app }) {
     app.component('FtxuiDemo', FtxuiDemo)
     if (typeof window !== 'undefined') {

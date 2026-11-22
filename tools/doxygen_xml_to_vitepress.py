@@ -330,7 +330,8 @@ class DoxygenToVitePress:
                 comp_items.append(entry)
 
         # Examples index page with featured showcase + categorized grid
-        featured = [
+        generated_keys = {e["link"].removeprefix("/examples/") for e in dom_items + comp_items}
+        all_featured = [
             ("component/homescreen", "Full multi-tab demo (htop, colors, spinner, gauges, compiler, paragraphs)"),
             ("component/gallery", "Showcase of all interactive FTXUI components"),
             ("component/canvas_animated", "Real-time animated braille & block drawing"),
@@ -338,17 +339,23 @@ class DoxygenToVitePress:
             ("component/modal_dialog", "Modal dialog overlay with keyboard & mouse support"),
             ("dom/table", "Styled tables with borders, alignments, and colors"),
         ]
+        featured = [(k, d) for k, d in all_featured if k in generated_keys]
         idx = [
             "# Examples",
             "",
             "Every example below includes an interactive WebAssembly terminal and cross-linked C++ source code.",
             "",
-            "## Featured Demos",
-            "",
-            "| Demo | Description |",
-            "| --- | --- |",
-            *[f"| [`{key}`](/examples/{key}) | {desc} |" for key, desc in featured],
-            "",
+        ]
+        if featured:
+            idx.extend([
+                "## Featured Demos",
+                "",
+                "| Demo | Description |",
+                "| --- | --- |",
+                *[f"| [`{key}`](/examples/{key}) | {desc} |" for key, desc in featured],
+                "",
+            ])
+        idx.extend([
             f"## Component Examples ({len(comp_items)})",
             "",
             *[f"- [`{it['text']}`]({it['link']})" for it in comp_items],
@@ -357,7 +364,7 @@ class DoxygenToVitePress:
             "",
             *[f"- [`{it['text']}`]({it['link']})" for it in dom_items],
             "",
-        ]
+        ])
         (self.examples_dir / "index.md").write_text("\n".join(idx), encoding="utf-8")
 
         return [
@@ -1151,13 +1158,27 @@ class DoxygenToVitePress:
 
         core_class_entries = [(s, n) for s, n in class_entries if is_core_class(n)]
 
-        screen_core = [
-            ("ftxui::Screen", "/api/class/screen", "A rectangular grid of `Cell`s rendered to the terminal."),
-            ("ftxui::Surface", "/api/class/surface", "Base 2D grid of `Cell`s (formerly `Image`)."),
-            ("ftxui::Cell", "/api/class/cell", "A single Unicode grapheme and its foreground/background style (formerly `Pixel`)."),
-            ("ftxui::Color", "/api/class/color", "Terminal color supporting Palette16, Palette256, and 24-bit TrueColor (RGB/HSV)."),
-            ("ftxui::Box", "/api/class/box", "Inclusive 2D bounding rectangle (`x_min`, `x_max`, `y_min`, `y_max`)."),
+        class_slug_map = {n: s for s, n in class_entries}
+        screen_candidates = [
+            ("ftxui::Screen", "Screen", "A rectangular grid of styled cells rendered to the terminal."),
+            ("ftxui::Surface", "Surface", "Base 2D grid of `Cell`s (formerly `Image`)."),
+            ("ftxui::Image", "Image", "Base 2D grid of `Pixel`s."),
+            ("ftxui::Cell", "Cell", "A single Unicode grapheme and its foreground/background style (formerly `Pixel`)."),
+            ("ftxui::Pixel", "Pixel", "A single Unicode grapheme and its foreground/background style."),
+            ("ftxui::Color", "Color", "Terminal color supporting Palette16, Palette256, and 24-bit TrueColor (RGB/HSV)."),
+            ("ftxui::Box", "Box", "Inclusive 2D bounding rectangle (`x_min`, `x_max`, `y_min`, `y_max`)."),
         ]
+        screen_core = [
+            (cname, f"/api/class/{class_slug_map[cname]}", desc)
+            for cname, _label, desc in screen_candidates
+            if cname in class_slug_map
+        ]
+        screen_sidebar_items = [
+            {"text": label, "link": f"/api/class/{class_slug_map[cname]}"}
+            for cname, label, _desc in screen_candidates
+            if cname in class_slug_map
+        ]
+        screen_sidebar_items.append({"text": "All Screen Utilities", "link": "/api/screen"})
 
         # API index page: Screen -> Elements -> Components -> Core Classes
         idx_lines = [
@@ -1199,14 +1220,7 @@ class DoxygenToVitePress:
             {
                 "text": "Screen",
                 "collapsed": False,
-                "items": [
-                    {"text": "Screen", "link": "/api/class/screen"},
-                    {"text": "Surface", "link": "/api/class/surface"},
-                    {"text": "Cell", "link": "/api/class/cell"},
-                    {"text": "Color", "link": "/api/class/color"},
-                    {"text": "Box", "link": "/api/class/box"},
-                    {"text": "All Screen Utilities", "link": "/api/screen"},
-                ],
+                "items": screen_sidebar_items,
             },
             {
                 "text": "Elements (DOM)",
@@ -1362,6 +1376,11 @@ class DoxygenToVitePress:
 
 
 if __name__ == "__main__":
-    xml_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("build/doc/doxygen/xml")
-    out_dir = Path(sys.argv[2]) if len(sys.argv) > 2 else Path("docs_vitepress")
-    DoxygenToVitePress(xml_dir, out_dir).run()
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    flags = {a for a in sys.argv[1:] if a.startswith("--")}
+    xml_dir = Path(args[0]) if len(args) > 0 else Path("build/doc/doxygen/xml")
+    out_dir = Path(args[1]) if len(args) > 1 else Path("docs_vitepress")
+    conv = DoxygenToVitePress(xml_dir, out_dir)
+    if "--no-guide-autolink" in flags:
+        conv.auto_link_guides = lambda: 0  # type: ignore[method-assign]
+    conv.run()

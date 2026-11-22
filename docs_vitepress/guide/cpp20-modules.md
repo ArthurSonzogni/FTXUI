@@ -1,10 +1,8 @@
 # C++20 Modules
 
-> [!WARNING]
-> This feature is still in development, and the API may change in future releases.
-> Your contribution is needed to help us improve the compatibility and usability
-> of C++ modules in FTXUI. If you encounter any issues or have suggestions,
-> please open an issue.
+::: warning Experimental
+This feature is still in development, and the API may change in future releases. If you encounter any issues or have suggestions, please open an issue on GitHub.
+:::
 
 FTXUI experimentally supports
 [C++20 modules](https://en.cppreference.com/w/cpp/language/modules) to reduce
@@ -23,10 +21,9 @@ cmake \
 ninja
 ```
 
-> [!NOTE]
-> To use modules, you need a C++≥20 compatible compiler, CMake version 3.20 or
-> higher, and use a compatible generator like Ninja. Note that Makefile
-> generators **do not support modules**.
+::: info Note
+To use modules, you need a C++20 compiler, CMake 3.20 or newer, and a compatible generator such as Ninja. Makefile generators do not support C++20 modules.
+:::
 
 Then, in your own code you can consume the modules and code as normal:
 
