@@ -40,6 +40,8 @@ class Reflect : public Node {
 };
 }  // namespace
 
+/// @brief Record the element's final rendered bounding `Box` into `box`.
+/// @ingroup dom
 Decorator reflect(Box& box) {
   return [&](Element child) -> Element {
     return std::make_shared<Reflect>(std::move(child), box);

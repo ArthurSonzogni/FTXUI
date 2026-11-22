@@ -1,0 +1,50 @@
+.vp-doc a.code-ref {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-underline-offset: 3px;
+  font-weight: inherit;
+}
+
+.vp-doc a.code-ref:hover {
+  text-decoration-style: solid;
+  text-decoration-color: var(--vp-c-brand-1);
+}
+
+.vp-doc code.shiki-inline span {
+  color: var(--shiki-light);
+}
+
+.dark .vp-doc code.shiki-inline span {
+  color: var(--shiki-dark);
+}
+
+/* Give /examples/* pages full width so 140-column terminals fit comfortably. */
+.example-page .VPDoc .container,
+.example-page .VPDoc .content,
+.example-page .VPDoc .content-container {
+  max-width: 1280px !important;
+}
+
+/* Clearly separate individual functions/members on API reference pages. */
+.api-page .vp-doc h3 {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--vp-c-divider);
+  font-size: 1.25rem;
+}
+
+.api-page .vp-doc h3 .header-anchor {
+  top: 24px;
+}
+
+.api-page .vp-doc h2 + h3 {
+  margin-top: 16px;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.api-page .vp-doc h2 + h3 .header-anchor {
+  top: 0;
+}

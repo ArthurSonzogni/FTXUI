@@ -71,6 +71,8 @@ struct FTXUI_EXPORT(COMPONENT) AnimatedColorOption {
   animation::easing::Function function = animation::easing::QuadraticInOut;
 };
 
+/// @brief Background and foreground animated color options.
+/// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) AnimatedColorsOption {
   AnimatedColorOption background;
   AnimatedColorOption foreground;
@@ -211,6 +213,8 @@ struct FTXUI_EXPORT(COMPONENT) RadioboxOption {
   Ref<int> focused_entry = 0;
 };
 
+/// @brief Option for the `ResizableSplit` component.
+/// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
   Component main;
   Component back;
@@ -225,8 +229,8 @@ struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
   Ref<int> max = std::numeric_limits<int>::max();
 };
 
-// @brief Option for the `Slider` component.
-// @ingroup component
+/// @brief Option for the `Slider` component.
+/// @ingroup component
 template <typename T>
 struct SliderOption {
   Ref<T> value;
@@ -253,8 +257,8 @@ struct FTXUI_EXPORT(COMPONENT) WindowRenderState {
   bool hover_down = false;   ///< Whether the resizeable down side is hovered.
 };
 
-// @brief Option for the `Window` component.
-// @ingroup component
+/// @brief Option for the `Window` component.
+/// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) WindowOptions {
   Component inner;            ///< The component wrapped by this window.
   ConstStringRef title = "";  ///< The title displayed by this window.

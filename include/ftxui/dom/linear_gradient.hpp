@@ -33,10 +33,7 @@ namespace ftxui {
 struct FTXUI_EXPORT(DOM) LinearGradient {
   float angle = 0.f;
 
-  /// A stop is a color at a specific position in the gradient.
-  /// The position is a value between 0.0 and 1.0,
-  /// where 0.0 is the start of the gradient
-  /// and 1.0 is the end of the gradient.
+  /// @brief A color stop at an optional normalized position (`0.0` to `1.0`).
   struct Stop {
     Color color = Color::Default;
     std::optional<float> position;

@@ -66,6 +66,7 @@ class DocInfo:
         self.version_name = version_name  # e.g., "main", "v6.1.9"
         self.is_main_version = is_main_version
         self.is_primary_lang = is_primary_lang
+        self.is_vitepress = False
         
         if self.is_primary_lang:
             if self.is_main_version:
@@ -89,7 +90,7 @@ class DocInfo:
     def __repr__(self) -> str:
         return f"DocInfo(lang='{self.lang}', version='{self.version_name}', dest_dir='{self.dest_dir}')"
 
-def run_command(command: List[str], check: bool = True, cwd: Path = None):
+def run_command(command: List[str], check: bool = True, cwd: Path = None, env: Dict[str, str] = None):
     """
     Runs a command, prints its output, and handles errors.
     """
@@ -101,7 +102,8 @@ def run_command(command: List[str], check: bool = True, cwd: Path = None):
             capture_output=True,
             text=True,
             check=check,
-            cwd=cwd
+            cwd=cwd,
+            env=env,
         )
         if result.stdout:
             print(result.stdout)
@@ -288,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {{
 }});
 """
 
-def build_doc_from_git(doc_info: DocInfo, build_root: Path, repo_url: str, branch_or_tag: str, temp_repo_dir: Path):
+def build_doc_from_git(doc_info: DocInfo, build_root: Path, repo_url: str, branch_or_tag: str, temp_repo_dir: Path, all_docs: List[DocInfo]):
     """
     Handles checking out the source from a git reference, running the build,
     and copying the output to the final destination.
@@ -298,6 +300,7 @@ def build_doc_from_git(doc_info: DocInfo, build_root: Path, repo_url: str, branc
     :param repo_url: The URL or path to the git repository.
     :param branch_or_tag: The git reference (branch or tag) to check out.
     :param temp_repo_dir: The path to the temporary cloned repository directory.
+    :param all_docs: All DocInfo entries being built (used for VitePress nav links).
     """
     print(f"--- Building {doc_info.key} (Source: {branch_or_tag} from {repo_url}) ---")
     
@@ -318,9 +321,13 @@ def build_doc_from_git(doc_info: DocInfo, build_root: Path, repo_url: str, branc
     run_command(["tar", "-xf", str(archive_path)], cwd=version_src_dir)
     archive_path.unlink()
 
+    vitepress_dir = version_src_dir / "docs_vitepress"
+    converter_script = version_src_dir / "tools" / "doxygen_xml_to_vitepress.py"
+    use_vitepress = (vitepress_dir / "package.json").is_file() and converter_script.is_file()
+
     # Translations only carry the text. Use the header from the current
-    # checkout, so its scripts stay in sync with the English docs.
-    if not doc_info.is_primary_lang:
+    # checkout, so its scripts stay in sync with the English docs (Doxygen only).
+    if not doc_info.is_primary_lang and not use_vitepress:
         shutil.copy(Path.cwd() / "doc" / "header.html",
                     version_src_dir / "doc" / "header.html")
 
@@ -328,7 +335,7 @@ def build_doc_from_git(doc_info: DocInfo, build_root: Path, repo_url: str, branc
     version_build_dir = build_root / f"build_{doc_info.key}"
     version_build_dir.mkdir()
 
-    # 2.a Update doc/Doxyfile.in to set the correct language.
+    # 2.a Update doc/Doxyfile.in to set the correct language (and enable XML for VitePress).
     doxyfile_in_path = version_src_dir / "doc" / "Doxyfile.in"
     if not doxyfile_in_path.is_file():
         print(f"FATAL: Doxyfile.in not found at {doxyfile_in_path} for {doc_info.key}")
@@ -338,8 +345,11 @@ def build_doc_from_git(doc_info: DocInfo, build_root: Path, repo_url: str, branc
     lang_doxygen_name = LANG_NAME_MAP.get(doc_info.lang, [doc_info.lang,
                                                           doc_info.lang])[1]
     doxyfile_content = doxyfile_content.replace("English", lang_doxygen_name)
+    if use_vitepress:
+        doxyfile_content = doxyfile_content.replace("GENERATE_XML           = NO",
+                                                    "GENERATE_XML           = YES")
+        doxyfile_in_path.write_text(doxyfile_content, encoding='utf-8')
 
-    
     # Assuming CMakeLists.txt is in the root of the extracted source
     run_command([ 
         "cmake", str(version_src_dir), 
@@ -349,7 +359,67 @@ def build_doc_from_git(doc_info: DocInfo, build_root: Path, repo_url: str, branc
     
     run_command(["make", "doc"], cwd=version_build_dir)
 
-    # 3. Copy the generated HTML files to the final destination.
+    if use_vitepress:
+        doc_info.is_vitepress = True
+        doxygen_xml_dir = version_build_dir / "doc" / "doxygen" / "xml"
+        if not doxygen_xml_dir.is_dir():
+            print(f"FATAL: Doxygen XML output not found for {doc_info.key} at {doxygen_xml_dir}")
+            exit(1)
+
+        run_command([
+            "python3", str(converter_script),
+            str(doxygen_xml_dir), str(vitepress_dir),
+        ], cwd=version_src_dir)
+
+        site_prefix = "/FTXUI"
+        if doc_info.is_primary_lang:
+            vp_base = f"{site_prefix}/" if doc_info.is_main_version else f"{site_prefix}/en/{doc_info.version_name}/"
+        else:
+            vp_base = f"{site_prefix}/{doc_info.lang}/"
+
+        en_versions = [d.version_name for d in all_docs if d.is_primary_lang]
+        version_items = []
+        for v in en_versions:
+            if v == "main":
+                version_items.append({
+                    "text": "main (latest)",
+                    "link": f"https://arthursonzogni.github.io{site_prefix}/",
+                    "target": "_self",
+                })
+            else:
+                version_items.append({
+                    "text": v,
+                    "link": f"https://arthursonzogni.github.io{site_prefix}/en/{v}/",
+                    "target": "_self",
+                })
+
+        lang_codes = sorted({d.lang for d in all_docs if d.is_main_version}, key=lambda x: (x != "en", x))
+        lang_items = []
+        for code in lang_codes:
+            label = LANG_NAME_MAP.get(code, [code, code])[0]
+            link = f"https://arthursonzogni.github.io{site_prefix}/" if code == "en" else f"https://arthursonzogni.github.io{site_prefix}/{code}/"
+            lang_items.append({"text": label, "link": link, "target": "_self"})
+
+        vp_env = os.environ.copy()
+        vp_env["VITEPRESS_BASE"] = vp_base
+        vp_env["VITEPRESS_VERSION"] = doc_info.version_name
+        vp_env["VITEPRESS_VERSIONS"] = json.dumps(version_items)
+        vp_env["VITEPRESS_LANGS"] = json.dumps(lang_items)
+
+        npm_install_cmd = ["npm", "ci"] if (vitepress_dir / "package-lock.json").is_file() else ["npm", "install"]
+        run_command(npm_install_cmd, cwd=vitepress_dir, env=vp_env)
+        run_command(["npm", "run", "docs:build"], cwd=vitepress_dir, env=vp_env)
+
+        vp_dist_dir = vitepress_dir / ".vitepress" / "dist"
+        if not vp_dist_dir.is_dir():
+            print(f"FATAL: VitePress dist output not found for {doc_info.key} at {vp_dist_dir}")
+            exit(1)
+
+        print(f"Copying VitePress files to: {doc_info.dest_dir}")
+        shutil.copytree(vp_dist_dir, doc_info.dest_dir, dirs_exist_ok=True)
+        return
+
+    # 3. Copy the generated Doxygen HTML files to the final destination.
     doxygen_html_dir = version_build_dir / "doc" / "doxygen" / "html"
     if not doxygen_html_dir.is_dir():
         print(f"FATAL: Doxygen HTML output not found for {doc_info.key} at {doxygen_html_dir}")
@@ -437,22 +507,22 @@ def main():
         for doc in all_docs:
             if doc.is_primary_lang:
                 # English docs are archived from the current directory (root_dir)
-                build_doc_from_git(doc, build_dir, "origin", doc.version_name, root_dir)
+                build_doc_from_git(doc, build_dir, "origin", doc.version_name, root_dir, all_docs)
             else:
                 # Translated docs are archived from the cloned translation repo
                 # FIX: Use 'origin/<lang>' as the git reference because 'git archive' 
                 # inside the repository only knows remote-tracking branches.
                 translation_git_ref = f"origin/{doc.lang}"
-                build_doc_from_git(doc, build_dir, TRANSLATIONS_REPO_URL, translation_git_ref, temp_translations_repo)
+                build_doc_from_git(doc, build_dir, TRANSLATIONS_REPO_URL, translation_git_ref, temp_translations_repo, all_docs)
 
-        # --- 4. Inject version and language switchers into all HTML files ---
+        # --- 4. Inject version and language switchers into legacy Doxygen HTML files ---
         print("\n--- Injecting version and language switcher JavaScript ---")
         
         # A set to keep track of processed directories
         processed_dirs = set() 
         
         for doc in all_docs:
-            if not doc.dest_dir.exists() or doc.dest_dir in processed_dirs:
+            if doc.is_vitepress or not doc.dest_dir.exists() or doc.dest_dir in processed_dirs:
                 continue
 
             print(f"Processing HTML files in: {doc.dest_dir}")

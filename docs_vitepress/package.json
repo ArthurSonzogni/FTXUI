@@ -1,0 +1,12 @@
+{
+  "name": "ftxui-docs",
+  "private": true,
+  "scripts": {
+    "docs:dev": "vitepress dev . --host 127.0.0.1 --port 5173",
+    "docs:build": "vitepress build .",
+    "docs:preview": "vitepress preview . --host 127.0.0.1 --port 5173"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}

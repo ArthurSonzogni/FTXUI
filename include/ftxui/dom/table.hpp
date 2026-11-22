@@ -62,6 +62,8 @@ class FTXUI_EXPORT(DOM) Table {
   int dim_y_ = 0;
 };
 
+/// @brief A rectangular subset of a `Table` that can be decorated as a group.
+/// @ingroup dom
 class FTXUI_EXPORT(DOM) TableSelection {
  public:
   // Decorate the whole selection with a decorator.
