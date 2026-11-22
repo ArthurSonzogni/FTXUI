@@ -11,8 +11,8 @@
 
 namespace ftxui {
 
-// Add a |modal| window on top of the |main| component. It is shown one on the
-// top of the other when |show_modal| is true.
+/// @brief Overlay a `modal` component on top of `main` when `*show_modal` is
+/// true.
 /// @ingroup component
 // NOLINTNEXTLINE
 Component Modal(Component main, Component modal, const bool* show_modal) {
@@ -51,8 +51,8 @@ Component Modal(Component main, Component modal, const bool* show_modal) {
   return Make<Impl>(main, modal, show_modal);
 }
 
-// Decorate a component. Add a |modal| window on top of it. It is shown one on
-// the top of the other when |show_modal| is true.
+/// @brief Decorator overlaying a `modal` component on top of a component when
+/// `*show_modal` is true.
 /// @ingroup component
 // NOLINTNEXTLINE
 ComponentDecorator Modal(Component modal, const bool* show_modal) {

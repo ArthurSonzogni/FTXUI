@@ -150,54 +150,72 @@ Element notflex(Element child) {
   return std::make_shared<Flex>(std::move(child), 0, 0, 0, 0);
 }
 
+/// @brief Set custom grow and shrink flex factors on both axes.
+/// @ingroup dom
 Decorator flex_factor(int grow, int shrink) {
   return [grow, shrink](Element child) {
     return std::make_shared<Flex>(std::move(child), grow, grow, shrink, shrink);
   };
 }
 
+/// @brief Set a custom grow flex factor on both axes.
+/// @ingroup dom
 Decorator flex_grow_factor(int grow) {
   return [grow](Element child) {
     return std::make_shared<Flex>(std::move(child), grow, grow, -1, -1);
   };
 }
 
+/// @brief Set a custom shrink flex factor on both axes.
+/// @ingroup dom
 Decorator flex_shrink_factor(int shrink) {
   return [shrink](Element child) {
     return std::make_shared<Flex>(std::move(child), -1, -1, shrink, shrink);
   };
 }
 
+/// @brief Set custom grow and shrink flex factors on the X axis.
+/// @ingroup dom
 Decorator xflex_factor(int grow, int shrink) {
   return [grow, shrink](Element child) {
     return std::make_shared<Flex>(std::move(child), grow, -1, shrink, -1);
   };
 }
 
+/// @brief Set a custom grow flex factor on the X axis.
+/// @ingroup dom
 Decorator xflex_grow_factor(int grow) {
   return [grow](Element child) {
     return std::make_shared<Flex>(std::move(child), grow, -1, -1, -1);
   };
 }
 
+/// @brief Set a custom shrink flex factor on the X axis.
+/// @ingroup dom
 Decorator xflex_shrink_factor(int shrink) {
   return [shrink](Element child) {
     return std::make_shared<Flex>(std::move(child), -1, -1, shrink, -1);
   };
 }
 
+/// @brief Set custom grow and shrink flex factors on the Y axis.
+/// @ingroup dom
 Decorator yflex_factor(int grow, int shrink) {
   return [grow, shrink](Element child) {
     return std::make_shared<Flex>(std::move(child), -1, grow, -1, shrink);
   };
 }
 
+/// @brief Set a custom grow flex factor on the Y axis.
+/// @ingroup dom
 Decorator yflex_grow_factor(int grow) {
   return [grow](Element child) {
     return std::make_shared<Flex>(std::move(child), -1, grow, -1, -1);
   };
 }
 
+/// @brief Set a custom shrink flex factor on the Y axis.
+/// @ingroup dom
 Decorator yflex_shrink_factor(int shrink) {
   return [shrink](Element child) {
     return std::make_shared<Flex>(std::move(child), -1, -1, -1, shrink);

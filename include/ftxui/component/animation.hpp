@@ -30,7 +30,8 @@ using Clock = std::chrono::steady_clock;
 using TimePoint = std::chrono::time_point<Clock>;
 using Duration = std::chrono::duration<float>;
 
-// Parameter of Component::OnAnimation(param).
+/// @brief Parameters passed to `ComponentBase::OnAnimation`.
+/// @ingroup component
 class FTXUI_EXPORT(COMPONENT) Params {
  public:
   explicit Params(Duration duration) : duration_(duration) {}
@@ -98,6 +99,8 @@ FTXUI_EXPORT(COMPONENT) float BounceOut(float p);
 FTXUI_EXPORT(COMPONENT) float BounceInOut(float p);
 }  // namespace easing
 
+/// @brief Interpolates a `float` value over time using an easing function.
+/// @ingroup component
 class FTXUI_EXPORT(COMPONENT) Animator {
  public:
   explicit Animator(float* from,

@@ -58,6 +58,26 @@ out/
 !doc/**/*.md
 !doc/*.md
 
+# docs_vitepress directory:
+!docs_vitepress/package.json
+!docs_vitepress/package-lock.json
+!docs_vitepress/index.md
+!docs_vitepress/guide/**/*.md
+!docs_vitepress/install/**/*.md
+!docs_vitepress/public/favicon.svg
+!docs_vitepress/public/demo/**/*.html
+!docs_vitepress/.vitepress/config.mts
+!docs_vitepress/.vitepress/theme/**/*.ts
+!docs_vitepress/.vitepress/theme/**/*.vue
+!docs_vitepress/.vitepress/theme/**/*.css
+docs_vitepress/node_modules/
+docs_vitepress/.vitepress/dist/
+docs_vitepress/.vitepress/cache/
+docs_vitepress/api/
+docs_vitepress/examples/
+docs_vitepress/public/llms.txt
+docs_vitepress/public/llms-full.txt
+
 # examples directory:
 !examples/**/*.cpp
 !examples/**/*.css

@@ -57,6 +57,7 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
 
   void ApplyShader();
 
+  /// @brief Terminal cursor position and shape.
   struct Cursor {
     int x = 0;
     int y = 0;

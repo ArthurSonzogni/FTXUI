@@ -7,10 +7,12 @@ on:
       - main
     paths:
       - 'doc/**'
+      - 'docs_vitepress/**'
       - 'include/**'
       - 'src/**'
       - 'examples/**'
       - 'tools/build_multiversion_doc.py'
+      - 'tools/doxygen_xml_to_vitepress.py'
       - 'CMakeLists.txt'
       - 'cmake/**'
       - '.github/workflows/documentation.yaml'
@@ -45,6 +47,11 @@ jobs:
       - name: "Install emsdk"
         uses: mymindstorm/setup-emsdk@v16
 
+      - name: "Install Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: "Install Doxygen"
         uses: ssciwr/doxygen-install@v2
         with:
@@ -75,6 +82,7 @@ jobs:
           cmake --build .;
           rsync -amv
           --include='*/'
+          --exclude='examples/index.html'
           --include='*.html'
           --include='*.css'
           --include='*.mjs'
