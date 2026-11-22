@@ -22,7 +22,9 @@ struct FTXUI_EXPORT(SCREEN) Dimensions {
 };
 
 namespace Terminal {
+/// Query the current terminal size (uses fallback size if unavailable).
 FTXUI_EXPORT(SCREEN) Dimensions Size();
+/// Set the fallback size returned by Size() when not attached to a terminal.
 FTXUI_EXPORT(SCREEN) void SetFallbackSize(const Dimensions& fallbackSize);
 
 /// @brief Color is an enumeration that represents the color support of the
@@ -34,7 +36,9 @@ enum Color : uint8_t {
   Palette256,
   TrueColor,
 };
+/// Return the detected (or overridden) terminal color capability.
 FTXUI_EXPORT(SCREEN) Color ColorSupport();
+/// Override the detected terminal color capability.
 FTXUI_EXPORT(SCREEN) void SetColorSupport(Color color);
 
 /// @brief Quirks is a structure that represents various terminal-specific
@@ -51,25 +55,31 @@ class FTXUI_EXPORT(SCREEN) Quirks {
 
   /// @brief Whether the terminal font supports the 8 Unicode block characters.
   bool BlockCharacters() const;
+  /// Set whether the terminal supports Unicode block characters.
   void SetBlockCharacters(bool v);
 
   /// @brief Whether the terminal correctly handles hiding the cursor.
   bool CursorHiding() const;
+  /// Set whether the terminal supports hiding the cursor.
   void SetCursorHiding(bool v);
 
   /// @brief Whether the terminal should use ASCII characters for components.
   bool ComponentAscii() const;
+  /// Set whether components should use ASCII fallback characters.
   void SetComponentAscii(bool v);
 
   /// @brief The level of color support of the terminal.
   Color ColorSupport() const;
+  /// Set the terminal color support level.
   void SetColorSupport(Color v);
 
  private:
   struct Impl;
   std::unique_ptr<Impl> impl_;
 };
+/// Return the active terminal Quirks configuration.
 FTXUI_EXPORT(SCREEN) Quirks GetQuirks();
+/// Override the active terminal Quirks configuration.
 FTXUI_EXPORT(SCREEN) void SetQuirks(const Quirks& quirks);
 
 /// @brief TerminalInfo is a structure that contains information about the
@@ -84,13 +94,20 @@ class FTXUI_EXPORT(SCREEN) TerminalInfo {
   TerminalInfo(TerminalInfo&&) noexcept;
   TerminalInfo& operator=(TerminalInfo&&) noexcept;
 
+  /// Set the TERM environment variable value.
   void SetTerm(std::string_view term);
+  /// Set the COLORTERM environment variable value.
   void SetColorterm(std::string_view colorterm);
+  /// Set the TERM_PROGRAM environment variable value.
   void SetTermProgram(std::string_view term_program);
+  /// Set the terminal name reported via DA2.
   void SetTerminalName(std::string_view terminal_name);
+  /// Set the terminal emulator name reported via XTVERSION.
   void SetTerminalEmulatorName(std::string_view terminal_emulator_name);
+  /// Set the terminal capability codes reported via DA1.
   void SetCapabilities(std::vector<int> capabilities);
 
+  /// Compute the best Color support level from the stored terminal info.
   Color ComputeColorSupport() const;
 
  private:

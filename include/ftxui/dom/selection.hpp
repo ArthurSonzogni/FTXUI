@@ -22,16 +22,24 @@ namespace ftxui {
 /// @ingroup dom
 class FTXUI_EXPORT(DOM) Selection {
  public:
-  Selection();  // Empty selection.
+  /// Create an empty selection.
+  Selection();
+  /// Create a selection spanning from (start_x, start_y) to (end_x, end_y).
   Selection(int start_x, int start_y, int end_x, int end_y);
 
+  /// Return the bounding box covering the selection endpoints.
   const Box& GetBox() const;
 
+  /// Restrict and adapt the selection horizontally to `box`.
   Selection SaturateHorizontal(Box box);
+  /// Restrict and adapt the selection vertically to `box`.
   Selection SaturateVertical(Box box);
+  /// Return true if no region is selected.
   bool IsEmpty() const { return empty_; }
 
+  /// Append a selected text fragment at row `y` spanning [left, right].
   void AddPart(std::string_view part, int y, int left, int right);
+  /// Return the accumulated selected text.
   std::string GetParts() { return parts_.str(); }
 
  private:

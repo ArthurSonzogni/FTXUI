@@ -43,14 +43,22 @@ struct FTXUI_EXPORT(DOM) LinearGradient {
   };
   std::vector<Stop> stops;
 
-  // Simple constructor
+  // Constructors:
+
+  /// Create an empty linear gradient.
   LinearGradient();
+  /// Create a horizontal gradient from `begin` to `end`.
   LinearGradient(Color begin, Color end);
+  /// Create a gradient at `angle` degrees from `begin` to `end`.
   LinearGradient(float angle, Color begin, Color end);
 
-  // Modifier using the builder pattern.
+  // Builder-pattern modifiers:
+
+  /// Set the gradient angle in degrees.
   LinearGradient& Angle(float angle);
+  /// Add a color stop at an explicit normalized `position` in [0, 1].
   LinearGradient& Stop(Color color, float position);
+  /// Add a color stop with an automatically interpolated position.
   LinearGradient& Stop(Color color);
 };
 

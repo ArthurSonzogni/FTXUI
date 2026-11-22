@@ -35,20 +35,31 @@ class FTXUI_EXPORT(SCREEN) Color {
   // longer depend on the terminal color support, but moving them inline
   // removes their exported symbols, which breaks the ABI.
   // NOLINTBEGIN
-  Color();                  // Transparent.
-  Color(Palette1 index);    // Transparent.
-  Color(Palette16 index);   // Implicit conversion from index to Color.
-  Color(Palette256 index);  // Implicit conversion from index to Color.
+  /// Create a default (transparent) color.
+  Color();
+  /// Create a color from the 1-color palette (transparent).
+  Color(Palette1 index);
+  /// Create a color from the 16-color terminal palette.
+  Color(Palette16 index);
+  /// Create a color from the 256-color terminal palette.
+  Color(Palette256 index);
   // NOLINTEND
+  /// Create a 24-bit RGBA color.
   Color(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
+  /// Create an opaque 24-bit RGB color.
   static Color RGB(uint8_t red, uint8_t green, uint8_t blue);
+  /// Create an opaque color from HSV values (each in [0, 255]).
   static Color HSV(uint8_t hue, uint8_t saturation, uint8_t value);
+  /// Create a 24-bit RGBA color with explicit alpha.
   static Color RGBA(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+  /// Create a color from HSV values with explicit alpha (each in [0, 255]).
   static Color HSVA(uint8_t hue,
                     uint8_t saturation,
                     uint8_t value,
                     uint8_t alpha);
+  /// Linearly interpolate between colors `a` and `b` by factor `t` in [0, 1].
   static Color Interpolate(float t, const Color& a, const Color& b);
+  /// Alpha-blend `rhs` over `lhs`.
   static Color Blend(const Color& lhs, const Color& rhs);
 
   //---------------------------
@@ -326,18 +337,27 @@ class FTXUI_EXPORT(SCREEN) Color {
   bool operator==(const Color& rhs) const;
   bool operator!=(const Color& rhs) const;
 
+  /// Return the ANSI SGR escape parameter string for this color.
   std::string Print(bool is_background_color) const;
+  /// Append the ANSI SGR escape parameter string for this color to `out`.
   void PrintTo(std::string& out, bool is_background_color) const;
+  /// Append the ANSI SGR parameter string downgraded to `color_support`.
   void PrintTo(std::string& out,
                bool is_background_color,
                Terminal::Color color_support) const;
+  /// Return true if the color is fully opaque (`alpha == 255`).
   bool IsOpaque() const { return alpha_ == 255; }
 
   // --- Accessors ------
   // Palette colors are resolved to their RGB approximation.
+
+  /// Return the red channel in [0, 255].
   uint8_t GetRed() const;
+  /// Return the green channel in [0, 255].
   uint8_t GetGreen() const;
+  /// Return the blue channel in [0, 255].
   uint8_t GetBlue() const;
+  /// Return the alpha channel in [0, 255].
   uint8_t GetAlpha() const;
 
  private:

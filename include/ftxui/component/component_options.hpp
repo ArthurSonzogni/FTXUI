@@ -48,9 +48,13 @@ struct FTXUI_EXPORT(COMPONENT) UnderlineOption {
   animation::Duration follower_duration = std::chrono::milliseconds(250);
   animation::Duration follower_delay = std::chrono::milliseconds(0);
 
+  /// Configure both duration and easing function for leader and follower.
   void SetAnimation(animation::Duration d, animation::easing::Function f);
+  /// Set the animation duration for both leader and follower.
   void SetAnimationDuration(animation::Duration d);
+  /// Set the easing function for both leader and follower.
   void SetAnimationFunction(animation::easing::Function f);
+  /// Set separate easing functions for leader and follower.
   void SetAnimationFunction(animation::easing::Function f_leader,
                             animation::easing::Function f_follower);
 };
@@ -58,6 +62,7 @@ struct FTXUI_EXPORT(COMPONENT) UnderlineOption {
 /// @brief Option about a potentially animated color.
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) AnimatedColorOption {
+  /// Enable and configure color transition between `inactive` and `active`.
   void Set(
       Color inactive,
       Color active,
@@ -71,6 +76,8 @@ struct FTXUI_EXPORT(COMPONENT) AnimatedColorOption {
   animation::easing::Function function = animation::easing::QuadraticInOut;
 };
 
+/// @brief Animated foreground and background color options.
+/// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) AnimatedColorsOption {
   AnimatedColorOption background;
   AnimatedColorOption foreground;
@@ -88,14 +95,20 @@ struct FTXUI_EXPORT(COMPONENT) MenuEntryOption {
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) MenuOption {
   // Standard constructors:
+
+  /// Horizontal menu preset.
   static MenuOption Horizontal();
+  /// Horizontal menu preset with animated underline.
   static MenuOption HorizontalAnimated();
+  /// Vertical menu preset.
   static MenuOption Vertical();
+  /// Vertical menu preset with animated underline.
   static MenuOption VerticalAnimated();
+  /// Horizontal toggle-style menu preset.
   static MenuOption Toggle();
 
-  ConstStringListRef entries;  ///> The list of entries.
-  Ref<int> selected = 0;       ///> The index of the selected entry.
+  ConstStringListRef entries;  ///< The list of entries.
+  Ref<int> selected = 0;       ///< The index of the selected entry.
 
   // Style:
   UnderlineOption underline;
@@ -106,21 +119,29 @@ struct FTXUI_EXPORT(COMPONENT) MenuOption {
   std::function<Element()> elements_postfix;
 
   // Observers:
-  std::function<void()> on_change;  ///> Called when the selected entry changes.
-  std::function<void()> on_enter;   ///> Called when the user presses enter.
+  std::function<void()> on_change;  ///< Called when the selected entry changes.
+  std::function<void()> on_enter;   ///< Called when the user presses enter.
   Ref<int> focused_entry = 0;
 };
 
-/// @brief Option for the AnimatedButton component.
+/// @brief Option for the Button component.
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) ButtonOption {
   // Standard constructors:
+
+  /// Plain ASCII button style (`[ label ]`).
   static ButtonOption Ascii();
+  /// Simple bordered button style.
   static ButtonOption Simple();
+  /// Bordered button style.
   static ButtonOption Border();
+  /// Animated button style with default colors.
   static ButtonOption Animated();
+  /// Animated button style tinted with `color`.
   static ButtonOption Animated(Color color);
+  /// Animated button style with custom background and foreground colors.
   static ButtonOption Animated(Color background, Color foreground);
+  /// Animated button style with separate inactive and active colors.
   static ButtonOption Animated(Color background,
                                Color foreground,
                                Color background_active,
@@ -138,6 +159,8 @@ struct FTXUI_EXPORT(COMPONENT) ButtonOption {
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) CheckboxOption {
   // Standard constructors:
+
+  /// Default checkbox style.
   static CheckboxOption Simple();
 
   ConstStringRef label = "Checkbox";
@@ -188,7 +211,7 @@ struct FTXUI_EXPORT(COMPONENT) InputOption {
   /// Called when the user presses enter.
   std::function<void()> on_enter = [] {};
 
-  // The char position of the cursor:
+  /// The byte position of the cursor in `content`.
   Ref<int> cursor_position = 0;
 };
 
@@ -196,6 +219,8 @@ struct FTXUI_EXPORT(COMPONENT) InputOption {
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) RadioboxOption {
   // Standard constructors:
+
+  /// Default radiobox style.
   static RadioboxOption Simple();
 
   // Content:
@@ -211,6 +236,8 @@ struct FTXUI_EXPORT(COMPONENT) RadioboxOption {
   Ref<int> focused_entry = 0;
 };
 
+/// @brief Option for the ResizableSplit component.
+/// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
   Component main;
   Component back;
@@ -225,8 +252,8 @@ struct FTXUI_EXPORT(COMPONENT) ResizableSplitOption {
   Ref<int> max = std::numeric_limits<int>::max();
 };
 
-// @brief Option for the `Slider` component.
-// @ingroup component
+/// @brief Option for the `Slider` component.
+/// @ingroup component
 template <typename T>
 struct SliderOption {
   Ref<T> value;
@@ -236,7 +263,7 @@ struct SliderOption {
   Direction direction = Direction::Right;
   Color color_active = Color::White;
   Color color_inactive = Color::GrayDark;
-  std::function<void()> on_change;  ///> Called when `value` is updated.
+  std::function<void()> on_change;  ///< Called when `value` is updated.
 };
 
 /// @brief State passed to the `Window` component's render function.
@@ -253,8 +280,8 @@ struct FTXUI_EXPORT(COMPONENT) WindowRenderState {
   bool hover_down = false;   ///< Whether the resizeable down side is hovered.
 };
 
-// @brief Option for the `Window` component.
-// @ingroup component
+/// @brief Option for the `Window` component.
+/// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) WindowOptions {
   Component inner;            ///< The component wrapped by this window.
   ConstStringRef title = "";  ///< The title displayed by this window.

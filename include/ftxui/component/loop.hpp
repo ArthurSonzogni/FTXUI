@@ -56,12 +56,17 @@ class App;
 /// @ingroup component
 class FTXUI_EXPORT(COMPONENT) Loop {
  public:
+  /// Create a manual event loop driving `component` on `screen`.
   Loop(App* screen, Component component);
   ~Loop();
 
+  /// Return true once the loop has been requested to exit.
   bool HasQuitted();
+  /// Process pending events and render once without blocking.
   void RunOnce();
+  /// Block until at least one event arrives, process it, and render.
   void RunOnceBlocking();
+  /// Run the loop until HasQuitted() becomes true.
   void Run();
 
   // This class is non copyable/movable.

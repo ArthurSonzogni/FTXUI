@@ -34,20 +34,32 @@ class ComponentBase;
 /// @ingroup component
 struct FTXUI_EXPORT(COMPONENT) Event {
   // --- Constructor section ---------------------------------------------------
+
+  /// Create a printable character event from a UTF-8 string.
   static Event Character(std::string_view);
+  /// Create a printable character event from an ASCII char.
   static Event Character(char);
+  /// Create a printable character event from a wide character.
   static Event Character(wchar_t);
+  /// Create a special (non-character) event from a raw escape sequence.
   static Event Special(std::string_view);
+  /// Create a special event from a list of raw bytes.
   static Event Special(std::initializer_list<char>);
+  /// Create a mouse event carrying `mouse` state.
   static Event Mouse(std::string_view, Mouse mouse);
-  static Event CursorPosition(std::string_view, int x, int y);  // Internal
-  static Event CursorShape(std::string_view, int shape);        // Internal
+  /// Internal: create a cursor-position report event.
+  static Event CursorPosition(std::string_view, int x, int y);
+  /// Internal: create a cursor-shape report event.
+  static Event CursorShape(std::string_view, int shape);
+  /// Internal: create a terminal name/version report event (DA2).
   static Event TerminalNameVersion(std::string_view,
                                    std::string name,
                                    int version);
+  /// Internal: create a terminal emulator name/version report event.
   static Event TerminalEmulator(std::string_view,
                                 std::string name,
                                 std::string version);
+  /// Internal: create a terminal capabilities report event (DA1).
   static Event TerminalCapabilities(std::string_view,
                                     std::vector<int> capabilities);
 
@@ -243,12 +255,17 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   bool operator!=(const Event& other) const { return !operator==(other); }
   bool operator<(const Event& other) const { return input_ < other.input_; }
 
+  /// Return the raw terminal input bytes associated with this event.
   const std::string& input() const { return input_; }
 
+  /// Return true if this event represents a printable character.
   bool is_character() const { return type_ == Type::Character; }
+  /// Return the UTF-8 character string (valid when is_character() is true).
   std::string character() const { return input_; }
 
+  /// Return true if this event is a mouse event.
   bool is_mouse() const { return type_ == Type::Mouse; }
+  /// Access the Mouse payload (valid when is_mouse() is true).
   struct Mouse& mouse() { return data_.mouse; }
 
   // --- Internal Method section -----------------------------------------------
@@ -271,7 +288,7 @@ struct FTXUI_EXPORT(COMPONENT) Event {
   const std::vector<int>& TerminalCapabilities() const;
   std::vector<std::string> TerminalCapabilityNames() const;
 
-  // Debug
+  /// Return a human-readable string representation of this event for debugging.
   std::string DebugString() const;
 
   //--- State section ----------------------------------------------------------

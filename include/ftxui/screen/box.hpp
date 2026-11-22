@@ -21,10 +21,15 @@ struct FTXUI_EXPORT(SCREEN) Box {
   int y_min = 0;
   int y_max = 0;
 
+  /// Return the overlapping intersection of two boxes.
   static auto Intersection(Box a, Box b) -> Box;
+  /// Return the smallest box enclosing both `a` and `b`.
   static auto Union(Box a, Box b) -> Box;
+  /// Translate the box by `(x, y)`.
   void Shift(int x, int y);
+  /// Return true if `(x, y)` lies inside the box (inclusive).
   bool Contain(int x, int y) const;
+  /// Return true if the box has no area (`x_min > x_max` or `y_min > y_max`).
   bool IsEmpty() const;
   bool operator==(const Box& other) const;
   bool operator!=(const Box& other) const;

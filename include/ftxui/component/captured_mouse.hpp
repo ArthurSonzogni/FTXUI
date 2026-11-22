@@ -10,6 +10,7 @@
 
 namespace ftxui {
 
+/// RAII lock representing exclusive mouse capture; released on destruction.
 class FTXUI_EXPORT(COMPONENT) CapturedMouseInterface {
  public:
   CapturedMouseInterface() = default;
@@ -19,6 +20,7 @@ class FTXUI_EXPORT(COMPONENT) CapturedMouseInterface {
   CapturedMouseInterface& operator=(CapturedMouseInterface&&) = delete;
   virtual ~CapturedMouseInterface() = default;
 };
+/// Owning handle to an exclusive mouse capture lock (null if capture failed).
 using CapturedMouse = std::unique_ptr<CapturedMouseInterface>;
 }  // namespace ftxui
 

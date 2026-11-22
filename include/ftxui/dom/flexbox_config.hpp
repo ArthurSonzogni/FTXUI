@@ -111,17 +111,19 @@ struct FTXUI_EXPORT(DOM) FlexboxConfig {
   int gap_x = 0;
   int gap_y = 0;
 
-  // Constructor pattern. For chained use like:
-  // ```
-  // FlexboxConfig()
-  //    .Set(FlexboxConfig::Direction::Row)
-  //    .Set(FlexboxConfig::Wrap::Wrap);
-  // ```
+  // Builder-pattern setters for chained configuration.
+
+  /// Set the flexbox main-axis direction.
   FlexboxConfig& Set(FlexboxConfig::Direction);
+  /// Set the flexbox line-wrapping behavior.
   FlexboxConfig& Set(FlexboxConfig::Wrap);
+  /// Set the main-axis item alignment (justify-content).
   FlexboxConfig& Set(FlexboxConfig::JustifyContent);
+  /// Set the cross-axis item alignment (align-items).
   FlexboxConfig& Set(FlexboxConfig::AlignItems);
+  /// Set the cross-axis multi-line alignment (align-content).
   FlexboxConfig& Set(FlexboxConfig::AlignContent);
+  /// Set the horizontal and vertical gaps between flex items.
   FlexboxConfig& SetGap(int gap_x, int gap_y);
 };
 

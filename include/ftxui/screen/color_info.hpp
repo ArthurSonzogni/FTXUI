@@ -28,7 +28,9 @@ struct FTXUI_EXPORT(SCREEN) ColorInfo {
   uint8_t value;
 };
 
+/// Return metadata (name, RGB, HSV) for a 256-color palette entry.
 FTXUI_EXPORT(SCREEN) ColorInfo GetColorInfo(Color::Palette256 index);
+/// Return metadata (name, RGB, HSV) for a 16-color palette entry.
 FTXUI_EXPORT(SCREEN) ColorInfo GetColorInfo(Color::Palette16 index);
 
 /// @brief Get the color information for the palette256, sorted in 2D.

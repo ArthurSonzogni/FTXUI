@@ -18,7 +18,9 @@ namespace ftxui {
 /// @brief Define how the Screen's dimensions should look like.
 /// @ingroup screen
 namespace Dimension {
+/// Return a fixed dimension `{value, value}`.
 FTXUI_EXPORT(SCREEN) Dimensions Fixed(int);
+/// Return the current terminal dimensions.
 FTXUI_EXPORT(SCREEN) Dimensions Full();
 }  // namespace Dimension
 
@@ -27,8 +29,12 @@ FTXUI_EXPORT(SCREEN) Dimensions Full();
 class FTXUI_EXPORT(SCREEN) Screen : public Surface {
  public:
   // Constructors:
+
+  /// Create a screen with dimensions `dimx` x `dimy`.
   Screen(int dimx, int dimy);
+  /// Create a screen with the given `dimension`.
   static Screen Create(Dimensions dimension);
+  /// Create a screen using `width.dimx` and `height.dimy`.
   static Screen Create(Dimensions width, Dimensions height);
 
   // Destructor:
@@ -38,25 +44,28 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   Screen(const Screen&) = default;
   Screen& operator=(const Screen&) = default;
 
+  /// Serialize the screen content into an ANSI-formatted string.
   std::string ToString() const;
+  /// Append the ANSI-formatted screen content into `ss`.
   void ToString(std::string& ss) const;
-  // Update the terminal from |previous| to this screen, printing only the cells
-  // that changed. The cursor must be at the top-left corner of |previous|.
+  /// Append an incremental ANSI diff from `previous` to this screen into `ss`.
   void ToString(std::string& ss, const Screen& previous) const;
 
-  // Print the Screen on to the terminal.
+  /// Print the screen to standard output.
   void Print() const;
 
-  // Fill the screen with space and reset any screen state, like hyperlinks, and
-  // cursor
+  /// Clear all cells and reset screen state (hyperlinks, cursor).
   void Clear();
 
-  // Move the terminal cursor n-lines up with n = dimy().
+  /// Return ANSI escape sequences moving the cursor back to the top-left.
   std::string ResetPosition(bool clear = false) const;
+  /// Append ANSI escape sequences moving the cursor back to the top-left.
   void ResetPosition(std::string& ss, bool clear = false) const;
 
+  /// Post-process automerge box-drawing characters across the screen.
   void ApplyShader();
 
+  /// Cursor position and visual shape.
   struct Cursor {
     int x = 0;
     int y = 0;
@@ -73,7 +82,9 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
     Shape shape = Hidden;
   };
 
+  /// Return the current cursor position and shape.
   Cursor cursor() const { return cursor_; }
+  /// Set the cursor position and shape.
   void SetCursor(Cursor cursor) { cursor_ = cursor; }
 
   // ABI Reserve:
@@ -86,13 +97,15 @@ class FTXUI_EXPORT(SCREEN) Screen : public Surface {
   void Reserved7() override;
   void Reserved8() override;
 
-  // Store an hyperlink in the screen. Return the id of the hyperlink. The id is
-  // used to identify the hyperlink when the user click on it.
+  /// Register a hyperlink URL and return its compact 8-bit ID.
   uint8_t RegisterHyperlink(std::string_view link);
+  /// Look up a previously registered hyperlink URL by ID.
   const std::string& Hyperlink(uint8_t id) const;
 
   using SelectionStyle = std::function<void(Cell&)>;
+  /// Return the active text-selection cell stylizer.
   const SelectionStyle& GetSelectionStyle() const;
+  /// Set the text-selection cell stylizer.
   void SetSelectionStyle(SelectionStyle decorator);
 
  protected:
