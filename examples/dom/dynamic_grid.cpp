@@ -11,17 +11,17 @@ int main() {
 
   Elements elements;
 
-  elements.push_back(text("element"));
-  elements.push_back(text("element long name"));
+  elements.push_back(text("element") | border);
+  elements.push_back(text("element long name") | border);
 
   for (int i = 0; i < 7; i++) {
-    elements.push_back(text("element"));
+    elements.push_back(text("element") | border);
   }
 
-  elements.push_back(text("element name"));
+  elements.push_back(text("element name") | border);
 
   for (int i = 0; i < 4; i++) {
-    elements.push_back(text("element"));
+    elements.push_back(text("element") | border);
   }
 
   auto renderer = Renderer([&] {
