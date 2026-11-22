@@ -1,0 +1,1005 @@
+# FTXUI Complete Reference (llms-full.txt)
+
+
+
+NOTE: Use `ftxui::App` (not `ScreenInteractive`), `ftxui::Cell` (not `Pixel`), and `Renderer(container, ...)` for event routing.
+
+
+---
+
+# Getting Started
+
+This guide walks through adding FTXUI to a project, rendering a static layout, and building a small interactive application.
+
+## 1. Add FTXUI to Your Project
+
+::: code-group
+
+```cmake [CMake (FetchContent)]
+include(FetchContent)
+FetchContent_Declare(ftxui
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/FTXUI
+  GIT_TAG v7.0.3
+)
+FetchContent_MakeAvailable(ftxui)
+
+add_executable(my_app main.cpp)
+target_link_libraries(my_app PRIVATE ftxui::ftxui)
+```
+
+```cpp [Single Header]
+// Download ftxui_all.hpp from the GitHub release artifacts:
+#define FTXUI_IMPLEMENTATION
+#include "ftxui_all.hpp"
+```
+
+```python [Bazel (MODULE.bazel)]
+bazel_dep(name = "ftxui", version = "7.0.3")
+```
+
+```ini [Meson (subprojects/ftxui.wrap)]
+[wrap-git]
+url = https://github.com/ArthurSonzogni/FTXUI.git
+revision = v7.0.3
+```
+
+```json [vcpkg (vcpkg.json)]
+{
+  "dependencies": ["ftxui"]
+}
+```
+
+```ini [Conan (conanfile.txt)]
+[requires]
+ftxui/7.0.3
+
+[generators]
+CMakeDeps
+CMakeToolchain
+```
+
+:::
+
+Need more details? See the full [Installation guides](/install/).
+
+---
+
+## 2. Static Layout (DOM)
+
+Build a declarative document with `hbox`, `vbox`, and pipeable decorators (`| border`, `| bold`, `| flex`):
+
+```cpp
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/screen/screen.hpp>
+
+int main() {
+  using namespace ftxui;
+
+  Element title = text("FTXUI Dashboard") | bold | center;
+  Element left_panel = text("Left Panel") | border;
+  Element right_panel = vbox({
+                            text("Main Content Area") | flex,
+                            separator(),
+                            text("Status: Ready") | dim,
+                        })
+                        | border
+                        | flex;
+
+  Element document = vbox({
+      title,
+      separator(),
+      hbox({left_panel, right_panel}) | flex,
+  });
+
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
+  Render(screen, document);
+  screen.Print();
+}
+```
+
+---
+
+## 3. Adding Interactivity (Component)
+
+Wrap plain C++ state with components like `Menu`, `Input`, and `Button`, and run them inside `App`:
+
+```cpp
+#include <ftxui/component/app.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
+
+int main() {
+  using namespace ftxui;
+
+  std::vector<std::string> entries = {"Dashboard", "Settings", "Logs"};
+  int selected = 0;
+
+  auto menu = Menu(&entries, &selected) | border;
+
+  auto app = App::TerminalOutput();
+  app.Loop(menu);
+}
+```
+
+
+---
+
+## 4. Composing Layout, Shortcuts, and Modals
+
+Combine a `Container` (for event/focus routing) with `Renderer(container, ...)` (for custom layout) and `CatchEvent` (for keyboard shortcuts):
+
+```cpp
+#include <ftxui/component/app.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
+
+int main() {
+  using namespace ftxui;
+
+  auto app = App::Fullscreen();
+  std::string name;
+  bool show_about = false;
+
+  auto input = Input(&name, "Enter your name...");
+  auto about_btn = Button("About", [&] { show_about = true; });
+  auto quit_btn = Button("Quit", app.ExitLoopClosure());
+
+  auto buttons = Container::Horizontal({about_btn, quit_btn});
+  auto controls = Container::Vertical({input, buttons});
+
+  auto main_ui = Renderer(controls, [&] {
+    auto greeting =
+        text("Hello " + (name.empty() ? "FTXUI" : name) + "!") | bold | hcenter;
+    auto input_row = hbox({text(" Name: "), input->Render()});
+    auto button_row = hbox({about_btn->Render(), quit_btn->Render()}) | hcenter;
+
+    return vbox({
+               greeting,
+               separator(),
+               input_row,
+               separator(),
+               button_row,
+           })
+           | border
+           | center;
+  });
+
+  auto modal = Button("Close (Esc)", [&] { show_about = false; })
+               | border
+               | clear_under;
+
+  auto root = main_ui
+              | Modal(modal, &show_about)
+              | CatchEvent([&](Event e) {
+                  if (show_about && e == Event::Escape) {
+                    show_about = false;
+                    return true;
+                  }
+                  return false;
+                });
+
+  app.Loop(root);
+}
+```
+
+---
+
+## Next Steps
+
+- [Mental Model](/guide/mental-model): how Elements, Components, and event routing work.
+- [Cookbook](/guide/cookbook): patterns for threads, scrolling, dynamic lists, and modals.
+- [Elements](/api/dom) and [Components](/api/component) API references.
+- [ftxui-starter](https://github.com/ArthurSonzogni/ftxui-starter) template repository, or [`/llms.txt`](/llms.txt) / [`/llms-full.txt`](/llms-full.txt).
+
+
+---
+
+# Mental Model
+
+FTXUI is built around a few core ideas. Knowing them upfront makes the API much easier to use.
+
+## 1. Three Layered Modules
+
+FTXUI is split into three modules that build on each other (`screen → dom → component`):
+
+- **`ftxui/screen`** ([guide](/guide/screen), [API](/api/screen)): low-level 2D grid of styled cells (`Screen`, `Surface`, `Cell`, `Color`, `Box`).
+- **`ftxui/dom`** ([guide](/guide/dom), [API](/api/dom)): stateless layout tree (`Element`, `hbox`, `vbox`, `border`, `table`, `canvas`, `Render()`).
+- **`ftxui/component`** ([guide](/guide/component), [API](/api/component)): interactive widgets and event loop (`Component`, `Button`, `Input`, `Menu`, `Container`, `App`).
+
+You can also use the umbrella target (`ftxui::ftxui` in CMake, `@ftxui//:ftxui` in Bazel, `#include <ftxui/ftxui.hpp>`) to include all three at once.
+
+## 2. Elements vs. Components
+
+| | **Element** (`ftxui/dom`) | **Component** (`ftxui/component`) |
+| --- | --- | --- |
+| **Lifetime** | Ephemeral, rebuilt every frame | Persistent, created once before `app.Loop(...)` |
+| **State** | Stateless value tree | Holds focus state and references to your C++ state |
+| **Input** | Does not receive events | Handles keyboard and mouse `Event`s via `OnEvent` |
+| **Examples** | `text`, `hbox`, `vbox`, `border`, `gauge`, `table`, `canvas` | `Button`, `Input`, `Menu`, `Slider`, `Modal`, `Window`, `Container` |
+
+Your UI is a function of your C++ state. Instead of mutating a widget's label in place, you update plain C++ variables (`std::string`, `int`, `bool`, `std::vector`) and let `Render()` build a fresh `Element` tree on the next frame.
+
+## 3. Event Tree vs. Visual Layout Tree
+
+In FTXUI, **event/focus routing** and **visual layout** are intentionally separate:
+
+- **Containers** (`Container::Vertical`, `Container::Horizontal`, `Container::Tab`, `Container::Stacked`) define the **event & focus tree** (which child receives keyboard input, and how arrow keys / `Tab` move focus).
+- **`Renderer(container, [&] { ... })`** defines the **visual layout** while forwarding all events to `container`.
+
+::: danger Common Pitfall
+Calling `child->Render()` inside `Renderer([&] { ... })` **without** passing the child (or a container holding all children) as the first argument means keyboard and mouse events will **never** reach those children!
+:::
+
+```cpp
+// WRONG: `input` and `button` are drawn, but never receive events!
+auto ui = Renderer([&] {
+  return vbox({input->Render(), button->Render()});
+});
+
+// RIGHT: `container` routes events & focus; `Renderer` controls layout.
+auto container = Container::Vertical({input, button});
+auto ui = Renderer(container, [&] {
+  return vbox({
+      text("Login") | bold | hcenter,
+      separator(),
+      input->Render(),
+      button->Render(),
+  }) | border;
+});
+```
+
+Notice that you do not have to call `container->Render()` inside the lambda. Calling each child's `->Render()` lets you arrange them in any layout (`vbox`, `hbox`, `window`, `gridbox`, etc.).
+
+## 4. The Frame Lifecycle
+
+```text
+  Terminal input / App::Post / RequestAnimationFrame
+                     │
+                     ▼
+        root_component->OnEvent(event)
+        (mutates your plain C++ state)
+                     │
+                     ▼
+        Element tree = root_component->Render()
+        (fresh stateless DOM tree from state)
+                     │
+                     ▼
+        Render(screen, tree) → diff → terminal
+```
+
+- FTXUI only redraws when an event arrives or an animation frame is requested.
+- Screen output is **diffed** against the previous frame and wrapped in synchronized updates (DEC mode 2026) to prevent flicker and tearing.
+
+## 5. Choosing an `App` Mode
+
+| Factory | Behavior | Best for |
+| --- | --- | --- |
+| `App::Fullscreen()` | Uses the alternate screen buffer (full terminal size, restored on exit). | Full-screen TUIs (dashboards, editors, file managers) |
+| `App::TerminalOutput()` | Draws inline below previous shell output; supports `PrintAbove()`. | Interactive CLIs, prompts, progress/log tools |
+| `App::FitComponent()` | Sizes itself to the component's minimum width and height. | Compact embedded widgets and quick prompts |
+| `App::FixedSize(w, h)` | Fixed width and height. | Tests and fixed-layout displays |
+
+
+---
+
+# Cookbook
+
+Common patterns for building applications with FTXUI.
+
+## 1. Background Threads & Live Updates
+
+Never mutate UI state from a background thread directly while `App::Loop()` is rendering. Instead, use `App::Post()` (thread-safe) to run state updates on the main loop thread, and `App::RequestAnimationFrame()` to schedule a redraw:
+
+```cpp
+#include <atomic>
+#include <chrono>
+#include <thread>
+#include <ftxui/component/app.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/dom/elements.hpp>
+
+int main() {
+  using namespace ftxui;
+
+  auto app = App::Fullscreen();
+  int progress = 0;
+
+  auto ui = Renderer([&] {
+    auto label = text("Downloading: " + std::to_string(progress) + "%");
+    auto bar = gauge(progress / 100.f);
+    return vbox({label, bar})
+           | border
+           | center;
+  });
+
+  std::atomic<bool> running = true;
+  std::thread worker([&] {
+    while (running && progress < 100) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(50));
+      app.Post([&] { progress++; });
+      app.RequestAnimationFrame();
+    }
+  });
+
+  app.Loop(ui);
+  running = false;
+  worker.join();
+}
+```
+
+## 2. Dynamic Lists of Components
+
+When a `std::vector` of items grows or shrinks, rebuild the container's children with `DetachAllChildren()` and `Add(...)` (always on the main loop thread, e.g. inside a button callback or `app.Post`):
+
+```cpp
+std::vector<std::string> items = {"Item 1", "Item 2"};
+auto list_container = Container::Vertical({});
+
+auto rebuild_list = [&] {
+  list_container->DetachAllChildren();
+  for (size_t i = 0; i < items.size(); ++i) {
+    auto item_button = Button(items[i], [&, i] {
+      items.erase(items.begin() + static_cast<ptrdiff_t>(i));
+      // Defer rebuild so we don't destroy the button while its callback runs.
+      app.Post(rebuild_list);
+    });
+    list_container->Add(item_button);
+  }
+};
+rebuild_list();
+```
+
+## 3. Scrollable Pane with Mouse Wheel
+
+`vscroll_indicator` is a passive visual indicator. To make a pane user-scrollable with the mouse wheel and keyboard, pair `yframe` + `vscroll_indicator` with `focusPositionRelative` and `CatchEvent`:
+
+```cpp
+float scroll_y = 0.0f;
+
+auto pane = Renderer([&] {
+  Elements lines;
+  for (int i = 0; i < 100; ++i) {
+    lines.push_back(text("Line " + std::to_string(i)));
+  }
+  return vbox(std::move(lines))
+         | focusPositionRelative(0.f, scroll_y)
+         | vscroll_indicator
+         | yframe
+         | border;
+});
+
+pane |= CatchEvent([&](Event event) {
+  if (event.is_mouse()) {
+    if (event.mouse().button == Mouse::WheelDown) {
+      scroll_y = std::min(1.0f, scroll_y + 0.05f);
+      return true;
+    }
+    if (event.mouse().button == Mouse::WheelUp) {
+      scroll_y = std::max(0.0f, scroll_y - 0.05f);
+      return true;
+    }
+  }
+  if (event == Event::ArrowDown) {
+    scroll_y = std::min(1.0f, scroll_y + 0.05f);
+    return true;
+  }
+  if (event == Event::ArrowUp) {
+    scroll_y = std::max(0.0f, scroll_y - 0.05f);
+    return true;
+  }
+  return false;
+});
+```
+
+## 4. Global Shortcuts & Custom `Ctrl+C`
+
+Attach `CatchEvent` at the root component for global shortcuts. Return `true` to consume an event, or `false` to let it propagate to children:
+
+```cpp
+auto app = App::Fullscreen();
+app.ForceHandleCtrlC(false);  // Allow your component to intercept Ctrl+C.
+
+auto root = main_ui
+            | CatchEvent([&](Event event) {
+                if (event == Event::Character('q') || event == Event::CtrlC) {
+                  app.Exit();
+                  return true;
+                }
+                return false;
+              });
+```
+
+## 5. Modals & Confirmation Dialogs
+
+Wrap your main component with `Modal(dialog, &show_modal)`. Add `CatchEvent` on the dialog to dismiss on `Escape`:
+
+```cpp
+bool show_modal = false;
+
+auto main_ui = Button("Delete item", [&] { show_modal = true; })
+               | center;
+
+auto confirm_button = Button("Confirm", [&] { show_modal = false; });
+auto cancel_button = Button("Cancel", [&] { show_modal = false; });
+auto modal_buttons = Container::Horizontal({
+    confirm_button,
+    cancel_button,
+});
+
+auto modal_layout = Renderer(modal_buttons, [&] {
+  return vbox({
+             text("Are you sure?") | bold,
+             separator(),
+             modal_buttons->Render(),
+         })
+         | border
+         | clear_under;
+});
+
+auto modal = modal_layout
+             | CatchEvent([&](Event e) {
+                 if (e == Event::Escape) {
+                   show_modal = false;
+                   return true;
+                 }
+                 return false;
+               });
+
+auto root = main_ui
+            | Modal(modal, &show_modal);
+```
+
+## 6. Mouse Hit-Testing & Element-Relative Coordinates
+
+Capture an element's rendered bounding `Box` with `| reflect(box)` during `Render()`, then test clicks inside `CatchEvent`:
+
+```cpp
+Box canvas_box;
+int last_x = -1;
+int last_y = -1;
+
+auto ui = Renderer([&] {
+  auto label = text("Click inside me (" + std::to_string(last_x) + ", " +
+                    std::to_string(last_y) + ")");
+  return label
+         | border
+         | reflect(canvas_box);
+});
+
+ui |= CatchEvent([&](Event event) {
+  if (event.is_mouse() &&
+      event.mouse().button == Mouse::Left &&
+      event.mouse().motion == Mouse::Pressed &&
+      canvas_box.Contain(event.mouse().x, event.mouse().y)) {
+    last_x = event.mouse().x - canvas_box.x_min;
+    last_y = event.mouse().y - canvas_box.y_min;
+    return true;
+  }
+  return false;
+});
+```
+
+## 7. Streaming CLI Output & Launching External Editors
+
+Use `App::TerminalOutput()` for inline CLIs, `PrintAbove()` to emit permanent scrollback lines, and `WithRestoredIO()` to temporarily hand the terminal back to an external program:
+
+```cpp
+auto app = App::TerminalOutput();
+
+auto log_button = Button("Log line", [&] {
+  app.PrintAbove(text("[info] Task completed") | color(Color::Green));
+});
+auto editor_button = Button("Open editor", app.WithRestoredIO([&] {
+  std::system("vim notes.txt");
+}));
+auto quit_button = Button("Quit", app.ExitLoopClosure());
+
+auto ui = Container::Horizontal({
+    log_button,
+    editor_button,
+    quit_button,
+});
+
+app.Loop(ui);
+```
+
+
+---
+
+# Cheat Sheet
+
+A 1-page quick reference for everyday FTXUI development.
+
+## Headers
+
+```cpp
+#include <ftxui/screen/screen.hpp>       // Screen, Surface, Cell, Color, Box
+#include <ftxui/dom/elements.hpp>        // hbox, vbox, text, border, flex, ...
+#include <ftxui/dom/table.hpp>           // Table
+#include <ftxui/dom/canvas.hpp>          // Canvas
+#include <ftxui/component/component.hpp> // Button, Input, Menu, Container, ...
+#include <ftxui/component/app.hpp>       // App
+#include <ftxui/component/loop.hpp>      // Loop (manual event loop)
+```
+
+## Layout Elements (`ftxui/dom`)
+
+| Element | Purpose |
+| --- | --- |
+| `hbox({...})` / `vbox({...})` | Horizontal / vertical box |
+| `dbox({...})` | Stacked layers (depth box; pair with `clear_under`) |
+| `flexbox({...}, config)` | CSS-like wrapping layout (`hflow`, `vflow` shorthands) |
+| `gridbox({ {...}, {...} })` | 2D aligned grid |
+| `filler()` / `emptyElement()` | Expandable blank space / 0×0 element |
+| `separator()` | Horizontal or vertical divider (`separatorLight`, `Double`, `Heavy`, `Dashed`) |
+| `window(title, content)` | Bordered box with title bar |
+
+## Decorators (chain with `|` on the left)
+
+```cpp
+auto el = text("Hello")
+          | bold
+          | color(Color::Cyan)
+          | bgcolor(Color::Black)
+          | borderRounded
+          | center
+          | flex;
+```
+
+| Category | Decorators |
+| --- | --- |
+| **Text style** | `bold`, `dim`, `italic`, `inverted`, `underlined`, `underlinedDouble`, `blink`, `strikethrough` |
+| **Color** | `color(Color::Red)`, `bgcolor(Color::Blue)`, `color(LinearGradient(...))` |
+| **Borders** | `border`, `borderLight`, `borderHeavy`, `borderDouble`, `borderRounded`, `borderDashed`, `borderEmpty`, `borderStyled(...)` |
+| **Flex & Size** | `flex`, `flex_grow`, `flex_shrink`, `xflex`, `yflex`, `notflex`, `size(WIDTH, EQUAL, 20)` (`LESS_THAN`, `GREATER_THAN`) |
+| **Alignment** | `center`, `hcenter`, `vcenter`, `align_right` |
+| **Scrolling** | `frame`, `xframe`, `yframe`, `vscroll_indicator`, `hscroll_indicator`, `focus`, `focusPositionRelative(x, y)` |
+| **Utilities** | `clear_under`, `reflect(box)`, `automerge`, `hyperlink(url)` |
+
+## Interactive Components (`ftxui/component`)
+
+| Component | Typical Usage |
+| --- | --- |
+| `Button` | `auto btn = Button("Click", [&] { ... });` |
+| `Input` | `auto in = Input(&str, "placeholder");` |
+| `Checkbox` | `auto cb = Checkbox("Enable", &flag);` |
+| `Menu` | `auto m = Menu(&entries, &selected);` |
+| `Radiobox` | `auto rb = Radiobox(&entries, &selected);` |
+| `Dropdown` | `auto dd = Dropdown(&entries, &selected);` |
+| `Toggle` | `auto tg = Toggle(&entries, &selected);` |
+| `Slider` | `auto sl = Slider("Volume:", &val, 0, 100, 5);` |
+| `Collapsible` | `auto col = Collapsible("Details", child);` |
+| `Modal` | `auto ui = main \| Modal(dialog, &show);` |
+| `Window` | `auto win = Window({.inner = child, .title = "Title"});` |
+| `ResizableSplit` | `ResizableSplitLeft(left, right, &size)` (`Right`, `Top`, `Bottom`) |
+| `Container` | `Container::Vertical({...})`, `Horizontal`, `Tab({...}, &idx)`, `Stacked` |
+| `Renderer` | `Renderer(container, [&] { return vbox({...}); })` |
+| `CatchEvent` | `comp \| CatchEvent([&](Event e) { return false; })` |
+| `Maybe` | `comp \| Maybe(&visible)` |
+| `Hoverable` | `comp \| Hoverable(&hovered)` |
+
+## Common Events (`ftxui::Event`)
+
+| Keys | Event |
+| --- | --- |
+| Printable char | `Event::Character('q')`, `event.is_character()`, `event.character()` |
+| Arrows | `Event::ArrowUp`, `ArrowDown`, `ArrowLeft`, `ArrowRight` (`*Ctrl`, `*Alt`) |
+| Navigation | `Event::Tab`, `TabReverse`, `Home`, `End`, `PageUp`, `PageDown` |
+| Editing | `Event::Return`, `Escape`, `Backspace`, `Delete`, `Insert` |
+| Control | `Event::CtrlC`, `CtrlD`, `CtrlA`..`CtrlZ`, `AltA`..`AltZ`, `F1`..`F12` |
+| Mouse | `event.is_mouse()`, `event.mouse().button` (`Mouse::Left`, `WheelUp`, `WheelDown`), `event.mouse().motion` (`Pressed`, `Released`, `Moved`), `x`, `y` |
+
+## `App` Lifecycle
+
+```cpp
+auto app = App::Fullscreen();      // or TerminalOutput(), FitComponent(), FixedSize(w, h)
+app.Loop(root_component);          // Blocking main loop
+app.Exit();                        // Exit loop (or app.ExitLoopClosure())
+app.Post([&] { /* state */ });     // Thread-safe callback on main loop thread
+app.RequestAnimationFrame();       // Schedule a redraw
+app.PrintAbove(element);           // Permanent scrollback output (TerminalOutput mode)
+app.WithRestoredIO([&] { ... });   // Suspend raw mode to run external CLI/editor
+```
+
+
+---
+
+# Events, Focus & Mouse
+
+How FTXUI routes keyboard events, moves focus between components, and handles mouse input.
+
+## How Events Travel Through the Tree
+
+When a key press, mouse action, or resize arrives:
+
+1. `App` delivers the `Event` to the **root component** via `root->OnEvent(event)`.
+2. A container (`Container::Vertical`, `Container::Horizontal`, `Container::Tab`, `Container::Stacked`) forwards keyboard events to its **currently active child** first.
+3. If the child returns `true`, the event is **consumed** and propagation stops.
+4. If the child returns `false`, the container handles navigation keys itself (e.g., `ArrowUp`/`ArrowDown` in `Container::Vertical`, `ArrowLeft`/`ArrowRight` in `Container::Horizontal`, `Tab`/`TabReverse` across focusable children).
+
+```text
+  App → root->OnEvent(e)
+           │
+           ▼
+     active child->OnEvent(e)
+       ├── returns true  → done (event consumed)
+       └── returns false → container handles navigation / bubbles up
+```
+
+## Intercepting Events with `CatchEvent`
+
+`CatchEvent` wraps a component and inspects every `Event` **before** it reaches the inner component:
+
+```cpp
+auto app = App::Fullscreen();
+
+auto ui = main_component
+          | CatchEvent([&](Event event) {
+              if (event == Event::Character('q')) {
+                app.Exit();
+                return true;  // Consumed: inner component won't see 'q'
+              }
+              return false;   // Not consumed: pass to main_component
+            });
+```
+
+::: warning Global Shortcuts vs. `Input`
+Because `CatchEvent` runs **before** children, catching `Event::Character('q')` at the root will prevent typing `'q'` into an `Input` box! Either:
+- Use modifier keys (`Event::CtrlQ`, `Event::Escape`), or
+- Check `!input->Focused()` before consuming printable characters.
+:::
+
+### Common `Event` Checks
+
+```cpp
+if (event == Event::Return) { /* Enter */ }
+if (event == Event::Escape) { /* Esc */ }
+if (event == Event::CtrlC)  { /* Ctrl+C */ }
+if (event.is_character())   { std::string ch = event.character(); }
+if (event.is_mouse())       { Mouse m = event.mouse(); }
+```
+
+## Focus & Containers
+
+- Only components where `Focusable()` returns `true` can receive focus. `Renderer(...)` without a focusable child is not focusable.
+- **`Container::Vertical` / `Container::Horizontal`** automatically track the active child index (you can also pass an explicit `int* selected` pointer to observe or control focus).
+- `Container::Tab({tab0, tab1, tab2}, &tab_index)` routes events only to `children[tab_index]`. Inactive tabs do not receive events or take focus.
+- **Programmatic focus:** Call `child->TakeFocus()` to move focus directly to a specific component.
+- **Querying focus:** Inside a `Renderer`, call `child->Focused()` (exact leaf has focus) or `child->Active()` (child or one of its descendants has focus) to style active panes.
+
+```cpp
+auto pane = Renderer(child, [&] {
+  auto border_style = child->Active() ? borderDouble : borderLight;
+  return child->Render() | border_style;
+});
+```
+
+## Modals & Event Isolation
+
+`Modal(dialog, &show)` layers `dialog` on top of the main UI (via `dbox` + `clear_under`) **and** blocks all keyboard/mouse events from reaching the background while `show == true`:
+
+```cpp
+bool show_modal = false;
+auto ui = main_component
+          | Modal(dialog_component, &show_modal);
+```
+
+When `show_modal` becomes `false`, events immediately resume routing to `main_component`.
+
+## Mouse Events & Hit-Testing
+
+Mouse support is enabled automatically in `App`. A `Mouse` struct contains:
+
+- `mouse.x`, `mouse.y`: 0-based terminal cell coordinates
+- `mouse.button`: `Mouse::Left`, `Mouse::Middle`, `Mouse::Right`, `Mouse::None`, `Mouse::WheelUp`, `Mouse::WheelDown`
+- `mouse.motion`: `Mouse::Pressed`, `Mouse::Released`, `Mouse::Moved`
+- Modifiers: `mouse.shift`, `mouse.meta`, `mouse.control`
+
+To detect clicks or hover on a custom region, capture its rendered rectangle with `reflect(box)` during `Render()`, then test `box.Contain(x, y)` in `OnEvent()`:
+
+```cpp
+Box card_box;
+bool hovered = false;
+
+auto card = Renderer([&] {
+  auto style = hovered ? color(Color::Yellow) : color(Color::White);
+  return text(" Click or hover me ")
+         | style
+         | borderRounded
+         | reflect(card_box);
+});
+
+auto interactive_card = card
+                        | CatchEvent([&](Event event) {
+                            if (!event.is_mouse()) {
+                              return false;
+                            }
+                            hovered = card_box.Contain(event.mouse().x, event.mouse().y);
+                            if (hovered &&
+                                event.mouse().button == Mouse::Left &&
+                                event.mouse().motion == Mouse::Pressed) {
+                              // Handle click
+                              return true;
+                            }
+                            return false;
+                          });
+```
+
+::: tip Built-in `Hoverable`
+If you only need a hover boolean, use the built-in decorator instead of writing mouse hit-testing manually:
+```cpp
+bool is_hovered = false;
+auto card = base_component | Hoverable(&is_hovered);
+```
+:::
+
+
+---
+
+# Custom Widgets (`ComponentBase` & `Node`)
+
+Most FTXUI apps can be built by composing built-in components with `Renderer`, `Container`, and `CatchEvent`. When you need a reusable, self-contained widget or custom low-level cell drawing, you can subclass `ComponentBase` or `Node` directly.
+
+## Custom Component (`ComponentBase`)
+
+Subclass [`ftxui::ComponentBase`](/api/class/componentbase) when you want a stateful interactive widget with its own rendering, event handling, and focus behavior.
+
+### Key Virtual Methods
+
+| Method | Purpose |
+| --- | --- |
+| `Element OnRender()` | Return the `Element` tree for this frame (called every redraw). |
+| `bool OnEvent(Event event)` | Handle keyboard/mouse input. Return `true` if consumed, `false` to let parents handle it. |
+| `bool Focusable() const` | Return `true` if this widget can receive keyboard focus via `Tab` / arrow keys. |
+| `void OnAnimation(animation::Params& params)` | Advance animations; call `animation::RequestAnimationFrame()` while still animating. |
+
+### Example: A Reusable Counter Widget
+
+```cpp
+#include <ftxui/component/app.hpp>
+#include <ftxui/component/component.hpp>
+#include <ftxui/component/component_base.hpp>
+#include <ftxui/dom/elements.hpp>
+#include <memory>
+#include <string>
+
+using namespace ftxui;
+
+class CounterWidget : public ComponentBase {
+ public:
+  explicit CounterWidget(int* value) : value_(value) {}
+
+  Element OnRender() override {
+    auto label = text(" Count: " + std::to_string(*value_) + " ");
+    auto hint = text(" (+/- or click) ") | dim;
+    auto body = hbox({label, hint});
+
+    if (Focused()) {
+      body = body | inverted;
+    }
+
+    return body
+           | borderRounded
+           | reflect(box_);
+  }
+
+  bool OnEvent(Event event) override {
+    if (event == Event::Character('+') || event == Event::ArrowRight) {
+      (*value_)++;
+      return true;
+    }
+    if (event == Event::Character('-') || event == Event::ArrowLeft) {
+      (*value_)--;
+      return true;
+    }
+    if (event.is_mouse() && box_.Contain(event.mouse().x, event.mouse().y)) {
+      if (event.mouse().button == Mouse::Left &&
+          event.mouse().motion == Mouse::Pressed) {
+        TakeFocus();
+        (*value_)++;
+        return true;
+      }
+      if (event.mouse().button == Mouse::WheelUp) {
+        (*value_)++;
+        return true;
+      }
+      if (event.mouse().button == Mouse::WheelDown) {
+        (*value_)--;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool Focusable() const override { return true; }
+
+ private:
+  int* value_;
+  Box box_;
+};
+
+// Factory function matching FTXUI's convention:
+Component Counter(int* value) {
+  return Make<CounterWidget>(value);
+}
+```
+
+::: tip `Make<T>(...)`
+Always construct components with `ftxui::Make<MyWidget>(args...)`, which returns a `Component` (`std::shared_ptr<ComponentBase>`).
+:::
+
+### Composing Child Components Inside a Custom Component
+
+If your custom component owns child components (e.g., an `Input` and a `Button`), register them with `Add(child)` in the constructor so `ComponentBase` wires up parent pointers and default event/focus forwarding:
+
+```cpp
+class SearchBar : public ComponentBase {
+ public:
+  SearchBar(std::string* query, std::function<void()> on_submit) {
+    input_ = Input(query, "Search...");
+    submit_ = Button("Go", std::move(on_submit));
+    Add(Container::Horizontal({input_, submit_}));
+  }
+
+  Element OnRender() override {
+    auto input_el = input_->Render() | flex;
+    auto submit_el = submit_->Render();
+    return hbox({input_el, submit_el}) | border;
+  }
+
+ private:
+  Component input_;
+  Component submit_;
+};
+```
+
+## Custom DOM Element (`Node`)
+
+Subclass [`ftxui::Node`](/api/class/node) when you need direct per-cell rendering onto a `Screen` (for example, a custom chart, hex viewer, or pixel shader).
+
+### The Three Layout Passes
+
+Every frame, [`ftxui::Render(screen, root)`](/api/dom#render) runs three passes over the `Node` tree:
+
+1. `ComputeRequirement()` (bottom-up): set `requirement_.min_x`, `requirement_.min_y`, `requirement_.flex_grow_x`, `requirement_.flex_grow_y`, etc.
+2. `SetBox(Box box)` (top-down): receive the allocated bounding box (`box_`) and assign sub-boxes to any children.
+3. `Render(Screen& screen)`: draw directly into `screen.CellAt(x, y)` within `box_`.
+
+### Example: A Custom Checkerboard Node
+
+```cpp
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/dom/node.hpp>
+#include <ftxui/screen/screen.hpp>
+#include <memory>
+
+using namespace ftxui;
+
+class CheckerboardNode : public Node {
+ public:
+  CheckerboardNode(Color a, Color b) : a_(a), b_(b) {}
+
+  void ComputeRequirement() override {
+    requirement_.min_x = 4;
+    requirement_.min_y = 2;
+    requirement_.flex_grow_x = 1;
+    requirement_.flex_grow_y = 1;
+  }
+
+  void Render(Screen& screen) override {
+    for (int y = box_.y_min; y <= box_.y_max; ++y) {
+      for (int x = box_.x_min; x <= box_.x_max; ++x) {
+        auto& cell = screen.CellAt(x, y);
+        cell.character = " ";
+        cell.background_color = ((x + y) % 2 == 0) ? a_ : b_;
+      }
+    }
+  }
+
+ private:
+  Color a_;
+  Color b_;
+};
+
+Element checkerboard(Color a, Color b) {
+  return std::make_shared<CheckerboardNode>(a, b);
+}
+```
+
+::: tip Performance: `screen.stencil` and `FastCellAt`
+`screen.CellAt(x, y)` is already bounds- and stencil-checked (writes outside `screen.stencil` are safely ignored). For very large nodes inside a `frame`, you can skip offscreen work by iterating over `Box::Intersection(box_, screen.stencil)` and calling `screen.FastCellAt(x, y)`.
+:::
+
+
+---
+
+# Troubleshooting & FAQ
+
+Solutions to the most common build, runtime, and migration issues.
+
+## Events Are Not Reaching My Child Components
+
+**Symptom:** Buttons, inputs, or menus render on screen, but keyboard or mouse input does nothing.
+
+**Cause:** You used `Renderer([&] { return child->Render(); })` without passing `child` (or a `Container` holding your children) as the first argument.
+
+**Fix:** Always pair a `Container` with `Renderer(container, ...)`:
+```cpp
+auto container = Container::Vertical({input, button});
+auto ui = Renderer(container, [&] {
+  return vbox({input->Render(), button->Render()})
+         | border;
+});
+```
+
+See the [Mental Model](/guide/mental-model) guide for details.
+
+---
+
+## Undefined References When Linking Manually
+
+**Symptom:** Linker errors mentioning [`ftxui::Node`](/api/class/node), [`ftxui::Screen`](/api/class/screen), or [`ftxui::Element`](/api/component#element).
+
+**Fix:** With static libraries, link order matters (`component` depends on `dom`, which depends on `screen`):
+```bash
+g++ main.cpp -lftxui-component -lftxui-dom -lftxui-screen
+```
+With CMake, simply link `ftxui::ftxui` (or `ftxui::component`, which pulls in `dom` and `screen` transitively).
+
+---
+
+## MinGW Cross-Compilation on Linux (`'mutex' is not a member of 'std'`)
+
+**Symptom:** Building with `x86_64-w64-mingw32-g++` on Debian/Ubuntu fails with `error: 'mutex' is not a member of 'std'`.
+
+**Fix:** The default MinGW compiler on Debian/Ubuntu uses the `win32` threading model, which does not implement C++11 `<mutex>`/`<thread>`. Switch to the `posix` variant:
+- In your CMake toolchain file, set `CMAKE_CXX_COMPILER` to `x86_64-w64-mingw32-g++-posix`, or
+- Run `sudo update-alternatives --config x86_64-w64-mingw32-g++` and select `x86_64-w64-mingw32-g++-posix`.
+
+---
+
+## Windows Macro Collisions (`RGB`, `DrawText`, `min`, `max`)
+
+**Symptom:** Strange compile errors in `<ftxui/screen/color.hpp>` or `<ftxui/dom/canvas.hpp>` after including `<windows.h>`.
+
+**Fix:** Define `NOMINMAX` and `WIN32_LEAN_AND_MEAN` before including `<windows.h>` (or pass `-DNOMINMAX` in CMake). FTXUI undefines `RGB` and `DrawText` in its headers, but defining `NOMINMAX` prevents `std::min`/`std::max` conflicts.
+
+---
+
+## Colors, Unicode, or Mouse Not Working in a Terminal
+
+- **Override color detection:**
+  ```cpp
+  Terminal::SetColorSupport(Terminal::Color::TrueColor);
+  ```
+- **Disable Unicode block characters / use ASCII fallbacks:**
+  ```cpp
+  auto quirks = Terminal::GetQuirks();
+  quirks.SetComponentAscii(true);
+  Terminal::SetQuirks(quirks);
+  ```
+- **Windows 7 / legacy consoles:** Legacy Windows `conhost` (before Windows 10) does not support Virtual Terminal escape sequences (`ENABLE_VIRTUAL_TERMINAL_PROCESSING`). Use Windows Terminal or a modern VT100-compatible terminal.
+
+---
+
+## Migrating from FTXUI v6 to v7
+
+FTXUI v7 renamed three core classes for clarity (deprecated aliases remain available for backwards compatibility):
+
+| FTXUI v6 (deprecated) | FTXUI v7 | Header |
+| --- | --- | --- |
+| `ScreenInteractive` | `App` | `<ftxui/component/app.hpp>` |
+| `Pixel` / `PixelAt()` | `Cell` / `CellAt()` | `<ftxui/screen/cell.hpp>` |
+| `Image` / `DrawImage()` | `Surface` / `DrawSurface()` | `<ftxui/screen/surface.hpp>` |
+
+
+---
+
+## Elements (`ftxui/dom`)
+
+`align_right`, `bgcolor`, `blink`, `bold`, `border`, `borderDouble`, `borderHeavy`, `borderLight`, `borderRounded`, `borderStyled`, `borderWith`, `center`, `clear_under`, `color`, `dbox`, `dim`, `filler`, `flex`, `flex_grow`, `flex_shrink`, `frame`, `gauge`, `graph`, `gridbox`, `hbox`, `hcenter`, `hflow`, `inverted`, `Node::ComputeRequirement`, `Node::Render`, `Node::SetBox`, `notflex`, `nothing`, `paragraph`, `Render`, `size`, `spinner`, `text`, `underlined`, `vbox`, `vcenter`, `vscroll_indicator`, `vtext`, `window`, `xflex`, `xflex_grow`, `xflex_shrink`, `yflex`, `yflex_grow`, `yflex_shrink`
+
+
+## Components (`ftxui/component`)
+
+`Button`, `Checkbox`, `ComponentBase::Active`, `ComponentBase::ActiveChild`, `ComponentBase::Add`, `ComponentBase::CaptureMouse`, `ComponentBase::ChildAt`, `ComponentBase::ChildCount`, `ComponentBase::Detach`, `ComponentBase::DetachAllChildren`, `ComponentBase::Focusable`, `ComponentBase::Focused`, `ComponentBase::OnEvent`, `ComponentBase::Parent`, `ComponentBase::Render`, `ComponentBase::SetActiveChild`, `ComponentBase::TakeFocus`, `Container::Horizontal`, `Container::Tab`, `Container::Vertical`, `Input`, `Menu`, `Radiobox`, `Renderer`, `ResizableSplitBottom`, `ResizableSplitLeft`, `ResizableSplitRight`, `ResizableSplitTop`, `Slider`, `Toggle`

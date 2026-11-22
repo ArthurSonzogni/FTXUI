@@ -1,0 +1,84 @@
+# FTXUI
+
+> C++ Functional Terminal User Interface library (v7.x). Zero dependencies, cross-platform (Linux, macOS, Windows, WebAssembly).
+
+## Important API Notes (v7+)
+- Use `ftxui::App` (from `<ftxui/component/app.hpp>`), NOT the deprecated `ScreenInteractive`.
+- Use `ftxui::Cell` / `ftxui::Surface` / `CellAt()`, NOT the deprecated `Pixel` / `Image` / `PixelAt()`.
+- Always pass a `Container` as the first argument to `Renderer(container, [&] { ... })` so events and focus reach child components.
+- Use `App::Post(...)` + `App::RequestAnimationFrame()` for thread-safe updates from background threads.
+
+## Guides
+- [Getting Started](/guide/getting-started)
+- [Mental Model](/guide/mental-model)
+- [Cookbook](/guide/cookbook)
+- [Cheat Sheet](/guide/cheatsheet)
+- [Troubleshooting & FAQ](/guide/troubleshooting)
+- [DOM Module](/guide/dom)
+- [Component Module](/guide/component)
+- [Screen Module](/guide/screen)
+- [Installation](/install/)
+
+## API Reference
+- [API Overview](/api/)
+- [Elements (ftxui/dom)](/api/dom): align_right, automerge, bgcolor, blink, bold, border, borderDashed, borderDouble, borderEmpty, borderHeavy, borderLight, borderRounded, borderStyled, borderWith, canvas, center, clear_under, color, dbox, dim, emptyElement, filler, flex, flex_grow, flex_shrink, flexbox, focus, focusCursorBar, focusCursorBarBlinking, focusCursorBlock, focusCursorBlockBlinking, focusCursorUnderline, focusCursorUnderlineBlinking, focusPosition, focusPositionRelative, frame, gauge, gaugeDirection, gaugeDown, gaugeLeft, gaugeRight, gaugeUp, graph, gridbox, hbox, hcenter, hflow, hscroll_indicator, hyperlink, inverted, italic, notflex, nothing, paragraph, paragraphAlignCenter, paragraphAlignJustify, paragraphAlignLeft, paragraphAlignRight, Render, select, selectionBackgroundColor, selectionColor, selectionForegroundColor, selectionStyle, selectionStyleReset, separator, separatorCharacter, separatorDashed, separatorDouble, separatorEmpty, separatorHeavy, separatorHSelector, separatorLight, separatorStyled, separatorVSelector, size, spinner, strikethrough, text, underlined, underlinedDouble, vbox, vcenter, vflow, vscroll_indicator, vtext, window, xflex, xflex_grow, xflex_shrink, xframe, yflex, yflex_grow, yflex_shrink, yframe
+- [Components (ftxui/component)](/api/component): animation::easing::Linear, animation::easing::QuadraticIn, animation::RequestAnimationFrame, Button, CatchEvent, Checkbox, Collapsible, Container::Horizontal, Container::Stacked, Container::Tab, Container::Vertical, Dropdown, Hoverable, Input, Maybe, Menu, MenuEntry, Radiobox, Renderer, ResizableSplit, ResizableSplitBottom, ResizableSplitLeft, ResizableSplitRight, ResizableSplitTop, Slider, Toggle, Window
+- [Screen (ftxui/screen)](/api/screen)
+- [Full LLM Reference](/llms-full.txt)
+
+## Key Classes
+- [ftxui::AnimatedColorOption](/api/class/animatedcoloroption)
+- [ftxui::AnimatedColorsOption](/api/class/animatedcolorsoption)
+- [ftxui::AnimationTask](/api/class/animationtask)
+- [ftxui::App](/api/class/app)
+- [ftxui::AutoReset](/api/class/autoreset)
+- [ftxui::Box](/api/class/box)
+- [ftxui::ButtonOption](/api/class/buttonoption)
+- [ftxui::Canvas](/api/class/canvas)
+- [ftxui::CapturedMouseInterface](/api/class/capturedmouseinterface)
+- [ftxui::Cell](/api/class/cell)
+- [ftxui::CheckboxOption](/api/class/checkboxoption)
+- [ftxui::Color](/api/class/color)
+- [ftxui::ColorInfo](/api/class/colorinfo)
+- [ftxui::ComponentBase](/api/class/componentbase)
+- [ftxui::ConstRef](/api/class/constref)
+- [ftxui::ConstStringListRef](/api/class/conststringlistref)
+- [ftxui::ConstStringListRef::Adapter](/api/class/conststringlistref-adapter)
+- [ftxui::ConstStringRef](/api/class/conststringref)
+- [ftxui::Dimensions](/api/class/dimensions)
+- [ftxui::DropdownOption](/api/class/dropdownoption)
+- [ftxui::EntryState](/api/class/entrystate)
+- [ftxui::Event](/api/class/event)
+- [ftxui::FlexboxConfig](/api/class/flexboxconfig)
+- [ftxui::InputOption](/api/class/inputoption)
+- [ftxui::InputState](/api/class/inputstate)
+- [ftxui::LinearGradient](/api/class/lineargradient)
+- [ftxui::LinearGradient::Stop](/api/class/lineargradient-stop)
+- [ftxui::Loop](/api/class/loop)
+- [ftxui::MenuEntryOption](/api/class/menuentryoption)
+- [ftxui::MenuOption](/api/class/menuoption)
+- [ftxui::Mouse](/api/class/mouse)
+- [ftxui::Node](/api/class/node)
+- [ftxui::Node::Status](/api/class/node-status)
+- [ftxui::RadioboxOption](/api/class/radioboxoption)
+- [ftxui::ReceiverImpl](/api/class/receiverimpl)
+- [ftxui::Ref](/api/class/ref)
+- [ftxui::Requirement](/api/class/requirement)
+- [ftxui::Requirement::Focused](/api/class/requirement-focused)
+- [ftxui::ResizableSplitOption](/api/class/resizablesplitoption)
+- [ftxui::Screen](/api/class/screen)
+- [ftxui::Screen::Cursor](/api/class/screen-cursor)
+- [ftxui::Selection](/api/class/selection)
+- [ftxui::SenderImpl](/api/class/senderimpl)
+- [ftxui::SliderOption](/api/class/slideroption)
+- [ftxui::StringRef](/api/class/stringref)
+- [ftxui::Surface](/api/class/surface)
+- [ftxui::Table](/api/class/table)
+- [ftxui::TableSelection](/api/class/tableselection)
+- [ftxui::Terminal::Quirks](/api/class/terminal-quirks)
+- [ftxui::Terminal::TerminalInfo](/api/class/terminal-terminalinfo)
+- [ftxui::UnderlineOption](/api/class/underlineoption)
+- [ftxui::WindowOptions](/api/class/windowoptions)
+- [ftxui::WindowRenderState](/api/class/windowrenderstate)
+- [ftxui::animation::Animator](/api/class/animation-animator)
+- [ftxui::animation::Params](/api/class/animation-params)

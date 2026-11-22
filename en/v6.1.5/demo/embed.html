@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FTXUI Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/xterm@4.18.0/css/xterm.css"
+      crossorigin="anonymous"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #0d1117;
+      }
+      #terminal {
+        width: 100%;
+        height: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        overflow: auto;
+      }
+      #status {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #8b949e;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 13px;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="status">Loading WebAssembly demo…</div>
+    <div id="terminal"></div>
+    <script type="module">
+      import xterm from 'https://cdn.jsdelivr.net/npm/xterm@4.18.0/+esm';
+      import xterm_addon_fit from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.5.0/+esm';
+
+      const statusEl = document.getElementById('status');
+      const termEl = document.getElementById('terminal');
+
+      const params = new URLSearchParams(window.location.search);
+      const example = params.get('file') || 'dom/color_gallery';
+      const parts = example.split('/');
+      if (parts.length !== 2) {
+        statusEl.textContent = 'Invalid example path: ' + example;
+        throw new Error('Invalid example path');
+      }
+      const [category, name] = parts;
+
+      // In production on GitHub Pages (/FTXUI/), load from same-origin /FTXUI/examples/.
+      // In local VitePress dev/preview, load via same-origin /wasm-examples/ proxy.
+      const baseDir = window.location.pathname.startsWith('/FTXUI/')
+        ? `/FTXUI/examples/${category}/`
+        : `/wasm-examples/${category}/`;
+
+      const isDom = category === 'dom';
+      const term = new xterm.Terminal({
+        cols: isDom ? 140 : 80,
+        rows: isDom ? 43 : 24,
+        fontSize: 13,
+        scrollback: isDom ? 1000 : 0,
+        theme: { background: '#0d1117' },
+      });
+      const fitAddon = new xterm_addon_fit.FitAddon();
+      term.loadAddon(fitAddon);
+      term.open(termEl);
+      if (!isDom) {
+        fitAddon.fit();
+      }
+
+      const stdinBuffer = [];
+      const stdoutBuffer = [];
+      const stderrBuffer = [];
+
+      const stdin = () => stdinBuffer.shift() || 0;
+      const stdout = (code) => {
+        if (code === 0) {
+          if (statusEl.style.display !== 'none') {
+            statusEl.style.display = 'none';
+          }
+          term.write(new Uint8Array(stdoutBuffer));
+          stdoutBuffer.length = 0;
+        } else {
+          stdoutBuffer.push(code);
+        }
+      };
+      const stderr = (code) => {
+        if (code === 0 || code === 10) {
+          console.error(String.fromCodePoint(...stderrBuffer));
+          stderrBuffer.length = 0;
+        } else {
+          stderrBuffer.push(code);
+        }
+      };
+      const onInput = (data) => {
+        for (const c of data) stdinBuffer.push(c.charCodeAt(0));
+      };
+      term.onBinary(onInput);
+      term.onData(onInput);
+
+      window.Module = {
+        locateFile: (path) => baseDir + path,
+        mainScriptUrlOrBlob: baseDir + `ftxui_example_${name}.js`,
+        preRun: () => {
+          FS.init(stdin, stdout, stderr);
+        },
+        onRuntimeInitialized: () => {
+          statusEl.style.display = 'none';
+          if (!window.Module._ftxui_on_resize) return;
+          const resize = () => {
+            const dims = fitAddon.proposeDimensions();
+            if (!dims || !dims.cols || !dims.rows) return;
+            term.resize(dims.cols, dims.rows);
+            window.Module._ftxui_on_resize(dims.cols, dims.rows);
+          };
+          new ResizeObserver(resize).observe(termEl);
+          resize();
+        },
+      };
+
+      const script = document.createElement('script');
+      script.src = baseDir + `ftxui_example_${name}.js`;
+      script.onerror = () => {
+        statusEl.textContent = `Could not load WebAssembly binary for ${example}.`;
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>
