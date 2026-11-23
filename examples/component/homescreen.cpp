@@ -457,8 +457,7 @@ int main() {
                           make_box(8, 4),
                           make_box(6, 3),
                       })),
-           }) |
-           vscroll_indicator | yframe | flex;
+           }) | yframe | flex;
   });
 
   auto paragraph_renderer_right = Renderer([] {
